@@ -1,9 +1,9 @@
 FROM gmathieu/node-browsers:3.0.0 AS build
 
-COPY package.json /usr/angular-workdir/
+COPY frontend/package.json /usr/angular-workdir/
 WORKDIR /usr/angular-workdir
 
-COPY ./ /usr/angular-workdir
+COPY ./frontend/ /usr/angular-workdir
 
 ARG ENV=prod
 RUN npm run build-$ENV

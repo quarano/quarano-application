@@ -10,4 +10,4 @@ ENV JAVA_OPTS="-Dspring.profiles.active=default,develop"
 ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -jar app.jar" ]
 
 # This statement is the last one because it changes frequently
-COPY target/coronareport_backend-0.0.1-SNAPSHOT.jar app.jar
+COPY backend/target/coronareport_backend-0.0.1-SNAPSHOT.jar app.jar
