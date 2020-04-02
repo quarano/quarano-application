@@ -2,4 +2,4 @@
 mvn clean install -DskipTests 
 
 # Confirm the .jar was created
-ls target/
+ls backend/target/
