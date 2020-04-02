@@ -4,7 +4,7 @@ steps:
     args: ['install']
     volumes:
       - name: 'modules'
-        path: '/frontend/node_modules'
+        path: '/frontend'
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
