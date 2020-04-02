@@ -1,10 +1,10 @@
 steps:
   # npm install
   - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
+    args: ['install', '--prefix', './frontend']
     volumes:
       - name: 'modules'
-        path: '/frontend'
+        path: '/frontend/node_modules'
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
