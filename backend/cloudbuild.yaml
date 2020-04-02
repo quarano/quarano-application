@@ -1,16 +1,16 @@
 steps:
   - name: 'gcr.io/cloud-builders/mvn'
     entrypoint: bash
-    args: ['./scripts/build.bash']
+    args: ['./backend/scripts/build.bash']
     volumes:
       - name: 'target'
-        path: /target
+        path: /backend/target
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build','-f', 'backend/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportbackend:$COMMIT_SHA', '.']
     volumes:
       - name: 'target'
-        path: /target
+        path: /backend/target
   # push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportbackend:$COMMIT_SHA']

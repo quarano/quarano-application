@@ -4,13 +4,13 @@ steps:
     args: ['install']
     volumes:
       - name: 'modules'
-        path: '/node_modules'
+        path: '/frontend/node_modules'
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-f',
-      'frontend/Dockerfile'
+      'frontend/Dockerfile',
       '--build-arg',
       'ENV=prod',
       '-t',
@@ -19,7 +19,7 @@ steps:
     ]
     volumes:
       - name: 'modules'
-        path: '/node_modules'
+        path: '/frontend/node_modules'
   # push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend:$COMMIT_SHA']

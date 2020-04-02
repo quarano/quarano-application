@@ -4,7 +4,7 @@ steps:
     args: ['install']
     volumes:
       - name: 'modules'
-        path: '/node_modules'
+        path: '/frontend/node_modules'
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
@@ -19,7 +19,7 @@ steps:
     ]
     volumes:
       - name: 'modules'
-        path: '/node_modules'
+        path: '/frontend/node_modules'
 images:
   - 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend-pr:$COMMIT_SHA'
 timeout: 900s
