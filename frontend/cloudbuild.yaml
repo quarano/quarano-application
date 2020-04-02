@@ -1,7 +1,7 @@
 steps:
   # npm install
   - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
+    args: ['install', '--prefix', './frontend/node_modules']
     volumes:
       - name: 'modules'
         path: '/frontend/node_modules'
