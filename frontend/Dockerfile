@@ -13,7 +13,7 @@ FROM nginx:1.15.8-alpine
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY ./dev/nginx.conf /etc/nginx/nginx.conf
+COPY ./frontend/dev/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=build  /usr/angular-workdir/dist/coronareportfrontend /usr/share/nginx/html
 
