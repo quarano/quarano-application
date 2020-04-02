@@ -1,0 +1,86 @@
+<span
+  [matBadge]="entries.length"
+  matBadgeOverlap="false"
+  matBadgeSize="small"
+  >{{ date }}</span
+>
+<div style="min-width: 40vw;">
+  <div class="bootstrap-wrapper">
+    <mat-card *ngFor="let entry of entries" class="card">
+      <div class="container-fluid" [routerLink]="['edit', entry.id]">
+        <div class="row align-items-center">
+          <div class="col-12 col-xl-4">
+            <div class="row align-items-center">
+              <div class="col-2">
+                <i
+                  class="material-icons"
+                  matTooltip="Uhrzeit"
+                  matTooltipPosition="left"
+                  >schedule</i
+                >
+              </div>
+              <div class="col-10">
+                {{ entry.dateTime | date: "HH:mm":"de" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-8">
+            <div
+              class="row align-items-center"
+              [class]="entry.symptoms.length === 0 ? 'disabled' : ''"
+            >
+              <div class="col-2">
+                <i
+                  class="material-icons"
+                  matTooltip="Symptome"
+                  matTooltipPosition="left"
+                  >healing</i
+                >
+              </div>
+              <div class="col-10">
+                {{ toStringSymptoms(entry) || "Keine Symptome angegeben" }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-12 col-xl-4">
+            <div class="row align-items-center">
+              <div class="col-2">
+                <i
+                  class="material-icons"
+                  matTooltip="Körpertemperatur"
+                  matTooltipPosition="left"
+                  >timeline</i
+                >
+              </div>
+              <div class="col-10">
+                {{ entry.bodyTemperature | number: "1.1-1":"de" }} °C
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-8">
+            <div
+              class="row align-items-center"
+              [class]="entry.contactPersonList.length === 0 ? 'disabled' : ''"
+            >
+              <div class="col-2">
+                <i
+                  class="material-icons"
+                  matTooltip="Kontakte"
+                  matTooltipPosition="left"
+                  >group</i
+                >
+              </div>
+              <div class="col-10">
+                {{
+                  toStringContactPersons(entry) || "Keine Kontakte angegeben"
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></mat-card
+    >
+  </div>
+</div>

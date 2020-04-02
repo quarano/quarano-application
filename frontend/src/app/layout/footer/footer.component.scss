@@ -1,0 +1,70 @@
+@import "../../app.component.scss";
+
+#footer-wrapper {
+  position: fixed;
+  right: 1rem;
+  bottom: 0;
+  height: 56px;
+  z-index: 1000;
+
+  @media (max-width: $break-xxl) {
+    display: none;
+  }
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  background-color: rgba(18, 8, 22, 0.3);
+  .footer__hashtag {
+    opacity: 0.3;
+  }
+  z-index: 999;
+}
+
+#link {
+  text-decoration: none;
+
+  @media display and (max-width: $break-md) {
+    display: none;
+  }
+}
+
+img {
+  max-height: 95%;
+}
+
+nav {
+  margin-left: 40px;
+
+  @media (max-width: $break-sm) {
+    margin-left: 15px;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+
+    @media (max-width: $break-sm) {
+      padding: 10px 7px;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    & ~ a {
+      margin-left: 20px;
+
+      @media (max-width: $break-sm) {
+        margin-left: 5px;
+      }
+    }
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

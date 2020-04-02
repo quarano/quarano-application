@@ -1,0 +1,7 @@
+clientId;firstname;surename;dateTime;bodyTemperature;symptoms;contactFirstname;contactSurename;typeOfContract;typeOfProtection
+212;Fabian;Bauer;2020-03-26 00:00:00.0;38.1;[Angst];;;;
+212;Fabian;Bauer;2020-03-27 00:00:00.0;38.4;[Angst, Kopfschmerzen, Fieber];Alice;Sommer;Ä;H
+212;Fabian;Bauer;2020-03-27 00:00:00.0;38.4;[Angst, Kopfschmerzen, Fieber];Boris;Johnson;Aer;M1
+214;Sabine;Wohlfart;2020-03-25 00:00:00.0;37.5;[];;;;
+214;Sabine;Wohlfart;2020-03-26 00:00:00.0;38.0;[Fieber];;;;
+214;Sabine;Wohlfart;2020-03-27 00:00:00.0;39.2;[Fieber, Husten, Atemnot];Roland;Koch;O;0

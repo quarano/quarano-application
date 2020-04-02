@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.5.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>de.wevsvirushackathon</groupId>
+    <artifactId>coronareport_backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>coronareport_backend</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <docker.image.prefix>coronahackathon</docker.image.prefix>
+        <docker.build.skip>false</docker.build.skip>
+        <docker.build.userid>1001</docker.build.userid>
+    </properties>
+
+    <profiles>
+
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <docker.build.skip>true</docker.build.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>develop</id>
+            <properties>
+                <docker.build.skip>false</docker.build.skip>
+                <docker.build.userid>1001</docker.build.userid>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <docker.build.skip>false</docker.build.skip>
+                <docker.build.userid>1001</docker.build.userid>
+            </properties>
+        </profile>        
+
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Spring modelmapper for DTO transformation -->
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>2.3.5</version>
+		</dependency>        
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Swagger integration for API documentation -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.9.2</version>
+		</dependency>     
+		   
+		<!-- Swagger ui to browse API -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.9.2</version>
+		</dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>1.4.194</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.10.3</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>cz.habarta.typescript-generator</groupId>
+                <artifactId>typescript-generator-maven-plugin</artifactId>
+                <version>2.20.583</version>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jsonLibrary>jackson2</jsonLibrary>
+                    <classes>
+                        <class>de.wevsvirushackathon.coronareport.contactperson.ContactPerson</class>
+                    </classes>
+                    <outputFile>../coronareportfrontend/src/app/models/generated/generated-dto.d.ts</outputFile>
+                    <outputKind>module</outputKind>
+                </configuration>
+            </plugin>
+
+
+ <!--           <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.12</version>
+                <configuration>
+                    <skip>${docker.build.skip}</skip>
+                    <buildArgs>
+                        <artifact>${project.build.finalName}</artifact>
+                        <userId>${docker.build.userid}</userId>
+                    </buildArgs>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+-->        </plugins>
+
+
+    </build>
+
+</project>

@@ -1,0 +1,38 @@
+steps:
+  # npm install
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    volumes:
+      - name: 'modules'
+        path: '/node_modules'
+  # build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '--build-arg',
+      'ENV=prod',
+      '-t',
+      'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend:$COMMIT_SHA',
+      '.'
+    ]
+    volumes:
+      - name: 'modules'
+        path: '/node_modules'
+  # push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend:$COMMIT_SHA']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'frontend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend:$COMMIT_SHA'
+      - '--region'
+      - 'europe-west1'
+      - '--platform'
+      - 'managed'
+images:
+  - 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend:$COMMIT_SHA'
+timeout: 900s

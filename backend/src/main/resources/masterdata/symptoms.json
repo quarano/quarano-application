@@ -1,0 +1,639 @@
+[
+  {
+    "name": "Anämie"
+  },
+  {
+    "name": "Angst"
+  },
+  {
+    "name": "Blähungen"
+  },
+  {
+    "name": "Blut im Stuhl"
+  },
+  {
+    "name": "Blut im Urin"
+  },
+  {
+    "name": "Durchfall"
+  },
+  {
+    "name": "Halsschmerzen",
+    "characteristic": true
+  },
+  {
+    "name": "Hautausschlag"
+  },
+  {
+    "name": "Inkontinenz"
+  },
+  {
+    "name": "Kopfschmerzen"
+  },
+  {
+    "name": "Magenschmerzen"
+  },
+  {
+    "name": "Ohrenschmerzen"
+  },
+  {
+    "name": "Rückenschmerzen"
+  },
+  {
+    "name": "Schlafstörungen"
+  },
+  {
+    "name": "Schnarchen"
+  },
+  {
+    "name": "Sodbrennen"
+  },
+  {
+    "name": "Tinnitus"
+  },
+  {
+    "name": "Verstopfung"
+  },
+  {
+    "name": "Afterjucken"
+  },
+  {
+    "name": "Ageusie"
+  },
+  {
+    "name": "Agnosie"
+  },
+  {
+    "name": "Amenorrhoe"
+  },
+  {
+    "name": "Amnesie"
+  },
+  {
+    "name": "Anämie"
+  },
+  {
+    "name": "Angst"
+  },
+  {
+    "name": "Anhidrose"
+  },
+  {
+    "name": "Aphasie"
+  },
+  {
+    "name": "Aphthen"
+  },
+  {
+    "name": "Appetitlosigkeit"
+  },
+  {
+    "name": "Apraxie"
+  },
+  {
+    "name": "Aszites"
+  },
+  {
+    "name": "Ataxie"
+  },
+  {
+    "name": "Atemnot"
+  },
+  {
+    "name": "Athetose"
+  },
+  {
+    "name": "Aufstoßen"
+  },
+  {
+    "name": "Augenringe"
+  },
+  {
+    "name": "Ausfluss"
+  },
+  {
+    "name": "Bauchschmerzen"
+  },
+  {
+    "name": "Belegte Zunge"
+  },
+  {
+    "name": "Blähungen"
+  },
+  {
+    "name": "Blase am Fuß"
+  },
+  {
+    "name": "Blepharospasmus"
+  },
+  {
+    "name": "Blut im Sperma"
+  },
+  {
+    "name": "Blut im Stuhl"
+  },
+  {
+    "name": "Blut im Urin"
+  },
+  {
+    "name": "Blutarmut"
+  },
+  {
+    "name": "Brennen beim Wasserlassen"
+  },
+  {
+    "name": "Brennen in der Scheide"
+  },
+  {
+    "name": "Brüchige Fingernägel"
+  },
+  {
+    "name": "Brustschmerzen"
+  },
+  {
+    "name": "Chemosis"
+  },
+  {
+    "name": "Chronische Schmerzen"
+  },
+  {
+    "name": "Cushing-Syndrom"
+  },
+  {
+    "name": "Dehnungsstreifen"
+  },
+  {
+    "name": "Dehydration"
+  },
+  {
+    "name": "Delirium"
+  },
+  {
+    "name": "Diarrhoe"
+  },
+  {
+    "name": "Dumping-Syndrom"
+  },
+  {
+    "name": "Durchblutungsstörungen"
+  },
+  {
+    "name": "Durchbruchschmerzen"
+  },
+  {
+    "name": "Durchfall"
+  },
+  {
+    "name": "Dysarthrie"
+  },
+  {
+    "name": "Dysphonie"
+  },
+  {
+    "name": "Dyspnoe"
+  },
+  {
+    "name": "Dystonie"
+  },
+  {
+    "name": "Echolalie"
+  },
+  {
+    "name": "Eingerissene Mundwinkel"
+  },
+  {
+    "name": "Ekzem"
+  },
+  {
+    "name": "Enuresis"
+  },
+  {
+    "name": "Erektile Dysfunktion"
+  },
+  {
+    "name": "Exophthalmus"
+  },
+  {
+    "name": "Fersenschmerzen"
+  },
+  {
+    "name": "Fieber",
+    "characteristic": true
+  },
+  {
+    "name": "Fingernägel-Kauen"
+  },
+  {
+    "name": "Fremdkörpergefühl im Auge"
+  },
+  {
+    "name": "Galaktorrhoe"
+  },
+  {
+    "name": "Gallenkolik"
+  },
+  {
+    "name": "Gangstörung"
+  },
+  {
+    "name": "Gelbe Zähne"
+  },
+  {
+    "name": "Gelbsucht"
+  },
+  {
+    "name": "Gelenkschmerzen"
+  },
+  {
+    "name": "Geschmacksstörung"
+  },
+  {
+    "name": "Geschwollene Augen"
+  },
+  {
+    "name": "Geschwollene Lymphknoten"
+  },
+  {
+    "name": "Gesichtslähmung"
+  },
+  {
+    "name": "Gewichtsabnahme"
+  },
+  {
+    "name": "Gewichtszunahme"
+  },
+  {
+    "name": "Gliederschmerzen"
+  },
+  {
+    "name": "Glubschaugen"
+  },
+  {
+    "name": "Haarausfall"
+  },
+  {
+    "name": "Halluzinationen"
+  },
+  {
+    "name": "Halsschmerzen"
+  },
+  {
+    "name": "Hämoptoe (Bluthusten)"
+  },
+  {
+    "name": "Harnverhalt"
+  },
+  {
+    "name": "Hautausschlag"
+  },
+  {
+    "name": "Heiserkeit"
+  },
+  {
+    "name": "Heißhunger"
+  },
+  {
+    "name": "Hepatomegalie"
+  },
+  {
+    "name": "Herzrasen"
+  },
+  {
+    "name": "Hirsutismus"
+  },
+  {
+    "name": "Hitzewallungen"
+  },
+  {
+    "name": "Husten",
+    "characteristic": true
+  },
+  {
+    "name": "Hypercortisolismus"
+  },
+  {
+    "name": "Hyperhidrose"
+  },
+  {
+    "name": "Hyperventilation"
+  },
+  {
+    "name": "Hypoglykämie (Unterzuckerung)"
+  },
+  {
+    "name": "Hypoxie"
+  },
+  {
+    "name": "Impotenz"
+  },
+  {
+    "name": "Inkontinenz"
+  },
+  {
+    "name": "Innere Unruhe"
+  },
+  {
+    "name": "Jucken im Ohr"
+  },
+  {
+    "name": "Juckreiz"
+  },
+  {
+    "name": "Knieschmerzen"
+  },
+  {
+    "name": "Knoten in der Brust"
+  },
+  {
+    "name": "Koma"
+  },
+  {
+    "name": "Konzentrationsschwäche"
+  },
+  {
+    "name": "Kopfschmerzen"
+  },
+  {
+    "name": "Koprolalie"
+  },
+  {
+    "name": "Krampfanfall"
+  },
+  {
+    "name": "Kribbeln"
+  },
+  {
+    "name": "Kurzatmigkeit",
+    "characteristic": true
+  },
+  {
+    "name": "Leistenschmerzen"
+  },
+  {
+    "name": "Libidoverlust"
+  },
+  {
+    "name": "Lichtscheu"
+  },
+  {
+    "name": "Lymphadenitis"
+  },
+  {
+    "name": "Lymphknotenentzündung"
+  },
+  {
+    "name": "Magenschmerzen"
+  },
+  {
+    "name": "Mastodynie"
+  },
+  {
+    "name": "Meningismus"
+  },
+  {
+    "name": "Menorrhagie"
+  },
+  {
+    "name": "Milchstau"
+  },
+  {
+    "name": "Müdigkeit"
+  },
+  {
+    "name": "Mundgeruch"
+  },
+  {
+    "name": "Mundtrockenheit"
+  },
+  {
+    "name": "Muskelkater"
+  },
+  {
+    "name": "Muskelschmerzen"
+  },
+  {
+    "name": "Muskelzucken"
+  },
+  {
+    "name": "Nackenschmerzen"
+  },
+  {
+    "name": "Nagelveränderungen"
+  },
+  {
+    "name": "Nasenbluten"
+  },
+  {
+    "name": "Neglect"
+  },
+  {
+    "name": "Nierenschmerzen"
+  },
+  {
+    "name": "Nykturie"
+  },
+  {
+    "name": "Ödem"
+  },
+  {
+    "name": "Ohnmacht"
+  },
+  {
+    "name": "Ohrensausen"
+  },
+  {
+    "name": "Ohrenschmerzen"
+  },
+  {
+    "name": "Perseveration"
+  },
+  {
+    "name": "Photophobie"
+  },
+  {
+    "name": "Pigmentflecken"
+  },
+  {
+    "name": "Pleuraerguss"
+  },
+  {
+    "name": "Polydipsie"
+  },
+  {
+    "name": "Ptosis"
+  },
+  {
+    "name": "Regelschmerzen"
+  },
+  {
+    "name": "Rückenschmerzen"
+  },
+  {
+    "name": "Scheidentrockenheit"
+  },
+  {
+    "name": "Schiefhals"
+  },
+  {
+    "name": "Schilddrüsenknoten"
+  },
+  {
+    "name": "Schluckauf"
+  },
+  {
+    "name": "Schmerzempfindliche Zähne"
+  },
+  {
+    "name": "Schmerzen beim Sex"
+  },
+  {
+    "name": "Schmerzen in der Brust"
+  },
+  {
+    "name": "Schmierblutung"
+  },
+  {
+    "name": "Schnarchen"
+  },
+  {
+    "name": "Schnupfen"
+  },
+  {
+    "name": "Schock"
+  },
+  {
+    "name": "Schulterschmerzen"
+  },
+  {
+    "name": "Schuppen"
+  },
+  {
+    "name": "Schüttelfrost"
+  },
+  {
+    "name": "Schwellung am Hals"
+  },
+  {
+    "name": "Schwerhörigkeit"
+  },
+  {
+    "name": "Schwindel"
+  },
+  {
+    "name": "Schwitzen"
+  },
+  {
+    "name": "Sehstörungen"
+  },
+  {
+    "name": "Skotom"
+  },
+  {
+    "name": "Sodbrennen"
+  },
+  {
+    "name": "Sprachstörung"
+  },
+  {
+    "name": "Starke Regelblutung"
+  },
+  {
+    "name": "Stimmungsschwankungen"
+  },
+  {
+    "name": "Stottern"
+  },
+  {
+    "name": "Stridor"
+  },
+  {
+    "name": "Struma"
+  },
+  {
+    "name": "Stupor"
+  },
+  {
+    "name": "Synkope (Ohnmacht)"
+  },
+  {
+    "name": "Taubheitsgefühl"
+  },
+  {
+    "name": "Tic (Tick)"
+  },
+  {
+    "name": "Tinnitus"
+  },
+  {
+    "name": "Torticollis"
+  },
+  {
+    "name": "Tränende Augen"
+  },
+  {
+    "name": "Traurigkeit"
+  },
+  {
+    "name": "Tremor"
+  },
+  {
+    "name": "Trockene Augen"
+  },
+  {
+    "name": "Trockene Haut"
+  },
+  {
+    "name": "Trommelschlegelfinger"
+  },
+  {
+    "name": "Übelkeit und Erbrechen"
+  },
+  {
+    "name": "Unregelmäßiger Zyklus"
+  },
+  {
+    "name": "Unreine Haut"
+  },
+  {
+    "name": "Unterleibsschmerzen"
+  },
+  {
+    "name": "Vergesslichkeit"
+  },
+  {
+    "name": "Verstopfung"
+  },
+  {
+    "name": "Virilisierung"
+  },
+  {
+    "name": "Wadenkrämpfe"
+  },
+  {
+    "name": "Zähneknirschen (Bruxismus)"
+  },
+  {
+    "name": "Zahnfleischbluten"
+  },
+  {
+    "name": "Zahnfleischrückgang"
+  },
+  {
+    "name": "Zahnfleischschmerzen"
+  },
+  {
+    "name": "Zahnfleischschwund"
+  },
+  {
+    "name": "Zahnschmerzen"
+  },
+  {
+    "name": "Zahnstein"
+  },
+  {
+    "name": "Zittern"
+  },
+  {
+    "name": "Zyanose"
+  }
+]

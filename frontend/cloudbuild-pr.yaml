@@ -1,0 +1,23 @@
+steps:
+  # npm install
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    volumes:
+      - name: 'modules'
+        path: '/node_modules'
+  # build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '--build-arg',
+      'ENV=stage',
+      '-t',
+      'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend-pr:$COMMIT_SHA',
+      '.'
+    ]
+    volumes:
+      - name: 'modules'
+        path: '/node_modules'
+images:
+  - 'gcr.io/$PROJECT_ID/coronareportteam/coronareportfrontend-pr:$COMMIT_SHA'
+timeout: 900s

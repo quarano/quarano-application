@@ -1,0 +1,28 @@
+<button type="button" mat-icon-button color="primary" routerLink="new">
+  <i class="material-icons">add</i>
+  Neuen Kontakt anlegen
+</button>
+<app-alert
+  *ngIf="contacts.length === 0"
+  message="Noch keine Einträge vorhanden"
+></app-alert>
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-6 col-xl-4" *ngFor="let contact of contacts">
+        <mat-card class="contact-card" [routerLink]="['edit', contact.id]">
+          <mat-card-header>
+            <div mat-card-avatar class="header-image"></div>
+            <mat-card-title
+              >{{ contact.firstname }} {{ contact.surename }}</mat-card-title
+            >
+            <mat-card-subtitle>{{ contact.phone }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content *ngIf="contact.email">
+            <p class="email">{{ contact.email }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

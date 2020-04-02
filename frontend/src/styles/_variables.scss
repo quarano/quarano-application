@@ -1,0 +1,13 @@
+@import "./app-theme";
+@import "~@angular/material/theming";
+
+$break-sm: 576px;
+$break-md: 720px;
+$break-lg: 960px;
+$break-xl: 1140px;
+$break-xxl: 1680px;
+
+$app-primary: mat-palette($mat-primary);
+$app-accent: mat-palette($mat-accent, A200, A100, A400);
+$app-warn: mat-palette($mat-red);
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
