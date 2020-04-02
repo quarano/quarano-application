@@ -7,7 +7,7 @@ steps:
         path: /target
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'Dockerfile-develop', '-t', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportbackend-develop:$COMMIT_SHA', '.']
+    args: ['build', '-f', 'backend/Dockerfile-develop', '-t', 'gcr.io/$PROJECT_ID/coronareportteam/coronareportbackend-develop:$COMMIT_SHA', '.']
     volumes:
       - name: 'target'
         path: /target
