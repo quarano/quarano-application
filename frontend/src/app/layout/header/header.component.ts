@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   public isAuthenticated$$ = this.userService.isAuthenticated$$;
   public tenantsEnum = TenantsEnum;
   public urlTenant = this.tenantService.urlTenant;
-
+  public tenant$$ = this.tenantService.tenant$$;
 
   constructor(
     private userService: UserService,
@@ -23,6 +23,10 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  public tenantLogout() {
+    this.tenantService.logout();
   }
 
 }
