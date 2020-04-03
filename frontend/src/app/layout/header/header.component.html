@@ -21,7 +21,7 @@
         Gesundheitsamt Testberg
       </h6>
     </ng-container>
-    <h6 *ngIf="(tenant$$ | async) !== null" (click)="tenantLogout()" style="cursor: pointer;">Logout</h6>
+    <h6 *ngIf="(tenant$$ | async) !== null" (click)="tenantLogout()" style="cursor: pointer;" id="tenant-admin-logout">Logout</h6>
   </div>
 </mat-toolbar>
 <mat-progress-bar
