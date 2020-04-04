@@ -1,50 +1,108 @@
 <mat-card>
   <mat-form-field class="form__input--full-width" appearance="outline">
     <mat-label>Suchen</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Name, Vorname, Telefon oder PLZ">
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Name, Vorname, Telefon oder PLZ"
+    />
   </mat-form-field>
-  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+</mat-card>
+
+<div class="container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
     <ng-container matColumnDef="surename">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nachname </th>
-      <td mat-cell *matCellDef="let element"> {{element.surename}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Nachname</mat-header-cell
+      >
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">Nachname</span
+        ><span class="value-span">{{ element.surename }}</span>
+      </mat-cell>
     </ng-container>
     <ng-container matColumnDef="firstname">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Vorname </th>
-      <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Vorname</mat-header-cell
+      >
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">Vorname</span
+        ><span class="value-span">{{ element.firstname }}</span>
+      </mat-cell>
     </ng-container>
     <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Telefon </th>
-      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+      <mat-header-cell *matHeaderCellDef>Telefon</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">Telefon</span
+        ><span class="value-span">{{ element.phone }}</span>
+      </mat-cell>
     </ng-container>
     <ng-container matColumnDef="zipCode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> PLZ </th>
-      <td mat-cell *matCellDef="let element"> {{element.zipCode}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>PLZ</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">PLZ</span
+        ><span class="value-span">{{ element.zipCode }}</span>
+      </mat-cell>
     </ng-container>
     <ng-container matColumnDef="infected">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Infiziert </th>
-      <td mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Infiziert</mat-header-cell
+      >
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">Infiziert</span>
         <mat-icon *ngIf="element.infected === true">done</mat-icon>
         <mat-icon *ngIf="element.infected === false">close</mat-icon>
-      </td>
+      </mat-cell>
     </ng-container>
     <ng-container matColumnDef="monitoringStatus">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
-      <td mat-cell *matCellDef="let element">
-
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('OK')" style="color:green;"><mat-icon>done</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('CHECK_HEALTH')" style="color:orange;"><mat-icon>healing</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('END_OF_QUARANTINE')" style="color:green;"><mat-icon>no_meeting_room</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('OVERDUE')" style="color:red;"><mat-icon>close</mat-icon> {{element.monitoringMessage}}</span>
-      </td>
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span class="mobile-label">Status</span>
+        <span
+          class="value-span with-icon"
+          *ngIf="element.monitoringStatus.includes('OK')"
+          style="color: green;"
+          ><mat-icon class="monitoring-icon">done</mat-icon>
+          {{ element.monitoringMessage }}</span
+        >
+        <span
+          class="value-span with-icon"
+          *ngIf="element.monitoringStatus.includes('CHECK_HEALTH')"
+          style="color: orange;"
+          ><mat-icon class="monitoring-icon">healing</mat-icon>
+          {{ element.monitoringMessage }}</span
+        >
+        <span
+          class="value-span with-icon"
+          *ngIf="element.monitoringStatus.includes('END_OF_QUARANTINE')"
+          style="color: green;"
+          ><mat-icon class="monitoring-icon">no_meeting_room</mat-icon>
+          {{ element.monitoringMessage }}</span
+        >
+        <span
+          class="value-span with-icon"
+          *ngIf="element.monitoringStatus.includes('OVERDUE')"
+          style="color: red;"
+          ><mat-icon class="monitoring-icon">close</mat-icon>
+          {{ element.monitoringMessage }}</span
+        >
+      </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-        <div class="example-element-detail"
-             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+    <!-- <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="displayedColumns.length"
+      >
+        <div
+          class="example-element-detail"
+          [@detailExpand]="
+            element == expandedElement ? 'expanded' : 'collapsed'
+          "
+        >
           <div class="example-element-description">
             <h3>Einträge</h3>
-            <table style="width:100%">
+            <table style="width: 100%;">
               <tr>
                 <td>Datum</td>
                 <td>Uhrzeit</td>
@@ -61,13 +119,19 @@
           </div>
         </div>
       </td>
-    </ng-container>
+    </ng-container> -->
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-        class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-  </table>
-</mat-card>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      *matRowDef="let element; columns: displayedColumns"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element"
+    ></mat-row>
+    <!-- <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="example-detail-row"
+    ></tr> -->
+  </mat-table>
+</div>
