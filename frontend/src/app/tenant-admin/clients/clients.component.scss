@@ -14,18 +14,6 @@ mat-card {
   z-index: 1;
 }
 
-// table {
-//   width: 100%;
-// }
-
-// .mat-cell {
-//   padding-right: 45px;
-// }
-
-// .mat-header-cell {
-//   padding-right: 45px;
-// }
-
 .with-icon {
   display: flex;
   align-items: center;
@@ -43,45 +31,37 @@ mat-row.example-detail-row {
   min-height: 0;
 }
 
-// tr.example-element-row:not(.example-expanded-row):hover {
-//   background: whitesmoke;
-// }
+mat-row.example-element-row {
+  cursor: pointer;
 
-// tr.example-element-row:not(.example-expanded-row):active {
-//   background: #efefef;
-// }
+  & > mat-cell:last-of-type {
+    flex-grow: 2;
+  }
 
-// .example-element-row td {
-//   border-bottom-width: 0;
-// }
+  &:not(.example-expanded-row) {
+    &:hover,
+    &:focus {
+      background: whitesmoke;
+    }
 
-// .example-element-detail {
-//   overflow: hidden;
-//   display: flex;
-// }
+    :active {
+      background: #efefef;
+    }
 
-// .example-element-diagram {
-//   min-width: 80px;
-//   border: 2px solid black;
-//   padding: 8px;
-//   font-weight: lighter;
-//   margin: 8px 0;
-//   height: 104px;
-// }
+    & + mat-row {
+      padding: 0;
+      transition-delay: 0.15s;
+    }
+  }
+}
 
-// .example-element-symbol {
-//   font-weight: bold;
-//   font-size: 40px;
-//   line-height: normal;
-// }
+.example-element-description {
+  padding: 16px;
+}
 
-// .example-element-description {
-//   padding: 16px;
-// }
-
-// .example-element-description-attribution {
-//   opacity: 0.5;
-// }
+.example-element-detail {
+  width: 100%;
+}
 
 @media (max-width: $break-lg) {
   .mobile-label {
@@ -99,10 +79,6 @@ mat-row.example-detail-row {
     align-items: start;
     padding: 8px 24px;
     min-height: 24px;
-
-    &:nth-child(even) {
-      background: #f4f4f4;
-    }
 
     &::after {
       min-height: auto;

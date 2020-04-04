@@ -54,7 +54,9 @@
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="monitoringStatus">
-      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef style="flex-grow: 2;"
+        >Status</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Status</span>
         <span
@@ -111,8 +113,10 @@
               <tr *ngFor="let entry of element.diaryEntires; let i = index">
                 <td>{{ entry.dateTime | date: "d.M.y" }}</td>
                 <td>{{ entry.dateTime | date: "HH:mm" }}</td>
-                <td>{{ entry.bodyTemperature }}</td>
-                <td>{{ toStringSymptoms(entry) }}</td>
+                <td>{{ entry.bodyTemperature | number: "1.1-1":"de" }} °C</td>
+                <td>
+                  {{ toStringSymptoms(entry) || "Keine Symptome angegeben" }}
+                </td>
               </tr>
             </table>
           </div>
