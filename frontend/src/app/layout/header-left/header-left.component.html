@@ -1,0 +1,25 @@
+<div class="container">
+  <img
+    id="logo"
+    src="../../../assets/epitrack_transparent_logo.png"
+    [routerLink]="['/']"
+    height="50px"
+    class="clickable"
+  />
+  <h2 class="clickable ml-3" [routerLink]="['/']">
+    epitrack
+  </h2>
+
+  <nav class="ml-3">
+    <a
+      routerLink="/tenant-admin"
+      routerLinkActive="active"
+      id="tenant-admin-login-link"
+      >Für Behörden</a
+    >
+    <ng-container *ngIf="isAuthenticated$$ | async"
+      ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
+      <a routerLink="/contacts" routerLinkActive="active">Kontakte</a>
+    </ng-container>
+  </nav>
+</div>

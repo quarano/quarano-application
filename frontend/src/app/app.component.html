@@ -1,41 +1,22 @@
-<div class="bootstrap-wrapper">
-  <app-header></app-header>
-
-  <div class="container-fluid">
-    <ng-container *ngIf="isTenantAdminRoute">
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <router-outlet></router-outlet>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="!isTenantAdminRoute">
-      <div class="row">
-        <div class="col-md-6 offset-xl-3">
-          <router-outlet></router-outlet>
-        </div>
-        <div class="col-md-6 col-xl-3 align-self-center text-center">
-          <img src="../../assets/postit.png" id="post-it" />
-          <div id="post-it-text-container">
-            <p id="post-it-text-header">
-              Wussten Sie schon?
-            </p>
-            <p id="post-it-text">
-              Durch die Verwendung dieser Plattform helfen Sie mit, wichtige
-              Ressourcen für Notfälle freizuhalten.
-            </p>
-            <a
-              mat-stroked-button
-              href="https://www.youtube.com/watch?v=z__mJRP8O0w&feature=youtu.be"
-              target="_blank"
-              style="float: right;"
-              >Zeig mir mehr</a
-            >
-          </div>
-        </div>
-      </div>
-    </ng-container>
-  </div>
+<div class="container">
+  <header>
+    <app-header-left style="height: 100%; flex-grow: 1;"></app-header-left>
+    <app-header-right style="height: 100%;"></app-header-right>
+  </header>
+  <mat-progress-bar
+    mode="query"
+    *ngIf="progressBarActive$$ | async"
+    class="mb-3"
+  ></mat-progress-bar>
+  <div
+    class="mb-3"
+    style="height: 4px;"
+    *ngIf="!(progressBarActive$$ | async)"
+  ></div>
+  <main>
+    <article><router-outlet></router-outlet></article>
+    <nav></nav>
+    <aside></aside>
+  </main>
+  <footer><app-footer></app-footer></footer>
 </div>
-
-<app-footer></app-footer>
