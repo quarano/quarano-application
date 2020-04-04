@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import de.wevsvirushackathon.coronareport.client.ClientRepository;
 
 @Service
 public class HDReportService {
+
+	private final Logger log = LoggerFactory.getLogger(HDReportService.class);
 
 	private ModelMapper modelMapper;
     private ClientRepository clientRepository;
@@ -34,14 +38,13 @@ public class HDReportService {
         List<Client> clients = this.clientRepository.findAllByHealthDepartmentId(healthDepartmentId);
         
         if(clients == null) {
+        	log.info("No clients found for hd: " + healthDepartmentId);
         	return new ArrayList<>();
         }
 
 		return clients.stream().map(client -> {
 
 			HDClient hdClient = modelMapper.map(client, HDClient.class);
-
-
 
 			List<DiaryEntry> diaryEntries =  diaryRepository.findAllByClientOrderByDateTimeDesc(client);
 			hdClient.setDiaryEntires(diaryEntries);
@@ -58,11 +61,7 @@ public class HDReportService {
 
 			determineStatus(hdClient);
 
-
-
-
 			return hdClient;
-
 
 		}).collect(Collectors.toList());
     }

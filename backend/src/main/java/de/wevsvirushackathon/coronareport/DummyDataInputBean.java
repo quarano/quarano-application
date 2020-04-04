@@ -14,6 +14,8 @@ import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 import de.wevsvirushackathon.coronareport.client.Client;
 import de.wevsvirushackathon.coronareport.client.ClientRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
@@ -27,6 +29,8 @@ import java.util.*;
 @Component
 //@Profile("!prod")
 public class DummyDataInputBean implements ApplicationListener<ContextRefreshedEvent>, Ordered {
+
+    private final Logger log = LoggerFactory.getLogger(DummyDataInputBean.class);
 
     private ClientRepository clientRepository;
     private ContactPersonRepository contactPersonRepository;
@@ -53,8 +57,11 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
     	
     	Client client = clientRepository.findByClientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22");
     	if(client != null){
+            log.info("Initial client data already exists, skipping dummy data generation");
     		return;
     	}
+
+        log.info("Generating dummy data");
 
         final HealthDepartment hd1 = this.healthDepartmentRepository.save(HealthDepartment.builder().fullName("Testamt 1")
                 .id("Testamt1").passCode(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2")).build());
