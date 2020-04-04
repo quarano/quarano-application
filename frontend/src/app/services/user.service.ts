@@ -1,13 +1,13 @@
 import { Injectable, } from '@angular/core';
-import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { Client } from '../models/client';
 import { ApiService } from './api.service';
-import {catchError, switchMap, tap} from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { BackendClient } from '../models/backend-client';
 import { FirstQuery } from '../models/first-query';
 
 export const USERCODE_STORAGE_KEY = 'covu';
+export const CLIENT_KEY = 'client';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,15 @@ export class UserService {
   public isAuthenticated$$ = new BehaviorSubject<boolean>(false);
 
   public get user(): Client | null {
-    return this.client$$.getValue();
+    return JSON.parse(localStorage.getItem(CLIENT_KEY));
+  }
+
+  public set user(client: Client | null) {
+    if (client === null) {
+      localStorage.removeItem(CLIENT_KEY);
+    } else {
+      localStorage.setItem(CLIENT_KEY, JSON.stringify(client));
+    }
   }
 
   public get localClientCode(): string | null {
@@ -77,14 +85,12 @@ export class UserService {
   }
 
   public setUserCode(code: string): Observable<Client> {
-    let client: Client;
     return this.checkCodeGetClient(code, false)
       .pipe(
         // Get Client
         tap((clientResponse: Client) => {
           this.localClientCode = clientResponse.clientCode;
-          client = clientResponse;
-          this.client$$.next(clientResponse);
+          this.user = clientResponse;
         })
       );
   }
