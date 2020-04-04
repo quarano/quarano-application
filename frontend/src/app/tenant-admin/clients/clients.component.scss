@@ -1,13 +1,17 @@
-table {
-  width: 100%;
+@import "../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
 }
 
-.mat-cell {
-  padding-right: 45px;
+mat-card {
+  margin-bottom: 20px;
 }
 
-.mat-header-cell {
-  padding-right: 45px;
+.mat-table {
+  z-index: 1;
 }
 
 .with-icon {
@@ -19,46 +23,85 @@ table {
   }
 }
 
-tr.example-detail-row {
-  height: 0;
+.mobile-label {
+  display: none;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
-  background: whitesmoke;
+mat-row.example-detail-row {
+  min-height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
-  background: #efefef;
-}
+mat-row.example-element-row {
+  cursor: pointer;
 
-.example-element-row td {
-  border-bottom-width: 0;
-}
+  & > mat-cell:last-of-type {
+    flex-grow: 2;
+  }
 
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
+  &:not(.example-expanded-row) {
+    &:hover,
+    &:focus {
+      background: whitesmoke;
+    }
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
+    :active {
+      background: #efefef;
+    }
 
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
+    & + mat-row {
+      padding: 0;
+      transition-delay: 0.15s;
+    }
+  }
 }
 
 .example-element-description {
   padding: 16px;
 }
 
-.example-element-description-attribution {
-  opacity: 0.5;
+.example-element-detail {
+  width: 100%;
+}
+
+@media (max-width: $break-lg) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row {
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+    min-height: 24px;
+
+    &::after {
+      min-height: auto;
+    }
+  }
+
+  mat-cell {
+    justify-content: space-between;
+    width: 100%;
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  .value-span {
+    text-align: right;
+  }
+
+  .monitoring-icon {
+    display: none;
+  }
 }
