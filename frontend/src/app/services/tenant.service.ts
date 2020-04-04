@@ -2,8 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {TenantsEnum} from './tenantsEnum';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, skip, tap} from 'rxjs/operators';
 import {Tenant} from '../models/tenant';
+import {Router} from '@angular/router';
+import {SnackbarService} from './snackbar.service';
 
 const MOCK_TENANT_1: Tenant = {
   tenantId: 'Testamt1',
@@ -24,8 +26,20 @@ export class TenantService {
   public readonly urlTenant: TenantsEnum;
   public readonly tenant$$ = new BehaviorSubject<Tenant>(null);
 
-  constructor(@Inject(DOCUMENT) private document) {
+  constructor(@Inject(DOCUMENT) private document,
+              private router: Router,
+              private snackbarService: SnackbarService) {
     this.getTenantFromLocation(document.location);
+
+    // Navigate on logout and notify user
+    this.tenant$$.asObservable()
+      .pipe(
+        skip(1),
+        distinctUntilChanged(),
+        filter((tenant) => tenant === null),
+        tap(() => this.snackbarService.message('Sie wurden abgemeldet'))
+      )
+      .subscribe(() => this.router.navigate(['/tenant-admin/login']));
   }
 
   private getTenantFromLocation(location: Location) {
@@ -48,6 +62,10 @@ export class TenantService {
         return TenantsEnum.default;
       }
     }
+  }
+
+  public logout() {
+    this.tenant$$.next(null);
   }
 
   public checkLogin(username: string, password: string): Observable<Tenant> {
