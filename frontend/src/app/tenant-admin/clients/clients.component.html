@@ -88,9 +88,8 @@
       </mat-cell>
     </ng-container>
 
-    <!-- <ng-container matColumnDef="expandedDetail">
-      <td
-        mat-cell
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell
         *matCellDef="let element"
         [attr.colspan]="displayedColumns.length"
       >
@@ -118,8 +117,8 @@
             </table>
           </div>
         </div>
-      </td>
-    </ng-container> -->
+      </mat-cell>
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
@@ -128,10 +127,9 @@
       [class.example-expanded-row]="expandedElement === element"
       (click)="expandedElement = expandedElement === element ? null : element"
     ></mat-row>
-    <!-- <tr
-      mat-row
+    <mat-row
       *matRowDef="let row; columns: ['expandedDetail']"
       class="example-detail-row"
-    ></tr> -->
+    ></mat-row>
   </mat-table>
 </div>
