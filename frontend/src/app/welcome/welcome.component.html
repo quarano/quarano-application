@@ -1,6 +1,6 @@
 <mat-card
   class="form__card--small form__card--animated"
-  style="margin-bottom: 1rem; text-align: center; color:red"
+  style="margin-bottom: 1rem; text-align: center; color: red;"
 >
   <span style="margin-left: 1rem;">
     Im Falle eines medizinischen Notfalls wählen Sie bitte umgehend den Notruf
@@ -39,7 +39,8 @@
     </p>
     <p>Sie haben von uns Zugangsdaten erhalten und sind bereits registriert?</p>
     <p>
-      <button id="client-login-btn"
+      <button
+        id="client-login-btn"
         style="margin-bottom: 3rem;"
         mat-button
         mat-raised-button
@@ -54,7 +55,8 @@
       aber noch keine Zugangsdaten?
     </p>
     <p style="margin-bottom: 3rem;">
-      <button id="client-register-btn"
+      <button
+        id="client-register-btn"
         mat-button
         mat-raised-button
         color="primary"
@@ -98,9 +100,9 @@
       mat-raised-button
       color="primary"
       (click)="authenticateCode()"
-      [disabled]="checkingCode"
+      [disabled]="!enteredCode || checkingCode"
     >
-      Code laden
+      Weiter
     </button>
   </mat-card-actions>
 </mat-card>
