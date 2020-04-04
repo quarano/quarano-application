@@ -1,4 +1,4 @@
-# epitrack
+# quarano
 
 Hosted at <https://epitrack.de>
 
@@ -39,4 +39,4 @@ further information at [github](https://github.com/typicode/json-server)
 
 ## CSS framework
 
-We use  [Angular Material](https://v7.material.angular.io)
+We use [Angular Material](https://v7.material.angular.io)
