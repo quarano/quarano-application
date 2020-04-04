@@ -1,0 +1,11 @@
+<div class="tenant-wrapper">
+  <ng-container [ngSwitch]="urlTenant">
+    <h6 *ngSwitchCase="tenantsEnum.develop">Develop</h6>
+    <h6 *ngSwitchCase="tenantsEnum.testhausen">
+      In Kooperation mit Gesundheitsamt Testhausen
+    </h6>
+    <h6 *ngSwitchCase="tenantsEnum.testberg">
+      Gesundheitsamt Testberg
+    </h6>
+  </ng-container>
+</div>
