@@ -34,10 +34,11 @@
         <mat-error>Bitte geben Sie das Datum des Eintrags ein</mat-error>
       </mat-form-field>
       <div class="radio-group">
-        <label class="mb-3">Körpertemperatur in °C</label>
-        <div style="display: flex; flex-direction: row;">
-          <span class="text-small">35,0</span>
+        <label class="mb-3">Körpertemperatur in °C *</label>
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <span class="text-small mr-2">35,0</span>
           <mat-slider
+            #slider
             style="flex-grow: 1;"
             color="primary"
             thumbLabel
@@ -49,9 +50,11 @@
             formControlName="bodyTemperature"
             required
           ></mat-slider>
-          <span class="text-small">44,0</span>
+          <span class="text-small ml-2">44,0</span>
         </div>
-        <mat-error>Bitte geben Sie Ihre Körpertemperatur ein</mat-error>
+        <mat-error *ngIf="!slider.value || slider.value === 35.0"
+          >Bitte geben Sie Ihre Körpertemperatur ein</mat-error
+        >
       </div>
       <div class="radio-group">
         <label class="mb-3">Symptome</label>

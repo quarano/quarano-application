@@ -68,7 +68,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
     const contactPersonIds = this.diaryEntry.contactPersonList.map(c => c.id);
     this.formGroup = this.formBuilder.group(
       {
-        bodyTemperature: new FormControl({ value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly }, Validators.required),
+        bodyTemperature: new FormControl(
+          { value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly },
+          [Validators.required, Validators.min(35.1), Validators.max(44.0)]),
         characteristicSymptoms: new FormControl({ value: characteristicSymptomIds, disabled: this.isReadonly }),
         nonCharacteristicSymptoms: new FormControl({ value: nonCharacteristicSymptomIds, disabled: this.isReadonly }),
         dateTime: new FormControl({ value: this.diaryEntry.dateTime, disabled: this.isReadonly }, Validators.required),
@@ -138,6 +140,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
   }
 
   formatLabel(value: number) {
+    if (value === 0) { return ''; }
     return value.toLocaleString();
   }
 }
