@@ -97,11 +97,7 @@
       <div
         style="display: flex; flex-direction: row; justify-content: flex-end;"
       >
-        <button
-          mat-stroked-button
-          type="button"
-          [routerLink]="['/contacts/new']"
-        >
+        <button mat-stroked-button type="button" (click)="openContactDialog()">
           Neue Kontaktperson anlegen
         </button>
       </div>

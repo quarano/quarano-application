@@ -1,5 +1,7 @@
+import { ContactPersonDto } from './../../models/contact-person';
+import { tap } from 'rxjs/operators';
+import { ContactPersonDialogComponent } from './../../contact/contact-person-dialog/contact-person-dialog.component';
 import { DeactivatableComponent } from './../../guards/prevent-unsaved-changes.guard';
-import { ContactPersonDto } from 'src/app/models/contact-person';
 import { SubSink } from 'subsink';
 import { DiaryEntryModifyDto } from './../../models/diary-entry';
 import { SnackbarService } from './../../services/snackbar.service';
@@ -11,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SymptomDto } from 'src/app/models/symptom';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-diary-entry',
@@ -44,7 +47,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private formBuilder: FormBuilder,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -149,5 +153,19 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   formatLabel(value: number) {
     if (value === 0) { return ''; }
     return value.toLocaleString();
+  }
+
+  openContactDialog() {
+    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
+      data: {
+        contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
+      }
+    });
+
+    this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+      if (createdContact) {
+        this.contactPersons.push(createdContact);
+      }
+    }));
   }
 }
