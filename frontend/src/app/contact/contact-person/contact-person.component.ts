@@ -1,13 +1,14 @@
 import { SubSink } from 'subsink';
 import {
-  Component, OnInit, OnDestroy
+  Component, OnInit, OnDestroy, HostListener
 } from '@angular/core';
 
 import {
-  ActivatedRoute
+  ActivatedRoute, Router
 } from '@angular/router';
 import { ContactPersonDto } from 'src/app/models/contact-person';
-import { Location } from '@angular/common';
+import { DeactivatableComponent } from 'src/app/guards/prevent-unsaved-changes.guard';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -15,13 +16,14 @@ import { Location } from '@angular/common';
   templateUrl: './contact-person.component.html',
   styleUrls: ['./contact-person.component.scss']
 })
-export class ContactPersonComponent implements OnInit, OnDestroy {
+export class ContactPersonComponent implements OnInit, OnDestroy, DeactivatableComponent {
   private subs = new SubSink();
   contactPerson: ContactPersonDto;
+  isDirty: boolean;
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location) { }
+    private router: Router) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -33,7 +35,16 @@ export class ContactPersonComponent implements OnInit, OnDestroy {
     }));
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.isDirty;
+  }
+
+  setDirtyFlag(value: boolean) {
+    this.isDirty = value;
+  }
+
   navigateBack() {
-    this.location.back();
+    this.router.navigate(['/contacts']);
   }
 }

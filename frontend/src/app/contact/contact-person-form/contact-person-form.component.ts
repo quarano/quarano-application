@@ -12,11 +12,12 @@ import { Observable } from 'rxjs';
   templateUrl: './contact-person-form.component.html',
   styleUrls: ['./contact-person-form.component.scss']
 })
-export class ContactPersonFormComponent implements OnInit, OnDestroy, DeactivatableComponent {
+export class ContactPersonFormComponent implements OnInit, OnDestroy {
   @Input() contactPerson: ContactPersonDto;
   @Output() contactCreated = new EventEmitter<ContactPersonDto>();
   @Output() contactModified = new EventEmitter<any>();
   @Output() cancelled = new EventEmitter<any>();
+  @Output() dirty = new EventEmitter<boolean>();
   formGroup: FormGroup;
   private subs = new SubSink();
 
@@ -36,12 +37,6 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
     this.subs.unsubscribe();
   }
 
-
-  @HostListener('window:beforeunload')
-  canDeactivate(): Observable<boolean> | boolean {
-    return this.formGroup.pristine;
-  }
-
   get isNew() {
     return (!this.contactPerson.id);
   }
@@ -55,6 +50,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
         phone: new FormControl(this.contactPerson.phone, [Validators.required]),
       }
     );
+    this.formGroup.valueChanges.subscribe(_ => this.dirty.emit(true));
   }
 
   onSubmit() {
@@ -76,6 +72,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
         this.snackbarService.success('Kontaktperson erfolgreich angelegt');
         this.formGroup.markAsPristine();
         this.contactCreated.emit(createdContactPerson);
+        this.dirty.emit(false);
       }));
   }
 
@@ -86,6 +83,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
         this.snackbarService.success('Kontaktperson erfolgreich aktualisiert');
         this.formGroup.markAsPristine();
         this.contactModified.emit();
+        this.dirty.emit(false);
       }));
   }
 
