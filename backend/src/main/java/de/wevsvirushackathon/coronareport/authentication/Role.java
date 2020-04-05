@@ -6,6 +6,12 @@ import javax.persistence.Id;
 
 import lombok.NoArgsConstructor;
 
+
+/**
+ * A masterdata-entity, which can be assigned to an account.
+ * @author Patrick Otto
+ *
+ */
 @Entity
 @NoArgsConstructor
 public class Role {
@@ -16,6 +22,10 @@ public class Role {
 	private String name;
 	
 	public Role(RoleType name){
+		this.name = name.getCode();
+	}
+	
+	public Role(RoleType name, int id){
 		this.name = name.getCode();
 	}
 

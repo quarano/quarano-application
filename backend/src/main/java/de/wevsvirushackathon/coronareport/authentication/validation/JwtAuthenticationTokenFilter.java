@@ -12,21 +12,29 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * A Request filter that checks if the Bearer Token header is set and starts and
+ * authentication with the containing token
+ * 
+ * @author Patrick Otto
+ *
+ */
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.validation.header}")
-    private String tokenHeader;
+	@Value("${jwt.validation.header}")
+	private String tokenHeader;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        final String requestHeader = request.getHeader(this.tokenHeader);
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		final String requestHeader = request.getHeader(this.tokenHeader);
 
-        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            String  authToken = requestHeader.substring(7);
-            JwtAuthentication authentication = new JwtAuthentication(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        chain.doFilter(request, response);
-    }
+		if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
+			String authToken = requestHeader.substring(7);
+			JwtAuthentication authentication = new JwtAuthentication(authToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+		chain.doFilter(request, response);
+	}
 }

@@ -13,7 +13,7 @@ public enum RoleType {
 
 	ROLE_USER("ROLE_USER"),
 	ROLE_HD_ADMIN("ROLE_HD_ADMIN"),
-	ROLE_HD_EMPLOYEE("ROLE_HD_CASE_AGENT");
+	ROLE_HD_CASE_AGENT("ROLE_HD_CASE_AGENT");
 	
 	@Getter
 	private String code;

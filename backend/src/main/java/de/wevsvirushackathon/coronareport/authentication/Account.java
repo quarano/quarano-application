@@ -15,11 +15,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * An account of a user. Can be connected to a {@link Client} or can be a HD employee account
+ * @author Patrick Otto
+ *
+ */
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Account {
 
     @Id
@@ -37,6 +41,5 @@ public class Account {
     
     @ManyToMany(cascade = CascadeType.DETACH)
     private List<Role> roles = new ArrayList<>();
-
 
 }

@@ -14,44 +14,51 @@ import org.springframework.stereotype.Component;
 import de.wevsvirushackathon.coronareport.authentication.RoleType;
 import io.jsonwebtoken.JwtException;
 
+/**
+ * An {@link AuthenticationProvider} implementation that creates an
+ * authentication based on the validity of a JWT token
+ * 
+ * @author Patrick Otto
+ *
+ */
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
+	private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
 
-    private final JwtTokenService jwtService;
+	private final JwtTokenService jwtService;
 
-    @SuppressWarnings("unused")
-    public JwtAuthenticationProvider() {
-        this(null);
-    }
+	public JwtAuthenticationProvider() {
+		this(null);
+	}
 
-    @Autowired
-    public JwtAuthenticationProvider(JwtTokenService jwtService) {
-        this.jwtService = jwtService;
-    }
+	@Autowired
+	public JwtAuthenticationProvider(JwtTokenService jwtService) {
+		this.jwtService = jwtService;
+	}
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+	@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        try {
-            String token = (String) authentication.getCredentials();
-            String username = jwtService.getUsernameFromToken(token);
-            List<String> roles = jwtService.getRolesFromToken(token);
-            List<RoleType> grantedRoleTypes = roles.stream().map( roleName -> RoleType.valueOf(roleName)).collect(Collectors.toList()); 
+		try {
+			String token = (String) authentication.getCredentials();
+			String username = jwtService.getUsernameFromToken(token);
+			List<String> roles = jwtService.getRolesFromToken(token);
+			List<RoleType> grantedRoleTypes = roles.stream().map(roleName -> RoleType.valueOf(roleName))
+					.collect(Collectors.toList());
 
-            return jwtService.validateToken(token)
-                    .map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes))
-                    .orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
+			return jwtService.validateToken(token)
+					.map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes))
+					.orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
 
-        } catch (JwtException ex) {
-            log.error(String.format("Invalid JWT Token: %s", ex.getMessage()));
-            throw new JwtAuthenticationException("Failed to verify token");
-        }
-    }
+		} catch (JwtException ex) {
+			log.error(String.format("Invalid JWT Token: %s", ex.getMessage()));
+			throw new JwtAuthenticationException("Failed to verify token");
+		}
+	}
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return JwtAuthentication.class.equals(authentication);
-    }
+	@Override
+	public boolean supports(Class<?> authentication) {
+		return JwtAuthentication.class.equals(authentication);
+	}
 }
