@@ -2,7 +2,7 @@
 
 Epidemiemanagement für Gesundheitsbehörden durch Digitalisierung von Selbstauskünften bestätigter Quarantänefälle und Verdachtspersonen (inkl. Informationen zu Symptomen und Kontakten)
 
-Hosted at <https://epitrack.de>
+Hosted at <https://quarano.de> (prod) and <https://develop.quarano.de> (dev)
 
 [![YouTube video](https://img.youtube.com/vi/z__mJRP8O0w/0.jpg)](https://www.youtube.com/watch?v=z__mJRP8O0wD)
 
