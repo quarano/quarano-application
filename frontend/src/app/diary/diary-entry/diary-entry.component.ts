@@ -136,4 +136,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
     const selectedValues = this.characteristicSymptomsControl.value as number[];
     return selectedValues.includes(symptom.id);
   }
+
+  formatLabel(value: number) {
+    return value.toLocaleString();
+  }
 }

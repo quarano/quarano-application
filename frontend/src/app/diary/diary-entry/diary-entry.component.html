@@ -33,22 +33,28 @@
         </ngx-mat-datetime-picker>
         <mat-error>Bitte geben Sie das Datum des Eintrags ein</mat-error>
       </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          lang="de"
-          type="number"
-          [step]="0.1"
-          [min]="30.0"
-          [max]="50.0"
-          placeholder="Körpertemperatur in °C"
-          formControlName="bodyTemperature"
-          required
-        />
-        <mat-error>Bitte geben Sie Ihre Körpertemperatur ein</mat-error>
-      </mat-form-field>
       <div class="radio-group">
-        <label>Symptome</label>
+        <label class="mb-3">Körpertemperatur in °C</label>
+        <div style="display: flex; flex-direction: row;">
+          <span class="text-small">35,0</span>
+          <mat-slider
+            style="flex-grow: 1;"
+            color="primary"
+            thumbLabel
+            step="0.1"
+            min="35.0"
+            max="44.0"
+            tickInterval="10.0"
+            [displayWith]="formatLabel"
+            formControlName="bodyTemperature"
+            required
+          ></mat-slider>
+          <span class="text-small">44,0</span>
+        </div>
+        <mat-error>Bitte geben Sie Ihre Körpertemperatur ein</mat-error>
+      </div>
+      <div class="radio-group">
+        <label class="mb-3">Symptome</label>
         <mat-slide-toggle
           class="radio-button"
           *ngFor="let symptom of characteristicSymptoms"
