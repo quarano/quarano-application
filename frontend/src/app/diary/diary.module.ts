@@ -1,3 +1,4 @@
+import { ConfirmationDialogModule } from './../ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from './../ui/alert/alert.module';
 import { DiaryListItemComponent } from './diary-list-item/diary-list-item.component';
 import { RouterModule } from '@angular/router';
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule
+    AlertModule,
+    ConfirmationDialogModule
   ],
   declarations: [DiaryComponent, DiaryEntryComponent, DiaryListItemComponent],
   providers: [DiaryEntryResolver, SymptomsResolver, GroupedDiaryEntriesResolver]

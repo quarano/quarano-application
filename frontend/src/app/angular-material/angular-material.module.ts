@@ -27,6 +27,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const materialModules = [
   MatButtonModule,
@@ -53,7 +54,8 @@ const materialModules = [
   MatListModule,
   MatSortModule,
   MatTooltipModule,
-  MatSliderModule
+  MatSliderModule,
+  MatDialogModule
 ];
 
 @NgModule({

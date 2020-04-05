@@ -1,21 +1,23 @@
+import { DeactivatableComponent } from './../../guards/prevent-unsaved-changes.guard';
 import { ContactPersonDto } from 'src/app/models/contact-person';
 import { SubSink } from 'subsink';
 import { DiaryEntryModifyDto } from './../../models/diary-entry';
 import { SnackbarService } from './../../services/snackbar.service';
 import { ApiService } from './../../services/api.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DiaryEntryDto } from 'src/app/models/diary-entry';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SymptomDto } from 'src/app/models/symptom';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-diary-entry',
   templateUrl: './diary-entry.component.html',
   styleUrls: ['./diary-entry.component.scss']
 })
-export class DiaryEntryComponent implements OnInit, OnDestroy {
+export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
   formGroup: FormGroup;
   diaryEntry: DiaryEntryDto;
   nonCharacteristicSymptoms: SymptomDto[] = [];
@@ -23,6 +25,11 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
   contactPersons: ContactPersonDto[] = [];
   today = new Date();
   private subs = new SubSink();
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return this.formGroup.pristine;
+  }
 
   get isNew(): boolean {
     return this.diaryEntry?.id == null;

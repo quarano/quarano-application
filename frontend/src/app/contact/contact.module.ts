@@ -1,3 +1,4 @@
+import { ConfirmationDialogModule } from './../ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from './../ui/alert/alert.module';
 import { RouterModule } from '@angular/router';
 import { ContactPersonResolver } from './../resolvers/contact-person.resolver';
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule
+    AlertModule,
+    ConfirmationDialogModule
   ],
   declarations: [ContactComponent, ContactPersonComponent],
   providers: [ContactPersonsResolver, ContactPersonResolver]
