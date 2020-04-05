@@ -1,5 +1,6 @@
-export interface ContactPersonDto {
-  id: number;
+import { IIdentifiable } from './general';
+
+export interface ContactPersonDto extends IIdentifiable {
   firstname: string;
   surename: string;
   phone: string;

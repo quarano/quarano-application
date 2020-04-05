@@ -74,6 +74,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
       .createContactPerson(this.contactPerson)
       .subscribe(createdContactPerson => {
         this.snackbarService.success('Kontaktperson erfolgreich angelegt');
+        this.formGroup.markAsPristine();
         this.contactCreated.emit(createdContactPerson);
       }));
   }
@@ -83,6 +84,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy, Deactivata
       .modifyContactPerson(this.contactPerson)
       .subscribe(_ => {
         this.snackbarService.success('Kontaktperson erfolgreich aktualisiert');
+        this.formGroup.markAsPristine();
         this.contactModified.emit();
       }));
   }

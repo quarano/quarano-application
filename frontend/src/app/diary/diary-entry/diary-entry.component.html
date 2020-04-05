@@ -67,33 +67,21 @@
           >{{ symptom.name }}</mat-slide-toggle
         >
       </div>
-      <mat-form-field>
-        <mat-select
-          formControlName="nonCharacteristicSymptoms"
-          placeholder="Sonstige Symptome"
-          multiple
-        >
-          <mat-option
-            *ngFor="let symptom of nonCharacteristicSymptoms"
-            [value]="symptom.id"
-            >{{ symptom.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select
-          formControlName="contactPersons"
-          placeholder="Kontaktpersonen"
-          multiple
-        >
-          <mat-option
-            *ngFor="let contactPerson of contactPersons"
-            [value]="contactPerson.id"
-            >{{ contactPerson.firstname }}
-            {{ contactPerson.surename }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+      <app-multiple-autocomplete
+        [control]="this.formGroup.controls.nonCharacteristicSymptoms"
+        [selectableItems]="nonCharacteristicSymptoms"
+        placeholder="Symptome"
+        [nameProperties]="['name']"
+        name="nonCharacteristicSymptoms"
+      ></app-multiple-autocomplete>
+      <app-multiple-autocomplete
+        [control]="this.formGroup.controls.contactPersons"
+        [selectableItems]="contactPersons"
+        placeholder="Kontaktpersonen"
+        [nameProperties]="['firstname', 'surename']"
+        name="contactPersons"
+      >
+      </app-multiple-autocomplete>
       <div
         style="display: flex; flex-direction: row; justify-content: flex-end;"
       >

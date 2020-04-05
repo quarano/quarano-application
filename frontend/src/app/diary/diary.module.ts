@@ -1,3 +1,4 @@
+import { MultipleAutocompleteModule } from './../ui/multiple-autocomplete/multiple-autocomplete.module';
 import { ConfirmationDialogModule } from './../ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from './../ui/alert/alert.module';
 import { DiaryListItemComponent } from './diary-list-item/diary-list-item.component';
@@ -21,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     RouterModule,
     AlertModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
+    MultipleAutocompleteModule
   ],
   declarations: [DiaryComponent, DiaryEntryComponent, DiaryListItemComponent],
   providers: [DiaryEntryResolver, SymptomsResolver, GroupedDiaryEntriesResolver]

@@ -1,5 +1,4 @@
 import { ContactPersonDto } from './../../models/contact-person';
-import { tap } from 'rxjs/operators';
 import { ContactPersonDialogComponent } from './../../contact/contact-person-dialog/contact-person-dialog.component';
 import { DeactivatableComponent } from './../../guards/prevent-unsaved-changes.guard';
 import { SubSink } from 'subsink';
@@ -73,9 +72,12 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     });
   }
 
+  get nonCharacteristicSymptomIds() {
+    return this.diaryEntry.nonCharacteristicSymptoms.map(s => s.id);
+  }
+
   buildForm() {
     const characteristicSymptomIds = this.diaryEntry.characteristicSymptoms.map(s => s.id);
-    const nonCharacteristicSymptomIds = this.diaryEntry.nonCharacteristicSymptoms.map(s => s.id);
     const contactPersonIds = this.diaryEntry.contactPersonList.map(c => c.id);
     this.formGroup = this.formBuilder.group(
       {
@@ -83,7 +85,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
           { value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly },
           [Validators.required, Validators.min(35.1), Validators.max(44.0)]),
         characteristicSymptoms: new FormControl({ value: characteristicSymptomIds, disabled: this.isReadonly }),
-        nonCharacteristicSymptoms: new FormControl({ value: nonCharacteristicSymptomIds, disabled: this.isReadonly }),
+        nonCharacteristicSymptoms: new FormControl({ value: this.nonCharacteristicSymptomIds, disabled: this.isReadonly }),
         dateTime: new FormControl({ value: this.diaryEntry.dateTime, disabled: this.isReadonly }, Validators.required),
         contactPersons: new FormControl({ value: contactPersonIds, disabled: this.isReadonly })
       }
@@ -114,6 +116,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
       .createDiaryEntry(diaryEntry)
       .subscribe(_ => {
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich angelegt');
+        this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
       }));
   }
@@ -123,6 +126,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
       .modifyDiaryEntry(diaryEntry)
       .subscribe(_ => {
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich aktualisiert');
+        this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
       }));
   }
