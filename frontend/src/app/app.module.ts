@@ -17,6 +17,7 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
+import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
 
 registerLocaleData(localeDe, 'de');
 
@@ -41,6 +42,11 @@ registerLocaleData(localeDe, 'de');
   ],
   providers: [
     SnackbarService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ProgressBarInterceptor,
+      multi: true
+    },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [
