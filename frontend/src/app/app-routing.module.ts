@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { IsAuthenticatedGuard } from './guards/is-authenticated.guard';
 import { IsNotAuthenticatedGuard } from './guards/is-not-authenticated.guard';
-import {IsTenantAdminGuard} from './guards/is-tenant-admin.guard';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 const routes: Routes = [
   {
@@ -21,6 +21,14 @@ const routes: Routes = [
   {
     path: 'tenant-admin', loadChildren: () =>
       import('./tenant-admin/tenant-admin.module').then(m => m.TenantAdminModule)
+  },
+  {
+    path: '404/:message',
+    component: NotFoundComponent,
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent
   },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }

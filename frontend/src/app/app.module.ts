@@ -1,3 +1,4 @@
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SnackbarService } from './services/snackbar.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,7 +28,8 @@ registerLocaleData(localeDe, 'de');
     NotFoundComponent,
     FooterComponent,
     HeaderLeftComponent,
-    HeaderRightComponent
+    HeaderRightComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
