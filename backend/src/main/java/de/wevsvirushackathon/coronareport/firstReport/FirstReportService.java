@@ -13,7 +13,6 @@ public class FirstReportService {
         this.firstReportRepository = firstReportRepository;
     }
 
-
     public void addFirstReport(FirstReport report) {
         this.firstReportRepository.save(report);
     }
