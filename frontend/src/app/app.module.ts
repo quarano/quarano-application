@@ -1,3 +1,4 @@
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SnackbarService } from './services/snackbar.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,6 +18,7 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
+import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
 
 registerLocaleData(localeDe, 'de');
 
@@ -26,7 +28,8 @@ registerLocaleData(localeDe, 'de');
     NotFoundComponent,
     FooterComponent,
     HeaderLeftComponent,
-    HeaderRightComponent
+    HeaderRightComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,11 @@ registerLocaleData(localeDe, 'de');
   ],
   providers: [
     SnackbarService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ProgressBarInterceptor,
+      multi: true
+    },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [

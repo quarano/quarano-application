@@ -57,8 +57,9 @@
         >
       </div>
       <div class="radio-group">
-        <label class="mb-3">Symptome</label>
+        <label class="mb-3">Krankheitsspezifische Symptome</label>
         <mat-slide-toggle
+          color="primary"
           class="radio-button"
           *ngFor="let symptom of characteristicSymptoms"
           [checked]="isCharacteristicSymptomSelected(symptom)"
@@ -70,23 +71,36 @@
       <app-multiple-autocomplete
         [control]="this.formGroup.controls.nonCharacteristicSymptoms"
         [selectableItems]="nonCharacteristicSymptoms"
-        placeholder="Symptome"
+        placeholder="Sonstige Symptome"
         [nameProperties]="['name']"
         name="nonCharacteristicSymptoms"
       ></app-multiple-autocomplete>
       <app-multiple-autocomplete
         [control]="this.formGroup.controls.contactPersons"
         [selectableItems]="contactPersons"
-        placeholder="Kontaktpersonen"
+        placeholder="Kontakte mit anderen Menschen seit letztem Eintrag"
         [nameProperties]="['firstname', 'surename']"
         name="contactPersons"
       >
       </app-multiple-autocomplete>
       <div
-        style="display: flex; flex-direction: row; justify-content: flex-end;"
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+        "
       >
-        <button mat-stroked-button type="button" (click)="openContactDialog()">
-          Neue Kontaktperson anlegen
+        <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+        <button
+          mat-button
+          color="primary"
+          type="button"
+          (click)="openContactDialog()"
+          class="p-2 mr-0"
+          style="line-height: normal;"
+        >
+          Hier anlegen
         </button>
       </div>
     </mat-card-content>
