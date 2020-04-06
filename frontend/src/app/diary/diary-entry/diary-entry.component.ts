@@ -1,21 +1,25 @@
-import { ContactPersonDto } from 'src/app/models/contact-person';
+import { ContactPersonDto } from './../../models/contact-person';
+import { ContactPersonDialogComponent } from './../../contact/contact-person-dialog/contact-person-dialog.component';
+import { DeactivatableComponent } from './../../guards/prevent-unsaved-changes.guard';
 import { SubSink } from 'subsink';
 import { DiaryEntryModifyDto } from './../../models/diary-entry';
 import { SnackbarService } from './../../services/snackbar.service';
 import { ApiService } from './../../services/api.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DiaryEntryDto } from 'src/app/models/diary-entry';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SymptomDto } from 'src/app/models/symptom';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-diary-entry',
   templateUrl: './diary-entry.component.html',
   styleUrls: ['./diary-entry.component.scss']
 })
-export class DiaryEntryComponent implements OnInit, OnDestroy {
+export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
   formGroup: FormGroup;
   diaryEntry: DiaryEntryDto;
   nonCharacteristicSymptoms: SymptomDto[] = [];
@@ -23,6 +27,11 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
   contactPersons: ContactPersonDto[] = [];
   today = new Date();
   private subs = new SubSink();
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return this.formGroup.pristine;
+  }
 
   get isNew(): boolean {
     return this.diaryEntry?.id == null;
@@ -37,7 +46,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -62,15 +72,20 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
     });
   }
 
+  get nonCharacteristicSymptomIds() {
+    return this.diaryEntry.nonCharacteristicSymptoms.map(s => s.id);
+  }
+
   buildForm() {
     const characteristicSymptomIds = this.diaryEntry.characteristicSymptoms.map(s => s.id);
-    const nonCharacteristicSymptomIds = this.diaryEntry.nonCharacteristicSymptoms.map(s => s.id);
     const contactPersonIds = this.diaryEntry.contactPersonList.map(c => c.id);
     this.formGroup = this.formBuilder.group(
       {
-        bodyTemperature: new FormControl({ value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly }, Validators.required),
+        bodyTemperature: new FormControl(
+          { value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly },
+          [Validators.required, Validators.min(35.1), Validators.max(44.0)]),
         characteristicSymptoms: new FormControl({ value: characteristicSymptomIds, disabled: this.isReadonly }),
-        nonCharacteristicSymptoms: new FormControl({ value: nonCharacteristicSymptomIds, disabled: this.isReadonly }),
+        nonCharacteristicSymptoms: new FormControl({ value: this.nonCharacteristicSymptomIds, disabled: this.isReadonly }),
         dateTime: new FormControl({ value: this.diaryEntry.dateTime, disabled: this.isReadonly }, Validators.required),
         contactPersons: new FormControl({ value: contactPersonIds, disabled: this.isReadonly })
       }
@@ -101,6 +116,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
       .createDiaryEntry(diaryEntry)
       .subscribe(_ => {
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich angelegt');
+        this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
       }));
   }
@@ -110,6 +126,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
       .modifyDiaryEntry(diaryEntry)
       .subscribe(_ => {
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich aktualisiert');
+        this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
       }));
   }
@@ -135,5 +152,24 @@ export class DiaryEntryComponent implements OnInit, OnDestroy {
   isCharacteristicSymptomSelected(symptom: SymptomDto) {
     const selectedValues = this.characteristicSymptomsControl.value as number[];
     return selectedValues.includes(symptom.id);
+  }
+
+  formatLabel(value: number) {
+    if (value === 0) { return ''; }
+    return value.toLocaleString();
+  }
+
+  openContactDialog() {
+    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
+      data: {
+        contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
+      }
+    });
+
+    this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+      if (createdContact) {
+        this.contactPersons.push(createdContact);
+      }
+    }));
   }
 }

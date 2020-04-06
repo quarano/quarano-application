@@ -55,7 +55,11 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(to right, #5ce1e6, #120816) !important;
+  background-image: linear-gradient(
+    to right,
+    $primary-color,
+    $accent-color
+  ) !important;
 }
 
 @media all and (max-width: $break-sm) {

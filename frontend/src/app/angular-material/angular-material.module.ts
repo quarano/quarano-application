@@ -26,6 +26,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const materialModules = [
   MatButtonModule,
@@ -51,7 +55,11 @@ const materialModules = [
   MatGridListModule,
   MatListModule,
   MatSortModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSliderModule,
+  MatDialogModule,
+  MatChipsModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({
