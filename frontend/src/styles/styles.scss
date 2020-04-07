@@ -32,3 +32,9 @@ h5,
 h6 {
   font-family: GlacialIndifferenceBold !important;
 }
+
+fieldset legend {
+  padding-left: 5px;
+  padding-right: 5px;
+  color: $muted-color;
+}

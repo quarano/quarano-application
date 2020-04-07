@@ -21,7 +21,8 @@
 }
 
 .light-primary-color {
-  background: #b2ebf2;
+  background-color: #b2ebf2 !important;
+  color: black !important;
 }
 
 .text-primary-color {
@@ -45,9 +46,9 @@
 }
 
 .text-muted {
-  color: rgba(0, 0, 0, 0.54) !important;
+  color: $muted-color !important;
 }
 
-label {
-  color: rgba(0, 0, 0, 0.54);
+mat-label {
+  color: $muted-color;
 }

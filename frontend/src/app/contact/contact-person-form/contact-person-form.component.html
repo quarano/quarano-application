@@ -8,44 +8,205 @@
       <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <mat-form-field>
+      <mat-form-field class="half-width">
         <input
           matInput
           placeholder="Vorname"
           formControlName="firstname"
-          required
           type="text"
         />
         <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="half-width">
         <input
           matInput
           placeholder="Nachname"
           formControlName="surename"
-          required
           type="text"
         />
         <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
       </mat-form-field>
-      <mat-form-field>
-        <input
+      <fieldset class="mb-3">
+        <legend>Kontaktmöglichkeiten *</legend>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            placeholder="Telefonnummer (Festnetz)"
+            formControlName="phone"
+            type="phone"
+          />
+          <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            placeholder="Telefonnummer (mobil)"
+            formControlName="mobilePhone"
+            type="phone"
+          />
+          <mat-error
+            >Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            placeholder="E-Mail"
+            formControlName="email"
+            type="email"
+          />
+          <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width" *ngIf="showCommentField">
+          <mat-label>Hinweise zur Identifikation</mat-label>
+          <textarea
+            #identificationHintTextarea
+            [mat-autosize]="true"
+            [matAutosizeMinRows]="8"
+            matInput
+            formControlName="identificationHint"
+            placeholder="Bitte geben Sie uns weitere Hinweise, wie wir die Person ermitteln könnten (z.B. Mitarbeiter von Bäckerei 'Müller', Taxifahrer, Mitarbeiter im Pflegeheim oder Krankenhaus 'Klinikum Mannheim' und bitte auch dazugehörige Telefonnummern oder Kontaktwege wie z.B. Nummer des Pflegeheims, etc) damit wir den Kontakt schnellstmöglich ermitteln können"
+          ></textarea>
+          <mat-error
+            >Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen
+            Hinweis zur Identifikation ein</mat-error
+          >
+        </mat-form-field>
+      </fieldset>
+      <fieldset class="mb-3">
+        <legend>Adresse</legend>
+
+        <mat-form-field style="width: 70%;">
+          <input
+            matInput
+            placeholder="Straße"
+            formControlName="street"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine Straße ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 30%;">
+          <input
+            matInput
+            placeholder="Hausnummer"
+            formControlName="houseNumber"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 30%;">
+          <input
+            matInput
+            placeholder="Postleitzahl"
+            formControlName="zipCode"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 70%;">
+          <input
+            matInput
+            placeholder="Ort"
+            formControlName="city"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+        </mat-form-field>
+      </fieldset>
+      <fieldset class="mb-3">
+        <legend>Risikoeinschätzung</legend>
+        <app-alert
+          message="Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson"
+        >
+        </app-alert>
+        <div style="display: flex; flex-direction: column;">
+          <div class="risk-question">
+            <mat-label id="example-radio-group-label"
+              >Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem
+              Pflegeberuf</mat-label
+            >
+            <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              class="example-radio-group"
+              formFieldName="isHealthStuff"
+            >
+              <mat-radio-button class="example-radio-button" [value]="true">
+                Ja
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="false">
+                Nein
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="null">
+                Das weiß ich nicht
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="risk-question">
+            <mat-label id="example-radio-group-label"
+              >Die Kontaktperson ist über 60 jahre alt</mat-label
+            >
+            <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              class="example-radio-group"
+              formFieldName="isSenior"
+            >
+              <mat-radio-button class="example-radio-button" [value]="true">
+                Ja
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="false">
+                Nein
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="null">
+                Das weiß ich nicht
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="risk-question">
+            <mat-label
+              id="example-radio-group-label"
+              style="display: flex; align-items: center;"
+              >Die Kontaktperson hat bekannte Vorerkrankungen<mat-icon
+                class="ml-1"
+                style="cursor: pointer;"
+                matTooltip="In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)"
+              >
+                info</mat-icon
+              ></mat-label
+            >
+
+            <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              class="example-radio-group"
+              formFieldName="hasPreExistingConditions"
+            >
+              <mat-radio-button class="example-radio-button" [value]="true">
+                Ja
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="false">
+                Nein
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="null">
+                Das weiß ich nicht
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </fieldset>
+      <mat-form-field class="full-width">
+        <mat-label>Sonstige Bemerkungen</mat-label>
+        <textarea
+          [mat-autosize]="true"
+          [matAutosizeMinRows]="4"
           matInput
-          placeholder="Telefonnummer"
-          formControlName="phone"
-          required
-          type="phone"
-        />
-        <mat-error>Bitte geben Sie eine Telefonnummer ein</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="E-Mail"
-          formControlName="email"
-          type="email"
-        />
-        <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+          formControlName="remark"
+          placeholder="Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben"
+        ></textarea>
+        <mat-hint align="start"
+          ><strong
+            >Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für
+            das Gesundheitsamt anzugeben</strong
+          >
+        </mat-hint>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>

@@ -5,7 +5,7 @@
   @extend .mb-3;
   @extend .mx-auto;
   max-width: 300px;
-  height: 160px;
+  height: 250px;
 
   &:hover,
   &:active,
@@ -26,11 +26,23 @@
   }
 }
 
-.email,
+mat-card-content p span,
 .mat-card-header .mat-card-title {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: normal;
+}
+
+mat-card-subtitle,
+mat-card-content p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 0.5rem;
+    color: rgba(0, 0, 0, 0.54);
+  }
 }
 
 @media screen and (min-width: $break-xl) and (max-width: $break-xxl) {

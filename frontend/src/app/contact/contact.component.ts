@@ -17,6 +17,26 @@ export class ContactComponent implements OnInit {
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.contacts = data.contacts;
+      this.contacts.forEach(c => {
+        c.city = 'Buxdehude';
+        c.zipCode = '12345';
+        c.mobilePhone = '0163-586624322';
+        c.identificationHint = 'Die Person ist froh wie der Mops im Haferstroh';
+        c.street = 'Besserwisserstraße';
+        c.houseNumber = '1232a';
+      });
     }));
+  }
+
+  getName(contact: ContactPersonDto): string {
+    let name = 'anonymer Kontakt';
+    if (contact.firstname && contact.surename) {
+      name = `${contact.firstname || ''} ${contact.surename || ''}`;
+    } else if (contact.firstname) {
+      name = contact.firstname;
+    } else if (contact.surename) {
+      name = contact.surename;
+    }
+    return name;
   }
 }

@@ -10,7 +10,9 @@ export class SnackbarService {
   constructor(public snackbar: MatSnackBar) { }
 
   confirm(message: string): MatSnackBarRef<SimpleSnackBar> {
-    return this.snackbar.open(message, 'Ok');
+    const config = new MatSnackBarConfig();
+    config.panelClass = ['light-primary-color'];
+    return this.snackbar.open(message, 'Ok', config);
   }
 
   success(message: string) {
@@ -36,6 +38,7 @@ export class SnackbarService {
   message(message: string) {
     const config = new MatSnackBarConfig();
     config.duration = this.duration;
+    config.panelClass = ['light-primary-color'];
     this.snackbar.open(message, null, config);
   }
 }

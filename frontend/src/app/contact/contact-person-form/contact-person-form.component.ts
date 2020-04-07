@@ -1,11 +1,9 @@
-import { DeactivatableComponent } from './../../guards/prevent-unsaved-changes.guard';
 import { ContactPersonDto } from './../../models/contact-person';
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { ApiService } from 'src/app/services/api.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-contact-person-form',
@@ -20,7 +18,8 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   @Output() dirty = new EventEmitter<boolean>();
   formGroup: FormGroup;
   private subs = new SubSink();
-
+  showCommentField = false;
+  @ViewChild('identificationHintTextarea') identificationHintTextarea: ElementRef<HTMLTextAreaElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,23 +43,54 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   buildForm() {
     this.formGroup = this.formBuilder.group(
       {
-        firstname: new FormControl(this.contactPerson.firstname, [Validators.required]),
-        surename: new FormControl(this.contactPerson.surename, [Validators.required]),
+        firstname: new FormControl(this.contactPerson.firstname),
+        surename: new FormControl(this.contactPerson.surename),
         email: new FormControl(this.contactPerson.email, [Validators.email]),
-        phone: new FormControl(this.contactPerson.phone, [Validators.required]),
+        phone: new FormControl(this.contactPerson.phone, [Validators.minLength(5), Validators.maxLength(15)]),
+        mobilePhone: new FormControl(this.contactPerson.mobilePhone, [Validators.minLength(5), Validators.maxLength(15)]),
+        street: new FormControl(this.contactPerson.street),
+        houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.maxLength(6)]),
+        zipCode: new FormControl(this.contactPerson.zipCode, [Validators.minLength(5), Validators.maxLength(5)]),
+        city: new FormControl(this.contactPerson.city),
+        identificationHint: new FormControl(this.contactPerson.identificationHint),
+        isHealthStuff: new FormControl(this.contactPerson.isHealthStuff),
+        isSenior: new FormControl(this.contactPerson.isSenior),
+        hasPreExistingConditions: new FormControl(this.contactPerson.hasPreExistingConditions),
+        remark: new FormControl(this.contactPerson.remark)
       }
     );
     this.formGroup.valueChanges.subscribe(_ => this.dirty.emit(true));
+    if (this.contactPerson.identificationHint) {
+      this.showCommentField = true;
+    }
+  }
+
+  private isWayToContactSet(): boolean {
+    return this.formGroup.controls.email.value
+      || this.formGroup.controls.phone.value
+      || this.formGroup.controls.mobilePhone.value
+      || this.formGroup.controls.comment.value;
   }
 
   onSubmit() {
     if (this.formGroup.valid) {
-      Object.assign(this.contactPerson, this.formGroup.value);
 
-      if (this.isNew) {
-        this.createContactPerson();
+      if (this.isWayToContactSet()) {
+        Object.assign(this.contactPerson, this.formGroup.value);
+
+        if (this.isNew) {
+          this.createContactPerson();
+        } else {
+          this.modifyContactPerson();
+        }
+
+      } else if (!this.showCommentField) {
+        this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
+        this.showCommentField = true;
+        console.log(this.identificationHintTextarea);
+        this.identificationHintTextarea.nativeElement.focus();
       } else {
-        this.modifyContactPerson();
+        this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
       }
     }
   }
