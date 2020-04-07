@@ -1,6 +1,6 @@
 import { IIdentifiable } from './../../models/general';
 import { FormControl } from '@angular/forms';
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -17,6 +17,8 @@ export class MultipleAutocompleteComponent implements OnInit {
   @Input() control: FormControl;
   @Input() placeholder: string;
   @Input() selectableItems: IIdentifiable[];
+  @Output() removed = new EventEmitter<number>();
+  @Output() added = new EventEmitter<number>();
   filteredItems: Observable<IIdentifiable[]>;
   selectedItemIds: number[];
   inputControl = new FormControl();
@@ -49,6 +51,7 @@ export class MultipleAutocompleteComponent implements OnInit {
     this.input.nativeElement.value = '';
     this.inputControl.setValue(null);
     this.setFormControlValue();
+    this.added.emit(selectedValue);
   }
 
   remove(id: number): void {
@@ -57,6 +60,7 @@ export class MultipleAutocompleteComponent implements OnInit {
     if (index >= 0) {
       this.selectedItemIds.splice(index, 1);
       this.setFormControlValue();
+      this.removed.emit(id);
     }
   }
 

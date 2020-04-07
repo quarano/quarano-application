@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="false" #stepper>
+<mat-horizontal-stepper [linear]="false" #stepper style="position: relative;">
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Persönliche Daten</ng-template>
@@ -35,6 +35,7 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="thirdFormGroup">
+    <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
       <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
       <p>
@@ -70,16 +71,48 @@
       </ul>
     </div>
     <form [formGroup]="thirdFormGroup">
-      <ng-template matStepLabel>Kontaktpersonen</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="thirdCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
+      <fieldset
+        *ngFor="
+          let dateMap of retrospectiveContacts | keyvalue: descendingOrder
+        "
+      >
+        <legend>Kontaktpersonen vom {{ dateMap.key | date: "d.M.y" }}</legend>
+
+        <app-multiple-autocomplete
+          [control]="
+            this.thirdFormGroup.controls[dateMap.key.toLocaleDateString()]
+          "
+          [selectableItems]="contactPersons"
+          [placeholder]="
+            'Kontakte mit anderen Menschen am ' +
+            dateMap.key.toLocaleDateString()
+          "
+          [nameProperties]="['firstname', 'surename']"
+          (added)="onContactAdded(dateMap.key, $event)"
+          (removed)="onContactRemoved(dateMap.key, $event)"
+        >
+        </app-multiple-autocomplete>
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+          "
+        >
+          <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+          <button
+            mat-button
+            color="primary"
+            type="button"
+            (click)="openContactDialog()"
+            class="p-2 mr-0"
+            style="line-height: normal;"
+          >
+            Hier anlegen
+          </button>
+        </div>
+      </fieldset>
       <div>
         <button mat-button matStepperPrevious>Zurück</button>
         <button mat-button matStepperNext>Weiter</button>

@@ -161,6 +161,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   openContactDialog() {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
+      height: '90vh',
+      maxWidth: '100vw',
       data: {
         contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
       }
