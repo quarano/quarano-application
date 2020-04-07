@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment } from '@angular/router';
-import { Observable } from 'rxjs';
-import { TenantService } from '../services/tenant.service';
+import {Injectable} from '@angular/core';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment} from '@angular/router';
+import {Observable} from 'rxjs';
+import {TenantService} from '../services/tenant.service';
+import {UserService} from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IsTenantAdminGuard implements CanActivate, CanLoad {
 
-  constructor(
-    private tenantService: TenantService,
-    private router: Router) {
+  constructor(private userService: UserService,
+              private tenantService: TenantService,
+              private router: Router) {
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
@@ -24,11 +25,11 @@ export class IsTenantAdminGuard implements CanActivate, CanLoad {
   }
 
   private check() {
-    if (this.tenantService.tenant$$.getValue() !== null) {
+    if (this.userService.hasRole('ROLE_HD_ADMIN') || this.userService.hasRole('ROLE_HD_CASE_AGENT')) {
       return true;
     }
 
-    this.router.navigate(['/tenant-admin/login']);
+    this.router.navigate(['/welcome/login']);
   }
 
 }

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header-left.component.scss']
 })
 export class HeaderLeftComponent implements OnInit {
-  public isAuthenticated$$ = this.userService.isAuthenticated$$;
+  public isAuthenticated$$ = this.userService.isAuthenticatedFully$$;
 
   constructor(private userService: UserService) { }
 

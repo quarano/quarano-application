@@ -103,4 +103,8 @@ export class ApiService {
   getReport(healthDepartmentId: string): Observable<Array<TenantClient>> {
     return this.httpClient.get<Array<TenantClient>>(`${this.baseUrl}/report/${healthDepartmentId}`);
   }
+
+  login(username: string, password: string): Observable<{token: string}> {
+    return this.httpClient.post<{token: string}>(`${this.baseUrl}/login`, {username, password});
+  }
 }
