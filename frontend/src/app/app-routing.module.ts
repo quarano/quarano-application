@@ -8,19 +8,27 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 const routes: Routes = [
   {
     path: 'welcome', loadChildren: () =>
-      import('./welcome/welcome.module').then(m => m.WelcomeModule), canActivate: [IsNotAuthenticatedGuard]
+      import('./welcome/welcome.module').then(m => m.WelcomeModule),
+    canActivate: [IsNotAuthenticatedGuard]
   },
   {
     path: 'diary', loadChildren: () =>
-      import('./diary/diary.module').then(m => m.DiaryModule), canActivate: [IsAuthenticatedGuard]
+      import('./diary/diary.module').then(m => m.DiaryModule),
+    canActivate: [IsAuthenticatedGuard]
   },
   {
     path: 'contacts', loadChildren: () =>
-      import('./contact/contact.module').then(m => m.ContactModule), canActivate: [IsAuthenticatedGuard]
+      import('./contact/contact.module').then(m => m.ContactModule),
+    canActivate: [IsAuthenticatedGuard]
   },
   {
     path: 'tenant-admin', loadChildren: () =>
       import('./tenant-admin/tenant-admin.module').then(m => m.TenantAdminModule)
+  },
+  {
+    path: 'basic-data', loadChildren: () =>
+      import('./basic-data/basic-data.module').then(m => m.BasicDataModule),
+    // canActivate: [IsAuthenticatedGuard]
   },
   {
     path: '404/:message',

@@ -1,0 +1,99 @@
+<mat-horizontal-stepper [linear]="false" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Persönliche Daten</ng-template>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          placeholder="Last name, First name"
+          formControlName="firstCtrl"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Weiter</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Initialer Fragebogen</ng-template>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <input
+          matInput
+          formControlName="secondCtrl"
+          placeholder="Ex. 1 Main St, New York, NY"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Zurück</button>
+        <button mat-button matStepperNext>Weiter</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <div class="info-text">
+      <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
+      <p>
+        Kontaktpersonen sind Personen mit einem unten definierten Kontakt zu
+        einem bestätigten Fall von COVID-19 ab dem 2. Tag vor Auftreten der
+        ersten Symptome des Falles. Das Ende der infektiösen Periode ist
+        momentan nicht sicher anzugeben.
+      </p>
+    </div>
+    <div class="info-text">
+      <h2>
+        Kontaktpersonen der Kategorie I mit engem Kontakt ("höheres"
+        Infektionsrisiko)
+      </h2>
+      <ul>
+        <li>
+          Personen mit kumulativ mindestens 15-minütigem Gesichts-
+          ("face-to-face") Kontakt, z.B. im Rahmen eines Gesprächs. Dazu gehören
+          z.B. Personen aus Lebensgemeinschaften im selben Haushalt.
+        </li>
+        <li>
+          Personen mit direktem Kontakt zu Sekreten oder Körperflüssigkeiten,
+          insbesondere zu respiratorischen Sekreten eines bestätigten
+          COVID-19-Falls, wie z.B. Küssen, Kontakt zu Erbrochenem, Mund-zu-Mund
+          Beatmung, Anhusten, Anniesen, etc.
+        </li>
+        <li>Personen, die aerosolbildenden Maßnahmen ausgesetzt sind</li>
+        <li>
+          Medizinisches Personal mit Kontakt zum bestätigten COVID-19-Fall im
+          Rahmen von Pflege oder medizinischer Untersuchung (≤ 2m), ohne
+          verwendete Schutzausrüstung.
+        </li>
+      </ul>
+    </div>
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Kontaktpersonen</ng-template>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <input
+          matInput
+          formControlName="thirdCtrl"
+          placeholder="Ex. 1 Main St, New York, NY"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Zurück</button>
+        <button mat-button matStepperNext>Weiter</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Fertig</ng-template>
+    <p>Vielen Dank, Sie haben es geschafft.</p>
+    <div>
+      <button mat-raised-button color="primary" [routerLink]="['/diary']">
+        Zum Tagebuch
+      </button>
+      <button mat-button matStepperPrevious>Zurück</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
