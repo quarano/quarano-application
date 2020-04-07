@@ -57,10 +57,9 @@
           />
           <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width" *ngIf="showCommentField">
+        <mat-form-field class="full-width" *ngIf="showIdentificationHintField">
           <mat-label>Hinweise zur Identifikation</mat-label>
           <textarea
-            #identificationHintTextarea
             [mat-autosize]="true"
             [matAutosizeMinRows]="8"
             matInput

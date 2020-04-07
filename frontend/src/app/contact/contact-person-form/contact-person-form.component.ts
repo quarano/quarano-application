@@ -18,8 +18,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   @Output() dirty = new EventEmitter<boolean>();
   formGroup: FormGroup;
   private subs = new SubSink();
-  showCommentField = false;
-  @ViewChild('identificationHintTextarea') identificationHintTextarea: ElementRef<HTMLTextAreaElement>;
+  showIdentificationHintField = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,7 +60,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     );
     this.formGroup.valueChanges.subscribe(_ => this.dirty.emit(true));
     if (this.contactPerson.identificationHint) {
-      this.showCommentField = true;
+      this.showIdentificationHintField = true;
     }
   }
 
@@ -69,7 +68,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     return this.formGroup.controls.email.value
       || this.formGroup.controls.phone.value
       || this.formGroup.controls.mobilePhone.value
-      || this.formGroup.controls.comment.value;
+      || this.formGroup.controls.identificationHint.value;
   }
 
   onSubmit() {
@@ -84,11 +83,9 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
           this.modifyContactPerson();
         }
 
-      } else if (!this.showCommentField) {
+      } else if (!this.showIdentificationHintField) {
         this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
-        this.showCommentField = true;
-        console.log(this.identificationHintTextarea);
-        this.identificationHintTextarea.nativeElement.focus();
+        this.showIdentificationHintField = true;
       } else {
         this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
       }
