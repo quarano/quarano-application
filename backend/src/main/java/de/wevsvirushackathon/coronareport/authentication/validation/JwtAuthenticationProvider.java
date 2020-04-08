@@ -43,12 +43,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		try {
 			String token = (String) authentication.getCredentials();
 			String username = jwtService.getUsernameFromToken(token);
+			Long clientId = jwtService.getClientIdFromToken(token);
 			List<String> roles = jwtService.getRolesFromToken(token);
 			List<RoleType> grantedRoleTypes = roles.stream().map(roleName -> RoleType.valueOf(roleName))
 					.collect(Collectors.toList());
 
 			return jwtService.validateToken(token)
-					.map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes))
+					.map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes, clientId))
 					.orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
 
 		} catch (JwtException ex) {

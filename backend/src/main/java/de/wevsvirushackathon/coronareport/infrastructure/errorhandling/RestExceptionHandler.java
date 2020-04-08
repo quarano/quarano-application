@@ -17,6 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import de.wevsvirushackathon.coronareport.client.MissingClientException;
 import de.wevsvirushackathon.coronareport.diary.ClientNotAuthorizedException;
 
 /**
@@ -86,9 +87,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ClientNotAuthorizedException.class)
 	protected ResponseEntity<Object> handleClientNotAuthorized(ClientNotAuthorizedException ex) {
-		String error = "Client with client-code '" + ex.getClientCode() + " is not authorized";
+		String error = "Client with client-id '" + ex.getClientCode() + " is not authorized";
 		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, error, ex);
 		return buildResponseEntity(apiError);
 	}
+	
+	@ExceptionHandler(MissingClientException.class)
+	protected ResponseEntity<Object> handleNotAuthorized(MissingClientException ex) {
+		String error = "There is no client for given Account username";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}	
+	
+	
 
 }

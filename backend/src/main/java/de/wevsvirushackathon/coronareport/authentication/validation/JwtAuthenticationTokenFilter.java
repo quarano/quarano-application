@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,6 +26,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 	@Value("${jwt.validation.header}")
 	private String tokenHeader;
+	
+	 @Autowired
+	private JwtAuthenticationProvider authProvider;
+	
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -32,8 +38,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 		if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
 			String authToken = requestHeader.substring(7);
-			JwtAuthentication authentication = new JwtAuthentication(authToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			Authentication filledAuth = this.authProvider.authenticate(new JwtAuthentication(authToken));
+			SecurityContextHolder.getContext().setAuthentication(filledAuth);
 		}
 		chain.doFilter(request, response);
 	}

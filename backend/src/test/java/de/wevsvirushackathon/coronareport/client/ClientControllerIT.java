@@ -33,7 +33,6 @@ public class ClientControllerIT {
         final ClientDto clientDto = ClientDto.builder()
                 .surename("Sarah")
                 .firstname("Bauer")
-                .healthDepartmentId("1234")
                 .phone("Testamt1")
                 .infected(true)
                 .zipCode("12345")

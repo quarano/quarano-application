@@ -22,14 +22,32 @@ import io.jsonwebtoken.Jwts;
 public class JwtTokenService {
     private String secret;
     private String roleClaimAttribute;
+    private String clientIdClaimAttribute;
 
     @Autowired
     public JwtTokenService(@Value("${jwt.authentication.secret}") String secret,
-    		 @Value("${jwt.authentication.claim.role}") String roleClaimAttribute) {
+    		 @Value("${jwt.authentication.claim.role}") String roleClaimAttribute,
+    		 @Value("${jwt.authentication.claim.clientid}") String clientIdClaimAttribute) {
         this.secret = secret;
         this.roleClaimAttribute = roleClaimAttribute;
+        this.clientIdClaimAttribute = clientIdClaimAttribute;
     }
+    
+    /**
+     * Retrieves the clientId from the claims of the token
+     * @param token
+     * @return
+     */
+	public Long getClientIdFromToken(String token) {
+    	final Claims claims = getAllClaimsFromToken(token);
+    	return  claims.get(clientIdClaimAttribute, Long.class);
+	}    
 
+    /**
+     * Retrieves the username from the claims of the token
+     * @param token
+     * @return
+     */	
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
@@ -86,4 +104,6 @@ public class JwtTokenService {
     public Optional<Boolean> validateToken(String token) {
         return  isTokenNotExpired(token) ? Optional.of(Boolean.TRUE) : Optional.empty();
     }
+
+
 }

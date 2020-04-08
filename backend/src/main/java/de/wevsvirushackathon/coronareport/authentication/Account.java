@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -36,10 +37,12 @@ public class Account {
     private String firstname;
     private String lastname;
     
-    @OneToOne
+    
+    // will be null if account belongs to a health department employee
+    @OneToOne(fetch = FetchType.LAZY)
     private Client client;
     
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany
     private List<Role> roles = new ArrayList<>();
 
 }

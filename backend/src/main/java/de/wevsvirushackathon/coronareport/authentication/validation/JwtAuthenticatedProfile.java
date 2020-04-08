@@ -14,12 +14,14 @@ import lombok.AllArgsConstructor;
 public class JwtAuthenticatedProfile implements Authentication {
 
     private final String username;
+    private final Long clientId;
     
     private List<RoleType> roles = new ArrayList<>();
     
-	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes) {
+	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes, Long clientId) {
 		this.username = username;
 		this.roles = grantedRoleTypes;
+		this.clientId = clientId;
 	}    
 
     @Override
@@ -38,7 +40,7 @@ public class JwtAuthenticatedProfile implements Authentication {
 
     @Override
     public Object getDetails() {
-        return null;
+        return this.clientId;
     }
 
     @Override
