@@ -4,7 +4,6 @@ import { ContactPersonDto } from 'src/app/models/contact-person';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import '../utils/date-extensions';
-import { KeyValue } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
 
@@ -14,14 +13,20 @@ import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/c
   styleUrls: ['./basic-data.component.scss']
 })
 export class BasicDataComponent implements OnInit, OnDestroy {
+  subs = new SubSink();
+  today = new Date();
+
+  // ########## STEP I ##########
   firstFormGroup: FormGroup;
+
+  // ########## STEP II ##########
   secondFormGroup: FormGroup;
+  dayOfFirstSymptoms = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+
+  // ########## STEP III ##########
   thirdFormGroup: FormGroup;
   datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
-  subs = new SubSink();
-  today = new Date();
-  dayOfFirstSymptoms = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate()); // ToDo: take from step 1
   noRetrospectiveContactsConfirmed = false;
 
   constructor(
@@ -41,14 +46,32 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   buildForms() {
+    this.buildFirstForm();
+    this.buildSecondForm();
+    this.buildThirdForm();
+  }
+
+  // ########## STEP I ##########
+
+  buildFirstForm() {
     this.firstFormGroup = this.formBuilder.group({
       // ToDo: Basic Data Step 1
       firstCtrl: ['', Validators.required]
     });
+  }
+
+  // ########## STEP II ##########
+
+  buildSecondForm() {
     this.secondFormGroup = this.formBuilder.group({
       // ToDo: Basic Data Step 2
       secondCtrl: ['', Validators.required]
     });
+  }
+
+  // ########## STEP III ##########
+
+  buildThirdForm() {
     this.thirdFormGroup = this.formBuilder.group({
       noRetrospectiveContactsConfirmed: new FormControl(false)
     });
@@ -59,10 +82,6 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl([]));
       day = day.addDays(-1);
     }
-  }
-
-  descendingOrder = (a: KeyValue<Date, number[]>, b: KeyValue<Date, number[]>): number => {
-    return a.key > b.key ? -1 : (b.key > a.key ? 1 : 0);
   }
 
   openContactDialog() {
