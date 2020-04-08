@@ -122,11 +122,6 @@ public class ClientControllerIT {
         final HealthDepartment hd1 = HealthDepartment.builder().fullName("Testamt 1")
                 .id("Testamt1").passCode(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2")).build();
         
-        final ClientDto expectedClientDto = ClientDto.builder().firstname("Fabian")
-        		.surename("Bauer").infected(true).clientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22")
-        		.healthDepartment(hd1)
-        		.phone("0175 664845454").zipCode("66845")
-        		.build();
     	String requestbody = createLoginRequestBody(username, password);
     	
     	// when
@@ -137,21 +132,11 @@ public class ClientControllerIT {
                 .content(requestbody)
         		)
         		
-        		.andExpect(status().isBadRequest())
+        		.andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();  
         TokenResponse response = fromJson(resultLogin, TokenResponse.class);
-        
-        
-        // check if  token is valid for authentication
-        String resultDtoStr = mvc.perform(
-                get("/client/me" )
-                        .header("Origin", "*")
-                        .header("Authorization", "Bearer " + response.getToken())
-                        .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString();       
-	
+        	
     }    
 
 

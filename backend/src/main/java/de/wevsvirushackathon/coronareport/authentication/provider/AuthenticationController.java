@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wevsvirushackathon.coronareport.authentication.NotAuthorizedException;
+
 @RestController
 @RequestMapping
 public class AuthenticationController {
@@ -29,4 +31,9 @@ public class AuthenticationController {
     public ResponseEntity handleEntityNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(NotAuthorizedException.class)
+    public ResponseEntity handleNotAuthorizedException(NotAuthorizedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }    
 }

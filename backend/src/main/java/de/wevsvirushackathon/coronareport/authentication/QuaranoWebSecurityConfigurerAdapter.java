@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -48,6 +49,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 		httpSecurity.authorizeRequests()
         .antMatchers("/login").permitAll()
+        .antMatchers(HttpMethod.OPTIONS).permitAll()
         .antMatchers("/client/register").permitAll()
         .antMatchers("/public/**").permitAll()
         .antMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')")
