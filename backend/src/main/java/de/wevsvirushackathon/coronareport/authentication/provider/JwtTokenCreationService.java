@@ -4,14 +4,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import de.wevsvirushackathon.coronareport.authentication.Role;
-import de.wevsvirushackathon.coronareport.client.Client;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -41,15 +39,16 @@ public class JwtTokenCreationService {
         this.clientIdClaimAttribute = clientIdClaimAttribute;
     }
 
-    public String generateToken(String username, List<Role> roles, Optional<Client> client ) {
+    public String generateToken(String username, List<Role> roles, Long clientId ) {
         final Date createdDate = new Date();
         final Date expirationDate = calculateExpirationDate(createdDate);
         
         // map roles to a list of rolenames
         Map<String, Object> claims = new HashMap<>();
         claims.put(roleClaimAttribute, roles.stream().map(Role::toString).collect(Collectors.toList()));
-        client.ifPresent(c -> claims.put(clientIdClaimAttribute, c.getClientId()));
-       
+        if(clientId != null) {
+        	claims.put(clientIdClaimAttribute, clientId);
+        }
 
         return Jwts.builder()
                 .setClaims(claims)

@@ -16,8 +16,6 @@ public interface ClientRepository
 
     List<Client> findAllByHealthDepartmentId(String healtDepartmentId);
     
-    @Query("SELECT client FROM Account as account INNER JOIN account.client as client WHERE account.username = :username")
-    public Optional<Client> findClientByAccountName( @Param("username") String username);
-    
+   
 
 }

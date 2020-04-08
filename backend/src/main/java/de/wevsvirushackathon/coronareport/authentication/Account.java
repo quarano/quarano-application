@@ -39,8 +39,7 @@ public class Account {
     
     
     // will be null if account belongs to a health department employee
-    @OneToOne(fetch = FetchType.LAZY)
-    private Client client;
+    private Long clientId;
     
     @ManyToMany
     private List<Role> roles = new ArrayList<>();

@@ -31,12 +31,11 @@ public class Client {
     
     private String surename;
     private String firstname;
-    private String street;
-    private String city;
-    private String zipCode;
-    private String mobilephone;
     private String phone;
-    private String email;
+    private String street;
+    private String zipCode;
+
+
     
     private boolean completedPersonalData;
     private boolean completedQuestionnaire;
@@ -49,7 +48,7 @@ public class Client {
     
     private  ClientType type;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private HealthDepartment healthDepartment;
 
 

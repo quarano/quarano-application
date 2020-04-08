@@ -43,9 +43,6 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
     	logger.warn("Adding dummy 4 accounts to database");
     	
     	Client client = clientRepository.findByClientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22");
-    	if(client == null){
-    		System.out.println("Client not found");;
-    	}
 
     	Role userRole = roleRepository.findByName("ROLE_USER");
     	Role adminRole = roleRepository.findByName("ROLE_HD_ADMIN");
@@ -59,7 +56,7 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         user.setUsername("DemoAccount");
         user.setPassword(passwordEncoder.encode("DemoPassword"));
         user.getRoles().add(userRole);
-        user.setClient(client);
+        user.setClientId(client.getClientId());
         accountRepository.save(user);
         
     	// create 2nd dummy acccount without client
