@@ -31,6 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const materialModules = [
   MatButtonModule,
@@ -61,7 +62,8 @@ const materialModules = [
   MatDialogModule,
   MatChipsModule,
   MatAutocompleteModule,
-  MatStepperModule
+  MatStepperModule,
+  MatCheckboxModule
 ];
 
 @NgModule({

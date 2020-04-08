@@ -34,7 +34,13 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="thirdFormGroup">
+  <mat-step
+    #thirdStep
+    [stepControl]="thirdFormGroup"
+    [hasError]="
+      !(hasRetrospectiveContacts() || hasNoRetrospectiveContactsConfirmed())
+    "
+  >
     <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
       <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
@@ -72,24 +78,20 @@
     </div>
     <form [formGroup]="thirdFormGroup">
       <fieldset
-        *ngFor="
-          let dateMap of retrospectiveContacts | keyvalue: descendingOrder
-        "
+        *ngFor="let date of datesForRetrospectiveContacts"
+        [class]="hasNoRetrospectiveContactsConfirmed() ? 'hidden' : ''"
       >
-        <legend>Kontaktpersonen vom {{ dateMap.key | date: "d.M.y" }}</legend>
+        <legend>Kontaktpersonen vom {{ date | date: "d.M.y" }}</legend>
 
         <app-multiple-autocomplete
-          [control]="
-            this.thirdFormGroup.controls[dateMap.key.toLocaleDateString()]
-          "
+          [control]="this.thirdFormGroup.controls[date.toLocaleDateString()]"
           [selectableItems]="contactPersons"
           [placeholder]="
-            'Kontakte mit anderen Menschen am ' +
-            dateMap.key.toLocaleDateString()
+            'Kontakte mit anderen Menschen am ' + date.toLocaleDateString()
           "
           [nameProperties]="['firstname', 'surename']"
-          (added)="onContactAdded(dateMap.key, $event)"
-          (removed)="onContactRemoved(dateMap.key, $event)"
+          (added)="onContactAdded(date, $event)"
+          (removed)="onContactRemoved(date, $event)"
         >
         </app-multiple-autocomplete>
         <div
@@ -113,15 +115,27 @@
           </button>
         </div>
       </fieldset>
+      <mat-checkbox
+        [class]="hasRetrospectiveContacts() ? 'hidden' : ''"
+        name="noRetrospectiveContactsConfirmed"
+        formControlName="noRetrospectiveContactsConfirmed"
+        >Ich bestätige, im genannten Zeitraum keinen relevanten Kontakt zu
+        anderen Personen gehabt zu haben.</mat-checkbox
+      >
       <div>
         <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button matStepperNext>Weiter</button>
+        <button mat-button matStepperNext [disabled]="thirdStep.hasError">
+          Erfassung abschließen
+        </button>
       </div>
     </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Fertig</ng-template>
-    <p>Vielen Dank, Sie haben es geschafft.</p>
+    <p>
+      Sie haben es geschafft. Vielen Dank für Ihre Unterstützung bei der
+      Aufklärung von Infektionsketten.
+    </p>
     <div>
       <button mat-raised-button color="primary" [routerLink]="['/diary']">
         Zum Tagebuch

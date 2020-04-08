@@ -1,6 +1,7 @@
+import { VALIDATION_PATTERNS } from './../../utils/validation';
 import { ContactPersonDto } from './../../models/contact-person';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { ApiService } from 'src/app/services/api.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -45,11 +46,14 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         firstname: new FormControl(this.contactPerson.firstname),
         surename: new FormControl(this.contactPerson.surename),
         email: new FormControl(this.contactPerson.email, [Validators.email]),
-        phone: new FormControl(this.contactPerson.phone, [Validators.minLength(5), Validators.maxLength(15)]),
-        mobilePhone: new FormControl(this.contactPerson.mobilePhone, [Validators.minLength(5), Validators.maxLength(15)]),
+        phone: new FormControl(this.contactPerson.phone,
+          [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+        mobilePhone: new FormControl(this.contactPerson.mobilePhone,
+          [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
         street: new FormControl(this.contactPerson.street),
         houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.maxLength(6)]),
-        zipCode: new FormControl(this.contactPerson.zipCode, [Validators.minLength(5), Validators.maxLength(5)]),
+        zipCode: new FormControl(this.contactPerson.zipCode,
+          [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
         city: new FormControl(this.contactPerson.city),
         identificationHint: new FormControl(this.contactPerson.identificationHint),
         isHealthStuff: new FormControl(this.contactPerson.isHealthStuff),
@@ -116,5 +120,10 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.cancelled.emit();
+  }
+
+  onPhoneFocusOut(control: AbstractControl) {
+    const value = control.value;
+    control.setValue(value.replace(/\s/g, ''));
   }
 }

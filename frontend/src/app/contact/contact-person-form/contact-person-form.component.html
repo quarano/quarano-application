@@ -31,6 +31,9 @@
         <mat-form-field class="full-width">
           <input
             matInput
+            maxlength="17"
+            minlength="5"
+            (focusout)="onPhoneFocusOut(formGroup.controls.phone)"
             placeholder="Telefonnummer (Festnetz)"
             formControlName="phone"
             type="phone"
@@ -39,7 +42,10 @@
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
+            (focusout)="onPhoneFocusOut(formGroup.controls.mobilePhone)"
             matInput
+            maxlength="17"
+            minlength="5"
             placeholder="Telefonnummer (mobil)"
             formControlName="mobilePhone"
             type="phone"
@@ -57,7 +63,10 @@
           />
           <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width" *ngIf="showIdentificationHintField">
+        <mat-form-field
+          class="full-width"
+          [class]="showIdentificationHintField ? '' : 'display-none'"
+        >
           <mat-label>Hinweise zur Identifikation</mat-label>
           <textarea
             [mat-autosize]="true"
@@ -88,6 +97,7 @@
           <input
             matInput
             placeholder="Hausnummer"
+            maxlength="6"
             formControlName="houseNumber"
             type="text"
           />
@@ -97,6 +107,8 @@
           <input
             matInput
             placeholder="Postleitzahl"
+            minlength="5"
+            maxlength="5"
             formControlName="zipCode"
             type="text"
           />

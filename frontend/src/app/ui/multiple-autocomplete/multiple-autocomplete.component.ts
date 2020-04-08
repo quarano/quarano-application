@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-multiple-autocomplete',

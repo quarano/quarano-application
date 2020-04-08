@@ -17,11 +17,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
-  retrospectiveContacts = new Map<Date, number[]>();
+  datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
   subs = new SubSink();
   today = new Date();
   dayOfFirstSymptoms = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate()); // ToDo: take from step 1
+  noRetrospectiveContactsConfirmed = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,11 +50,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       secondCtrl: ['', Validators.required]
     });
     this.thirdFormGroup = this.formBuilder.group({
+      noRetrospectiveContactsConfirmed: new FormControl(false)
     });
     let day = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
     const firstDay = this.dayOfFirstSymptoms.addDays(-2);
     while (day >= firstDay) {
-      this.retrospectiveContacts.set(day, []);
+      this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl([]));
       day = day.addDays(-1);
     }
@@ -79,12 +81,26 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   onContactAdded(date: Date, id: number) {
-    alert(`Added contact ${id} for ${date}`);
     // ToDo: call api post
   }
 
   onContactRemoved(date: Date, id: number) {
-    alert(`Removed contact ${id} for ${date}`);
     // ToDo: call api delete
+  }
+
+  hasRetrospectiveContacts(): boolean {
+    let result = false;
+    Object.keys(this.thirdFormGroup.controls).forEach(key => {
+      if (key !== 'noRetrospectiveContactsConfirmed') {
+        if (this.thirdFormGroup.controls[key].value.length > 0) {
+          result = true;
+        }
+      }
+    });
+    return result;
+  }
+
+  hasNoRetrospectiveContactsConfirmed(): boolean {
+    return this.thirdFormGroup.controls.noRetrospectiveContactsConfirmed.value;
   }
 }

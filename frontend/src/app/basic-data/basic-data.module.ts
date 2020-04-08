@@ -1,7 +1,7 @@
 import { ContactPersonsResolver } from './../resolvers/contact-persons.resolver';
 import { ContactModule } from './../contact/contact.module';
 import { MultipleAutocompleteModule } from './../ui/multiple-autocomplete/multiple-autocomplete.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './../angular-material/angular-material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,7 @@ import { BasicDataRoutingModule } from './basic-data-routing.module';
     CommonModule,
     BasicDataRoutingModule,
     AngularMaterialModule,
+    FormsModule,
     ReactiveFormsModule,
     MultipleAutocompleteModule,
     ContactModule
