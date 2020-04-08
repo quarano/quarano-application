@@ -49,7 +49,6 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 		httpSecurity.authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers(HttpMethod.OPTIONS).permitAll()
         .antMatchers("/client/register").permitAll()
         .antMatchers("/public/**").permitAll()
         .antMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')")
@@ -61,7 +60,8 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
         .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-    httpSecurity.headers().cacheControl();
+		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.headers().cacheControl();
+		httpSecurity.cors();
 	}
 }
