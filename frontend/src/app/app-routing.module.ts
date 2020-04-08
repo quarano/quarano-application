@@ -28,7 +28,7 @@ const routes: Routes = [
   {
     path: 'basic-data', loadChildren: () =>
       import('./basic-data/basic-data.module').then(m => m.BasicDataModule),
-    // canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard]
   },
   {
     path: '404/:message',
