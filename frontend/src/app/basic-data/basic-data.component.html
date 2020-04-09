@@ -31,7 +31,7 @@
   >
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Initialer Fragebogen</ng-template>
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width mb-3">
         <mat-label>Tag, an dem die ersten Symptome auftraten</mat-label>
         <input
           matInput
@@ -41,6 +41,12 @@
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+        <mat-hint align="start"
+          ><strong
+            >Falls bislang noch keine Symptome aufgetreten sind, bitte leer
+            lassen</strong
+          >
+        </mat-hint>
       </mat-form-field>
 
       <mat-label id="min15MinutesContactWithC19PatLabel"
