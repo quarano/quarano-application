@@ -9,5 +9,6 @@ export interface FirstQuery {
   belongToLaboratoryStaff: boolean;
   familyMember: boolean;
   otherContactType: string;
+  hasSymptoms: boolean;
   dayOfFirstSymptoms: Date;
 }

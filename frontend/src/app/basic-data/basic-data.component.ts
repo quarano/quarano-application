@@ -87,7 +87,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   buildSecondForm() {
-    this.secondFormGroup = this.formBuilder.group({
+    this.secondFormGroup = new FormGroup({
       min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, [Validators.required]),
       nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, [Validators.required]),
       directContactWithLiquidsOfC19Pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19Pat, [Validators.required]),
@@ -98,15 +98,29 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, [Validators.required]),
       familyMember: new FormControl(this.firstQuery.familyMember, [Validators.required]),
       dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
-      otherContactType: new FormControl(this.firstQuery.otherContactType)
+      otherContactType: new FormControl(this.firstQuery.otherContactType),
+      hasSymptoms: new FormControl(this.firstQuery.hasSymptoms, [Validators.required])
+    }, this.firstSymptomsValidator);
+
+    this.secondFormGroup.controls.hasSymptoms.valueChanges.subscribe((value: boolean) => {
+      if (!value) {
+        this.secondFormGroup.controls.dayOfFirstSymptoms.setValue(null);
+      }
     });
+
     this.secondFormGroup.valueChanges.subscribe((value) => {
-      console.log(this.secondFormGroup);
       value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
       // ToDo: PUT Endpunkt in api aufrufen
       this.firstQuery = value;
       this.snackbarService.success('Fragebogen erfolgreich gespeichert');
     });
+  }
+
+  firstSymptomsValidator(g: FormGroup) {
+    if (g.controls.hasSymptoms.value) {
+      return g.controls.dayOfFirstSymptoms.value ? null : { required: true };
+    }
+    return null;
   }
 
   // ########## STEP III ##########

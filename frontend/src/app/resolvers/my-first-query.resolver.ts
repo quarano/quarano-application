@@ -26,7 +26,8 @@ export class MyFirstQueryResolver implements Resolve<FirstQuery> {
           belongToLaboratoryStaff: null,
           familyMember: null,
           otherContactType: 'Sehr viel Text hier',
-          dayOfFirstSymptoms: null
+          dayOfFirstSymptoms: null,
+          hasSymptoms: null
         });
     } else {
       return of(
@@ -41,7 +42,8 @@ export class MyFirstQueryResolver implements Resolve<FirstQuery> {
           belongToLaboratoryStaff: null,
           familyMember: null,
           otherContactType: null,
-          dayOfFirstSymptoms: null
+          dayOfFirstSymptoms: null,
+          hasSymptoms: null
         });
     }
   }

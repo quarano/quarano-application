@@ -30,7 +30,8 @@ export class FirstQueryComponent {
     belongToLaboratoryStaff: null,
     familyMember: null,
     otherContactType: null,
-    dayOfFirstSymptoms: null
+    dayOfFirstSymptoms: null,
+    hasSymptoms: null
   };
 
   constructor() {
