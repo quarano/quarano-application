@@ -95,7 +95,6 @@ export class BasicDataComponent implements OnInit, OnDestroy {
           value.dateOfBirth = this.dateOfBirth;
           // ToDo: PUT Endpunkt in api aufrufen
           this.client = value;
-          alert(this.client.dateOfBirth);
           this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
         }
       });
@@ -115,7 +114,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   onPhoneFocusOut(control: AbstractControl) {
     const value = control.value;
-    control.setValue(value.replace(/\s/g, ''));
+    if (value) { control.setValue(value.replace(/\s/g, '')); }
   }
 
   // ########## STEP II ##########

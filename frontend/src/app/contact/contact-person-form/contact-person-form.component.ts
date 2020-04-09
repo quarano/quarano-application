@@ -124,6 +124,6 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   onPhoneFocusOut(control: AbstractControl) {
     const value = control.value;
-    control.setValue(value.replace(/\s/g, ''));
+    if (value) { control.setValue(value.replace(/\s/g, '')); }
   }
 }
