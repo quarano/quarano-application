@@ -7,4 +7,10 @@ export interface Client {
   zipCode: string;
   infected: boolean;
   healthDepartmentId: string;
+  email: string;
+  street: string;
+  houseNumber: string;
+  city: string;
+  mobilePhone: string;
+  dateOfBirth: Date;
 }

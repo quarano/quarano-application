@@ -7,20 +7,148 @@
   <ng-template matStepperIcon="edit">
     <mat-icon>check</mat-icon>
   </ng-template>
-  <mat-step [stepControl]="firstFormGroup">
+  <mat-step
+    [stepControl]="firstFormGroup"
+    #firstStep
+    [hasError]="firstFormGroup.invalid"
+  >
+    <ng-template matStepLabel>Persönliche Daten</ng-template>
+    <p>Pflichtfelder sind mit * markiert</p>
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Persönliche Daten</ng-template>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input
-          matInput
-          placeholder="Last name, First name"
-          formControlName="firstCtrl"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Weiter</button>
+      <fieldset class="mb-3">
+        <legend>Person</legend>
+        <mat-form-field class="half-width">
+          <input
+            required
+            matInput
+            placeholder="Vorname"
+            formControlName="firstname"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="half-width">
+          <input
+            matInput
+            required
+            placeholder="Nachname"
+            formControlName="surename"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Geburtsdatum</mat-label>
+          <input
+            matInput
+            required
+            [max]="today"
+            [matDatepicker]="dateOfBirthPicker"
+            formControlName="dateOfBirth"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="dateOfBirthPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+          <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+        </mat-form-field>
+      </fieldset>
+      <fieldset class="mb-3">
+        <legend>Kontaktmöglichkeiten</legend>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            required
+            placeholder="E-Mail"
+            formControlName="email"
+            type="email"
+          />
+          <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            maxlength="17"
+            minlength="5"
+            (focusout)="onPhoneFocusOut(firstFormGroup.controls.phone)"
+            placeholder="Telefonnummer (Festnetz)"
+            formControlName="phone"
+            type="phone"
+          />
+          <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            (focusout)="onPhoneFocusOut(firstFormGroup.controls.mobilePhone)"
+            matInput
+            maxlength="17"
+            minlength="5"
+            placeholder="Telefonnummer (mobil)"
+            formControlName="mobilePhone"
+            type="phone"
+          />
+          <mat-error
+            >Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error
+          >
+        </mat-form-field>
+      </fieldset>
+      <fieldset class="mb-3">
+        <legend>Adresse</legend>
+
+        <mat-form-field style="width: 70%;">
+          <input
+            matInput
+            required
+            placeholder="Straße"
+            formControlName="street"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine Straße ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 30%;">
+          <input
+            matInput
+            placeholder="Hausnummer"
+            maxlength="6"
+            formControlName="houseNumber"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 30%;">
+          <input
+            matInput
+            required
+            placeholder="Postleitzahl"
+            minlength="5"
+            maxlength="5"
+            formControlName="zipCode"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 70%;">
+          <input
+            matInput
+            required
+            placeholder="Ort"
+            formControlName="city"
+            type="text"
+          />
+          <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+        </mat-form-field>
+      </fieldset>
+      <div class="mt-3">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="firstStep.hasError"
+          matStepperNext
+        >
+          <mat-icon>arrow_forward</mat-icon>
+          Weiter
+        </button>
       </div>
     </form>
   </mat-step>
@@ -72,7 +200,6 @@
           <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
         </mat-form-field>
       </div>
-
       <div class="bool-question">
         <mat-label id="min15MinutesContactWithC19PatLabel"
           >Hatten Sie bereits Kontakt mit einer Person, bei der COVID-19
@@ -260,9 +387,17 @@
         </mat-form-field>
       </div>
       <div class="mt-3">
-        <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button matStepperNext [disabled]="secondStep.hasError">
-          Weiter
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>Zurück
+        </button>
+        <button
+          class="ml-3"
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          [disabled]="secondStep.hasError"
+        >
+          <mat-icon>arrow_forward</mat-icon>Weiter
         </button>
       </div>
     </form>
@@ -356,14 +491,17 @@
         anderen Personen gehabt zu haben.</mat-checkbox
       >
       <div class="mt-3">
-        <button mat-button matStepperPrevious>Zurück</button>
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>Zurück
+        </button>
         <button
           mat-raised-button
           color="primary"
+          class="ml-3"
           [routerLink]="['/diary']"
           [disabled]="thirdStep.hasError"
         >
-          Erfassung abschließen und zum Tagebuch
+          <mat-icon>check</mat-icon>Erfassung abschließen und zum Tagebuch
         </button>
       </div>
     </form>

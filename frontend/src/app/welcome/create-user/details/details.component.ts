@@ -1,6 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Client} from '../../../models/client';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Client } from '../../../models/client';
 
 @Component({
   selector: 'app-create-user-details',
@@ -36,7 +36,13 @@ export class DetailsComponent implements OnInit {
       zipCode: this.phoneZipFormGroup.controls['zipCode'].value,
       clientId: null,
       infected: false,
-      healthDepartmentId: null
+      healthDepartmentId: null,
+      dateOfBirth: null,
+      street: null,
+      city: null,
+      houseNumber: null,
+      email: null,
+      mobilePhone: null
     };
 
     this.client.emit(client);

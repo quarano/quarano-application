@@ -1,15 +1,18 @@
+import { Client } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { FirstQuery } from './../models/first-query';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import '../utils/date-extensions';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
+import { VALIDATION_PATTERNS } from '../utils/validation';
+import { delay, distinctUntilChanged, debounceTime, auditTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-basic-data',
@@ -22,6 +25,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
+  client: Client;
 
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
@@ -43,6 +47,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.subs.add(this.route.data.subscribe(data => {
       this.contactPersons = data.contactPersons;
       this.firstQuery = data.firstQuery;
+      this.client = data.client;
       this.buildForms();
     }));
   }
@@ -67,9 +72,50 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   buildFirstForm() {
     this.firstFormGroup = this.formBuilder.group({
-      // ToDo: Basic Data Step 1
-      firstCtrl: ['', Validators.required]
+      firstname: new FormControl(this.client.firstname, [Validators.required]),
+      surename: new FormControl(this.client.surename, [Validators.required]),
+      email: new FormControl(this.client.email, [Validators.required, Validators.email]),
+      phone: new FormControl(this.client.phone,
+        [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+      mobilePhone: new FormControl(this.client.mobilePhone,
+        [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+      street: new FormControl(this.client.street, [Validators.required]),
+      houseNumber: new FormControl(this.client.houseNumber, [Validators.maxLength(6)]),
+      zipCode: new FormControl(this.client.zipCode,
+        [Validators.required, Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
+      city: new FormControl(this.client.city, [Validators.required]),
+      dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
     });
+
+    this.firstFormGroup.statusChanges
+      .pipe(debounceTime(1000))
+      .subscribe((status) => {
+        if (status === 'VALID') {
+          const value = this.firstFormGroup.value;
+          value.dateOfBirth = this.dateOfBirth;
+          // ToDo: PUT Endpunkt in api aufrufen
+          this.client = value;
+          alert(this.client.dateOfBirth);
+          this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+        }
+      });
+  }
+
+  get dateOfBirth() {
+    const dateValue = this.firstFormGroup?.controls.dateOfBirth.value;
+    if (dateValue?.toDate instanceof Function) {
+      const date = new Date((dateValue as Moment).toLocaleString());
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    if (dateValue) {
+      return dateValue as Date;
+    }
+    return null;
+  }
+
+  onPhoneFocusOut(control: AbstractControl) {
+    const value = control.value;
+    control.setValue(value.replace(/\s/g, ''));
   }
 
   // ########## STEP II ##########
@@ -77,7 +123,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   get dayOfFirstSymptoms() {
     const dateValue = this.secondFormGroup?.controls.dayOfFirstSymptoms.value;
     if (dateValue?.toDate instanceof Function) {
-      const date = (dateValue as Moment).toDate();
+      const date = new Date((dateValue as Moment).toLocaleString());
       return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
     if (dateValue) {
@@ -108,12 +154,16 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.secondFormGroup.valueChanges.subscribe((value) => {
-      value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-      // ToDo: PUT Endpunkt in api aufrufen
-      this.firstQuery = value;
-      this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-    });
+    this.secondFormGroup.statusChanges
+      .pipe(debounceTime(1000)).subscribe((status) => {
+        if (status === 'VALID') {
+          const value = this.secondFormGroup.value;
+          value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
+          // ToDo: PUT Endpunkt in api aufrufen
+          this.firstQuery = value;
+          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+        }
+      });
   }
 
   firstSymptomsValidator(g: FormGroup) {
