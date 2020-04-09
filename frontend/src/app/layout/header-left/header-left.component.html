@@ -15,9 +15,10 @@
       routerLink="/tenant-admin"
       routerLinkActive="active"
       id="tenant-admin-login-link"
+      *ngIf="isHealthDepartmentUser$ | async"
       >Für Behörden</a
     >
-    <ng-container *ngIf="isAuthenticated$$ | async"
+    <ng-container *ngIf="(isFullyAuthenticated$ | async) && !(isHealthDepartmentUser$ | async)"
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
       <a routerLink="/contacts" routerLinkActive="active">Kontakte</a>
     </ng-container>

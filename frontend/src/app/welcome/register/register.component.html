@@ -1,0 +1,52 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Registrieren</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="registrationForm">
+    <mat-card-content>
+      <p>Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um ihre Symptome online zu melden, können Sie sich
+        hier registrieren.</p>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Anmeldecode</mat-label>
+        <input matInput formControlName="clientKey" placeholder="Anmeldecode" id="client-key">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Benutzername</mat-label>
+        <input matInput formControlName="username" placeholder="Benutzername" id="username">
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Passwort</mat-label>
+        <input matInput formControlName="password" placeholder="Passwort" id="password">
+        <mat-error *ngIf="registrationForm.controls.password.hasError('minLength')">
+          Das Passwort muss mindestens 7 Zeichen lang sein.
+        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.password.hasError('maxLength')">
+          Das Passwort darf höchstens 30 Zeichen lang sein.
+        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.password.hasError('uppercase')">
+          Das Passwort muss mindestens einen Großbuchstaben beinhalten.
+        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.password.hasError('digit')">
+          Das Passwort muss mindestens eine Zahl beinhalten.
+        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.password.hasError('nonWordChar')">
+          Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Passwort bestätigen</mat-label>
+        <input matInput formControlName="password" placeholder="Passwort bestätigen" id="password-confirm">
+        <mat-error *ngIf="registrationForm.controls.password.hasError('mustMatch')">
+          Das Passwort und die Passwort Bestätigung müssen übereinstimmen.
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button mat-raised-button type="submit" [disabled]="registrationForm.invalid">Registrieren</button>
+    </mat-card-actions>
+  </form>
+</mat-card>

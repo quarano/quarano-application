@@ -13,7 +13,7 @@ import de.wevsvirushackathon.coronareport.client.Client;
 @Repository
 public interface DiaryEntryRepository
         extends CrudRepository<DiaryEntry, Long> {
-    @Query("SELECT d FROM DiaryEntry d WHERE d.client.healthDepartmentId = :healthDepartmentId")
+    @Query("SELECT d FROM DiaryEntry d WHERE d.client.healthDepartment.id = :healthDepartmentId")
     Collection<DiaryEntry> findAllByHealthDepartmentId(@Param("healthDepartmentId") String healthDepartmentId);
 
     List<DiaryEntry> findAllByClientOrderByDateTimeDesc(Client client);

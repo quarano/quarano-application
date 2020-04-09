@@ -1,6 +1,5 @@
-import { TenantService } from './../../services/tenant.service';
-import { Component, OnInit } from '@angular/core';
-import { TenantsEnum } from 'src/app/services/tenantsEnum';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-header-right',
@@ -8,16 +7,15 @@ import { TenantsEnum } from 'src/app/services/tenantsEnum';
   styleUrls: ['./header-right.component.scss']
 })
 export class HeaderRightComponent implements OnInit {
-  public tenantsEnum = TenantsEnum;
-  public urlTenant = this.tenantService.urlTenant;
-  public tenant$$ = this.tenantService.tenant$$;
+  public healthDepartment$ = this.userService.healthDepartment$;
+  public isLoggedIn$ = this.userService.isLoggedIn$;
 
-  constructor(private tenantService: TenantService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
 
-  public tenantLogout() {
-    this.tenantService.logout();
+  public logout() {
+    this.userService.logout();
   }
 }

@@ -17,7 +17,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import de.wevsvirushackathon.coronareport.client.MissingClientException;
 import de.wevsvirushackathon.coronareport.diary.ClientNotAuthorizedException;
+import de.wevsvirushackathon.coronareport.user.UserNotFoundException;
 
 /**
  * Overrides basic Spring Exception Handling Entries to provide better error
@@ -86,9 +88,31 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ClientNotAuthorizedException.class)
 	protected ResponseEntity<Object> handleClientNotAuthorized(ClientNotAuthorizedException ex) {
-		String error = "Client with client-code '" + ex.getClientCode() + " is not authorized";
+		String error = "Client with client-id '" + ex.getClientCode() + " is not authorized";
 		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, error, ex);
 		return buildResponseEntity(apiError);
 	}
-
+	
+	@ExceptionHandler(MissingClientException.class)
+	protected ResponseEntity<Object> handleNotAuthorized(MissingClientException ex) {
+		String error = "There is no client for given Account username";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}	
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+		String error = "There is no user with the given username " + ex.getUsername() +"'";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}	
+	
+	@ExceptionHandler(InconsistentDataException.class)
+	protected ResponseEntity<Object> handleInconsistentDataException(InconsistentDataException ex) {
+		String error = "Internal server error";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}		
+	
+	
 }

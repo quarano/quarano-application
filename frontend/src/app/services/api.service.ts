@@ -1,17 +1,18 @@
-import { environment } from './../../environments/environment';
-import { SymptomDto } from './../models/symptom';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BackendClient } from '../models/backend-client';
-import { share, map, tap } from 'rxjs/operators';
-import { DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
-import { groupBy } from '../utils/groupBy';
-import { FirstQuery } from '../models/first-query';
-import { ContactPersonDto } from '../models/contact-person';
-import { TenantClient } from '../models/tenant-client';
-import { Tenant } from '../models/tenant';
+import {environment} from './../../environments/environment';
+import {SymptomDto} from './../models/symptom';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {BackendClient} from '../models/backend-client';
+import {map, share} from 'rxjs/operators';
+import {DiaryEntryDto, DiaryEntryModifyDto} from '../models/diary-entry';
+import {groupBy} from '../utils/groupBy';
+import {FirstQuery} from '../models/first-query';
+import {ContactPersonDto} from '../models/contact-person';
+import {TenantClient} from '../models/tenant-client';
 import {Client} from '../models/client';
+import {HealthDepartmentDto} from '../models/healtDepartment';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -102,5 +103,17 @@ export class ApiService {
 
   getReport(healthDepartmentId: string): Observable<Array<TenantClient>> {
     return this.httpClient.get<Array<TenantClient>>(`${this.baseUrl}/report/${healthDepartmentId}`);
+  }
+
+  getHealthDepartment(healthDepartmentId: string): Observable<HealthDepartmentDto> {
+    return this.httpClient.get<HealthDepartmentDto>(`${this.baseUrl}/healthdepartments/${healthDepartmentId}`);
+  }
+
+  login(username: string, password: string): Observable<{token: string}> {
+    return this.httpClient.post<{token: string}>(`${this.baseUrl}/login`, {username, password});
+  }
+
+  getMe(): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseUrl}/user/me`);
   }
 }

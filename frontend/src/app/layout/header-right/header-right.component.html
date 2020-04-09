@@ -1,16 +1,10 @@
 <div class="container">
-  <ng-container [ngSwitch]="urlTenant">
-    <h6 *ngSwitchCase="tenantsEnum.develop">Develop</h6>
-    <h6 *ngSwitchCase="tenantsEnum.testhausen">
-      In Kooperation mit Gesundheitsamt Testhausen
-    </h6>
-    <h6 *ngSwitchCase="tenantsEnum.testberg">
-      Gesundheitsamt Testberg
-    </h6>
+  <ng-container *ngIf="(healthDepartment$ | async) !== null">
+    <h6>{{(healthDepartment$ | async)?.fullName}}</h6>
   </ng-container>
   <h6
-    *ngIf="(tenant$$ | async) !== null"
-    (click)="tenantLogout()"
+    *ngIf="(isLoggedIn$ | async) === true"
+    (click)="logout()"
     style="cursor: pointer;"
     id="tenant-admin-logout"
   >

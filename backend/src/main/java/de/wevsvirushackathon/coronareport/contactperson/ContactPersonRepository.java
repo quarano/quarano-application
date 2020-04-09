@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ContactPersonRepository
         extends CrudRepository<ContactPerson, Long> {
 
-    @Query("SELECT c FROM ContactPerson c WHERE c.client.clientCode = :clientCode")
-    Iterable<ContactPerson> findAllByClientCode(@Param("clientCode") String clientCode);
+    @Query("SELECT c FROM ContactPerson c WHERE c.client.clientId = :clientId")
+    Iterable<ContactPerson> findAllByClientId(@Param("clientId") Long clientId);
 }

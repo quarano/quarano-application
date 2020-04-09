@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +37,11 @@ class ContactPersonController {
 	}
 
 	@GetMapping("/")
-	public Iterable<ContactPersonDto> getContacts(@RequestHeader("client-code") String clientCode) {
+	public Iterable<ContactPersonDto> getContacts(Authentication authentication) {
+		
+		Long clientId = Long.parseLong(authentication.getDetails().toString());
 
-		final Iterable<ContactPerson> entries = this.repo.findAllByClientCode(clientCode);
+		final Iterable<ContactPerson> entries = this.repo.findAllByClientId(clientId);
 
 		ArrayList<ContactPersonDto> dtos = new ArrayList<>();
 		entries.forEach(x -> dtos.add(modelMapper.map(x, ContactPersonDto.class)));

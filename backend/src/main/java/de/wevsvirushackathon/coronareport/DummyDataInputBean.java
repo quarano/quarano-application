@@ -1,5 +1,23 @@
 package de.wevsvirushackathon.coronareport;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import de.wevsvirushackathon.coronareport.client.Client;
+import de.wevsvirushackathon.coronareport.client.ClientRepository;
 import de.wevsvirushackathon.coronareport.contactperson.ContactPerson;
 import de.wevsvirushackathon.coronareport.contactperson.ContactPersonRepository;
 import de.wevsvirushackathon.coronareport.diary.DiaryEntry;
@@ -12,23 +30,10 @@ import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
 import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
-import de.wevsvirushackathon.coronareport.client.Client;
-import de.wevsvirushackathon.coronareport.client.ClientRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 
 @Component
 //@Profile("!prod")
+@Order(300)
 public class DummyDataInputBean implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
     private final Logger log = LoggerFactory.getLogger(DummyDataInputBean.class);
@@ -74,7 +79,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
 
         final Client client1 = clientRepository.save(Client.builder().firstname("Fabian")
         		.surename("Bauer").infected(true).clientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22")
-        		.healthDepartmentId(hd1.getId())
+        		.healthDepartment(hd1)
         		.phone("0175 664845454").zipCode("66845")
         		.build());
         this.firstReportRepository.save(FirstReport.builder()
@@ -87,7 +92,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
 
         final Client client2 = clientRepository.save(Client.builder().firstname("Sabine")
         		.surename("Wohlfart").infected(false).clientCode("4dsafg1f-a9f1-4619-9896-2b5cb3akd8e4")
-        		.healthDepartmentId(hd1.getId())
+        		.healthDepartment(hd1)
         		.phone("0172 9847845125").zipCode("68309")
         		.build());
 
@@ -100,7 +105,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
 
         final Client client3 = clientRepository.save(Client.builder().firstname("Daniela")
         		.surename("Maurer").infected(true).clientCode("22safg1f-a9f1-225f-9896-2b5cb3akdg88")
-        		.healthDepartmentId(hd2.getId())
+        		.healthDepartment(hd2)
         		.phone("0621 884433").zipCode("68259").build());
         this.firstReportRepository.save(FirstReport.builder()
                 .directContactWithLiquidsOfC19pat(true)
