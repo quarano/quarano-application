@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -30,10 +28,10 @@ public class Client {
 
     private String healthDepartmentId;
 
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST,
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE,
             orphanRemoval = true
     )
-    private List<FirstReport> comments = new ArrayList<>();
+    private FirstReport comments;
 
 }
