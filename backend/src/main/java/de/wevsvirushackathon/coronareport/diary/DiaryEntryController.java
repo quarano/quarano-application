@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
+import de.wevsvirushackathon.coronareport.report.HDReportService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,6 +50,8 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 public class DiaryEntryController {
+
+	private final Logger log = LoggerFactory.getLogger(DiaryEntryController.class);
 
 	private DiaryEntryRepository diaryEntryRepository;
 	private ClientRepository userRepository;
@@ -256,6 +261,8 @@ public class DiaryEntryController {
 				"clientId;firstname;surename;dateTime;bodyTemperature;symptoms;contactFirstname;contactSurename;typeOfContract;typeOfProtection");
 
 		final String valueSep = ";";
+
+		log.info(String.format("Exporting demoralized CSV of %d diary entries", diaryEntryCollection.size()));
 
 		for (final DiaryEntry d : diaryEntryCollection) {
 			final Collection<ContactPerson> contactPersonCollection = d.getContactPersons().size() == 0

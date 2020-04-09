@@ -25,10 +25,11 @@ public class FirstReportController {
         if (client == null) {
             return ResponseEntity.badRequest().build();
         }
+        if (client.getComments() != null) {
+            return ResponseEntity.badRequest().build();
+        }
 
         this.firstReportService.addFirstReport(firstReportDto);
         return ResponseEntity.ok().build();
     }
-
-
 }

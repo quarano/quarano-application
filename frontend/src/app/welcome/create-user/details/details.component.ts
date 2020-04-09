@@ -29,11 +29,11 @@ export class DetailsComponent implements OnInit {
   }
 
   public saveUser() {
-    const client: Client = {
-      firstname: this.nameFormGroup.controls['firstname'].value,
-      surename: this.nameFormGroup.controls['surname'].value,
-      phone: this.phoneZipFormGroup.controls['phone'].value,
-      zipCode: this.phoneZipFormGroup.controls['zipCode'].value,
+    /*const client: Client = {
+      firstname: this.nameFormGroup.controls.firstname.value,
+      surename: this.nameFormGroup.controls.surname.value,
+      phone: this.phoneZipFormGroup.controls.phone.value,
+      zipCode: this.phoneZipFormGroup.controls.zipCode.value,
       clientId: null,
       infected: false,
       healthDepartmentId: null,
@@ -45,7 +45,7 @@ export class DetailsComponent implements OnInit {
       mobilePhone: null
     };
 
-    this.client.emit(client);
+    this.client.emit(client);*/
   }
 
 }

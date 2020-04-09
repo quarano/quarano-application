@@ -36,7 +36,7 @@ export class CreateUserComponent implements OnInit {
   public registerClient() {
     this.progressBarService.progressBarState = true;
     this.registerStarted = true;
-    this.userService.createClientWithFirstQuery(this.client$$.getValue(), this.firstQuery$$.getValue())
+    /*this.userService.createClientWithFirstQuery(this.client$$.getValue(), this.firstQuery$$.getValue())
       .subscribe(
         (client: Client) => {
           this.progressBarService.progressBarState = false;
@@ -48,7 +48,7 @@ export class CreateUserComponent implements OnInit {
           this.progressBarService.progressBarState = false;
           this.snackbarService.error('Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.');
         }
-      );
+      );*/
   }
 
   public navigateToDiary() {

@@ -43,7 +43,7 @@ export class WelcomeComponent implements OnInit {
   public authenticateCode() {
     this.checkingCode = true;
     this.progressBarService.progressBarState = true;
-    this.userService.setUserCode(this.enteredCode)
+    /*this.userService.setUserCode(this.enteredCode)
       .subscribe(
         (client: Client) => {
           this.checkingCode = false;
@@ -57,7 +57,7 @@ export class WelcomeComponent implements OnInit {
           this.snackbarService.error('Der Code ist nicht vergeben.');
           this.router.navigate(['/welcome/create-user']);
         }
-      );
+      );*/
   }
 
 }

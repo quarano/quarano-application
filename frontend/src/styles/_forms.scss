@@ -5,6 +5,17 @@
 .form__card--small {
   @extend .mx-auto;
   max-width: 700px;
+
+  .mat-card-header-text {
+    margin-left: 0 !important;
+  }
+
+  .mat-card-actions {
+    // By default, there is a negative margin
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
   .mat-button {
     margin-right: 15px !important;
     & ~ .mat-button {
@@ -84,4 +95,8 @@ fieldset legend {
     opacity: 1;
     left: 0;
   }
+}
+
+.mat-card {
+  margin-bottom: 40px;
 }

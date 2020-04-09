@@ -9,6 +9,8 @@ import { CreateUserComponent } from './create-user/create-user.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { DetailsComponent } from './create-user/details/details.component';
 import { FirstQueryComponent } from './create-user/first-query/first-query.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -17,7 +19,9 @@ import { FirstQueryComponent } from './create-user/first-query/first-query.compo
     WelcomeComponent,
     CreateUserComponent,
     DetailsComponent,
-    FirstQueryComponent
+    FirstQueryComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,

@@ -27,7 +27,7 @@ public class DiaryEntryControllerIT {
     private MockMvc mvc;
 
     @Test
-    public void givenEmployees_whenGetEmployees_thenStatus200()
+    public void exportCSV()
             throws Exception {
 
         MvcResult result = mvc.perform(get("/diaryentries/export/csv/Testamt1/aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2").header("Origin", "*")

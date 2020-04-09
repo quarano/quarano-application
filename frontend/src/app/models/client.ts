@@ -5,12 +5,18 @@ export interface Client {
   firstname: string;
   phone: string;
   zipCode: string;
+  street?: string;
+  city?: string;
+  email?: string;
+  mobilephone?: string;
   infected: boolean;
-  healthDepartmentId: string;
-  email: string;
-  street: string;
+  completedPersonalData: boolean;
+  completedQuestionnaire: boolean;
+  completedContactRetro: boolean;
+  quarantineStartDateTime?: Date;
+  quarantineEndDateTime?: Date;
+
   houseNumber: string;
   city: string;
-  mobilePhone: string;
   dateOfBirth: Date;
 }

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: {
-    baseUrl: 'https://api-dev.epitrack.de'
+    baseUrl: 'http://localhost:8080'
   }
 };
 
