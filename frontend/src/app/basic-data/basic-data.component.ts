@@ -1,3 +1,4 @@
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { FirstQuery } from './../models/first-query';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -35,7 +36,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -81,22 +83,29 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     if (dateValue) {
       return dateValue as Date;
     }
-    return new Date(this.today);
+    return null;
   }
 
   buildSecondForm() {
     this.secondFormGroup = this.formBuilder.group({
-      min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, Validators.required),
-      nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, Validators.required),
-      directContactWithLiquidsOfC19Pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19Pat, Validators.required),
-      flightPassengerWithCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerWithCloseRowC19Pat, Validators.required),
-      flightAsCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightAsCrewMemberWithC19Pat, Validators.required),
-      belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, Validators.required),
-      belongToNursingStaff: new FormControl(this.firstQuery.belongToNursingStaff, Validators.required),
-      belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, Validators.required),
-      familyMember: new FormControl(this.firstQuery.familyMember, Validators.required),
+      min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, [Validators.required]),
+      nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, [Validators.required]),
+      directContactWithLiquidsOfC19Pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19Pat, [Validators.required]),
+      flightPassengerWithCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerWithCloseRowC19Pat, [Validators.required]),
+      flightAsCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightAsCrewMemberWithC19Pat, [Validators.required]),
+      belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
+      belongToNursingStaff: new FormControl(this.firstQuery.belongToNursingStaff, [Validators.required]),
+      belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, [Validators.required]),
+      familyMember: new FormControl(this.firstQuery.familyMember, [Validators.required]),
       dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
       otherContactType: new FormControl(this.firstQuery.otherContactType)
+    });
+    this.secondFormGroup.valueChanges.subscribe((value) => {
+      console.log(this.secondFormGroup);
+      value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
+      // ToDo: PUT Endpunkt in api aufrufen
+      this.firstQuery = value;
+      this.snackbarService.success('Fragebogen erfolgreich gespeichert');
     });
   }
 
@@ -108,8 +117,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     });
     let day = new Date(this.today);
     this.datesForRetrospectiveContacts = [];
-    console.log(this.dayOfFirstSymptoms);
-    const firstDay = this.dayOfFirstSymptoms.addDays(-2);
+    const firstSymptomsDay = this.firstQuery.dayOfFirstSymptoms || new Date(this.today);
+    const firstDay = firstSymptomsDay.addDays(-2);
     while (day >= firstDay) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl([]));
@@ -134,10 +143,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   onContactAdded(date: Date, id: number) {
     // ToDo: call api post
+    this.snackbarService.success('Kontakt erfolgreich gespeichert');
   }
 
   onContactRemoved(date: Date, id: number) {
     // ToDo: call api delete
+    this.snackbarService.success('Kontakt erfolgreich entfernt');
   }
 
   hasRetrospectiveContacts(): boolean {
