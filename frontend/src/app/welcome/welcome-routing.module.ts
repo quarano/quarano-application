@@ -5,11 +5,10 @@ import {RegisterComponent} from './register/register.component';
 import {LoginComponent} from './login/login.component';
 import {IsNotAuthenticatedGuard} from '../guards/is-not-authenticated.guard';
 
-
 const routes: Routes = [
   { path: 'create-user', component: CreateUserComponent },
   { path: 'register', component: RegisterComponent, canActivate: [IsNotAuthenticatedGuard] },
-  { path: 'login', component: LoginComponent, canActivate: [IsNotAuthenticatedGuard] },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
