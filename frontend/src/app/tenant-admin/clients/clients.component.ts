@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {BackendClient} from '../../models/backend-client';
 import {MatTableDataSource} from '@angular/material/table';
@@ -6,9 +6,10 @@ import {MatSort} from '@angular/material/sort';
 import {ApiService} from '../../services/api.service';
 import {TenantClient} from '../../models/tenant-client';
 import {DiaryEntryDto} from '../../models/diary-entry';
-import {filter} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {ProgressBarService} from '../../services/progress-bar.service';
 import {UserService} from '../../services/user.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-clients',
@@ -22,11 +23,13 @@ import {UserService} from '../../services/user.service';
     ]),
   ],
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['surename', 'firstname', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
   public dataSource = new MatTableDataSource<TenantClient>();
   public healthDepartment$ = this.userService.healthDepartment$;
+
+  private readonly destroy$$ = new Subject();
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -38,7 +41,8 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {
     this.healthDepartment$
       .pipe(
-        filter(healthDepartment => healthDepartment !== null)
+        filter(healthDepartment => healthDepartment != null),
+        takeUntil(this.destroy$$)
       )
       .subscribe(healthDepartment => {
         this.apiService.getReport(healthDepartment.id)
@@ -47,6 +51,10 @@ export class ClientsComponent implements OnInit {
           });
         this.dataSource.sort = this.sort;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$$.next();
   }
 
   applyFilter(event: Event) {
