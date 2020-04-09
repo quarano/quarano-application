@@ -17,41 +17,41 @@ import org.springframework.stereotype.Component;
 
 /**
  * Allows requests from different domains as the one on which the api runs.
- *
+ * <p>
  * TODO This effectively disables Cors. It is a means for development during MVP, will be replaced before production.
- * @author Patrick Otto
  *
+ * @author Patrick Otto
  */
 @Component
 public class SimpleCORSFilter implements Filter {
 
-private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
+    private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
 
-public SimpleCORSFilter() {
-    log.info("SimpleCORSFilter init");
-}
+    public SimpleCORSFilter() {
+        log.info("SimpleCORSFilter init");
+    }
 
-@Override
-public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-    HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
-    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, HEAD, GET, OPTIONS, DELETE");
-    response.setHeader("Access-Control-Max-Age", "3600");
-    response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, client-code, Origin,Accept, X-Requested-With, remember-me, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, HEAD, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, client-code, Origin,Accept, X-Requested-With, remember-me, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 
-    chain.doFilter(req, res);
-}
+        chain.doFilter(req, res);
+    }
 
-@Override
-public void init(FilterConfig filterConfig) {
-}
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
 
-@Override
-public void destroy() {
-}
+    @Override
+    public void destroy() {
+    }
 
 }
