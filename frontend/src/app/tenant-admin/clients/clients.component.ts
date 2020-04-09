@@ -4,9 +4,11 @@ import {BackendClient} from '../../models/backend-client';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {ApiService} from '../../services/api.service';
-import {TenantService} from '../../services/tenant.service';
 import {TenantClient} from '../../models/tenant-client';
 import {DiaryEntryDto} from '../../models/diary-entry';
+import {filter} from 'rxjs/operators';
+import {ProgressBarService} from '../../services/progress-bar.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-clients',
@@ -24,16 +26,27 @@ export class ClientsComponent implements OnInit {
   public displayedColumns: string[] = ['surename', 'firstname', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
   public dataSource = new MatTableDataSource<TenantClient>();
+  public healthDepartment$ = this.userService.healthDepartment$;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private apiService: ApiService,
-              private tenantService: TenantService) { }
+              private progressBarService: ProgressBarService,
+              private userService: UserService) {
+  }
 
   ngOnInit(): void {
-    this.apiService.getReport(this.tenantService.tenant$$.getValue().tenantId)
-      .subscribe((val: Array<TenantClient>) => { this.dataSource.data = val; });
-    this.dataSource.sort = this.sort;
+    this.healthDepartment$
+      .pipe(
+        filter(healthDepartment => healthDepartment !== null)
+      )
+      .subscribe(healthDepartment => {
+        this.apiService.getReport(healthDepartment.id)
+          .subscribe((val: Array<TenantClient>) => {
+            this.dataSource.data = val;
+          });
+        this.dataSource.sort = this.sort;
+      });
   }
 
   applyFilter(event: Event) {

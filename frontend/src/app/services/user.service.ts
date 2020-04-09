@@ -1,47 +1,71 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Client} from '../models/client';
 import {ApiService} from './api.service';
-import {filter, map, tap} from 'rxjs/operators';
-import {Router} from '@angular/router';
+import {distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/operators';
 import {SnackbarService} from './snackbar.service';
 import {TokenService} from './token.service';
+import {HealthDepartmentDto} from '../models/healtDepartment';
+import {Router} from '@angular/router';
+import {User} from '../models/user';
+
+export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  public readonly client$$ = new BehaviorSubject<Client>(null);
+  public readonly user$$ = new BehaviorSubject<User>(null);
+  public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
   public readonly roles$$ = this.tokenService.roles$$;
-  public readonly username$$ = this.tokenService.username$$;
+  public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthdepartment));
+
   public readonly isLoggedIn$: Observable<boolean>;
-  public readonly isAuthenticatedFully$$ = new BehaviorSubject<boolean>(null);
+  public readonly isFullyAuthenticated$: Observable<boolean>;
+  public readonly isHealthDepartmentUser$: Observable<boolean>;
+
+  public readonly completedPersonalData$: Observable<boolean>;
+  public readonly completedQuestionnaire$: Observable<boolean>;
+  public readonly completedContactRetro$: Observable<boolean>;
 
   constructor(private apiService: ApiService,
               private snackbarService: SnackbarService,
-              private tokenService: TokenService,
-              private router: Router) {
+              private router: Router,
+              private tokenService: TokenService) {
     this.init();
 
     this.isLoggedIn$ = this.tokenService.token$
       .pipe(
         map(token => token !== null)
       );
+
+    this.isFullyAuthenticated$ = this.client$
+      .pipe(
+        distinctUntilChanged(),
+        map(client => client !== null && client?.completedPersonalData && client?.completedQuestionnaire && client?.completedContactRetro)
+      );
+
+    this.completedPersonalData$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedPersonalData));
+    this.completedQuestionnaire$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedQuestionnaire));
+    this.completedContactRetro$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedContactRetro));
+
+    this.isHealthDepartmentUser$ = this.roles$$
+      .pipe(
+        distinctUntilChanged(),
+        map(roles => this.isHealthDepartmentUser(roles))
+      );
   }
 
   private init() {
-    // Check for user, if there is a new token
+    // Check for client, if there is a new token
     this.tokenService.token$.pipe(
-      filter(token => token !== null)
-    ).subscribe();
+      filter(token => token !== null),
+      switchMap(() => this.apiService.getMe())
+    ).subscribe(user => this.user$$.next(user));
 
-    // Unset user if token gets null
+    // Unset client if token gets null
     this.tokenService.token$.pipe(
       filter(token => token === null)
-    ).subscribe(
-      () => this.client$$.next(null)
-    );
+    ).subscribe(() => this.user$$.next(null));
   }
 
   public login(username: string, password: string): Observable<any> {
@@ -58,5 +82,18 @@ export class UserService {
 
   public hasRole(role: string, rolesList: Array<string> = this.roles$$.getValue()) {
     return rolesList.includes(role);
+  }
+
+  public isHealthDepartmentUser(userRoles: string[] = this.roles$$.getValue()): boolean {
+    if (!userRoles) {
+      return false;
+    }
+
+    for (const role of HEALTH_DEPARTMENT_ROLES) {
+      if (userRoles.includes(role)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
