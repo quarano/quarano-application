@@ -37,5 +37,4 @@ public class ClientDto {
     
     private  ClientType type;
     
-    private HealthDepartment healthDepartment;
 }

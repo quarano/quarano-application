@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -55,33 +56,6 @@ public class ClientController {
 	}
 
 	
-	/**
-	 * Retrieves information of the tracked case, that is currently logged in
-	 * 
-	 * @return a clientDto of the authenticated user
-	 * @throws ParseException
-	 */
-	@ApiOperation(value = "Get information of logged in user", response = ClientDto.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-			@ApiResponse(code = 403, message = "Not authorized, if there is no session"),
-			@ApiResponse(code = 404, message = "Bad request"),
-			@ApiResponse(code = 500, message = "Internal Server error") })	
-	@GetMapping("/me")
-	public ResponseEntity<ClientDto> getMe(Authentication authentication) {
-			
-		// get client of authenticated account
-		long clientId = Long.parseLong(authentication.getDetails().toString());
-		final Client client = this.clientRepository.findById(clientId)
-				.orElseThrow(() -> new MissingClientException(
-						"No Client found for username '" + authentication.getPrincipal(),
-						authentication.getPrincipal().toString() + "'"));
-
-		// map to dto
-		ClientDto clientDto = modelMapper.map(client, ClientDto.class);
-
-		return ResponseEntity.ok(clientDto);
-	}
-
 	private Client registerClientAndCreateExternalId(ClientDto clientDto) {
 		Client newClient = modelMapper.map(clientDto, Client.class);
 		newClient.setClientCode(createNewClientId());

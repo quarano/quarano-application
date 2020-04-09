@@ -43,6 +43,8 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
     	logger.warn("Adding dummy 4 accounts to database");
     	
     	Client client = clientRepository.findByClientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22");
+    	
+    	String hdId = client.getHealthDepartment().getId();
 
     	Role userRole = roleRepository.findByName("ROLE_USER");
     	Role adminRole = roleRepository.findByName("ROLE_HD_ADMIN");
@@ -57,6 +59,7 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         user.setPassword(passwordEncoder.encode("DemoPassword"));
         user.getRoles().add(userRole);
         user.setClientId(client.getClientId());
+        user.setHdId(hdId);
         accountRepository.save(user);
         
     	// create 2nd dummy acccount without client
@@ -66,6 +69,7 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         user2.setUsername("hansmueller");
         user2.setPassword(passwordEncoder.encode("hansmueller"));
         user2.getRoles().add(userRole);
+        user2.setHdId(hdId);
         accountRepository.save(user2);        
         
         Account admin = new Account();
@@ -73,7 +77,8 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         admin.setLastname("Beyer");
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
-        admin.getRoles().add(adminRole);        
+        admin.getRoles().add(adminRole);   
+        admin.setHdId(hdId);
         accountRepository.save(admin);
         
         Account caseAgent = new Account();
@@ -81,7 +86,8 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         caseAgent.setLastname("Baum");
         caseAgent.setUsername("agent1");
         caseAgent.setPassword(passwordEncoder.encode("agent1"));
-        caseAgent.getRoles().add(caseRole);        
+        caseAgent.getRoles().add(caseRole);   
+        caseAgent.setHdId(hdId);
         accountRepository.save(caseAgent);
         
         Account caseAgent2 = new Account();
@@ -89,7 +95,8 @@ class DummyDataiInitializer implements ApplicationListener<ApplicationReadyEvent
         caseAgent2.setLastname("Strauch");
         caseAgent2.setUsername("agent2");
         caseAgent2.setPassword(passwordEncoder.encode("agent2"));
-        caseAgent2.getRoles().add(caseRole);        
+        caseAgent2.getRoles().add(caseRole);     
+        caseAgent2.setHdId(hdId);
         accountRepository.save(caseAgent2);        
     }
 }

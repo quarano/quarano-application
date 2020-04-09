@@ -37,6 +37,8 @@ public class Account {
     private String firstname;
     private String lastname;
     
+    private String hdId;
+    
     
     // will be null if account belongs to a health department employee
     private Long clientId;

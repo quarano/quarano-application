@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import de.wevsvirushackathon.coronareport.client.MissingClientException;
 import de.wevsvirushackathon.coronareport.diary.ClientNotAuthorizedException;
+import de.wevsvirushackathon.coronareport.user.UserNotFoundException;
 
 /**
  * Overrides basic Spring Exception Handling Entries to provide better error
@@ -99,6 +100,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}	
 	
+	@ExceptionHandler(UserNotFoundException.class)
+	protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+		String error = "There is no user with the given username " + ex.getUsername() +"'";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}	
 	
-
+	@ExceptionHandler(InconsistentDataException.class)
+	protected ResponseEntity<Object> handleInconsistentDataException(InconsistentDataException ex) {
+		String error = "Internal server error";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}		
+	
+	
 }
