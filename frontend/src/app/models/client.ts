@@ -15,8 +15,6 @@ export interface Client {
   completedContactRetro: boolean;
   quarantineStartDateTime?: Date;
   quarantineEndDateTime?: Date;
-
   houseNumber: string;
-  city: string;
   dateOfBirth: Date;
 }

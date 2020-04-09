@@ -77,7 +77,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       email: new FormControl(this.client.email, [Validators.required, Validators.email]),
       phone: new FormControl(this.client.phone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
-      mobilePhone: new FormControl(this.client.mobilePhone,
+      mobilePhone: new FormControl(this.client.mobilephone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
       street: new FormControl(this.client.street, [Validators.required]),
       houseNumber: new FormControl(this.client.houseNumber, [Validators.maxLength(6)]),
