@@ -3,6 +3,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import {
   MatMomentDateModule,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MAT_MOMENT_DATE_FORMATS,
 } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
@@ -15,7 +16,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -71,7 +72,6 @@ const materialModules = [
   exports: [...materialModules],
   declarations: [],
   providers: [
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: MAT_DATE_LOCALE, useValue: 'de' },
   ]
 })

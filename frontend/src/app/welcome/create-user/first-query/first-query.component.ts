@@ -1,7 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FirstQuery} from '../../../models/first-query';
-import {FIRST_QUERY_QUESTIONS, FirstQueryQuestion} from './first-query-questions';
-import {BehaviorSubject} from 'rxjs';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FirstQuery } from '../../../models/first-query';
+import { FIRST_QUERY_QUESTIONS, FirstQueryQuestion } from './first-query-questions';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-create-user-first-query',
@@ -20,16 +20,17 @@ export class FirstQueryComponent {
   public counter = 0;
 
   private result: FirstQuery = {
-    Min15MinutesContactWithC19Pat: null,
-    NursingActionOnC19Pat: null,
-    DirectContactWithLiquidsOfC19Pat: null,
-    FlightPassengerWithCloseRowC19Pat: null,
-    FlightAsCrewMemberWithC19Pat: null,
-    BelongToMedicalStaff: null,
-    BelongToNursingStaff: null,
-    BelongToLaboratoryStaff: null,
-    FamilyMember: null,
-    OtherContactType: null,
+    min15MinutesContactWithC19Pat: null,
+    nursingActionOnC19Pat: null,
+    directContactWithLiquidsOfC19Pat: null,
+    flightPassengerWithCloseRowC19Pat: null,
+    flightAsCrewMemberWithC19Pat: null,
+    belongToMedicalStaff: null,
+    belongToNursingStaff: null,
+    belongToLaboratoryStaff: null,
+    familyMember: null,
+    otherContactType: null,
+    dayOfFirstSymptoms: null
   };
 
   constructor() {

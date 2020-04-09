@@ -1,3 +1,4 @@
+import { FirstQuery } from './../models/first-query';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
@@ -6,6 +7,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import '../utils/date-extensions';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-basic-data',
@@ -14,14 +17,14 @@ import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/c
 })
 export class BasicDataComponent implements OnInit, OnDestroy {
   subs = new SubSink();
-  today = new Date();
+  today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
 
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
-  dayOfFirstSymptoms = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+  firstQuery: FirstQuery;
 
   // ########## STEP III ##########
   thirdFormGroup: FormGroup;
@@ -37,8 +40,9 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.contactPersons = data.contactPersons;
+      this.firstQuery = data.firstQuery;
+      this.buildForms();
     }));
-    this.buildForms();
   }
 
   ngOnDestroy() {
@@ -49,6 +53,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.buildFirstForm();
     this.buildSecondForm();
     this.buildThirdForm();
+  }
+
+  onTabChanged(event: StepperSelectionEvent) {
+    if (event.selectedIndex === 2) {
+      this.buildThirdForm();
+    }
   }
 
   // ########## STEP I ##########
@@ -62,10 +72,31 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   // ########## STEP II ##########
 
+  get dayOfFirstSymptoms() {
+    const dateValue = this.secondFormGroup?.controls.dayOfFirstSymptoms.value;
+    if (dateValue?.toDate instanceof Function) {
+      const date = (dateValue as Moment).toDate();
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    if (dateValue) {
+      return dateValue as Date;
+    }
+    return new Date(this.today);
+  }
+
   buildSecondForm() {
     this.secondFormGroup = this.formBuilder.group({
-      // ToDo: Basic Data Step 2
-      secondCtrl: ['', Validators.required]
+      min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, Validators.required),
+      nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, Validators.required),
+      directContactWithLiquidsOfC19Pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19Pat, Validators.required),
+      flightPassengerWithCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerWithCloseRowC19Pat, Validators.required),
+      flightAsCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightAsCrewMemberWithC19Pat, Validators.required),
+      belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, Validators.required),
+      belongToNursingStaff: new FormControl(this.firstQuery.belongToNursingStaff, Validators.required),
+      belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, Validators.required),
+      familyMember: new FormControl(this.firstQuery.familyMember, Validators.required),
+      dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
+      otherContactType: new FormControl(this.firstQuery.otherContactType)
     });
   }
 
@@ -75,7 +106,9 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.thirdFormGroup = this.formBuilder.group({
       noRetrospectiveContactsConfirmed: new FormControl(false)
     });
-    let day = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+    let day = new Date(this.today);
+    this.datesForRetrospectiveContacts = [];
+    console.log(this.dayOfFirstSymptoms);
     const firstDay = this.dayOfFirstSymptoms.addDays(-2);
     while (day >= firstDay) {
       this.datesForRetrospectiveContacts.push(day);

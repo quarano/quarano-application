@@ -1,4 +1,9 @@
-<mat-horizontal-stepper [linear]="false" #stepper style="position: relative;">
+<mat-horizontal-stepper
+  [linear]="false"
+  #stepper
+  style="position: relative;"
+  (selectionChange)="onTabChanged($event)"
+>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Persönliche Daten</ng-template>
@@ -16,19 +21,192 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step
+    #secondStep
+    [stepControl]="secondFormGroup"
+    [hasError]="secondFormGroup.hasError && secondStep.interacted"
+  >
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Initialer Fragebogen</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
+      <mat-form-field class="full-width">
+        <mat-label>Tag, an dem die ersten Symptome auftraten</mat-label>
         <input
           matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
+          [max]="today"
+          [matDatepicker]="picker"
+          formControlName="dayOfFirstSymptoms"
         />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-      <div>
+
+      <mat-label id="min15MinutesContactWithC19PatLabel"
+        >Hatten Sie bereits Kontakt mit einer Person, bei der COVID-19
+        nachgewiesen wurde?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="min15MinutesContactWithC19PatLabel"
+        class="example-radio-group"
+        formControlName="min15MinutesContactWithC19Pat"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="nursingActionOnC19PatLabel"
+        >Haben Sie eine Person gepflegt / versorgt, bei der COVID-19
+        festgestellt wurde?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="nursingActionOnC19PatLabel"
+        class="example-radio-group"
+        formControlName="nursingActionOnC19Pat"
+      >
+        <mat-radio-button class="example-radio-button" [value]="1">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="0">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="directContactWithLiquidsOfC19PatLabel"
+        >Hatten Sie direkten Kontakt zu Körperflüssigkeiten von einer Person,
+        bei der COVID-19 festgestellt wurde?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="directContactWithLiquidsOfC19PatLabel"
+        class="example-radio-group"
+        formControlName="directContactWithLiquidsOfC19Pat"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="flightPassengerWithCloseRowC19PatLabel"
+        >Saßen Sie auf einem FLug nahe an einer Person, bei der COVID-19
+        festgestellt wurde?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="flightPassengerWithCloseRowC19PatLabel"
+        class="example-radio-group"
+        formControlName="flightPassengerWithCloseRowC19Pat"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="flightAsCrewMemberWithC19PatLabel"
+        >Waren Sie Crewmitglied auf einem FLug mit einer Person an Board, bei
+        der COVID-19 festgestellt wurde?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="flightAsCrewMemberWithC19PatLabel"
+        class="example-radio-group"
+        formControlName="flightAsCrewMemberWithC19Pat"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="belongToMedicalStaffLabel"
+        >Sind Sie in einem medizinischen Beruf tätig?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="belongToMedicalStaffLabel"
+        class="example-radio-group"
+        formControlName="belongToMedicalStaff"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="belongToNursingStaffLabel"
+        >Sind Sie in einem Pflegeberuf tätig?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="belongToNursingStaffLabel"
+        class="example-radio-group"
+        formControlName="belongToNursingStaff"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="belongToLaboratoryStaffLabel"
+        >Sind Sie in einem Labor tätig?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="belongToLaboratoryStaffLabel"
+        class="example-radio-group"
+        formControlName="belongToLaboratoryStaff"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-label id="familyMemberLabel"
+        >Wurde bei einem Ihrer Familienmitglieder COVID-19
+        festgestellt?</mat-label
+      >
+      <mat-radio-group
+        required
+        aria-labelledby="familyMemberLabel"
+        class="example-radio-group"
+        formControlName="familyMember"
+      >
+        <mat-radio-button class="example-radio-button" [value]="true">
+          Ja
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="false">
+          Nein
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field class="full-width">
+        <mat-label
+          >Hatten Sie auf andere Art Kontakt mit einer Person, bei der COVID-19
+          festgestellt wurde?</mat-label
+        >
+        <textarea
+          [mat-autosize]="true"
+          [matAutosizeMinRows]="2"
+          matInput
+          formControlName="otherContactType"
+          placeholder="Falls ja, bitte beschreiben"
+        ></textarea>
+        <mat-hint align="start"
+          ><strong>Falls ja, bitte beschreiben</strong>
+        </mat-hint>
+      </mat-form-field>
+      <div class="mt-3">
         <button mat-button matStepperPrevious>Zurück</button>
         <button mat-button matStepperNext>Weiter</button>
       </div>
@@ -38,7 +216,8 @@
     #thirdStep
     [stepControl]="thirdFormGroup"
     [hasError]="
-      !(hasRetrospectiveContacts() || hasNoRetrospectiveContactsConfirmed())
+      !(hasRetrospectiveContacts() || hasNoRetrospectiveContactsConfirmed()) &&
+      thirdStep.interacted
     "
   >
     <ng-template matStepLabel>Kontaktpersonen</ng-template>

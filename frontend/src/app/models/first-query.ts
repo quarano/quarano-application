@@ -1,12 +1,13 @@
 export interface FirstQuery {
-  Min15MinutesContactWithC19Pat: boolean;
-  NursingActionOnC19Pat: boolean;
-  DirectContactWithLiquidsOfC19Pat: boolean;
-  FlightPassengerWithCloseRowC19Pat: boolean;
-  FlightAsCrewMemberWithC19Pat: boolean;
-  BelongToMedicalStaff: boolean;
-  BelongToNursingStaff: boolean;
-  BelongToLaboratoryStaff: boolean;
-  FamilyMember: boolean;
-  OtherContactType: boolean;
+  min15MinutesContactWithC19Pat: boolean;
+  nursingActionOnC19Pat: boolean;
+  directContactWithLiquidsOfC19Pat: boolean;
+  flightPassengerWithCloseRowC19Pat: boolean;
+  flightAsCrewMemberWithC19Pat: boolean;
+  belongToMedicalStaff: boolean;
+  belongToNursingStaff: boolean;
+  belongToLaboratoryStaff: boolean;
+  familyMember: boolean;
+  otherContactType: string;
+  dayOfFirstSymptoms: Date;
 }

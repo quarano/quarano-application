@@ -1,3 +1,4 @@
+import { MyFirstQueryResolver } from './../resolvers/my-first-query.resolver';
 import { BasicDataComponent } from './basic-data.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -7,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: BasicDataComponent,
-    resolve: { contactPersons: ContactPersonsResolver },
+    resolve: { contactPersons: ContactPersonsResolver, firstQuery: MyFirstQueryResolver },
   },
 ];
 
