@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {ApiService} from './api.service';
-import {distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/operators';
-import {SnackbarService} from './snackbar.service';
-import {TokenService} from './token.service';
-import {HealthDepartmentDto} from '../models/healtDepartment';
-import {Router} from '@angular/router';
-import {User} from '../models/user';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { SnackbarService } from './snackbar.service';
+import { TokenService } from './token.service';
+import { HealthDepartmentDto } from '../models/healtDepartment';
+import { User } from '../models/user';
 
 export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
 
@@ -27,10 +26,10 @@ export class UserService {
   public readonly completedQuestionnaire$: Observable<boolean>;
   public readonly completedContactRetro$: Observable<boolean>;
 
-  constructor(private apiService: ApiService,
-              private snackbarService: SnackbarService,
-              private router: Router,
-              private tokenService: TokenService) {
+  constructor(
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private tokenService: TokenService) {
     this.init();
 
     this.isLoggedIn$ = this.tokenService.token$
