@@ -70,10 +70,10 @@ public class TrackingController {
 	@GetMapping("/api/details/form")
 	HttpEntity<?> trackedPersonForm() {
 
-		var properties = Map.of("zipCode", Map.of("regex", ZipCode.REGEX.pattern()), //
-				"mobilePhone", Map.of("regex", PhoneNumber.REGEX.pattern()), //
-				"phone", Map.of("regex", PhoneNumber.REGEX.pattern()), //
-				"email", Map.of("regex", EmailAddress.REGEX.pattern()));
+		var properties = Map.of("zipCode", Map.of("regex", ZipCode.PATTERN), //
+				"mobilePhone", Map.of("regex", PhoneNumber.PATTERN), //
+				"phone", Map.of("regex", PhoneNumber.PATTERN), //
+				"email", Map.of("regex", EmailAddress.PATTERN));
 
 		return ResponseEntity.ok(Map.of("properties", properties));
 	}
@@ -102,5 +102,4 @@ public class TrackingController {
 			dto.validate(errors);
 		}
 	}
-
 }

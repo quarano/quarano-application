@@ -27,9 +27,12 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.ClientDto;
 import quarano.tracking.web.TrackingController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -52,6 +55,7 @@ public class TrackedCaseController {
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull ModelMapper mapper;
+	private final @NonNull MessageSourceAccessor accessor;
 
 	@GetMapping("/api/cases")
 	Stream<?> allCases() {
@@ -75,13 +79,10 @@ public class TrackedCaseController {
 			@LoggedIn TrackedPerson user) {
 
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(errors);
+			return ResponseEntity.badRequest().body(toMap(errors));
 		}
 
-		var trackedCase = cases.findByTrackedPerson(user);
-
-		trackedCase //
-				.map(TrackedCase::markEnrollmentDetailsSubmitted) //
+		cases.findByTrackedPerson(user).map(TrackedCase::markEnrollmentDetailsSubmitted) //
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
 		return tracking.createTrackedPerson(dto, errors, user);
@@ -116,5 +117,16 @@ public class TrackedCaseController {
 	@ExceptionHandler
 	ResponseEntity<?> handle(EnrollmentException o_O) {
 		return ResponseEntity.badRequest().body(o_O.getMessage());
+	}
+
+	private Map<String, String> toMap(Errors errors) {
+
+		Map<String, String> fields = new HashMap<>();
+
+		errors.getFieldErrors().forEach(it -> {
+			fields.put(it.getField(), accessor.getMessage(it));
+		});
+
+		return fields;
 	}
 }

@@ -32,8 +32,8 @@ import javax.persistence.Embeddable;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PhoneNumber {
 
-	// TODO - More restrictive
-	public static final Pattern REGEX = Pattern.compile("^[\\+\\(\\)0-9\\s-]*?$");
+	public static final String PATTERN = "^[\\+\\(\\)0-9\\s-]*?$";
+	private static final Pattern REGEX = Pattern.compile(PATTERN);
 
 	private final @Column(name = "phoneNumber") String value;
 

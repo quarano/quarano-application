@@ -17,6 +17,9 @@ package quarano;
 
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
@@ -30,4 +33,9 @@ public class Quarano {
 	// public static void main(String... args) {
 	// SpringApplication.run(Quarano.class, args);
 	// }
+
+	@Bean
+	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
+		return new MessageSourceAccessor(source);
+	}
 }

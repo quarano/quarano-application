@@ -32,7 +32,8 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ZipCode {
 
-	public static final Pattern REGEX = Pattern.compile("[0-9]{5}");
+	public static final String PATTERN = "[0-9]{5}";
+	private static final Pattern REGEX = Pattern.compile("[0-9]{5}");
 
 	private final @Column(name = "zipcode") String value;
 
