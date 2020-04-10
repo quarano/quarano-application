@@ -13,7 +13,7 @@ import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/c
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { VALIDATION_PATTERNS } from '../utils/validation';
-import { delay, distinctUntilChanged, debounceTime, auditTime } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-basic-data',
@@ -93,7 +93,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.firstFormGroup.statusChanges
       .pipe(debounceTime(1000))
       .subscribe((status) => {
-        if (status === 'VALID') {
+        if (status === 'VALID' && !this.firstFormGroup.pristine) {
           const value = this.firstFormGroup.value;
           value.dateOfBirth = this.dateOfBirth;
           // ToDo: PUT Endpunkt in api aufrufen
@@ -158,7 +158,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
     this.secondFormGroup.statusChanges
       .pipe(debounceTime(1000)).subscribe((status) => {
-        if (status === 'VALID') {
+        if (status === 'VALID' && !this.secondFormGroup.pristine) {
           const value = this.secondFormGroup.value;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
           // ToDo: PUT Endpunkt in api aufrufen
