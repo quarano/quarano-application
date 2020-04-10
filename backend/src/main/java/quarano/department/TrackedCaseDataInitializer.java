@@ -64,19 +64,19 @@ public class TrackedCaseDataInitializer implements ApplicationListener<Applicati
 						case_.setTrackedPerson(person);
 						case_.setDepartment(department);
 
-						Streamable.of(firstReports.findAll()) //
+						var initialReport = Streamable.of(firstReports.findAll()) //
 								.filter(report -> report.getClient().getClientId() == it.getClientId()) //
 								.stream() //
 								.findFirst() //
 								.map(report -> mapper.map(report, InitialReport.class)) //
-								.ifPresent(report -> case_.setInitialReport(report));
+								.orElse(null);
 
 						if (it.isCompletedPersonalData()) {
 							case_.markEnrollmentDetailsSubmitted();
 						}
 
 						if (it.isCompletedQuestionnaire()) {
-							case_.markQuestionaireSubmitted();
+							case_.submitQuestionaire(initialReport);
 						}
 
 						if (it.isCompletedContactRetro()) {

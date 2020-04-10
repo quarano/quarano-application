@@ -35,13 +35,11 @@ public class MappingConfigurationUnitTests {
 
 		new MappingConfiguration(mapper);
 
-		var map = mapper.typeMap(FirstReport.class, InitialReport.class);
-
 		var report = new FirstReport();
 		report.setNursingActionOnC19Pat(true);
 
 		InitialReport result = mapper.map(report, InitialReport.class);
 
-		assertThat(result.isNursingActionOnC19Pat()).isTrue();
+		assertThat(result.getNursingActionOnC19Pat()).isTrue();
 	}
 }

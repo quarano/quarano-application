@@ -25,13 +25,15 @@ import quarano.core.QuaranoEntity;
 import quarano.department.InitialReport.InitialReportIdentifier;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
 import org.jddd.core.types.Identifier;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -42,8 +44,7 @@ import org.jddd.core.types.Identifier;
 @Setter(AccessLevel.PACKAGE)
 public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdentifier> {
 
-	private final LocalDateTime dateTime;
-	private boolean min15MinutesContactWithC19Pat, //
+	private Boolean min15MinutesContactWithC19Pat, //
 			nursingActionOnC19Pat, //
 			directContactWithLiquidsOfC19pat, //
 			flightPassengerCloseRowC19Pat, //
@@ -52,13 +53,27 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 			belongToNursingStaff, //
 			belongToLaboratoryStaff, //
 			familyMember, //
-			isPassengerOnSameFlightAsPatient, //
-			otherContactType;
+			isPassengerOnSameFlightAsPatient;
+
+	private String otherContactType;
+	private LocalDate dayOfFirstSymptoms;
 
 	InitialReport() {
-
 		this.id = InitialReportIdentifier.of(UUID.randomUUID());
-		this.dateTime = LocalDateTime.now();
+	}
+
+	public boolean isComplete() {
+
+		for (Field it : InitialReport.class.getDeclaredFields()) {
+
+			ReflectionUtils.makeAccessible(it);
+
+			if (ReflectionUtils.getField(it, this) == null) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Embeddable

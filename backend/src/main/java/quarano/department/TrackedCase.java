@@ -47,11 +47,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	private @OneToOne TrackedPerson trackedPerson;
 	private @ManyToOne Department department;
-	private @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) InitialReport InitialReport;
+	private @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) InitialReport initialReport;
 	private Enrollment enrollment = new Enrollment();
 
 	public TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
+	}
+
+	public InitialReport getOrCreateInitialReport() {
+		return initialReport == null ? new InitialReport() : initialReport;
 	}
 
 	public TrackedCase markEnrollmentDetailsSubmitted() {
@@ -61,9 +65,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	public TrackedCase markQuestionaireSubmitted() {
+	public TrackedCase submitQuestionaire(InitialReport report) {
 
-		this.enrollment.markQuestionaireSubmitted();
+		this.initialReport = report;
+
+		if (report.isComplete()) {
+			enrollment.markQuestionaireSubmitted();
+		}
 
 		return this;
 	}

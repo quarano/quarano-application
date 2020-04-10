@@ -15,19 +15,16 @@
  */
 package quarano.department.web;
 
-import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.department.EnrollmentException;
-import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.ClientDto;
 import quarano.tracking.web.TrackingController;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -93,26 +90,30 @@ public class TrackedCaseController {
 	HttpEntity<?> showQuestionaire(@LoggedIn TrackedPerson person) {
 
 		var report = cases.findByTrackedPerson(person) //
-				.<Object> map(TrackedCase::getInitialReport) //
-				.orElseGet(() -> emptyInitialReport());
+				.map(TrackedCase::getInitialReport) //
+				.map(it -> mapper.map(it, InitialReportDto.class)) //
+				.orElseGet(() -> new InitialReportDto());
 
 		return ResponseEntity.ok(report);
 	}
 
 	@RequestMapping(path = "/api/enrollment/questionaire", method = { RequestMethod.POST, RequestMethod.PUT })
-	HttpEntity<?> addQuestionaire(@Validated @RequestBody FirstReport dto, Errors errors,
+	HttpEntity<?> addQuestionaire(@Validated @RequestBody InitialReportDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(errors);
 		}
 
-		var report = mapper.map(dto, InitialReport.class);
-
 		cases.findByTrackedPerson(person) //
-				.map(it -> it.setInitialReport(report)) //
-				.map(TrackedCase::markQuestionaireSubmitted) //
-				.ifPresent(cases::save);
+				.map(it -> {
+
+					var report = it.getOrCreateInitialReport();
+					mapper.map(dto, report);
+
+					return it.submitQuestionaire(report);
+
+				}).ifPresent(cases::save);
 
 		return ResponseEntity.ok().build();
 	}
@@ -131,16 +132,5 @@ public class TrackedCaseController {
 		});
 
 		return fields;
-	}
-
-	private static Map<String, Object> emptyInitialReport() {
-
-		var result = new HashMap<String, Object>();
-
-		Arrays.stream(InitialReport.class.getDeclaredFields()).forEach(it -> {
-			result.put(it.getName(), null);
-		});
-
-		return result;
 	}
 }
