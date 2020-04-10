@@ -36,6 +36,14 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 	@Autowired JwtTokenToAuthenticationConverter jwtAuthenticationProvider;
 
+	private static final String[] SWAGGER_UI_WHITELIST = {
+
+			// -- swagger ui
+			"/swagger-resources/**", //
+			"/swagger-ui.html", //
+			"/v2/api-docs", //
+			"/webjars/**" };
+
 	@Bean
 	public JwtDecoder jwtDecoder(@Value("${jwt.authentication.secret}") String secret) {
 
@@ -50,16 +58,16 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-		logger.debug("Configuring HTTP security, allowing public access to '/login' and '/public/**'");
+		logger.debug(
+				"Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
 
 		httpSecurity.oauth2ResourceServer() //
 				.jwt(it -> it.jwtAuthenticationConverter(jwtAuthenticationProvider));
 
 		httpSecurity.authorizeRequests(it -> {
+			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/login").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
-			it.mvcMatchers("/public/**").permitAll();
-			it.mvcMatchers("/public/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
 			it.mvcMatchers("/api/user/me").authenticated(); //
