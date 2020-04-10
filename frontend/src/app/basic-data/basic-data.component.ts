@@ -1,3 +1,4 @@
+import { UserService } from './../services/user.service';
 import { Client } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { FirstQuery } from './../models/first-query';
@@ -41,15 +42,17 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService) { }
+    private snackbarService: SnackbarService,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.contactPersons = data.contactPersons;
       this.firstQuery = data.firstQuery;
-      this.client = data.client;
-      this.buildForms();
     }));
+    this.subs.add(this.userService.client$
+      .subscribe(client => this.client = client));
+    this.buildForms();
   }
 
   ngOnDestroy() {

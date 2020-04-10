@@ -9,7 +9,11 @@ const routes: Routes = [
   {
     path: '',
     component: BasicDataComponent,
-    resolve: { contactPersons: ContactPersonsResolver, firstQuery: MyFirstQueryResolver, client: MyClientDataResolver },
+    resolve:
+    {
+      contactPersons: ContactPersonsResolver,
+      firstQuery: MyFirstQueryResolver,
+    },
   },
 ];
 
