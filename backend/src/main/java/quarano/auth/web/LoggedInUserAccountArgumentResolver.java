@@ -41,7 +41,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
 
-	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current user but none available! If the user does not necessarily have to be logged in, use Optional<UserAccount> instead!";
+	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current user but none available!";
 	private static final ResolvableType TRACKED_PERSON = ResolvableType.forClass(TrackedPerson.class);
 
 	private final @NonNull AuthenticationManager authenticationManager;

@@ -16,9 +16,12 @@
 package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.stereotype.Component;
@@ -31,9 +34,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MappingConfiguration {
 
+	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
+			= source -> source == null ? null : EmailAddress.of(source.getSource());
+
+	private static final Converter<String, PhoneNumber> STRING_TO_PHONE_NUMBER //
+			= source -> source == null ? null : PhoneNumber.of(source.getSource());
+
+	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE //
+			= source -> source == null ? null : ZipCode.of(source.getSource());
+
 	public MappingConfiguration(ModelMapper mapper) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
+
+		mapper.addConverter(STRING_TO_EMAIL_ADDRESS);
+		mapper.addConverter(STRING_TO_PHONE_NUMBER);
+		mapper.addConverter(STRING_TO_ZIP_CODE);
 
 		mapper.typeMap(Client.class, TrackedPerson.class).setPreConverter(context -> {
 
@@ -55,7 +71,9 @@ public class MappingConfiguration {
 
 		mapper.typeMap(ClientDto.class, TrackedPerson.class).addMappings(it -> {
 
-			it.map(ClientDto::getClientId, TrackedPerson::setLegacyClientId);
+			it.using(STRING_TO_PHONE_NUMBER).map(ClientDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
+			it.using(STRING_TO_PHONE_NUMBER).map(ClientDto::getPhone, TrackedPerson::setPhoneNumber);
+			it.using(STRING_TO_EMAIL_ADDRESS).map(ClientDto::getEmail, TrackedPerson::setEmailAddress);
 
 			it.<String> map(ClientDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(ClientDto::getCity, (target, v) -> target.getAddress().setCity(v));

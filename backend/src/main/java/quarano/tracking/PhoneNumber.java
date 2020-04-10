@@ -17,6 +17,7 @@ package quarano.tracking;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class PhoneNumber {
 
 	public static final String PATTERN = "^[\\+\\(\\)0-9\\s-]*?$";
@@ -48,5 +50,14 @@ public class PhoneNumber {
 
 	public static boolean isValid(String candidate) {
 		return REGEX.matcher(candidate).matches();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return value;
 	}
 }

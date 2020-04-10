@@ -20,7 +20,6 @@ import org.springframework.validation.Errors;
 @AllArgsConstructor
 public class ClientDto {
 
-	private Long clientId;
 	private String clientCode;
 
 	private String surename;

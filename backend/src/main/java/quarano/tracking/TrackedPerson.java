@@ -56,12 +56,12 @@ import org.jddd.event.types.DomainEvent;
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
 
 	private @Getter @Setter Long legacyClientId;
-	private @Getter String firstname, lastname;
-	private @Getter EmailAddress emailAddress;
-	private @Getter PhoneNumber phoneNumber;
+	private @Getter @Setter String firstname, lastname;
+	private @Getter @Setter EmailAddress emailAddress;
+	private @Getter @Setter PhoneNumber phoneNumber;
 
 	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
-	private @Getter PhoneNumber mobilePhoneNumber;
+	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 
 	@OneToMany(cascade = CascadeType.ALL) //
