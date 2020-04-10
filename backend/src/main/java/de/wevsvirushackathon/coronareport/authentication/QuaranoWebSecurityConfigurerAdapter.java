@@ -11,7 +11,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,9 +36,19 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
+    
 
     @Autowired
     private JwtAuthenticationProvider jwtAuthenticationProvider;
+    
+    private static final String[] SWAGGER_UI_WHITELIST = {
+
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) {
@@ -45,30 +59,32 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() {
         return new JwtAuthenticationTokenFilter();
     }
+
 	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		
-		logger.debug("Configuring HTTP security, allowing public access to '/login' and '/public/**'");
+		logger.debug("Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
 
 		httpSecurity.authorizeRequests()
+        .antMatchers(SWAGGER_UI_WHITELIST).permitAll()      
         .antMatchers("/login").permitAll()
         .antMatchers("/client/register").permitAll()
-        .antMatchers("/public/**").permitAll()
-        .antMatchers("/user/me").authenticated()
+        .antMatchers("/user/me").authenticated() 
         .antMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')")
         .antMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')")
         .antMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN +"')")
         .and()
             .csrf().disable()              
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-        .and()
+        .and()  
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-         .and().cors();
+        .and()
+        .cors();
 
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		httpSecurity.headers().cacheControl();
-
+		
 	}
 	
     @Bean
