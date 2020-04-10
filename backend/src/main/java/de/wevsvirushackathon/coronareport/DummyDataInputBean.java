@@ -37,6 +37,10 @@ import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 public class DummyDataInputBean implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
     private final Logger log = LoggerFactory.getLogger(DummyDataInputBean.class);
+    
+    final static String VALID_CLIENT_CODE_DEP1 = "738d3d1f-a9f1-4619-9896-2b5cb3a89c22";
+    final static String VALID_CLIENT_CODE2_DEP1 = "aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2";
+    final static String VALID_CLIENT_CODE3_DEP2 = "aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2";
 
     private ClientRepository clientRepository;
     private ContactPersonRepository contactPersonRepository;
@@ -64,7 +68,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
     	
     	// check if testclients do already exist:
     	
-    	Client client = clientRepository.findByClientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22");
+    	Client client = clientRepository.findByClientCode(VALID_CLIENT_CODE_DEP1);
     	if(client != null){
             log.info("Initial client data already exists, skipping dummy data generation");
     		return;
@@ -73,9 +77,9 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
         log.info("Generating dummy data");
 
         final HealthDepartment hd1 = this.healthDepartmentRepository.save(HealthDepartment.builder().fullName("Testamt 1")
-                .id("Testamt1").passCode(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2")).build());
+                .id("Testamt1").passCode(UUID.fromString(VALID_CLIENT_CODE2_DEP1)).build());
         final HealthDepartment hd2 = this.healthDepartmentRepository.save(HealthDepartment.builder().fullName("Testamt 2")
-                .id("Testamt2").passCode(UUID.fromString("ca3f3e9a-414a-4117-a623-59b109b269f1")).build());
+                .id("Testamt2").passCode(UUID.fromString(VALID_CLIENT_CODE3_DEP2)).build());
 
         final Client client1 = clientRepository.save(Client.builder().firstname("Fabian")
         		.surename("Bauer").infected(true).clientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22")
@@ -179,7 +183,9 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
         diaryEntryRepository.save(DiaryEntry.builder().client(client3)
                 .dateTime(dateOf(2020, 3, 19)).bodyTemperature(37.5f).build());
     }
-
+    
+   
+    
     public Timestamp dateOf(int year, int month, int day) {
         return new Timestamp(Date.from(LocalDate.of(year, month, day).atStartOfDay()
                 .atZone(ZoneId.systemDefault())
