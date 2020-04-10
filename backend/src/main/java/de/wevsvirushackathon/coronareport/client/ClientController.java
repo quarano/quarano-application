@@ -8,7 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
+import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.ArgumentType;
+import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InconsistentDataException;
+import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InvalidArgumentException;
+import de.wevsvirushackathon.coronareport.user.UserDto;
+import de.wevsvirushackathon.coronareport.user.UserNotFoundException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -42,17 +45,29 @@ public class ClientController {
 	}
 
 	/**
+	 * Checks if the given code exists
 	 * 
-	 * @param clientCode
-	 * @return
+	 * @return true if the code exists, error-json otherwise
+	 * @throws EntityNotFoundException
+	 * @throws InvalidArgumentException
 	 */
-	@GetMapping("/{clientCode}")
-	public ResponseEntity<ClientDto> getClient(@PathVariable String clientCode) {
-		Client client = this.clientRepository.findByClientCode(clientCode);
-		if (client == null) {
-			throw new EntityNotFoundException("Client with clientCode '" + clientCode + "' does not exist.");
+	@ApiOperation(value = "Get information about the logged in user", response = UserDto.class)
+	@ApiResponses(value = { 
+		@ApiResponse(code = 200, message = "OK"),
+		@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
+		@ApiResponse(code = 500, message = "Internal Server error") })
+	@GetMapping("/checkcode/{clientCode}")
+	public ResponseEntity<Boolean> doesClientexist(@PathVariable String clientCode) throws InvalidArgumentException {
+		
+		if(null == clientCode) {
+			throw new InvalidArgumentException("clientCode", "ClientCode '"+ clientCode + "' does not exist.", ArgumentType.PATH_VARIABLE, "");
 		}
-		return ResponseEntity.ok(modelMapper.map(client, ClientDto.class));
+		
+		boolean exists = this.clientRepository.existsByClientCode(clientCode);
+		if (!exists) {
+			throw new EntityNotFoundException("ClientCode '"+ clientCode + "' does not exist.");
+		}
+		return ResponseEntity.ok(true);
 	}
 
 	
