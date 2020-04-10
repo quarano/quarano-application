@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.util.Streamable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class NewSymptomController {
 
-	private final @NonNull NewSymptomRepository repo;
+	private static final Sort BY_NAME_ASCENDING = Sort.sort(NewSymptom.class).by(NewSymptom::getName).ascending();
+
+	private final @NonNull NewSymptomRepository symptoms;
 	private final @NonNull ModelMapper modelMapper;
 
 	/**
@@ -30,8 +32,8 @@ public class NewSymptomController {
 	@GetMapping("/api/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
 
-		return Streamable.of(repo.findAll()) //
-				.map(x -> modelMapper.map(x, SymptomDto.class)) //
+		return symptoms.findAll(BY_NAME_ASCENDING) //
+				.map(it -> modelMapper.map(it, SymptomDto.class)) //
 				.stream();
 	}
 
@@ -44,7 +46,7 @@ public class NewSymptomController {
 	@PostMapping("/api/symptoms")
 	public SymptomDto addSymptom(@RequestBody SymptomDto symptomDto) {
 		var symptom = modelMapper.map(symptomDto, NewSymptom.class);
-		return this.modelMapper.map(this.repo.save(symptom), SymptomDto.class);
+		return modelMapper.map(symptoms.save(symptom), SymptomDto.class);
 	}
 
 	/**
@@ -54,13 +56,14 @@ public class NewSymptomController {
 	 * @return
 	 */
 	@PostMapping("/api/allsymptoms")
-	public Streamable<SymptomDto> addSymptoms(@RequestBody List<SymptomDto> symptomDtos) {
+	public Stream<SymptomDto> addSymptoms(@RequestBody List<SymptomDto> symptomDtos) {
 
 		symptomDtos.stream() //
 				.map(x -> modelMapper.map(x, NewSymptom.class)) //
-				.forEach(repo::save);
+				.forEach(symptoms::save);
 
-		return Streamable.of(repo.findAll()) //
-				.map(x -> modelMapper.map(x, SymptomDto.class));
+		return symptoms.findAll() //
+				.map(x -> modelMapper.map(x, SymptomDto.class)) //
+				.stream();
 	}
 }
