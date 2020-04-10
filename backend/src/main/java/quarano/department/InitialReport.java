@@ -53,7 +53,7 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 			belongToNursingStaff, //
 			belongToLaboratoryStaff, //
 			familyMember, //
-			isPassengerOnSameFlightAsPatient;
+			hasSymptoms;
 
 	private String otherContactType;
 	private LocalDate dayOfFirstSymptoms;

@@ -18,7 +18,7 @@ public class InitialReportDto {
 	private Boolean belongToNursingStaff;
 	private Boolean belongToLaboratoryStaff;
 	private Boolean familyMember;
-	private Boolean isPassengerOnSameFlightAsPatient;
+	private Boolean hasSymptoms;
 	private String OtherContactType;
 	private LocalDate dayOfFirstSymptoms;
 }
