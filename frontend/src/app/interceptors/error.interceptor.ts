@@ -25,8 +25,7 @@ export enum HttpStatusCode {
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private snackbarService: SnackbarService,
-    private router: Router,
-    private progressBarService: ProgressBarService) { }
+    private router: Router) { }
 
   intercept(
     req: HttpRequest<any>,
@@ -100,8 +99,6 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           return throwError(modelStateErrors || serverError || 'Server Fehler');
-        } else {
-          this.progressBarService.progressBarState = false;
         }
         return throwError(error);
       }),

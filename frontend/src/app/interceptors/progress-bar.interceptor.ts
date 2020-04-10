@@ -1,7 +1,7 @@
 import { ProgressBarService } from './../services/progress-bar.service';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEventType } from '@angular/common/http';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ProgressBarInterceptor implements HttpInterceptor {
@@ -20,6 +20,10 @@ export class ProgressBarInterceptor implements HttpInterceptor {
         if (res.type === HttpEventType.Response) {
           this.progressBarService.progressBarState = false;
         }
+      }),
+      catchError(error => {
+        this.progressBarService.progressBarState = false;
+        throw error;
       }));
   }
 }

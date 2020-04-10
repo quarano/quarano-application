@@ -1,12 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {Client} from '../../models/client';
-import {FirstQuery} from '../../models/first-query';
-import {UserService} from '../../services/user.service';
-import {SnackbarService} from '../../services/snackbar.service';
-import {ProgressBarService} from '../../services/progress-bar.service';
-import {ApiService} from '../../services/api.service';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Client } from '../../models/client';
+import { FirstQuery } from '../../models/first-query';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-user',
@@ -23,18 +19,13 @@ export class CreateUserComponent implements OnInit {
   public registerStarted = false;
   public clientCode: string | undefined = undefined;
 
-  constructor(private userService: UserService,
-              private snackbarService: SnackbarService,
-              private apiService: ApiService,
-              private router: Router,
-              private progressBarService: ProgressBarService) {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
   }
 
   public registerClient() {
-    this.progressBarService.progressBarState = true;
     this.registerStarted = true;
     /*this.userService.createClientWithFirstQuery(this.client$$.getValue(), this.firstQuery$$.getValue())
       .subscribe(
