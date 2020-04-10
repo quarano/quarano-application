@@ -27,6 +27,7 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.ClientDto;
 import quarano.tracking.web.TrackingController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -90,10 +91,12 @@ public class TrackedCaseController {
 
 	@GetMapping("/api/enrollment/questionaire")
 	HttpEntity<?> showQuestionaire(@LoggedIn TrackedPerson person) {
-		return ResponseEntity.of(//
-				cases.findByTrackedPerson(person) //
-						.map(TrackedCase::getInitialReport) //
-		);
+
+		var report = cases.findByTrackedPerson(person) //
+				.<Object> map(TrackedCase::getInitialReport) //
+				.orElseGet(() -> emptyInitialReport());
+
+		return ResponseEntity.ok(report);
 	}
 
 	@RequestMapping(path = "/api/enrollment/questionaire", method = { RequestMethod.POST, RequestMethod.PUT })
@@ -128,5 +131,16 @@ public class TrackedCaseController {
 		});
 
 		return fields;
+	}
+
+	private static Map<String, Object> emptyInitialReport() {
+
+		var result = new HashMap<String, Object>();
+
+		Arrays.stream(InitialReport.class.getDeclaredFields()).forEach(it -> {
+			result.put(it.getName(), null);
+		});
+
+		return result;
 	}
 }
