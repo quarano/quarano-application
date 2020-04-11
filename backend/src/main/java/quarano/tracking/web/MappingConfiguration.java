@@ -80,11 +80,12 @@ public class MappingConfiguration {
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
 			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);
+			it.using(STRING_TO_HOUSE_NUMBER).<HouseNumber> map(TrackedPersonDto::getHouseNumber,
+					(target, v) -> target.getAddress().setHouseNumber(v));
 
 			it.<String> map(TrackedPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
-			it.<HouseNumber> map(TrackedPersonDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
 		});
 	}
 }

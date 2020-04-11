@@ -86,7 +86,8 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(toMap(errors));
 		}
 
-		cases.findByTrackedPerson(user).map(TrackedCase::markEnrollmentDetailsSubmitted) //
+		cases.findByTrackedPerson(user) //
+				.map(TrackedCase::markEnrollmentDetailsSubmitted) //
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
 		return tracking.createTrackedPerson(dto, errors, user);

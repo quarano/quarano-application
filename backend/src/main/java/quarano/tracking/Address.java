@@ -20,10 +20,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
-
-import org.springframework.lang.Nullable;
 
 /**
  * @author Oliver Drotbohm
@@ -41,18 +40,18 @@ public class Address {
 
 	@Embeddable
 	@EqualsAndHashCode
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class HouseNumber {
 
 		public static final HouseNumber NONE = HouseNumber.of(null);
 
-		private String value;
+		private final String value;
 
-		@Nullable
 		public static HouseNumber of(String source) {
 			return source == null || source.isBlank() //
-					? new HouseNumber() //
-					: HouseNumber.NONE;
+					? HouseNumber.NONE //
+					: new HouseNumber(source);
 		}
 
 		/*
