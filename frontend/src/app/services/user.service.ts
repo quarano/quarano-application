@@ -1,9 +1,9 @@
 import { EnrollmentService } from './enrollment.service';
 import { ClientStatus } from './../models/client-status';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { ApiService } from './api.service';
-import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, tap, mergeMap, combineAll } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
 import { HealthDepartmentDto } from '../models/healtDepartment';
@@ -63,13 +63,15 @@ export class UserService {
     // Check for client, if there is a new token
     this.tokenService.token$.pipe(
       filter(token => token !== null),
-      switchMap(() => this.apiService.getMe())
-    ).subscribe(user => this.user$$.next(user));
-
-    this.tokenService.token$.pipe(
-      filter(token => token !== null),
-      switchMap(() => this.enrollmentService.getEnrollmentStatus())
-    ).subscribe(status => this.clientStatus$$.next(status));
+      mergeMap(() => {
+        const user = this.apiService.getMe();
+        const status = this.enrollmentService.getEnrollmentStatus();
+        return combineLatest([user, status]);
+      }),
+    ).subscribe(pair => {
+      this.user$$.next(pair[0]);
+      this.clientStatus$$.next(pair[1]);
+    });
 
     // Unset client if token gets null
     this.tokenService.token$.pipe(

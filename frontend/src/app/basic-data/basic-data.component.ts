@@ -175,9 +175,11 @@ export class BasicDataComponent implements OnInit, OnDestroy {
         if (status === 'VALID' && !this.secondFormGroup.pristine) {
           const value = this.secondFormGroup.value;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-          // ToDo: PUT Endpunkt in api aufrufen
-          this.firstQuery = value;
-          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+          this.enrollmentService.updateFirstQuery(value)
+            .subscribe(_ => {
+              this.firstQuery = value;
+              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+            });
         }
       });
   }
@@ -199,7 +201,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.datesForRetrospectiveContacts = [];
     const firstSymptomsDay = this.firstQuery.dayOfFirstSymptoms || new Date(this.today);
     const firstDay = firstSymptomsDay.addDays(-2);
-    while (day >= firstDay) {
+    while (new Date(day.getTime() - day.getTimezoneOffset() * 60000).toISOString().split('T')[0]
+      >= new Date(firstDay.getTime() - firstDay.getTimezoneOffset() * 60000).toISOString().split('T')[0]) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl([]));
       day = day.addDays(-1);
