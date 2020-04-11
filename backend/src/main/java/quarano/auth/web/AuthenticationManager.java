@@ -15,8 +15,10 @@
  */
 package quarano.auth.web;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Optional;
@@ -31,14 +33,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class AuthenticationManager {
 
-	private final TrackedPersonRepository repository;
+	private final @NonNull TrackedPersonRepository repository;
 
-	Optional<TrackedPerson> getCurrentUser() {
+	public Optional<TrackedPerson> getCurrentUser() {
 
-		var clientId = (Long) SecurityContextHolder.getContext() //
+		var clientId = SecurityContextHolder.getContext() //
 				.getAuthentication() //
 				.getDetails();
 
-		return repository.findByLegacyClientId(clientId);
+		return TrackedPersonIdentifier.class.isInstance(clientId) //
+				? repository.findById((TrackedPersonIdentifier) clientId) //
+				: repository.findByLegacyClientId((Long) clientId);
 	}
 }
