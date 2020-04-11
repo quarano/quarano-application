@@ -15,10 +15,13 @@
  */
 package quarano.department.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
+import quarano.core.web.ErrorsDto;
 import quarano.department.Enrollment;
 import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
@@ -27,8 +30,6 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -43,8 +44,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -74,7 +73,10 @@ class TrackedCaseController {
 
 	@GetMapping("/api/enrollment")
 	HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
-		var map = cases.findByTrackedPerson(person).map(TrackedCase::getEnrollment);
+
+		var map = cases.findByTrackedPerson(person) //
+				.map(TrackedCase::getEnrollment) //
+				.map(EnrollmentDto::new);
 
 		return ResponseEntity.of(map);
 	}
@@ -84,7 +86,7 @@ class TrackedCaseController {
 			@LoggedIn TrackedPerson user) {
 
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(toMap(errors));
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
 		cases.findByTrackedPerson(user) //
@@ -94,7 +96,7 @@ class TrackedCaseController {
 		return tracking.createTrackedPerson(dto, errors, user);
 	}
 
-	@GetMapping("/api/enrollment/questionaire")
+	@GetMapping("/api/enrollment/questionnaire")
 	HttpEntity<?> showQuestionaire(@LoggedIn TrackedPerson person) {
 
 		var report = cases.findByTrackedPerson(person) //
@@ -105,7 +107,7 @@ class TrackedCaseController {
 		return ResponseEntity.ok(report);
 	}
 
-	@RequestMapping(path = "/api/enrollment/questionaire", method = { RequestMethod.POST, RequestMethod.PUT })
+	@PutMapping(path = "/api/enrollment/questionnaire")
 	HttpEntity<?> addQuestionaire(@Validated @RequestBody InitialReportDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
@@ -119,14 +121,14 @@ class TrackedCaseController {
 		}
 
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(toMap(errors));
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
 		// Trigger custom validation
 		var validated = dto.validate(errors);
 
 		if (validated.hasErrors()) {
-			return ResponseEntity.badRequest().body(toMap(validated));
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
 		trackedCase = apply(dto, trackedCase); //
@@ -141,23 +143,12 @@ class TrackedCaseController {
 		mapper.map(dto, report);
 		report = dto.applyTo(report);
 
-		return it.submitQuestionaire(report);
+		return it.submitQuestionnaire(report);
 	}
 
 	@ExceptionHandler
 	ResponseEntity<?> handle(EnrollmentException o_O) {
 		return ResponseEntity.badRequest().body(o_O.getMessage());
-	}
-
-	private Map<String, String> toMap(Errors errors) {
-
-		Map<String, String> fields = new HashMap<>();
-
-		errors.getFieldErrors().forEach(it -> {
-			fields.put(it.getField(), accessor.getMessage(it));
-		});
-
-		return fields;
 	}
 
 	@RequiredArgsConstructor
@@ -168,15 +159,33 @@ class TrackedCaseController {
 		@JsonProperty("_links")
 		public Map<String, Object> getLinks() {
 
+			var questionnareUri = fromMethodCall(on(TrackedCaseController.class).addQuestionaire(null, null, null))
+					.toUriString();
+
+			var detailsUri = fromMethodCall(on(TrackingController.class).enrollmentOverview(null)).toUriString();
+
 			if (enrollment.isComplete()) {
-				return Collections.emptyMap();
+				return Map.of(//
+						"details", Map.of("href", detailsUri), //
+						"questionnaire", Map.of("href", questionnareUri), //
+						"contacts", Map.of("href", "/api/enrollment/contacts"));
+			}
+
+			if (enrollment.isCompletedQuestionnaire()) {
+				return Map.of(//
+						"details", Map.of("href", detailsUri), //
+						"questionnaire", Map.of("href", questionnareUri), //
+						"next", Map.of("href", "/api/enrollment/contacts"));
 			}
 
 			if (enrollment.isCompletedPersonalData()) {
-				return Map.of("details", Map.of("href", "/api/enrollment/details"));
+				return Map.of(//
+						"details", Map.of("href", detailsUri), //
+						"next", Map.of("href", questionnareUri));
 			}
 
-			return null;
+			return Map.of(//
+					"next", Map.of("href", detailsUri));
 		}
 	}
 }

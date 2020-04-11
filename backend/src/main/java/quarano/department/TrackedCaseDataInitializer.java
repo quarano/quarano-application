@@ -76,7 +76,7 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 						}
 
 						if (it.isCompletedQuestionnaire()) {
-							case_.submitQuestionaire(initialReport);
+							case_.submitQuestionnaire(initialReport);
 						}
 
 						if (it.isCompletedContactRetro()) {

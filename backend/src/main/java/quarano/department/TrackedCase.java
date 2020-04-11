@@ -65,7 +65,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	public TrackedCase submitQuestionaire(InitialReport report) {
+	public TrackedCase submitQuestionnaire(InitialReport report) {
 
 		this.initialReport = report;
 

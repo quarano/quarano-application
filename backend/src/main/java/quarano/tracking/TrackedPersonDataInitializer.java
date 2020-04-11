@@ -34,8 +34,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class TrackedPersonDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
-	private final TrackedPersonRepository trackedPeople;
 	private final ClientRepository clients;
+	private final de.wevsvirushackathon.coronareport.contactperson.ContactPersonRepository legacyContacts;
+
+	private final TrackedPersonRepository trackedPeople;
+	private final ContactPersonRepository contacts;
+
 	private final ModelMapper mapper;
 
 	/*
@@ -52,6 +56,15 @@ class TrackedPersonDataInitializer implements ApplicationListener<ApplicationRea
 			var address = new Address(it.getStreet(), HouseNumber.NONE, null, zipCode);
 
 			trackedPeople.save(person.setAddress(address));
+		});
+
+		Streamable.of(legacyContacts.findAll()).forEach(it -> {
+
+			var person = mapper.map(it, ContactPerson.class);
+
+			trackedPeople.findByLegacyClientId(it.getClient().getClientId()) //
+					.map(person::assignOwner) //
+					.ifPresent(contacts::save);
 		});
 	}
 }

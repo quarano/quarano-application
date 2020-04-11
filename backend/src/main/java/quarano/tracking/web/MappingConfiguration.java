@@ -17,6 +17,7 @@ package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
 import quarano.tracking.Address.HouseNumber;
+import quarano.tracking.ContactPerson;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
@@ -56,6 +57,23 @@ public class MappingConfiguration {
 		mapper.addConverter(STRING_TO_ZIP_CODE, String.class, ZipCode.class);
 		mapper.addConverter(STRING_TO_HOUSE_NUMBER, String.class, HouseNumber.class);
 
+		mapper.typeMap(de.wevsvirushackathon.coronareport.contactperson.ContactPerson.class, ContactPerson.class)
+				.setPreConverter(context -> {
+
+					var source = context.getSource();
+					return new ContactPerson(source.getFirstname(), source.getSurename());
+
+				});
+
+		mapper.typeMap(ContactPersonDto.class, ContactPerson.class).setPreConverter(context -> {
+
+			var source = context.getSource();
+
+			return context.getDestination() != null //
+					? context.getDestination() //
+					: new ContactPerson(source.getFirstName(), source.getLastName());
+		});
+
 		mapper.typeMap(Client.class, TrackedPerson.class).setPreConverter(context -> {
 
 			var source = context.getSource();
@@ -67,8 +85,6 @@ public class MappingConfiguration {
 
 		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
 
-			it.map(TrackedPerson::getLastname, TrackedPersonDto::setSurename);
-
 			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);
 			it.map(source -> source.getAddress().getZipCode(), TrackedPersonDto::setZipCode);
 			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
@@ -77,9 +93,7 @@ public class MappingConfiguration {
 
 		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
 
-			it.map(TrackedPersonDto::getSurename, TrackedPerson::setLastname);
-
-			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
+			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilePhone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
 			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);
 			it.using(STRING_TO_HOUSE_NUMBER).<HouseNumber> map(TrackedPersonDto::getHouseNumber,

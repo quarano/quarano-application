@@ -25,6 +25,7 @@ import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.ZipCode;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
@@ -46,7 +47,12 @@ public class TrackingController {
 	private final @NonNull TrackedPersonRepository repository;
 	private final @NonNull ModelMapper mapper;
 
-	@GetMapping({ "/api/details", "/api/enrollment/details" })
+	@GetMapping("/api/enrollment/details")
+	public HttpEntity<?> enrollmentOverview(@LoggedIn TrackedPerson person) {
+		return overview(person);
+	}
+
+	@GetMapping("/api/details")
 	HttpEntity<?> overview(@LoggedIn TrackedPerson person) {
 		return ResponseEntity.ok(mapper.map(person, TrackedPersonDto.class));
 	}
@@ -74,5 +80,13 @@ public class TrackingController {
 				"email", Map.of("regex", EmailAddress.PATTERN));
 
 		return ResponseEntity.ok(Map.of("properties", properties));
+	}
+
+	@GetMapping("/api/diary")
+	Stream<DiaryEntryDto> diary(@LoggedIn TrackedPerson person) {
+
+		return person.getDiary() //
+				.map(it -> mapper.map(person, DiaryEntryDto.class)) //
+				.stream();
 	}
 }

@@ -24,13 +24,13 @@ public class TrackedPersonDto {
 
 	private String clientCode;
 
-	private @NotEmpty String surename;
-	private @NotEmpty String firstname;
+	private @NotEmpty String lastName;
+	private @NotEmpty String firstName;
 	private @NotEmpty String street;
 	private String houseNumber;
 	private @NotEmpty String city;
 	private @NotEmpty @Pattern(regexp = ZipCode.PATTERN) String zipCode;
-	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilephone;
+	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @NotEmpty @Pattern(regexp = EmailAddress.PATTERN) String email;
 	private @NotNull @Past LocalDate dateOfBirth;

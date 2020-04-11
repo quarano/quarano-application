@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,7 +46,9 @@ import org.jddd.core.types.Identifier;
 @Entity(name = "newDE")
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> {
+public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
+
+	private static final Comparator<DiaryEntry> BY_DATE = Comparator.comparing(DiaryEntry::getDateTime);
 
 	private final LocalDateTime date;
 	private final @OneToMany List<ContactPerson> contacts;
@@ -78,6 +81,15 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		return contacts.stream() //
 				.map(it -> Encounter.with(it, date.toLocalDate())) //
 				.collect(Collectors.toList());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(DiaryEntry that) {
+		return BY_DATE.compare(this, that);
 	}
 
 	@Embeddable

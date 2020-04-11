@@ -56,7 +56,7 @@ import org.jddd.event.types.DomainEvent;
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
 
 	private @Getter @Setter Long legacyClientId;
-	private @Getter @Setter String firstname, lastname;
+	private @Getter @Setter String firstName, lastName;
 	private @Getter @Setter EmailAddress emailAddress;
 	private @Getter @Setter PhoneNumber phoneNumber;
 
@@ -72,14 +72,18 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<Encounter> encounters;
 
-	public TrackedPerson(String firstname, String lastname) {
+	public TrackedPerson(String firstName, String lastName) {
 
 		this.id = new TrackedPersonIdentifier(UUID.randomUUID());
-		this.firstname = firstname;
-		this.lastname = lastname;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.emailAddress = null;
 		this.entries = new ArrayList<>();
 		this.encounters = new ArrayList<>();
+	}
+
+	public Diary getDiary() {
+		return Diary.of(entries);
 	}
 
 	public TrackedPerson addDiaryEntry(DiaryEntry entry) {

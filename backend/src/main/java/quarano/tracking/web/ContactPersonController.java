@@ -15,14 +15,33 @@
  */
 package quarano.tracking.web;
 
-import quarano.auth.web.LoggedIn;
-import quarano.tracking.TrackedPerson;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.auth.web.LoggedIn;
+import quarano.core.web.ErrorsDto;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
+
+import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.validation.Valid;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,18 +52,66 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController("newContactPersonController")
 @RequestMapping("/api/contacts")
+@RequiredArgsConstructor
 class ContactPersonController {
 
-	@PostMapping
-	void createContactPerson(@RequestBody ContactPersonDto dto, @LoggedIn TrackedPerson person) {
-
-		// person.reportContactWith(dto.toEntity(), LocalDate.now());
-	}
+	private final @NonNull ModelMapper mapper;
+	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull ContactPersonRepository contacts;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping
 	Stream<ContactPersonDto> allContacts(@LoggedIn TrackedPerson person) {
 
-		return person.getContactPersons() //
-				.map(it -> new ContactPersonDto(null, null, null, null, null, null, null));
+		return contacts.findByOwnerId(person.getId()) //
+				.map(it -> mapper.map(it, ContactPersonDto.class)) //
+				.stream();
+	}
+
+	@PostMapping
+	HttpEntity<?> createContactPerson(@Valid @RequestBody ContactPersonDto dto, Errors errors,
+			@LoggedIn TrackedPerson person) {
+
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		}
+
+		var contact = contacts.save(mapper.map(dto, ContactPerson.class).assignOwner(person));
+		var uri = fromMethodCall(on(this.getClass()).getContact(person, contact.getId().toString())).build().toUri();
+
+		return ResponseEntity.created(uri).body(mapper.map(contact, ContactPersonDto.class));
+	}
+
+	@GetMapping("/{id}")
+	HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable String id) {
+
+		var identifier = ContactPersonIdentifier.of(UUID.fromString(id));
+		var dto = contacts.findById(identifier) //
+				.filter(it -> it.belongsTo(person)) //
+				.map(it -> mapper.map(it, ContactPersonDto.class));
+
+		return ResponseEntity.of(dto);
+	}
+
+	@PutMapping("/{id}")
+	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person, //
+			@PathVariable String id, //
+			@Valid @RequestBody ContactPersonDto payload, //
+			Errors errors) {
+
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		}
+
+		var identifier = ContactPersonIdentifier.of(UUID.fromString(id));
+
+		return ResponseEntity.of(contacts.findById(identifier) //
+				.filter(it -> it.belongsTo(person)) //
+				.map(it -> {
+					mapper.map(payload, it);
+					return it;
+				}) //
+				.map(contacts::save) //
+				.map(it -> mapper.map(it, ContactPersonDto.class)));
 	}
 }

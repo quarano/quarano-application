@@ -21,6 +21,7 @@ import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
 import quarano.department.InitialReport;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
+import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
@@ -58,8 +59,8 @@ public class MappingConfigurationUnitTests {
 	void mapsTrackedPersonDtoToEntity() {
 
 		TrackedPersonDto dto = new TrackedPersonDto();
-		dto.setFirstname("Firstname");
-		dto.setSurename("Lastname");
+		dto.setFirstName("Firstname");
+		dto.setLastName("Lastname");
 		dto.setStreet("Street");
 		dto.setHouseNumber("4711");
 		dto.setCity("City");
@@ -67,8 +68,8 @@ public class MappingConfigurationUnitTests {
 
 		TrackedPerson result = mapper.map(dto, TrackedPerson.class);
 
-		assertThat(result.getFirstname()).isEqualTo(dto.getFirstname());
-		assertThat(result.getLastname()).isEqualTo(dto.getSurename());
+		assertThat(result.getFirstName()).isEqualTo(dto.getFirstName());
+		assertThat(result.getLastName()).isEqualTo(dto.getLastName());
 
 		Address address = result.getAddress();
 
@@ -76,5 +77,19 @@ public class MappingConfigurationUnitTests {
 		assertThat(address.getHouseNumber()).isEqualTo(HouseNumber.of(dto.getHouseNumber()));
 		assertThat(address.getCity()).isEqualTo(dto.getCity());
 		assertThat(address.getZipCode()).isEqualTo(ZipCode.of(dto.getZipCode()));
+	}
+
+	@Test
+	void mapsContactPersonDtoToExistingEntity() {
+
+		ContactPerson person = new ContactPerson("Firstname", "Lastname");
+
+		var source = new ContactPersonDto();
+		source.setFirstName("Something");
+		source.setLastName("Different");
+
+		mapper.map(source, person);
+
+		assertThat(person.getLastName()).isEqualTo(source.getLastName());
 	}
 }
