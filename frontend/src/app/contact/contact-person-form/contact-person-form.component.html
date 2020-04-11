@@ -33,7 +33,6 @@
             matInput
             maxlength="17"
             minlength="5"
-            (focusout)="onPhoneFocusOut(formGroup.controls.phone)"
             placeholder="Telefonnummer (Festnetz)"
             formControlName="phone"
             type="phone"
@@ -42,7 +41,6 @@
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
-            (focusout)="onPhoneFocusOut(formGroup.controls.mobilePhone)"
             matInput
             maxlength="17"
             minlength="5"

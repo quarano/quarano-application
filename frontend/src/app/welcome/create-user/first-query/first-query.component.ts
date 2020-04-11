@@ -22,9 +22,9 @@ export class FirstQueryComponent {
   private result: FirstQuery = {
     min15MinutesContactWithC19Pat: null,
     nursingActionOnC19Pat: null,
-    directContactWithLiquidsOfC19Pat: null,
-    flightPassengerWithCloseRowC19Pat: null,
-    flightAsCrewMemberWithC19Pat: null,
+    directContactWithLiquidsOfC19pat: null,
+    flightPassengerCloseRowC19Pat: null,
+    flightCrewMemberWithC19Pat: null,
     belongToMedicalStaff: null,
     belongToNursingStaff: null,
     belongToLaboratoryStaff: null,

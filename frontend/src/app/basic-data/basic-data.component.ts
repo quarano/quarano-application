@@ -1,4 +1,4 @@
-import { UserService } from './../services/user.service';
+import { EnrollmentService } from './../services/enrollment.service';
 import { Client } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { FirstQuery } from './../models/first-query';
@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import '../utils/date-extensions';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
@@ -14,6 +14,8 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { VALIDATION_PATTERNS } from '../utils/validation';
 import { debounceTime } from 'rxjs/operators';
+import { MatHorizontalStepper } from '@angular/material/stepper';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-basic-data',
@@ -23,6 +25,7 @@ import { debounceTime } from 'rxjs/operators';
 export class BasicDataComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  @ViewChild('stepper') stepper: MatHorizontalStepper;
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -43,16 +46,25 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
-    private userService: UserService) { }
+    private enrollmentService: EnrollmentService) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.contactPersons = data.contactPersons;
       this.firstQuery = data.firstQuery;
+      this.client = data.clientData;
+      this.buildForms();
     }));
-    this.subs.add(this.userService.client$
-      .subscribe(client => this.client = client));
-    this.buildForms();
+
+    this.enrollmentService.getEnrollmentStatus()
+      .subscribe(status => {
+        if (status.completedPersonalData) {
+          this.stepper.next();
+        }
+        if (status.completedQuestionnaire) {
+          this.stepper.next();
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -80,7 +92,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       email: new FormControl(this.client.email, [Validators.required, Validators.email]),
       phone: new FormControl(this.client.phone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
-      mobilePhone: new FormControl(this.client.mobilephone,
+      mobilephone: new FormControl(this.client.mobilephone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
       street: new FormControl(this.client.street, [Validators.required]),
       houseNumber: new FormControl(this.client.houseNumber, [Validators.maxLength(6)]),
@@ -96,9 +108,11 @@ export class BasicDataComponent implements OnInit, OnDestroy {
         if (status === 'VALID' && !this.firstFormGroup.pristine) {
           const value = this.firstFormGroup.value;
           value.dateOfBirth = this.dateOfBirth;
-          // ToDo: PUT Endpunkt in api aufrufen
-          this.client = value;
-          this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+          this.enrollmentService.updatePersonalDetails(value)
+            .subscribe(_ => {
+              this.client = value;
+              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+            });
         }
       });
   }
@@ -106,8 +120,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   get dateOfBirth() {
     const dateValue = this.firstFormGroup?.controls.dateOfBirth.value;
     if (dateValue?.toDate instanceof Function) {
-      const date = new Date((dateValue as Moment).toLocaleString());
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      return (dateValue as Moment).toDate();
     }
     if (dateValue) {
       return dateValue as Date;
@@ -115,18 +128,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  onPhoneFocusOut(control: AbstractControl) {
-    const value = control.value;
-    if (value) { control.setValue(value.replace(/\s/g, '')); }
-  }
-
   // ########## STEP II ##########
 
   get dayOfFirstSymptoms() {
     const dateValue = this.secondFormGroup?.controls.dayOfFirstSymptoms.value;
     if (dateValue?.toDate instanceof Function) {
-      const date = new Date((dateValue as Moment).toLocaleString());
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      return (dateValue as Moment).toDate();
     }
     if (dateValue) {
       return dateValue as Date;
@@ -138,9 +145,9 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.secondFormGroup = new FormGroup({
       min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, [Validators.required]),
       nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, [Validators.required]),
-      directContactWithLiquidsOfC19Pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19Pat, [Validators.required]),
-      flightPassengerWithCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerWithCloseRowC19Pat, [Validators.required]),
-      flightAsCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightAsCrewMemberWithC19Pat, [Validators.required]),
+      directContactWithLiquidsOfC19pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19pat, [Validators.required]),
+      flightPassengerCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerCloseRowC19Pat, [Validators.required]),
+      flightCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightCrewMemberWithC19Pat, [Validators.required]),
       belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
       belongToNursingStaff: new FormControl(this.firstQuery.belongToNursingStaff, [Validators.required]),
       belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, [Validators.required]),
@@ -148,11 +155,18 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
       otherContactType: new FormControl(this.firstQuery.otherContactType),
       hasSymptoms: new FormControl(this.firstQuery.hasSymptoms, [Validators.required])
-    }, this.firstSymptomsValidator);
+    });
 
     this.secondFormGroup.controls.hasSymptoms.valueChanges.subscribe((value: boolean) => {
+      const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
+
       if (!value) {
-        this.secondFormGroup.controls.dayOfFirstSymptoms.setValue(null);
+        control.clearValidators();
+        this.secondFormGroup.updateValueAndValidity();
+        control.setValue(null);
+      } else {
+        control.setValidators(Validators.required);
+        this.secondFormGroup.updateValueAndValidity();
       }
     });
 
@@ -169,7 +183,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   firstSymptomsValidator(g: FormGroup) {
-    if (g.controls.hasSymptoms.value) {
+    if (g.controls.hasSymptoms.value === true) {
       return g.controls.dayOfFirstSymptoms.value ? null : { required: true };
     }
     return null;
@@ -231,5 +245,13 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   hasNoRetrospectiveContactsConfirmed(): boolean {
     return this.thirdFormGroup.controls.noRetrospectiveContactsConfirmed.value;
+  }
+
+  onCheckboxChanged(event: MatCheckboxChange) {
+    if (event.checked) {
+      // ToDo: tell api that contact step is completed
+    } else {
+      // ToDo: tell api that contact step is not yet completed
+    }
   }
 }

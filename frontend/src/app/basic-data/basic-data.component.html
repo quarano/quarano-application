@@ -71,7 +71,6 @@
             matInput
             maxlength="17"
             minlength="5"
-            (focusout)="onPhoneFocusOut(firstFormGroup.controls.phone)"
             placeholder="Telefonnummer (Festnetz)"
             formControlName="phone"
             type="phone"
@@ -80,12 +79,11 @@
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
-            (focusout)="onPhoneFocusOut(firstFormGroup.controls.mobilePhone)"
             matInput
             maxlength="17"
             minlength="5"
             placeholder="Telefonnummer (mobil)"
-            formControlName="mobilePhone"
+            formControlName="mobilephone"
             type="phone"
           />
           <mat-error
@@ -230,24 +228,24 @@
           class="example-radio-group"
           formControlName="nursingActionOnC19Pat"
         >
-          <mat-radio-button class="example-radio-button" [value]="1">
+          <mat-radio-button class="example-radio-button" [value]="true">
             Ja
           </mat-radio-button>
-          <mat-radio-button class="example-radio-button" [value]="0">
+          <mat-radio-button class="example-radio-button" [value]="false">
             Nein
           </mat-radio-button>
         </mat-radio-group>
       </div>
       <div class="bool-question">
-        <mat-label id="directContactWithLiquidsOfC19PatLabel"
+        <mat-label id="directContactWithLiquidsOfC19patLabel"
           >Hatten Sie direkten Kontakt zu Körperflüssigkeiten von einer Person,
           bei der COVID-19 festgestellt wurde? *</mat-label
         >
         <mat-radio-group
           required
-          aria-labelledby="directContactWithLiquidsOfC19PatLabel"
+          aria-labelledby="directContactWithLiquidsOfC19patLabel"
           class="example-radio-group"
-          formControlName="directContactWithLiquidsOfC19Pat"
+          formControlName="directContactWithLiquidsOfC19pat"
         >
           <mat-radio-button class="example-radio-button" [value]="true">
             Ja
@@ -258,15 +256,15 @@
         </mat-radio-group>
       </div>
       <div class="bool-question">
-        <mat-label id="flightPassengerWithCloseRowC19PatLabel"
-          >Saßen Sie auf einem FLug nahe an einer Person, bei der COVID-19
+        <mat-label id="flightPassengerCloseRowC19PatLabel"
+          >Saßen Sie auf einem Flug nahe an einer Person, bei der COVID-19
           festgestellt wurde? *</mat-label
         >
         <mat-radio-group
           required
-          aria-labelledby="flightPassengerWithCloseRowC19PatLabel"
+          aria-labelledby="flightPassengerCloseRowC19PatLabel"
           class="example-radio-group"
-          formControlName="flightPassengerWithCloseRowC19Pat"
+          formControlName="flightPassengerCloseRowC19Pat"
         >
           <mat-radio-button class="example-radio-button" [value]="true">
             Ja
@@ -277,15 +275,15 @@
         </mat-radio-group>
       </div>
       <div class="bool-question">
-        <mat-label id="flightAsCrewMemberWithC19PatLabel"
+        <mat-label id="flightCrewMemberWithC19PatLabel"
           >Waren Sie Crewmitglied auf einem FLug mit einer Person an Board, bei
           der COVID-19 festgestellt wurde? *</mat-label
         >
         <mat-radio-group
           required
-          aria-labelledby="flightAsCrewMemberWithC19PatLabel"
+          aria-labelledby="flightCrewMemberWithC19PatLabel"
           class="example-radio-group"
-          formControlName="flightAsCrewMemberWithC19Pat"
+          formControlName="flightCrewMemberWithC19Pat"
         >
           <mat-radio-button class="example-radio-button" [value]="true">
             Ja
@@ -487,7 +485,8 @@
         [class]="hasRetrospectiveContacts() ? 'hidden' : ''"
         name="noRetrospectiveContactsConfirmed"
         formControlName="noRetrospectiveContactsConfirmed"
-        >Ich bestätige, im genannten Zeitraum keinen relevanten Kontakt zu
+        (change)="onCheckboxChanged($event)"
+        >Ich bestätige, im fraglichen Zeitraum keinen relevanten Kontakt zu
         anderen Personen gehabt zu haben.</mat-checkbox
       >
       <div class="mt-3">

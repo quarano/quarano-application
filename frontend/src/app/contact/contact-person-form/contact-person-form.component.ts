@@ -121,9 +121,4 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   cancel() {
     this.cancelled.emit();
   }
-
-  onPhoneFocusOut(control: AbstractControl) {
-    const value = control.value;
-    if (value) { control.setValue(value.replace(/\s/g, '')); }
-  }
 }

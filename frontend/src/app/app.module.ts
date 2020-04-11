@@ -1,3 +1,4 @@
+import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SnackbarService } from './services/snackbar.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
@@ -46,6 +47,7 @@ registerLocaleData(localeDe, 'de');
   ],
   providers: [
     SnackbarService,
+    ErrorInterceptorProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressBarInterceptor,

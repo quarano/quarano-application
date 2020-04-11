@@ -1,3 +1,5 @@
+import { EnrollmentService } from './enrollment.service';
+import { ClientStatus } from './../models/client-status';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from './api.service';
@@ -14,6 +16,8 @@ export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
 })
 export class UserService {
   public readonly user$$ = new BehaviorSubject<User>(null);
+  private readonly clientStatus$$ = new BehaviorSubject<ClientStatus>(null);
+  public readonly clientStatus$ = this.clientStatus$$.asObservable();
   public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
   public readonly roles$$ = this.tokenService.roles$$;
   public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthdepartment));
@@ -29,7 +33,8 @@ export class UserService {
   constructor(
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private tokenService: TokenService) {
+    private tokenService: TokenService,
+    private enrollmentService: EnrollmentService) {
     this.init();
 
     this.isLoggedIn$ = this.tokenService.token$
@@ -37,15 +42,15 @@ export class UserService {
         map(token => token !== null)
       );
 
-    this.isFullyAuthenticated$ = this.client$
+    this.isFullyAuthenticated$ = this.clientStatus$
       .pipe(
         distinctUntilChanged(),
-        map(client => client !== null && client?.completedPersonalData && client?.completedQuestionnaire && client?.completedContactRetro)
+        map(status => status?.complete)
       );
 
-    this.completedPersonalData$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedPersonalData));
-    this.completedQuestionnaire$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedQuestionnaire));
-    this.completedContactRetro$ = this.client$.pipe(distinctUntilChanged(), map(client => client?.completedContactRetro));
+    this.completedPersonalData$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedPersonalData));
+    this.completedQuestionnaire$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedQuestionnaire));
+    this.completedContactRetro$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedContactRetro));
 
     this.isHealthDepartmentUser$ = this.roles$$
       .pipe(
@@ -61,10 +66,18 @@ export class UserService {
       switchMap(() => this.apiService.getMe())
     ).subscribe(user => this.user$$.next(user));
 
+    this.tokenService.token$.pipe(
+      filter(token => token !== null),
+      switchMap(() => this.enrollmentService.getEnrollmentStatus())
+    ).subscribe(status => this.clientStatus$$.next(status));
+
     // Unset client if token gets null
     this.tokenService.token$.pipe(
       filter(token => token === null)
-    ).subscribe(() => this.user$$.next(null));
+    ).subscribe(() => {
+      this.user$$.next(null);
+      this.clientStatus$$.next(null);
+    });
   }
 
   public login(username: string, password: string): Observable<any> {
