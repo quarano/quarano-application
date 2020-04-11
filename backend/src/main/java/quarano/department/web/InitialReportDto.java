@@ -1,14 +1,19 @@
 package quarano.department.web;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
+import quarano.department.InitialReport;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import javax.validation.constraints.Past;
+
+import org.springframework.validation.Errors;
 
 @Data
-class InitialReportDto {
+@Accessors(chain = true)
+public class InitialReportDto {
 
-	private LocalDateTime dateTime;
 	private Boolean min15MinutesContactWithC19Pat;
 	private Boolean nursingActionOnC19Pat;
 	private Boolean directContactWithLiquidsOfC19pat;
@@ -20,5 +25,29 @@ class InitialReportDto {
 	private Boolean familyMember;
 	private Boolean hasSymptoms;
 	private String OtherContactType;
-	private LocalDate dayOfFirstSymptoms;
+	private @Past LocalDate dayOfFirstSymptoms;
+
+	InitialReport applyTo(InitialReport report) {
+
+		if (dayOfFirstSymptoms != null) {
+			return report.withFirstSymptomsAt(dayOfFirstSymptoms);
+		}
+
+		if (hasSymptoms == null) {
+			return report;
+		}
+
+		return hasSymptoms //
+				? report.withFirstSymptomsAt(dayOfFirstSymptoms)
+				: report.withoutSymptoms();
+	}
+
+	Errors validate(Errors errors) {
+
+		if (Boolean.TRUE.equals(hasSymptoms) && dayOfFirstSymptoms == null) {
+			errors.rejectValue("dayOfFirstSymptoms", "NotNull.IntialReportDto.dayOfFirstSymptoms");
+		}
+
+		return errors;
+	}
 }

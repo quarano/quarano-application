@@ -109,20 +109,30 @@ class TrackedCaseController {
 			@LoggedIn TrackedPerson person) {
 
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(errors);
+			return ResponseEntity.badRequest().body(toMap(errors));
+		}
+
+		// Trigger custom validation
+		var validated = dto.validate(errors);
+
+		if (validated.hasErrors()) {
+			return ResponseEntity.badRequest().body(toMap(validated));
 		}
 
 		cases.findByTrackedPerson(person) //
-				.map(it -> {
-
-					var report = it.getOrCreateInitialReport();
-					mapper.map(dto, report);
-
-					return it.submitQuestionaire(report);
-
-				}).ifPresent(cases::save);
+				.map(it -> apply(dto, it)) //
+				.ifPresent(cases::save);
 
 		return ResponseEntity.ok().build();
+	}
+
+	private TrackedCase apply(InitialReportDto dto, TrackedCase it) {
+
+		var report = it.getOrCreateInitialReport();
+		mapper.map(dto, report);
+		report = dto.applyTo(report);
+
+		return it.submitQuestionaire(report);
 	}
 
 	@ExceptionHandler

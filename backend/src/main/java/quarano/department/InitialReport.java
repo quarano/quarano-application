@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
 import quarano.department.InitialReport.InitialReportIdentifier;
 
@@ -42,6 +43,7 @@ import org.springframework.util.ReflectionUtils;
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
+@Accessors(chain = true)
 public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdentifier> {
 
 	private Boolean min15MinutesContactWithC19Pat, //
@@ -52,8 +54,9 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 			belongToMedicalStaff, //
 			belongToNursingStaff, //
 			belongToLaboratoryStaff, //
-			familyMember, //
-			hasSymptoms;
+			familyMember; //
+
+	private @Setter(value = AccessLevel.NONE) Boolean hasSymptoms;
 
 	private String otherContactType;
 	private LocalDate dayOfFirstSymptoms;
@@ -62,11 +65,31 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 		this.id = InitialReportIdentifier.of(UUID.randomUUID());
 	}
 
+	public InitialReport withoutSymptoms() {
+
+		this.hasSymptoms = false;
+		this.dayOfFirstSymptoms = null;
+
+		return this;
+	}
+
+	public InitialReport withFirstSymptomsAt(LocalDate date) {
+
+		this.dayOfFirstSymptoms = date;
+		this.hasSymptoms = true;
+
+		return this;
+	}
+
 	public boolean isComplete() {
 
 		for (Field it : InitialReport.class.getDeclaredFields()) {
 
 			ReflectionUtils.makeAccessible(it);
+
+			if (it.getName().equals("otherContactType") || it.getName().equals("dayOfFirstSymptoms")) {
+				continue;
+			}
 
 			if (ReflectionUtils.getField(it, this) == null) {
 				return false;
