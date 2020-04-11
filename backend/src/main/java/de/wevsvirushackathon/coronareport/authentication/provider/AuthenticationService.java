@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wevsvirushackathon.coronareport.authentication.Account;
+import de.wevsvirushackathon.coronareport.authentication.AccountRepository;
 import de.wevsvirushackathon.coronareport.authentication.NotAuthorizedException;
 import lombok.AllArgsConstructor;
 
@@ -22,7 +23,7 @@ public class AuthenticationService {
     public JWTTokenResponse generateJWTToken(String username, String password) {
     	
     	// lookup  account object from database and check if password matches
-    	Optional<Account> userFromDB = accountRepository.findOneByUsername(username)
+    	Optional<Account> userFromDB = accountRepository.findOneByUsername(username.trim())
     		.filter(account ->  passwordEncoder.matches(password, account.getPassword()));
     	
     	userFromDB.orElseThrow(() -> new NotAuthorizedException());	

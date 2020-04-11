@@ -48,6 +48,8 @@ public class Client {
     
     private  ClientType type;
     
+    private Timestamp registrationTimestamp;
+    
     @ManyToOne
     private HealthDepartment healthDepartment;
 

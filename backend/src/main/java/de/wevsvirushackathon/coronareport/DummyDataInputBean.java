@@ -3,9 +3,11 @@ package de.wevsvirushackathon.coronareport;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.wevsvirushackathon.coronareport.client.Client;
 import de.wevsvirushackathon.coronareport.client.ClientRepository;
@@ -30,6 +33,7 @@ import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
 import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
+import lombok.Getter;
 
 @Component
 //@Profile("!prod")
@@ -39,8 +43,15 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
     private final Logger log = LoggerFactory.getLogger(DummyDataInputBean.class);
     
     final static String VALID_CLIENT_CODE_DEP1 = "738d3d1f-a9f1-4619-9896-2b5cb3a89c22";
-    final static String VALID_CLIENT_CODE2_DEP1 = "aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2";
-    final static String VALID_CLIENT_CODE3_DEP2 = "aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2";
+    final static String VALID_CLIENT_CODE2_DEP1 = "4dsafc1f-a9f1-4619-9896-2b5cb3akd8e4";
+    final static String VALID_CLIENT_CODE3_DEP2 = "22safg1f-a9f1-225f-9896-2b5cb3akdg88";
+    
+    final static String DEPARTMENT_CODE_DEP1 = "aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2";
+    final static String DEPARTMENT_CODE_DEP2 = "ca3f3e9a-414a-4117-a623-59b109b269f1";
+    
+    @Getter private Client clientWithNoAccount;
+    @Getter private Client clientWithAccountAndEntries;
+    
 
     private ClientRepository clientRepository;
     private ContactPersonRepository contactPersonRepository;
@@ -64,6 +75,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
     	
     	// check if testclients do already exist:
@@ -77,15 +89,19 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
         log.info("Generating dummy data");
 
         final HealthDepartment hd1 = this.healthDepartmentRepository.save(HealthDepartment.builder().fullName("Testamt 1")
-                .id("Testamt1").passCode(UUID.fromString(VALID_CLIENT_CODE2_DEP1)).build());
+                .id("Testamt1").passCode(UUID.fromString(DEPARTMENT_CODE_DEP1)).build());
         final HealthDepartment hd2 = this.healthDepartmentRepository.save(HealthDepartment.builder().fullName("Testamt 2")
-                .id("Testamt2").passCode(UUID.fromString(VALID_CLIENT_CODE3_DEP2)).build());
+                .id("Testamt2").passCode(UUID.fromString(DEPARTMENT_CODE_DEP2)).build());
 
+        List<Client> clientList = new ArrayList<>();
+        
         final Client client1 = clientRepository.save(Client.builder().firstname("Fabian")
-        		.surename("Bauer").infected(true).clientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22")
+        		.surename("Bauer").infected(true).clientCode(VALID_CLIENT_CODE_DEP1)
         		.healthDepartment(hd1)
         		.phone("0175 664845454").zipCode("66845")
         		.build());
+        clientList.add(client1);
+
         this.firstReportRepository.save(FirstReport.builder()
                 .belongToLaboratoryStaff(false)
                 .belongToMedicalStaff(true)
@@ -95,11 +111,12 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
                 .build());
 
         final Client client2 = clientRepository.save(Client.builder().firstname("Sabine")
-        		.surename("Wohlfart").infected(false).clientCode("4dsafg1f-a9f1-4619-9896-2b5cb3akd8e4")
+        		.surename("Wohlfart").infected(false).clientCode(VALID_CLIENT_CODE2_DEP1)
         		.healthDepartment(hd1)
         		.phone("0172 9847845125").zipCode("68309")
         		.build());
-
+        clientList.add(client2);
+        this.clientWithNoAccount = client2;
         this.firstReportRepository.save(FirstReport.builder()
                 .belongToLaboratoryStaff(true)
                 .directContactWithLiquidsOfC19pat(true)
@@ -111,11 +128,18 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
         		.surename("Maurer").infected(true).clientCode("22safg1f-a9f1-225f-9896-2b5cb3akdg88")
         		.healthDepartment(hd2)
         		.phone("0621 884433").zipCode("68259").build());
+        clientList.add(client3);
         this.firstReportRepository.save(FirstReport.builder()
                 .directContactWithLiquidsOfC19pat(true)
                 .familyMember(true)
                 .client(client3)
                 .build());
+        
+        
+        for(Client createdClient: clientList) {
+            log.info("created dummy client with id: " + createdClient.getClientId() + " and client-code: " + createdClient.getClientCode());
+
+        }
 
         final ContactPerson cp1 = contactPersonRepository.save(ContactPerson.builder().client(client1).firstname("Alice").surename("Sommer")
                 .typeOfContract(TypeOfContract.AE)

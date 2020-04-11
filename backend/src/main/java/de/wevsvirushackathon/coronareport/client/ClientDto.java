@@ -32,7 +32,9 @@ public class ClientDto {
     
     private Timestamp quarantineStartDateTime;
     private Timestamp quarantineEndDateTime;
-
+    
+    private Timestamp registrationTimestamp;
+    
     private boolean infected;
     
     private  ClientType type;
