@@ -15,6 +15,6 @@ export class DiaryListItemComponent {
   }
 
   toStringContactPersons(entry: DiaryEntryDto): string {
-    return entry.contactPersonList.map(s => `${s.firstname} ${s.surename}`).join(', ');
+    return entry.contactPersonList.map(s => `${s.firstName} ${s.lastName}`).join(', ');
   }
 }

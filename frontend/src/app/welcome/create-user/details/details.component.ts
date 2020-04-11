@@ -14,8 +14,8 @@ export class DetailsComponent implements OnInit {
   // ToDo Error Messages
 
   public nameFormGroup = new FormGroup({
-    surname: new FormControl(null, [Validators.minLength(2), Validators.maxLength(100)]),
-    firstname: new FormControl(null, [Validators.minLength(2), Validators.maxLength(100)])
+    lastName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(100)]),
+    firstName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(100)])
   });
 
   public phoneZipFormGroup = new FormGroup({
@@ -30,8 +30,8 @@ export class DetailsComponent implements OnInit {
 
   public saveUser() {
     /*const client: Client = {
-      firstname: this.nameFormGroup.controls.firstname.value,
-      surename: this.nameFormGroup.controls.surname.value,
+      firstName: this.nameFormGroup.controls.firstName.value,
+      lastName: this.nameFormGroup.controls.lastName.value,
       phone: this.phoneZipFormGroup.controls.phone.value,
       zipCode: this.phoneZipFormGroup.controls.zipCode.value,
       clientId: null,

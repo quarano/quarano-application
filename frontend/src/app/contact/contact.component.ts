@@ -30,12 +30,12 @@ export class ContactComponent implements OnInit {
 
   getName(contact: ContactPersonDto): string {
     let name = 'anonymer Kontakt';
-    if (contact.firstname && contact.surename) {
-      name = `${contact.firstname || ''} ${contact.surename || ''}`;
-    } else if (contact.firstname) {
-      name = contact.firstname;
-    } else if (contact.surename) {
-      name = contact.surename;
+    if (contact.firstName && contact.lastName) {
+      name = `${contact.firstName || ''} ${contact.lastName || ''}`;
+    } else if (contact.firstName) {
+      name = contact.firstName;
+    } else if (contact.lastName) {
+      name = contact.lastName;
     }
     return name;
   }

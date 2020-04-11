@@ -1,8 +1,8 @@
 import { IIdentifiable } from './general';
 
 export interface ContactPersonDto extends IIdentifiable {
-  firstname: string;
-  surename: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   mobilePhone: string;
   email: string;

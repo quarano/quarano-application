@@ -23,7 +23,7 @@ import { Subject } from 'rxjs';
   ],
 })
 export class ClientsComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['surename', 'firstname', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
+  public displayedColumns: string[] = ['lastName', 'firstName', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
   public dataSource = new MatTableDataSource<TenantClient>();
   public healthDepartment$ = this.userService.healthDepartment$;

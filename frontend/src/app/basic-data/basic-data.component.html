@@ -22,7 +22,7 @@
             required
             matInput
             placeholder="Vorname"
-            formControlName="firstname"
+            formControlName="firstName"
             type="text"
           />
           <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
@@ -32,7 +32,7 @@
             matInput
             required
             placeholder="Nachname"
-            formControlName="surename"
+            formControlName="lastName"
             type="text"
           />
           <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
@@ -455,7 +455,7 @@
           [placeholder]="
             'Kontakte mit anderen Menschen am ' + date.toLocaleDateString()
           "
-          [nameProperties]="['firstname', 'surename']"
+          [nameProperties]="['firstName', 'lastName']"
           (added)="onContactAdded(date, $event)"
           (removed)="onContactRemoved(date, $event)"
         >

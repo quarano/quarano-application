@@ -43,8 +43,8 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   buildForm() {
     this.formGroup = this.formBuilder.group(
       {
-        firstname: new FormControl(this.contactPerson.firstname),
-        surename: new FormControl(this.contactPerson.surename),
+        firstName: new FormControl(this.contactPerson.firstName),
+        lastName: new FormControl(this.contactPerson.lastName),
         email: new FormControl(this.contactPerson.email, [Validators.email]),
         phone: new FormControl(this.contactPerson.phone,
           [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),

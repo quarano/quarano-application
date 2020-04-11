@@ -87,8 +87,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   buildFirstForm() {
     this.firstFormGroup = this.formBuilder.group({
-      firstname: new FormControl(this.client.firstname, [Validators.required]),
-      surename: new FormControl(this.client.surename, [Validators.required]),
+      firstName: new FormControl(this.client.firstName, [Validators.required]),
+      lastName: new FormControl(this.client.lastName, [Validators.required]),
       email: new FormControl(this.client.email, [Validators.required, Validators.email]),
       phone: new FormControl(this.client.phone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
@@ -213,7 +213,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
-        contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
+        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
       }
     });
 

@@ -17,8 +17,8 @@ export class ContactPersonResolver implements Resolve<ContactPersonDto> {
       return of(
         {
           id: null,
-          firstname: null,
-          surename: null,
+          firstName: null,
+          lastName: null,
           zipCode: null,
           email: null,
           phone: null,

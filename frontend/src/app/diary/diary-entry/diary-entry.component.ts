@@ -164,7 +164,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
       height: '90vh',
       maxWidth: '100vw',
       data: {
-        contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
+        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
       }
     });
 
