@@ -20,7 +20,7 @@ export class TokenService {
   public readonly expDateTime$$ = new BehaviorSubject<Date>(null);
 
   public get token(): string | null {
-    if (this.expDateTime$$.getValue() < new Date()) {
+    if (this.expDateTime$$.getValue() !== null && this.expDateTime$$.getValue() < new Date()) {
       this.unsetToken();
     }
     return this.token$$.getValue();
