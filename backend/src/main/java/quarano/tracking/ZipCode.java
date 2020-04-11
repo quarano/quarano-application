@@ -16,6 +16,7 @@
 package quarano.tracking;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ import javax.persistence.Embeddable;
  * @author Oliver Drotbohm
  */
 @Embeddable
+@EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ZipCode {

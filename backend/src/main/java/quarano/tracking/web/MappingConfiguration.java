@@ -77,6 +77,8 @@ public class MappingConfiguration {
 
 		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
 
+			it.map(TrackedPersonDto::getSurename, TrackedPerson::setLastname);
+
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
 			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);
