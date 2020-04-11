@@ -22,7 +22,7 @@ import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.web.ClientDto;
+import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class TrackedCaseController {
 	}
 
 	@PutMapping("/api/enrollment/details")
-	HttpEntity<?> submitEnrollmentDetails(@Validated @RequestBody ClientDto dto, Errors errors,
+	HttpEntity<?> submitEnrollmentDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
 		if (errors.hasErrors()) {

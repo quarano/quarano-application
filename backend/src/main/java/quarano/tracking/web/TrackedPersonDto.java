@@ -20,7 +20,7 @@ import javax.validation.constraints.Pattern;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDto {
+public class TrackedPersonDto {
 
 	private String clientCode;
 

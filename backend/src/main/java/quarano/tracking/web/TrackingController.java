@@ -48,11 +48,11 @@ public class TrackingController {
 
 	@GetMapping({ "/api/details", "/api/enrollment/details" })
 	HttpEntity<?> overview(@LoggedIn TrackedPerson person) {
-		return ResponseEntity.ok(mapper.map(person, ClientDto.class));
+		return ResponseEntity.ok(mapper.map(person, TrackedPersonDto.class));
 	}
 
 	@PutMapping("/api/details")
-	public HttpEntity<?> createTrackedPerson(@Validated @RequestBody ClientDto dto, Errors errors,
+	public HttpEntity<?> createTrackedPerson(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
 		if (errors.hasErrors()) {

@@ -65,26 +65,26 @@ public class MappingConfiguration {
 			it.map(Client::getClientId, TrackedPerson::setLegacyClientId);
 		});
 
-		mapper.typeMap(TrackedPerson.class, ClientDto.class).addMappings(it -> {
+		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
 
-			it.map(TrackedPerson::getLastname, ClientDto::setSurename);
+			it.map(TrackedPerson::getLastname, TrackedPersonDto::setSurename);
 
-			it.map(source -> source.getAddress().getStreet(), ClientDto::setStreet);
-			it.map(source -> source.getAddress().getZipCode(), ClientDto::setZipCode);
-			it.map(source -> source.getAddress().getCity(), ClientDto::setCity);
-			it.map(source -> source.getAddress().getHouseNumber(), ClientDto::setHouseNumber);
+			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);
+			it.map(source -> source.getAddress().getZipCode(), TrackedPersonDto::setZipCode);
+			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
+			it.map(source -> source.getAddress().getHouseNumber(), TrackedPersonDto::setHouseNumber);
 		});
 
-		mapper.typeMap(ClientDto.class, TrackedPerson.class).addMappings(it -> {
+		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
 
-			it.using(STRING_TO_PHONE_NUMBER).map(ClientDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
-			it.using(STRING_TO_PHONE_NUMBER).map(ClientDto::getPhone, TrackedPerson::setPhoneNumber);
-			it.using(STRING_TO_EMAIL_ADDRESS).map(ClientDto::getEmail, TrackedPerson::setEmailAddress);
+			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilephone, TrackedPerson::setMobilePhoneNumber);
+			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
+			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);
 
-			it.<String> map(ClientDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
-			it.<String> map(ClientDto::getCity, (target, v) -> target.getAddress().setCity(v));
-			it.<ZipCode> map(ClientDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
-			it.<HouseNumber> map(ClientDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
+			it.<String> map(TrackedPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
+			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
+			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
+			it.<HouseNumber> map(TrackedPersonDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
 		});
 	}
 }
