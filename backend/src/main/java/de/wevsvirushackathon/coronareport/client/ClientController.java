@@ -1,6 +1,5 @@
 package de.wevsvirushackathon.coronareport.client;
 
-import java.text.ParseException;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.ArgumentType;
-import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InconsistentDataException;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InvalidArgumentException;
+import de.wevsvirushackathon.coronareport.registration.AccountRegistrationDetails;
 import de.wevsvirushackathon.coronareport.user.UserDto;
-import de.wevsvirushackathon.coronareport.user.UserNotFoundException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -29,19 +27,26 @@ import io.swagger.annotations.ApiResponses;
 public class ClientController {
 
 	private ClientRepository clientRepository;
+	private ClientService clientService;
 	private ModelMapper modelMapper;
 
 	@Autowired
-	public ClientController(ClientRepository clientRepository, ModelMapper modelMapper) {
+	public ClientController(ClientRepository clientRepository, ClientService clientService, ModelMapper modelMapper) {
+		this.clientService = clientService;
 		this.clientRepository = clientRepository;
 		this.modelMapper = modelMapper;
 	}
 
-	@PostMapping("/register")
-	public ResponseEntity<String> registerClient(@RequestBody ClientDto clientDto) {
-		Client client = this.registerClientAndCreateExternalId(clientDto);
+	@PostMapping("/{clientId}/register")
+	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto, @PathVariable Long clientId) {
+		
+		AccountRegistrationDetails details = new AccountRegistrationDetails();
+		modelMapper.map(registrationDto, details) ;
+		details.setClientId(clientId);
+		
+		clientService.registerAccountForClient(details);
 
-		return ResponseEntity.ok(client.getClientCode());
+		return ResponseEntity.ok("");
 	}
 
 	/**
@@ -71,13 +76,6 @@ public class ClientController {
 	}
 
 	
-	private Client registerClientAndCreateExternalId(ClientDto clientDto) {
-		Client newClient = modelMapper.map(clientDto, Client.class);
-		newClient.setClientCode(createNewClientId());
-		this.clientRepository.save(newClient);
-		return newClient;
-	}
-
 	/**
 	 * Creates a new unique client id
 	 * 

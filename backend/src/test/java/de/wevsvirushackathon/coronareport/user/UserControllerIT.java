@@ -113,7 +113,7 @@ public class UserControllerIT {
 
 	}
 
-	private String createLoginRequestBody(String username, String password) {
+	public static String createLoginRequestBody(String username, String password) {
 		return "{ \"username\": \"" + username + "\", \"password\": \"" + password + "\" }";
 	}
 

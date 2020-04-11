@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wevsvirushackathon.coronareport.authentication.Account;
-import de.wevsvirushackathon.coronareport.authentication.provider.AccountRepository;
+import de.wevsvirushackathon.coronareport.authentication.AccountRepository;
 import de.wevsvirushackathon.coronareport.client.Client;
 import de.wevsvirushackathon.coronareport.client.ClientDto;
 import de.wevsvirushackathon.coronareport.client.ClientRepository;
