@@ -18,9 +18,12 @@ package quarano.tracking;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+
+import org.springframework.lang.Nullable;
 
 /**
  * @author Oliver Drotbohm
@@ -32,6 +35,33 @@ import javax.persistence.Embeddable;
 public class Address {
 
 	private String street;
+	private HouseNumber houseNumber = HouseNumber.NONE;
 	private String city;
 	private ZipCode zipCode;
+
+	@Embeddable
+	@EqualsAndHashCode
+	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	public static class HouseNumber {
+
+		public static final HouseNumber NONE = HouseNumber.of(null);
+
+		private String value;
+
+		@Nullable
+		public static HouseNumber of(String source) {
+			return source == null || source.isBlank() //
+					? new HouseNumber() //
+					: HouseNumber.NONE;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return value;
+		}
+	}
 }

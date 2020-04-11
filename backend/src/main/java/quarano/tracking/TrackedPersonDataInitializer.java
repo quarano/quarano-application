@@ -17,6 +17,7 @@ package quarano.tracking;
 
 import de.wevsvirushackathon.coronareport.client.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.Address.HouseNumber;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -45,10 +46,12 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 
 		Streamable.of(clients.findAll()).forEach(it -> {
+
 			var person = mapper.map(it, TrackedPerson.class);
-			person
-					.setAddress(new Address(it.getStreet(), null, it.getZipCode() == null ? null : ZipCode.of(it.getZipCode())));
-			trackedPeople.save(person);
+			var zipCode = it.getZipCode() == null ? null : ZipCode.of(it.getZipCode());
+			var address = new Address(it.getStreet(), HouseNumber.NONE, null, zipCode);
+
+			trackedPeople.save(person.setAddress(address));
 		});
 	}
 }

@@ -16,6 +16,7 @@
 package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
+import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
@@ -43,13 +44,17 @@ public class MappingConfiguration {
 	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE //
 			= source -> source.getSource() == null ? null : ZipCode.of(source.getSource());
 
+	private static final Converter<String, HouseNumber> STRING_TO_HOUSE_NUMBER //
+			= source -> HouseNumber.of(source.getSource());
+
 	public MappingConfiguration(ModelMapper mapper) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 
-		mapper.addConverter(STRING_TO_EMAIL_ADDRESS);
-		mapper.addConverter(STRING_TO_PHONE_NUMBER);
-		mapper.addConverter(STRING_TO_ZIP_CODE);
+		mapper.addConverter(STRING_TO_EMAIL_ADDRESS, String.class, EmailAddress.class);
+		mapper.addConverter(STRING_TO_PHONE_NUMBER, String.class, PhoneNumber.class);
+		mapper.addConverter(STRING_TO_ZIP_CODE, String.class, ZipCode.class);
+		mapper.addConverter(STRING_TO_HOUSE_NUMBER, String.class, HouseNumber.class);
 
 		mapper.typeMap(Client.class, TrackedPerson.class).setPreConverter(context -> {
 
@@ -67,6 +72,7 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getStreet(), ClientDto::setStreet);
 			it.map(source -> source.getAddress().getZipCode(), ClientDto::setZipCode);
 			it.map(source -> source.getAddress().getCity(), ClientDto::setCity);
+			it.map(source -> source.getAddress().getHouseNumber(), ClientDto::setHouseNumber);
 		});
 
 		mapper.typeMap(ClientDto.class, TrackedPerson.class).addMappings(it -> {
@@ -78,6 +84,7 @@ public class MappingConfiguration {
 			it.<String> map(ClientDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(ClientDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(ClientDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
+			it.<HouseNumber> map(ClientDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
 		});
 	}
 }

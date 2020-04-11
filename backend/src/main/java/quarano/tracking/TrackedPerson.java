@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import lombok.With;
+import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -50,7 +50,7 @@ import org.jddd.event.types.DomainEvent;
  * @author Oliver Drotbohm
  */
 @Entity
-@With
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
@@ -63,6 +63,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
+	private @Getter @Setter LocalDate dateOfBirth;
 
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<DiaryEntry> entries;

@@ -8,11 +8,13 @@ import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-
-import org.springframework.validation.Errors;
 
 @Data
 @Builder
@@ -22,14 +24,16 @@ public class ClientDto {
 
 	private String clientCode;
 
-	private String surename;
-	private String firstname;
-	private String street;
-	private String city;
-	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
+	private @NotEmpty String surename;
+	private @NotEmpty String firstname;
+	private @NotEmpty String street;
+	private String houseNumber;
+	private @NotEmpty String city;
+	private @NotEmpty @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilephone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
-	private @Pattern(regexp = EmailAddress.PATTERN) String email;
+	private @NotEmpty @Pattern(regexp = EmailAddress.PATTERN) String email;
+	private @NotNull @Past LocalDate dateOfBirth;
 
 	private LocalDateTime quarantineStartDateTime;
 	private LocalDateTime quarantineEndDateTime;
@@ -37,17 +41,4 @@ public class ClientDto {
 	private boolean infected;
 
 	private ClientType type;
-
-	Errors validate(Errors errors) {
-
-		if (!ZipCode.isValid(zipCode)) {
-			errors.reject("zipCode");
-		}
-
-		if (!PhoneNumber.isValid(phone)) {
-			errors.reject("phone");
-		}
-
-		return errors;
-	}
 }
