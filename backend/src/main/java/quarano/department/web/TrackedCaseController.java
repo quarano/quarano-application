@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -108,6 +109,15 @@ class TrackedCaseController {
 	HttpEntity<?> addQuestionaire(@Validated @RequestBody InitialReportDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
+		var trackedCase = cases.findByTrackedPerson(person) //
+				.orElseThrow(() -> new IllegalStateException("No case found for tracked person " + person.getId() + "!"));
+
+		if (!trackedCase.getEnrollment().isCompletedPersonalData()) {
+
+			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED) //
+					.body(accessor.getMessage("enrollment.detailsSubmissionRequired"));
+		}
+
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(toMap(errors));
 		}
@@ -119,9 +129,8 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(toMap(validated));
 		}
 
-		cases.findByTrackedPerson(person) //
-				.map(it -> apply(dto, it)) //
-				.ifPresent(cases::save);
+		trackedCase = apply(dto, trackedCase); //
+		cases.save(trackedCase);
 
 		return ResponseEntity.ok().build();
 	}
