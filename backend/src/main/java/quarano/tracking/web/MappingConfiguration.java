@@ -35,13 +35,13 @@ import org.springframework.stereotype.Component;
 public class MappingConfiguration {
 
 	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
-			= source -> source == null ? null : EmailAddress.of(source.getSource());
+			= source -> source.getSource() == null ? null : EmailAddress.of(source.getSource());
 
 	private static final Converter<String, PhoneNumber> STRING_TO_PHONE_NUMBER //
-			= source -> source == null ? null : PhoneNumber.of(source.getSource());
+			= source -> source.getSource() == null ? null : PhoneNumber.of(source.getSource());
 
 	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE //
-			= source -> source == null ? null : ZipCode.of(source.getSource());
+			= source -> source.getSource() == null ? null : ZipCode.of(source.getSource());
 
 	public MappingConfiguration(ModelMapper mapper) {
 
