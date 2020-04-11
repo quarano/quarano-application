@@ -15,9 +15,11 @@
  */
 package quarano.department.web;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
+import quarano.department.Enrollment;
 import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
@@ -25,6 +27,7 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -43,12 +46,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 /**
  * @author Oliver Drotbohm
  */
 @RestController
 @RequiredArgsConstructor
-public class TrackedCaseController {
+class TrackedCaseController {
 
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
@@ -132,5 +138,25 @@ public class TrackedCaseController {
 		});
 
 		return fields;
+	}
+
+	@RequiredArgsConstructor
+	static class EnrollmentDto {
+
+		private final @Getter(onMethod = @__(@JsonUnwrapped)) Enrollment enrollment;
+
+		@JsonProperty("_links")
+		public Map<String, Object> getLinks() {
+
+			if (enrollment.isComplete()) {
+				return Collections.emptyMap();
+			}
+
+			if (enrollment.isCompletedPersonalData()) {
+				return Map.of("details", Map.of("href", "/api/enrollment/details"));
+			}
+
+			return null;
+		}
 	}
 }

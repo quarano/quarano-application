@@ -10,7 +10,7 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NewSymptomRepository extends PagingAndSortingRepository<NewSymptom, Long> {
+interface NewSymptomRepository extends PagingAndSortingRepository<NewSymptom, Long> {
 
 	/*
 	 * (non-Javadoc)

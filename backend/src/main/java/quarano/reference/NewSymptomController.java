@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController
 @RequiredArgsConstructor
-public class NewSymptomController {
+class NewSymptomController {
 
 	private static final Sort BY_NAME_ASCENDING = Sort.sort(NewSymptom.class).by(NewSymptom::getName).ascending();
 

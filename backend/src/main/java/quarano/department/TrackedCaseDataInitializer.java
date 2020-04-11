@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Order(660)
-public class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
 	private final ModelMapper mapper;
 

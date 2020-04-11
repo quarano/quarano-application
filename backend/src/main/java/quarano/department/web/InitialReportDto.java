@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class InitialReportDto {
+class InitialReportDto {
 
 	private LocalDateTime dateTime;
 	private Boolean min15MinutesContactWithC19Pat;

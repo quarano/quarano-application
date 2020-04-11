@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Order(600)
 @Component
 @RequiredArgsConstructor
-public class TrackedPersonDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+class TrackedPersonDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
 	private final TrackedPersonRepository trackedPeople;
 	private final ClientRepository clients;

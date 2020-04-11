@@ -23,7 +23,7 @@ import java.util.Optional;
 /**
  * @author Oliver Drotbohm
  */
-public interface DepartmentRepository extends QuaranoRepository<Department, DepartmentIdentifier> {
+interface DepartmentRepository extends QuaranoRepository<Department, DepartmentIdentifier> {
 
 	Optional<Department> findByName(String name);
 }
