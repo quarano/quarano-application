@@ -14,12 +14,11 @@ export class ProgressBarInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       tap(res => {
-        if (res.type === HttpEventType.Sent) {
           this.progressBarService.progressBarState = true;
-        }
-        if (res.type === HttpEventType.Response) {
-          this.progressBarService.progressBarState = false;
-        }
-      }));
+      }),
+      finalize(() => {
+        this.progressBarService.progressBarState = false;
+      })
+    );
   }
 }
