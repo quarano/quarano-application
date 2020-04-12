@@ -20,7 +20,8 @@ export class UserService {
   public readonly clientStatus$ = this.clientStatus$$.asObservable();
   public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
   public readonly roles$$ = this.tokenService.roles$$;
-  public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthdepartment));
+  public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthDepartment));
+  public readonly currentUserName$: Observable<string>;
 
   public readonly isLoggedIn$: Observable<boolean>;
   public readonly isFullyAuthenticated$: Observable<boolean>;
@@ -57,6 +58,21 @@ export class UserService {
         distinctUntilChanged(),
         map(roles => this.isHealthDepartmentUser(roles))
       );
+
+    this.currentUserName$ = combineLatest([this.user$$, this.isHealthDepartmentUser$]).pipe(
+      map(([user, isHealthDepartmentUser]) => ({ user, isHealthDepartmentUser })),
+      map(value => {
+        if (value.user) {
+          if (value.isHealthDepartmentUser) {
+            return `${value.user.username} (${value.user.healthDepartment?.fullName || 'Gesundheitsamt unbekannt'})`;
+          } else if (value.user.client?.firstName || value.user.client?.lastName) {
+            return `${value.user.client.firstName || ''} ${value.user.client.lastName || ''}`;
+          }
+          return value.user.username;
+        }
+        return null;
+      })
+    );
   }
 
   private init() {
@@ -64,13 +80,13 @@ export class UserService {
     this.tokenService.token$.pipe(
       filter(token => token !== null),
       mergeMap(() => {
-        const user = this.apiService.getMe();
-        const status = this.enrollmentService.getEnrollmentStatus();
-        return combineLatest([user, status]);
+        return this.apiService.getMe()
+          .pipe(
+            tap(returnedUser => this.user$$.next(returnedUser)),
+            mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null));
       }),
-    ).subscribe(pair => {
-      this.user$$.next(pair[0]);
-      this.clientStatus$$.next(pair[1]);
+    ).subscribe(status => {
+      this.clientStatus$$.next(status);
     });
 
     // Unset client if token gets null

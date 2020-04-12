@@ -1,0 +1,124 @@
+<div [formGroup]="formGroup">
+  <fieldset class="mb-3">
+    <legend>Person</legend>
+    <mat-form-field class="half-width">
+      <input
+        required
+        matInput
+        placeholder="Vorname"
+        formControlName="firstName"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <input
+        matInput
+        required
+        placeholder="Nachname"
+        formControlName="lastName"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Geburtsdatum</mat-label>
+      <input
+        matInput
+        required
+        [max]="today"
+        [matDatepicker]="dateOfBirthPicker"
+        formControlName="dateOfBirth"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="dateOfBirthPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Kontaktmöglichkeiten</legend>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        required
+        placeholder="E-Mail"
+        formControlName="email"
+        type="email"
+      />
+      <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (Festnetz)"
+        formControlName="phone"
+        type="phone"
+      />
+      <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (mobil)"
+        formControlName="mobilePhone"
+        type="phone"
+      />
+      <mat-error
+        >Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error
+      >
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Adresse</legend>
+
+    <mat-form-field style="width: 70%;">
+      <input
+        matInput
+        required
+        placeholder="Straße"
+        formControlName="street"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine Straße ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        placeholder="Hausnummer"
+        maxlength="6"
+        formControlName="houseNumber"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        required
+        placeholder="Postleitzahl"
+        minlength="5"
+        maxlength="5"
+        formControlName="zipCode"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 70%;">
+      <input
+        matInput
+        required
+        placeholder="Ort"
+        formControlName="city"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+</div>

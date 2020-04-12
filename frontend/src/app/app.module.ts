@@ -1,3 +1,4 @@
+import { ProfileModule } from './profile/profile.module';
 import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SnackbarService } from './services/snackbar.service';
@@ -43,7 +44,8 @@ registerLocaleData(localeDe, 'de');
     DiaryModule,
     WelcomeModule,
     ContactModule,
-    BasicDataModule
+    BasicDataModule,
+    ProfileModule
   ],
   providers: [
     SnackbarService,

@@ -49,7 +49,9 @@
     padding: 0 !important;
   }
 
-  .cdk-overlay-pane:not(.mat-snack-bar-handset) {
+  .cdk-overlay-container
+    .cdk-global-overlay-wrapper
+    .cdk-overlay-pane:not(.mat-snack-bar-handset) {
     max-width: 100vw !important;
     width: 100vw !important;
     height: 100vh !important;

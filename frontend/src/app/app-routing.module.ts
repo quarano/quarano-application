@@ -22,6 +22,11 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, IsAuthenticatedFullyClientGuard]
   },
   {
+    path: 'profile', loadChildren: () =>
+      import('./profile/profile.module').then(m => m.ProfileModule),
+    canActivate: [IsAuthenticatedGuard, IsAuthenticatedFullyClientGuard]
+  },
+  {
     path: 'tenant-admin', loadChildren: () =>
       import('./tenant-admin/tenant-admin.module').then(m => m.TenantAdminModule),
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard]

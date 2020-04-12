@@ -1,7 +1,7 @@
+import { AppFormsModule } from './../app-forms/app-forms.module';
 import { MyClientDataResolver } from './../resolvers/my-client-data.resolver';
 import { MyFirstQueryResolver } from './../resolvers/my-first-query.resolver';
 import { ContactPersonsResolver } from './../resolvers/contact-persons.resolver';
-import { ContactModule } from './../contact/contact.module';
 import { MultipleAutocompleteModule } from './../ui/multiple-autocomplete/multiple-autocomplete.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './../angular-material/angular-material.module';
@@ -20,7 +20,7 @@ import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
     FormsModule,
     ReactiveFormsModule,
     MultipleAutocompleteModule,
-    ContactModule
+    AppFormsModule
   ],
   declarations: [BasicDataComponent],
   providers:

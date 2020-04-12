@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-header-right',
@@ -7,8 +7,9 @@ import {UserService} from '../../services/user.service';
   styleUrls: ['./header-right.component.scss']
 })
 export class HeaderRightComponent implements OnInit {
-  public healthDepartment$ = this.userService.healthDepartment$;
   public isLoggedIn$ = this.userService.isLoggedIn$;
+  public isFullyAuthenticated$ = this.userService.isFullyAuthenticated$;
+  public currentUserName$ = this.userService.currentUserName$;
 
   constructor(private userService: UserService) { }
 

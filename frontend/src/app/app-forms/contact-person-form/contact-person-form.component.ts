@@ -1,7 +1,7 @@
-import { VALIDATION_PATTERNS } from './../../utils/validation';
-import { ContactPersonDto } from './../../models/contact-person';
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { VALIDATION_PATTERNS } from '../../utils/validation';
+import { ContactPersonDto } from '../../models/contact-person';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { ApiService } from 'src/app/services/api.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';

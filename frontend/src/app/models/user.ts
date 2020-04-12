@@ -1,9 +1,8 @@
-import {Client} from './client';
-import {HealthDepartmentDto} from './healtDepartment';
+import { Client } from './client';
+import { HealthDepartmentDto } from './healtDepartment';
 
 export interface User {
   client?: Client;
-  healthdepartment: HealthDepartmentDto;
-  healthdepartmentid: string;
+  healthDepartment: HealthDepartmentDto;
   username: string;
 }

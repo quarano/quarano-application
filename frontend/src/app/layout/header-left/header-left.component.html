@@ -18,10 +18,13 @@
       *ngIf="isHealthDepartmentUser$ | async"
       >Für Behörden</a
     >
-    <ng-container *ngIf="(isFullyAuthenticated$ | async) && !(isHealthDepartmentUser$ | async)"
+    <ng-container
+      *ngIf="
+        (isFullyAuthenticated$ | async) && !(isHealthDepartmentUser$ | async)
+      "
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
       <a routerLink="/contacts" routerLinkActive="active">Kontakte</a>
-      <a routerLink="/basic-data" routerLinkActive="active">Basisdaten</a>
+      <a routerLink="/profile" routerLinkActive="active">Benutzerprofil</a>
     </ng-container>
   </nav>
 </div>
