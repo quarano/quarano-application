@@ -20,6 +20,7 @@
 		<docker.image.prefix>coronahackathon</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
+		<spring-hateoas.version>1.1.0.BUILD-SNAPSHOT</spring-hateoas.version>
 	</properties>
 
 	<profiles>
@@ -31,7 +32,14 @@
 			</activation>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
+				<spring.profile.active>integrationtest</spring.profile.active>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+				</dependency>
+			</dependencies>
 		</profile>
 		<profile>
 			<id>develop</id>
@@ -53,12 +61,20 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.hateoas</groupId> -->
+<!-- 			<artifactId>spring-hateoas</artifactId> -->
+<!-- 		</dependency> -->
 		<!-- Spring modelmapper for DTO transformation -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -89,8 +105,29 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		<groupId>org.jddd</groupId>
+			<artifactId>jddd-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jddd</groupId>
+			<artifactId>jddd-events</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-test</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-docs</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -120,7 +157,6 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
-			<version>1.4.194</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -134,6 +170,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<profiles>
+						<profile>${spring.profile.active}</profile>
+					</profiles>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>cz.habarta.typescript-generator</groupId>
@@ -169,5 +210,13 @@
 
 
 	</build>
+	
+	<repositories>
+	<!-- For Moduliths & jDDD -->
+		<repository>
+			<id>spring-libs-snapshot</id>
+			<url>https://repo.spring.io/libs-snapshot</url>
+		</repository>
+	</repositories>
 
 </project>
