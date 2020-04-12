@@ -17,7 +17,7 @@ export class EnrollmentService {
 
 
   getFirstQuery(): Observable<FirstQuery> {
-    return this.httpClient.get<FirstQuery>(`${this.baseUrl}/questionaire`)
+    return this.httpClient.get<FirstQuery>(`${this.baseUrl}/questionnaire`)
       .pipe(
         share(),
         map(result => {
@@ -29,7 +29,7 @@ export class EnrollmentService {
   }
 
   updateFirstQuery(firstQuery: FirstQuery) {
-    return this.httpClient.put(`${this.baseUrl}/questionaire`, firstQuery);
+    return this.httpClient.put(`${this.baseUrl}/questionnaire`, firstQuery);
   }
 
   getPersonalDetails(): Observable<Client> {

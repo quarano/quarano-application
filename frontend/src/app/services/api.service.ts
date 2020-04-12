@@ -28,11 +28,11 @@ export class ApiService {
   }
 
   getContactPersons(): Observable<ContactPersonDto[]> {
-    return this.httpClient.get<ContactPersonDto[]>(`${this.baseUrl}/contact/`).pipe(share());
+    return this.httpClient.get<ContactPersonDto[]>(`${this.baseUrl}/api/contacts`).pipe(share());
   }
 
   getContactPerson(id: number): Observable<ContactPersonDto> {
-    return this.httpClient.get<ContactPersonDto>(`${this.baseUrl}/contact/${id}`).pipe(share());
+    return this.httpClient.get<ContactPersonDto>(`${this.baseUrl}/api/contacts/${id}`).pipe(share());
   }
 
   getDiaryEntry(id: number): Observable<DiaryEntryDto> {
@@ -81,20 +81,12 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/client/register`, client, { responseType: 'text' });
   }
 
-  getClientByCode(code: string): Observable<Client> {
-    return this.httpClient.get<BackendClient>(`${this.baseUrl}/client/${code}`);
-  }
-
-  createFirstReport(firstReport: FirstQuery, clientCode: string): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/firstreport/${clientCode}`, firstReport);
-  }
-
   createContactPerson(contactPerson: ContactPersonDto): Observable<ContactPersonDto> {
-    return this.httpClient.post<ContactPersonDto>(`${this.baseUrl}/contact/`, contactPerson);
+    return this.httpClient.post<ContactPersonDto>(`${this.baseUrl}/api/contacts`, contactPerson);
   }
 
   modifyContactPerson(contactPerson: ContactPersonDto) {
-    return this.httpClient.put(`${this.baseUrl}/contact/${contactPerson.id}`, contactPerson);
+    return this.httpClient.put(`${this.baseUrl}/api/contacts/${contactPerson.id}`, contactPerson);
   }
 
   getReport(healthDepartmentId: string): Observable<Array<TenantClient>> {

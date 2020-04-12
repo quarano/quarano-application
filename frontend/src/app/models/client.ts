@@ -8,10 +8,15 @@ export interface Client {
   street?: string;
   city?: string;
   email?: string;
-  mobilephone?: string;
+  mobilePhone?: string;
   infected: boolean;
   quarantineStartDateTime?: Date;
   quarantineEndDateTime?: Date;
   houseNumber: string;
   dateOfBirth: Date;
+  type: ClientType;
+}
+
+export enum ClientType {
+  INDEX_CASE, CONTACT_CASE
 }

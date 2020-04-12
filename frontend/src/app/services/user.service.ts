@@ -1,9 +1,9 @@
 import { EnrollmentService } from './enrollment.service';
 import { ClientStatus } from './../models/client-status';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ApiService } from './api.service';
-import { distinctUntilChanged, filter, map, switchMap, tap, mergeMap, combineAll } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap, mergeMap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
 import { HealthDepartmentDto } from '../models/healtDepartment';
