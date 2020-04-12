@@ -1,7 +1,5 @@
 package de.wevsvirushackathon.coronareport.client;
 
-import java.util.UUID;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.ArgumentType;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InvalidArgumentException;
 import de.wevsvirushackathon.coronareport.registration.AccountRegistrationDetails;
+import de.wevsvirushackathon.coronareport.registration.ActivationCodeExpiredException;
+import de.wevsvirushackathon.coronareport.registration.ActivationNotActiveException;
+import de.wevsvirushackathon.coronareport.registration.CodeNotFoundException;
 import de.wevsvirushackathon.coronareport.user.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -36,14 +37,14 @@ public class ClientController {
 		this.clientRepository = clientRepository;
 		this.modelMapper = modelMapper;
 	}
+	
 
-	@PostMapping("/{clientId}/register")
-	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto, @PathVariable Long clientId) {
+	@PostMapping("/register")
+	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto) throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException {
 		
 		AccountRegistrationDetails details = new AccountRegistrationDetails();
 		modelMapper.map(registrationDto, details) ;
-		details.setClientId(clientId);
-		
+
 		clientService.registerAccountForClient(details);
 
 		return ResponseEntity.ok("");
@@ -75,19 +76,4 @@ public class ClientController {
 		return ResponseEntity.ok(true);
 	}
 
-	
-	/**
-	 * Creates a new unique client id
-	 * 
-	 * @return
-	 */
-	private String createNewClientId() {
-		Client possiblyExistingClient;
-		String newClientCode;
-		do {
-			newClientCode = UUID.randomUUID().toString();
-			possiblyExistingClient = this.clientRepository.findByClientCode(newClientCode);
-		} while (possiblyExistingClient != null);
-		return newClientCode;
-	}
 }

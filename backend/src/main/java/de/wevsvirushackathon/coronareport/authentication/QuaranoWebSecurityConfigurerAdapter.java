@@ -53,7 +53,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 		httpSecurity.authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers("/client/*/register").permitAll()
+        .antMatchers("/client/register").permitAll()
         .antMatchers("/client/checkcode/**").permitAll()
         .antMatchers("/public/**").permitAll()
         .antMatchers("/user/me").authenticated()

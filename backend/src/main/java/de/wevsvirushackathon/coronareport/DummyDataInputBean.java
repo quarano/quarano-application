@@ -2,6 +2,7 @@ package de.wevsvirushackathon.coronareport;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
@@ -31,17 +30,18 @@ import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
 import de.wevsvirushackathon.coronareport.firstReport.FirstReportRepository;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
+import de.wevsvirushackathon.coronareport.registration.ActivationCode;
 import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 //@Profile("!prod")
 @Order(300)
+@Slf4j
 public class DummyDataInputBean implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
-    private final Logger log = LoggerFactory.getLogger(DummyDataInputBean.class);
-    
     final static String VALID_CLIENT_CODE_DEP1 = "738d3d1f-a9f1-4619-9896-2b5cb3a89c22";
     final static String VALID_CLIENT_CODE2_DEP1 = "4dsafc1f-a9f1-4619-9896-2b5cb3akd8e4";
     final static String VALID_CLIENT_CODE3_DEP2 = "22safg1f-a9f1-225f-9896-2b5cb3akdg88";
@@ -53,12 +53,12 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
     @Getter private Client clientWithAccountAndEntries;
     
 
-    private ClientRepository clientRepository;
-    private ContactPersonRepository contactPersonRepository;
-    private DiaryEntryRepository diaryEntryRepository;
-    private HealthDepartmentRepository healthDepartmentRepository;
-    private SymptomRepository symptomRepository;
-    private FirstReportRepository firstReportRepository;
+    private final ClientRepository clientRepository;
+    private final ContactPersonRepository contactPersonRepository;
+    private final DiaryEntryRepository diaryEntryRepository;
+    private final HealthDepartmentRepository healthDepartmentRepository;
+    private final SymptomRepository symptomRepository;
+    private final FirstReportRepository firstReportRepository;
 
     public DummyDataInputBean(ClientRepository clientRepository,
                               ContactPersonRepository contactPersonRepository,
@@ -117,6 +117,7 @@ public class DummyDataInputBean implements ApplicationListener<ContextRefreshedE
         		.build());
         clientList.add(client2);
         this.clientWithNoAccount = client2;
+        
         this.firstReportRepository.save(FirstReport.builder()
                 .belongToLaboratoryStaff(true)
                 .directContactWithLiquidsOfC19pat(true)

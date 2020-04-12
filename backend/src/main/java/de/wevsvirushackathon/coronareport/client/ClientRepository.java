@@ -6,13 +6,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientRepository
-        extends CrudRepository<Client, Long> {
+public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    Client findByClientCode(String clientCode);
+	Client findByClientCode(String clientCode);
 
-    List<Client> findAllByHealthDepartmentId(String healtDepartmentId);
-    
-   boolean existsByClientCode(String clientCode);
+	List<Client> findAllByHealthDepartmentId(String healtDepartmentId);
+
+	boolean existsByClientCode(String clientCode);
+	
 
 }

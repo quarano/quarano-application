@@ -27,9 +27,9 @@ import de.wevsvirushackathon.coronareport.registration.AccountRegistrationDetail
  * @author Patrick Otto
  */
 @Component
-public class MappingConfiguration {
+public class ClientMappingConfiguration {
 
-	public MappingConfiguration(ModelMapper mapper) {
+	public ClientMappingConfiguration(ModelMapper mapper) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 

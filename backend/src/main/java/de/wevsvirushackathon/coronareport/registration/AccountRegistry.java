@@ -1,6 +1,6 @@
 package de.wevsvirushackathon.coronareport.registration;
 
-import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import de.wevsvirushackathon.coronareport.authentication.Account;
 import de.wevsvirushackathon.coronareport.authentication.AccountService;
 import de.wevsvirushackathon.coronareport.authentication.RoleType;
-import de.wevsvirushackathon.coronareport.client.Client;
+import de.wevsvirushackathon.coronareport.registration.ActivationCode.ActivationCodeIdentifier;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +22,18 @@ public class AccountRegistry {
 	private final @NonNull AccountService accountService;
 
 	@Transactional
-	public Client registerAccountForClient(Client client, AccountRegistrationDetails details) {
+	public void registerAccountForClient(AccountRegistrationDetails details)
+			throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException {
 
-		// validate registration
+		// validate username
 		// #TODO
+
+		ActivationCode code = activationCodeService.redeemCode(ActivationCodeIdentifier.of(UUID.fromString(details.getClientCode())));
 		
-		activationCodeService.useCode(details.getClientCode(), details.getClientId());
+		// get client that belongs to the registration
+		details.setClientId(code.getClientId());
 
 		createAndStoreAccountFrom(details);
-
-		// mark registration completed in client
-		client.setRegistrationTimestamp(new Timestamp(System.currentTimeMillis()));
-
-		return client;
 
 	}
 

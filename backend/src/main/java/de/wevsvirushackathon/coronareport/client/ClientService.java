@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import de.wevsvirushackathon.coronareport.diary.DiaryEntryController;
 import de.wevsvirushackathon.coronareport.registration.AccountRegistrationDetails;
 import de.wevsvirushackathon.coronareport.registration.AccountRegistry;
+import de.wevsvirushackathon.coronareport.registration.ActivationCodeExpiredException;
+import de.wevsvirushackathon.coronareport.registration.ActivationNotActiveException;
+import de.wevsvirushackathon.coronareport.registration.CodeNotFoundException;
 
 @Component
 public class ClientService {
@@ -28,10 +31,9 @@ public class ClientService {
 	}
 
 	@Transactional
-	void registerAccountForClient(AccountRegistrationDetails details) {
+	void registerAccountForClient(AccountRegistrationDetails details) throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException {
 		
-		Client client = clientRepository.findById(details.getClientId()).orElseThrow(() -> new EntityNotFoundException("No client with given id +'" + details.getClientId() +"' found."));
-		accountRegistry.registerAccountForClient(client, details);
+		accountRegistry.registerAccountForClient(details);
 
 	}
 
