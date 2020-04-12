@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.ContactPerson.TypeOfContract;
-import quarano.tracking.ContactPerson.TypeOfProtection;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 
@@ -23,11 +21,14 @@ public class ContactPersonDto {
 	@Setter(onMethod = @__(@JsonIgnore)) //
 	@Getter(onMethod = @__(@JsonProperty)) //
 	@JsonSerialize(using = ToStringSerializer.class) //
-	ContactPersonIdentifier id;
+	private ContactPersonIdentifier id;
 
-	@NotEmpty String lastName, firstName;
-	@Pattern(regexp = PhoneNumber.PATTERN) String phone;
-	@Pattern(regexp = EmailAddress.PATTERN) String email;
-	TypeOfContract typeOfContract;
-	TypeOfProtection typeOfProtection;
+	private @NotEmpty String lastName, firstName;
+	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
+	private @Pattern(regexp = EmailAddress.PATTERN) String email;
+	private String remark;
+	private String identificationHint;
+	private Boolean isHealthStaff;
+	private Boolean isSenior;
+	private Boolean hasPreExistingConditions;
 }

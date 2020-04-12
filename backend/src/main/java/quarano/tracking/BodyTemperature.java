@@ -15,6 +15,9 @@
  */
 package quarano.tracking;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
@@ -27,12 +30,13 @@ import org.springframework.data.domain.Range;
  */
 @Embeddable
 @RequiredArgsConstructor(staticName = "of")
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class BodyTemperature {
 
 	private static final Range<Float> VALID = Range.open(35.0f, 42.0f);
 
 	@Column(name = "temperature") //
-	private final float value;
+	private final @Getter float value;
 
 	public static boolean isValid(float value) {
 		return VALID.contains(value);

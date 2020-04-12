@@ -16,12 +16,20 @@
 package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
+import de.wevsvirushackathon.coronareport.symptomes.Symptom;
+import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
+import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.DiaryEntry;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
+
+import java.util.UUID;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -48,7 +56,13 @@ public class MappingConfiguration {
 	private static final Converter<String, HouseNumber> STRING_TO_HOUSE_NUMBER //
 			= source -> HouseNumber.of(source.getSource());
 
-	public MappingConfiguration(ModelMapper mapper) {
+	private static final Converter<Float, BodyTemperature> FLOAT_TO_BODY_TEMPERATURE //
+			= source -> source.getSource() == null ? null : BodyTemperature.of(source.getSource());
+
+	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
+			= source -> source.getSource().getValue();
+
+	public MappingConfiguration(ModelMapper mapper, SymptomRepository symptoms, ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 
@@ -56,6 +70,13 @@ public class MappingConfiguration {
 		mapper.addConverter(STRING_TO_PHONE_NUMBER, String.class, PhoneNumber.class);
 		mapper.addConverter(STRING_TO_ZIP_CODE, String.class, ZipCode.class);
 		mapper.addConverter(STRING_TO_HOUSE_NUMBER, String.class, HouseNumber.class);
+
+		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
+		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
+
+		mapper.addConverter(context -> symptoms.findById(context.getSource()).orElse(null), UUID.class, Symptom.class);
+		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
+				UUID.class, ContactPerson.class);
 
 		mapper.typeMap(de.wevsvirushackathon.coronareport.contactperson.ContactPerson.class, ContactPerson.class)
 				.setPreConverter(context -> {
@@ -102,6 +123,18 @@ public class MappingConfiguration {
 			it.<String> map(TrackedPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
+		});
+
+		mapper.typeMap(DiaryEntryDto.class, DiaryEntry.class).setPreConverter(context -> {
+
+			var source = context.getSource();
+
+			return DiaryEntry.of(null, source.getDate());
+
+		}).addMappings(it -> {
+
+			it.using(FLOAT_TO_BODY_TEMPERATURE).map(DiaryEntryDto::getBodyTemperature, DiaryEntry::setBodyTemperature);
+
 		});
 	}
 }

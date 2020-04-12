@@ -16,11 +16,13 @@
 package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.Encounter.EncounterIdentifier;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.util.Streamable;
 
@@ -38,7 +40,13 @@ public class Encounters implements Streamable<Encounter> {
 
 		return encounters.stream() //
 				.filter(it -> it.getDate().isAfter(reference)) //
-				.anyMatch(it -> it.with(person));
+				.anyMatch(it -> it.isEncounterWith(person));
+	}
+
+	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
+		return encounters.stream() //
+				.filter(it -> it.hasId(id)) //
+				.findFirst();
 	}
 
 	/*

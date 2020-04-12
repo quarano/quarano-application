@@ -15,11 +15,15 @@
  */
 package quarano.tracking;
 
+import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 
@@ -34,38 +38,42 @@ import java.util.stream.Collectors;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 import org.jddd.core.types.Identifier;
+import org.springframework.util.Assert;
 
 /**
  * A bi-daily diary entry capturing a report of medical conditions and potential {@link ContactPerson}s.
  *
  * @author Oliver Drotbohm
  */
+@EqualsAndHashCode(callSuper = true, of = {})
 @Entity(name = "newDE")
+@Accessors(chain = true)
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
 
 	private static final Comparator<DiaryEntry> BY_DATE = Comparator.comparing(DiaryEntry::getDateTime);
 
-	private final LocalDateTime date;
-	private final @OneToMany List<ContactPerson> contacts;
-	private final @Getter String note;
-	private final BodyTemperature temperature;
+	private LocalDateTime date;
+	private @ManyToMany List<ContactPerson> contacts = new ArrayList<>();
+	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
+	private @Getter String note;
+	private @Getter BodyTemperature bodyTemperature;
 
-	private DiaryEntry(LocalDateTime date, List<ContactPerson> contacts, String note) {
+	private DiaryEntry(LocalDateTime date, String note) {
 
-		this.id = new DiaryEntryIdentifier();
+		this.id = DiaryEntryIdentifier.of(UUID.randomUUID());
 		this.date = date;
-		this.contacts = contacts;
 		this.note = note;
-		this.temperature = null;
+		this.bodyTemperature = null;
 	}
 
 	public static DiaryEntry of(String note, LocalDateTime date) {
-		return new DiaryEntry(date, new ArrayList<>(), note);
+		return new DiaryEntry(date, note);
 	}
 
 	public LocalDate getDate() {
@@ -76,11 +84,32 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		return date;
 	}
 
+	public DiaryEntry add(Symptom symptom) {
+
+		Assert.notNull(symptom, "Symptom must not be null!");
+
+		this.symptoms.add(symptom);
+		return this;
+	}
+
 	List<Encounter> toEncounters() {
 
 		return contacts.stream() //
 				.map(it -> Encounter.with(it, date.toLocalDate())) //
 				.collect(Collectors.toList());
+	}
+
+	boolean contains(Encounter encounter) {
+
+		if (!encounter.happenedOn(getDate())) {
+			return false;
+		}
+
+		return contacts.contains(encounter.getContact());
+	}
+
+	public boolean hasId(DiaryEntryIdentifier identifier) {
+		return this.id.equals(identifier);
 	}
 
 	/*
@@ -94,8 +123,11 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 
 	@Embeddable
 	@EqualsAndHashCode
-	static class DiaryEntryIdentifier implements Identifier, Serializable {
+	@RequiredArgsConstructor(staticName = "of")
+	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+	public static class DiaryEntryIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = -8938479214117686141L;
-		UUID id = UUID.randomUUID();
+		private final UUID id;
 	}
+
 }

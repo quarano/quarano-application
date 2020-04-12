@@ -86,6 +86,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return Diary.of(entries);
 	}
 
+	public Encounters getEncounters() {
+		return Encounters.of(encounters);
+	}
+
 	public TrackedPerson addDiaryEntry(DiaryEntry entry) {
 
 		this.lastEntryUpdate = entry.getDateTime();
@@ -103,11 +107,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				.map(Encounter::getContact);
 	}
 
-	public TrackedPerson reportContactWith(ContactPerson person, LocalDate date) {
+	public Encounter reportContactWith(ContactPerson person, LocalDate date) {
 
-		this.encounters.add(Encounter.with(person, date));
+		var encounter = Encounter.with(person, date);
+		this.encounters.add(encounter);
 
-		return this;
+		return encounter;
 	}
 
 	public boolean hasBeenInTouchWith(ContactPerson person, Period period) {

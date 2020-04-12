@@ -27,7 +27,6 @@ import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
@@ -77,15 +76,14 @@ class ContactPersonController {
 		}
 
 		var contact = contacts.save(mapper.map(dto, ContactPerson.class).assignOwner(person));
-		var uri = fromMethodCall(on(this.getClass()).getContact(person, contact.getId().toString())).build().toUri();
+		var uri = fromMethodCall(on(this.getClass()).getContact(person, contact.getId())).build().toUri();
 
 		return ResponseEntity.created(uri).body(mapper.map(contact, ContactPersonDto.class));
 	}
 
-	@GetMapping("/{id}")
-	HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable String id) {
+	@GetMapping("/{identifier}")
+	HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
 
-		var identifier = ContactPersonIdentifier.of(UUID.fromString(id));
 		var dto = contacts.findById(identifier) //
 				.filter(it -> it.belongsTo(person)) //
 				.map(it -> mapper.map(it, ContactPersonDto.class));
@@ -93,17 +91,15 @@ class ContactPersonController {
 		return ResponseEntity.of(dto);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{identifier}")
 	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person, //
-			@PathVariable String id, //
+			@PathVariable ContactPersonIdentifier identifier, //
 			@Valid @RequestBody ContactPersonDto payload, //
 			Errors errors) {
 
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
-
-		var identifier = ContactPersonIdentifier.of(UUID.fromString(id));
 
 		return ResponseEntity.of(contacts.findById(identifier) //
 				.filter(it -> it.belongsTo(person)) //

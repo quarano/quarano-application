@@ -30,6 +30,7 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
@@ -41,6 +42,7 @@ import org.jddd.core.types.Identifier;
  */
 @Entity(name = "newContactPerson")
 @Data
+@EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
 @Accessors(chain = true)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -48,9 +50,18 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 	private String firstName, lastName;
 	private EmailAddress emailAddress;
+
+	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
+	private PhoneNumber mobilePhoneNumber;
 	private PhoneNumber phoneNumber;
 	private Address address;
 	private TypeOfContract typeOfContract;
+	private String remark;
+	private String identificationHint;
+	private Boolean isHealthStaff;
+	private Boolean isSenior;
+	private Boolean hasPreExistingConditions;
+
 	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
 
 	public ContactPerson(String firstName, String lastName) {
@@ -58,6 +69,10 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.id = ContactPersonIdentifier.of(UUID.randomUUID());
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+
+	public String getFullName() {
+		return String.format("%s %s", firstName, lastName);
 	}
 
 	public boolean hasId(ContactPersonIdentifier id) {

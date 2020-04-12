@@ -16,9 +16,11 @@
 package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.util.Streamable;
 
@@ -29,6 +31,24 @@ import org.springframework.data.util.Streamable;
 public class Diary implements Streamable<DiaryEntry> {
 
 	private final List<DiaryEntry> enties;
+
+	public boolean contains(Encounter encounter) {
+		return getEntryFor(encounter).isPresent();
+	}
+
+	public Optional<DiaryEntry> getEntryFor(Encounter encounter) {
+
+		return enties.stream() //
+				.filter(it -> it.contains(encounter)) //
+				.findFirst();
+	}
+
+	public Optional<DiaryEntry> getEntryFor(DiaryEntryIdentifier identifier) {
+
+		return enties.stream() //
+				.filter(it -> it.hasId(identifier)) //
+				.findFirst();
+	}
 
 	/*
 	 * (non-Javadoc)

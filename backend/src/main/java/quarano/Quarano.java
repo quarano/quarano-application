@@ -15,12 +15,18 @@
  */
 package quarano;
 
+import org.jddd.core.types.Identifier;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 /**
  * @author Oliver Drotbohm
@@ -38,4 +44,16 @@ public class Quarano {
 	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
 		return new MessageSourceAccessor(source);
 	}
+
+	@Bean
+	Module quaranoModule() {
+
+		var module = new SimpleModule();
+		module.setMixInAnnotation(Identifier.class, IdentifierMixin.class);
+
+		return module;
+	}
+
+	@JsonSerialize(using = ToStringSerializer.class)
+	static abstract class IdentifierMixin {}
 }

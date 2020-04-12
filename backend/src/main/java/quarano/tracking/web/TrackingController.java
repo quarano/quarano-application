@@ -15,27 +15,42 @@
  */
 package quarano.tracking.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import quarano.auth.web.LoggedIn;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.EmailAddress;
+import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.ZipCode;
 
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Stream;
+
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
  * @author Oliver Drotbohm
@@ -45,11 +60,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TrackingController {
 
 	private final @NonNull TrackedPersonRepository repository;
+	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull ModelMapper mapper;
 
 	@GetMapping("/api/enrollment/details")
 	public HttpEntity<?> enrollmentOverview(@LoggedIn TrackedPerson person) {
 		return overview(person);
+	}
+
+	@PostMapping("/api/enrollment/encounter")
+	HttpEntity<?> addEnrollmentContacts() {
+		return null;
 	}
 
 	@GetMapping("/api/details")
@@ -82,11 +103,62 @@ public class TrackingController {
 		return ResponseEntity.ok(Map.of("properties", properties));
 	}
 
-	@GetMapping("/api/diary")
-	Stream<DiaryEntryDto> diary(@LoggedIn TrackedPerson person) {
+	@GetMapping("/api/encounters")
+	Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
 
-		return person.getDiary() //
-				.map(it -> mapper.map(person, DiaryEntryDto.class)) //
-				.stream();
+		return person.getEncounters().stream() //
+				.map(it -> EncounterDto.of(it, person));
+	}
+
+	@PostMapping("/api/encounters")
+	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, @LoggedIn TrackedPerson person) {
+
+		return contacts.findById(payload.getContactId()) //
+				.filter(it -> it.belongsTo(person)) //
+				.map(it -> person.reportContactWith(it, payload.date)) //
+				.map(it -> {
+					repository.save(person);
+					return it;
+				}) //
+				.<HttpEntity<?>> map(it -> {
+
+					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId().toString(), person);
+					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
+
+					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
+
+				}).orElseGet(() -> ResponseEntity.badRequest().body("Invalid contact identifier!"));
+	}
+
+	@GetMapping("/api/encounters/{id}")
+	HttpEntity<?> getEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
+
+		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+
+		return ResponseEntity.of(person.getEncounters() //
+				.havingIdOf(identifier) //
+				.map(it -> EncounterDto.of(it, person)));
+	}
+
+	@DeleteMapping("/api/encounters/{id}")
+	HttpEntity<?> removeEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
+
+		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+
+		person.getEncounters().havingIdOf(null);
+
+		return null;
+	}
+
+	@Value
+	@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
+	static class NewEncounter {
+
+		String contactId;
+		LocalDate date;
+
+		ContactPersonIdentifier getContactId() {
+			return ContactPersonIdentifier.of(UUID.fromString(contactId));
+		}
 	}
 }

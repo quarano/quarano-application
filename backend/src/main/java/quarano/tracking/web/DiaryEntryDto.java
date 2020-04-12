@@ -1,19 +1,17 @@
 package quarano.tracking.web;
 
-import de.wevsvirushackathon.coronareport.client.Client;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class DiaryEntryDto {
 
-	private Client client;
-	private Date dateTime;
+	private LocalDateTime date;
 	private float bodyTemperature;
-	private List<Integer> symptoms = new ArrayList<>();
-	private List<Integer> contactPersonList = new ArrayList<>();
-	private boolean transmittedToHealthDepartment;
+	private List<UUID> symptoms = new ArrayList<>();
+	private List<UUID> contacts = new ArrayList<>();
 }

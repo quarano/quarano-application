@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -17,8 +18,8 @@ import javax.persistence.Id;
 @Setter(value = AccessLevel.PACKAGE)
 public class NewSymptom {
 
-	@Id @GeneratedValue //
-	private Long id;
+	@Id //
+	private UUID id;
 	private String name;
 	private boolean isCharacteristic;
 }
