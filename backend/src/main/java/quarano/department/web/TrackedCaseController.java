@@ -17,12 +17,10 @@ package quarano.department.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
-import quarano.department.Enrollment;
 import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
@@ -30,7 +28,6 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
@@ -45,9 +42,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * @author Oliver Drotbohm
@@ -149,43 +143,5 @@ class TrackedCaseController {
 	@ExceptionHandler
 	ResponseEntity<?> handle(EnrollmentException o_O) {
 		return ResponseEntity.badRequest().body(o_O.getMessage());
-	}
-
-	@RequiredArgsConstructor
-	static class EnrollmentDto {
-
-		private final @Getter(onMethod = @__(@JsonUnwrapped)) Enrollment enrollment;
-
-		@JsonProperty("_links")
-		public Map<String, Object> getLinks() {
-
-			var questionnareUri = fromMethodCall(on(TrackedCaseController.class).addQuestionaire(null, null, null))
-					.toUriString();
-
-			var detailsUri = fromMethodCall(on(TrackingController.class).enrollmentOverview(null)).toUriString();
-
-			if (enrollment.isComplete()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri), //
-						"questionnaire", Map.of("href", questionnareUri), //
-						"contacts", Map.of("href", "/api/enrollment/contacts"));
-			}
-
-			if (enrollment.isCompletedQuestionnaire()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri), //
-						"questionnaire", Map.of("href", questionnareUri), //
-						"next", Map.of("href", "/api/enrollment/contacts"));
-			}
-
-			if (enrollment.isCompletedPersonalData()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri), //
-						"next", Map.of("href", questionnareUri));
-			}
-
-			return Map.of(//
-					"next", Map.of("href", detailsUri));
-		}
 	}
 }
