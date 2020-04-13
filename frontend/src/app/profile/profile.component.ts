@@ -3,9 +3,9 @@ import { EnrollmentService } from './../services/enrollment.service';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VALIDATION_PATTERNS } from '../utils/validation';
-import { Client } from '../models/client';
+import { ClientDto } from '../models/client';
 import { Moment } from 'moment';
 
 @Component({
@@ -13,9 +13,9 @@ import { Moment } from 'moment';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  client: Client;
+  client: ClientDto;
   private subs = new SubSink();
 
   constructor(
@@ -30,6 +30,10 @@ export class ProfileComponent implements OnInit {
       this.client = data.clientData;
       this.buildForm();
     }));
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   buildForm() {

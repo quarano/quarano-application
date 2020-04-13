@@ -3,16 +3,14 @@ import { SymptomDto } from './../models/symptom';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BackendClient } from '../models/backend-client';
 import { map, share } from 'rxjs/operators';
 import { DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
 import { groupBy } from '../utils/groupBy';
-import { FirstQuery } from '../models/first-query';
 import { ContactPersonDto } from '../models/contact-person';
-import { TenantClient } from '../models/tenant-client';
-import { Client } from '../models/client';
-import { HealthDepartmentDto } from '../models/healtDepartment';
-import { User } from '../models/user';
+import { TenantClientDto } from '../models/tenant-client';
+import { ClientDto } from '../models/client';
+import { HealthDepartmentDto } from '../models/healthDepartment';
+import { UserDto } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +22,7 @@ export class ApiService {
   }
 
   getSymptoms(): Observable<SymptomDto[]> {
-    return this.httpClient.get<SymptomDto[]>(`${this.baseUrl}/symptoms`).pipe(share());
+    return this.httpClient.get<SymptomDto[]>(`${this.baseUrl}/api/symptoms`).pipe(share());
   }
 
   getContactPersons(): Observable<ContactPersonDto[]> {
@@ -36,13 +34,13 @@ export class ApiService {
   }
 
   getDiaryEntry(id: number): Observable<DiaryEntryDto> {
-    return this.httpClient.get<DiaryEntryDto>(`${this.baseUrl}/diaryentries/${id}`)
+    return this.httpClient.get<DiaryEntryDto>(`${this.baseUrl}/api/diary/${id}`)
       .pipe(
         share(),
         map(entry => {
           entry.characteristicSymptoms = entry.symptoms.filter(s => s.characteristic);
           entry.nonCharacteristicSymptoms = entry.symptoms.filter(s => !s.characteristic);
-          entry.dateTime = this.getDate(entry.dateTime);
+          entry.date = this.getDate(entry.date);
           return entry;
         }),
       );
@@ -55,29 +53,33 @@ export class ApiService {
   getGroupedDiaryEntries(): Observable<Map<string, DiaryEntryDto[]>> {
     return this.getDiaryEntries()
       .pipe(
-        map(entries => groupBy<DiaryEntryDto>(entries, e => e.dateTime.toLocaleDateString())),
+        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString())),
       );
   }
 
   getDiaryEntries(): Observable<DiaryEntryDto[]> {
-    return this.httpClient.get<DiaryEntryDto[]>(`${this.baseUrl}/diaryentries`)
+    return this.httpClient.get<DiaryEntryDto[]>(`${this.baseUrl}/api/diary`)
       .pipe(
         share(),
         map(entries => {
-          entries.forEach(e => e.dateTime = this.getDate(e.dateTime));
+          entries.forEach(e => e.date = this.getDate(e.date));
           return entries;
         }));
   }
 
   createDiaryEntry(diaryEntry: DiaryEntryModifyDto): Observable<DiaryEntryDto> {
-    return this.httpClient.post<DiaryEntryDto>(`${this.baseUrl}/diaryentries`, diaryEntry);
+    return this.httpClient.post<DiaryEntryDto>(`${this.baseUrl}/api/diary`, diaryEntry)
+      .pipe(map(entry => {
+        entry.date = this.getDate(entry.date);
+        return entry;
+      }));
   }
 
   modifyDiaryEntry(diaryEntry: DiaryEntryModifyDto) {
-    return this.httpClient.put(`${this.baseUrl}/diaryentries/${diaryEntry.id}`, diaryEntry);
+    return this.httpClient.put(`${this.baseUrl}/api/diary/${diaryEntry.id}`, diaryEntry);
   }
 
-  registerClient(client: Client): Observable<string> {
+  registerClient(client: ClientDto): Observable<string> {
     return this.httpClient.post(`${this.baseUrl}/client/register`, client, { responseType: 'text' });
   }
 
@@ -89,8 +91,8 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/contacts/${contactPerson.id}`, contactPerson);
   }
 
-  getReport(healthDepartmentId: string): Observable<Array<TenantClient>> {
-    return this.httpClient.get<Array<TenantClient>>(`${this.baseUrl}/report/${healthDepartmentId}`);
+  getReport(healthDepartmentId: string): Observable<Array<TenantClientDto>> {
+    return this.httpClient.get<Array<TenantClientDto>>(`${this.baseUrl}/report/${healthDepartmentId}`);
   }
 
   getHealthDepartment(healthDepartmentId: string): Observable<HealthDepartmentDto> {
@@ -101,8 +103,8 @@ export class ApiService {
     return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
   }
 
-  getMe(): Observable<User> {
-    return this.httpClient.get<User>(`${this.baseUrl}/user/me`);
+  getMe(): Observable<UserDto> {
+    return this.httpClient.get<UserDto>(`${this.baseUrl}/user/me`);
   }
 
 }

@@ -1,14 +1,14 @@
 import { EnrollmentService } from './../services/enrollment.service';
-import { FirstQuery } from './../models/first-query';
+import { QuestionnaireDto } from './../models/first-query';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
-export class MyFirstQueryResolver implements Resolve<FirstQuery> {
+export class MyFirstQueryResolver implements Resolve<QuestionnaireDto> {
   constructor(private enrollmentService: EnrollmentService) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<FirstQuery> {
+  resolve(route: ActivatedRouteSnapshot): Observable<QuestionnaireDto> {
     return this.enrollmentService.getFirstQuery();
     // return of(
     //   {

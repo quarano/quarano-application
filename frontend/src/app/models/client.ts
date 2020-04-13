@@ -1,4 +1,4 @@
-export interface Client {
+export interface ClientDto {
   clientCode?: string;
   clientId: number;
   lastName: string;

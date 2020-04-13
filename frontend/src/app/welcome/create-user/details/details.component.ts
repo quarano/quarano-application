@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Client } from '../../../models/client';
+import { ClientDto } from '../../../models/client';
 
 @Component({
   selector: 'app-create-user-details',
@@ -9,7 +9,7 @@ import { Client } from '../../../models/client';
 })
 export class DetailsComponent implements OnInit {
 
-  @Output() client = new EventEmitter<Client>();
+  @Output() client = new EventEmitter<ClientDto>();
 
   // ToDo Error Messages
 

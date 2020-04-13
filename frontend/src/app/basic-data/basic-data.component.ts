@@ -1,7 +1,7 @@
 import { EnrollmentService } from './../services/enrollment.service';
-import { Client } from './../models/client';
+import { ClientDto } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { FirstQuery } from './../models/first-query';
+import { QuestionnaireDto } from './../models/first-query';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
@@ -29,11 +29,11 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
-  client: Client;
+  client: ClientDto;
 
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
-  firstQuery: FirstQuery;
+  firstQuery: QuestionnaireDto;
 
   // ########## STEP III ##########
   thirdFormGroup: FormGroup;

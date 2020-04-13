@@ -27,7 +27,7 @@ export class ContactPersonResolver implements Resolve<ContactPersonDto> {
           houseNumber: null,
           city: null,
           remark: null,
-          isHealthStuff: null,
+          isHealthStaff: null,
           hasPreExistingConditions: null,
           isSenior: null,
           identificationHint: null

@@ -1,21 +1,20 @@
+import { IIdentifiable } from './general';
 import { ContactPersonDto } from './contact-person';
 import { SymptomDto } from './symptom';
 
-export interface DiaryEntryDto {
+export interface DiaryEntryDto extends IIdentifiable {
   bodyTemperature: number;
-  id: number;
   symptoms: SymptomDto[];
   characteristicSymptoms: SymptomDto[];
   nonCharacteristicSymptoms: SymptomDto[];
-  dateTime: Date;
+  date: Date;
   transmittedToHealthDepartment: boolean;
-  contactPersonList: ContactPersonDto[];
+  contacts: ContactPersonDto[];
 }
 
-export interface DiaryEntryModifyDto {
+export interface DiaryEntryModifyDto extends IIdentifiable {
   bodyTemperature: number;
-  id: number;
   symptoms: number[];
-  contactPersonList: number[];
-  dateTime: Date;
+  contacts: number[];
+  date: Date;
 }

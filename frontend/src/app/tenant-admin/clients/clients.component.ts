@@ -4,7 +4,7 @@ import { BackendClient } from '../../models/backend-client';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ApiService } from '../../services/api.service';
-import { TenantClient } from '../../models/tenant-client';
+import { TenantClientDto } from '../../models/tenant-client';
 import { DiaryEntryDto } from '../../models/diary-entry';
 import { filter, takeUntil } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
@@ -25,7 +25,7 @@ import { Subject } from 'rxjs';
 export class ClientsComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['lastName', 'firstName', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
-  public dataSource = new MatTableDataSource<TenantClient>();
+  public dataSource = new MatTableDataSource<TenantClientDto>();
   public healthDepartment$ = this.userService.healthDepartment$;
 
   private readonly destroy$$ = new Subject();
@@ -45,7 +45,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       )
       .subscribe(healthDepartment => {
         this.apiService.getReport(healthDepartment.id)
-          .subscribe((val: Array<TenantClient>) => {
+          .subscribe((val: Array<TenantClientDto>) => {
             this.dataSource.data = val;
           });
         this.dataSource.sort = this.sort;

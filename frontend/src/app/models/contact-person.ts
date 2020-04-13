@@ -12,7 +12,7 @@ export interface ContactPersonDto extends IIdentifiable {
   city: string;
   remark: string;
   identificationHint: string;
-  isHealthStuff: boolean | null;
+  isHealthStaff: boolean | null;
   isSenior: boolean | null;
   hasPreExistingConditions: boolean | null;
 }

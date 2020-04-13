@@ -16,10 +16,10 @@ export class MultipleAutocompleteComponent implements OnInit {
   @Input() control: FormControl;
   @Input() placeholder: string;
   @Input() selectableItems: IIdentifiable[];
-  @Output() removed = new EventEmitter<number>();
-  @Output() added = new EventEmitter<number>();
+  @Output() removed = new EventEmitter<string>();
+  @Output() added = new EventEmitter<string>();
   filteredItems: Observable<IIdentifiable[]>;
-  selectedItemIds: number[];
+  selectedItemIds: string[];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
@@ -53,7 +53,7 @@ export class MultipleAutocompleteComponent implements OnInit {
     this.added.emit(selectedValue);
   }
 
-  remove(id: number): void {
+  remove(id: string): void {
     const index = this.selectedItemIds.indexOf(id);
 
     if (index >= 0) {
@@ -68,7 +68,7 @@ export class MultipleAutocompleteComponent implements OnInit {
     this.control.markAsDirty();
   }
 
-  getNameById(id: number) {
+  getNameById(id: string) {
     const item = this.selectableItems.find(i => i.id === id);
     return this.getName(item);
   }

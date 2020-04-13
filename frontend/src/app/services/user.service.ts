@@ -1,13 +1,13 @@
 import { EnrollmentService } from './enrollment.service';
-import { ClientStatus } from './../models/client-status';
+import { ClientStatusDto } from './../models/client-status';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ApiService } from './api.service';
 import { distinctUntilChanged, filter, map, tap, mergeMap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
-import { HealthDepartmentDto } from '../models/healtDepartment';
-import { User } from '../models/user';
+import { HealthDepartmentDto } from '../models/healthDepartment';
+import { UserDto } from '../models/user';
 
 export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
 
@@ -15,8 +15,8 @@ export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
   providedIn: 'root'
 })
 export class UserService {
-  public readonly user$$ = new BehaviorSubject<User>(null);
-  private readonly clientStatus$$ = new BehaviorSubject<ClientStatus>(null);
+  public readonly user$$ = new BehaviorSubject<UserDto>(null);
+  private readonly clientStatus$$ = new BehaviorSubject<ClientStatusDto>(null);
   public readonly clientStatus$ = this.clientStatus$$.asObservable();
   public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
   public readonly roles$$ = this.tokenService.roles$$;

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FirstQuery } from '../../../models/first-query';
+import { QuestionnaireDto } from '../../../models/first-query';
 import { FIRST_QUERY_QUESTIONS, FirstQueryQuestion } from './first-query-questions';
 import { BehaviorSubject } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FirstQueryComponent {
 
-  @Output() firstQueryEventEmitter = new EventEmitter<FirstQuery>();
+  @Output() firstQueryEventEmitter = new EventEmitter<QuestionnaireDto>();
 
   private questions = FIRST_QUERY_QUESTIONS;
   public currentQuestion$$ = new BehaviorSubject<FirstQueryQuestion>(this.questions['0']);
@@ -19,7 +19,7 @@ export class FirstQueryComponent {
   public currentTextAnswer = '';
   public counter = 0;
 
-  private result: FirstQuery = {
+  private result: QuestionnaireDto = {
     min15MinutesContactWithC19Pat: null,
     nursingActionOnC19Pat: null,
     directContactWithLiquidsOfC19pat: null,

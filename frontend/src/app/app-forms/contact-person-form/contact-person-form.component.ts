@@ -56,7 +56,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
           [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
         city: new FormControl(this.contactPerson.city),
         identificationHint: new FormControl(this.contactPerson.identificationHint),
-        isHealthStuff: new FormControl(this.contactPerson.isHealthStuff),
+        isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),
         isSenior: new FormControl(this.contactPerson.isSenior),
         hasPreExistingConditions: new FormControl(this.contactPerson.hasPreExistingConditions),
         remark: new FormControl(this.contactPerson.remark)

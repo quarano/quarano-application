@@ -1,4 +1,4 @@
-export interface FirstQuery {
+export interface QuestionnaireDto {
   min15MinutesContactWithC19Pat: boolean;
   nursingActionOnC19Pat: boolean;
   directContactWithLiquidsOfC19pat: boolean;

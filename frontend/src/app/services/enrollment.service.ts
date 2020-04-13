@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { FirstQuery } from '../models/first-query';
-import { Client } from '../models/client';
+import { QuestionnaireDto } from '../models/first-query';
+import { ClientDto } from '../models/client';
 import { tap, share, map } from 'rxjs/operators';
-import { ClientStatus } from '../models/client-status';
+import { ClientStatusDto } from '../models/client-status';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +16,8 @@ export class EnrollmentService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getFirstQuery(): Observable<FirstQuery> {
-    return this.httpClient.get<FirstQuery>(`${this.baseUrl}/questionnaire`)
+  getFirstQuery(): Observable<QuestionnaireDto> {
+    return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/questionnaire`)
       .pipe(
         share(),
         map(result => {
@@ -28,12 +28,12 @@ export class EnrollmentService {
         }));
   }
 
-  updateFirstQuery(firstQuery: FirstQuery) {
+  updateFirstQuery(firstQuery: QuestionnaireDto) {
     return this.httpClient.put(`${this.baseUrl}/questionnaire`, firstQuery);
   }
 
-  getPersonalDetails(): Observable<Client> {
-    return this.httpClient.get<Client>(`${this.baseUrl}/details`)
+  getPersonalDetails(): Observable<ClientDto> {
+    return this.httpClient.get<ClientDto>(`${this.baseUrl}/details`)
       .pipe(
         share(),
         map(result => {
@@ -44,12 +44,12 @@ export class EnrollmentService {
         }));
   }
 
-  updatePersonalDetails(client: Client) {
+  updatePersonalDetails(client: ClientDto) {
     return this.httpClient.put(`${this.baseUrl}/details`, client);
   }
 
-  getEnrollmentStatus(): Observable<ClientStatus> {
-    return this.httpClient.get<ClientStatus>(`${this.baseUrl}`)
+  getEnrollmentStatus(): Observable<ClientStatusDto> {
+    return this.httpClient.get<ClientStatusDto>(`${this.baseUrl}`)
       .pipe(share());
   }
 

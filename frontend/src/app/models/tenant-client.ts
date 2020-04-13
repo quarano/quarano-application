@@ -1,7 +1,7 @@
-import {Client} from './client';
-import {DiaryEntryDto} from './diary-entry';
+import { ClientDto } from './client';
+import { DiaryEntryDto } from './diary-entry';
 
-export interface TenantClient extends Client {
+export interface TenantClientDto extends ClientDto {
   diaryEntires: Array<DiaryEntryDto>;
   monitoringStatus: string;
   monitoringMessage: string;

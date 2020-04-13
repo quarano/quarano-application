@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Client } from '../../models/client';
-import { FirstQuery } from '../../models/first-query';
+import { ClientDto } from '../../models/client';
+import { QuestionnaireDto } from '../../models/first-query';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,8 +13,8 @@ export class CreateUserComponent implements OnInit {
 
   public stepperStarted = new Subject<boolean>();
 
-  public client$$: BehaviorSubject<Client> = new BehaviorSubject<Client>(null);
-  public firstQuery$$: BehaviorSubject<FirstQuery> = new BehaviorSubject<FirstQuery>(null);
+  public client$$: BehaviorSubject<ClientDto> = new BehaviorSubject<ClientDto>(null);
+  public firstQuery$$: BehaviorSubject<QuestionnaireDto> = new BehaviorSubject<QuestionnaireDto>(null);
 
   public registerStarted = false;
   public clientCode: string | undefined = undefined;
