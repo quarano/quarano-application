@@ -35,23 +35,27 @@ public class EnrollmentDto {
 	@JsonProperty("_links")
 	public Map<String, Object> getLinks() {
 
-		var questionnareUri = fromMethodCall(on(TrackedCaseController.class).addQuestionaire(null, null, null))
-				.toUriString();
+		var caseController = on(TrackedCaseController.class);
+		var trackingController = on(TrackingController.class);
 
-		var detailsUri = fromMethodCall(on(TrackingController.class).enrollmentOverview(null)).toUriString();
+		var questionnareUri = fromMethodCall(caseController.addQuestionaire(null, null, null)).toUriString();
+		var detailsUri = fromMethodCall(trackingController.enrollmentOverview(null)).toUriString();
+		var encountersUri = fromMethodCall(trackingController.getEncounters(null)).toUriString();
+		var reopenUri = fromMethodCall(caseController.reopenEnrollment(null)).toUriString();
 
 		if (enrollment.isComplete()) {
 			return Map.of(//
 					"details", Map.of("href", detailsUri), //
 					"questionnaire", Map.of("href", questionnareUri), //
-					"contacts", Map.of("href", "/api/enrollment/contacts"));
+					"contacts", Map.of("href", encountersUri), //
+					"reopen", Map.of("href", reopenUri));
 		}
 
 		if (enrollment.isCompletedQuestionnaire()) {
 			return Map.of(//
 					"details", Map.of("href", detailsUri), //
 					"questionnaire", Map.of("href", questionnareUri), //
-					"next", Map.of("href", "/api/enrollment/contacts"));
+					"next", Map.of("href", encountersUri));
 		}
 
 		if (enrollment.isCompletedPersonalData()) {

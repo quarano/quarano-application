@@ -85,18 +85,13 @@ public class TrackingController {
 		return overview(person);
 	}
 
-	@PostMapping("/api/enrollment/encounter")
-	HttpEntity<?> addEnrollmentContacts() {
-		return null;
-	}
-
 	@GetMapping("/api/details")
 	HttpEntity<?> overview(@LoggedIn TrackedPerson person) {
 		return ResponseEntity.ok(mapper.map(person, TrackedPersonDto.class));
 	}
 
 	@PutMapping("/api/details")
-	public HttpEntity<?> createTrackedPerson(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
+	public HttpEntity<?> updateTrackedPersonDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
 		if (errors.hasErrors()) {
@@ -121,7 +116,7 @@ public class TrackingController {
 	}
 
 	@GetMapping("/api/encounters")
-	Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
+	public Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
 
 		return person.getEncounters().stream() //
 				.map(it -> EncounterDto.of(it, person));

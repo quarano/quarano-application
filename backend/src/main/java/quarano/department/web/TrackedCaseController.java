@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.department.EnrollmentCompletion;
 import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
@@ -33,14 +34,18 @@ import java.util.stream.Stream;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -62,7 +67,11 @@ class TrackedCaseController {
 
 	@GetMapping("/api/enrollments")
 	Stream<?> allEnrollments() {
-		return cases.findAll().map(TrackedCase::getEnrollment).stream();
+
+		return cases.findAll() //
+				.map(TrackedCase::getEnrollment) //
+				.map(EnrollmentDto::new) //
+				.stream();
 	}
 
 	@GetMapping("/api/enrollment")
@@ -87,7 +96,11 @@ class TrackedCaseController {
 				.map(TrackedCase::markEnrollmentDetailsSubmitted) //
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
-		return tracking.createTrackedPerson(dto, errors, user);
+		tracking.updateTrackedPersonDetails(dto, errors, user);
+
+		return ResponseEntity.ok() //
+				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+				.build();
 	}
 
 	@GetMapping("/api/enrollment/questionnaire")
@@ -98,7 +111,9 @@ class TrackedCaseController {
 				.map(it -> mapper.map(it, InitialReportDto.class)) //
 				.orElseGet(() -> new InitialReportDto());
 
-		return ResponseEntity.ok(report);
+		return ResponseEntity.ok() //
+				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+				.body(report);
 	}
 
 	@PutMapping(path = "/api/enrollment/questionnaire")
@@ -128,7 +143,42 @@ class TrackedCaseController {
 		trackedCase = apply(dto, trackedCase); //
 		cases.save(trackedCase);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok() //
+				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+				.build();
+	}
+
+	@PostMapping("/api/enrollment/completion")
+	HttpEntity<?> completeEnrollment(@LoggedIn TrackedPerson person,
+			@RequestParam("withoutEncounters") boolean withoutEncounters) {
+
+		var completion = withoutEncounters //
+				? EnrollmentCompletion.WITHOUT_ENCOUNTERS //
+				: EnrollmentCompletion.WITH_ENCOUNTERS;
+
+		cases.findByTrackedPerson(person) //
+				.map(it -> it.markEnrollmentCompleted(completion)) //
+				.map(cases::save);
+
+		return ResponseEntity.ok() //
+				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+				.build();
+	}
+
+	@DeleteMapping("/api/enrollment/completion")
+	HttpEntity<?> reopenEnrollment(@LoggedIn TrackedPerson person) {
+
+		cases.findByTrackedPerson(person) //
+				.map(TrackedCase::reopenEnrollment) //
+				.map(cases::save);
+
+		return ResponseEntity.ok() //
+				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+				.build();
+	}
+
+	private static String getEnrollmentLink() {
+		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}
 
 	private TrackedCase apply(InitialReportDto dto, TrackedCase it) {

@@ -42,14 +42,14 @@ public class Enrollment {
 	private boolean completedQuestionnaire;
 	private boolean completedContactRetro;
 
-	public Enrollment markDetailsSubmitted() {
+	Enrollment markDetailsSubmitted() {
 
 		this.completedPersonalData = true;
 
 		return this;
 	}
 
-	public Enrollment markQuestionaireSubmitted() {
+	Enrollment markQuestionaireSubmitted() {
 
 		if (!completedPersonalData) {
 			throw new EnrollmentException("Cannot submit questionaire before personal details were submitted!");
@@ -63,13 +63,20 @@ public class Enrollment {
 	/**
 	 * @return
 	 */
-	public Enrollment markInitialContactsSubmitted() {
+	Enrollment markEnrollmentCompleted() {
 
 		if (!completedQuestionnaire) {
 			throw new EnrollmentException("Cannot mark contacts submitted before questionaire was submitted!");
 		}
 
 		this.completedContactRetro = true;
+
+		return this;
+	}
+
+	Enrollment reopenEnrollment() {
+
+		this.completedContactRetro = false;
 
 		return this;
 	}

@@ -50,6 +50,10 @@ public class Encounters implements Streamable<Encounter> {
 				.findFirst();
 	}
 
+	public boolean hasAtLeastOneEncounter() {
+		return !encounters.isEmpty();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()

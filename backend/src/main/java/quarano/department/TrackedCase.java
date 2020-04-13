@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
@@ -41,7 +42,8 @@ import org.jddd.core.types.Identifier;
  */
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Setter(AccessLevel.PACKAGE)
+@EqualsAndHashCode(callSuper = true, of = {})
 @Accessors(chain = true)
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
@@ -50,8 +52,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) InitialReport initialReport;
 	private Enrollment enrollment = new Enrollment();
 
-	public TrackedCase() {
+	TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
+	}
+
+	public TrackedCase(TrackedPerson person, Department department) {
+
+		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
+		this.trackedPerson = person;
+		this.department = department;
 	}
 
 	public InitialReport getOrCreateInitialReport() {
@@ -76,9 +85,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	public TrackedCase markEnrollmentContactsSubmitted() {
+	public TrackedCase markEnrollmentCompleted(EnrollmentCompletion completion) {
 
-		this.enrollment.markInitialContactsSubmitted();
+		if (!completion.verify(trackedPerson.getEncounters())) {
+			throw new EnrollmentException("No encounters registered so far! Explicit acknowledgement needed!");
+		}
+
+		this.enrollment.markEnrollmentCompleted();
+
+		return this;
+	}
+
+	public TrackedCase reopenEnrollment() {
+
+		this.enrollment.reopenEnrollment();
 
 		return this;
 	}
