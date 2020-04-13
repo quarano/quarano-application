@@ -32,10 +32,8 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
@@ -46,12 +44,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.Errors;
-import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +55,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -192,29 +186,6 @@ public class TrackingController {
 //		person.getEncounters().havingIdOf(null);
 
 		return null;
-	}
-
-	@ExceptionHandler
-	public HttpEntity<?> handle(HttpMessageNotReadableException o_O) {
-
-		var cause = o_O.getCause();
-
-		if (InvalidFormatException.class.isInstance(cause)) {
-
-			var invalidFormat = (InvalidFormatException) cause;
-
-			Errors errors = new MapBindingResult(new HashMap<>(), "bean");
-
-			String path = invalidFormat.getPath().stream() //
-					.map(it -> it.getFieldName()) //
-					.collect(Collectors.joining("."));
-
-			errors.rejectValue(path, "Invalid." + path);
-
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
-		}
-
-		return ResponseEntity.badRequest().build();
 	}
 
 	@Value
