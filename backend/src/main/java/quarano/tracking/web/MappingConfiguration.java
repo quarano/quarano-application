@@ -20,15 +20,12 @@ import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
-
-import java.util.UUID;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -116,10 +113,6 @@ public class MappingConfiguration {
 			var source = context.getSource();
 
 			return DiaryEntry.of(null, source.getDate());
-
-		}).addMappings(it -> {
-
-			it.using(FLOAT_TO_BODY_TEMPERATURE).map(DiaryEntryDto::getBodyTemperature, DiaryEntry::setBodyTemperature);
 
 		});
 	}

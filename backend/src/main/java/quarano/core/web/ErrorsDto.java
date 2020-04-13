@@ -23,7 +23,7 @@ import java.util.Map;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.Errors;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
 /**
  * @author Oliver Drotbohm
@@ -34,7 +34,7 @@ public class ErrorsDto {
 	private final Errors errors;
 	private final MessageSourceAccessor messages;
 
-	@JsonUnwrapped
+	@JsonAnyGetter
 	Map<String, String> toMap() {
 
 		Map<String, String> fields = new HashMap<>();
@@ -45,5 +45,4 @@ public class ErrorsDto {
 
 		return fields;
 	}
-
 }

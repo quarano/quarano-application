@@ -17,11 +17,10 @@ package quarano.tracking;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
 import quarano.reference.NewSymptom;
@@ -51,7 +50,7 @@ import org.springframework.util.Assert;
 @EqualsAndHashCode(callSuper = true, of = {})
 @Entity(name = "newDE")
 @Accessors(chain = true)
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
@@ -61,8 +60,8 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	private LocalDateTime date;
 	private @ManyToMany List<ContactPerson> contacts = new ArrayList<>();
 	private @ManyToMany List<NewSymptom> symptoms = new ArrayList<>();
-	private @Getter String note;
-	private @Getter BodyTemperature bodyTemperature;
+	private String note;
+	private BodyTemperature bodyTemperature;
 
 	private DiaryEntry(LocalDateTime date, String note) {
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), date, note);
