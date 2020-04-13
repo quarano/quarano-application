@@ -15,10 +15,6 @@
  */
 package quarano.auth.web;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.tracking.TrackedPerson;
-
 import java.util.List;
 
 import org.springframework.core.MethodParameter;
@@ -31,18 +27,22 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+
 /**
- * {@link HandlerMethodArgumentResolver} to inject the {@link TrackedPerson} of the currently logged in user into Spring
+ * {@link HandlerMethodArgumentResolver} to inject the {@link Account} of the currently logged in health department user into Spring
  * MVC controller method parameters annotated with {@link LoggedIn}.
  *
- * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @Component
 @RequiredArgsConstructor
-class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
+class LoggedInAccountArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
 
 	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current user but none available!";
-	private static final ResolvableType TRACKED_PERSON = ResolvableType.forClass(TrackedPerson.class);
+	private static final ResolvableType ACCOUNT = ResolvableType.forClass(Account.class);
 
 	private final @NonNull AuthenticationManager authenticationManager;
 
@@ -54,7 +54,7 @@ class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolv
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-		return authenticationManager.getLoggedInTrackedPerson() //
+		return authenticationManager.getCurrentUser() //
 				.orElseThrow(() -> new ServletRequestBindingException(USER_ACCOUNT_EXPECTED));
 	}
 
@@ -66,7 +66,7 @@ class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolv
 	public boolean supportsParameter(MethodParameter parameter) {
 
 		return parameter.hasParameterAnnotation(LoggedIn.class)
-				&& TRACKED_PERSON.isAssignableFrom(ResolvableType.forMethodParameter(parameter));
+				&& ACCOUNT.isAssignableFrom(ResolvableType.forMethodParameter(parameter));
 	}
 
 	/*

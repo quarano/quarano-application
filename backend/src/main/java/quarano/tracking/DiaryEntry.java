@@ -65,13 +65,17 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	private @Getter BodyTemperature bodyTemperature;
 
 	private DiaryEntry(LocalDateTime date, String note) {
+		this(DiaryEntryIdentifier.of(UUID.randomUUID()), date, note);
+	}
+	
+	DiaryEntry(DiaryEntryIdentifier fixedId, LocalDateTime date, String note) {
 
-		this.id = DiaryEntryIdentifier.of(UUID.randomUUID());
+		this.id = fixedId;
 		this.date = date;
 		this.note = note;
 		this.bodyTemperature = null;
 	}
-
+	
 	public static DiaryEntry of(String note, LocalDateTime date) {
 		return new DiaryEntry(date, note);
 	}
@@ -101,9 +105,9 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 
 	boolean contains(Encounter encounter) {
 
-		if (!encounter.happenedOn(getDate())) {
-			return false;
-		}
+//		if (!encounter.happenedOn(getDate())) {
+//			return false;
+//		}
 
 		return contacts.contains(encounter.getContact());
 	}

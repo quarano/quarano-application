@@ -15,10 +15,10 @@
  */
 package quarano.auth.web;
 
-import static org.mockito.Mockito.*;
-
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.TrackedPersonRepository;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
@@ -29,6 +29,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import quarano.auth.AccountRepository;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -36,11 +40,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class AuthenticationManagerUnitTest {
 
 	@Mock TrackedPersonRepository repository;
+	@Mock AccountRepository accountRepository;
 
 	@Test
 	void looksUpTrackedPersonByLegacyIdIfNeeded() {
 
-		var manager = new AuthenticationManager(repository);
+		var manager = new AuthenticationManager(repository,accountRepository);
 
 		SecurityContextHolder.getContext() //
 				.setAuthentication(getAuthenticationWithDetailsOf(4711L));
@@ -53,7 +58,7 @@ public class AuthenticationManagerUnitTest {
 	@Test
 	void looksUpTrackedPersonById() {
 
-		var manager = new AuthenticationManager(repository);
+		var manager = new AuthenticationManager(repository, accountRepository);
 		var identifier = TrackedPersonIdentifier.of(UUID.randomUUID());
 
 		SecurityContextHolder.getContext() //

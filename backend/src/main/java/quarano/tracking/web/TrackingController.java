@@ -15,20 +15,8 @@
  */
 package quarano.tracking.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import quarano.auth.web.LoggedIn;
-import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.Encounter.EncounterIdentifier;
-import quarano.tracking.PhoneNumber;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
-import quarano.tracking.ZipCode;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -51,6 +39,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import quarano.auth.web.LoggedIn;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.ZipCode;
 
 /**
  * @author Oliver Drotbohm
@@ -110,45 +110,45 @@ public class TrackingController {
 				.map(it -> EncounterDto.of(it, person));
 	}
 
-	@PostMapping("/api/encounters")
-	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, @LoggedIn TrackedPerson person) {
-
-		return contacts.findById(payload.getContactId()) //
-				.filter(it -> it.belongsTo(person)) //
-				.map(it -> person.reportContactWith(it, payload.date)) //
-				.map(it -> {
-					repository.save(person);
-					return it;
-				}) //
-				.<HttpEntity<?>> map(it -> {
-
-					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId().toString(), person);
-					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
-
-					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
-
-				}).orElseGet(() -> ResponseEntity.badRequest().body("Invalid contact identifier!"));
-	}
-
-	@GetMapping("/api/encounters/{id}")
-	HttpEntity<?> getEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
-
-		var identifier = EncounterIdentifier.of(UUID.fromString(id));
-
-		return ResponseEntity.of(person.getEncounters() //
-				.havingIdOf(identifier) //
-				.map(it -> EncounterDto.of(it, person)));
-	}
-
-	@DeleteMapping("/api/encounters/{id}")
-	HttpEntity<?> removeEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
-
-		var identifier = EncounterIdentifier.of(UUID.fromString(id));
-
-		person.getEncounters().havingIdOf(null);
-
-		return null;
-	}
+//	@PostMapping("/api/encounters")
+//	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, @LoggedIn TrackedPerson person) {
+//
+//		return contacts.findById(payload.getContactId()) //
+//				.filter(it -> it.belongsTo(person)) //
+//				.map(it -> person.reportContactWith(it, payload.date)) //
+//				.map(it -> {
+//					repository.save(person);
+//					return it;
+//				}) //
+//				.<HttpEntity<?>> map(it -> {
+//
+//					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId().toString(), person);
+//					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
+//
+//					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
+//
+//				}).orElseGet(() -> ResponseEntity.badRequest().body("Invalid contact identifier!"));
+//	}
+//
+//	@GetMapping("/api/encounters/{id}")
+//	HttpEntity<?> getEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
+//
+//		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+//
+//		return ResponseEntity.of(person.getEncounters() //
+//				.havingIdOf(identifier) //
+//				.map(it -> EncounterDto.of(it, person)));
+//	}
+//
+//	@DeleteMapping("/api/encounters/{id}")
+//	HttpEntity<?> removeEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
+//
+//		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+//
+//		person.getEncounters().havingIdOf(null);
+//
+//		return null;
+//	}
 
 	@Value
 	@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))

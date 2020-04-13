@@ -1,5 +1,14 @@
 package quarano.tracking.web;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,21 +17,11 @@ import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrackedPersonDto {
-
-	private String clientCode;
 
 	private @NotEmpty String lastName;
 	private @NotEmpty String firstName;

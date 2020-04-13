@@ -27,55 +27,29 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.jddd.core.types.Identifier;
-import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
  */
 @Entity
+@RequiredArgsConstructor(staticName = "with", access = AccessLevel.PROTECTED)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
 	private final @Getter @ManyToOne ContactPerson contact;
 	private final @Getter LocalDate date;
 
-	private Encounter(ContactPerson contact, LocalDate date) {
-
-		Assert.notNull(contact, "ContactPerson must not be null!");
-		Assert.notNull(date, "Date must not be null!");
-
-		this.id = EncounterIdentifier.of(UUID.randomUUID());
-		this.contact = contact;
-		this.date = date;
-	}
-
-	public static Encounter with(ContactPerson person, LocalDate date) {
-		return new Encounter(person, date);
-	}
-
-	public boolean isEncounterWith(ContactPerson person) {
+	public boolean with(ContactPerson person) {
 		return this.contact == person;
 	}
 
-	public boolean hasId(EncounterIdentifier id) {
-		return this.id.equals(id);
-	}
-
-	public boolean happenedOn(LocalDate date) {
-		return this.date.equals(date);
-	}
-
-	@Embeddable
 	@EqualsAndHashCode
-	@RequiredArgsConstructor(staticName = "of")
-	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-	public static class EncounterIdentifier implements Identifier, Serializable {
+	static class EncounterIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = -5998761917714158567L;
-		private final UUID encounterId;
+		UUID encounterId;
 	}
 }

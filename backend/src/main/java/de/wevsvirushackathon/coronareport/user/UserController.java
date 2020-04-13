@@ -3,43 +3,40 @@ package de.wevsvirushackathon.coronareport.user;
 import java.text.ParseException;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wevsvirushackathon.coronareport.authentication.Account;
-import de.wevsvirushackathon.coronareport.authentication.AccountRepository;
-import de.wevsvirushackathon.coronareport.client.Client;
-import de.wevsvirushackathon.coronareport.client.ClientDto;
-import de.wevsvirushackathon.coronareport.client.ClientRepository;
-import de.wevsvirushackathon.coronareport.client.MissingClientException;
-import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
-import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InconsistentDataException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+import quarano.auth.AccountRepository;
+import quarano.auth.web.LoggedIn;
+import quarano.department.Department;
+import quarano.department.DepartmentRepository;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
+import quarano.department.web.EnrollmentDto;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.web.TrackedPersonDto;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
-	private ClientRepository clientRepository;
-	private AccountRepository accountRepository;
-	private HealthDepartmentRepository hdRepository;
-	private ModelMapper modelMapper;
+	private final @NonNull TrackedPersonRepository trackedPersonRepository;
+	private final @NonNull AccountRepository accountRepository;
+	private final @NonNull DepartmentRepository hdRepository;
+	private final @NonNull TrackedCaseRepository caseRepository;
+	private final @NonNull ModelMapper modelMapper;
 
-	@Autowired
-	public UserController(ClientRepository clientRepository, AccountRepository accountRepository,
-			HealthDepartmentRepository hdRepository, ModelMapper modelMapper) {
-		this.clientRepository = clientRepository;
-		this.accountRepository = accountRepository;
-		this.hdRepository = hdRepository;
-		this.modelMapper= modelMapper;
-	}
 
 	/**
 	 * Retrieves information of the tracked case, that is currently logged in
@@ -55,40 +52,35 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Bad request"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
 	@GetMapping("/me")
-	public ResponseEntity<UserDto> getMe(Authentication authentication)
+	public ResponseEntity<UserDto> getMe(@LoggedIn Account user)
 			throws UserNotFoundException, InconsistentDataException {
-
-		final String usernameFromAutentication = authentication.getPrincipal().toString();
-		UserDto userDto = new UserDto().withUsername(usernameFromAutentication);
-
-		// if user is a client
-		if (authentication.getDetails() != null) {
-
+		
+		UserDto userDto = new UserDto().withUsername(user.getUsername());
+		
+		if(user.isTrackedPerson()) 
+		{
+			TrackedPerson person = trackedPersonRepository.findById(user.getTrackedPersonId()).orElse(null);
+			TrackedCase trackedCase = caseRepository.findByTrackedPerson(person).orElse(null);
+			
+			
 			// fetch client of authenticated account
-			long clientId = Long.parseLong(authentication.getDetails().toString());
-
-			final Client client = this.clientRepository.findById(clientId)
-					.orElseThrow(() -> new MissingClientException(
-							"No Client found for username '" + authentication.getPrincipal(),
-							authentication.getPrincipal().toString() + "'"));
-
-			userDto.setClient(modelMapper.map(client, ClientDto.class));
-			userDto.setFirstname(client.getFirstname());
-			userDto.setSurename(client.getSurename());
-			userDto.setHealthDepartment(client.getHealthDepartment());
-		} else {
-			// user is no client, it is a employee of the health department
-			Account account = accountRepository.findOneByUsername(usernameFromAutentication)
-					.orElseThrow(() -> new UserNotFoundException(usernameFromAutentication));
-
-			HealthDepartment hd = hdRepository.findById(account.getHdId())
-					.orElseThrow(() -> new InconsistentDataException(
-							"No healthdepartment found for hdid from account : '" + account.getHdId() + "'"));
-			userDto.setHealthDepartment(hd);
-
-			userDto.setFirstname(account.getFirstname());
-			userDto.setSurename(account.getLastname());
+			
+			
+			userDto.setClient(modelMapper.map(person, TrackedPersonDto.class));
+			userDto.setHealthDepartment(trackedCase.getDepartment());
+			userDto.setEnrollment(new EnrollmentDto(trackedCase.getEnrollment()));
 		}
+		else {
+			// user is no client, it is a employee of the health department
+
+			Department hd = hdRepository.findById(user.getDepartmentId())
+					.orElseThrow(() -> new InconsistentDataException(
+							"No healthdepartment found for hdid from account : '" + user.getDepartmentId() + "'"));
+			userDto.setHealthDepartment(hd);
+		}
+		
+		userDto.setFirstName(user.getFirstname());
+		userDto.setLastName(user.getLastname());
 
 		return ResponseEntity.ok(userDto);
 	}

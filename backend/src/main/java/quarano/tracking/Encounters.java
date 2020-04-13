@@ -38,14 +38,15 @@ public class Encounters implements Streamable<Encounter> {
 
 		var reference = LocalDate.now().minus(period);
 
-		return encounters.stream() //
-				.filter(it -> it.getDate().isAfter(reference)) //
-				.anyMatch(it -> it.isEncounterWith(person));
+		return true;
+//		return encounters.stream() //
+//				.filter(it -> it.getDate().isAfter(reference)) //
+//				.anyMatch(it -> it.isEncounterWith(person));
 	}
 
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
 		return encounters.stream() //
-				.filter(it -> it.hasId(id)) //
+//				.filter(it -> it.hasId(id)) //
 				.findFirst();
 	}
 

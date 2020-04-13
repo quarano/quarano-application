@@ -40,13 +40,18 @@ import org.jddd.core.types.Identifier;
 public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
 
 	private final @Getter @Column(unique = true) String name;
-	private final @Getter UUID passCode;
 
-	public Department(String name, UUID passcode) {
+	public Department(String name) {
 
 		this.id = DepartmentIdentifier.of(UUID.randomUUID());
 		this.name = name;
-		this.passCode = passcode;
+	}
+	
+	// fixed Id department for tests and integration data
+	Department(String name, DepartmentIdentifier fixedId) {
+
+		this.id = fixedId;
+		this.name = name;
 	}
 
 	@Embeddable
@@ -55,6 +60,6 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class DepartmentIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID id;
+		final UUID departmentId;
 	}
 }

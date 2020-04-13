@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.department;
-
-import quarano.core.QuaranoRepository;
-import quarano.department.Department.DepartmentIdentifier;
+package quarano.registration;
 
 import java.util.Optional;
 
-/**
- * @author Oliver Drotbohm
- */
-public interface DepartmentRepository extends QuaranoRepository<Department, DepartmentIdentifier> {
+import quarano.core.QuaranoRepository;
+import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 
-	Optional<Department> findByName(String name);
+/**
+ * @author Patrick Otto
+ */
+interface ActivationCodeRepository extends QuaranoRepository<ActivationCode, ActivationCodeIdentifier> {
+
+	Optional<ActivationCode> findById(String code);
 }

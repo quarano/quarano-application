@@ -15,18 +15,6 @@
  */
 package quarano.tracking;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
-import lombok.experimental.Accessors;
-import quarano.core.QuaranoAggregate;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,12 +34,27 @@ import javax.persistence.OneToMany;
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.Value;
+import lombok.experimental.Accessors;
+import quarano.core.QuaranoAggregate;
+import quarano.department.Department;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+
 /**
  * @author Oliver Drotbohm
  */
 @Entity
 @Accessors(chain = true)
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
 
@@ -68,16 +71,23 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<DiaryEntry> entries;
 	private LocalDateTime lastEntryUpdate;
-
+	
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<Encounter> encounters;
 
 	public TrackedPerson(String firstName, String lastName) {
 
-		this.id = new TrackedPersonIdentifier(UUID.randomUUID());
+		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null, null);
+	}
+	
+	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, EmailAddress emailAddress, PhoneNumber phoneNumber, LocalDate dateOfBirth, Department department) {
+
+		this.id = fixedId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.emailAddress = null;
+		this.emailAddress = emailAddress;
+		this.phoneNumber = phoneNumber;
+		this.dateOfBirth = dateOfBirth;
 		this.entries = new ArrayList<>();
 		this.encounters = new ArrayList<>();
 	}

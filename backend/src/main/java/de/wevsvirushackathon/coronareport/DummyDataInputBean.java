@@ -2,7 +2,6 @@ package de.wevsvirushackathon.coronareport;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +29,6 @@ import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
 import de.wevsvirushackathon.coronareport.firstReport.FirstReportRepository;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
 import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
-import de.wevsvirushackathon.coronareport.registration.ActivationCode;
 import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 import lombok.Getter;

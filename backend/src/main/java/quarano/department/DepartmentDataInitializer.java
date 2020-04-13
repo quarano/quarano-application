@@ -15,25 +15,36 @@
  */
 package quarano.department;
 
-import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import java.util.UUID;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartmentRepository;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import quarano.department.Department.DepartmentIdentifier;
+
 /**
  * @author Oliver Drotbohm
  */
 @Component
 @RequiredArgsConstructor
-@Order(550)
-class DepartmentDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+@Order(510)
+@Slf4j
+public class DepartmentDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull HealthDepartmentRepository legacyDepartments;
+	
+	public final static DepartmentIdentifier DEPARTMENT_ID_DEP1 = DepartmentIdentifier.of(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2"));
+	public final static DepartmentIdentifier DEPARTMENT_ID_DEP2 = DepartmentIdentifier.of(UUID.fromString("ca3f3e9a-414a-4117-a623-59b109b269f1"));
+	    
+	public final static Department DEPARTMENT_1 = new Department("GA Mannheim", DEPARTMENT_ID_DEP1);
+	public final static Department DEPARTMENT_2 = new Department("GA Darmstadt", DEPARTMENT_ID_DEP2);
 
 	/*
 	 * (non-Javadoc)
@@ -41,9 +52,12 @@ class DepartmentDataInitializer implements ApplicationListener<ApplicationReadyE
 	 */
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
+		
+		this.log.warn("Testdata: creating two healthdepartmens");
 
-		legacyDepartments.findAll().forEach(it -> {
-			departments.save(new Department(it.getFullName(), it.getPassCode()));
-		});
+        final Department hd1 = this.departments.save(DEPARTMENT_1); 
+        final Department hd2 = this.departments.save(DEPARTMENT_2); 
+	
+	   
 	}
 }

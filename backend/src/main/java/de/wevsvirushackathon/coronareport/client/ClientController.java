@@ -7,17 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.ArgumentType;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InvalidArgumentException;
-import de.wevsvirushackathon.coronareport.registration.AccountRegistrationDetails;
-import de.wevsvirushackathon.coronareport.registration.ActivationCodeExpiredException;
-import de.wevsvirushackathon.coronareport.registration.ActivationNotActiveException;
-import de.wevsvirushackathon.coronareport.registration.CodeNotFoundException;
 import de.wevsvirushackathon.coronareport.user.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -28,27 +22,14 @@ import io.swagger.annotations.ApiResponses;
 public class ClientController {
 
 	private ClientRepository clientRepository;
-	private ClientService clientService;
 	private ModelMapper modelMapper;
 
 	@Autowired
-	public ClientController(ClientRepository clientRepository, ClientService clientService, ModelMapper modelMapper) {
-		this.clientService = clientService;
+	public ClientController(ClientRepository clientRepository, ModelMapper modelMapper) {
 		this.clientRepository = clientRepository;
 		this.modelMapper = modelMapper;
 	}
 	
-
-	@PostMapping("/register")
-	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto) throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException {
-		
-		AccountRegistrationDetails details = new AccountRegistrationDetails();
-		modelMapper.map(registrationDto, details) ;
-
-		clientService.registerAccountForClient(details);
-
-		return ResponseEntity.ok("");
-	}
 
 	/**
 	 * Checks if the given code exists
