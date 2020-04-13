@@ -1,4 +1,4 @@
-package de.wevsvirushackathon.coronareport.user;
+package quarano.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

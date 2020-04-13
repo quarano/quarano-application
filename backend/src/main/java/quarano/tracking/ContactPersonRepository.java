@@ -29,5 +29,4 @@ import org.springframework.stereotype.Repository;
 public interface ContactPersonRepository extends QuaranoRepository<ContactPerson, ContactPersonIdentifier> {
 
 	Streamable<ContactPerson> findByOwnerId(TrackedPersonIdentifier ownerId);
-
 }

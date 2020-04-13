@@ -24,13 +24,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.wevsvirushackathon.coronareport.TestDataProvider;
-import de.wevsvirushackathon.coronareport.user.UserControllerIT;
-import de.wevsvirushackathon.coronareport.user.UserDto;
 import quarano.registration.web.AccountRegistrationDto;
+import quarano.user.UserControllerIT;
+import quarano.user.UserDto;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
+
 public class ClientControllerIT {
 
 	@Autowired

@@ -1,7 +1,5 @@
 package quarano.auth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
@@ -9,9 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.wevsvirushackathon.coronareport.client.Client;
-import de.wevsvirushackathon.coronareport.client.ClientRepository;
-import quarano.department.Department.DepartmentIdentifier;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import quarano.department.DepartmentDataInitializer;
 import quarano.tracking.TrackedPersonDataInitializer;
 
@@ -23,28 +20,19 @@ import quarano.tracking.TrackedPersonDataInitializer;
  */
 @Component
 @Order(500)
+@RequiredArgsConstructor
+@Slf4j
 class AccountDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
-	private AccountRepository accountRepository;
-	private RoleRepository roleRepository;
-	private PasswordEncoder passwordEncoder;
-	private ClientRepository clientRepository;
-
-	private final Log logger = LogFactory.getLog(AccountDataInitializer.class);
-
-	public AccountDataInitializer(AccountRepository accountRepository, PasswordEncoder passwordEncoder,
-			RoleRepository roleRepository, ClientRepository clientRepository) {
-		this.accountRepository = accountRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.roleRepository = roleRepository;
-		this.clientRepository = clientRepository;
-	}
+	private final AccountRepository accountRepository;
+	private final RoleRepository roleRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 
-		logger.warn("Test data: creating 7 accounts");
+		log.warn("Test data: creating 7 accounts");
 
 		Role userRole = roleRepository.findByName("ROLE_USER");
 		Role adminRole = roleRepository.findByName("ROLE_HD_ADMIN");
@@ -57,14 +45,14 @@ class AccountDataInitializer implements ApplicationListener<ApplicationReadyEven
 		// person 1 should not have an account yet
 		
 		// account for person 2
-		Account accountPerson2 = new Account("DemoAccount", "DemoPassword", "Markus", "Hanser",
+		Account accountPerson2 = new Account("DemoAccount", passwordEncoder.encode("DemoPassword"), "Markus", "Hanser",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT.getId(),
 				RoleType.valueOf(userRole.toString()));
 		accountRepository.save(accountPerson2);
 		
 		// account for person 3
-		Account accountPerson3 = new Account("test3", "test123", "Sandra", "Schubert",
+		Account accountPerson3 = new Account("test3", passwordEncoder.encode("test123"), "Sandra", "Schubert",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING.getId(),
 				RoleType.valueOf(userRole.toString()));
@@ -72,19 +60,19 @@ class AccountDataInitializer implements ApplicationListener<ApplicationReadyEven
 		
 		
 		// account for GA user
-		Account accountHD1 = new Account("admin", "admin", "Mark", "Muster",
+		Account accountHD1 = new Account("admin", passwordEncoder.encode("admin"), "Mark", "Muster",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				null,
 				RoleType.valueOf(adminRole.toString()));
 		accountRepository.save(accountHD1);
 		
-		Account accountHD2 = new Account("agent1", "agent1", "Horst", "Hallig",
+		Account accountHD2 = new Account("agent1", passwordEncoder.encode("agent1"), "Horst", "Hallig",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				null,
 				RoleType.valueOf(caseRole.toString()));
 		accountRepository.save(accountHD2);
 		
-		Account accountHD3 = new Account("agent2", "agent2", "Bettina", "Boot",
+		Account accountHD3 = new Account("agent2", passwordEncoder.encode("agent2"), "Bettina", "Boot",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				null,
 				RoleType.valueOf(caseRole.toString()));

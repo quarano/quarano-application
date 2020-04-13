@@ -61,5 +61,9 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	public static class DepartmentIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
 		final UUID departmentId;
+		
+		public String toString() {
+			return departmentId.toString();
+		}
 	}
 }

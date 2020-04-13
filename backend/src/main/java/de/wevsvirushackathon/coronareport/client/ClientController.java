@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.ArgumentType;
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InvalidArgumentException;
-import de.wevsvirushackathon.coronareport.user.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import quarano.user.UserDto;
 
 @RestController
 @RequestMapping("/client")

@@ -1,6 +1,7 @@
 package quarano.reference;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +11,7 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface NewSymptomRepository extends PagingAndSortingRepository<NewSymptom, Long> {
+public interface NewSymptomRepository extends PagingAndSortingRepository<NewSymptom, UUID> {
 
 	/*
 	 * (non-Javadoc)

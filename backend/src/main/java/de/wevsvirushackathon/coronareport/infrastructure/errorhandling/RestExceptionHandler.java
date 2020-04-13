@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import de.wevsvirushackathon.coronareport.client.MissingClientException;
 import de.wevsvirushackathon.coronareport.diary.ClientNotAuthorizedException;
-import de.wevsvirushackathon.coronareport.user.UserNotFoundException;
+import quarano.user.UserNotFoundException;
 
 /**
  * Overrides basic Spring Exception Handling Entries to provide better error

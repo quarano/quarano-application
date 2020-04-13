@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 /**
  * Retriev standard and application specific  information from a JWT token created by quarano application 
@@ -22,15 +24,15 @@ import io.jsonwebtoken.Jwts;
 public class JwtTokenService {
     private String secret;
     private String roleClaimAttribute;
-    private String clientIdClaimAttribute;
+    private String trackedPersonIdClaimAttribute;
 
     @Autowired
     public JwtTokenService(@Value("${jwt.authentication.secret}") String secret,
     		 @Value("${jwt.authentication.claim.role}") String roleClaimAttribute,
-    		 @Value("${jwt.authentication.claim.clientid}") String clientIdClaimAttribute) {
+    		 @Value("${jwt.authentication.claim.trackedpersonid}") String trackedPersonIdClaimAttribute) {
         this.secret = secret;
         this.roleClaimAttribute = roleClaimAttribute;
-        this.clientIdClaimAttribute = clientIdClaimAttribute;
+        this.trackedPersonIdClaimAttribute = trackedPersonIdClaimAttribute;
     }
     
     /**
@@ -38,9 +40,10 @@ public class JwtTokenService {
      * @param token
      * @return
      */
-	public Long getClientIdFromToken(String token) {
+	public TrackedPersonIdentifier getTrackedPersonIdFromToken(String token) {
     	final Claims claims = getAllClaimsFromToken(token);
-    	return  claims.get(clientIdClaimAttribute, Long.class);
+    	String personIdLiteral = claims.get(trackedPersonIdClaimAttribute, String.class);
+    	return TrackedPersonIdentifier.of(UUID.fromString(personIdLiteral));
 	}    
 
     /**

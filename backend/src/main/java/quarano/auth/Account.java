@@ -63,7 +63,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier>{
     }
     
     // for testing purposes
-    Account(String username, String encryptedPassword, String firstname, String lastname, DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, RoleType roletype, UUID fixedUID){
+     Account(String username, String encryptedPassword, String firstname, String lastname, DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, RoleType roletype, UUID fixedUID){
     	super();
     	
     	this.id = AccountIdentifier.of(fixedUID);
@@ -100,7 +100,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier>{
 
 	public boolean isTrackedPerson() {
 		
-		return this.roles.contains(RoleType.ROLE_USER);
+		return this.roles.contains(new Role(RoleType.ROLE_USER));
 		
 	}
 

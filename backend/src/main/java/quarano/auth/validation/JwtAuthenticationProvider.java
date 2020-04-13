@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
 import quarano.auth.RoleType;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 /**
  * An {@link AuthenticationProvider} implementation that creates an
@@ -43,13 +44,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		try {
 			String token = (String) authentication.getCredentials();
 			String username = jwtService.getUsernameFromToken(token);
-			Long clientId = jwtService.getClientIdFromToken(token);
+			TrackedPersonIdentifier personIdentifier = jwtService.getTrackedPersonIdFromToken(token);
 			List<String> roles = jwtService.getRolesFromToken(token);
 			List<RoleType> grantedRoleTypes = roles.stream().map(roleName -> RoleType.valueOf(roleName))
 					.collect(Collectors.toList());
 
 			return jwtService.validateToken(token)
-					.map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes, clientId))
+					.map(aBoolean -> new JwtAuthenticatedProfile(username, grantedRoleTypes, personIdentifier))
 					.orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
 
 		} catch (JwtException ex) {

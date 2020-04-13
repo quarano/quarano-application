@@ -19,9 +19,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
 import quarano.department.InitialReport;
+import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
@@ -29,19 +31,26 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 /**
  * @author Oliver Drotbohm
  */
 @TestInstance(Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 public class MappingConfigurationUnitTests {
 
 	ModelMapper mapper = new ModelMapper();
 
+	@Mock NewSymptomRepository symptoms;
+	@Mock ContactPersonRepository contacts;
+
 	@BeforeAll
 	void setUp() {
-		new MappingConfiguration(mapper);
+		new MappingConfiguration(mapper, symptoms, contacts);
 	}
 
 	@Test

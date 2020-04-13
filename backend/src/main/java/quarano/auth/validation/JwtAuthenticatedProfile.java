@@ -8,20 +8,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import lombok.AllArgsConstructor;
 import quarano.auth.RoleType;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 public class JwtAuthenticatedProfile implements Authentication {
 
     private final String username;
-    private final Long clientId;
+    private final TrackedPersonIdentifier trackedPersonId;
     
     private List<RoleType> roles = new ArrayList<>();
     
-	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes, Long clientId) {
+	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes, TrackedPersonIdentifier trackedPersonId) {
 		this.username = username;
 		this.roles = grantedRoleTypes;
-		this.clientId = clientId;
+		this.trackedPersonId = trackedPersonId;
 	}    
 
     @Override
@@ -40,7 +40,7 @@ public class JwtAuthenticatedProfile implements Authentication {
 
     @Override
     public Object getDetails() {
-        return this.clientId;
+        return this.trackedPersonId;
     }
 
     @Override

@@ -1,11 +1,11 @@
-package de.wevsvirushackathon.coronareport.user;
+package quarano.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import quarano.department.Department;
+import quarano.department.web.DepartmentDto;
 import quarano.department.web.EnrollmentDto;
 import quarano.tracking.web.TrackedPersonDto;
 
@@ -16,7 +16,7 @@ import quarano.tracking.web.TrackedPersonDto;
 public class UserDto {
 
 	@With private String username;
-    private Department healthDepartment;
+    private DepartmentDto healthDepartment;
 	private TrackedPersonDto client;
 	private String firstName;
 	private String lastName;

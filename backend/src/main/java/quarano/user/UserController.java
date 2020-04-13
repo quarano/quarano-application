@@ -1,4 +1,4 @@
-package de.wevsvirushackathon.coronareport.user;
+package quarano.user;
 
 import java.text.ParseException;
 
@@ -21,6 +21,7 @@ import quarano.department.Department;
 import quarano.department.DepartmentRepository;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.DepartmentDto;
 import quarano.department.web.EnrollmentDto;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
@@ -36,7 +37,6 @@ public class UserController {
 	private final @NonNull DepartmentRepository hdRepository;
 	private final @NonNull TrackedCaseRepository caseRepository;
 	private final @NonNull ModelMapper modelMapper;
-
 
 	/**
 	 * Retrieves information of the tracked case, that is currently logged in
@@ -54,31 +54,24 @@ public class UserController {
 	@GetMapping("/me")
 	public ResponseEntity<UserDto> getMe(@LoggedIn Account user)
 			throws UserNotFoundException, InconsistentDataException {
-		
+
 		UserDto userDto = new UserDto().withUsername(user.getUsername());
-		
-		if(user.isTrackedPerson()) 
-		{
-			TrackedPerson person = trackedPersonRepository.findById(user.getTrackedPersonId()).orElse(null);
+
+		Department hd = hdRepository.findById(user.getDepartmentId()).orElseThrow(() -> new InconsistentDataException(
+				"No healthdepartment found for hdid from account : '" + user.getDepartmentId() + "'"));
+		userDto.setHealthDepartment(modelMapper.map(hd, DepartmentDto.class));
+
+		if (user.isTrackedPerson()) {
+			TrackedPerson person = trackedPersonRepository.findById(user.getTrackedPersonId())
+					.orElseThrow(() -> new InconsistentDataException(
+							"Token references not existing trackedPerson with id '" + user.getTrackedPersonId() + "'"));
 			TrackedCase trackedCase = caseRepository.findByTrackedPerson(person).orElse(null);
-			
-			
+
 			// fetch client of authenticated account
-			
-			
 			userDto.setClient(modelMapper.map(person, TrackedPersonDto.class));
-			userDto.setHealthDepartment(trackedCase.getDepartment());
 			userDto.setEnrollment(new EnrollmentDto(trackedCase.getEnrollment()));
 		}
-		else {
-			// user is no client, it is a employee of the health department
 
-			Department hd = hdRepository.findById(user.getDepartmentId())
-					.orElseThrow(() -> new InconsistentDataException(
-							"No healthdepartment found for hdid from account : '" + user.getDepartmentId() + "'"));
-			userDto.setHealthDepartment(hd);
-		}
-		
 		userDto.setFirstName(user.getFirstname());
 		userDto.setLastName(user.getLastname());
 

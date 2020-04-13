@@ -11,13 +11,7 @@ public class TestDataProvider {
 	
 	private static final String INVALID_CLIENT_CODE = "xxxxxxx-xxxx-xxxx-xxx-xxxxxxxxx";
 	
-	@Autowired
-	private DummyDataInputBean dummyData;
 
-	public static String validClientCode() {
-		return DummyDataInputBean.VALID_CLIENT_CODE_DEP1;
-	}
-	
 	public static String invalidClientCode() {
 		return INVALID_CLIENT_CODE;
 	}
@@ -34,9 +28,6 @@ public class TestDataProvider {
 				.infected(true).zipCode("12345").build();
 		return clientDto;
 	}
-	
-	public Client clientWithNoAccount() {
-		return dummyData.getClientWithNoAccount();
-	}
+
 
 }

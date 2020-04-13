@@ -78,6 +78,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	public TrackedPerson(String firstName, String lastName) {
 
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null, null);
+	
 	}
 	
 	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, EmailAddress emailAddress, PhoneNumber phoneNumber, LocalDate dateOfBirth, Department department) {
@@ -144,5 +145,9 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		private static final long serialVersionUID = -853047182358126916L;
 
 		private final UUID trackedPersonId;
+		
+		public String toString() {
+			return trackedPersonId.toString();
+		}
 	}
 }

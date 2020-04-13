@@ -15,7 +15,6 @@
  */
 package quarano.tracking;
 
-import de.wevsvirushackathon.coronareport.symptomes.Symptom;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
+import quarano.reference.NewSymptom;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 
 import java.io.Serializable;
@@ -60,7 +60,7 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 
 	private LocalDateTime date;
 	private @ManyToMany List<ContactPerson> contacts = new ArrayList<>();
-	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
+	private @ManyToMany List<NewSymptom> symptoms = new ArrayList<>();
 	private @Getter String note;
 	private @Getter BodyTemperature bodyTemperature;
 
@@ -88,7 +88,7 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		return date;
 	}
 
-	public DiaryEntry add(Symptom symptom) {
+	public DiaryEntry add(NewSymptom symptom) {
 
 		Assert.notNull(symptom, "Symptom must not be null!");
 

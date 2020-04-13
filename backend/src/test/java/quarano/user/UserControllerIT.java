@@ -1,4 +1,4 @@
-package de.wevsvirushackathon.coronareport.user;
+package quarano.user;
 
 import static de.wevsvirushackathon.coronareport.TestUtil.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,37 +15,44 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import de.wevsvirushackathon.coronareport.CoronareportBackendApplication;
 import de.wevsvirushackathon.coronareport.client.ClientDto;
 import de.wevsvirushackathon.coronareport.client.TokenResponse;
-import de.wevsvirushackathon.coronareport.healthdepartment.HealthDepartment;
+import quarano.Quarano;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.web.TrackedPersonDto;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = {CoronareportBackendApplication.class, Quarano.class})
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
+@ActiveProfiles("integrationtest")
 public class UserControllerIT {
 
 	@Autowired
 	private MockMvc mvc;
 
 
-//	@Test
+	@Test
 	public void testLoginWithValidCredentials() throws Exception {
 
 		// Accounts and password created by dummy data input beans
 		// given
 		final String username = "DemoAccount";
 		final String password = "DemoPassword";
-
-		final HealthDepartment hd1 = HealthDepartment.builder().fullName("Testamt 1").id("Testamt1")
-				.passCode(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2")).build();
-
 		
-		final ClientDto expectedClientDto = ClientDto.builder().firstname("Fabian").surename("Bauer").infected(true)
-				.clientCode("738d3d1f-a9f1-4619-9896-2b5cb3a89c22").phone("0175 664845454")
-				.zipCode("66845").build();
+		final TrackedPerson person = TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT;
+		final TrackedPersonDto expectedPersonDto = TrackedPersonDto.builder()
+				.firstName(person.getFirstName())
+				.lastName(person.getLastName())
+				.infected(true)
+				.email(person.getEmailAddress().toString())
+				.phone(person.getPhoneNumber().toString())
+				.build();
+		
+
 		String requestbody = createLoginRequestBody(username, password);
 
 		// when
@@ -62,17 +67,14 @@ public class UserControllerIT {
 		// check if token is valid for authentication
 		String resultDtoStr = mvc
 				.perform(
-						get("/client/me").header("Origin", "*").header("Authorization", "Bearer " + response.getToken())
+						get("/user/me").header("Origin", "*").header("Authorization", "Bearer " + response.getToken())
 								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse().getContentAsString();
-		ClientDto resultDto = fromJson(resultDtoStr, ClientDto.class);
+		UserDto resultDto = fromJson(resultDtoStr, UserDto.class);
 
 		// then
-		expectedClientDto.setClientId(resultDto.getClientId());
-		expectedClientDto.setClientCode(resultDto.getClientCode());
-
-		Assertions.assertEquals(expectedClientDto, resultDto);
+		Assertions.assertEquals(expectedPersonDto, resultDto.getClient());
 
 	}
 
@@ -83,9 +85,6 @@ public class UserControllerIT {
 		// given
 		final String username = "DemoAccount";
 		final String password = "My-Wrong-Password";
-
-		final HealthDepartment hd1 = HealthDepartment.builder().fullName("Testamt 1").id("Testamt1")
-				.passCode(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2")).build();
 
 		String requestbody = createLoginRequestBody(username, password);
 

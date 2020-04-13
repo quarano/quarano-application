@@ -15,17 +15,14 @@
  */
 package quarano.department;
 
-import de.wevsvirushackathon.coronareport.client.ClientRepository;
-import de.wevsvirushackathon.coronareport.firstReport.FirstReportRepository;
-import lombok.RequiredArgsConstructor;
-import quarano.tracking.TrackedPersonRepository;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import quarano.tracking.TrackedPersonDataInitializer;
 
 /**
  * @author Oliver Drotbohm
@@ -37,12 +34,7 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 
 	private final ModelMapper mapper;
 
-	private final ClientRepository clients;
-	private final TrackedPersonRepository people;
-	private final DepartmentRepository departments;
 	private final TrackedCaseRepository cases;
-
-	private final FirstReportRepository firstReports;
 
 	/*
 	 * (non-Javadoc)
@@ -51,41 +43,38 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 
-		clients.findAll().forEach(it -> {
-
-			var department = departments.findByName(it.getHealthDepartment().getFullName()) //
-					.orElseThrow(() -> new IllegalStateException(
-							String.format("Health department named %s not found!", it.getHealthDepartment().getFullName())));
-
-			people.findByLegacyClientId(it.getClientId()) //
-					.ifPresentOrElse(person -> {
-
-						var case_ = new TrackedCase();
-						case_.setTrackedPerson(person);
-						case_.setDepartment(department);
-
-						var initialReport = Streamable.of(firstReports.findAll()) //
-								.filter(report -> report.getClient().getClientId() == it.getClientId()) //
-								.stream() //
-								.findFirst() //
-								.map(report -> mapper.map(report, InitialReport.class)) //
-								.orElse(null);
-
-						if (it.isCompletedPersonalData()) {
-							case_.markEnrollmentDetailsSubmitted();
-						}
-
-						if (it.isCompletedQuestionnaire()) {
-							case_.submitQuestionnaire(initialReport);
-						}
-
-						if (it.isCompletedContactRetro()) {
-							case_.markEnrollmentContactsSubmitted();
-						}
-
-						cases.save(case_);
-
-					}, () -> new IllegalStateException("Couldn't find tracked person with client id " + it.getClientId()));
-		});
+			var case1 = new TrackedCase();
+			case1.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED);
+			case1.setDepartment(DepartmentDataInitializer.DEPARTMENT_1);
+			cases.save(case1);
+			
+			var case2 = new TrackedCase();
+			case2.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT);
+			case2.setDepartment(DepartmentDataInitializer.DEPARTMENT_1);
+			case2.setEnrollment(new Enrollment());
+			case2.setInitialReport(new InitialReport());
+			cases.save(case2);
+			
+			var case3 = new TrackedCase();
+			case3.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING);
+			case3.setDepartment(DepartmentDataInitializer.DEPARTMENT_2);
+			Enrollment enrollment = new Enrollment();
+			enrollment.markDetailsSubmitted();
+			
+			InitialReport report  = new InitialReport();
+			report.setBelongToLaboratoryStaff(true);
+			report.setBelongToMedicalStaff(true);
+			report.setBelongToNursingStaff(true);
+			report.setDirectContactWithLiquidsOfC19pat(false);
+			report.setFamilyMember(true);
+			report.setFlightCrewMemberWithC19Pat(false);
+			report.setFlightPassengerCloseRowC19Pat(true);
+			report.setMin15MinutesContactWithC19Pat(true);
+			report.setNursingActionOnC19Pat(false);
+			case3.submitQuestionnaire(report);
+			
+			//case3.markEnrollmentContactsSubmitted();
+			case3.setEnrollment(enrollment);
+			cases.save(case3);
 	}
 }

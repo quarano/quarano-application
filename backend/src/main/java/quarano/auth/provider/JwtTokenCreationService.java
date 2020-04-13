@@ -26,18 +26,18 @@ public class JwtTokenCreationService {
 
     private Long expiration;
     private String roleClaimAttribute;
-    private String clientIdClaimAttribute;
+    private String trackedPersonIdClaimAttribute;
 
     public JwtTokenCreationService(@Value("${jwt.authentication"
     		+ ".secret}") String secret,
                            @Value("${jwt.provider.expiration}") Long expiration,
                            @Value("${jwt.authentication.claim.role}") String roleClaimAttribute,
-                           @Value("${jwt.authentication.claim.clientid}") String clientIdClaimAttribute
+                           @Value("${jwt.authentication.claim.trackedpersonid}") String trackedPersonIdClaimAttribute
                            ) {
         this.secret = secret;
         this.expiration = expiration;
         this.roleClaimAttribute = roleClaimAttribute;
-        this.clientIdClaimAttribute = clientIdClaimAttribute;
+        this.trackedPersonIdClaimAttribute = trackedPersonIdClaimAttribute;
     }
 
     public String generateToken(String username, List<Role> roles, TrackedPersonIdentifier trackedPersonId ) {
@@ -48,7 +48,7 @@ public class JwtTokenCreationService {
         Map<String, Object> claims = new HashMap<>();
         claims.put(roleClaimAttribute, roles.stream().map(Role::toString).collect(Collectors.toList()));
         if(trackedPersonId != null) {
-        	claims.put(clientIdClaimAttribute, trackedPersonId);
+        	claims.put(trackedPersonIdClaimAttribute, trackedPersonId.toString());
         }
 
         return Jwts.builder()

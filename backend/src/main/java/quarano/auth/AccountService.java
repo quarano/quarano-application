@@ -2,29 +2,22 @@ package quarano.auth;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 @Component
+@RequiredArgsConstructor
 public class AccountService {
-	
 
-    private PasswordEncoder passwordEncoder;
-	
-	private AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
+	private final AccountRepository accountRepository;
 	
 	private final Log logger = LogFactory.getLog(AccountService.class);
 
-	@Autowired
-	public AccountService(PasswordEncoder passwordEncoder, AccountRepository accountRepository) {
-		super();
-		this.passwordEncoder = passwordEncoder;
-		this.accountRepository = accountRepository;
-	}
 	
 	/**
 	 * creates a new account, encrypts the password and stores it
