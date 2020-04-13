@@ -13,6 +13,7 @@ import {TenantClient} from '../models/tenant-client';
 import {Client} from '../models/client';
 import {HealthDepartmentDto} from '../models/healtDepartment';
 import {User} from '../models/user';
+import {Register} from '../models/register';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,8 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/diaryentries/${diaryEntry.id}`, diaryEntry);
   }
 
-  registerClient(client: Client): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/client/register`, client, { responseType: 'text' });
+  registerClient(registerClient: Register): Observable<string> {
+    return this.httpClient.post(`${this.baseUrl}/client/register`, registerClient, {responseType: 'text'});
   }
 
   getClientByCode(code: string): Observable<Client> {
@@ -109,11 +110,15 @@ export class ApiService {
     return this.httpClient.get<HealthDepartmentDto>(`${this.baseUrl}/healthdepartments/${healthDepartmentId}`);
   }
 
-  login(username: string, password: string): Observable<{token: string}> {
-    return this.httpClient.post<{token: string}>(`${this.baseUrl}/login`, {username, password});
+  login(username: string, password: string): Observable<{ token: string }> {
+    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, {username, password});
   }
 
   getMe(): Observable<User> {
     return this.httpClient.get<User>(`${this.baseUrl}/user/me`);
+  }
+
+  checkClientCode(code: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/client/checkcode/${code}`);
   }
 }

@@ -3,11 +3,11 @@ import {RouterModule, Routes} from '@angular/router';
 import {CreateUserComponent} from './create-user/create-user.component';
 import {RegisterComponent} from './register/register.component';
 import {LoginComponent} from './login/login.component';
-import {IsNotAuthenticatedGuard} from '../guards/is-not-authenticated.guard';
 
 const routes: Routes = [
   { path: 'create-user', component: CreateUserComponent },
-  { path: 'register', component: RegisterComponent, canActivate: [IsNotAuthenticatedGuard] },
+  { path: 'register', component: RegisterComponent },
+  { path: 'register/:clientcode', component: RegisterComponent},
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
