@@ -53,10 +53,10 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 		httpSecurity.authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers("/client/register").permitAll()
+        .antMatchers("/api/registration").permitAll()
         .antMatchers("/public/**").permitAll()
-        .antMatchers("/client/checkcode/**").permitAll()
-        .antMatchers("/registration/checkusername/**").permitAll()
+        .antMatchers("/api/registration/checkcode/**").permitAll()
+        .antMatchers("/api/registration/checkusername/**").permitAll()
         .antMatchers("/user/me").authenticated()
         .antMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')")
         .antMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')")

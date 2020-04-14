@@ -6,6 +6,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +41,14 @@ public class RegistrationController {
 	private final @NonNull AccountRegistry registry;
 	private final @NonNull ActivationCodeService codeService;
 
-	@PostMapping("/client/register")
-	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto)
+	@PostMapping("api/registration")
+	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto, Errors errors)
 			throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException,
 			InconsistentDataException, InvalidAuthentificationDataException {
+		
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().build();
+		}
 
 		AccountRegistrationDetails details = new AccountRegistrationDetails();
 		modelMapper.map(registrationDto, details);
@@ -69,7 +74,7 @@ public class RegistrationController {
 		@ApiResponse(code = 200, message = "OK"),
 		@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
 		@ApiResponse(code = 500, message = "Internal Server error") })
-	@GetMapping("/client/checkcode/{activationCode}")
+	@GetMapping("api/registration/checkcode/{activationCode}")
 	public ResponseEntity<Boolean> doesClientexist(@PathVariable UUID activationCode) throws InvalidArgumentException, CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException {
 		
 		if(null == activationCode) {
@@ -94,7 +99,7 @@ public class RegistrationController {
 		@ApiResponse(code = 200, message = "OK"),
 		@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
 		@ApiResponse(code = 500, message = "Internal Server error") })
-	@GetMapping("/registration/checkusername/{userName}")
+	@GetMapping("api/registration/checkusername/{userName}")
 	public ResponseEntity<Boolean> checkUserName(@PathVariable String userName) throws InvalidArgumentException, InvalidUsernameException {
 		
 		if(null == userName) {
