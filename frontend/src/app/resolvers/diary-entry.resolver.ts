@@ -10,7 +10,7 @@ export class DiaryEntryResolver implements Resolve<DiaryEntryDto> {
   constructor(private apiService: ApiService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<DiaryEntryDto> {
-    const id = Number(route.paramMap.get('id'));
+    const id = route.paramMap.get('id');
 
     if (id) {
       return this.apiService.getDiaryEntry(id);

@@ -29,11 +29,11 @@ export class ApiService {
     return this.httpClient.get<ContactPersonDto[]>(`${this.baseUrl}/api/contacts`).pipe(share());
   }
 
-  getContactPerson(id: number): Observable<ContactPersonDto> {
+  getContactPerson(id: string): Observable<ContactPersonDto> {
     return this.httpClient.get<ContactPersonDto>(`${this.baseUrl}/api/contacts/${id}`).pipe(share());
   }
 
-  getDiaryEntry(id: number): Observable<DiaryEntryDto> {
+  getDiaryEntry(id: string): Observable<DiaryEntryDto> {
     return this.httpClient.get<DiaryEntryDto>(`${this.baseUrl}/api/diary/${id}`)
       .pipe(
         share(),

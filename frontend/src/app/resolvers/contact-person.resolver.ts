@@ -9,7 +9,7 @@ export class ContactPersonResolver implements Resolve<ContactPersonDto> {
   constructor(private apiService: ApiService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ContactPersonDto> {
-    const id = Number(route.paramMap.get('id'));
+    const id = route.paramMap.get('id');
 
     if (id) {
       return this.apiService.getContactPerson(id);
