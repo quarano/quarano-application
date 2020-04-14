@@ -217,6 +217,56 @@
 <!-- 				</configuration> -->
 <!-- 			</plugin> -->
 
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>2.0.0-RC.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj-diagram</artifactId>
+						<version>2.0.1</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>reference</id>
+						<phase>package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<requires>
+								<require>asciidoctor-diagram</require>
+							</requires>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<doctype>book</doctype>
+					<backend>html5</backend>
+					<sourceHighlighter>highlight.js</sourceHighlighter>
+					<resources>
+						<resource>
+							<directory>src/main/asciidoc</directory>
+						</resource>
+					</resources>
+					<attributes>
+						<icons>font</icons>
+						<linkcss>true</linkcss>
+						<numbered>true</numbered>
+						<sectanchors>true</sectanchors>
+						<toc>left</toc>
+						<version>${project.version}</version>
+					</attributes>
+				</configuration>
+			</plugin>
+
 
 			<!-- <plugin> <groupId>com.spotify</groupId> <artifactId>dockerfile-maven-plugin</artifactId> 
 				<version>1.4.12</version> <configuration> <skip>${docker.build.skip}</skip> 
