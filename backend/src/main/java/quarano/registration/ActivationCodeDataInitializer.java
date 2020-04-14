@@ -29,23 +29,23 @@ import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 @Order(500)
 @Slf4j
 @RequiredArgsConstructor
-class ActivationCodeDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class ActivationCodeDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
 	private final ActivationCodeRepository codeRepo;
 	
-	private static final ActivationCode ACTIVATIONCODE_PERSON1 = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
+	public static final ActivationCode ACTIVATIONCODE_PERSON1 = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
 			INDEX_PERSON1_NOT_REGISTERED.getId(),
 			ActivationCodeIdentifier.of(UUID.fromString("acc8b747-1eac-4db4-a8f3-d2a8bbe8320d")));
 	
-	private static final ActivationCode ACTIVATIONCODE_PERSON2_REDEEMED = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
+	public static final ActivationCode ACTIVATIONCODE_PERSON2_REDEEMED = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
 			INDEX_PERSON2_IN_ENROLLMENT.getId(),
 			ActivationCodeIdentifier.of(UUID.fromString("85829049-9c4c-4a20-a854-70e813adaab4")));
 
-	private static final ActivationCode ACTIVATIONCODE_PERSON3_CANCELED = new ActivationCode(LocalDateTime.of(2020, 04, 10, 0, 0),
+	public static final ActivationCode ACTIVATIONCODE_PERSON3_CANCELED = new ActivationCode(LocalDateTime.of(2020, 04, 10, 0, 0),
 			INDEX_PERSON3_WITH_ACTIVE_TRACKING.getId(),
 			ActivationCodeIdentifier.of(UUID.fromString("dc304a58-082a-4b9c-a635-374082658561")));
 	
-	private static final ActivationCode ACTIVATIONCODE_PERSON3_REDEEMED = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
+	public static final ActivationCode ACTIVATIONCODE_PERSON3_REDEEMED = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
 			INDEX_PERSON3_WITH_ACTIVE_TRACKING.getId(),
 			ActivationCodeIdentifier.of(UUID.fromString("80e43d28-24f9-4781-9d0c-f9d722987803")));	
 	

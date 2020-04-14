@@ -15,11 +15,14 @@
  */
 package quarano.registration.web;
 
+import java.util.UUID;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.stereotype.Component;
 
 import quarano.registration.AccountRegistrationDetails;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 /**
  * Customizations for {@link ModelMapper}.
@@ -33,12 +36,14 @@ public class RegistrationMappingConfiguration {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 
-		mapper.typeMap(AccountRegistrationDto.class, AccountRegistrationDetails.class).addMappings(it -> {
-
-			it.map(AccountRegistrationDto::getPassword, AccountRegistrationDetails::setUnencryptedPassword);
-
-		});
-
+		mapper.typeMap(AccountRegistrationDto.class, AccountRegistrationDetails.class)
+			.addMappings(it -> {
+	
+				it.map(AccountRegistrationDto::getPassword, AccountRegistrationDetails::setUnencryptedPassword);
+				it.<UUID> map(AccountRegistrationDto::getClientCode, (target, v) -> target.setActivationCodeLiteral(v));
+				it.<UUID> map(AccountRegistrationDto::getClientId, (target, v) -> target.setTrackedPersonId(TrackedPersonIdentifier.of(v)));
+					
+			});
 
 	}
 }

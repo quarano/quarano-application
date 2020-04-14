@@ -1,6 +1,7 @@
 package quarano.registration;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class AccountRegistrationDetails {
 	private String firstname;
 	private String lastname;
 	private LocalDate dateOfBirth;
-	private String activationCodeLiteral;
+	private UUID activationCodeLiteral;
 	private String email;
 	private TrackedPersonIdentifier trackedPersonId;
 	private DepartmentIdentifier departmentId;

@@ -1,6 +1,7 @@
 package quarano.registration.web;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +18,10 @@ public class AccountRegistrationDto {
 	private String password;
 	private String firstname;
 	private String lastmname;
-	private Date dateOfBirth;
-	private String clientCode;
+	private LocalDate dateOfBirth;
+	private UUID clientCode;
 	private String email;
-	private Long clientId;
+	private UUID clientId;
 	private String departmentId;
 
 }

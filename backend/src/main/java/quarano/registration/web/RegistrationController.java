@@ -2,9 +2,9 @@ package quarano.registration.web;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InconsistentDataException;
 import lombok.NonNull;
@@ -16,14 +16,14 @@ import quarano.registration.ActivationNotActiveException;
 import quarano.registration.CodeNotFoundException;
 import quarano.registration.InvalidAuthentificationDataException;
 
-@Component
+@RestController
 @RequiredArgsConstructor
 public class RegistrationController {
 
 	private final @NonNull ModelMapper modelMapper;
 	private final @NonNull AccountRegistry registry;
 
-	@PostMapping("client/register")
+	@PostMapping("/client/register")
 	public ResponseEntity<String> registerClient(@RequestBody AccountRegistrationDto registrationDto)
 			throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException,
 			InconsistentDataException, InvalidAuthentificationDataException {

@@ -35,7 +35,7 @@ public class AccountRegistry {
 		// #TODO
 
 		ActivationCode code = activationCodeService
-				.redeemCode(ActivationCodeIdentifier.of(UUID.fromString(details.getActivationCodeLiteral())));
+				.redeemCode(ActivationCodeIdentifier.of(details.getActivationCodeLiteral()));
 
 		// get Tracked person and check identity
 		checkIdentity(details, code.getTrackedPersonId());
