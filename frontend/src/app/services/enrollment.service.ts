@@ -50,7 +50,7 @@ export class EnrollmentService {
   }
 
   getEnrollmentStatus(): Observable<ClientStatusDto> {
-    return this.httpClient.get<ClientStatusDto>(`${this.baseUrl}`)
+    return this.httpClient.get<ClientStatusDto>(`${this.baseUrl}/enrollment`)
       .pipe(share());
   }
 

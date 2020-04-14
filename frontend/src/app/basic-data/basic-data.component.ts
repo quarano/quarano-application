@@ -1,3 +1,4 @@
+import { EncounterDto } from './../models/encounter';
 import { EnrollmentService } from './../services/enrollment.service';
 import { ClientDto } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -39,6 +40,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   thirdFormGroup: FormGroup;
   datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
+  encounters: EncounterDto[] = [];
   noRetrospectiveContactsConfirmed = false;
 
   constructor(
@@ -53,6 +55,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       this.contactPersons = data.contactPersons;
       this.firstQuery = data.firstQuery;
       this.client = data.clientData;
+      this.encounters = data.encounters;
       this.buildForms();
     }));
 
@@ -201,10 +204,10 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.datesForRetrospectiveContacts = [];
     const firstSymptomsDay = this.firstQuery.dayOfFirstSymptoms || new Date(this.today);
     const firstDay = firstSymptomsDay.addDays(-2);
-    while (new Date(day.getTime() - day.getTimezoneOffset() * 60000).toISOString().split('T')[0]
-      >= new Date(firstDay.getTime() - firstDay.getTimezoneOffset() * 60000).toISOString().split('T')[0]) {
+    while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
       this.datesForRetrospectiveContacts.push(day);
-      this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl([]));
+      this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl(this.encounters
+        .filter(e => e.date.getDateWithoutTime() === day.getDateWithoutTime())));
       day = day.addDays(-1);
     }
   }

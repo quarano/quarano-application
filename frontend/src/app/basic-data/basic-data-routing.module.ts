@@ -1,3 +1,4 @@
+import { EncountersResolver } from './../resolvers/encounters.resolver';
 import { MyClientDataResolver } from './../resolvers/my-client-data.resolver';
 import { MyFirstQueryResolver } from './../resolvers/my-first-query.resolver';
 import { BasicDataComponent } from './basic-data.component';
@@ -13,7 +14,8 @@ const routes: Routes = [
     {
       contactPersons: ContactPersonsResolver,
       firstQuery: MyFirstQueryResolver,
-      clientData: MyClientDataResolver
+      clientData: MyClientDataResolver,
+      encounters: EncountersResolver
     },
   },
 ];

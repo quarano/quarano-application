@@ -1,6 +1,7 @@
 export interface EncounterDto {
   date: Date;
-  fullName: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface EncounterCreateDto {

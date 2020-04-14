@@ -1,3 +1,4 @@
+import { EncountersResolver } from './../resolvers/encounters.resolver';
 import { AppFormsModule } from './../app-forms/app-forms.module';
 import { MyClientDataResolver } from './../resolvers/my-client-data.resolver';
 import { MyFirstQueryResolver } from './../resolvers/my-first-query.resolver';
@@ -28,6 +29,7 @@ import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
       ContactPersonsResolver,
       MyFirstQueryResolver,
       MyClientDataResolver,
+      EncountersResolver,
       { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
     ]
 })

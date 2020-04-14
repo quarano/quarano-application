@@ -74,6 +74,7 @@ export class MultipleAutocompleteComponent implements OnInit {
   }
 
   getName(item: IIdentifiable) {
+    if (!item) { return ''; }
     let name = '';
     this.nameProperties.forEach(prop => {
       name += item[prop] + ' ';
