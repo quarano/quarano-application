@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.core.web.MapperWrapper;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.TrackedPerson;
@@ -30,7 +31,6 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -46,11 +46,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-class DiaryController {
+public class DiaryController {
 
-	private final @NonNull ModelMapper mapper;
-	private final TrackedPersonRepository people;
-	private final MessageSourceAccessor messages;
+	private final @NonNull MapperWrapper mapper;
+	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/api/diary")
 	Stream<?> getDiary(@LoggedIn TrackedPerson person) {
@@ -68,14 +68,9 @@ class DiaryController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
 
-		DiaryEntry entry = mapper.map(payload, DiaryEntry.class);
-
-		people.save(person.addDiaryEntry(entry));
-
-		var handlerMethod = fromMethodCall(on(DiaryController.class).getDiaryEntry(entry.getId(), person));
-
-		return ResponseEntity.created(handlerMethod.build().toUri()) //
-				.body(mapper.map(entry, DiaryEntryDto.class));
+		return mapper.map(payload, DiaryEntry.class, errors) //
+				.fold(entry -> handle(entry, person), //
+						error -> ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages)));
 	}
 
 	@GetMapping("/api/diary/{identifier}")
@@ -86,5 +81,15 @@ class DiaryController {
 				.map(it -> mapper.map(it, DiaryEntryDto.class));
 
 		return ResponseEntity.of(dto);
+	}
+
+	private HttpEntity<?> handle(DiaryEntry entry, TrackedPerson person) {
+
+		people.save(person.addDiaryEntry(entry));
+
+		var handlerMethod = fromMethodCall(on(DiaryController.class).getDiaryEntry(entry.getId(), person));
+
+		return ResponseEntity.created(handlerMethod.build().toUri()) //
+				.body(mapper.map(entry, DiaryEntryDto.class));
 	}
 }

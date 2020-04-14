@@ -15,12 +15,18 @@
  */
 package quarano.core.web;
 
+import lombok.Getter;
+
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.modelmapper.Converter;
+import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.ErrorMessage;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
@@ -54,7 +60,18 @@ public class RepositoryMappingConfiguration {
 
 				var invoker = invokerFactory.getInvokerFor(context.getDestinationType());
 
-				return invoker.invokeFindById(domainId).orElse(null);
+				return invoker.invokeFindById(domainId) //
+						.orElseThrow(() -> {
+							Class<?> type = context.getParent().getSourceType();
+
+							boolean isCollection = Collection.class.isAssignableFrom(type);
+							var mappingContext = isCollection ? context.getParent() : context;
+							var mapping = mappingContext.getMapping();
+
+							return new AggregateReferenceMappingException(mapping.getPath(), context.getSource(),
+									context.getDestinationType());
+						});
+
 			}
 		};
 
@@ -89,5 +106,34 @@ public class RepositoryMappingConfiguration {
 				mapper.addConverter(toStringOrUuidConverter, information.getType(), it);
 			});
 		});
+	}
+
+	@Getter
+	static class AggregateReferenceMappingException extends MappingException {
+
+		private static final long serialVersionUID = 2554385939537893357L;
+
+		private final String path;
+		private final Object source;
+		private final Class<?> targetType;
+		private final String message;
+
+		public AggregateReferenceMappingException(String path, Object source, Class<?> targetType) {
+
+			super(List.of(new ErrorMessage(message(targetType, source))));
+
+			this.path = cleanUp(path);
+			this.source = source;
+			this.targetType = targetType;
+			this.message = message(targetType, source);
+		}
+
+		private static String message(Class<?> targetType, Object source) {
+			return String.format("Invalid %s reference %s!", targetType.getName(), source);
+		}
+
+		private static String cleanUp(String path) {
+			return !path.contains(".") ? path : path.substring(0, path.indexOf('.'));
+		}
 	}
 }
