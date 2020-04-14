@@ -125,6 +125,8 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		var encounter = Encounter.with(person, date);
 		this.encounters.add(encounter);
 
+		registerEvent(EncounterReported.of(encounter, id));
+
 		return encounter;
 	}
 
@@ -145,6 +147,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@Value(staticConstructor = "of")
 	public static class DiaryEntryAdded implements DomainEvent {
 		DiaryEntry entry;
+		TrackedPersonIdentifier personIdentifier;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class EncounterReported implements DomainEvent {
+		Encounter encounter;
 		TrackedPersonIdentifier personIdentifier;
 	}
 

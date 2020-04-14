@@ -15,22 +15,17 @@
  */
 package quarano.department;
 
-import quarano.core.QuaranoRepository;
-import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.Query;
-
 /**
  * @author Oliver Drotbohm
  */
-public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, TrackedCaseIdentifier> {
+class CompletedInitialReport extends InitialReport {
 
-	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
-
-	@Query("select c from TrackedCase c where c.trackedPerson.id = :identifier")
-	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.department.InitialReport#isComplete()
+	 */
+	@Override
+	public boolean isComplete() {
+		return true;
+	}
 }

@@ -88,12 +88,6 @@ public class TrackedCaseUnitTests {
 
 		return new TrackedCase(person, department) //
 				.markEnrollmentDetailsSubmitted() //
-				.submitQuestionnaire(new InitialReport() {
-
-					@Override
-					public boolean isComplete() {
-						return true;
-					}
-				});
+				.submitQuestionnaire(new CompletedInitialReport());
 	}
 }
