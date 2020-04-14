@@ -26,10 +26,7 @@ export class UserService {
   public readonly isLoggedIn$: Observable<boolean>;
   public readonly isFullyAuthenticated$: Observable<boolean>;
   public readonly isHealthDepartmentUser$: Observable<boolean>;
-
-  public readonly completedPersonalData$: Observable<boolean>;
-  public readonly completedQuestionnaire$: Observable<boolean>;
-  public readonly completedContactRetro$: Observable<boolean>;
+  public readonly completedEnrollment$: Observable<boolean>;
 
   constructor(
     private apiService: ApiService,
@@ -49,9 +46,7 @@ export class UserService {
         map(status => status?.complete)
       );
 
-    this.completedPersonalData$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedPersonalData));
-    this.completedQuestionnaire$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedQuestionnaire));
-    this.completedContactRetro$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.completedContactRetro));
+    this.completedEnrollment$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.complete));
 
     this.isHealthDepartmentUser$ = this.roles$$
       .pipe(

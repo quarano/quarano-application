@@ -281,13 +281,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step
-    #thirdStep
-    [stepControl]="thirdFormGroup"
-    [hasError]="
-      !(hasRetrospectiveContacts() || hasNoRetrospectiveContactsConfirmed())
-    "
-  >
+  <mat-step #thirdStep [stepControl]="thirdFormGroup">
     <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
       <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
@@ -324,10 +318,7 @@
       </ul>
     </div>
     <form [formGroup]="thirdFormGroup">
-      <fieldset
-        *ngFor="let date of datesForRetrospectiveContacts"
-        [class]="hasNoRetrospectiveContactsConfirmed() ? 'hidden' : ''"
-      >
+      <fieldset *ngFor="let date of datesForRetrospectiveContacts">
         <legend>Kontaktpersonen vom {{ date | date: "d.M.y" }}</legend>
 
         <app-multiple-autocomplete
@@ -362,14 +353,6 @@
           </button>
         </div>
       </fieldset>
-      <mat-checkbox
-        [class]="hasRetrospectiveContacts() ? 'hidden' : ''"
-        name="noRetrospectiveContactsConfirmed"
-        formControlName="noRetrospectiveContactsConfirmed"
-        (change)="onCheckboxChanged($event)"
-        >Ich bestätige, im fraglichen Zeitraum keinen relevanten Kontakt zu
-        anderen Personen gehabt zu haben.</mat-checkbox
-      >
       <div class="mt-3">
         <button mat-raised-button matStepperPrevious>
           <mat-icon>arrow_back</mat-icon>Zurück
@@ -378,7 +361,7 @@
           mat-raised-button
           color="primary"
           class="ml-3"
-          [routerLink]="['/diary']"
+          (click)="onComplete()"
           [disabled]="thirdStep.hasError"
         >
           <mat-icon>check</mat-icon>Erfassung abschließen

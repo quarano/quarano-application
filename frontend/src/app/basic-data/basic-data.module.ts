@@ -12,6 +12,7 @@ import { BasicDataComponent } from './basic-data.component';
 import { BasicDataRoutingModule } from './basic-data-routing.module';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { ConfirmationDialogModule } from '../ui/confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
     FormsModule,
     ReactiveFormsModule,
     MultipleAutocompleteModule,
-    AppFormsModule
+    AppFormsModule,
+    ConfirmationDialogModule
   ],
   declarations: [BasicDataComponent],
   providers:

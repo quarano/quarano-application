@@ -1,9 +1,9 @@
-import { EncounterDto } from './../models/encounter';
+import { EncounterDto, EncounterEntry } from './../models/encounter';
 import { EnrollmentService } from './../services/enrollment.service';
 import { ClientDto } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { QuestionnaireDto } from './../models/first-query';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
@@ -17,6 +17,7 @@ import { VALIDATION_PATTERNS } from '../utils/validation';
 import { debounceTime } from 'rxjs/operators';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-basic-data',
@@ -40,7 +41,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   thirdFormGroup: FormGroup;
   datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
-  encounters: EncounterDto[] = [];
+  encounters: EncounterEntry[] = [];
   noRetrospectiveContactsConfirmed = false;
 
   constructor(
@@ -48,7 +49,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
-    private enrollmentService: EnrollmentService) { }
+    private enrollmentService: EnrollmentService,
+    private router: Router) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -197,9 +199,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   // ########## STEP III ##########
 
   buildThirdForm() {
-    this.thirdFormGroup = this.formBuilder.group({
-      noRetrospectiveContactsConfirmed: new FormControl(false)
-    });
+    this.thirdFormGroup = new FormGroup({});
     let day = new Date(this.today);
     this.datesForRetrospectiveContacts = [];
     const firstSymptomsDay = this.firstQuery.dayOfFirstSymptoms || new Date(this.today);
@@ -207,7 +207,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl(this.encounters
-        .filter(e => e.date.getDateWithoutTime() === day.getDateWithoutTime())));
+        .filter(e => e.date === day.getDateWithoutTime())
+        .map(e => e.contactPersonId)));
       day = day.addDays(-1);
     }
   }
@@ -228,15 +229,22 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date, contact: id })
-      .subscribe(_ => {
+    this.enrollmentService.createEncounter({ date: date.getDateWithoutTime(), contact: id })
+      .subscribe(encounter => {
+        this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
       });
   }
 
   onContactRemoved(date: Date, id: string) {
-    // ToDo: call api delete
-    this.snackbarService.success('Kontakt erfolgreich entfernt');
+    const encounterToRemove = this.encounters.find(e =>
+      e.contactPersonId === id
+      && e.date === date.getDateWithoutTime());
+    this.enrollmentService.deleteEncounter(encounterToRemove.encounter)
+      .subscribe(_ => {
+        this.encounters = this.encounters.filter(e => e !== encounterToRemove);
+        this.snackbarService.success('Kontakt erfolgreich entfernt');
+      });
   }
 
   hasRetrospectiveContacts(): boolean {
@@ -251,17 +259,33 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  hasNoRetrospectiveContactsConfirmed(): boolean {
-    return this.thirdFormGroup.controls.noRetrospectiveContactsConfirmed.value;
+  onComplete() {
+    if (!this.hasRetrospectiveContacts()) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          title: 'Keine relevanten Kontakte?',
+          text:
+            'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
+            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten'
+        }
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(result => {
+          if (result) {
+            this.completeEnrollment(true);
+          }
+        });
+    } else {
+      this.completeEnrollment(false);
+    }
   }
 
-  onCheckboxChanged(event: MatCheckboxChange) {
-    if (event.checked) {
-      this.enrollmentService.completeEnrollment(true)
-        .subscribe(_ => this.snackbarService.success('Die Registrierung wurde als abgeschlossen markiert'));
-    } else {
-      this.enrollmentService.reopenEnrollment()
-        .subscribe(_ => this.snackbarService.success('Die Registrierung wurde wieder zum Bearbeiten freigeschaltet'));
-    }
+  private completeEnrollment(withoutEncounters: boolean) {
+    this.enrollmentService.completeEnrollment(withoutEncounters)
+      .subscribe(_ => {
+        this.snackbarService.success('Die Registrierung wurde abgeschlossen');
+        this.router.navigate(['/diary']);
+      });
   }
 }

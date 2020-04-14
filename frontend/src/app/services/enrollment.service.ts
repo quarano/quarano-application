@@ -1,10 +1,11 @@
+import { EncounterEntry } from './../models/encounter';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { QuestionnaireDto } from '../models/first-query';
 import { ClientDto } from '../models/client';
-import { tap, share, map } from 'rxjs/operators';
+import { tap, share, map, mergeMap } from 'rxjs/operators';
 import { ClientStatusDto } from '../models/client-status';
 import { EncounterDto, EncounterCreateDto } from '../models/encounter';
 
@@ -54,28 +55,28 @@ export class EnrollmentService {
       .pipe(share());
   }
 
-  getEncounters(): Observable<EncounterDto[]> {
+  getEncounters(): Observable<EncounterEntry[]> {
     return this.httpClient.get<EncounterDto[]>(`${this.baseUrl}/encounters`)
-      .pipe(share(), map(encounters => {
-        return encounters.map(encounter => {
-          encounter.date = new Date(encounter.date);
-          return encounter;
-        });
+      .pipe(share(), map(encounters => encounters.map(e => this.mapEncounterToEncounterEntry(e))));
+  }
+
+  private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
+    return { encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0] };
+  }
+
+  createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
+    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto)
+      .pipe(map(encounter => {
+        return this.mapEncounterToEncounterEntry(encounter);
       }));
   }
 
-  createEncounter(createDto: EncounterCreateDto): Observable<EncounterDto> {
-    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto)
-      .pipe(map(encounter => {
-        encounter.date = new Date(encounter.date);
-        return encounter;
-      }));
+  deleteEncounter(encounter: EncounterDto) {
+    return this.httpClient.delete(encounter._links.self.href);
   }
 
   completeEnrollment(withoutEncounters: boolean) {
-    const params = new HttpParams();
-    params.append('withoutEncounters', withoutEncounters.toString());
-    return this.httpClient.post(`${this.baseUrl}/enrollment/completion`, { params });
+    return this.httpClient.post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {});
   }
 
   reopenEnrollment() {
