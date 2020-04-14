@@ -224,12 +224,14 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     }));
   }
 
-  onContactAdded(date: Date, id: number) {
-    // ToDo: call api post
-    this.snackbarService.success('Kontakt erfolgreich gespeichert');
+  onContactAdded(date: Date, id: string) {
+    this.enrollmentService.createEncounter({ date, contact: id })
+      .subscribe(_ => {
+        this.snackbarService.success('Kontakt erfolgreich gespeichert');
+      });
   }
 
-  onContactRemoved(date: Date, id: number) {
+  onContactRemoved(date: Date, id: string) {
     // ToDo: call api delete
     this.snackbarService.success('Kontakt erfolgreich entfernt');
   }
@@ -252,9 +254,11 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   onCheckboxChanged(event: MatCheckboxChange) {
     if (event.checked) {
-      // ToDo: tell api that contact step is completed
+      this.enrollmentService.completeEnrollment(true)
+        .subscribe(_ => this.snackbarService.success('Die Registrierung wurde als abgeschlossen markiert'));
     } else {
-      // ToDo: tell api that contact step is not yet completed
+      this.enrollmentService.reopenEnrollment()
+        .subscribe(_ => this.snackbarService.success('Die Registrierung wurde wieder zum Bearbeiten freigeschaltet'));
     }
   }
 }
