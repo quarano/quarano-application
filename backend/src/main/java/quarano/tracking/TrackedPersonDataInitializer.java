@@ -70,7 +70,7 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 			LocalDate.of(1990, 1, 1), DepartmentDataInitializer.DEPARTMENT_1);
 	
 	public static TrackedPerson INDEX_PERSON3_WITH_ACTIVE_TRACKING = new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2, "Sandra",
-			"Schubert", EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"),
+			"Schubert", EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"),
 			LocalDate.of(1990, 1, 1), DepartmentDataInitializer.DEPARTMENT_1);
 	
 
