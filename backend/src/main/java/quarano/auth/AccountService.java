@@ -14,7 +14,7 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 public class AccountService {
 
     private final PasswordEncoder passwordEncoder;
-	private final AccountRepository accountRepository;
+	private final AccountRepository accounts;
 	
 	private final Log logger = LogFactory.getLog(AccountService.class);
 
@@ -35,11 +35,16 @@ public class AccountService {
 		String encryptedPassword = passwordEncoder.encode(unencryptedPassword);
 		
 		Account account = new Account(username, encryptedPassword, firstname, lastename, departmentId, trackedPersonIdentifier, roleType);
-		account = accountRepository.save(account);
+		account = accounts.save(account);
 		
 		logger.info("Created account for client " + trackedPersonIdentifier + " with username " + username);
 		
 		return account;
+	}
+
+
+	public boolean isUsernameAvailable(String userName) {
+		return accounts.findByUsername(userName).isEmpty();
 	}
 
 }

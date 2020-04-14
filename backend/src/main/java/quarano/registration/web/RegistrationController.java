@@ -29,6 +29,7 @@ import quarano.registration.ActivationCodeService;
 import quarano.registration.ActivationNotActiveException;
 import quarano.registration.CodeNotFoundException;
 import quarano.registration.InvalidAuthentificationDataException;
+import quarano.registration.InvalidUsernameException;
 import quarano.user.UserDto;
 
 @RestController
@@ -76,6 +77,31 @@ public class RegistrationController {
 		}
 		
 		codeService.getCodeIfValid(ActivationCodeIdentifier.of(activationCode));
+		
+		return ResponseEntity.ok(true);
+	}
+	
+	
+	/**
+	 * Checks if the given username is available and complient to username conventions
+	 * 
+	 * @return true if the username is available and valid, error json otherwise
+	 * @throws InvalidArgumentException 
+	 * @throws InvalidUsernameException 
+	 */
+	@ApiOperation(value = "Check if the given activation code is valid", response = UserDto.class)
+	@ApiResponses(value = { 
+		@ApiResponse(code = 200, message = "OK"),
+		@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
+		@ApiResponse(code = 500, message = "Internal Server error") })
+	@GetMapping("/registration/checkusername/{userName}")
+	public ResponseEntity<Boolean> checkUserName(@PathVariable String userName) throws InvalidArgumentException, InvalidUsernameException {
+		
+		if(null == userName) {
+			throw new InvalidArgumentException("userName", "Username '"+ userName + "' not given.", ArgumentType.PATH_VARIABLE, "");
+		}
+		
+		registry.checkIfUserNameAvailableAndValid(userName);
 		
 		return ResponseEntity.ok(true);
 	}

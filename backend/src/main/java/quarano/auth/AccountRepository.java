@@ -9,4 +9,6 @@ import quarano.auth.Account.AccountIdentifier;
 public interface AccountRepository extends CrudRepository<Account, AccountIdentifier> {
 
     Optional<Account> findOneByUsername(String username);
+
+	Optional<Account> findByUsername(String userName);
 }

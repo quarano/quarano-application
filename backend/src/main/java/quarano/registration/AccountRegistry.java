@@ -1,7 +1,5 @@
 package quarano.registration;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,5 +75,14 @@ public class AccountRegistry {
 				details.getFirstname(), details.getLastname(), details.getDepartmentId(), details.getTrackedPersonId(),
 				RoleType.ROLE_USER);
 
+	}
+
+	public void checkIfUserNameAvailableAndValid(String userName) throws InvalidUsernameException {
+		
+		if(!accountService.isUsernameAvailable(userName)) {
+			throw new InvalidUsernameException("Username is not available");
+		}
+		
+		// check username pattern
 	}
 }
