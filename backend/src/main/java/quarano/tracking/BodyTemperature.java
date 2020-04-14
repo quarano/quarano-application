@@ -15,6 +15,7 @@
  */
 package quarano.tracking;
 
+import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.springframework.data.domain.Range;
+import org.springframework.util.NumberUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -38,12 +40,35 @@ public class BodyTemperature {
 	@Column(name = "temperature") //
 	private final @Getter float value;
 
+	/**
+	 * Returns whether the current {@link BodyTemperature} exceeds the given one.
+	 *
+	 * @param that must not be {@literal null}.
+	 * @return
+	 */
 	public boolean exceeds(BodyTemperature that) {
+
+		Assert.notNull(that, "BodyTemperature must not be null!");
+
 		return this.value > that.value;
 	}
 
 	public static boolean isValid(float value) {
 		return VALID.contains(value);
+	}
+
+	/**
+	 * Parses a {@link BodyTemperature} from the given source {@link String}. Required by Spring Boot's configuration
+	 * properties binding.
+	 *
+	 * @param source must not be {@literal null} or empty.
+	 * @return
+	 */
+	public static BodyTemperature from(String source) {
+
+		Assert.hasText(source, "No body temperature source value given!");
+
+		return new BodyTemperature(NumberUtils.parseNumber(source, Float.class));
 	}
 
 	/*

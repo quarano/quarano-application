@@ -18,7 +18,6 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
@@ -31,9 +30,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ActionItemEventListener {
 
-	private static final BodyTemperature REFERENCE = BodyTemperature.of(40.0f);
-
 	private final @NonNull ActionItemRepository items;
+	private final @NonNull ConspicuityProperties config;
 
 	@EventListener
 	void on(DiaryEntryAdded event) {
@@ -43,11 +41,11 @@ public class ActionItemEventListener {
 
 		// Body temperature exceeds reference
 
-		if (entry.getBodyTemperature().exceeds(REFERENCE)) {
+		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
 
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE, //
 					entry.getBodyTemperature(), //
-					REFERENCE);
+					config.getTemperatureThreshold());
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
 		}
