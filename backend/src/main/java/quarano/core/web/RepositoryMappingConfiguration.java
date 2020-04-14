@@ -39,9 +39,9 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-public class RepositoryMappingConfiguration {
+class RepositoryMappingConfiguration {
 
-	public RepositoryMappingConfiguration(ModelMapper mapper, ApplicationContext context, ConversionService conversions) {
+	RepositoryMappingConfiguration(ModelMapper mapper, ApplicationContext context, ConversionService conversions) {
 
 		Repositories repositories = new Repositories(context);
 		RepositoryInvokerFactory invokerFactory = new DefaultRepositoryInvokerFactory(repositories);
@@ -102,6 +102,7 @@ public class RepositoryMappingConfiguration {
 			idTypes.addAll(Set.of(UUID.class, String.class));
 			idTypes.add(domainIdType);
 			idTypes.forEach(it -> {
+
 				mapper.addConverter(converter, it, information.getType());
 				mapper.addConverter(toStringOrUuidConverter, information.getType(), it);
 			});

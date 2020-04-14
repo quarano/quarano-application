@@ -1,12 +1,15 @@
 package quarano.tracking.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
 import lombok.Data;
 import lombok.Getter;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
-import java.util.UUID;
+import java.util.Map;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -17,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 class ContactPersonDto {
 
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
-	private UUID id;
+	private ContactPersonIdentifier id;
 
 	private @NotEmpty String lastName, firstName, street;
 	private String houseNumber;
@@ -31,4 +34,12 @@ class ContactPersonDto {
 	private Boolean isHealthStaff;
 	private Boolean isSenior;
 	private Boolean hasPreExistingConditions;
+
+	@JsonProperty("_links")
+	public Map<String, Object> getLinks() {
+
+		var contactResource = on(ContactPersonController.class).getContact(null, id);
+
+		return Map.of("self", Map.of("self", fromMethodCall(contactResource).toUriString()));
+	}
 }
