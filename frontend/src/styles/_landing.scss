@@ -1,0 +1,29 @@
+@import "variables";
+
+.landing__section {
+  width: 100%;
+
+  .section__content {
+    max-width: 1070px;
+    margin: 0 auto;
+    padding: 40px 25px;
+  }
+
+  .section__content--flex {
+    display: flex;
+    flex-direction: row;
+
+    @media all and (max-width: $break-md) {
+      flex-wrap: wrap;
+
+      &>div:not(:last-of-type) {
+        margin-bottom: 40px;
+      }
+
+    }
+  }
+}
+
+.landing__section--background {
+  background-color: rgba(120, 120, 120, 0.08);
+}

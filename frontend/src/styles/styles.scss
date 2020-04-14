@@ -5,6 +5,7 @@
 @import "forms";
 @import "alignment";
 @import "colors";
+@import "landing";
 
 @include mat-core();
 
@@ -13,7 +14,6 @@
 html,
 body {
   height: 100%;
-  background-color: #fafafa;
 }
 
 body {

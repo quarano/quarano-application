@@ -1,0 +1,62 @@
+<section class="landing__section section--hero">
+  <div class="section__content section__content--flex align-items-center">
+    <div>
+      <h1>Einfache Beobachtung von Krankheitsverläufen</h1>
+      <p>Quarano entlastet Gesundheitsämter und Bürger bei der Überwachung von Krankheitsverläufen bei
+        Epidemiefällen.</p>
+      <div class="pl-0">
+        <button mat-raised-button class="mr-2">Infos für Behörden</button>
+        <button mat-raised-button class="mr-2">Infos für Bürger</button>
+        <button mat-raised-button>Kontakt</button>
+      </div>
+    </div>
+    <img style="max-width: 100%;" src="assets/landing/computer.png">
+  </div>
+</section>
+<section class="landing__section">
+  <div class="section__content">
+    <h1>Einfache Beobachtung von Krankheitsverläufen</h1>
+    <p>Quarano entlastet Gesundheitsämter und Bürger bei der Überwachung von Krankheitsverläufen bei
+      Epidemiefällen.</p>
+  </div>
+</section>
+<section class="landing__section landing__section--background">
+  <div class="section__content">
+    <h1>Kontakt</h1>
+    <p>Wenn Sie Fragen haben, oder weitere Informationen wünschen, füllen Sie einfach das folgende Formular aus:</p>
+    <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+      <div class="section__content--flex contact-form" style="justify-content: space-between">
+        <div>
+          <mat-form-field class="form__input--full-width" appearance="outline">
+            <mat-label>Name*</mat-label>
+            <input matInput formControlName="name" placeholder="Name">
+          </mat-form-field>
+          <mat-form-field class="form__input--full-width" appearance="outline">
+            <mat-label>Telefon</mat-label>
+            <input matInput formControlName="phone" placeholder="Telefon">
+          </mat-form-field>
+          <mat-form-field class="form__input--full-width" appearance="outline">
+            <mat-label>E-Mail</mat-label>
+            <input matInput formControlName="email" placeholder="E-Mail">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form__input--full-width" appearance="outline">
+            <mat-label>Ihre Nachricht*</mat-label>
+            <textarea matInput formControlName="message" placeholder="Ihre Nachricht" rows="4"></textarea>
+          </mat-form-field>
+          <p><small>* Pflichtfelder</small></p>
+          <button mat-raised-button type="submit" [disabled]="contactForm.invalid">Senden</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<section class="landing__section">
+  <div class="section__content text-center">
+    <div class="logos">
+      <img src="assets/sponsored_by_intersoft.png">
+      <img src="assets/Logo_Projekt_01.png">
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+@import "../../../styles/variables";
+
+.section--hero {
+  background: linear-gradient(45deg, #085078 10%, #85d8ce 90%);
+  color: #fff;
+
+  button {
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+}
+
+.logos {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  @media all and (max-width: $break-md) {
+    flex-wrap: wrap;
+    img {
+      max-height: 60px;
+    }
+  }
+
+  img {
+    max-height: 110px;
+    max-width: 100%;
+
+    @media all and (max-width: $break-md) {
+      max-height: 80px;
+      max-width: 100%;
+    }
+  }
+}
+
+.contact-form {
+  display: flex;
+  justify-content: space-between;
+
+  @media all and (max-width: $break-md) {
+    flex-wrap: wrap;
+  }
+
+  div {
+    width: 45%;
+
+    @media all and (max-width: $break-md) {
+      width: 70%;
+    }
+  }
+}

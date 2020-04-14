@@ -1,0 +1,118 @@
+@import "../../styles/variables";
+
+.menu--shadow {
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+}
+
+header{
+  @extend .menu--shadow;
+  padding: 22px 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  z-index: 1000;
+  background-color: #fff;
+  height: 94px;
+
+  .small-device-only {
+    @media all and (min-width: $break-md + 1) {
+      display: none;
+      max-width: 0;
+    }
+  }
+  .small-device-hide {
+    @media all and (max-width: $break-md) {
+      display: none;
+      max-width: 0;
+    }
+  }
+
+  .landing__menu {
+    margin: 0 auto;
+    max-width: 1170px;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+    display: flex;
+    place-content: center flex-start;
+    align-items: center;
+
+    @media all and (max-width: $break-md) {
+      place-content: center center;
+    }
+  }
+
+  .landing__menu--mobile {
+    width: 100%;
+    top: 94px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 900;
+    overflow: hidden;
+    transform-origin: top;
+
+    @extend .menu--shadow;
+
+    nav {
+      transition: visibility 0s, opacity 0.5s linear;
+      button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  }
+}
+
+@keyframes expand-mobile-menu {
+  from {
+    opacity: 0;
+    height: 0;
+    background-color: #fff;
+  }
+  to {
+    opacity: 1;
+    background-color: #fff;
+    height: auto;
+  }
+}
+
+.flex-space {
+  flex: 1 1 auto;
+}
+
+.content {
+  padding-top: 94px;
+}
+
+footer {
+  padding: 22px 0;
+  width: 100%;
+  z-index: 999;
+  color: #fafafa;
+  background-color: rgba(18, 8, 22, .3);
+
+  .footer__menu {
+    margin: 0 auto;
+    max-width: 1170px;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+    display: flex;
+    place-content: center center;
+    align-items: center;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  border: #ffffff;
+
+  &:focus {
+    outline: none;
+  }
+}

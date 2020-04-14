@@ -1,0 +1,48 @@
+<header>
+  <div class="landing__menu">
+    <img
+      id="logo"
+      src="../../../assets/quarano_transparent_logo.png"
+      [routerLink]="['/']"
+      height="50px"
+      class="clickable ml-1"
+    />
+    <h2 class="clickable ml-2 mb-0" [routerLink]="['/']">
+      quarano
+    </h2>
+    <div class="flex-space small-device-only"></div>
+    <button mat-icon-button class="small-device-only" (click)="toggleMobileMenu()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <div class="landing__menu--mobile small-device-only" [@toggleMenu]="showMobileMenu ? 'open' : 'closed'">
+      <nav>
+        <button mat-button (click)="navigate('/home')">Home</button>
+        <button mat-button>Bürger</button>
+        <button mat-button>Gesundheitsämter</button>
+        <mat-divider></mat-divider>
+        <button mat-button>Login</button>
+        <button mat-button>Registrieren</button>
+      </nav>
+    </div>
+    <nav class="ml-3 small-device-hide">
+      <button mat-button mat-menu-item (click)="navigate('/home')">Home</button>
+      <button mat-button mat-menu-item>Bürger</button>
+      <button mat-button mat-menu-item>Gesundheitsämter</button>
+    </nav>
+    <div class="flex-space small-device-hide"></div>
+    <nav class="small-device-hide">
+      <button mat-button mat-menu-item routerLink="/welcome/login">Login</button>
+      <button mat-button mat-menu-item routerLink="/welcome/register">Registrieren</button>
+    </nav>
+  </div>
+</header>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
+<footer>
+  <div class="footer__menu">
+    <button mat-button mat-menu-item routerLink="/imprint">Impressum</button>
+    <button mat-button mat-menu-item routerLink="/terms">AGB</button>
+    <button mat-button mat-menu-item routerLink="/privacy">Datenschutz</button>
+  </div>
+</footer>

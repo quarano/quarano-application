@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DiaryModule } from './diary/diary.module';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -19,6 +19,13 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
 import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
+import { PortalComponent } from './layout/portal/portal.component';
+import {LayoutModule} from '@angular/cdk/layout';
+import { LandingComponent } from './landing/landing.component';
+import {HomeComponent} from './landing/home/home.component';
+import { TermsComponent } from './landing/terms/terms.component';
+import { ImprintComponent } from './landing/imprint/imprint.component';
+import { PrivacyInformationComponent } from './landing/privacy-information/privacy-information.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -29,7 +36,13 @@ registerLocaleData(localeDe, 'de');
     FooterComponent,
     HeaderLeftComponent,
     HeaderRightComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    PortalComponent,
+    LandingComponent,
+    HomeComponent,
+    TermsComponent,
+    ImprintComponent,
+    PrivacyInformationComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +53,8 @@ registerLocaleData(localeDe, 'de');
     HttpClientModule,
     DiaryModule,
     WelcomeModule,
-    ContactModule
+    ContactModule,
+    ReactiveFormsModule
   ],
   providers: [
     SnackbarService,

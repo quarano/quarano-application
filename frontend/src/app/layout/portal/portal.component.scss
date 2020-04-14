@@ -1,4 +1,16 @@
-@import "../../src/styles/variables";
+@import "../../../styles/variables";
+
+.container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+app-portal {
+  background-color: #fafafa;
+}
 
 main > *,
 header,
@@ -48,9 +60,9 @@ header {
   justify-content: space-between;
   align-items: center;
   background-image: linear-gradient(
-    to right,
-    $primary-color,
-    $accent-color
+      to right,
+      $primary-color,
+      $accent-color
   ) !important;
 }
 
