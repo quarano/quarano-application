@@ -42,11 +42,15 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	private final @Getter @Column(unique = true) String name;
 
 	public Department(String name) {
+		this(name, UUID.randomUUID());
+	}
 
-		this.id = DepartmentIdentifier.of(UUID.randomUUID());
+	public Department(String name, UUID uuid) {
+
+		this.id = DepartmentIdentifier.of(uuid);
 		this.name = name;
 	}
-	
+
 	// fixed Id department for tests and integration data
 	Department(String name, DepartmentIdentifier fixedId) {
 
@@ -61,7 +65,8 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	public static class DepartmentIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
 		final UUID departmentId;
-		
+
+		@Override
 		public String toString() {
 			return departmentId.toString();
 		}
