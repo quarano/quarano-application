@@ -23,9 +23,12 @@ import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMapping
 import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.ErrorMessage;
+import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 
 /**
+ * Wrapper for {@link ModelMapper} to add a few convenience methods.
+ *
  * @author Oliver Drotbohm
  */
 @RequiredArgsConstructor
@@ -33,12 +36,40 @@ public class MapperWrapper {
 
 	private final @NonNull ModelMapper mapper;
 
+	/**
+	 * Maps the given source object to the given target and returns the target object.
+	 *
+	 * @param <T>
+	 * @param source must not be {@literal null}.
+	 * @param target must not be {@literal null}.
+	 * @return
+	 */
 	public <T> T map(Object source, T target) {
+
+		Assert.notNull(source, "Source must not be null!");
+		Assert.notNull(target, "Target must not be null!");
+
 		mapper.map(source, target);
 		return target;
 	}
 
+	/**
+	 * Maps the given source object to the given target capturing potentially occurring {@link MappingException}s in the
+	 * given {@link Errors} instance.
+	 *
+	 * @param <T>
+	 * @param source must not be {@literal null}.
+	 * @param target must not be {@literal null}.
+	 * @param errors must not be {@literal null}.
+	 * @return an {@link Either} containing either the successfully mapped target object or an {@link Errors} with the
+	 *         exceptions mapped to rejected properties.
+	 */
 	public <T> Either<T, Errors> map(Object source, T target, Errors errors) {
+
+		Assert.notNull(source, "Source must not be null!");
+		Assert.notNull(target, "Target must not be null!");
+		Assert.notNull(errors, "Errors must not be null!");
+
 		try {
 
 			mapper.map(source, target);
@@ -49,10 +80,29 @@ public class MapperWrapper {
 		}
 	}
 
+	/**
+	 * Maps the given source object to the given target type.
+	 *
+	 * @param <T>
+	 * @param source must not be {@literal null}.
+	 * @param target must not be {@literal null}.
+	 * @return
+	 */
 	public <T> T map(Object source, Class<T> target) {
 		return mapper.map(source, target);
 	}
 
+	/**
+	 * Maps the given source object to the given target capturing potentially occurring {@link MappingException}s in the
+	 * given {@link Errors} instance.
+	 *
+	 * @param <T>
+	 * @param source must not be {@literal null}.
+	 * @param target must not be {@literal null}.
+	 * @param errors must not be {@literal null}.
+	 * @return an {@link Either} containing either the successfully mapped target object or an {@link Errors} with the
+	 *         exceptions mapped to rejected properties.
+	 */
 	public <T> Either<T, Errors> map(Object source, Class<T> target, Errors errors) {
 
 		try {
@@ -73,7 +123,6 @@ public class MapperWrapper {
 					} else {
 						handle((RuntimeException) it, errors);
 					}
-
 				});
 
 		return Either.right(errors);

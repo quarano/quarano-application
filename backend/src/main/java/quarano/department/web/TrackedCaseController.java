@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.core.web.MapperWrapper;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
@@ -31,7 +32,6 @@ import quarano.tracking.web.TrackingController;
 
 import java.util.stream.Stream;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -57,7 +57,7 @@ class TrackedCaseController {
 
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull ModelMapper mapper;
+	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor accessor;
 
 	@GetMapping("/api/cases")
@@ -184,8 +184,8 @@ class TrackedCaseController {
 	private TrackedCase apply(InitialReportDto dto, TrackedCase it) {
 
 		var report = it.getOrCreateInitialReport();
-		mapper.map(dto, report);
-		report = dto.applyTo(report);
+		report = mapper.map(dto, report);
+		report = dto.applyTo(mapper.map(dto, report));
 
 		return it.submitQuestionnaire(report);
 	}

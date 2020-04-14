@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
@@ -31,7 +32,6 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class ContactPersonController {
 
-	private final @NonNull ModelMapper mapper;
+	private final @NonNull MapperWrapper mapper;
 	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MessageSourceAccessor messages;
@@ -103,10 +103,7 @@ class ContactPersonController {
 
 		return ResponseEntity.of(contacts.findById(identifier) //
 				.filter(it -> it.belongsTo(person)) //
-				.map(it -> {
-					mapper.map(payload, it);
-					return it;
-				}) //
+				.map(it -> mapper.map(payload, it)) //
 				.map(contacts::save) //
 				.map(it -> mapper.map(it, ContactPersonDto.class)));
 	}

@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.EmailAddress;
@@ -40,7 +41,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +65,7 @@ public class TrackingController {
 
 	private final @NonNull TrackedPersonRepository repository;
 	private final @NonNull ContactPersonRepository contacts;
-	private final @NonNull ModelMapper mapper;
+	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/api/enrollment/details")
@@ -86,8 +86,7 @@ public class TrackingController {
 			return ResponseEntity.badRequest().build();
 		}
 
-		mapper.map(dto, user);
-		repository.save(user);
+		repository.save(mapper.map(dto, user));
 
 		return ResponseEntity.ok().build();
 	}
