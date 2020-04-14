@@ -29,7 +29,7 @@ import quarano.tracking.web.TrackedPersonDto;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
 	private final @NonNull TrackedPersonRepository trackedPersonRepository;
