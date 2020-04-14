@@ -31,30 +31,4 @@ public class ClientController {
 	}
 	
 
-	/**
-	 * Checks if the given code exists
-	 * 
-	 * @return true if the code exists, error-json otherwise
-	 * @throws EntityNotFoundException
-	 * @throws InvalidArgumentException
-	 */
-	@ApiOperation(value = "Get information about the logged in user", response = UserDto.class)
-	@ApiResponses(value = { 
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
-		@ApiResponse(code = 500, message = "Internal Server error") })
-	@GetMapping("/checkcode/{clientCode}")
-	public ResponseEntity<Boolean> doesClientexist(@PathVariable String clientCode) throws InvalidArgumentException {
-		
-		if(null == clientCode) {
-			throw new InvalidArgumentException("clientCode", "ClientCode '"+ clientCode + "' does not exist.", ArgumentType.PATH_VARIABLE, "");
-		}
-		
-		boolean exists = this.clientRepository.existsByClientCode(clientCode);
-		if (!exists) {
-			throw new EntityNotFoundException("ClientCode '"+ clientCode + "' does not exist.");
-		}
-		return ResponseEntity.ok(true);
-	}
-
 }

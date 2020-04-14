@@ -8,7 +8,7 @@ import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 
 @Component
 @RequiredArgsConstructor
-class ActivationCodeService {
+public class ActivationCodeService {
 	
 	private final @NonNull ActivationCodeRepository codeRepo;
 

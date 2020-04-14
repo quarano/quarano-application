@@ -53,7 +53,7 @@ class AccountDataInitializer implements ApplicationListener<ApplicationReadyEven
 		
 		// account for person 3
 		Account accountPerson3 = new Account("test3", passwordEncoder.encode("test123"), "Sandra", "Schubert",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
 				TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING.getId(),
 				RoleType.valueOf(userRole.toString()));
 		accountRepository.save(accountPerson3);
@@ -72,11 +72,18 @@ class AccountDataInitializer implements ApplicationListener<ApplicationReadyEven
 				RoleType.valueOf(caseRole.toString()));
 		accountRepository.save(accountHD2);
 		
+		
 		Account accountHD3 = new Account("agent2", passwordEncoder.encode("agent2"), "Bettina", "Boot",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 				null,
 				RoleType.valueOf(caseRole.toString()));
 		accountRepository.save(accountHD3);
+		
+		Account accountHD4 = new Account("agent3", passwordEncoder.encode("agent3"), "Heike", "Hirsch",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
+				null,
+				RoleType.valueOf(caseRole.toString()));
+		accountRepository.save(accountHD4);
 		
 
 	}

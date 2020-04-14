@@ -40,8 +40,9 @@ public class AccountRegistry {
 		// get Tracked person and check identity
 		checkIdentity(details, code.getTrackedPersonId());
 
-		// get client that belongs to the registration
+		// get client and department that belongs to the registration
 		details.setTrackedPersonId(code.getTrackedPersonId());
+		details.setDepartmentId(code.getDepartmentId());
 
 		createAndStoreAccountFrom(details);
 

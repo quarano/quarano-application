@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.core.QuaranoAggregate;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -27,19 +28,18 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	private @Getter TrackedPersonIdentifier trackedPersonId;
 	private @Getter ActivationCodeStatus status;
 	private @Getter int activationTries;
+	private @Getter DepartmentIdentifier departmentId;
 	
-	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId) {
+	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId, DepartmentIdentifier departmentId) {
 
-		this.expirationTime = expirationTime;
-		this.trackedPersonId = trackedPersonId;
-		this.id = ActivationCodeIdentifier.of(UUID.randomUUID());
-		this.status = ActivationCodeStatus.WAITING_FOR_ACTIVATION;
+		this(expirationTime, trackedPersonId, departmentId, ActivationCodeIdentifier.of(UUID.randomUUID()));
 		
 	}
 	
 	// for testing purposes
-	ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId, ActivationCodeIdentifier uuid) {
+	ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId, DepartmentIdentifier departmentId, ActivationCodeIdentifier uuid) {
 
+		this.departmentId = departmentId;
 		this.expirationTime = expirationTime;
 		this.trackedPersonId = trackedPersonId;
 		this.id = uuid;

@@ -25,5 +25,5 @@ import quarano.registration.ActivationCode.ActivationCodeIdentifier;
  */
 interface ActivationCodeRepository extends QuaranoRepository<ActivationCode, ActivationCodeIdentifier> {
 
-	Optional<ActivationCode> findById(String code);
+
 }
