@@ -15,43 +15,32 @@
  */
 package quarano.tracking;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import quarano.reference.NewSymptom;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import java.util.Iterator;
+import java.util.List;
 
-import org.springframework.data.domain.Range;
+import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
  */
-@Embeddable
 @RequiredArgsConstructor(staticName = "of")
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class BodyTemperature {
+public class Symptoms implements Streamable<NewSymptom> {
 
-	private static final Range<Float> VALID = Range.open(35.0f, 42.0f);
+	private final List<NewSymptom> symptoms;
 
-	@Column(name = "temperature") //
-	private final @Getter float value;
-
-	public boolean exceeds(BodyTemperature that) {
-		return this.value > that.value;
-	}
-
-	public static boolean isValid(float value) {
-		return VALID.contains(value);
+	public boolean hasCharacteristicSymptom() {
+		return symptoms.stream().anyMatch(NewSymptom::isCharacteristic);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override
-	public String toString() {
-		return String.format("%s°C", value);
+	public Iterator<NewSymptom> iterator() {
+		return symptoms.iterator();
 	}
 }

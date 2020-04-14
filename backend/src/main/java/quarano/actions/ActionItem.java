@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.department;
+package quarano.actions;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoAggregate;
-import quarano.department.Department.DepartmentIdentifier;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
@@ -36,38 +36,36 @@ import org.jddd.core.types.Identifier;
  * @author Oliver Drotbohm
  */
 @Entity
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
+@Getter
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
+public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItemIdentifier> {
 
-	private final @Getter @Column(unique = true) String name;
+	private TrackedPersonIdentifier personIdentifier;
+	private ItemType type;
+	private Description description;
+	private boolean resolved;
 
-	public Department(String name) {
-		this(name, UUID.randomUUID());
+	protected ActionItem(TrackedPersonIdentifier person, ItemType type, Description description) {
+
+		this.id = ActionItemIdentifier.of(UUID.randomUUID());
+		this.personIdentifier = person;
+		this.type = type;
+		this.description = description;
 	}
 
-	public Department(String name, UUID uuid) {
+	public enum ItemType {
 
-		this.id = DepartmentIdentifier.of(uuid);
-		this.name = name;
-	}
+		MEDICAL_INCIDENT,
 
-	// fixed Id department for tests and integration data
-	Department(String name, DepartmentIdentifier fixedId) {
-
-		this.id = fixedId;
+		PROCESS_INCIDENT;
 	}
 
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-	public static class DepartmentIdentifier implements Identifier, Serializable {
+	public static class ActionItemIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
 		final UUID departmentId;
-
-		@Override
-		public String toString() {
-			return departmentId.toString();
-		}
 	}
 }
