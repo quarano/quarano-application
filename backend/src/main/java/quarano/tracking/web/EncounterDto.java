@@ -48,7 +48,7 @@ public class EncounterDto {
 	}
 
 	public String getLastName() {
-		return encounter.getContact().getFirstName();
+		return encounter.getContact().getLastName();
 	}
 
 	@JsonProperty("_links")
