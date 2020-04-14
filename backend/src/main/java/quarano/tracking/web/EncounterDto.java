@@ -43,8 +43,12 @@ public class EncounterDto {
 		return encounter.getDate();
 	}
 
-	public String getFullName() {
-		return encounter.getContact().getFullName();
+	public String getFirstName() {
+		return encounter.getContact().getFirstName();
+	}
+
+	public String getLastName() {
+		return encounter.getContact().getFirstName();
 	}
 
 	@JsonProperty("_links")
@@ -52,9 +56,11 @@ public class EncounterDto {
 
 		var contactId = encounter.getContact().getId();
 		var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
+		var encounterUri = on(TrackingController.class).getEncounter(encounter.getId(), person);
 
 		var links = new HashMap<String, Object>();
 
+		links.put("self", Map.of("href", fromMethodCall(encounterUri).toUriString()));
 		links.put("contact", Map.of("href", fromMethodCall(contactHandlerMethod).toUriString()));
 
 		person.getDiary().getEntryFor(encounter).ifPresent(it -> {
