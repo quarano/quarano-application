@@ -25,10 +25,9 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private @NotEmpty String lastName, firstName, street;
-	private String houseNumber;
-	private @NotEmpty String city;
-	private @NotEmpty @Pattern(regexp = ZipCode.PATTERN) String zipCode;
+	private @NotEmpty String lastName, firstName;
+	private String street, houseNumber, city;
+	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = EmailAddress.PATTERN) String email;
