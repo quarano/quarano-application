@@ -77,13 +77,9 @@ public class MappingConfiguration {
 		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
 				UUID.class, ContactPerson.class);
 
-		mapper.typeMap(ContactPersonDto.class, ContactPerson.class).setPreConverter(context -> {
-
-			var source = context.getSource();
-
-			return context.getDestination() != null //
-					? context.getDestination() //
-					: new ContactPerson(source.getFirstName(), source.getLastName());
+		mapper.typeMap(ContactPersonDto.class, ContactPerson.class).setProvider(request -> {
+			var dto = (ContactPersonDto) request.getSource();
+			return new ContactPerson(dto.getFirstName(), dto.getLastName());
 		}).addMappings(it -> {
 
 			it.using(STRING_TO_PHONE_NUMBER).map(ContactPersonDto::getMobilePhone, ContactPerson::setMobilePhoneNumber);
@@ -112,10 +108,6 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
 			it.map(source -> source.getAddress().getHouseNumber(), TrackedPersonDto::setHouseNumber);
 		});
-
-		// mapper.typeMap(Department.class, DepartmentDto.class).addMappings(it -> {
-		// it.map(source -> UUID.fromString(source.getId().toString()) , DepartmentDto::setId);
-		// });
 
 		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
 

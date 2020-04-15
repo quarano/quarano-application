@@ -18,28 +18,20 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
+import quarano.AbstractQuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.Address.HouseNumber;
+import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.EmailAddress;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
 
 /**
  * @author Oliver Drotbohm
  */
-@ActiveProfiles("integrationtest")
-@SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-@TestConstructor(autowireMode = AutowireMode.ALL)
 @RequiredArgsConstructor
-public class ContactPersonMappingIntegrationTests {
+public class ContactPersonMappingIntegrationTests extends AbstractQuaranoIntegrationTest {
 
 	private final ContactPersonRepository contacts;
 	private final MapperWrapper mapper;
@@ -70,5 +62,20 @@ public class ContactPersonMappingIntegrationTests {
 		assertThat(result.getFirstName()).isEqualTo(person.getFirstName());
 		assertThat(result.getLastName()).isEqualTo(person.getLastName());
 		assertThat(result.getStreet()).isEqualTo(person.getAddress().getStreet());
+	}
+
+	@Test
+	void bindsToNewContact() {
+
+		var dto = new ContactPersonDto();
+		dto.setFirstName("Michael");
+		dto.setLastName("Mustermann");
+		dto.setStreet("Street");
+		dto.setHouseNumber("42");
+		dto.setEmail("michael@mustermann.de");
+
+		var person = mapper.map(dto, ContactPerson.class);
+
+		assertThat(person.getId()).isNotNull();
 	}
 }
