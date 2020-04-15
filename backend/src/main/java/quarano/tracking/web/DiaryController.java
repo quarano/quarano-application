@@ -17,7 +17,6 @@ package quarano.tracking.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
-import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
@@ -51,7 +50,6 @@ class DiaryController {
 
 	private final @NonNull ModelMapper mapper;
 	private final TrackedPersonRepository people;
-	private final SymptomRepository symptoms;
 	private final MessageSourceAccessor messages;
 
 	@GetMapping("/api/diary")

@@ -1,8 +1,5 @@
 package quarano.registration;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import de.wevsvirushackathon.coronareport.infrastructure.errorhandling.InconsistentDataException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,9 @@ import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,8 +29,10 @@ public class AccountRegistry {
 			throws CodeNotFoundException, ActivationCodeExpiredException, ActivationNotActiveException,
 			InconsistentDataException, InvalidAuthentificationDataException {
 
-		// validate username
-		// #TODO
+		// Validate username
+		if (!accountService.isUsernameAvailable(details.getUsername())) {
+			throw new InvalidUsernameException("Username " + details.getUsername() + " already taken!");
+		}
 
 		ActivationCode code = activationCodeService
 				.redeemCode(ActivationCodeIdentifier.of(details.getActivationCodeLiteral()));
@@ -47,9 +49,9 @@ public class AccountRegistry {
 	}
 
 	/**
-	 * Checks the identitiy of the registering user by comparing the provided date
-	 * of birth with the data stored by the health department during case creation
-	 * 
+	 * Checks the identitiy of the registering user by comparing the provided date of birth with the data stored by the
+	 * health department during case creation
+	 *
 	 * @param details
 	 * @param trackedPersonId
 	 * @throws InconsistentDataException
@@ -58,9 +60,9 @@ public class AccountRegistry {
 	private void checkIdentity(AccountRegistrationDetails details, TrackedPersonIdentifier trackedPersonId)
 			throws InconsistentDataException, InvalidAuthentificationDataException {
 
-		TrackedPerson person = this.trackedPersonRepo.findById(trackedPersonId).orElseThrow(
-				() -> new InconsistentDataException("No tracked person found that belongs to activation code '"
-						+ details.getActivationCodeLiteral() + "'"));
+		TrackedPerson person = this.trackedPersonRepo.findById(trackedPersonId)
+				.orElseThrow(() -> new InconsistentDataException(
+						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'"));
 
 		// check if given date of registering user matches date stored by health
 		// department during case creation
@@ -78,11 +80,11 @@ public class AccountRegistry {
 	}
 
 	public void checkIfUserNameAvailableAndValid(String userName) throws InvalidUsernameException {
-		
-		if(!accountService.isUsernameAvailable(userName)) {
+
+		if (!accountService.isUsernameAvailable(userName)) {
 			throw new InvalidUsernameException("Username is not available");
 		}
-		
+
 		// check username pattern
 	}
 }

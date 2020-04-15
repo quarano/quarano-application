@@ -1,13 +1,10 @@
 package quarano.user;
 
-import static de.wevsvirushackathon.coronareport.TestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import de.wevsvirushackathon.coronareport.CoronareportBackendApplication;
-import de.wevsvirushackathon.coronareport.client.TokenResponse;
-import quarano.Quarano;
+import quarano.util.TokenResponse;
 
 import java.util.Map;
 
@@ -25,11 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-		classes = { CoronareportBackendApplication.class, Quarano.class })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationtest")
-class UserControllerIT {
+public class UserControllerIT {
 
 	@Autowired MockMvc mvc;
 	@Autowired ObjectMapper mapper;
@@ -49,7 +45,8 @@ class UserControllerIT {
 				.andExpect(status().isOk()) //
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
 				.andReturn().getResponse().getContentAsString();
-		TokenResponse response = fromJson(resultLogin, TokenResponse.class);
+
+		TokenResponse response = mapper.readValue(resultLogin, TokenResponse.class);
 
 		// check if token is valid for authentication
 		String resultDtoStr = mvc.perform(get("/api/user/me") //

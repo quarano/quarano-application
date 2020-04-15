@@ -17,8 +17,6 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import de.wevsvirushackathon.coronareport.firstReport.FirstReport;
-import quarano.department.InitialReport;
 import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
@@ -51,17 +49,6 @@ public class MappingConfigurationUnitTests {
 	@BeforeAll
 	void setUp() {
 		new MappingConfiguration(mapper, symptoms, contacts);
-	}
-
-	@Test
-	void mapsFirstReportToInitialReport() {
-
-		var report = new FirstReport();
-		report.setNursingActionOnC19Pat(true);
-
-		InitialReport result = mapper.map(report, InitialReport.class);
-
-		assertThat(result.getNursingActionOnC19Pat()).isTrue();
 	}
 
 	@Test

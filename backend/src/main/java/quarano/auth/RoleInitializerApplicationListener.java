@@ -1,7 +1,9 @@
 package quarano.auth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
@@ -9,38 +11,33 @@ import org.springframework.stereotype.Component;
 
 /**
  * Create fix role setup on startup based on role enum {@link RoleType}
- * @author Patrick Otto
  *
+ * @author Patrick Otto
  */
 @Component
 @Order(50)
+@Slf4j
+@RequiredArgsConstructor
 class RoleInitializerApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
 
+	private final @NonNull RoleRepository roleRepository;
 
-    private RoleRepository roleRepository;
-    
-    
-	private final Log logger = LogFactory.getLog(RoleInitializerApplicationListener.class);
-    
+	/**
+	 * adds each role defined in enum {@link RoleType} that is not existing in the database
+	 */
+	@Override
+	public void onApplicationEvent(ApplicationReadyEvent event) {
 
-    public RoleInitializerApplicationListener(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+		for (RoleType type : RoleType.values()) {
 
-    /**
-     *    adds each role defined in enum {@link RoleType} that is not existing in the database 
-     */
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
-    	    	   	
-    	for(RoleType type: RoleType.values()) {
-    		Role role = roleRepository.findByName(type.getCode());
-    		if(role == null) {
-    			logger.info("Adding missing role " + type);
-            	Role userRole = new Role(type);
-            	userRole = roleRepository.save(userRole);
-    		}
-    	}
- 
-    }
+			var role = roleRepository.findByName(type.getCode());
+
+			if (role != null) {
+				continue;
+			}
+
+			log.info("Adding missing role " + type);
+			roleRepository.save(new Role(type));
+		}
+	}
 }

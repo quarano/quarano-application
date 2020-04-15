@@ -25,6 +25,6 @@ public interface NewSymptomRepository extends PagingAndSortingRepository<NewSymp
 	 */
 	Streamable<NewSymptom> findAll(Sort sort);
 
-	@Query("SELECT s FROM Symptom s WHERE s.name = :name")
+	@Query("SELECT s FROM NewSymptom s WHERE s.name = :name")
 	List<NewSymptom> findAllByName(@Param("name") String name);
 }

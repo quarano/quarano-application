@@ -15,17 +15,6 @@
  */
 package quarano.tracking.web;
 
-import java.util.UUID;
-
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration.AccessLevel;
-import org.springframework.stereotype.Component;
-
-import de.wevsvirushackathon.coronareport.client.Client;
-import quarano.department.Department;
-import quarano.department.Department.DepartmentIdentifier;
-import quarano.department.web.DepartmentDto;
 import quarano.reference.NewSymptom;
 import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address.HouseNumber;
@@ -38,6 +27,13 @@ import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
+
+import java.util.UUID;
+
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration.AccessLevel;
+import org.springframework.stereotype.Component;
 
 /**
  * Customizations for {@link ModelMapper}.
@@ -64,7 +60,7 @@ public class MappingConfiguration {
 
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
 			= source -> source.getSource().getValue();
-			
+
 	public MappingConfiguration(ModelMapper mapper, NewSymptomRepository symptoms, ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
@@ -81,14 +77,6 @@ public class MappingConfiguration {
 		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
 				UUID.class, ContactPerson.class);
 
-		mapper.typeMap(de.wevsvirushackathon.coronareport.contactperson.ContactPerson.class, ContactPerson.class)
-				.setPreConverter(context -> {
-
-					var source = context.getSource();
-					return new ContactPerson(source.getFirstname(), source.getSurename());
-
-				});
-
 		mapper.typeMap(ContactPersonDto.class, ContactPerson.class).setPreConverter(context -> {
 
 			var source = context.getSource();
@@ -98,15 +86,6 @@ public class MappingConfiguration {
 					: new ContactPerson(source.getFirstName(), source.getLastName());
 		});
 
-		mapper.typeMap(Client.class, TrackedPerson.class).setPreConverter(context -> {
-
-			var source = context.getSource();
-			return new TrackedPerson(source.getFirstname(), source.getSurename());
-
-		}).addMappings(it -> {
-			it.map(Client::getClientId, TrackedPerson::setLegacyClientId);
-		});
-
 		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
 
 			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);
@@ -114,10 +93,10 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
 			it.map(source -> source.getAddress().getHouseNumber(), TrackedPersonDto::setHouseNumber);
 		});
-		
-//		mapper.typeMap(Department.class, DepartmentDto.class).addMappings(it -> {
-//			it.map(source -> UUID.fromString(source.getId().toString()) , DepartmentDto::setId);
-//		});
+
+		// mapper.typeMap(Department.class, DepartmentDto.class).addMappings(it -> {
+		// it.map(source -> UUID.fromString(source.getId().toString()) , DepartmentDto::setId);
+		// });
 
 		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
 
