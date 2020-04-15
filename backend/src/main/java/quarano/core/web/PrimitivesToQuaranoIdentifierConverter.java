@@ -15,38 +15,29 @@
  */
 package quarano.core.web;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.jddd.core.types.Identifier;
-import org.modelmapper.Converter;
 import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * A Spring {@link Converter} to convert from {@link Identifier} types to both {@link UUID} and {@link String} assuming
- * the {@link Identifier} implementation contains a single property of type {@link UUID}. If the target is
- * {@link String} we simply also call {@link Object#toString()} on the {@link UUID}.
+ * A Spring {@link Converter} to convert {@link String} and {@link UUID} values to Quarano {@link Identifier}
+ * implementations, assuming they expose a static factory method {@code of(UUID)}.
  *
  * @author Oliver Drotbohm
  */
 @Component
-public class QuaranoIdentifierToPrimtivesConverter implements GenericConverter {
+class PrimitivesToQuaranoIdentifierConverter implements GenericConverter {
 
-	private static final Map<Class<?>, Field> CACHE = new ConcurrentReferenceHashMap<>();
-
-	public static Stream<Class<?>> getIdPrimitives() {
-		return Stream.of(UUID.class, String.class);
-	}
+	private static final Map<Class<?>, Method> CACHE = new ConcurrentReferenceHashMap<>();
 
 	/*
 	 * (non-Javadoc)
@@ -55,9 +46,10 @@ public class QuaranoIdentifierToPrimtivesConverter implements GenericConverter {
 	@Override
 	public Set<ConvertiblePair> getConvertibleTypes() {
 
-		return getIdPrimitives() //
-				.map(it -> new ConvertiblePair(Identifier.class, it)) //
-				.collect(Collectors.toUnmodifiableSet());
+		return Set.of(//
+				new ConvertiblePair(String.class, Identifier.class), //
+				new ConvertiblePair(UUID.class, Identifier.class) //
+		);
 	}
 
 	/*
@@ -67,17 +59,22 @@ public class QuaranoIdentifierToPrimtivesConverter implements GenericConverter {
 	@Override
 	public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
 
-		Field idField = CACHE.computeIfAbsent(source.getClass(), type -> {
-			return Arrays.stream(type.getDeclaredFields()) //
-					.filter(it -> !Modifier.isStatic(it.getModifiers())) //
-					.filter(it -> it.getType().equals(UUID.class)) //
-					.peek(ReflectionUtils::makeAccessible) //
-					.findFirst()
-					.orElseThrow(() -> new IllegalStateException("Unable to find UUID identifier field on " + type + "!"));
+		if (source == null) {
+			return null;
+		}
+
+		UUID uuid = UUID.class.equals(sourceType.getType()) //
+				? (UUID) source //
+				: UUID.fromString(source.toString());
+
+		Method factoryMethod = CACHE.computeIfAbsent(targetType.getType(), it -> {
+
+			Method method = ReflectionUtils.findMethod(it, "of", UUID.class);
+			ReflectionUtils.makeAccessible(method);
+
+			return method;
 		});
 
-		var id = ReflectionUtils.getField(idField, source);
-
-		return targetType.getType().equals(UUID.class) ? (UUID) id : id.toString();
+		return ReflectionUtils.invokeMethod(factoryMethod, null, uuid);
 	}
 }

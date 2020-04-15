@@ -84,6 +84,17 @@ public class MappingConfiguration {
 			return context.getDestination() != null //
 					? context.getDestination() //
 					: new ContactPerson(source.getFirstName(), source.getLastName());
+		}).addMappings(it -> {
+
+			it.using(STRING_TO_PHONE_NUMBER).map(ContactPersonDto::getMobilePhone, ContactPerson::setMobilePhoneNumber);
+			it.using(STRING_TO_PHONE_NUMBER).map(ContactPersonDto::getPhone, ContactPerson::setPhoneNumber);
+			it.using(STRING_TO_EMAIL_ADDRESS).map(ContactPersonDto::getEmail, ContactPerson::setEmailAddress);
+			it.using(STRING_TO_HOUSE_NUMBER).<HouseNumber> map(ContactPersonDto::getHouseNumber,
+					(target, v) -> target.getAddress().setHouseNumber(v));
+
+			it.<String> map(ContactPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
+			it.<String> map(ContactPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
+			it.<ZipCode> map(ContactPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
 		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {

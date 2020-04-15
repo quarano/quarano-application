@@ -9,11 +9,14 @@ import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
+import java.util.Collections;
 import java.util.Map;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
@@ -36,10 +39,15 @@ class ContactPersonDto {
 	private Boolean hasPreExistingConditions;
 
 	@JsonProperty("_links")
+	@JsonInclude(Include.NON_EMPTY)
 	public Map<String, Object> getLinks() {
+
+		if (id == null) {
+			return Collections.emptyMap();
+		}
 
 		var contactResource = on(ContactPersonController.class).getContact(null, id);
 
-		return Map.of("self", Map.of("self", fromMethodCall(contactResource).toUriString()));
+		return Map.of("self", Map.of("href", fromMethodCall(contactResource).toUriString()));
 	}
 }

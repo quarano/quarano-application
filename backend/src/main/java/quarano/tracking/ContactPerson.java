@@ -21,7 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
@@ -43,7 +42,6 @@ import org.jddd.core.types.Identifier;
 @Entity(name = "newContactPerson")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
-@Setter(AccessLevel.PACKAGE)
 @Accessors(chain = true)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPersonIdentifier> {

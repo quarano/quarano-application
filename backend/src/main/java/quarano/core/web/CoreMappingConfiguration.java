@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Registers a {@link ModelMapper} {@link Converter} to convert from {@link Identifier} instances to {@link UUID} or
- * {@link String} values by delegating to {@link QuaranoIdentifierToPrimtivesConverter}.
+ * {@link String} values by delegating to {@link QuaranoIdentifierToPrimitivesConverter}.
  *
  * @author Oliver Drotbohm
  */
@@ -46,7 +46,7 @@ class CoreMappingConfiguration {
 				.map(PersistentProperty::getType) //
 				.filter(it -> Identifier.class.isAssignableFrom(it)) //
 				.forEach(it -> {
-					QuaranoIdentifierToPrimtivesConverter.getIdPrimitives().forEach(target -> {
+					QuaranoIdentifierToPrimitivesConverter.getIdPrimitives().forEach(target -> {
 						mapper.addConverter((Converter) IdentifierToUuidOrStringConverter.INSTANCE, it, target);
 					});
 				});
@@ -56,7 +56,7 @@ class CoreMappingConfiguration {
 
 		INSTANCE;
 
-		private final QuaranoIdentifierToPrimtivesConverter delegate = new QuaranoIdentifierToPrimtivesConverter();
+		private final QuaranoIdentifierToPrimitivesConverter delegate = new QuaranoIdentifierToPrimitivesConverter();
 
 		/*
 		 * (non-Javadoc)
