@@ -23,6 +23,7 @@ import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMapping
 import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.ErrorMessage;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 
@@ -31,6 +32,7 @@ import org.springframework.validation.Errors;
  *
  * @author Oliver Drotbohm
  */
+@Component
 @RequiredArgsConstructor
 public class MapperWrapper {
 

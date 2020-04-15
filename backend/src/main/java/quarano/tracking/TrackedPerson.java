@@ -26,7 +26,6 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
-import quarano.department.Department;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -77,13 +76,11 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private List<Encounter> encounters;
 
 	public TrackedPerson(String firstName, String lastName) {
-
-		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null, null);
-
+		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);
 	}
 
 	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, EmailAddress emailAddress,
-			PhoneNumber phoneNumber, LocalDate dateOfBirth, Department department) {
+			PhoneNumber phoneNumber, LocalDate dateOfBirth) {
 
 		this.id = fixedId;
 		this.firstName = firstName;

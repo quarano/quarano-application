@@ -17,7 +17,6 @@ package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import quarano.department.DepartmentDataInitializer;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
@@ -53,16 +52,14 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 
 	// people
 	public static TrackedPerson INDEX_PERSON1_NOT_REGISTERED = new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja",
-			"Mueller", EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3),
-			DepartmentDataInitializer.DEPARTMENT_1);
+			"Mueller", EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3));
 
 	public static TrackedPerson INDEX_PERSON2_IN_ENROLLMENT = new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus",
-			"Hanser", EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1),
-			DepartmentDataInitializer.DEPARTMENT_1);
+			"Hanser", EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1));
 
 	public static TrackedPerson INDEX_PERSON3_WITH_ACTIVE_TRACKING = new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2,
 			"Sandra", "Schubert", EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"),
-			LocalDate.of(1990, 1, 1), DepartmentDataInitializer.DEPARTMENT_1);
+			LocalDate.of(1990, 1, 1));
 
 	/*
 		 * (non-Javadoc)
