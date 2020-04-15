@@ -1,3 +1,5 @@
+import { Link } from './general';
+
 export interface EncounterDto {
   date: string;
   firstName: string;
@@ -13,10 +15,6 @@ export interface EncounterCreateDto {
 export interface EncounterLinks {
   contact: Link;
   self: Link;
-}
-
-export interface Link {
-  href: string;
 }
 
 export interface EncounterEntry {

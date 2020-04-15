@@ -1,3 +1,4 @@
+import { ContactPersonModifyDto } from './../../models/contact-person';
 import { VALIDATION_PATTERNS } from '../../utils/validation';
 import { ContactPersonDto } from '../../models/contact-person';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
@@ -79,12 +80,12 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid) {
 
       if (this.isWayToContactSet()) {
-        Object.assign(this.contactPerson, this.formGroup.value);
+        const contactPersonToModify = Object.assign(this.formGroup.value);
 
         if (this.isNew) {
-          this.createContactPerson();
+          this.createContactPerson(contactPersonToModify);
         } else {
-          this.modifyContactPerson();
+          this.modifyContactPerson(contactPersonToModify);
         }
 
       } else if (!this.showIdentificationHintField) {
@@ -96,9 +97,9 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  createContactPerson() {
+  createContactPerson(contactPerson: ContactPersonModifyDto) {
     this.subs.add(this.apiService
-      .createContactPerson(this.contactPerson)
+      .createContactPerson(contactPerson)
       .subscribe(createdContactPerson => {
         this.snackbarService.success('Kontaktperson erfolgreich angelegt');
         this.formGroup.markAsPristine();
@@ -107,9 +108,9 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
       }));
   }
 
-  modifyContactPerson() {
+  modifyContactPerson(contactPerson: ContactPersonModifyDto) {
     this.subs.add(this.apiService
-      .modifyContactPerson(this.contactPerson)
+      .modifyContactPerson(contactPerson, this.contactPerson.id)
       .subscribe(_ => {
         this.snackbarService.success('Kontaktperson erfolgreich aktualisiert');
         this.formGroup.markAsPristine();

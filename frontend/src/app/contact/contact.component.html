@@ -13,7 +13,7 @@
         <mat-card
           class="contact-card"
           [routerLink]="['edit', contact.id]"
-          [matTooltip]="contact.comment"
+          [matTooltip]="contact.identificationHint"
         >
           <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
@@ -34,7 +34,7 @@
               <mat-icon>smartphone</mat-icon>
               <span>{{ contact.mobilePhone }}</span>
             </p>
-            <p>
+            <p *ngIf="contact.street || contact.zipCode || contact.city">
               <mat-icon>house</mat-icon>
               <span style="display: flex; flex-direction: column;">
                 <span *ngIf="contact.street"

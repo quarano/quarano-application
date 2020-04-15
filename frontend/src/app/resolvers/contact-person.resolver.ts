@@ -30,7 +30,8 @@ export class ContactPersonResolver implements Resolve<ContactPersonDto> {
           isHealthStaff: null,
           hasPreExistingConditions: null,
           isSenior: null,
-          identificationHint: null
+          identificationHint: null,
+          _links: null
         });
     }
   }

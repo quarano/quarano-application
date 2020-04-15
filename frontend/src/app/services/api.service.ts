@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
 import { groupBy } from '../utils/groupBy';
-import { ContactPersonDto } from '../models/contact-person';
+import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
 import { TenantClientDto } from '../models/tenant-client';
 import { ClientDto } from '../models/client';
 import { HealthDepartmentDto } from '../models/healthDepartment';
@@ -83,12 +83,12 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/client/register`, client, { responseType: 'text' });
   }
 
-  createContactPerson(contactPerson: ContactPersonDto): Observable<ContactPersonDto> {
+  createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
     return this.httpClient.post<ContactPersonDto>(`${this.baseUrl}/api/contacts`, contactPerson);
   }
 
-  modifyContactPerson(contactPerson: ContactPersonDto) {
-    return this.httpClient.put(`${this.baseUrl}/api/contacts/${contactPerson.id}`, contactPerson);
+  modifyContactPerson(contactPerson: ContactPersonModifyDto, id: string) {
+    return this.httpClient.put(`${this.baseUrl}/api/contacts/${id}`, contactPerson);
   }
 
   getReport(healthDepartmentId: string): Observable<Array<TenantClientDto>> {
