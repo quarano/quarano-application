@@ -29,6 +29,7 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -40,6 +41,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
@@ -50,6 +52,8 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @RequiredArgsConstructor
 @ExtendWith(PublishedEventsExtension.class)
+@Transactional
+@Disabled
 public class TrackedPersonIntegrationTests {
 
 	private final TrackedPersonRepository people;

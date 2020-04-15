@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.moduliths.docs.Documenter;
 import org.moduliths.docs.Documenter.Options;
+import org.moduliths.model.Modules;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -36,7 +37,10 @@ public class QuaranoModuleTests {
 		Logger logger = (Logger) LoggerFactory.getLogger("com.tngtech.archunit");
 		logger.setLevel(Level.WARN);
 
-		Documenter documenter = new Documenter(Quarano.class);
+		Modules modules = Modules.of(Quarano.class);
+		modules.verify();
+
+		Documenter documenter = new Documenter(modules);
 
 		documenter.writeModuleCanvases(null);
 		documenter.writeModulesAsPlantUml(Options.defaults());

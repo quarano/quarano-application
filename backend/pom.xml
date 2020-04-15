@@ -132,6 +132,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-api</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
 			<artifactId>moduliths-test</artifactId>
 			<version>1.0.0.BUILD-SNAPSHOT</version>
 			<scope>test</scope>
