@@ -24,7 +24,10 @@
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Benutzername</mat-label>
-        <input matInput formControlName="username" placeholder="Benutzername" id="username">
+        <input matInput formControlName="username" placeholder="Benutzername" id="username" (change)="changeUsername()">
+        <mat-error *ngIf="registrationForm.controls.username.hasError('usernameInvalid')">
+          Der angegebene Benutzername kann nicht verwendet werden.
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Passwort</mat-label>
@@ -45,13 +48,18 @@
           Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >
         </mat-error>
       </mat-form-field>
+      <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
+        Das Passwort darf nicht den Benutzernamen beinhalten.
+      </mat-error>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Passwort bestätigen</mat-label>
-        <input matInput formControlName="password" placeholder="Passwort bestätigen" id="password-confirm" type="password">
-        <mat-error *ngIf="registrationForm.controls.password.hasError('mustMatch')">
-          Das Passwort und die Passwort Bestätigung müssen übereinstimmen.
-        </mat-error>
+        <input matInput formControlName="passwordConfirm" placeholder="Passwort bestätigen" id="password-confirm" type="password">
       </mat-form-field>
+      <div class="mat-form-field-subscript-wrapper ng-tns-c78-3" *ngIf="registrationForm.hasError('passwordConfirmWrong')">
+        <mat-error>
+          Das Passwort und die Bestätigung müssen übereinstimmen.
+        </mat-error>
+      </div>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Geburtsdatum</mat-label>
         <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" readonly>

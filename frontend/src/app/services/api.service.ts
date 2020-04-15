@@ -79,7 +79,7 @@ export class ApiService {
   }
 
   registerClient(registerClient: Register): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/client/register`, registerClient, {responseType: 'text'});
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, {responseType: 'text'});
   }
 
   getClientByCode(code: string): Observable<Client> {
@@ -115,10 +115,14 @@ export class ApiService {
   }
 
   getMe(): Observable<User> {
-    return this.httpClient.get<User>(`${this.baseUrl}/user/me`);
+    return this.httpClient.get<User>(`${this.baseUrl}/api/user/me`);
   }
 
   checkClientCode(code: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/client/checkcode/${code}`);
+    return this.httpClient.get(`${this.baseUrl}/api/registration/checkcode/${code}`);
+  }
+
+  checkUsername(username: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/api/registration/checkusername/${username}`);
   }
 }

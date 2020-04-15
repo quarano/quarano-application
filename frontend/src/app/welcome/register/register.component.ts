@@ -16,18 +16,18 @@ import {DatePipe} from '@angular/common';
 export class RegisterComponent implements OnInit {
 
   private codeIsValid = false;
+  private usernameIsValid = false;
 
   public registrationForm = new FormGroup({
     clientCode: new FormControl(null, [
       Validators.required,
-      Validators.minLength(9),
-      Validators.maxLength(30),
       () => this.codeIsValid ? null : {codeInvalid: true}
     ]),
     username: new FormControl(null, [
       Validators.required,
       Validators.minLength(1),
-      Validators.maxLength(30)
+      Validators.maxLength(30),
+      () => this.usernameIsValid ? null : {usernameInvalid: true}
     ]),
     password: new FormControl(null, [
       PasswordValidator.secure
@@ -68,7 +68,9 @@ export class RegisterComponent implements OnInit {
     ).subscribe(
       (response) => {
         if (urlParamCode && response) {
+          this.codeIsValid = true;
           this.registrationForm.get('clientCode').setValue(urlParamCode);
+          this.registrationForm.get('clientCode').updateValueAndValidity();
         }
       },
       () => {
@@ -83,9 +85,6 @@ export class RegisterComponent implements OnInit {
       .pipe(
         tap(() => {
           this.registrationForm.get('clientCode').disable();
-        }),
-        finalize(() => {
-          this.registrationForm.get('clientCode').enable();
         })
       )
       .subscribe(
@@ -94,6 +93,30 @@ export class RegisterComponent implements OnInit {
         },
         () => {
           this.codeIsValid = false;
+        },
+        () => {
+          this.registrationForm.get('clientCode').enable();
+        }
+      );
+  }
+
+  public changeUsername() {
+    const username = this.registrationForm.controls.username.value;
+    this.apiService.checkUsername(username)
+      .pipe(
+        tap(() => {
+          this.registrationForm.get('username').disable();
+        }),
+        finalize(() => {
+          this.registrationForm.get('username').enable();
+        })
+      )
+      .subscribe(
+        () => {
+          this.usernameIsValid = true;
+        },
+        () => {
+          this.usernameIsValid = false;
         }
       );
   }
