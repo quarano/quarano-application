@@ -20,10 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 
 import org.springframework.context.MessageSourceResolvable;
@@ -37,10 +35,13 @@ import org.springframework.context.MessageSourceResolvable;
 public class Description implements MessageSourceResolvable {
 
 	private final DescriptionCode code;
-	private final @ElementCollection List<String> arguments;
+	private final String arguments;
 
 	public static Description of(DescriptionCode code, Object... arguments) {
-		return new Description(code, Arrays.stream(arguments).map(Object::toString).collect(Collectors.toList()));
+		var collect = Arrays.stream(arguments) //
+				.map(Object::toString) //
+				.collect(Collectors.joining(","));
+		return new Description(code, collect);
 	}
 
 	/*
@@ -63,6 +64,6 @@ public class Description implements MessageSourceResolvable {
 	 */
 	@Override
 	public Object[] getArguments() {
-		return arguments.toArray();
+		return arguments.split(",");
 	}
 }
