@@ -36,6 +36,10 @@ public class DiaryEntryDetailsDto {
 
 	private final DiaryEntry entry;
 
+	public String getId() {
+		return entry.getId().toString();
+	}
+
 	public Stream<?> getContacts() {
 		return entry.getContacts().stream() //
 				.map(ContactSummary::new);

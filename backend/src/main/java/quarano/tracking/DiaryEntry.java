@@ -63,18 +63,17 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	private String note;
 	private BodyTemperature bodyTemperature;
 
-	private DiaryEntry(LocalDateTime date, String note) {
+	public DiaryEntry(LocalDateTime date, String note) {
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), date, note);
 	}
-	
-	DiaryEntry(DiaryEntryIdentifier fixedId, LocalDateTime date, String note) {
 
-		this.id = fixedId;
+	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime date, String note) {
+
+		this.id = id;
 		this.date = date;
 		this.note = note;
-		this.bodyTemperature = null;
 	}
-	
+
 	public static DiaryEntry of(String note, LocalDateTime date) {
 		return new DiaryEntry(date, note);
 	}
@@ -108,9 +107,9 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 
 	boolean contains(Encounter encounter) {
 
-//		if (!encounter.happenedOn(getDate())) {
-//			return false;
-//		}
+		// if (!encounter.happenedOn(getDate())) {
+		// return false;
+		// }
 
 		return contacts.contains(encounter.getContact());
 	}
@@ -133,7 +132,18 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 	public static class DiaryEntryIdentifier implements Identifier, Serializable {
+
 		private static final long serialVersionUID = -8938479214117686141L;
+
 		private final UUID id;
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return id.toString();
+		}
 	}
 }

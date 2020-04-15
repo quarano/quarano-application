@@ -59,7 +59,7 @@ public class MappingConfiguration {
 			= source -> source.getSource() == null ? null : BodyTemperature.of(source.getSource());
 
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
-			= source -> source.getSource().getValue();
+			= source -> source.getSource() == null ? null : source.getSource().getValue();
 
 	public MappingConfiguration(ModelMapper mapper, NewSymptomRepository symptoms, ContactPersonRepository contacts) {
 
@@ -130,12 +130,9 @@ public class MappingConfiguration {
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
-		mapper.typeMap(DiaryEntryDto.class, DiaryEntry.class).setPreConverter(context -> {
-
-			var source = context.getSource();
-
-			return DiaryEntry.of(null, source.getDate());
-
+		mapper.typeMap(DiaryEntryDto.class, DiaryEntry.class).setProvider(request -> {
+			var dto = (DiaryEntryDto) request.getSource();
+			return new DiaryEntry(dto.getDate(), "");
 		});
 	}
 }
