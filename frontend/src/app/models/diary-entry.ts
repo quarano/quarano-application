@@ -1,4 +1,4 @@
-import { IIdentifiable } from './general';
+import { IIdentifiable, Link } from './general';
 import { ContactPersonDto } from './contact-person';
 import { SymptomDto } from './symptom';
 
@@ -8,8 +8,12 @@ export interface DiaryEntryDto extends IIdentifiable {
   characteristicSymptoms: SymptomDto[];
   nonCharacteristicSymptoms: SymptomDto[];
   date: Date;
-  transmittedToHealthDepartment: boolean;
   contacts: ContactPersonDto[];
+  _links: DiaryEntryLinks;
+}
+
+export interface DiaryEntryLinks {
+  self: Link;
 }
 
 export interface DiaryEntryModifyDto extends IIdentifiable {

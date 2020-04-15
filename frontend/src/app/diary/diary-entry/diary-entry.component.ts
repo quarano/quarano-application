@@ -38,7 +38,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   get isReadonly(): boolean {
-    return this.diaryEntry.transmittedToHealthDepartment;
+    // ToDo: ggf. anpassen, wenn wir hier eine andere Vorgehensweise haben
+    return false;
   }
 
   constructor(
@@ -93,7 +94,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   onSubmit() {
-    if (this.formGroup.valid && !this.diaryEntry.transmittedToHealthDepartment) {
+    if (this.formGroup.valid) {
       const diaryEntryModifyDto: DiaryEntryModifyDto
         = { id: null, bodyTemperature: null, symptoms: [], date: null, contacts: [] };
       diaryEntryModifyDto.symptoms = this.characteristicSymptomsControl.value;
