@@ -46,15 +46,14 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	}
 
 	public Department(String name, UUID uuid) {
-
-		this.id = DepartmentIdentifier.of(uuid);
-		this.name = name;
+		this(name, DepartmentIdentifier.of(uuid));
 	}
 
 	// fixed Id department for tests and integration data
 	Department(String name, DepartmentIdentifier fixedId) {
 
 		this.id = fixedId;
+		this.name = name;
 	}
 
 	@Embeddable

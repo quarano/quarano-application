@@ -97,6 +97,14 @@ public class MappingConfiguration {
 			it.<ZipCode> map(ContactPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
+		mapper.typeMap(ContactPerson.class, ContactPersonDto.class).addMappings(it -> {
+
+			it.map(source -> source.getAddress().getStreet(), ContactPersonDto::setStreet);
+			it.map(source -> source.getAddress().getZipCode(), ContactPersonDto::setZipCode);
+			it.map(source -> source.getAddress().getCity(), ContactPersonDto::setCity);
+			it.map(source -> source.getAddress().getHouseNumber(), ContactPersonDto::setHouseNumber);
+		});
+
 		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
 
 			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);

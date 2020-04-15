@@ -17,9 +17,7 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import de.wevsvirushackathon.coronareport.CoronareportBackendApplication;
 import lombok.RequiredArgsConstructor;
-import quarano.Quarano;
 import quarano.department.TrackingEventListener;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
@@ -47,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Drotbohm
  */
 @ActiveProfiles("integrationtest")
-@SpringBootTest(classes = { Quarano.class, CoronareportBackendApplication.class })
+@SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @RequiredArgsConstructor

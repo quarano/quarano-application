@@ -17,8 +17,6 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import de.wevsvirushackathon.coronareport.CoronareportBackendApplication;
-import quarano.Quarano;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 
 import java.util.UUID;
@@ -35,7 +33,7 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * @author Oliver Drotbohm
  */
-@SpringBootTest(classes = { Quarano.class, CoronareportBackendApplication.class })
+@SpringBootTest
 @ActiveProfiles("integrationtest")
 public class JacksonMarshallingIntegrationTests {
 

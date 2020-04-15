@@ -17,9 +17,7 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import de.wevsvirushackathon.coronareport.CoronareportBackendApplication;
 import lombok.RequiredArgsConstructor;
-import quarano.Quarano;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPersonRepository;
@@ -37,7 +35,7 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
  * @author Oliver Drotbohm
  */
 @ActiveProfiles("integrationtest")
-@SpringBootTest(classes = { Quarano.class, CoronareportBackendApplication.class })
+@SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @RequiredArgsConstructor
@@ -71,5 +69,6 @@ public class ContactPersonMappingIntegrationTests {
 		assertThat(result.getId()).isEqualTo(reference.getId());
 		assertThat(result.getFirstName()).isEqualTo(person.getFirstName());
 		assertThat(result.getLastName()).isEqualTo(person.getLastName());
+		assertThat(result.getStreet()).isEqualTo(person.getAddress().getStreet());
 	}
 }
