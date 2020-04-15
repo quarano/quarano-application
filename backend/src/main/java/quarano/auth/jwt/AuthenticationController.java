@@ -27,10 +27,13 @@ class AuthenticationController {
 
 		return authenticationService.generateJWTToken(request.getUsername(), request.getPassword())
 				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK))
-				.recover(EntityNotFoundException.class, it -> ResponseEntity.notFound().build()) //
-				.recover(NotAuthorizedException.class,
-						it -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(it.getMessage())) //
+				.recover(EntityNotFoundException.class, it -> toUnauthorized(it.getMessage())) //
+				.recover(NotAuthorizedException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
+	}
+
+	private static HttpEntity<?> toUnauthorized(String message) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
 	}
 
 	@Data

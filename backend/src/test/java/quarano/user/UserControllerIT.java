@@ -66,17 +66,12 @@ public class UserControllerIT {
 
 	@Test
 	void testLoginWithInvalidCredentials() throws Exception {
+		expectLoginRejectedFor("DemoAccount", "My-Wrong-Password");
+	}
 
-		// Accounts and password created by dummy data input beans given
-		var username = "DemoAccount";
-		var password = "My-Wrong-Password";
-
-		// when
-		mvc.perform(post("/login") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(createLoginRequestBody(username, password))) //
-				.andExpect(status().isUnauthorized());
+	@Test
+	void loginWithInvalidUsernameIsRejected() throws Exception {
+		expectLoginRejectedFor("InvalidUsername", "DemoPassword");
 	}
 
 	@Test
@@ -89,7 +84,16 @@ public class UserControllerIT {
 				.andExpect(status().isOk());
 	}
 
-	public String createLoginRequestBody(String username, String password) throws Exception {
+	private void expectLoginRejectedFor(String username, String password) throws Exception {
+
+		mvc.perform(post("/login") //
+				.header("Origin", "*") //
+				.contentType(MediaType.APPLICATION_JSON) //
+				.content(createLoginRequestBody(username, password))) //
+				.andExpect(status().isUnauthorized());
+	}
+
+	private String createLoginRequestBody(String username, String password) throws Exception {
 		return mapper.writeValueAsString(Map.of("username", username, "password", password));
 	}
 }
