@@ -67,6 +67,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/login").permitAll();
+			it.mvcMatchers("/api/login").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
@@ -76,21 +77,23 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			it.mvcMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //
 		});
 
-		httpSecurity.csrf().disable().cors();
+		httpSecurity.csrf().disable().cors(it -> {
+			it.configurationSource(corsConfigurationSource());
+		});
 	}
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
+
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*")); // Problem!
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-		configuration
-				.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token", "client-code", "Origin"));
-		configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token", "Origin"));
+		configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-
 }
