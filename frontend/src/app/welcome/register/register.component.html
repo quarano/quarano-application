@@ -4,23 +4,34 @@
       <h1>Registrieren</h1>
     </mat-card-title>
   </mat-card-header>
-  <form [formGroup]="registrationForm">
+  <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
     <mat-card-content>
       <p>Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um ihre Symptome online zu melden, können Sie sich
         hier registrieren.</p>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Anmeldecode</mat-label>
-        <input matInput formControlName="clientKey" placeholder="Anmeldecode" id="client-key">
+        <input matInput formControlName="clientCode" placeholder="Anmeldecode" id="client-code" (change)="changeCode(null)">
+        <mat-error *ngIf="registrationForm.controls.clientCode.hasError('codeInvalid')">
+          Der angegebene Code ist ungültig.
+        </mat-error>
       </mat-form-field>
-    </mat-card-content>
-    <mat-card-content>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>E-Mailadresse</mat-label>
+        <input matInput formControlName="email" placeholder="E-Mailadresse" id="email">
+        <mat-error *ngIf="registrationForm.controls.email.hasError('email')">
+        Sie müssen eine richtige E-Mailadresse angeben.
+      </mat-error>
+      </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Benutzername</mat-label>
-        <input matInput formControlName="username" placeholder="Benutzername" id="username">
+        <input matInput formControlName="username" placeholder="Benutzername" id="username" (change)="changeUsername()">
+        <mat-error *ngIf="registrationForm.controls.username.hasError('usernameInvalid')">
+          Der angegebene Benutzername kann nicht verwendet werden.
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Passwort</mat-label>
-        <input matInput formControlName="password" placeholder="Passwort" id="password">
+        <input matInput formControlName="password" placeholder="Passwort" id="password" type="password">
         <mat-error *ngIf="registrationForm.controls.password.hasError('minLength')">
           Das Passwort muss mindestens 7 Zeichen lang sein.
         </mat-error>
@@ -37,12 +48,24 @@
           Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >
         </mat-error>
       </mat-form-field>
+      <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
+        Das Passwort darf nicht den Benutzernamen beinhalten.
+      </mat-error>
       <mat-form-field class="form__input--full-width" appearance="outline">
         <mat-label>Passwort bestätigen</mat-label>
-        <input matInput formControlName="password" placeholder="Passwort bestätigen" id="password-confirm">
-        <mat-error *ngIf="registrationForm.controls.password.hasError('mustMatch')">
-          Das Passwort und die Passwort Bestätigung müssen übereinstimmen.
+        <input matInput formControlName="passwordConfirm" placeholder="Passwort bestätigen" id="password-confirm" type="password">
+      </mat-form-field>
+      <div class="mat-form-field-subscript-wrapper ng-tns-c78-3" *ngIf="registrationForm.hasError('passwordConfirmWrong')">
+        <mat-error>
+          Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>
+      </div>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Geburtsdatum</mat-label>
+        <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Bitte geben Sie zur Verifizierung Ihr Geburtsdatum ein.</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>

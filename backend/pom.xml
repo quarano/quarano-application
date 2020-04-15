@@ -20,6 +20,7 @@
 		<docker.image.prefix>coronahackathon</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
+		<spring-hateoas.version>1.1.0.BUILD-SNAPSHOT</spring-hateoas.version>
 	</properties>
 
 	<profiles>
@@ -31,7 +32,14 @@
 			</activation>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
+				<spring.profile.active>integrationtest</spring.profile.active>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+				</dependency>
+			</dependencies>
 		</profile>
 		<profile>
 			<id>develop</id>
@@ -51,6 +59,10 @@
 	</profiles>
 
 	<dependencies>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-devtools</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -59,11 +71,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.hateoas</groupId> -->
+<!-- 			<artifactId>spring-hateoas</artifactId> -->
+<!-- 		</dependency> -->
 		<!-- Spring modelmapper for DTO transformation -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>0.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -75,22 +96,56 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<!-- include web security for api protection with JWT -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+		
 		<!-- Include lombok for development convenience -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		<groupId>org.jddd</groupId>
+			<artifactId>jddd-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jddd</groupId>
+			<artifactId>jddd-events</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-api</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-test</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.moduliths</groupId>
+			<artifactId>moduliths-docs</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -120,13 +175,18 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
-			<version>1.4.194</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.10.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -134,27 +194,82 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<profiles>
+						<profile>${spring.profile.active}</profile>
+					</profiles>
+				</configuration>
 			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>cz.habarta.typescript-generator</groupId> -->
+<!-- 				<artifactId>typescript-generator-maven-plugin</artifactId> -->
+<!-- 				<version>2.20.583</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>generate</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>generate</goal> -->
+<!-- 						</goals> -->
+<!-- 						<phase>process-classes</phase> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<jsonLibrary>jackson2</jsonLibrary> -->
+<!-- 					<classes> -->
+<!-- 						<class>de.wevsvirushackathon.coronareport.contactperson.ContactPerson</class> -->
+<!-- 					</classes> -->
+<!-- 					<outputFile>../coronareportfrontend/src/app/models/generated/generated-dto.d.ts</outputFile> -->
+<!-- 					<outputKind>module</outputKind> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+
 			<plugin>
-				<groupId>cz.habarta.typescript-generator</groupId>
-				<artifactId>typescript-generator-maven-plugin</artifactId>
-				<version>2.20.583</version>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>2.0.0-RC.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj-diagram</artifactId>
+						<version>2.0.1</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
-						<id>generate</id>
+						<id>reference</id>
+						<phase>package</phase>
 						<goals>
-							<goal>generate</goal>
+							<goal>process-asciidoc</goal>
 						</goals>
-						<phase>process-classes</phase>
+						<configuration>
+							<requires>
+								<require>asciidoctor-diagram</require>
+							</requires>
+						</configuration>
 					</execution>
 				</executions>
 				<configuration>
-					<jsonLibrary>jackson2</jsonLibrary>
-					<classes>
-						<class>de.wevsvirushackathon.coronareport.contactperson.ContactPerson</class>
-					</classes>
-					<outputFile>../coronareportfrontend/src/app/models/generated/generated-dto.d.ts</outputFile>
-					<outputKind>module</outputKind>
+					<doctype>book</doctype>
+					<backend>html5</backend>
+					<sourceHighlighter>highlight.js</sourceHighlighter>
+					<resources>
+						<resource>
+							<directory>src/main/asciidoc</directory>
+						</resource>
+					</resources>
+					<attributes>
+						<icons>font</icons>
+						<linkcss>true</linkcss>
+						<numbered>true</numbered>
+						<sectanchors>true</sectanchors>
+						<toc>left</toc>
+						<version>${project.version}</version>
+					</attributes>
 				</configuration>
 			</plugin>
 
@@ -169,5 +284,13 @@
 
 
 	</build>
+	
+	<repositories>
+	<!-- For Moduliths & jDDD -->
+		<repository>
+			<id>spring-libs-snapshot</id>
+			<url>https://repo.spring.io/libs-snapshot</url>
+		</repository>
+	</repositories>
 
 </project>

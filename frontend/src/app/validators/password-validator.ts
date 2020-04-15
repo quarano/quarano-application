@@ -29,23 +29,23 @@ export class PasswordValidator {
     return errors;
   }
 
-  public static mustMatch(control: AbstractControl): { invalid: boolean } {
-    if (!control.get('password').value || !control.get('confirmPassword').value) {
+  public static mustMatch(control: AbstractControl): { passwordConfirmWrong: boolean } {
+    if (!control.get('password').value || !control.get('passwordConfirm').value) {
       return null;
     }
 
-    if (control.get('password').value !== control.get('confirmPassword').value) {
-      return {invalid: true};
+    if (control.get('password').value !== control.get('passwordConfirm').value) {
+      return {passwordConfirmWrong: true};
     }
   }
 
-  public static mustNotIncludeUsername(control: AbstractControl): { invalid: boolean } {
+  public static mustNotIncludeUsername(control: AbstractControl): { passwordIncludesUsername: boolean } {
     if (!control.get('password').value || !control.get('username').value) {
       return null;
     }
 
     if (control.get('password').value.includes(control.get('username').value)) {
-      return {invalid: true};
+      return {passwordIncludesUsername: true};
     }
   }
 }

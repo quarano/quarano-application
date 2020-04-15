@@ -3,6 +3,10 @@
 }
 
 .form__card--small {
+  .mat-form-field-subscript-wrapper {
+    position: inherit !important;
+  }
+
   @extend .mx-auto;
   max-width: 700px;
 
@@ -105,4 +109,8 @@ fieldset legend {
 
 .mat-card {
   margin-bottom: 40px;
+}
+
+.mat-error {
+  line-height: 1.5;
 }

@@ -1,16 +1,19 @@
-import { environment } from './../../environments/environment';
-import { SymptomDto } from './../models/symptom';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
-import { DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
-import { groupBy } from '../utils/groupBy';
-import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
-import { TenantClientDto } from '../models/tenant-client';
-import { ClientDto } from '../models/client';
-import { HealthDepartmentDto } from '../models/healthDepartment';
-import { UserDto } from '../models/user';
+import {environment} from './../../environments/environment';
+import {SymptomDto} from './../models/symptom';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {BackendClient} from '../models/backend-client';
+import {map, share} from 'rxjs/operators';
+import {DiaryEntryDto, DiaryEntryModifyDto} from '../models/diary-entry';
+import {groupBy} from '../utils/groupBy';
+import {FirstQuery} from '../models/first-query';
+import {ContactPersonDto} from '../models/contact-person';
+import {TenantClient} from '../models/tenant-client';
+import {Client} from '../models/client';
+import {HealthDepartmentDto} from '../models/healtDepartment';
+import {User} from '../models/user';
+import {Register} from '../models/register';
 
 @Injectable({
   providedIn: 'root'
@@ -79,8 +82,8 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/diary/${diaryEntry.id}`, diaryEntry);
   }
 
-  registerClient(client: ClientDto): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/client/register`, client, { responseType: 'text' });
+  registerClient(registerClient: Register): Observable<string> {
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, {responseType: 'text'});
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
@@ -100,11 +103,19 @@ export class ApiService {
   }
 
   login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
+    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, {username, password});
   }
 
-  getMe(): Observable<UserDto> {
-    return this.httpClient.get<UserDto>(`${this.baseUrl}/user/me`);
+  getMe(): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseUrl}/api/user/me`);
+  }
+
+  checkClientCode(code: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/api/registration/checkcode/${code}`);
+  }
+
+  checkUsername(username: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/api/registration/checkusername/${username}`);
   }
 
 }
