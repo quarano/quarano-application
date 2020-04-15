@@ -2,6 +2,7 @@ package quarano.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import quarano.auth.Account;
 import quarano.auth.Role;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @author Patrick Otto
  */
 @Component
-public class JwtTokenCreationService {
+class JwtTokenCreationService {
 
 	private String secret;
 
@@ -38,7 +39,12 @@ public class JwtTokenCreationService {
 		this.trackedPersonIdClaimAttribute = trackedPersonIdClaimAttribute;
 	}
 
-	public String generateToken(String username, List<Role> roles, TrackedPersonIdentifier trackedPersonId) {
+	public String generateToken(Account it) {
+
+		String username = it.getUsername();
+		List<Role> roles = it.getRoles();
+		TrackedPersonIdentifier trackedPersonId = it.getTrackedPersonId();
+
 		final Date createdDate = new Date();
 		final Date expirationDate = calculateExpirationDate(createdDate);
 

@@ -1,8 +1,8 @@
-package quarano.auth;
+package quarano.auth.jwt;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
-import quarano.auth.jwt.JwtTokenToAuthenticationConverter;
+import quarano.auth.RoleType;
 
 import java.util.Arrays;
 

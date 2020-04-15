@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Retriev standard and application specific information from a JWT token created by quarano application
- * 
+ *
  * @author Patrick Otto
  */
 @Component
@@ -37,7 +36,7 @@ class JwtTokenService {
 
 	/**
 	 * Retrieves the clientId from the claims of the token
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -49,7 +48,7 @@ class JwtTokenService {
 
 	/**
 	 * Retrieves the username from the claims of the token
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -59,20 +58,21 @@ class JwtTokenService {
 
 	/**
 	 * Retrieve the roles of the user in String represantation
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<String> getRolesFromToken(String token) {
-		final Claims claims = getAllClaimsFromToken(token);
-		final ArrayList<String> roleNames = claims.get(roleClaimAttribute, ArrayList.class);
 
-		return roleNames;
+		var claims = getAllClaimsFromToken(token);
+
+		return claims.get(roleClaimAttribute, List.class);
 	}
 
 	/**
 	 * Retrieve the Expiration date of the token, using the standard expiration attribute of JWT
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -91,7 +91,7 @@ class JwtTokenService {
 
 	/**
 	 * Checks if the token is not expired Returns true if the token is not expired
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -102,7 +102,7 @@ class JwtTokenService {
 
 	/**
 	 * Checks if the token is valid by checking if it is expired
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */

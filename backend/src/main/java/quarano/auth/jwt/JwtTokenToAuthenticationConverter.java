@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class JwtTokenToAuthenticationConverter implements Converter<Jwt, JwtAuthenticatedProfile> {
+class JwtTokenToAuthenticationConverter implements Converter<Jwt, JwtAuthenticatedProfile> {
 
 	private final JwtTokenService jwtService;
 

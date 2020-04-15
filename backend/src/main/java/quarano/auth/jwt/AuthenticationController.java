@@ -1,12 +1,15 @@
 package quarano.auth.jwt;
 
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import quarano.auth.NotAuthorizedException;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,27 +17,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
-public class AuthenticationController {
+@RequiredArgsConstructor
+class AuthenticationController {
 
-	private AuthenticationService authenticationService;
-
-	public AuthenticationController(AuthenticationService authenticationService) {
-		this.authenticationService = authenticationService;
-	}
+	private final @NonNull AuthenticationService authenticationService;
 
 	@PostMapping("/login")
-	public ResponseEntity createCustomer(@RequestBody AuthenticationRequest request) {
-		return new ResponseEntity<>(authenticationService.generateJWTToken(request.getUsername(), request.getPassword()),
-				HttpStatus.OK);
+	HttpEntity<?> createCustomer(@RequestBody AuthenticationRequest request) {
+
+		return authenticationService.generateJWTToken(request.getUsername(), request.getPassword())
+				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK))
+				.recover(EntityNotFoundException.class, it -> ResponseEntity.notFound().build()) //
+				.recover(NotAuthorizedException.class,
+						it -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(it.getMessage())) //
+				.get();
 	}
 
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity handleEntityNotFoundException(EntityNotFoundException ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-	}
+	@Data
+	static class AuthenticationRequest {
 
-	@ExceptionHandler(NotAuthorizedException.class)
-	public ResponseEntity handleNotAuthorizedException(NotAuthorizedException ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+		private String username;
+		private String password;
 	}
 }

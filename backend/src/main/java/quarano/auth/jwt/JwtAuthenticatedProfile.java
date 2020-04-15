@@ -13,6 +13,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
+	private static final long serialVersionUID = 6843604992995383584L;
+
 	private final String username;
 	private final TrackedPersonIdentifier trackedPersonId;
 

@@ -75,7 +75,8 @@ public class UserControllerIT {
 		mvc.perform(post("/login") //
 				.header("Origin", "*") //
 				.contentType(MediaType.APPLICATION_JSON) //
-				.content(createLoginRequestBody(username, password))).andExpect(status().isUnauthorized());
+				.content(createLoginRequestBody(username, password))) //
+				.andExpect(status().isUnauthorized());
 	}
 
 	@Test

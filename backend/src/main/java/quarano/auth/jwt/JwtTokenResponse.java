@@ -1,10 +1,10 @@
 package quarano.auth.jwt;
 
-public class JWTTokenResponse {
+public class JwtTokenResponse {
 
 	private String token;
 
-	public JWTTokenResponse(String token) {
+	public JwtTokenResponse(String token) {
 		this.token = token;
 	}
 
