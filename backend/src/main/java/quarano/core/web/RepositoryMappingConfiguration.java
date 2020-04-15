@@ -41,11 +41,13 @@ import org.springframework.stereotype.Component;
 @Component
 class RepositoryMappingConfiguration {
 
+	@SuppressWarnings("unchecked")
 	RepositoryMappingConfiguration(ModelMapper mapper, ApplicationContext context, ConversionService conversions) {
 
 		Repositories repositories = new Repositories(context);
 		RepositoryInvokerFactory invokerFactory = new DefaultRepositoryInvokerFactory(repositories);
 
+		@SuppressWarnings("rawtypes")
 		Converter converter = new Converter<Object, Object>() {
 
 			@Override
@@ -75,6 +77,7 @@ class RepositoryMappingConfiguration {
 			}
 		};
 
+		@SuppressWarnings("rawtypes")
 		Converter toStringOrUuidConverter = new Converter<Object, Object>() {
 
 			@Override
