@@ -2,16 +2,14 @@ import { ContactPersonDto } from './../models/contact-person';
 import { ApiService } from '../services/api.service';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
-import { DiaryEntryDto } from '../models/diary-entry';
-import { pipe } from 'rxjs';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
 export class ContactPersonResolver implements Resolve<ContactPersonDto> {
   constructor(private apiService: ApiService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ContactPersonDto> {
-    const id = Number(route.paramMap.get('id'));
+    const id = route.paramMap.get('id');
 
     if (id) {
       return this.apiService.getContactPerson(id);
@@ -19,11 +17,21 @@ export class ContactPersonResolver implements Resolve<ContactPersonDto> {
       return of(
         {
           id: null,
-          firstname: null,
-          surename: null,
+          firstName: null,
+          lastName: null,
           zipCode: null,
           email: null,
-          phone: null
+          phone: null,
+          mobilePhone: null,
+          street: null,
+          houseNumber: null,
+          city: null,
+          remark: null,
+          isHealthStaff: null,
+          hasPreExistingConditions: null,
+          isSenior: null,
+          identificationHint: null,
+          _links: null
         });
     }
   }

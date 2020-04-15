@@ -1,15 +1,14 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {BackendClient} from '../../models/backend-client';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {ApiService} from '../../services/api.service';
-import {TenantClient} from '../../models/tenant-client';
-import {DiaryEntryDto} from '../../models/diary-entry';
-import {filter, takeUntil} from 'rxjs/operators';
-import {ProgressBarService} from '../../services/progress-bar.service';
-import {UserService} from '../../services/user.service';
-import {Subject} from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BackendClient } from '../../models/backend-client';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { ApiService } from '../../services/api.service';
+import { TenantClientDto } from '../../models/tenant-client';
+import { DiaryEntryDto } from '../../models/diary-entry';
+import { filter, takeUntil } from 'rxjs/operators';
+import { UserService } from '../../services/user.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-clients',
@@ -17,25 +16,25 @@ import {Subject} from 'rxjs';
   styleUrls: ['./clients.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 export class ClientsComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['surename', 'firstname', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
+  public displayedColumns: string[] = ['lastName', 'firstName', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
-  public dataSource = new MatTableDataSource<TenantClient>();
+  public dataSource = new MatTableDataSource<TenantClientDto>();
   public healthDepartment$ = this.userService.healthDepartment$;
 
   private readonly destroy$$ = new Subject();
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private apiService: ApiService,
-              private progressBarService: ProgressBarService,
-              private userService: UserService) {
+  constructor(
+    private apiService: ApiService,
+    private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -46,7 +45,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       )
       .subscribe(healthDepartment => {
         this.apiService.getReport(healthDepartment.id)
-          .subscribe((val: Array<TenantClient>) => {
+          .subscribe((val: Array<TenantClientDto>) => {
             this.dataSource.data = val;
           });
         this.dataSource.sort = this.sort;

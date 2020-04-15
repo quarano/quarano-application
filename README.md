@@ -33,6 +33,11 @@ Two health departments are created as dummy data upon startup with the following
 Testamt1 aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2
 Testamt2 ca3f3e9a-414a-4117-a623-59b109b269f1
 
+### Run Locally
+
+navigate to backend folder.
+Run `./mvnw spring-boot:run`. `Runs at http://localhost:8080/`
+
 ## Frontend
 
 ### Development Server

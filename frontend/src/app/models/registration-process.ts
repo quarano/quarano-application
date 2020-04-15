@@ -1,6 +1,6 @@
-import {Client} from './client';
+import { ClientDto } from './client';
 
-export interface RegistrationProcess extends Client {
+export interface RegistrationProcess extends ClientDto {
   userId: string;
 
 }

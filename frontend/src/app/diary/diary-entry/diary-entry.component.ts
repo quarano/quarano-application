@@ -38,7 +38,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   get isReadonly(): boolean {
-    return this.diaryEntry.transmittedToHealthDepartment;
+    // ToDo: ggf. anpassen, wenn wir hier eine andere Vorgehensweise haben
+    return false;
   }
 
   constructor(
@@ -78,7 +79,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   buildForm() {
     const characteristicSymptomIds = this.diaryEntry.characteristicSymptoms.map(s => s.id);
-    const contactPersonIds = this.diaryEntry.contactPersonList.map(c => c.id);
+    const contactPersonIds = this.diaryEntry.contacts.map(c => c.id);
     this.formGroup = this.formBuilder.group(
       {
         bodyTemperature: new FormControl(
@@ -86,22 +87,22 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
           [Validators.required, Validators.min(35.1), Validators.max(44.0)]),
         characteristicSymptoms: new FormControl({ value: characteristicSymptomIds, disabled: this.isReadonly }),
         nonCharacteristicSymptoms: new FormControl({ value: this.nonCharacteristicSymptomIds, disabled: this.isReadonly }),
-        dateTime: new FormControl({ value: this.diaryEntry.dateTime, disabled: this.isReadonly }, Validators.required),
+        dateTime: new FormControl({ value: this.diaryEntry.date, disabled: this.isReadonly }, Validators.required),
         contactPersons: new FormControl({ value: contactPersonIds, disabled: this.isReadonly })
       }
     );
   }
 
   onSubmit() {
-    if (this.formGroup.valid && !this.diaryEntry.transmittedToHealthDepartment) {
+    if (this.formGroup.valid) {
       const diaryEntryModifyDto: DiaryEntryModifyDto
-        = { id: null, bodyTemperature: null, symptoms: [], dateTime: null, contactPersonList: [] };
+        = { id: null, bodyTemperature: null, symptoms: [], date: null, contacts: [] };
       diaryEntryModifyDto.symptoms = this.characteristicSymptomsControl.value;
       diaryEntryModifyDto.id = this.diaryEntry.id;
       diaryEntryModifyDto.bodyTemperature = this.formGroup.controls.bodyTemperature.value;
-      diaryEntryModifyDto.dateTime = this.formGroup.controls.dateTime.value;
+      diaryEntryModifyDto.date = this.formGroup.controls.dateTime.value;
       diaryEntryModifyDto.symptoms.push(...this.formGroup.controls.nonCharacteristicSymptoms.value);
-      diaryEntryModifyDto.contactPersonList = this.formGroup.controls.contactPersons.value;
+      diaryEntryModifyDto.contacts = this.formGroup.controls.contactPersons.value;
 
       if (this.isNew) {
         this.createEntry(diaryEntryModifyDto);
@@ -150,7 +151,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   isCharacteristicSymptomSelected(symptom: SymptomDto) {
-    const selectedValues = this.characteristicSymptomsControl.value as number[];
+    const selectedValues = this.characteristicSymptomsControl.value as string[];
     return selectedValues.includes(symptom.id);
   }
 
@@ -161,8 +162,10 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   openContactDialog() {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
+      height: '90vh',
+      maxWidth: '100vw',
       data: {
-        contactPerson: { id: null, surename: null, firstname: null, phone: null, email: null },
+        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
       }
     });
 

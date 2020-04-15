@@ -20,7 +20,7 @@
                 >
               </div>
               <div class="col-10">
-                {{ entry.dateTime | date: "HH:mm":"de" }}
+                {{ entry.date | date: "HH:mm":"de" }}
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@
           <div class="col-12 col-xl-8">
             <div
               class="row align-items-center"
-              [class]="entry.contactPersonList.length === 0 ? 'disabled' : ''"
+              [class]="entry.contacts.length === 0 ? 'disabled' : ''"
             >
               <div class="col-2">
                 <i

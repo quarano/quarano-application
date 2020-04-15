@@ -1,3 +1,4 @@
+import { ProgressBarService } from './../services/progress-bar.service';
 import { SnackbarService } from './../services/snackbar.service';
 import { Injectable } from '@angular/core';
 import {
@@ -34,7 +35,8 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
-            // ToDo: Zum Login navigieren, sobald dieser fertig ist
+            this.snackbarService.message('Sie müssen sich zunächst einloggen');
+            this.router.navigate(['/welcome/login']);
             return throwError(error);
           }
 

@@ -1,11 +1,10 @@
 import { IIdentifiable } from './../../models/general';
 import { FormControl } from '@angular/forms';
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-multiple-autocomplete',
@@ -17,8 +16,10 @@ export class MultipleAutocompleteComponent implements OnInit {
   @Input() control: FormControl;
   @Input() placeholder: string;
   @Input() selectableItems: IIdentifiable[];
+  @Output() removed = new EventEmitter<string>();
+  @Output() added = new EventEmitter<string>();
   filteredItems: Observable<IIdentifiable[]>;
-  selectedItemIds: number[];
+  selectedItemIds: string[];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
@@ -49,14 +50,16 @@ export class MultipleAutocompleteComponent implements OnInit {
     this.input.nativeElement.value = '';
     this.inputControl.setValue(null);
     this.setFormControlValue();
+    this.added.emit(selectedValue);
   }
 
-  remove(id: number): void {
+  remove(id: string): void {
     const index = this.selectedItemIds.indexOf(id);
 
     if (index >= 0) {
       this.selectedItemIds.splice(index, 1);
       this.setFormControlValue();
+      this.removed.emit(id);
     }
   }
 
@@ -65,12 +68,13 @@ export class MultipleAutocompleteComponent implements OnInit {
     this.control.markAsDirty();
   }
 
-  getNameById(id: number) {
+  getNameById(id: string) {
     const item = this.selectableItems.find(i => i.id === id);
     return this.getName(item);
   }
 
   getName(item: IIdentifiable) {
+    if (!item) { return ''; }
     let name = '';
     this.nameProperties.forEach(prop => {
       name += item[prop] + ' ';

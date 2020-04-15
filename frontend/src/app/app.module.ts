@@ -1,3 +1,5 @@
+import { ProfileModule } from './profile/profile.module';
+import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SnackbarService } from './services/snackbar.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
@@ -19,6 +21,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
 import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
+import { BasicDataModule } from './basic-data/basic-data.module';
 
 registerLocaleData(localeDe, 'de');
 
@@ -40,10 +43,13 @@ registerLocaleData(localeDe, 'de');
     HttpClientModule,
     DiaryModule,
     WelcomeModule,
-    ContactModule
+    ContactModule,
+    BasicDataModule,
+    ProfileModule
   ],
   providers: [
     SnackbarService,
+    ErrorInterceptorProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressBarInterceptor,

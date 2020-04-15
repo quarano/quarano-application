@@ -11,22 +11,22 @@
 
 <div class="container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
-    <ng-container matColumnDef="surename">
+    <ng-container matColumnDef="lastName">
       <mat-header-cell *matHeaderCellDef mat-sort-header
         >Nachname</mat-header-cell
       >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Nachname</span
-        ><span class="value-span">{{ element.surename }}</span>
+        ><span class="value-span">{{ element.lastName }}</span>
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="firstname">
+    <ng-container matColumnDef="firstName">
       <mat-header-cell *matHeaderCellDef mat-sort-header
         >Vorname</mat-header-cell
       >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Vorname</span
-        ><span class="value-span">{{ element.firstname }}</span>
+        ><span class="value-span">{{ element.firstName }}</span>
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="phone">

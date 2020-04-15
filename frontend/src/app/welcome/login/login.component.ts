@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SnackbarService} from '../../services/snackbar.service';
-import {UserService} from '../../services/user.service';
-import {Router} from '@angular/router';
-import {switchMap, tap} from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SnackbarService } from '../../services/snackbar.service';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -17,9 +17,10 @@ export class LoginComponent {
     password: new FormControl(null, Validators.required)
   });
 
-  constructor(private userService: UserService,
-              private snackbarService: SnackbarService,
-              private router: Router) {
+  constructor(
+    private userService: UserService,
+    private snackbarService: SnackbarService,
+    private router: Router) {
   }
 
   public submitForm() {

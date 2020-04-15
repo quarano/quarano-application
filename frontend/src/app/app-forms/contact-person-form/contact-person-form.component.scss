@@ -1,0 +1,35 @@
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px;
+}
+
+.header-image {
+  background-image: url("../../../assets/contact_icon.png");
+  background-size: cover;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+.risk-question {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.display-none {
+  display: none;
+}

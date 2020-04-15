@@ -9,8 +9,8 @@ it('Should register an new client', () => {
   cy.get('#next-btn').click();
 
   // Naming page
-  cy.get('#firstname-input').type('Alice');
-  cy.get('#surename-input').type('Alice');
+  cy.get('#firstName-input').type('Alice');
+  cy.get('#lastName-input').type('Alice');
   cy.get('#s1-next-btn').click();
 
   // Phone and zipcode page
@@ -44,6 +44,6 @@ it('Should register an new client', () => {
   cy.get('#first-report-finish-btn').click();
 
   // Finish registration
-  //cy.get('#finish-reg-btn').click();
+  // cy.get('#finish-reg-btn').click();
 
 });
