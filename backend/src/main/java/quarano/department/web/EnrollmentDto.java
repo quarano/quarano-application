@@ -47,7 +47,7 @@ public class EnrollmentDto {
 			return Map.of(//
 					"details", Map.of("href", detailsUri), //
 					"questionnaire", Map.of("href", questionnareUri), //
-					"contacts", Map.of("href", encountersUri), //
+					"encounters", Map.of("href", encountersUri), //
 					"reopen", Map.of("href", reopenUri));
 		}
 
