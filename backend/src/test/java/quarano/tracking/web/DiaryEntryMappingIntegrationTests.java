@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 import lombok.RequiredArgsConstructor;
 import quarano.AbstractQuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
+import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
 
 import java.time.LocalDateTime;
@@ -61,9 +62,13 @@ public class DiaryEntryMappingIntegrationTests extends AbstractQuaranoIntegratio
 	void mapsEntityToDetailsDto() {
 
 		var source = new DiaryEntry(LocalDateTime.now(), "Note");
+		source.setBodyTemperature(BodyTemperature.of(40.0f));
+		source.setDate(LocalDateTime.now());
 
 		var result = DiaryEntryDetailsDto.of(source);
 
 		assertThat(result.getId()).isEqualTo(source.getId().toString());
+		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());
+		assertThat(result.getDate()).isEqualTo(source.getDateTime());
 	}
 }

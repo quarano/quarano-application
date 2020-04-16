@@ -22,6 +22,7 @@ import quarano.reference.NewSymptom;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.DiaryEntry;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -38,6 +39,14 @@ public class DiaryEntryDetailsDto {
 
 	public String getId() {
 		return entry.getId().toString();
+	}
+
+	public LocalDateTime getDate() {
+		return entry.getDateTime();
+	}
+
+	public float getBodyTemperature() {
+		return entry.getBodyTemperature().getValue();
 	}
 
 	public Stream<?> getContacts() {
