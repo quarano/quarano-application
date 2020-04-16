@@ -17,6 +17,7 @@ package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
@@ -60,6 +61,12 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 	public static TrackedPerson INDEX_PERSON3_WITH_ACTIVE_TRACKING = new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2,
 			"Sandra", "Schubert", EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"),
 			LocalDate.of(1990, 1, 1));
+	
+	static {
+		// add address data to person 3
+		INDEX_PERSON3_WITH_ACTIVE_TRACKING.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
+		
+	}
 
 	/*
 		 * (non-Javadoc)
