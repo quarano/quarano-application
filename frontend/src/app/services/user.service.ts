@@ -59,7 +59,10 @@ export class UserService {
       map(value => {
         if (value.user) {
           if (value.isHealthDepartmentUser) {
-            return `${value.user.username} (${value.user.healthDepartment?.fullName || 'Gesundheitsamt unbekannt'})`;
+            if (value.user.firstName && value.user.lastName) {
+              return `${value.user.firstName} ${value.user.lastName} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+            }
+            return `${value.user.username} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
           } else if (value.user.client?.firstName || value.user.client?.lastName) {
             return `${value.user.client.firstName || ''} ${value.user.client.lastName || ''}`;
           }

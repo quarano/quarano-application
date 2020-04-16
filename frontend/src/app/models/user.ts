@@ -5,4 +5,6 @@ export interface UserDto {
   client?: ClientDto;
   healthDepartment: HealthDepartmentDto;
   username: string;
+  firstName: string;
+  lastName: string;
 }

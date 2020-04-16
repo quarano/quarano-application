@@ -1,5 +1,4 @@
 export interface HealthDepartmentDto {
-  fullName: string;
+  name: string;
   id: string;
-  passCode: string;
 }
