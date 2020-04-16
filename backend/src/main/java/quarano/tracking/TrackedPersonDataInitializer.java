@@ -17,6 +17,7 @@ package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
@@ -28,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TrackedPersonDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+public class TrackedPersonDataInitializer implements DataInitializer {
 
 	private final TrackedPersonRepository trackedPeople;
 	private final ContactPersonRepository contacts;
@@ -73,13 +72,11 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 	}
 
 	/*
-		 * (non-Javadoc)
-		 *
-		 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.
-		 * springframework.context.ApplicationEvent)
-		 */
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#initialize()
+	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
 		// create a fixed set of tracked people for testing and integration if it is not present yet
 		if (this.trackedPeople.findById(VALID_TRACKED_PERSON1_ID_DEP1).isPresent()) {
@@ -139,6 +136,5 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		trackedPeople.save(INDEX_PERSON1_NOT_REGISTERED);
 		trackedPeople.save(INDEX_PERSON2_IN_ENROLLMENT);
 		trackedPeople.save(INDEX_PERSON3_WITH_ACTIVE_TRACKING);
-
 	}
 }

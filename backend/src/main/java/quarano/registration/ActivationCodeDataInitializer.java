@@ -4,6 +4,7 @@ import static quarano.tracking.TrackedPersonDataInitializer.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 import quarano.department.DepartmentDataInitializer;
 import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 
@@ -12,11 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Create some dummy accounts for test and development
@@ -27,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Order(500)
 @Slf4j
 @RequiredArgsConstructor
-public class ActivationCodeDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+public class ActivationCodeDataInitializer implements DataInitializer {
 
 	private final ActivationCodeRepository codeRepo;
 
@@ -59,9 +57,12 @@ public class ActivationCodeDataInitializer implements ApplicationListener<Applic
 		CODES.add(ACTIVATIONCODE_PERSON3_REDEEMED);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#initialize()
+	 */
 	@Override
-	@Transactional
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
 		// set status of codes
 		ACTIVATIONCODE_PERSON2_REDEEMED.redeem();

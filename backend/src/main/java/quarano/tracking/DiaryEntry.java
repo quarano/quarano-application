@@ -48,7 +48,7 @@ import org.springframework.util.Assert;
  * @author Oliver Drotbohm
  */
 @EqualsAndHashCode(callSuper = true, of = {})
-@Entity(name = "newDE")
+@Entity
 @Accessors(chain = true)
 @Data
 @AllArgsConstructor

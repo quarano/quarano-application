@@ -3,9 +3,8 @@ package quarano.auth;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,15 +17,16 @@ import org.springframework.stereotype.Component;
 @Order(50)
 @Slf4j
 @RequiredArgsConstructor
-class RoleInitializerApplicationListener implements ApplicationListener<ApplicationStartedEvent> {
+class RoleDataInitializer implements DataInitializer {
 
 	private final @NonNull RoleRepository roleRepository;
 
-	/**
-	 * adds each role defined in enum {@link RoleType} that is not existing in the database
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#initialize()
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
 		for (RoleType type : RoleType.values()) {
 
