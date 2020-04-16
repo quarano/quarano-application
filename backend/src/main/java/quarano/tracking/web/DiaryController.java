@@ -38,6 +38,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,7 +71,7 @@ public class DiaryController {
 
 		return mapper.map(payload, DiaryEntry.class, errors) //
 				.fold(entry -> handle(entry, person), //
-						error -> ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages)));
+						error -> ErrorsDto.toBadRequest(errors, messages));
 	}
 
 	@GetMapping("/api/diary/{identifier}")
@@ -82,6 +83,28 @@ public class DiaryController {
 				.map(it -> DiaryEntryDetailsDto.of(it, mapper));
 
 		return ResponseEntity.of(dto);
+	}
+
+	@PutMapping("/api/diary/{identifier}")
+	HttpEntity<?> addDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, //
+			@Valid @RequestBody DiaryEntryDto payload, Errors errors, //
+			@LoggedIn TrackedPerson person) {
+
+		var entry = person.getDiary().getEntryFor(identifier).orElse(null);
+
+		if (entry == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (errors.hasErrors()) {
+			return ErrorsDto.toBadRequest(errors, messages);
+		}
+
+		return mapper.map(payload, entry, errors) //
+				.peekLeft(__ -> people.save(person)) //
+				.mapLeft(it -> DiaryEntryDetailsDto.of(it, mapper)) //
+				.<HttpEntity<?>> fold(ResponseEntity.ok()::body, //
+						__ -> ErrorsDto.toBadRequest(errors, messages));
 	}
 
 	private HttpEntity<?> handle(DiaryEntry entry, TrackedPerson person) {

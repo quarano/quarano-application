@@ -28,6 +28,8 @@ import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.Converter;
@@ -64,6 +66,7 @@ public class MappingConfiguration {
 	public MappingConfiguration(ModelMapper mapper, SymptomRepository symptoms, ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
+		mapper.getConfiguration().setCollectionsMergeEnabled(false);
 
 		mapper.addConverter(STRING_TO_EMAIL_ADDRESS, String.class, EmailAddress.class);
 		mapper.addConverter(STRING_TO_PHONE_NUMBER, String.class, PhoneNumber.class);
@@ -125,6 +128,9 @@ public class MappingConfiguration {
 		mapper.typeMap(DiaryEntryDto.class, DiaryEntry.class).setProvider(request -> {
 			var dto = (DiaryEntryDto) request.getSource();
 			return new DiaryEntry(dto.getDate(), "");
+		}).addMappings(it -> {
+			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryDto::getSymptoms,
+					(target, v) -> target.setSymptoms(v));
 		});
 	}
 }
