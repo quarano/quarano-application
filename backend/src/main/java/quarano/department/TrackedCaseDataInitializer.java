@@ -15,14 +15,13 @@
  */
 package quarano.department;
 
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
+import quarano.tracking.TrackedPersonDataInitializer;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
-import quarano.tracking.TrackedPersonDataInitializer;
 
 /**
  * @author Oliver Drotbohm
@@ -31,8 +30,6 @@ import quarano.tracking.TrackedPersonDataInitializer;
 @RequiredArgsConstructor
 @Order(660)
 class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
-
-	private final ModelMapper mapper;
 
 	private final TrackedCaseRepository cases;
 
@@ -43,38 +40,29 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 
-			var case1 = new TrackedCase();
-			case1.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED);
-			case1.setDepartment(DepartmentDataInitializer.DEPARTMENT_1);
-			cases.save(case1);
-			
-			var case2 = new TrackedCase();
-			case2.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT);
-			case2.setDepartment(DepartmentDataInitializer.DEPARTMENT_1);
-			case2.setEnrollment(new Enrollment());
-			case2.setInitialReport(new InitialReport());
-			cases.save(case2);
-			
-			var case3 = new TrackedCase();
-			case3.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING);
-			case3.setDepartment(DepartmentDataInitializer.DEPARTMENT_2);
-			Enrollment enrollment = new Enrollment();
-			enrollment.markDetailsSubmitted();
-			
-			InitialReport report  = new InitialReport();
-			report.setBelongToLaboratoryStaff(true);
-			report.setBelongToMedicalStaff(true);
-			report.setBelongToNursingStaff(true);
-			report.setDirectContactWithLiquidsOfC19pat(false);
-			report.setFamilyMember(true);
-			report.setFlightCrewMemberWithC19Pat(false);
-			report.setFlightPassengerCloseRowC19Pat(true);
-			report.setMin15MinutesContactWithC19Pat(true);
-			report.setNursingActionOnC19Pat(false);
-			case3.submitQuestionnaire(report);
-			
-			//case3.markEnrollmentContactsSubmitted();
-			case3.setEnrollment(enrollment);
-			cases.save(case3);
+		cases.save(new TrackedCase() //
+				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED) //
+				.setDepartment(DepartmentDataInitializer.DEPARTMENT_1));
+
+		cases.save(new TrackedCase()//
+				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT)
+				.setDepartment(DepartmentDataInitializer.DEPARTMENT_1));
+
+		cases.save(new TrackedCase() //
+				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING)
+				.setDepartment(DepartmentDataInitializer.DEPARTMENT_2) //
+				.markEnrollmentDetailsSubmitted() //
+				.submitQuestionnaire(new InitialReport() //
+						.setBelongToLaboratoryStaff(true) //
+						.setBelongToMedicalStaff(true) //
+						.setBelongToNursingStaff(true) //
+						.setDirectContactWithLiquidsOfC19pat(false) //
+						.setFamilyMember(true) //
+						.setFlightCrewMemberWithC19Pat(false) //
+						.setFlightPassengerCloseRowC19Pat(true) //
+						.setMin15MinutesContactWithC19Pat(true) //
+						.setNursingActionOnC19Pat(false) //
+						.withoutSymptoms()) //
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 	}
 }

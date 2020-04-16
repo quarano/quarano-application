@@ -49,8 +49,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	private @OneToOne TrackedPerson trackedPerson;
 	private @ManyToOne Department department;
-	private @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) InitialReport initialReport;
-	private Enrollment enrollment = new Enrollment();
+
+	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
+	private InitialReport initialReport;
+
+	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
 
 	TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
