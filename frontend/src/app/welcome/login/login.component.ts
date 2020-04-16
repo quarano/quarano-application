@@ -38,7 +38,7 @@ export class LoginComponent {
           }
         },
         () => {
-          this.snackbarService.error('Benutzername, oder Passwort falsch');
+          this.snackbarService.error('Benutzername oder Passwort falsch');
         }
       );
   }

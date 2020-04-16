@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      Object.assign(this.client, this.formGroup.valid);
+      Object.assign(this.client, this.formGroup.value);
       this.client.dateOfBirth = this.dateOfBirth;
       this.modifyProfile();
     }
