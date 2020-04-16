@@ -74,11 +74,12 @@ public class DiaryController {
 	}
 
 	@GetMapping("/api/diary/{identifier}")
-	public HttpEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, @LoggedIn TrackedPerson person) {
+	public ResponseEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
+			@LoggedIn TrackedPerson person) {
 
 		var dto = person.getDiary() //
 				.getEntryFor(identifier) //
-				.map(it -> mapper.map(it, DiaryEntryDetailsDto.class));
+				.map(DiaryEntryDetailsDto::of);
 
 		return ResponseEntity.of(dto);
 	}
