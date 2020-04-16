@@ -18,7 +18,7 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTest;
+import quarano.AbstractQuaranoIntegrationTests;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  * @author Oliver Drotbohm
  */
 @RequiredArgsConstructor
-public class DiaryEntryMappingIntegrationTests extends AbstractQuaranoIntegrationTest {
+public class DiaryEntryMappingIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 	private final MapperWrapper mapper;
 

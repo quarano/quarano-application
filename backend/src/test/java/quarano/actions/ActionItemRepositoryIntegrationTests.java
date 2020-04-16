@@ -18,7 +18,7 @@ package quarano.actions;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTest;
+import quarano.AbstractQuaranoIntegrationTests;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @RequiredArgsConstructor
-public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegrationTest {
+public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;

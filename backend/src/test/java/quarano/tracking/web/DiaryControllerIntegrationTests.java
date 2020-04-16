@@ -18,7 +18,7 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTest;
+import quarano.AbstractQuaranoIntegrationTests;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ import org.springframework.http.ResponseEntity;
  */
 
 @RequiredArgsConstructor
-public class DiaryControllerIntegrationTests extends AbstractQuaranoIntegrationTest {
+public class DiaryControllerIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 	private final DiaryController controller;
 

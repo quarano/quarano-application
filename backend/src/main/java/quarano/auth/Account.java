@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 import org.jddd.core.types.Identifier;
@@ -44,7 +45,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	// will be null if account belongs to a health department employee
 	@Getter private @Nullable TrackedPersonIdentifier trackedPersonId;
 
-	@ManyToMany //
+	@ManyToMany(fetch = FetchType.EAGER) //
 	@Getter private List<Role> roles = new ArrayList<>();
 
 	Account(String username, String encryptedPassword, String firstname, String lastname,
