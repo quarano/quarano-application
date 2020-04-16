@@ -23,7 +23,7 @@ class AuthenticationController {
 	private final @NonNull AuthenticationService authenticationService;
 
 	@PostMapping({ "/login", "/api/login" })
-	HttpEntity<?> createCustomer(@RequestBody AuthenticationRequest request) {
+	HttpEntity<?> login(@RequestBody AuthenticationRequest request) {
 
 		return authenticationService.generateJWTToken(request.getUsername(), request.getPassword())
 				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK))
