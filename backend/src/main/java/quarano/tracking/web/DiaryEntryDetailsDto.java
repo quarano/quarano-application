@@ -18,13 +18,13 @@ package quarano.tracking.web;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.reference.NewSymptom;
+import quarano.core.web.MapperWrapper;
+import quarano.reference.SymptomDto;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.DiaryEntry;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DiaryEntryDetailsDto {
 
 	private final DiaryEntry entry;
+	private final MapperWrapper mapper;
 
 	public String getId() {
 		return entry.getId().toString();
@@ -54,10 +55,10 @@ public class DiaryEntryDetailsDto {
 				.map(ContactSummary::new);
 	}
 
-	public Stream<?> getSymptoms() {
+	public Stream<SymptomDto> getSymptoms() {
 
 		return entry.getSymptoms().stream() //
-				.map(SymptomSummary::new);
+				.map(it -> mapper.map(it, SymptomDto.class));
 	}
 
 	@JsonProperty("_links")
@@ -91,20 +92,6 @@ public class DiaryEntryDetailsDto {
 			var itemResource = on(ContactPersonController.class).getContact(null, contact.getId());
 
 			return Map.of("self", Map.of("href", fromMethodCall(itemResource).toUriString()));
-		}
-	}
-
-	@RequiredArgsConstructor
-	static class SymptomSummary {
-
-		private final NewSymptom symptom;
-
-		public UUID getId() {
-			return symptom.getId();
-		}
-
-		public String getName() {
-			return symptom.getName();
 		}
 	}
 }

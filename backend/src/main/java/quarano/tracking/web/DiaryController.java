@@ -56,7 +56,7 @@ public class DiaryController {
 	Stream<?> getDiary(@LoggedIn TrackedPerson person) {
 
 		return person.getDiary() //
-				.map(DiaryEntryDetailsDto::of) //
+				.map(it -> DiaryEntryDetailsDto.of(it, mapper)) //
 				.stream();
 	}
 
@@ -79,7 +79,7 @@ public class DiaryController {
 
 		var dto = person.getDiary() //
 				.getEntryFor(identifier) //
-				.map(DiaryEntryDetailsDto::of);
+				.map(it -> DiaryEntryDetailsDto.of(it, mapper));
 
 		return ResponseEntity.of(dto);
 	}

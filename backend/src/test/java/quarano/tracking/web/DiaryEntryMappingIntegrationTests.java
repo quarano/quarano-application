@@ -65,10 +65,15 @@ public class DiaryEntryMappingIntegrationTests extends AbstractQuaranoIntegratio
 		source.setBodyTemperature(BodyTemperature.of(40.0f));
 		source.setDate(LocalDateTime.now());
 
-		var result = DiaryEntryDetailsDto.of(source);
+		var result = DiaryEntryDetailsDto.of(source, mapper);
 
 		assertThat(result.getId()).isEqualTo(source.getId().toString());
 		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());
 		assertThat(result.getDate()).isEqualTo(source.getDateTime());
+		assertThat(result.getSymptoms()).allSatisfy(it -> {
+			assertThat(it.getId()).isNotNull();
+			assertThat(it.getName()).isNotBlank();
+			assertThat(it.isCharacteristic()).isNotNull();
+		});
 	}
 }
