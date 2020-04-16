@@ -3,10 +3,11 @@ package quarano.auth.jwt;
 import quarano.auth.RoleType;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,11 +30,10 @@ public class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
 	private static Collection<? extends GrantedAuthority> toAuthorities(List<RoleType> roles) {
 
-		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-		for (RoleType role : roles) {
-			grantedAuthorities.add(new SimpleGrantedAuthority(role.getCode()));
-		}
-		return grantedAuthorities;
+		return roles.stream() //
+				.map(RoleType::getCode) //
+				.map(SimpleGrantedAuthority::new) //
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@Override
@@ -42,6 +42,7 @@ public class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 	}
 
 	@Override
+	@Nullable
 	public Object getDetails() {
 		return this.trackedPersonId;
 	}

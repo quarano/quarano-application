@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,10 +41,13 @@ class JwtTokenService {
 	 * @param token
 	 * @return
 	 */
+	@Nullable
 	public TrackedPersonIdentifier getTrackedPersonIdFromToken(String token) {
-		final Claims claims = getAllClaimsFromToken(token);
-		String personIdLiteral = claims.get(trackedPersonIdClaimAttribute, String.class);
-		return TrackedPersonIdentifier.of(UUID.fromString(personIdLiteral));
+
+		var claims = getAllClaimsFromToken(token);
+		var idClaim = claims.get(trackedPersonIdClaimAttribute, String.class);
+
+		return idClaim == null ? null : TrackedPersonIdentifier.of(UUID.fromString(idClaim));
 	}
 
 	/**
