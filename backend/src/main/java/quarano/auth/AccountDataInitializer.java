@@ -42,14 +42,14 @@ class AccountDataInitializer implements DataInitializer {
 
 		// account for person 2
 		Account accountPerson2 = new Account("DemoAccount", passwordEncoder.encode("DemoPassword"), "Markus", "Hanser",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT.getId(),
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1,
 				userRole);
 		accountRepository.save(accountPerson2);
 
 		// account for person 3
 		Account accountPerson3 = new Account("test3", passwordEncoder.encode("test123"), "Sandra", "Schubert",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
-				TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING.getId(), userRole);
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP2, TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2,
+				userRole);
 		accountRepository.save(accountPerson3);
 
 		// account for GA user

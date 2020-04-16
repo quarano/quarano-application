@@ -49,7 +49,7 @@ class DiaryControllerWebIntegrationTests extends AbstractQuaranoWebIntegrationTe
 	@WithQuaranoUser("test3")
 	void updatesDiaryEntry() throws Exception {
 
-		var person = TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING;
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		DiaryEntry entry = person.getDiary().iterator().next();
 
 		DiaryEntryDto payload = mapper.map(entry, DiaryEntryDto.class);

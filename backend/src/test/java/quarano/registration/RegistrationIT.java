@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import quarano.AbstractQuaranoWebIntegrationTests;
 import quarano.registration.web.AccountRegistrationDto;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 import quarano.util.TokenResponse;
 
 import java.io.IOException;
@@ -18,30 +20,25 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
-@ActiveProfiles("integrationtest")
 @Transactional
-class RegistrationIT {
+class RegistrationIT extends AbstractQuaranoWebIntegrationTests {
 
 	@Autowired MockMvc mvc;
 	@Autowired ObjectMapper mapper;
+	@Autowired TrackedPersonRepository repository;
 
 	@Test
 	public void registerNewAccountForClientSuccess() throws Exception {
 
 		// Given
-		var person = TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED;
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
 
 		var password = "myPassword";
 		var username = "testusername";
@@ -71,7 +68,7 @@ class RegistrationIT {
 	@Test
 	public void registerNewAccountWithInvalidActivationCodeFails() throws Exception {
 
-		var person = TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED;
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
 
 		var password = "myPassword";
 		var username = "testusername";
@@ -98,7 +95,7 @@ class RegistrationIT {
 	@Test
 	public void registerAccountWithExistingUsernameFails() throws Exception {
 
-		var person = TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED;
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
 		var password = "myPassword";
 
 		var registrationDto = AccountRegistrationDto.builder() //

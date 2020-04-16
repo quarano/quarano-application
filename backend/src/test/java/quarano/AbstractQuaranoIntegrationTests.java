@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
@@ -29,6 +30,7 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)
+@Transactional
 public class AbstractQuaranoIntegrationTests {
 
 }
