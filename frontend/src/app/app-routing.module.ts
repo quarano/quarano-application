@@ -44,7 +44,7 @@ const routes: Routes = [
     path: 'forbidden',
     component: ForbiddenComponent
   },
-  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }
 ];
 
