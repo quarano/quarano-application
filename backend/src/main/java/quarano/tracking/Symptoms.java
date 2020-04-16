@@ -16,7 +16,7 @@
 package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
-import quarano.reference.NewSymptom;
+import quarano.reference.Symptom;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,12 +27,12 @@ import org.springframework.data.util.Streamable;
  * @author Oliver Drotbohm
  */
 @RequiredArgsConstructor(staticName = "of")
-public class Symptoms implements Streamable<NewSymptom> {
+public class Symptoms implements Streamable<Symptom> {
 
-	private final List<NewSymptom> symptoms;
+	private final List<Symptom> symptoms;
 
 	public boolean hasCharacteristicSymptom() {
-		return symptoms.stream().anyMatch(NewSymptom::isCharacteristic);
+		return symptoms.stream().anyMatch(Symptom::isCharacteristic);
 	}
 
 	/*
@@ -40,7 +40,7 @@ public class Symptoms implements Streamable<NewSymptom> {
 	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override
-	public Iterator<NewSymptom> iterator() {
+	public Iterator<Symptom> iterator() {
 		return symptoms.iterator();
 	}
 }

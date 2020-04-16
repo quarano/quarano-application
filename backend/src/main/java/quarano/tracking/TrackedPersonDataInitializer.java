@@ -17,8 +17,8 @@ package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import quarano.reference.NewSymptom;
-import quarano.reference.NewSymptomRepository;
+import quarano.reference.Symptom;
+import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -45,7 +45,7 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 
 	private final TrackedPersonRepository trackedPeople;
 	private final ContactPersonRepository contacts;
-	private final NewSymptomRepository symptoms;
+	private final SymptomRepository symptoms;
 
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("738d3d1f-a9f1-4619-9896-2b5cb3a89c22"));
@@ -64,11 +64,12 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 	public static TrackedPerson INDEX_PERSON3_WITH_ACTIVE_TRACKING = new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2,
 			"Sandra", "Schubert", EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"),
 			LocalDate.of(1990, 1, 1));
-	
+
 	static {
 		// add address data to person 3
-		INDEX_PERSON3_WITH_ACTIVE_TRACKING.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
-		
+		INDEX_PERSON3_WITH_ACTIVE_TRACKING
+				.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
+
 	}
 
 	/*
@@ -104,23 +105,21 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		contacts.saveAll(contactsOfPerson3);
 
 		// generate diary entries for person 3
-		
-		
-		
+
 		DiaryEntry entry1 = DiaryEntry.of("", LocalDateTime.now().minusDays(3));
 		entry1.setContacts(contactsOfPerson3);
 		// add 'husten'
-		List<NewSymptom> symptomsE1 = new ArrayList<>();
-		NewSymptom cough = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
+		List<Symptom> symptomsE1 = new ArrayList<>();
+		Symptom cough = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
 		symptomsE1.add(cough);
-		entry1.setSymptoms(symptomsE1);	
+		entry1.setSymptoms(symptomsE1);
 		entry1.setBodyTemperature(BodyTemperature.of(37.5f));
 		INDEX_PERSON3_WITH_ACTIVE_TRACKING.addDiaryEntry(entry1);
 
 		DiaryEntry entry2 = DiaryEntry.of("", LocalDateTime.now().minusDays(2));
 		// add 'husten' and 'Nackenschmerzen'
-		List<NewSymptom> symptomsE2 = new ArrayList<>();
-		NewSymptom neckProblems = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
+		List<Symptom> symptomsE2 = new ArrayList<>();
+		Symptom neckProblems = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
 		symptomsE2.add(neckProblems);
 		symptomsE2.add(cough);
 		entry2.setSymptoms(symptomsE2);
@@ -130,13 +129,13 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 
 		DiaryEntry entry3 = DiaryEntry.of("", LocalDateTime.now().minusDays(1));
 		// add 'husten' and 'Nackenschmerzen'
-		List<NewSymptom> symptomsE3 = new ArrayList<>();
+		List<Symptom> symptomsE3 = new ArrayList<>();
 		symptomsE3.add(cough);
-		entry3.setSymptoms(symptomsE3);		
+		entry3.setSymptoms(symptomsE3);
 		entry3.setContacts(contactsOfPerson3.subList(1, 1));
 		entry3.setBodyTemperature(BodyTemperature.of(39.7f));
 		INDEX_PERSON3_WITH_ACTIVE_TRACKING.addDiaryEntry(entry3);
-		
+
 		trackedPeople.save(INDEX_PERSON1_NOT_REGISTERED);
 		trackedPeople.save(INDEX_PERSON2_IN_ENROLLMENT);
 		trackedPeople.save(INDEX_PERSON3_WITH_ACTIVE_TRACKING);

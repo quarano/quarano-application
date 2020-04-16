@@ -14,14 +14,14 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
-public class NewSymptom {
+public class Symptom {
 
 	@Id //
 	private UUID id;
 	private String name;
 	private boolean isCharacteristic;
 
-	NewSymptom() {
+	Symptom() {
 		this.id = UUID.randomUUID();
 	}
 }

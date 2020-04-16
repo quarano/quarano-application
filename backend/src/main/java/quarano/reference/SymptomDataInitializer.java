@@ -39,9 +39,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 @Order(10)
 @Slf4j
-public class NewSymptomDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class SymptomDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
-	private final @NonNull NewSymptomRepository repository;
+	private final @NonNull SymptomRepository repository;
 	private final @NonNull ModelMapper mapper;
 
 	/*
@@ -65,7 +65,7 @@ public class NewSymptomDataInitializer implements ApplicationListener<Applicatio
 
 		// read json file and convert to customer object
 		try {
-			this.repository.saveAll(objectMapper.readValue(in, new TypeReference<List<NewSymptom>>() {}));
+			this.repository.saveAll(objectMapper.readValue(in, new TypeReference<List<Symptom>>() {}));
 		} catch (IOException e) {
 			throw new IllegalStateException("Unable to parse masterdata file", e);
 		}

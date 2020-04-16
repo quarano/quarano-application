@@ -17,7 +17,7 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import quarano.reference.NewSymptomRepository;
+import quarano.reference.SymptomRepository;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
@@ -43,7 +43,7 @@ public class MappingConfigurationUnitTests {
 
 	ModelMapper mapper = new ModelMapper();
 
-	@Mock NewSymptomRepository symptoms;
+	@Mock SymptomRepository symptoms;
 	@Mock ContactPersonRepository contacts;
 
 	@BeforeAll

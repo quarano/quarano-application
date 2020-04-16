@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController
 @RequiredArgsConstructor
-class NewSymptomController {
+class SymptomController {
 
-	private static final Sort BY_NAME_ASCENDING = Sort.sort(NewSymptom.class).by(NewSymptom::getName).ascending();
+	private static final Sort BY_NAME_ASCENDING = Sort.sort(Symptom.class).by(Symptom::getName).ascending();
 
-	private final @NonNull NewSymptomRepository symptoms;
+	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ModelMapper modelMapper;
 
 	/**
@@ -45,7 +45,7 @@ class NewSymptomController {
 	 */
 	@PostMapping("/api/symptoms")
 	public SymptomDto addSymptom(@RequestBody SymptomDto symptomDto) {
-		var symptom = modelMapper.map(symptomDto, NewSymptom.class);
+		var symptom = modelMapper.map(symptomDto, Symptom.class);
 		return modelMapper.map(symptoms.save(symptom), SymptomDto.class);
 	}
 
@@ -59,7 +59,7 @@ class NewSymptomController {
 	public Stream<SymptomDto> addSymptoms(@RequestBody List<SymptomDto> symptomDtos) {
 
 		symptomDtos.stream() //
-				.map(x -> modelMapper.map(x, NewSymptom.class)) //
+				.map(x -> modelMapper.map(x, Symptom.class)) //
 				.forEach(symptoms::save);
 
 		return symptoms.findAll() //
