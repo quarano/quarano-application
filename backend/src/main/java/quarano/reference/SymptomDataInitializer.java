@@ -24,9 +24,10 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -39,33 +40,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 @Order(10)
 @Slf4j
-public class SymptomDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class SymptomDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+
+	private static final String MASTER_DATA = "classpath:masterdata/symptoms.json";
 
 	private final @NonNull SymptomRepository repository;
 	private final @NonNull ModelMapper mapper;
+	private final @NonNull ResourceLoader resources;
+	private final @NonNull ObjectMapper objectMapper;
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
-		final String jsonFileName = "masterdata/symptoms.json";
-		final InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsonFileName);
+		try (InputStream in = resources.getResource(MASTER_DATA).getInputStream()) {
 
-		if (this.repository.count() > 0) {
-			log.info("Symptom data already exists, skipping JSON import");
-			return;
-		}
+			if (this.repository.count() > 0) {
+				log.info("Symptom data already exists, skipping JSON import");
+				return;
+			}
 
-		log.info("Importing symptoms from JSON file: " + jsonFileName);
+			log.info("Importing symptoms from JSON file: " + MASTER_DATA);
 
-		final ObjectMapper objectMapper = new ObjectMapper();
-
-		// read json file and convert to customer object
-		try {
 			this.repository.saveAll(objectMapper.readValue(in, new TypeReference<List<Symptom>>() {}));
+
 		} catch (IOException e) {
 			throw new IllegalStateException("Unable to parse masterdata file", e);
 		}

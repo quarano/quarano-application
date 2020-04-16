@@ -18,7 +18,7 @@ package quarano.department;
 import lombok.RequiredArgsConstructor;
 import quarano.tracking.TrackedPersonDataInitializer;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Order(660)
-class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+class TrackedCaseDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
 
 	private final TrackedCaseRepository cases;
 
@@ -38,7 +38,7 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
 		cases.save(new TrackedCase() //
 				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED) //

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.department.DepartmentDataInitializer;
 import quarano.tracking.TrackedPersonDataInitializer;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Order(500)
 @RequiredArgsConstructor
 @Slf4j
-class AccountDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+class AccountDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
 
 	private final AccountRepository accountRepository;
 	private final RoleRepository roleRepository;
@@ -29,7 +29,7 @@ class AccountDataInitializer implements ApplicationListener<ApplicationReadyEven
 
 	@Override
 	@Transactional
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
 		log.warn("Test data: creating 7 accounts");
 

@@ -22,7 +22,7 @@ import quarano.department.Department.DepartmentIdentifier;
 
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Order(510)
 @Slf4j
-public class DepartmentDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class DepartmentDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
 
 	private final @NonNull DepartmentRepository departments;
 
@@ -51,7 +51,7 @@ public class DepartmentDataInitializer implements ApplicationListener<Applicatio
 	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
 		this.log.warn("Testdata: creating two healthdepartmens");
 

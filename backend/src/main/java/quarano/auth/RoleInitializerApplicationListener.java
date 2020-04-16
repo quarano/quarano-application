@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Order(50)
 @Slf4j
 @RequiredArgsConstructor
-class RoleInitializerApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
+class RoleInitializerApplicationListener implements ApplicationListener<ApplicationStartedEvent> {
 
 	private final @NonNull RoleRepository roleRepository;
 
@@ -26,7 +26,7 @@ class RoleInitializerApplicationListener implements ApplicationListener<Applicat
 	 * adds each role defined in enum {@link RoleType} that is not existing in the database
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
 		for (RoleType type : RoleType.values()) {
 

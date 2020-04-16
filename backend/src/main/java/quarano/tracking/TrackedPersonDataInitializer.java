@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TrackedPersonDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class TrackedPersonDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
 
 	private final TrackedPersonRepository trackedPeople;
 	private final ContactPersonRepository contacts;
@@ -79,7 +79,7 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		 * springframework.context.ApplicationEvent)
 		 */
 	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+	public void onApplicationEvent(ApplicationStartedEvent event) {
 
 		// create a fixed set of tracked people for testing and integration if it is not present yet
 		if (this.trackedPeople.findById(VALID_TRACKED_PERSON1_ID_DEP1).isPresent()) {
