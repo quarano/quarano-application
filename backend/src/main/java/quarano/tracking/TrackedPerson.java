@@ -47,6 +47,7 @@ import javax.persistence.OneToMany;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -58,7 +59,6 @@ import org.jddd.event.types.DomainEvent;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
 
-	private @Getter @Setter Long legacyClientId;
 	private @Getter @Setter String firstName, lastName;
 	private @Getter @Setter EmailAddress emailAddress;
 	private @Getter @Setter PhoneNumber phoneNumber;
@@ -139,6 +139,15 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				.ifPresent(encounters::remove);
 
 		return this;
+	}
+
+	public boolean isDetailsCompleted() {
+
+		return StringUtils.hasText(firstName) //
+				&& StringUtils.hasText(lastName) //
+				&& emailAddress != null //
+				&& address.isComplete() //
+				&& dateOfBirth != null;
 	}
 
 	@Value(staticConstructor = "of")

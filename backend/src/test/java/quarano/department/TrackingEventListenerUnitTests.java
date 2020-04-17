@@ -20,8 +20,8 @@ import static org.mockito.Mockito.*;
 
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Encounter;
-import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
+import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class TrackingEventListenerUnitTests {
 
 		var listener = new TrackingEventListener(cases);
 
-		var person = new TrackedPerson("Michael", "Mustermann");
+		var person = TrackedPersonDataInitializer.createTanja();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann");
 		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 

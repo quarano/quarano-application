@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 
+import org.springframework.util.StringUtils;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -37,6 +39,14 @@ public class Address {
 	private HouseNumber houseNumber = HouseNumber.NONE;
 	private String city;
 	private ZipCode zipCode;
+
+	boolean isComplete() {
+
+		return StringUtils.hasText(street) //
+				&& !houseNumber.equals(HouseNumber.NONE) //
+				&& StringUtils.hasText(city) //
+				&& zipCode != null;
+	}
 
 	@Embeddable
 	@EqualsAndHashCode

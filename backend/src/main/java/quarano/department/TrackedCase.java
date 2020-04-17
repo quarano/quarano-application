@@ -72,6 +72,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public TrackedCase markEnrollmentDetailsSubmitted() {
 
+		if (!trackedPerson.isDetailsCompleted()) {
+			throw new EnrollmentException("Enrollment details need to be completed!");
+		}
+
 		this.enrollment.markDetailsSubmitted();
 
 		return this;
