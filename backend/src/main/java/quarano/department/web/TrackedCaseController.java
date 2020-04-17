@@ -60,7 +60,7 @@ class TrackedCaseController {
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor accessor;
 
-	@GetMapping("/api/cases")
+	@GetMapping("/api/hd/cases")
 	Stream<?> allCases() {
 		return cases.findAll().stream().map(TrackedCaseSummaryDto::of);
 	}
