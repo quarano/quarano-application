@@ -92,11 +92,11 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
+		tracking.updateTrackedPersonDetails(dto, errors, user);
+
 		cases.findByTrackedPerson(user) //
 				.map(TrackedCase::submitEnrollmentDetails) //
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
-
-		tracking.updateTrackedPersonDetails(dto, errors, user);
 
 		return ResponseEntity.ok() //
 				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
