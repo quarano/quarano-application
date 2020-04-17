@@ -10,18 +10,15 @@
     quarano
   </h2>
 
-  <nav class="ml-3">
+  <nav class="ml-3" *ngIf="isLoggedIn | async">
     <a
       routerLink="/tenant-admin"
       routerLinkActive="active"
       id="tenant-admin-login-link"
-      *ngIf="isHealthDepartmentUser$ | async"
+      *appIsHealthDepartmentUser
       >Für Behörden</a
     >
-    <ng-container
-      *ngIf="
-        (isFullyAuthenticated$ | async) && !(isHealthDepartmentUser$ | async)
-      "
+    <ng-container *ngIf="enrollmentCompleted$ | async"
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
       <a routerLink="/contacts" routerLinkActive="active">Kontakte</a>
     </ng-container>

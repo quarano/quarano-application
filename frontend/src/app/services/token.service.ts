@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
-import {distinctUntilChanged, filter} from 'rxjs/operators';
-import {SnackbarService} from './snackbar.service';
-import {Router} from '@angular/router';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { SnackbarService } from './snackbar.service';
+import { Router } from '@angular/router';
 
 export const JWT_STORAGE_KEY = 'jwt';
 
@@ -12,12 +12,12 @@ export const JWT_STORAGE_KEY = 'jwt';
 })
 export class TokenService {
 
-  public readonly token$$: BehaviorSubject<string>;
+  private readonly token$$: BehaviorSubject<string>;
   public readonly token$: Observable<string>;
 
   public readonly roles$$ = new BehaviorSubject<string[]>([]);
-  public readonly username$$ = new BehaviorSubject<string>(null);
-  public readonly expDateTime$$ = new BehaviorSubject<Date>(null);
+  private readonly username$$ = new BehaviorSubject<string>(null);
+  private readonly expDateTime$$ = new BehaviorSubject<Date>(null);
 
   public get token(): string | null {
     if (this.expDateTime$$.getValue() !== null && this.expDateTime$$.getValue() < new Date()) {
@@ -44,8 +44,9 @@ export class TokenService {
     }
   }
 
-  constructor(private snackbarService: SnackbarService,
-              private router: Router) {
+  constructor(
+    private snackbarService: SnackbarService,
+    private router: Router) {
     const storageToken = this.localJwt;
     this.token$$ = new BehaviorSubject<string>(storageToken);
     this.token$ = this.token$$.asObservable();

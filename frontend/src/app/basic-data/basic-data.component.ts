@@ -62,7 +62,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       this.buildForms();
     }));
 
-    this.enrollmentService.getEnrollmentStatus()
+    this.userService.enrollmentStatus$
       .subscribe(status => {
         if (status.completedPersonalData) {
           this.stepper.next();
@@ -284,7 +284,6 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   private completeEnrollment(withoutEncounters: boolean) {
     this.enrollmentService.completeEnrollment(withoutEncounters)
-      .pipe(switchMap(_ => this.userService.reloadUser()))
       .subscribe(_ => {
         this.snackbarService.success('Die Registrierung wurde abgeschlossen');
         this.router.navigate(['/diary']);
