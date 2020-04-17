@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   api: {
-    baseUrl: 'https://api.epitrack.de'
+    baseUrl: 'https://quarano-backend.cfapps.io'
   }
 };

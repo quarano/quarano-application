@@ -46,7 +46,7 @@ export class UserService {
         map(status => status?.complete)
       );
 
-    this.completedEnrollment$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.complete));
+    this.completedEnrollment$ = this.clientStatus$$.pipe(map(status => status?.complete));
 
     this.isHealthDepartmentUser$ = this.roles$$
       .pipe(
@@ -76,9 +76,9 @@ export class UserService {
   public reloadUser(): Observable<ClientStatusDto> {
     return this.apiService.getMe()
       .pipe(
-        tap(returnedUser => this.user$$.next(returnedUser)),
+        tap(returnedUser => { console.log(returnedUser); this.user$$.next(returnedUser); }),
         mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null),
-        tap(status => this.clientStatus$$.next(status)));
+        tap(status => { console.log(status); this.clientStatus$$.next(status); }));
   }
 
   private init() {
