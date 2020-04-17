@@ -9,7 +9,7 @@ import { roleNames } from 'src/app/models/role';
 })
 export class HeaderLeftComponent implements OnInit {
   public readonly enrollmentCompleted$ = this.userService.enrollmentCompleted$;
-  public readonly isLoggedIn = this.userService.isLoggedIn$;
+  public readonly isLoggedIn$ = this.userService.isLoggedIn$;
   public rolesNames = roleNames;
 
   constructor(private userService: UserService) { }

@@ -10,7 +10,7 @@
     quarano
   </h2>
 
-  <nav class="ml-3" *ngIf="isLoggedIn | async">
+  <nav class="ml-3" *ngIf="isLoggedIn$ | async">
     <a
       routerLink="/tenant-admin"
       routerLinkActive="active"
