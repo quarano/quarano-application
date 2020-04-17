@@ -18,8 +18,9 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTest;
+import quarano.AbstractQuaranoIntegrationTests;
 import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -30,14 +31,15 @@ import org.springframework.http.ResponseEntity;
  */
 
 @RequiredArgsConstructor
-public class DiaryControllerIntegrationTests extends AbstractQuaranoIntegrationTest {
+public class DiaryControllerIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 	private final DiaryController controller;
+	private final TrackedPersonRepository repository;
 
 	@Test
 	void rendersDiaryEntryCorrectly() throws Exception {
 
-		var person = TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING;
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		var entry = person.getDiary().iterator().next();
 
 		ResponseEntity<?> entity = controller.getDiaryEntry(entry.getId(), person);

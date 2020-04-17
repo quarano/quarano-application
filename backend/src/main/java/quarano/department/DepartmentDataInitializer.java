@@ -18,12 +18,12 @@ package quarano.department;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 import quarano.department.Department.DepartmentIdentifier;
 
+import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Order(510)
 @Slf4j
-public class DepartmentDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+public class DepartmentDataInitializer implements DataInitializer {
 
 	private final @NonNull DepartmentRepository departments;
 
@@ -43,19 +43,17 @@ public class DepartmentDataInitializer implements ApplicationListener<Applicatio
 	public final static DepartmentIdentifier DEPARTMENT_ID_DEP2 = DepartmentIdentifier
 			.of(UUID.fromString("ca3f3e9a-414a-4117-a623-59b109b269f1"));
 
-	public final static Department DEPARTMENT_1 = new Department("GA Mannheim", DEPARTMENT_ID_DEP1);
-	public final static Department DEPARTMENT_2 = new Department("GA Darmstadt", DEPARTMENT_ID_DEP2);
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
+	 * @see quarano.core.DataInitializer#initialize()
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
-		this.log.warn("Testdata: creating two healthdepartmens");
+		log.warn("Testdata: creating two health departmens");
 
-		final Department hd1 = this.departments.save(DEPARTMENT_1);
-		final Department hd2 = this.departments.save(DEPARTMENT_2);
+		departments.saveAll(List.of( //
+				new Department("GA Mannheim", DEPARTMENT_ID_DEP1), //
+				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2)));
 	}
 }

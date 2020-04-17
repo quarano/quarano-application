@@ -46,7 +46,7 @@ export class UserService {
         map(status => status?.complete)
       );
 
-    this.completedEnrollment$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.complete));
+    this.completedEnrollment$ = this.clientStatus$$.pipe(map(status => status?.complete));
 
     this.isHealthDepartmentUser$ = this.roles$$
       .pipe(
@@ -73,19 +73,20 @@ export class UserService {
     );
   }
 
+  public reloadUser(): Observable<ClientStatusDto> {
+    return this.apiService.getMe()
+      .pipe(
+        tap(returnedUser => { console.log(returnedUser); this.user$$.next(returnedUser); }),
+        mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null),
+        tap(status => { console.log(status); this.clientStatus$$.next(status); }));
+  }
+
   private init() {
     // Check for client, if there is a new token
     this.tokenService.token$.pipe(
       filter(token => token !== null),
-      mergeMap(() => {
-        return this.apiService.getMe()
-          .pipe(
-            tap(returnedUser => this.user$$.next(returnedUser)),
-            mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null));
-      }),
-    ).subscribe(status => {
-      this.clientStatus$$.next(status);
-    });
+      mergeMap(() => this.reloadUser()),
+    ).subscribe();
 
     // Unset client if token gets null
     this.tokenService.token$.pipe(

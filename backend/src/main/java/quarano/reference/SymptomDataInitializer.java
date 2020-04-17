@@ -18,14 +18,12 @@ package quarano.reference;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -40,7 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 @Order(10)
 @Slf4j
-public class SymptomDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+public class SymptomDataInitializer implements DataInitializer {
 
 	private static final String MASTER_DATA = "classpath:masterdata/symptoms.json";
 
@@ -51,10 +49,10 @@ public class SymptomDataInitializer implements ApplicationListener<ApplicationSt
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
+	 * @see quarano.core.DataInitializer#initialize()
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
 		try (InputStream in = resources.getResource(MASTER_DATA).getInputStream()) {
 
@@ -67,7 +65,12 @@ public class SymptomDataInitializer implements ApplicationListener<ApplicationSt
 
 			this.repository.saveAll(objectMapper.readValue(in, new TypeReference<List<Symptom>>() {}));
 
-		} catch (IOException e) {
+			log.info("Importing symptoms done!");
+
+		} catch (Exception e) {
+
+			log.warn(e.toString());
+
 			throw new IllegalStateException("Unable to parse masterdata file", e);
 		}
 	}

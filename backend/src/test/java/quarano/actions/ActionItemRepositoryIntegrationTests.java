@@ -18,7 +18,7 @@ package quarano.actions;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTest;
+import quarano.AbstractQuaranoIntegrationTests;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @RequiredArgsConstructor
-public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegrationTest {
+public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
@@ -50,8 +50,9 @@ public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegra
 		DiaryEntry entry = new DiaryEntry(LocalDateTime.now(), "");
 		entry.setBodyTemperature(BodyTemperature.of(41.0f));
 
-		var person = persons.save(TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING //
-				.addDiaryEntry(entry));
+		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
+				.map(it -> it.addDiaryEntry(entry)) //
+				.map(persons::save).orElseThrow();
 
 		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.INCREASED_TEMPERATURE, BodyTemperature.of(36.0f), BodyTemperature.of(40.0f)));

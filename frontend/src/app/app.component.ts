@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ProgressBarService} from './services/progress-bar.service';
-import {delay} from 'rxjs/operators';
+import { UserService } from './services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { ProgressBarService } from './services/progress-bar.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import {delay} from 'rxjs/operators';
 export class AppComponent implements OnInit {
   public progressBarActive = false;
 
-  constructor(private progressBarService: ProgressBarService) {
+  constructor(private progressBarService: ProgressBarService, private userService: UserService) {
   }
 
   ngOnInit(): void {

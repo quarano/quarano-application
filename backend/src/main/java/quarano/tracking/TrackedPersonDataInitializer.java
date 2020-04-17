@@ -17,6 +17,7 @@ package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.DataInitializer;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
@@ -28,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TrackedPersonDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+public class TrackedPersonDataInitializer implements DataInitializer {
 
 	private final TrackedPersonRepository trackedPeople;
 	private final ContactPersonRepository contacts;
@@ -54,32 +53,12 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 
-	// people
-	public static TrackedPerson INDEX_PERSON1_NOT_REGISTERED = new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja",
-			"Mueller", EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3));
-
-	public static TrackedPerson INDEX_PERSON2_IN_ENROLLMENT = new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus",
-			"Hanser", EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1));
-
-	public static TrackedPerson INDEX_PERSON3_WITH_ACTIVE_TRACKING = new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2,
-			"Sandra", "Schubert", EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"),
-			LocalDate.of(1990, 1, 1));
-
-	static {
-		// add address data to person 3
-		INDEX_PERSON3_WITH_ACTIVE_TRACKING
-				.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
-
-	}
-
 	/*
-		 * (non-Javadoc)
-		 *
-		 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.
-		 * springframework.context.ApplicationEvent)
-		 */
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#initialize()
+	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
 
 		// create a fixed set of tracked people for testing and integration if it is not present yet
 		if (this.trackedPeople.findById(VALID_TRACKED_PERSON1_ID_DEP1).isPresent()) {
@@ -87,19 +66,30 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 			return;
 		}
 
+		trackedPeople
+				.save(new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja", "Mueller",
+						EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3)))
+				.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
+
+		trackedPeople.save(new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus", "Hanser",
+				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1)));
+
+		var sandra = trackedPeople.save(new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2, "Sandra", "Schubert",
+				EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1)));
+
 		log.info("Test data: Generating 3 tracked Persons");
 
 		// generate 2 contacts for Person 3
 		List<ContactPerson> contactsOfPerson3 = new ArrayList<>();
 
 		ContactPerson contact1OfPerson3 = new ContactPerson("Lora", "Laurer");
-		contact1OfPerson3.assignOwner(INDEX_PERSON3_WITH_ACTIVE_TRACKING);
+		contact1OfPerson3.assignOwner(sandra);
 		contact1OfPerson3.setEmailAddress(EmailAddress.of("lora@testtest.de"));
 		contactsOfPerson3.add(contact1OfPerson3);
 
 		ContactPerson contact2OfPerson3 = new ContactPerson("Harry", "Huber");
 		contact2OfPerson3.setEmailAddress(EmailAddress.of("harry@testtest.de"));
-		contact2OfPerson3.assignOwner(INDEX_PERSON3_WITH_ACTIVE_TRACKING);
+		contact2OfPerson3.assignOwner(sandra);
 		contactsOfPerson3.add(contact2OfPerson3);
 
 		contacts.saveAll(contactsOfPerson3);
@@ -114,7 +104,8 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		symptomsE1.add(cough);
 		entry1.setSymptoms(symptomsE1);
 		entry1.setBodyTemperature(BodyTemperature.of(37.5f));
-		INDEX_PERSON3_WITH_ACTIVE_TRACKING.addDiaryEntry(entry1);
+
+		trackedPeople.save(sandra.addDiaryEntry(entry1));
 
 		DiaryEntry entry2 = DiaryEntry.of("", LocalDateTime.now().minusDays(2));
 		// add 'husten' and 'Nackenschmerzen'
@@ -125,7 +116,7 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		entry2.setSymptoms(symptomsE2);
 		entry2.setContacts(contactsOfPerson3.subList(0, 0));
 		entry2.setBodyTemperature(BodyTemperature.of(37.8f));
-		INDEX_PERSON3_WITH_ACTIVE_TRACKING.addDiaryEntry(entry2);
+		trackedPeople.save(sandra.addDiaryEntry(entry2));
 
 		DiaryEntry entry3 = DiaryEntry.of("", LocalDateTime.now().minusDays(1));
 		// add 'husten' and 'Nackenschmerzen'
@@ -134,11 +125,6 @@ public class TrackedPersonDataInitializer implements ApplicationListener<Applica
 		entry3.setSymptoms(symptomsE3);
 		entry3.setContacts(contactsOfPerson3.subList(1, 1));
 		entry3.setBodyTemperature(BodyTemperature.of(39.7f));
-		INDEX_PERSON3_WITH_ACTIVE_TRACKING.addDiaryEntry(entry3);
-
-		trackedPeople.save(INDEX_PERSON1_NOT_REGISTERED);
-		trackedPeople.save(INDEX_PERSON2_IN_ENROLLMENT);
-		trackedPeople.save(INDEX_PERSON3_WITH_ACTIVE_TRACKING);
-
+		trackedPeople.save(sandra.addDiaryEntry(entry3));
 	}
 }

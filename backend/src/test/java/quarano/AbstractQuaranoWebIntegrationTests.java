@@ -15,20 +15,12 @@
  */
 package quarano;
 
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 /**
  * @author Oliver Drotbohm
  */
-@ActiveProfiles("integrationtest")
-@SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-@TestConstructor(autowireMode = AutowireMode.ALL)
-public class AbstractQuaranoIntegrationTest {
+@AutoConfigureMockMvc
+public class AbstractQuaranoWebIntegrationTests extends AbstractQuaranoIntegrationTests {
 
 }

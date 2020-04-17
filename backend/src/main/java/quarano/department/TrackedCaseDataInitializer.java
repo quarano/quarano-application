@@ -16,10 +16,10 @@
 package quarano.department;
 
 import lombok.RequiredArgsConstructor;
+import quarano.core.DataInitializer;
 import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -29,28 +29,34 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Order(660)
-class TrackedCaseDataInitializer implements ApplicationListener<ApplicationStartedEvent> {
+class TrackedCaseDataInitializer implements DataInitializer {
 
 	private final TrackedCaseRepository cases;
+	private final TrackedPersonRepository trackedPeople;
+	private final DepartmentRepository departments;
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
+	 * @see quarano.core.DataInitializer#initialize()
 	 */
 	@Override
-	public void onApplicationEvent(ApplicationStartedEvent event) {
+	public void initialize() {
+
+		var person1 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
+		var person3 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 
 		cases.save(new TrackedCase() //
-				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON1_NOT_REGISTERED) //
-				.setDepartment(DepartmentDataInitializer.DEPARTMENT_1));
-
-		cases.save(new TrackedCase()//
-				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON2_IN_ENROLLMENT)
-				.setDepartment(DepartmentDataInitializer.DEPARTMENT_1));
+				.setTrackedPerson(person1) //
+				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
 
 		cases.save(new TrackedCase() //
-				.setTrackedPerson(TrackedPersonDataInitializer.INDEX_PERSON3_WITH_ACTIVE_TRACKING)
-				.setDepartment(DepartmentDataInitializer.DEPARTMENT_2) //
+				.setTrackedPerson(person2) //
+				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
+
+		cases.save(new TrackedCase() //
+				.setTrackedPerson(person3) //
+				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElse(null)) //
 				.markEnrollmentDetailsSubmitted() //
 				.submitQuestionnaire(new InitialReport() //
 						.setBelongToLaboratoryStaff(true) //

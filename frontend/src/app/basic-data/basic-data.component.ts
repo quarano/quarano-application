@@ -1,4 +1,5 @@
-import { EncounterDto, EncounterEntry } from './../models/encounter';
+import { UserService } from './../services/user.service';
+import { EncounterEntry } from './../models/encounter';
 import { EnrollmentService } from './../services/enrollment.service';
 import { ClientDto } from './../models/client';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -6,17 +7,16 @@ import { QuestionnaireDto } from './../models/first-query';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ContactPersonDto } from 'src/app/models/contact-person';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import '../utils/date-extensions';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { VALIDATION_PATTERNS } from '../utils/validation';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -50,7 +50,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
-    private router: Router) { }
+    private router: Router,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -283,6 +284,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   private completeEnrollment(withoutEncounters: boolean) {
     this.enrollmentService.completeEnrollment(withoutEncounters)
+      .pipe(switchMap(_ => this.userService.reloadUser()))
       .subscribe(_ => {
         this.snackbarService.success('Die Registrierung wurde abgeschlossen');
         this.router.navigate(['/diary']);

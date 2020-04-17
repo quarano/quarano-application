@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -33,6 +35,10 @@ public class ErrorsDto {
 
 	private final Errors errors;
 	private final MessageSourceAccessor messages;
+
+	public static HttpEntity<?> toBadRequest(Errors errors, MessageSourceAccessor messages) {
+		return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+	}
 
 	@JsonAnyGetter
 	Map<String, String> toMap() {
