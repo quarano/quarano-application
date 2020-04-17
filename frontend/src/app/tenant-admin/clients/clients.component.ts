@@ -1,53 +1,37 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BackendClient } from '../../models/backend-client';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { ApiService } from '../../services/api.service';
-import { TenantClientDto } from '../../models/tenant-client';
-import { DiaryEntryDto } from '../../models/diary-entry';
-import { filter, takeUntil } from 'rxjs/operators';
-import { UserService } from '../../services/user.service';
-import { Subject } from 'rxjs';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {ApiService} from '../../services/api.service';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {ReportCaseDto} from '../../models/report-case';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  styleUrls: ['./clients.component.scss']
 })
 export class ClientsComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['lastName', 'firstName', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
-  public expandedElement: BackendClient | null;
-  public dataSource = new MatTableDataSource<TenantClientDto>();
-  public healthDepartment$ = this.userService.healthDepartment$;
+  public displayedColumns: string[] = ['lastName', 'firstName', 'zipCode', 'dateOfBirth', 'email',
+    'type', 'medicalStaff', 'quarantineStart'];
+  public dataSource = new MatTableDataSource<ReportCaseDto>();
+  private dateTimeNow = new Date();
 
   private readonly destroy$$ = new Subject();
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private apiService: ApiService,
-    private userService: UserService) {
+    private apiService: ApiService) {
   }
 
   ngOnInit(): void {
-    this.healthDepartment$
+    this.apiService.getCases()
       .pipe(
-        filter(healthDepartment => healthDepartment != null),
         takeUntil(this.destroy$$)
       )
-      .subscribe(healthDepartment => {
-        this.apiService.getReport(healthDepartment.id)
-          .subscribe((val: Array<TenantClientDto>) => {
-            this.dataSource.data = val;
-          });
+      .subscribe(cases => {
+        this.dataSource.data = cases;
         this.dataSource.sort = this.sort;
       });
   }
@@ -61,8 +45,11 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  toStringSymptoms(entry: DiaryEntryDto): string {
-    return entry.symptoms.map(s => s.name).join(', ');
+  public isQuarantineOngoing(endDate: Date | null): boolean {
+    if (!endDate) {
+      return null;
+    }
+    return endDate < this.dateTimeNow;
   }
 
 }
