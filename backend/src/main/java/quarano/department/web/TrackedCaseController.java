@@ -93,7 +93,7 @@ class TrackedCaseController {
 		}
 
 		cases.findByTrackedPerson(user) //
-				.map(TrackedCase::markEnrollmentDetailsSubmitted) //
+				.map(TrackedCase::submitEnrollmentDetails) //
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
 		tracking.updateTrackedPersonDetails(dto, errors, user);

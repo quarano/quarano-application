@@ -56,7 +56,7 @@ public class TrackingEventListenerUnitTests {
 			listener.on(event);
 		});
 
-		trackedCase.markEnrollmentDetailsSubmitted() //
+		trackedCase.submitEnrollmentDetails() //
 				.submitQuestionnaire(new CompletedInitialReport());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();

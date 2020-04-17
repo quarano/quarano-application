@@ -65,7 +65,7 @@ class TrackedCaseDataInitializer implements DataInitializer {
 				.setTrackedPerson(person3) //
 				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElse(null)) //
 				.setQuarantine(Quarantine.of(start, end)) //
-				.markEnrollmentDetailsSubmitted() //
+				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
 						.setBelongToLaboratoryStaff(true) //
 						.setBelongToMedicalStaff(true) //

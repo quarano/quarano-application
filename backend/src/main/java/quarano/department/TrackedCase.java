@@ -78,13 +78,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return initialReport == null ? new InitialReport() : initialReport;
 	}
 
-	public TrackedCase markEnrollmentDetailsSubmitted() {
+	public TrackedCase submitEnrollmentDetails() {
 
-		if (!trackedPerson.isDetailsCompleted()) {
-			throw new EnrollmentException("Enrollment details need to be completed!");
+		if (trackedPerson.isDetailsCompleted()) {
+			this.enrollment.markDetailsSubmitted();
 		}
-
-		this.enrollment.markDetailsSubmitted();
 
 		return this;
 	}

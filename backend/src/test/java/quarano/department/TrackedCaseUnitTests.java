@@ -92,7 +92,7 @@ public class TrackedCaseUnitTests {
 		var trackedCase = new TrackedCase(person, department);
 
 		assertThatExceptionOfType(EnrollmentException.class) //
-				.isThrownBy(() -> trackedCase.markEnrollmentDetailsSubmitted());
+				.isThrownBy(() -> trackedCase.submitQuestionnaire(new CompletedInitialReport()));
 	}
 
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
@@ -100,7 +100,7 @@ public class TrackedCaseUnitTests {
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
 		return new TrackedCase(person, department) //
-				.markEnrollmentDetailsSubmitted() //
+				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new CompletedInitialReport());
 	}
 }
