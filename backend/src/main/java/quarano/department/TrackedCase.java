@@ -18,12 +18,14 @@ package quarano.department;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
 import java.io.Serializable;
@@ -54,6 +56,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private InitialReport initialReport;
 
 	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
+	private @Getter @Setter CaseType type = CaseType.INDEX;
+	private @Getter Quarantine quarantine = null;
 
 	TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
@@ -64,6 +68,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
 		this.trackedPerson = person;
 		this.department = department;
+	}
+
+	public boolean isInQuarantine() {
+		return quarantine != null;
 	}
 
 	public InitialReport getOrCreateInitialReport() {

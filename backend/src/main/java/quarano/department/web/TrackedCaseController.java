@@ -62,7 +62,7 @@ class TrackedCaseController {
 
 	@GetMapping("/api/cases")
 	Stream<?> allCases() {
-		return cases.findAll().stream();
+		return cases.findAll().stream().map(TrackedCaseSummaryDto::of);
 	}
 
 	@GetMapping("/api/enrollments")

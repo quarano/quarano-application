@@ -17,7 +17,6 @@ package quarano.tracking;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,6 +43,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -55,7 +55,6 @@ import org.springframework.util.StringUtils;
 @Entity
 @Accessors(chain = true)
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
 
@@ -160,6 +159,14 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	public static class EncounterReported implements DomainEvent {
 		Encounter encounter;
 		TrackedPersonIdentifier personIdentifier;
+	}
+
+	@PostLoad
+	private void init() {
+
+		if (address == null) {
+			this.address = new Address();
+		}
 	}
 
 	@Embeddable
