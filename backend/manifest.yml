@@ -1,0 +1,10 @@
+---
+applications:
+  - name: quarano-backend
+    buildpacks:
+      - java_buildpack
+    path: target/coronareport_backend-0.0.1-SNAPSHOT.jar
+    services:
+      - postgres
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
