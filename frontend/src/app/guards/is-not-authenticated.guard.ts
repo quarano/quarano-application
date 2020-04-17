@@ -36,8 +36,10 @@ export class IsNotAuthenticatedGuard implements CanActivate, CanLoad {
 
     if (this.userService.isHealthDepartmentUser) {
       this.router.navigate(['/tenant-admin']);
+      return false;
     } else {
       this.router.navigate(['/diary']);
+      return false;
     }
   }
 }

@@ -28,6 +28,7 @@ export class IsAuthenticatedFullyClientGuard implements CanActivate {
         if (isFullyAuthenticated) { return true; }
         this.snackbarService.message('Bitte schließen Sie zunächst die Registrierung ab');
         this.router.navigate(['/basic-data']);
+        return false;
       }));
   }
 }
