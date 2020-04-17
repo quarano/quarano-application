@@ -18,7 +18,7 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTests;
+import quarano.QuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
@@ -30,8 +30,9 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Oliver Drotbohm
  */
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
-public class ContactPersonMappingIntegrationTests extends AbstractQuaranoIntegrationTests {
+class ContactPersonMappingIntegrationTests {
 
 	private final ContactPersonRepository contacts;
 	private final MapperWrapper mapper;

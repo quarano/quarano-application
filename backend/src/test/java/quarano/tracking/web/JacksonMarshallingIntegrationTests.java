@@ -17,15 +17,13 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
+import lombok.RequiredArgsConstructor;
+import quarano.QuaranoIntegrationTest;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -33,14 +31,13 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * @author Oliver Drotbohm
  */
-@SpringBootTest
-@ActiveProfiles("integrationtest")
-public class JacksonMarshallingIntegrationTests {
+@QuaranoIntegrationTest
+@RequiredArgsConstructor
+class JacksonMarshallingIntegrationTests {
 
-	@Autowired ObjectMapper mapper;
+	private final ObjectMapper mapper;
 
 	@Test
-	@Disabled
 	void rendersIdentifierForContactPersonDtoButDoesNotBindIt() throws Exception {
 
 		var dto = new ContactPersonDto();

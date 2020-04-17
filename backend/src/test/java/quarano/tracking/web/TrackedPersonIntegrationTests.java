@@ -18,6 +18,7 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
+import quarano.QuaranoIntegrationTest;
 import quarano.department.TrackingEventListener;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
@@ -27,32 +28,19 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.moduliths.test.PublishedEvents;
 import org.moduliths.test.PublishedEventsExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
  */
-@ActiveProfiles("integrationtest")
-@SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-@TestConstructor(autowireMode = AutowireMode.ALL)
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
 @ExtendWith(PublishedEventsExtension.class)
-@Transactional
-@Disabled
-public class TrackedPersonIntegrationTests {
+class TrackedPersonIntegrationTests {
 
 	private final TrackedPersonRepository people;
 	private final ContactPersonRepository contacts;

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import quarano.AbstractQuaranoWebIntegrationTests;
+import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.DiaryEntry;
@@ -38,7 +38,8 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * @author Oliver Drotbohm
  */
-class DiaryControllerWebIntegrationTests extends AbstractQuaranoWebIntegrationTests {
+@QuaranoWebIntegrationTest
+class DiaryControllerWebIntegrationTests {
 
 	@Autowired MockMvc mvc;
 	@Autowired TrackedPersonRepository repository;

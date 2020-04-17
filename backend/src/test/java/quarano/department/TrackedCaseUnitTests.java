@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oliver Drotbohm
  */
-public class TrackedCaseUnitTests {
+class TrackedCaseUnitTests {
 
 	@Test
 	void rejectsEnrollmentCompletionForRequiredEncountersButNoneRegistered() {

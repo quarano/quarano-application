@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoWebIntegrationTests;
+import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 
 import java.util.Map;
@@ -38,9 +38,10 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * @author Oliver Drotbohm
  */
+@QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
 @RequiredArgsConstructor
-public class ContactPersonControllerWebIntegrationTests extends AbstractQuaranoWebIntegrationTests {
+class ContactPersonControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;

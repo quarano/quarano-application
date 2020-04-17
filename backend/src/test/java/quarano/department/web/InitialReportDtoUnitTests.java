@@ -26,7 +26,7 @@ import org.springframework.validation.MapBindingResult;
 /**
  * @author Oliver Drotbohm
  */
-public class InitialReportDtoUnitTests {
+class InitialReportDtoUnitTests {
 
 	@Test
 	void rejectsEmptyDayOfFirstSymptomsIfSymptomatic() {

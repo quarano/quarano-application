@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import quarano.AbstractQuaranoWebIntegrationTests;
+import lombok.RequiredArgsConstructor;
+import quarano.QuaranoWebIntegrationTest;
 import quarano.registration.web.AccountRegistrationDto;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -19,20 +20,19 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
-@Transactional
-class RegistrationIT extends AbstractQuaranoWebIntegrationTests {
+@QuaranoWebIntegrationTest
+@RequiredArgsConstructor
+class RegistrationIT {
 
-	@Autowired MockMvc mvc;
-	@Autowired ObjectMapper mapper;
-	@Autowired TrackedPersonRepository repository;
+	private final MockMvc mvc;
+	private final ObjectMapper mapper;
+	private final TrackedPersonRepository repository;
 
 	@Test
 	public void registerNewAccountForClientSuccess() throws Exception {

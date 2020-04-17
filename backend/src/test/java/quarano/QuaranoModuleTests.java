@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Oliver Drotbohm
  */
-public class QuaranoModuleTests {
+class QuaranoModuleTests {
 
 	@Test
 	void writeModuleDocumentation() throws IOException {

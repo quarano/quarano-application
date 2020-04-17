@@ -18,6 +18,7 @@ package quarano.department;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import quarano.QuaranoUnitTest;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson.EncounterReported;
@@ -28,15 +29,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * @author Oliver Drotbohm
  */
-@ExtendWith(MockitoExtension.class)
-public class TrackingEventListenerUnitTests {
+@QuaranoUnitTest
+class TrackingEventListenerUnitTests {
 
 	@Mock TrackedCaseRepository cases;
 
