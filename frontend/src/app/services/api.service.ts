@@ -53,7 +53,7 @@ export class ApiService {
   getGroupedDiaryEntries(): Observable<Map<string, DiaryEntryDto[]>> {
     return this.getDiaryEntries()
       .pipe(
-        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString())),
+        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString('de'))),
       );
   }
 

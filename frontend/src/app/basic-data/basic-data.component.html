@@ -322,10 +322,12 @@
         <legend>Kontaktpersonen vom {{ date | date: "d.M.y" }}</legend>
 
         <app-multiple-autocomplete
-          [control]="this.thirdFormGroup.controls[date.toLocaleDateString()]"
+          [control]="
+            this.thirdFormGroup.controls[date.toLocaleDateString('de')]
+          "
           [selectableItems]="contactPersons"
           [placeholder]="
-            'Kontakte mit anderen Menschen am ' + date.toLocaleDateString()
+            'Kontakte mit anderen Menschen am ' + date.toLocaleDateString('de')
           "
           [nameProperties]="['firstName', 'lastName']"
           (added)="onContactAdded(date, $event)"

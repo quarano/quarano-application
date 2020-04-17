@@ -207,7 +207,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     const firstDay = firstSymptomsDay.addDays(-2);
     while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
       this.datesForRetrospectiveContacts.push(day);
-      this.thirdFormGroup.addControl(day.toLocaleDateString(), new FormControl(this.encounters
+      this.thirdFormGroup.addControl(day.toLocaleDateString('de'), new FormControl(this.encounters
         .filter(e => e.date === day.getDateWithoutTime())
         .map(e => e.contactPersonId)));
       day = day.addDays(-1);
