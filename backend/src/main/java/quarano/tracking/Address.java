@@ -43,7 +43,6 @@ public class Address {
 	boolean isComplete() {
 
 		return StringUtils.hasText(street) //
-				&& !houseNumber.equals(HouseNumber.NONE) //
 				&& StringUtils.hasText(city) //
 				&& zipCode != null;
 	}
@@ -54,7 +53,7 @@ public class Address {
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class HouseNumber {
 
-		public static final HouseNumber NONE = HouseNumber.of(null);
+		public static final HouseNumber NONE = HouseNumber.of("¯\\_(ツ)_/¯");
 
 		private final String value;
 
