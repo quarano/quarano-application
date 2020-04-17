@@ -71,6 +71,9 @@ class ContactPersonController {
 	HttpEntity<?> createContactPerson(@Valid @RequestBody ContactPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
+		// Cross-field validation
+		dto.validate(errors);
+
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
@@ -96,6 +99,9 @@ class ContactPersonController {
 			@PathVariable ContactPersonIdentifier identifier, //
 			@Valid @RequestBody ContactPersonDto payload, //
 			Errors errors) {
+
+		// Cross-field validation
+		payload.validate(errors);
 
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));

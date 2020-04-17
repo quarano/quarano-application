@@ -12,8 +12,9 @@ import quarano.tracking.ZipCode;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+
+import org.springframework.validation.Errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -25,7 +26,7 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private @NotEmpty String lastName, firstName;
+	private String lastName, firstName;
 	private String street, houseNumber, city;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
@@ -48,5 +49,16 @@ class ContactPersonDto {
 		var contactResource = on(ContactPersonController.class).getContact(null, id);
 
 		return Map.of("self", Map.of("href", fromMethodCall(contactResource).toUriString()));
+	}
+
+	Errors validate(Errors errors) {
+
+		if (phone == null && email == null && mobilePhone == null) {
+			errors.rejectValue("phone", "Invalid.contactWays");
+			errors.rejectValue("mobilePhone", "Invalid.contactWays");
+			errors.rejectValue("email", "Invalid.contactWays");
+		}
+
+		return errors;
 	}
 }
