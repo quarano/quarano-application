@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -30,12 +31,12 @@ import org.junit.jupiter.api.Test;
  *
  * @author Oliver Drotbohm
  */
-public class TrackedCaseUnitTests {
+class TrackedCaseUnitTests {
 
 	@Test
 	void rejectsEnrollmentCompletionForRequiredEncountersButNoneRegistered() {
 
-		var person = new TrackedPerson("Michael", "Mustermann");
+		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
 		assertThatExceptionOfType(EnrollmentException.class)
@@ -46,7 +47,7 @@ public class TrackedCaseUnitTests {
 	@Test
 	void allowsEnrollmentCompletionWithoutEncountersIfExplicitlyAcknowledged() {
 
-		var person = new TrackedPerson("Michael", "Mustermann");
+		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
@@ -57,7 +58,7 @@ public class TrackedCaseUnitTests {
 	@Test
 	void allowsCompletionWithEncountersIfRegistered() {
 
-		var person = new TrackedPerson("Michael", "Mustermann");
+		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
 		person.reportContactWith(new ContactPerson("Michaela", "Mustermann"), LocalDate.now());
@@ -70,7 +71,7 @@ public class TrackedCaseUnitTests {
 	@Test
 	void reopensEnrollment() {
 
-		var person = new TrackedPerson("Michael", "Mustermann");
+		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
@@ -82,12 +83,24 @@ public class TrackedCaseUnitTests {
 		assertThat(trackedCase.getEnrollment().isComplete()).isFalse();
 	}
 
+	@Test
+	void rejectDetailsSubmissionIfIncomplete() {
+
+		var person = TrackedPersonDataInitializer.createMarkus();
+		var department = new Department("Musterstadt", UUID.randomUUID());
+
+		var trackedCase = new TrackedCase(person, department);
+
+		assertThatExceptionOfType(EnrollmentException.class) //
+				.isThrownBy(() -> trackedCase.submitQuestionnaire(new CompletedInitialReport()));
+	}
+
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
 
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
 		return new TrackedCase(person, department) //
-				.markEnrollmentDetailsSubmitted() //
+				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new CompletedInitialReport());
 	}
 }

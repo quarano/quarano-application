@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking.web;
+package quarano.tracking;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Oliver Drotbohm
  */
-public class AddressUnitTests {
+class AddressUnitTests {
 
 	@Test
 	void createsNullHouseNumberObjectForNullSource() {
@@ -34,5 +34,13 @@ public class AddressUnitTests {
 	@Test
 	void createsSimpleHouseNumber() {
 		assertThat(HouseNumber.of("4711").toString()).isEqualTo("4711");
+	}
+
+	@Test
+	void considersAddressWithoutHouseNumberComplete() {
+
+		Address address = new Address("Steet", HouseNumber.NONE, "City", ZipCode.of("68199"));
+
+		assertThat(address.isComplete()).isTrue();
 	}
 }

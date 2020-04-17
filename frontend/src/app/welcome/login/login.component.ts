@@ -25,13 +25,10 @@ export class LoginComponent {
 
   public submitForm() {
     this.userService.login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
-      .pipe(
-        switchMap(() => this.userService.isHealthDepartmentUser$)
-      )
       .subscribe(
-        (isHealthDepartmentUser) => {
-          this.snackbarService.success('Login erfolgreich');
-          if (isHealthDepartmentUser) {
+        _ => {
+          this.snackbarService.success('Willkommen bei quarano');
+          if (this.userService.isHealthDepartmentUser) {
             this.router.navigate(['/tenant-admin']);
           } else {
             this.router.navigate(['/diary']);

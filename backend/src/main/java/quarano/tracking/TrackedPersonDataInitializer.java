@@ -53,6 +53,40 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 
+	/**
+	 * A persona with all contact details submitted, ready to take the next steps in enrollment.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createTanja() {
+
+		return new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja", "Mueller",
+				EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3))
+						.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
+	}
+
+	/**
+	 * A persona without contact details completed.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createMarkus() {
+		return new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus", "Hanser",
+				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1));
+	}
+
+	/**
+	 * A persona fully enrolled.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createSandra() {
+
+		return new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2, "Sandra", "Schubert",
+				EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1))
+						.setAddress(new Address("Wingertstraße", HouseNumber.of("71"), "Mannheim", ZipCode.of("68199")));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -66,16 +100,9 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			return;
 		}
 
-		trackedPeople
-				.save(new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja", "Mueller",
-						EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3)))
-				.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
-
-		trackedPeople.save(new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus", "Hanser",
-				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1)));
-
-		var sandra = trackedPeople.save(new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2, "Sandra", "Schubert",
-				EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1)));
+		trackedPeople.save(createTanja());
+		trackedPeople.save(createMarkus());
+		var sandra = trackedPeople.save(createSandra());
 
 		log.info("Test data: Generating 3 tracked Persons");
 

@@ -1,100 +1,84 @@
 import { EnrollmentService } from './enrollment.service';
 import { ClientStatusDto } from './../models/client-status';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
-import { distinctUntilChanged, filter, map, tap, mergeMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
 import { HealthDepartmentDto } from '../models/healthDepartment';
 import { UserDto } from '../models/user';
-
-export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
+import { roles } from '../models/role';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  public readonly user$$ = new BehaviorSubject<UserDto>(null);
-  private readonly clientStatus$$ = new BehaviorSubject<ClientStatusDto>(null);
-  public readonly clientStatus$ = this.clientStatus$$.asObservable();
-  public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
-  public readonly roles$$ = this.tokenService.roles$$;
-  public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthDepartment));
-  public readonly currentUserName$: Observable<string>;
+  public get enrollmentStatus$(): Observable<ClientStatusDto> {
+    if (this.isHealthDepartmentUser) {
+      return of(null);
+    }
+    return this.enrollmentService.getEnrollmentStatus()
+      .pipe(distinctUntilChanged());
+  }
 
-  public readonly isLoggedIn$: Observable<boolean>;
-  public readonly isFullyAuthenticated$: Observable<boolean>;
-  public readonly isHealthDepartmentUser$: Observable<boolean>;
-  public readonly completedEnrollment$: Observable<boolean>;
+  public get user$(): Observable<UserDto> {
+    return this.apiService.getMe()
+      .pipe(distinctUntilChanged());
+  }
 
-  constructor(
-    private apiService: ApiService,
-    private snackbarService: SnackbarService,
-    private tokenService: TokenService,
-    private enrollmentService: EnrollmentService) {
-    this.init();
+  public get client$() {
+    return this.user$.pipe(
+      distinctUntilChanged(),
+      map(user => user?.client));
+  }
 
-    this.isLoggedIn$ = this.tokenService.token$
-      .pipe(
-        map(token => token !== null)
-      );
+  public get healthDepartment$(): Observable<HealthDepartmentDto> {
+    return this.user$
+      .pipe(distinctUntilChanged(),
+        map(user => user?.healthDepartment));
+  }
 
-    this.isFullyAuthenticated$ = this.clientStatus$
-      .pipe(
-        distinctUntilChanged(),
-        map(status => status?.complete)
-      );
-
-    this.completedEnrollment$ = this.clientStatus$$.pipe(map(status => status?.complete));
-
-    this.isHealthDepartmentUser$ = this.roles$$
-      .pipe(
-        distinctUntilChanged(),
-        map(roles => this.isHealthDepartmentUser(roles))
-      );
-
-    this.currentUserName$ = combineLatest([this.user$$, this.isHealthDepartmentUser$]).pipe(
-      map(([user, isHealthDepartmentUser]) => ({ user, isHealthDepartmentUser })),
-      map(value => {
-        if (value.user) {
-          if (value.isHealthDepartmentUser) {
-            if (value.user.firstName && value.user.lastName) {
-              return `${value.user.firstName} ${value.user.lastName} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+  public get currentUserName$(): Observable<string> {
+    return this.user$.pipe(
+      map(user => {
+        if (user) {
+          if (this.isHealthDepartmentUser) {
+            if (user.firstName && user.lastName) {
+              return `${user.firstName} ${user.lastName} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
             }
-            return `${value.user.username} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
-          } else if (value.user.client?.firstName || value.user.client?.lastName) {
-            return `${value.user.client.firstName || ''} ${value.user.client.lastName || ''}`;
+            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+          } else if (user.client?.firstName || user.client?.lastName) {
+            return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
           }
-          return value.user.username;
+          return user.username;
         }
         return null;
       })
     );
   }
 
-  public reloadUser(): Observable<ClientStatusDto> {
-    return this.apiService.getMe()
+  public get isLoggedIn$(): Observable<boolean> {
+    return this.tokenService.token$
       .pipe(
-        tap(returnedUser => { console.log(returnedUser); this.user$$.next(returnedUser); }),
-        mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null),
-        tap(status => { console.log(status); this.clientStatus$$.next(status); }));
+        distinctUntilChanged(),
+        map(token => token !== null)
+      );
   }
 
-  private init() {
-    // Check for client, if there is a new token
-    this.tokenService.token$.pipe(
-      filter(token => token !== null),
-      mergeMap(() => this.reloadUser()),
-    ).subscribe();
+  public get enrollmentCompleted$(): Observable<boolean> {
+    return this.enrollmentStatus$
+      .pipe(
+        distinctUntilChanged(),
+        map(status => status?.complete)
+      );
+  }
 
-    // Unset client if token gets null
-    this.tokenService.token$.pipe(
-      filter(token => token === null)
-    ).subscribe(() => {
-      this.user$$.next(null);
-      this.clientStatus$$.next(null);
-    });
+  constructor(
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private tokenService: TokenService,
+    private enrollmentService: EnrollmentService) {
   }
 
   public login(username: string, password: string): Observable<any> {
@@ -109,20 +93,13 @@ export class UserService {
     this.tokenService.unsetToken();
   }
 
-  public hasRole(role: string, rolesList: Array<string> = this.roles$$.getValue()) {
-    return rolesList.includes(role);
+  public roleMatch(roleNames: string[]): boolean {
+    const currentRoles = this.tokenService.roles$$.value;
+    if (!currentRoles) { return false; }
+    return currentRoles.filter(value => roleNames.includes(value)).length > 0;
   }
 
-  public isHealthDepartmentUser(userRoles: string[] = this.roles$$.getValue()): boolean {
-    if (!userRoles) {
-      return false;
-    }
-
-    for (const role of HEALTH_DEPARTMENT_ROLES) {
-      if (userRoles.includes(role)) {
-        return true;
-      }
-    }
-    return false;
+  public get isHealthDepartmentUser(): boolean {
+    return this.roleMatch(roles.filter(r => r.isHealthDepartmentUser).map(r => r.name));
   }
 }

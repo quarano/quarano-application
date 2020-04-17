@@ -12,7 +12,7 @@ import { KeyValue } from '@angular/common';
 export class DiaryComponent implements OnInit, OnDestroy {
   diaryEntries: Map<string, DiaryEntryDto[]> = new Map<string, DiaryEntryDto[]>();
   private subs = new SubSink();
-  today = new Date().toLocaleDateString();
+  today = new Date().toLocaleDateString('de');
   displayedColumns = ['dateTime', 'bodyTemperature', 'symptoms', 'contactPersonList', 'transmittedToHealthDepartment'];
 
   constructor(private route: ActivatedRoute) { }

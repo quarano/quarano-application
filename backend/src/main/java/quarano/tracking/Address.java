@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 
+import org.springframework.util.StringUtils;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -38,13 +40,20 @@ public class Address {
 	private String city;
 	private ZipCode zipCode;
 
+	boolean isComplete() {
+
+		return StringUtils.hasText(street) //
+				&& StringUtils.hasText(city) //
+				&& zipCode != null;
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class HouseNumber {
 
-		public static final HouseNumber NONE = HouseNumber.of(null);
+		public static final HouseNumber NONE = HouseNumber.of("¯\\_(ツ)_/¯");
 
 		private final String value;
 

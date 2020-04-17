@@ -1,3 +1,4 @@
+import { HasRoleDirective } from './directives/has-role.directive';
 import { ProfileModule } from './profile/profile.module';
 import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
@@ -22,6 +23,7 @@ import { HeaderLeftComponent } from './layout/header-left/header-left.component'
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
 import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
 import { BasicDataModule } from './basic-data/basic-data.module';
+import { IsHealthDepartmentUserDirective } from './directives/is-health-department-user.directive';
 
 registerLocaleData(localeDe, 'de');
 
@@ -32,7 +34,9 @@ registerLocaleData(localeDe, 'de');
     FooterComponent,
     HeaderLeftComponent,
     HeaderRightComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    HasRoleDirective,
+    IsHealthDepartmentUserDirective
   ],
   imports: [
     BrowserModule,

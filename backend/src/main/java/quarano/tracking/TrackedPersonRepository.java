@@ -32,7 +32,5 @@ public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson
 	@Query("select p from TrackedPerson p where p.lastEntryUpdate < :date")
 	Streamable<TrackedPerson> findPeopleWithoutDiaryEntrySince(LocalDateTime date);
 
-	Optional<TrackedPerson> findByLegacyClientId(Long legacyClientId);
-
 	Optional<TrackedPerson> findByEmailAddress(EmailAddress emailAddress);
 }

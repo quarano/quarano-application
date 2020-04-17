@@ -11,6 +11,7 @@ import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-pers
 import { Register } from '../models/register';
 import { TenantClientDto } from '../models/tenant-client';
 import { HealthDepartmentDto } from '../models/healthDepartment';
+import {ReportCaseDto} from '../models/report-case';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +54,7 @@ export class ApiService {
   getGroupedDiaryEntries(): Observable<Map<string, DiaryEntryDto[]>> {
     return this.getDiaryEntries()
       .pipe(
-        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString())),
+        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString('de'))),
       );
   }
 
@@ -113,6 +114,10 @@ export class ApiService {
 
   checkUsername(username: string): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/api/registration/checkusername/${username}`);
+  }
+
+  getCases(): Observable<Array<ReportCaseDto>> {
+    return this.httpClient.get<Array<ReportCaseDto>>(`${this.baseUrl}/api/hd/cases`);
   }
 
 }

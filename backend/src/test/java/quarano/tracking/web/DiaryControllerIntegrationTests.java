@@ -18,7 +18,7 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTests;
+import quarano.QuaranoIntegrationTest;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -29,9 +29,9 @@ import org.springframework.http.ResponseEntity;
 /**
  * @author Oliver Drotbohm
  */
-
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
-public class DiaryControllerIntegrationTests extends AbstractQuaranoIntegrationTests {
+class DiaryControllerIntegrationTests {
 
 	private final DiaryController controller;
 	private final TrackedPersonRepository repository;

@@ -17,6 +17,7 @@ package quarano.tracking.web;
 
 import static org.assertj.core.api.Assertions.*;
 
+import quarano.QuaranoUnitTest;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
@@ -27,19 +28,14 @@ import quarano.tracking.ZipCode;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 /**
  * @author Oliver Drotbohm
  */
-@TestInstance(Lifecycle.PER_CLASS)
-@ExtendWith(MockitoExtension.class)
-public class MappingConfigurationUnitTests {
+@QuaranoUnitTest
+class MappingConfigurationUnitTests {
 
 	ModelMapper mapper = new ModelMapper();
 

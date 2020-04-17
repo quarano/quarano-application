@@ -1,39 +1,32 @@
+import { UserService } from './../services/user.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TokenService } from '../services/token.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IsAuthenticatedGuard implements CanActivate, CanLoad {
+export class IsAuthenticatedGuard implements CanActivate {
 
   constructor(
-    private tokenService: TokenService,
+    private userService: UserService,
     private router: Router,
     private snackbarService: SnackbarService) {
-  }
-
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.tokenService.isAuthenticated()) {
-      return true;
-    }
-
-    this.router.navigate(['/welcome/login']);
   }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (this.tokenService.isAuthenticated()) {
-      return true;
-    }
-
-    this.snackbarService.message('Bitte loggen Sie sich zuerst ein');
-    this.router.navigate(['/welcome/login']);
-
+    return this.userService.isLoggedIn$
+      .pipe(map(isLoggedIn => {
+        if (isLoggedIn) { return true; }
+        this.snackbarService.message('Bitte loggen Sie sich zuerst ein');
+        this.router.navigate(['/welcome/login']);
+        return false;
+      }));
   }
-
 }

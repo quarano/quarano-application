@@ -13,14 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano;
+package quarano.tracking;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * @author Oliver Drotbohm
  */
-@AutoConfigureMockMvc
-public class AbstractQuaranoWebIntegrationTests extends AbstractQuaranoIntegrationTests {
+@Data
+@Embeddable
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(staticName = "of")
+public class Quarantine {
 
+	@Column(name = "quarantine_from") //
+	private final LocalDate from;
+
+	@Column(name = "quarantine_to") //
+	private final LocalDate to;
 }

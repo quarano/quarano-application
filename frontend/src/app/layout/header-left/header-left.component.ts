@@ -1,5 +1,6 @@
-import {UserService} from './../../services/user.service';
-import {Component, OnInit} from '@angular/core';
+import { UserService } from './../../services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { roleNames } from 'src/app/models/role';
 
 @Component({
   selector: 'app-header-left',
@@ -7,8 +8,9 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./header-left.component.scss']
 })
 export class HeaderLeftComponent implements OnInit {
-  public readonly isFullyAuthenticated$ = this.userService.isFullyAuthenticated$;
-  public readonly isHealthDepartmentUser$ = this.userService.isHealthDepartmentUser$;
+  public readonly enrollmentCompleted$ = this.userService.enrollmentCompleted$;
+  public readonly isLoggedIn$ = this.userService.isLoggedIn$;
+  public rolesNames = roleNames;
 
   constructor(private userService: UserService) { }
 

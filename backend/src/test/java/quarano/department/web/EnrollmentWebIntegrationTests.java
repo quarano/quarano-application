@@ -13,58 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking.web;
+package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.web.MapperWrapper;
-import quarano.tracking.DiaryEntry;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.web.TrackedPersonDto;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 /**
  * @author Oliver Drotbohm
  */
 @QuaranoWebIntegrationTest
-class DiaryControllerWebIntegrationTests {
+@RequiredArgsConstructor
+class EnrollmentWebIntegrationTests {
 
-	@Autowired MockMvc mvc;
-	@Autowired TrackedPersonRepository repository;
-	@Autowired MapperWrapper mapper;
-	@Autowired ObjectMapper jackson;
+	private final MockMvc mvc;
+	private final ObjectMapper jackson;
+	private final TrackedPersonRepository repository;
+	private final MapperWrapper mapper;
 
 	@Test
-	@WithQuaranoUser("test3")
-	void updatesDiaryEntry() throws Exception {
+	@WithQuaranoUser("DemoAccount")
+	public void completeEnrollmentDetailsSubmissionMarksStepComplete() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		DiaryEntry entry = person.getDiary().iterator().next();
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
+		var source = mapper.map(person, TrackedPersonDto.class);
 
-		DiaryEntryDto payload = mapper.map(entry, DiaryEntryDto.class);
-		payload.setBodyTemperature(42.0f);
+		source.setStreet("Street");
+		source.setZipCode("68199");
+		source.setCity("Mannheim");
 
-		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId()) //
-				.content(jackson.writeValueAsString(payload)) //
+		// When all enrollment details were submitted
+		mvc.perform(put("/api/enrollment/details") //
+				.content(jackson.writeValueAsString(source)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
 
-		DocumentContext document = JsonPath.parse(response);
+		// The first enrollment step is completed
+		String result = mvc.perform(get("/api/enrollment")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
 
-		assertThat(document.read("$.id", String.class)).isNotNull();
-		assertThat(document.read("$.bodyTemperature", float.class)).isEqualTo(42.0f);
+		assertThat(JsonPath.parse(result).read("$.completedPersonalData", boolean.class)).isTrue();
 	}
 }

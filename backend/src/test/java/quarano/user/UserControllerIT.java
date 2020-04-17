@@ -4,31 +4,28 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import lombok.RequiredArgsConstructor;
+import quarano.QuaranoWebIntegrationTest;
 import quarano.util.TokenResponse;
 
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
-@ActiveProfiles("integrationtest")
-public class UserControllerIT {
+@QuaranoWebIntegrationTest
+@RequiredArgsConstructor
+class UserControllerIT {
 
-	@Autowired MockMvc mvc;
-	@Autowired ObjectMapper mapper;
+	private final MockMvc mvc;
+	private final ObjectMapper mapper;
 
 	@Test
 	void testLoginWithValidCredentials() throws Exception {

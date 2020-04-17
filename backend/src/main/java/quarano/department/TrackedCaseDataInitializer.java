@@ -17,8 +17,11 @@ package quarano.department;
 
 import lombok.RequiredArgsConstructor;
 import quarano.core.DataInitializer;
+import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
+
+import java.time.LocalDate;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -48,16 +51,21 @@ class TrackedCaseDataInitializer implements DataInitializer {
 
 		cases.save(new TrackedCase() //
 				.setTrackedPerson(person1) //
+				.setType(CaseType.CONTACT) //
 				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
 
 		cases.save(new TrackedCase() //
 				.setTrackedPerson(person2) //
 				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
 
+		LocalDate start = LocalDate.now().minusWeeks(1);
+		LocalDate end = start.plusWeeks(4);
+
 		cases.save(new TrackedCase() //
 				.setTrackedPerson(person3) //
 				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElse(null)) //
-				.markEnrollmentDetailsSubmitted() //
+				.setQuarantine(Quarantine.of(start, end)) //
+				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
 						.setBelongToLaboratoryStaff(true) //
 						.setBelongToMedicalStaff(true) //

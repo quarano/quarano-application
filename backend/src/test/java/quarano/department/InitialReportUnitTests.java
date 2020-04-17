@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Oliver Drotbohm
  */
-public class InitialReportUnitTests {
+class InitialReportUnitTests {
 
 	@Test
 	void isCompleteWithoutOtherContactTypeAndWithoutFirstDayOfSymptomsIfAsymptomatic() {

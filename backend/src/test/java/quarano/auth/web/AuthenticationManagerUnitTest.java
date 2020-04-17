@@ -17,6 +17,7 @@ package quarano.auth.web;
 
 import static org.mockito.Mockito.*;
 
+import quarano.QuaranoUnitTest;
 import quarano.auth.AccountRepository;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
@@ -24,17 +25,15 @@ import quarano.tracking.TrackedPersonRepository;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @author Oliver Drotbohm
  */
-@ExtendWith(MockitoExtension.class)
-public class AuthenticationManagerUnitTest {
+@QuaranoUnitTest
+class AuthenticationManagerUnitTest {
 
 	@Mock TrackedPersonRepository repository;
 	@Mock AccountRepository accountRepository;

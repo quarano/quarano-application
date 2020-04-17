@@ -18,7 +18,7 @@ package quarano.auth.jwt;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTests;
+import quarano.QuaranoIntegrationTest;
 import quarano.auth.AccountRepository;
 
 import org.junit.jupiter.api.Test;
@@ -27,8 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author Oliver Drotbohm
  */
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
-public class JwtTokenCreationServiceIntegrationTests extends AbstractQuaranoIntegrationTests {
+class JwtTokenCreationServiceIntegrationTests {
 
 	private final JwtTokenCreationService service;
 	private final JwtTokenService validation;

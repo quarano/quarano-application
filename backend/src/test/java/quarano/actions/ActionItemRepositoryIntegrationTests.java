@@ -18,7 +18,7 @@ package quarano.actions;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
-import quarano.AbstractQuaranoIntegrationTests;
+import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
@@ -30,20 +30,18 @@ import java.time.LocalDateTime;
 import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
  */
-
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
-public class ActionItemRepositoryIntegrationTests extends AbstractQuaranoIntegrationTests {
+class ActionItemRepositoryIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
 	private final EntityManager em;
 
-	@Transactional
 	@Test
 	void persistsDescriptionArguments() {
 

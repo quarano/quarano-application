@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.department.web;
+package quarano;
 
-import static org.assertj.core.api.Assertions.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import java.util.HashMap;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.validation.Errors;
-import org.springframework.validation.MapBindingResult;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 /**
  * @author Oliver Drotbohm
  */
-class InitialReportDtoUnitTests {
+@Documented
+@Retention(RUNTIME)
+@Target(TYPE)
+@QuaranoIntegrationTest
+@AutoConfigureMockMvc
+public @interface QuaranoWebIntegrationTest {
 
-	@Test
-	void rejectsEmptyDayOfFirstSymptomsIfSymptomatic() {
-
-		var dto = new InitialReportDto().setHasSymptoms(true);
-
-		Errors errors = dto.validate(new MapBindingResult(new HashMap<>(), "name"));
-
-		assertThat(errors.hasFieldErrors("dayOfFirstSymptoms")).isTrue();
-	}
 }
