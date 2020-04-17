@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { MatTreeModule } from '@angular/material/tree';
 import {
   MatMomentDateModule,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
@@ -26,6 +25,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 
 const materialModules = [
   MatButtonModule,
@@ -51,7 +57,14 @@ const materialModules = [
   MatGridListModule,
   MatListModule,
   MatSortModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSliderModule,
+  MatDialogModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatStepperModule,
+  MatCheckboxModule,
+  MatMenuModule
 ];
 
 @NgModule({
@@ -59,7 +72,6 @@ const materialModules = [
   exports: [...materialModules],
   declarations: [],
   providers: [
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: MAT_DATE_LOCALE, useValue: 'de' },
   ]
 })

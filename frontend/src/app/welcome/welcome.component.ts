@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { delay, filter, tap } from 'rxjs/operators';
-import { Client } from '../models/client';
-import { SnackbarService } from '../services/snackbar.service';
-import { ProgressBarService } from '../services/progress-bar.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-welcome',
@@ -20,10 +16,7 @@ export class WelcomeComponent implements OnInit {
   public checkingCode = false;
 
   constructor(
-    private userService: UserService,
-    private router: Router,
-    private snackbarService: SnackbarService,
-    private progressBarService: ProgressBarService) {
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -42,8 +35,7 @@ export class WelcomeComponent implements OnInit {
 
   public authenticateCode() {
     this.checkingCode = true;
-    this.progressBarService.progressBarState = true;
-    this.userService.setUserCode(this.enteredCode)
+    /*this.userService.setUserCode(this.enteredCode)
       .subscribe(
         (client: Client) => {
           this.checkingCode = false;
@@ -57,7 +49,7 @@ export class WelcomeComponent implements OnInit {
           this.snackbarService.error('Der Code ist nicht vergeben.');
           this.router.navigate(['/welcome/create-user']);
         }
-      );
+      );*/
   }
 
 }

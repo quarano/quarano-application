@@ -1,3 +1,7 @@
+import { AppFormsModule } from './../app-forms/app-forms.module';
+import { ContactPersonDialogComponent } from './contact-person-dialog/contact-person-dialog.component';
+import { ContactPersonFormComponent } from '../app-forms/contact-person-form/contact-person-form.component';
+import { ConfirmationDialogModule } from './../ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from './../ui/alert/alert.module';
 import { RouterModule } from '@angular/router';
 import { ContactPersonResolver } from './../resolvers/contact-person.resolver';
@@ -17,9 +21,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule
+    AlertModule,
+    ConfirmationDialogModule,
+    AppFormsModule
   ],
-  declarations: [ContactComponent, ContactPersonComponent],
-  providers: [ContactPersonsResolver, ContactPersonResolver]
+  declarations: [ContactComponent, ContactPersonComponent, ContactPersonDialogComponent],
+  providers: [ContactPersonsResolver, ContactPersonResolver],
+  entryComponents: [ContactPersonDialogComponent]
 })
 export class ContactModule { }

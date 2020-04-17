@@ -19,4 +19,16 @@ export class ContactComponent implements OnInit {
       this.contacts = data.contacts;
     }));
   }
+
+  getName(contact: ContactPersonDto): string {
+    let name = 'anonymer Kontakt';
+    if (contact.firstName && contact.lastName) {
+      name = `${contact.firstName || ''} ${contact.lastName || ''}`;
+    } else if (contact.firstName) {
+      name = contact.firstName;
+    } else if (contact.lastName) {
+      name = contact.lastName;
+    }
+    return name;
+  }
 }

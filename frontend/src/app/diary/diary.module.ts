@@ -1,3 +1,5 @@
+import { MultipleAutocompleteModule } from './../ui/multiple-autocomplete/multiple-autocomplete.module';
+import { ConfirmationDialogModule } from './../ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from './../ui/alert/alert.module';
 import { DiaryListItemComponent } from './diary-list-item/diary-list-item.component';
 import { RouterModule } from '@angular/router';
@@ -11,6 +13,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './diary.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @NgModule({
   imports: [
@@ -19,9 +22,17 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule
+    AlertModule,
+    ConfirmationDialogModule,
+    MultipleAutocompleteModule
   ],
   declarations: [DiaryComponent, DiaryEntryComponent, DiaryListItemComponent],
-  providers: [DiaryEntryResolver, SymptomsResolver, GroupedDiaryEntriesResolver]
+  providers:
+    [
+      DiaryEntryResolver,
+      SymptomsResolver,
+      GroupedDiaryEntriesResolver,
+      { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+    ]
 })
 export class DiaryModule { }

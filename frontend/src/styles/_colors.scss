@@ -1,11 +1,11 @@
 .background-red {
   background-color: rgb(153, 50, 50) !important;
-  color: beige;
+  color: white !important;
 }
 
 .background-green {
   background-color: rgb(29, 102, 29) !important;
-  color: beige;
+  color: white !important;
 }
 
 .background-orange {
@@ -21,7 +21,8 @@
 }
 
 .light-primary-color {
-  background: #b2ebf2;
+  background-color: #b2ebf2 !important;
+  color: black !important;
 }
 
 .text-primary-color {
@@ -42,4 +43,12 @@
 
 .divider-color {
   border-color: #bdbdbd;
+}
+
+.text-muted {
+  color: $muted-color !important;
+}
+
+mat-label {
+  color: $muted-color;
 }

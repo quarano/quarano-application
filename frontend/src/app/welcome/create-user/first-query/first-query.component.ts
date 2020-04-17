@@ -1,7 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FirstQuery} from '../../../models/first-query';
-import {FIRST_QUERY_QUESTIONS, FirstQueryQuestion} from './first-query-questions';
-import {BehaviorSubject} from 'rxjs';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { QuestionnaireDto } from '../../../models/first-query';
+import { FIRST_QUERY_QUESTIONS, FirstQueryQuestion } from './first-query-questions';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-create-user-first-query',
@@ -10,7 +10,7 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class FirstQueryComponent {
 
-  @Output() firstQueryEventEmitter = new EventEmitter<FirstQuery>();
+  @Output() firstQueryEventEmitter = new EventEmitter<QuestionnaireDto>();
 
   private questions = FIRST_QUERY_QUESTIONS;
   public currentQuestion$$ = new BehaviorSubject<FirstQueryQuestion>(this.questions['0']);
@@ -19,17 +19,19 @@ export class FirstQueryComponent {
   public currentTextAnswer = '';
   public counter = 0;
 
-  private result: FirstQuery = {
-    Min15MinutesContactWithC19Pat: null,
-    NursingActionOnC19Pat: null,
-    DirectContactWithLiquidsOfC19Pat: null,
-    FlightPassengerWithCloseRowC19Pat: null,
-    FlightAsCrewMemberWithC19Pat: null,
-    BelongToMedicalStaff: null,
-    BelongToNursingStaff: null,
-    BelongToLaboratoryStaff: null,
-    FamilyMember: null,
-    OtherContactType: null,
+  private result: QuestionnaireDto = {
+    min15MinutesContactWithC19Pat: null,
+    nursingActionOnC19Pat: null,
+    directContactWithLiquidsOfC19pat: null,
+    flightPassengerCloseRowC19Pat: null,
+    flightCrewMemberWithC19Pat: null,
+    belongToMedicalStaff: null,
+    belongToNursingStaff: null,
+    belongToLaboratoryStaff: null,
+    familyMember: null,
+    otherContactType: null,
+    dayOfFirstSymptoms: null,
+    hasSymptoms: null
   };
 
   constructor() {

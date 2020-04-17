@@ -1,5 +1,7 @@
 package de.wevsvirushackathon.coronareport.infrastructure.errorhandling;
 
+import quarano.user.UserNotFoundException;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.core.Ordered;
@@ -17,22 +19,18 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import de.wevsvirushackathon.coronareport.diary.ClientNotAuthorizedException;
-
 /**
- * Overrides basic Spring Exception Handling Entries to provide better error
- * responses to API users
- * 
- * @author Patrick Otto
+ * Overrides basic Spring Exception Handling Entries to provide better error responses to API users
  *
+ * @author Patrick Otto
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
 		String error = "Malformed JSON request";
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
 	}
@@ -52,8 +50,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
 		String error = "A given argument was not valid";
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
 	}
@@ -84,10 +82,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}
 
-	@ExceptionHandler(ClientNotAuthorizedException.class)
-	protected ResponseEntity<Object> handleClientNotAuthorized(ClientNotAuthorizedException ex) {
-		String error = "Client with client-code '" + ex.getClientCode() + " is not authorized";
-		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, error, ex);
+	@ExceptionHandler(UserNotFoundException.class)
+	protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+		String error = "There is no user with the given username " + ex.getUsername() + "'";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		return buildResponseEntity(apiError);
+	}
+
+	@ExceptionHandler(InconsistentDataException.class)
+	protected ResponseEntity<Object> handleInconsistentDataException(InconsistentDataException ex) {
+		String error = "Internal server error";
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
 		return buildResponseEntity(apiError);
 	}
 

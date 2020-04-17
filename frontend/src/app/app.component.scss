@@ -1,55 +1,73 @@
 @import "../../src/styles/variables";
 
-.bootstrap-wrapper,
-.row {
-  height: 100%;
+.container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f4f4;
 }
 
-.container-fluid {
-  height: 99%;
-  padding-top: 100px;
+main > *,
+header,
+footer {
+  padding: 10px;
 }
 
-#post-it {
+a {
+  text-decoration: none;
+  color: black;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+article {
+  flex: 4 0 60%;
+  margin: 0 5px;
+}
+
+nav {
+  flex: 1 1 20%;
+  order: -1;
+}
+
+aside {
+  flex: 1 1 20%;
+}
+
+footer,
+header {
+  flex-basis: 80px;
+}
+
+footer {
+  background-color: rgba(18, 8, 22, 0.3);
+  margin-top: 5px;
   z-index: 1;
-  width: 90%;
 }
 
-#post-it-text {
-  font-family: "Indie Flower";
-  font-size: x-large;
-
-  &-header {
-    font-size: xx-large;
-    font-family: "Indie Flower";
-  }
-
-  &-container {
-    position: absolute;
-    width: 17rem;
-    transform: translate(-50%, -50%) rotate(14deg);
-    line-height: 1.3;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-  }
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(
+    to right,
+    $primary-color,
+    $accent-color
+  ) !important;
 }
 
-@media screen and (min-width: $break-md) and (max-width: $break-lg),
-  (min-width: $break-xl) and (max-width: $break-xxl) {
-  #post-it {
-    width: 100%;
+@media all and (max-width: $break-sm) {
+  main {
+    flex-direction: column;
   }
 
-  #post-it-text {
-    font-size: large;
-
-    &-header {
-      font-size: x-large;
-    }
-
-    &-container {
-      width: 15rem;
-    }
+  nav {
+    order: 0;
   }
 }

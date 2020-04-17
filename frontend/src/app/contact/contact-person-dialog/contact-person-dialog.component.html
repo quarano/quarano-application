@@ -1,0 +1,5 @@
+<app-contact-person-form
+  [contactPerson]="data.contactPerson"
+  (contactCreated)="onContactCreated($event)"
+  (cancelled)="close()"
+></app-contact-person-form>

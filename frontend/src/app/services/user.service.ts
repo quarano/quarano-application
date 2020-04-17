@@ -1,91 +1,128 @@
-import { Injectable, } from '@angular/core';
-import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
-import { Client } from '../models/client';
+import { EnrollmentService } from './enrollment.service';
+import { ClientStatusDto } from './../models/client-status';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ApiService } from './api.service';
-import {catchError, switchMap, tap} from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { BackendClient } from '../models/backend-client';
-import { FirstQuery } from '../models/first-query';
+import { distinctUntilChanged, filter, map, tap, mergeMap } from 'rxjs/operators';
+import { SnackbarService } from './snackbar.service';
+import { TokenService } from './token.service';
+import { HealthDepartmentDto } from '../models/healthDepartment';
+import { UserDto } from '../models/user';
 
-export const USERCODE_STORAGE_KEY = 'covu';
+export const HEALTH_DEPARTMENT_ROLES = ['ROLE_HD_ADMIN', 'ROLE_HD_CASE_AGENT'];
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private readonly client$$ = new BehaviorSubject<Client>(null);
+  public readonly user$$ = new BehaviorSubject<UserDto>(null);
+  private readonly clientStatus$$ = new BehaviorSubject<ClientStatusDto>(null);
+  public readonly clientStatus$ = this.clientStatus$$.asObservable();
+  public readonly client$ = this.user$$.asObservable().pipe(map(user => user?.client));
+  public readonly roles$$ = this.tokenService.roles$$;
+  public readonly healthDepartment$: Observable<HealthDepartmentDto> = this.user$$.pipe(map(user => user?.healthDepartment));
+  public readonly currentUserName$: Observable<string>;
 
-  public isAuthenticated$$ = new BehaviorSubject<boolean>(false);
-
-  public get user(): Client | null {
-    return this.client$$.getValue();
-  }
-
-  public get localClientCode(): string | null {
-    return localStorage[USERCODE_STORAGE_KEY];
-  }
-
-  public set localClientCode(code) {
-    if (code === null) {
-      localStorage.removeItem(USERCODE_STORAGE_KEY);
-    } else {
-      localStorage[USERCODE_STORAGE_KEY] = code;
-    }
-  }
+  public readonly isLoggedIn$: Observable<boolean>;
+  public readonly isFullyAuthenticated$: Observable<boolean>;
+  public readonly isHealthDepartmentUser$: Observable<boolean>;
+  public readonly completedEnrollment$: Observable<boolean>;
 
   constructor(
     private apiService: ApiService,
-    private router: Router) {
-    const clientCode = this.localClientCode;
-    if (clientCode !== undefined) {
-      this.checkCodeGetClient(clientCode).subscribe(
-        () => this.router.navigate(['/diary'])
-      );
-    }
-  }
+    private snackbarService: SnackbarService,
+    private tokenService: TokenService,
+    private enrollmentService: EnrollmentService) {
+    this.init();
 
-  public isFullyAuthenticated(): boolean {
-    const authenticated = this.localClientCode !== null && this.user !== null;
-    this.isAuthenticated$$.next(authenticated);
-    return authenticated;
-  }
-
-  private checkCodeGetClient(code: string, withErrorNavigation = true): Observable<Client> {
-    if (code === undefined) {
-      return throwError('No code present!');
-    }
-    return this.apiService.getClientByCode(code)
+    this.isLoggedIn$ = this.tokenService.token$
       .pipe(
-        catchError(error => {
-          this.localClientCode = null;
-          if (withErrorNavigation) {
-            // this.router.navigate(['/welcome']);
+        map(token => token !== null)
+      );
+
+    this.isFullyAuthenticated$ = this.clientStatus$
+      .pipe(
+        distinctUntilChanged(),
+        map(status => status?.complete)
+      );
+
+    this.completedEnrollment$ = this.clientStatus$.pipe(distinctUntilChanged(), map(status => status?.complete));
+
+    this.isHealthDepartmentUser$ = this.roles$$
+      .pipe(
+        distinctUntilChanged(),
+        map(roles => this.isHealthDepartmentUser(roles))
+      );
+
+    this.currentUserName$ = combineLatest([this.user$$, this.isHealthDepartmentUser$]).pipe(
+      map(([user, isHealthDepartmentUser]) => ({ user, isHealthDepartmentUser })),
+      map(value => {
+        if (value.user) {
+          if (value.isHealthDepartmentUser) {
+            if (value.user.firstName && value.user.lastName) {
+              return `${value.user.firstName} ${value.user.lastName} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+            }
+            return `${value.user.username} (${value.user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+          } else if (value.user.client?.firstName || value.user.client?.lastName) {
+            return `${value.user.client.firstName || ''} ${value.user.client.lastName || ''}`;
           }
-          return throwError('Code invalid! No Client found.');
-        })
+          return value.user.username;
+        }
+        return null;
+      })
+    );
+  }
+
+  public reloadUser(): Observable<ClientStatusDto> {
+    return this.apiService.getMe()
+      .pipe(
+        tap(returnedUser => this.user$$.next(returnedUser)),
+        mergeMap(returnedUser => returnedUser.client ? this.enrollmentService.getEnrollmentStatus() : null),
+        tap(status => this.clientStatus$$.next(status)));
+  }
+
+  private init() {
+    // Check for client, if there is a new token
+    this.tokenService.token$.pipe(
+      filter(token => token !== null),
+      mergeMap(() => this.reloadUser()),
+    ).subscribe();
+
+    // Unset client if token gets null
+    this.tokenService.token$.pipe(
+      filter(token => token === null)
+    ).subscribe(() => {
+      this.user$$.next(null);
+      this.clientStatus$$.next(null);
+    });
+  }
+
+  public login(username: string, password: string): Observable<any> {
+    return this.apiService.login(username, password)
+      .pipe(
+        tap(response => this.tokenService.setToken(response.token))
       );
   }
 
-  public createClientWithFirstQuery(client: Client, firstQuery: FirstQuery): Observable<Client> {
-    let clientCode: string;
-    return this.apiService.registerClient(client)
-      .pipe(
-        tap(clientCodeResponse => clientCode = clientCodeResponse),
-        switchMap(clientCodeResponse => this.apiService.createFirstReport(firstQuery, clientCodeResponse)),
-        switchMap(() => this.setUserCode(clientCode))
-      );
+  public logout() {
+    this.snackbarService.message('Sie wurden abgemeldet');
+    this.tokenService.unsetToken();
   }
 
-  public setUserCode(code: string): Observable<Client> {
-    let client: Client;
-    return this.checkCodeGetClient(code, false)
-      .pipe(
-        // Get Client
-        tap((clientResponse: Client) => {
-          this.localClientCode = clientResponse.clientCode;
-          client = clientResponse;
-          this.client$$.next(clientResponse);
-        })
-      );
+  public hasRole(role: string, rolesList: Array<string> = this.roles$$.getValue()) {
+    return rolesList.includes(role);
+  }
+
+  public isHealthDepartmentUser(userRoles: string[] = this.roles$$.getValue()): boolean {
+    if (!userRoles) {
+      return false;
+    }
+
+    for (const role of HEALTH_DEPARTMENT_ROLES) {
+      if (userRoles.includes(role)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

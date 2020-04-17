@@ -1,5 +1,5 @@
-@import "./app-theme";
-@import "~@angular/material/theming";
+@import "app-theme";
+@import "../../node_modules/@angular/material/theming";
 
 $break-sm: 576px;
 $break-md: 720px;
@@ -7,6 +7,9 @@ $break-lg: 960px;
 $break-xl: 1140px;
 $break-xxl: 1680px;
 
+$primary-color: #5ce1e6;
+$accent-color: #030103;
+$muted-color: rgba(0, 0, 0, 0.54);
 $app-primary: mat-palette($mat-primary);
 $app-accent: mat-palette($mat-accent, A200, A100, A400);
 $app-warn: mat-palette($mat-red);

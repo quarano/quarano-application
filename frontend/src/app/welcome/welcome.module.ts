@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { WelcomeComponent } from './welcome.component';
 import { WelcomeRoutingModule } from './welcome-routing.module';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
@@ -9,7 +9,21 @@ import { CreateUserComponent } from './create-user/create-user.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { DetailsComponent } from './create-user/details/details.component';
 import { FirstQueryComponent } from './create-user/first-query/first-query.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import {MAT_DATE_FORMATS} from '@angular/material/core';
 
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'LL',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 
 @NgModule({
@@ -17,7 +31,9 @@ import { FirstQueryComponent } from './create-user/first-query/first-query.compo
     WelcomeComponent,
     CreateUserComponent,
     DetailsComponent,
-    FirstQueryComponent
+    FirstQueryComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +43,10 @@ import { FirstQueryComponent } from './create-user/first-query/first-query.compo
     ClipboardModule,
     MatStepperModule,
     ReactiveFormsModule,
-  ]
+  ],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT},
+    DatePipe
+    ]
 })
 export class WelcomeModule { }

@@ -6,6 +6,7 @@ import { DiaryComponent } from './diary.component';
 import { DiaryEntryComponent } from './diary-entry/diary-entry.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PreventUnsavedChangesGuard } from '../guards/prevent-unsaved-changes.guard';
 
 
 const routes: Routes = [
@@ -17,12 +18,14 @@ const routes: Routes = [
   {
     path: 'edit/:id',
     component: DiaryEntryComponent,
-    resolve: { diaryEntry: DiaryEntryResolver, symptoms: SymptomsResolver, contactPersons: ContactPersonsResolver }
+    resolve: { diaryEntry: DiaryEntryResolver, symptoms: SymptomsResolver, contactPersons: ContactPersonsResolver },
+    canDeactivate: [PreventUnsavedChangesGuard]
   },
   {
     path: 'new',
     component: DiaryEntryComponent,
-    resolve: { diaryEntry: DiaryEntryResolver, symptoms: SymptomsResolver, contactPersons: ContactPersonsResolver }
+    resolve: { diaryEntry: DiaryEntryResolver, symptoms: SymptomsResolver, contactPersons: ContactPersonsResolver },
+    canDeactivate: [PreventUnsavedChangesGuard]
   }
 ];
 

@@ -1,0 +1,18 @@
+<div class="container" *ngIf="isLoggedIn$ | async">
+  <button mat-button [matMenuTriggerFor]="menu">
+    <span>{{ currentUserName$ | async }} </span>
+    <mat-icon style="color: white;">arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      *ngIf="isFullyAuthenticated$ | async"
+      [routerLink]="['/profile']"
+    >
+      <mat-icon>person</mat-icon> Benutzerprofil
+    </button>
+    <button id="tenant-admin-logout" mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon> Abmelden
+    </button>
+  </mat-menu>
+</div>

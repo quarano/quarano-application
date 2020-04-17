@@ -1,7 +1,6 @@
-import {Client} from './client';
-import {FirstQuery} from './first-query';
+import { ClientDto } from './client';
+import { QuestionnaireDto } from './first-query';
 
-export interface BackendClient extends Client {
-  comments: Array<FirstQuery>;
+export interface BackendClient extends ClientDto {
   clientCode: string;
 }

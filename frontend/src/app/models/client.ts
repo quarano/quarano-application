@@ -1,10 +1,22 @@
-export interface Client {
+export interface ClientDto {
   clientCode?: string;
-  clientId: string;
-  surename: string;
-  firstname: string;
-  phone: string;
+  clientId: number;
+  lastName: string;
+  firstName: string;
+  phone?: string;
   zipCode: string;
+  street?: string;
+  city?: string;
+  email?: string;
+  mobilePhone?: string;
   infected: boolean;
-  healthDepartmentId: string;
+  quarantineStartDateTime?: Date;
+  quarantineEndDateTime?: Date;
+  houseNumber: string;
+  dateOfBirth: Date;
+  type: ClientType;
+}
+
+export enum ClientType {
+  INDEX_CASE, CONTACT_CASE
 }
