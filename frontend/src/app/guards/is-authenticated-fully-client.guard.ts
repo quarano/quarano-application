@@ -23,9 +23,8 @@ export class IsAuthenticatedFullyClientGuard implements CanActivate {
     if (this.userService.isHealthDepartmentUser) { return true; }
 
     return this.userService.enrollmentCompleted$
-      .pipe(map(isFullyAuthenticated => {
-        console.log(isFullyAuthenticated);
-        if (isFullyAuthenticated) { return true; }
+      .pipe(map(enrollmentCompleted => {
+        if (enrollmentCompleted) { return true; }
         this.snackbarService.message('Bitte schließen Sie zunächst die Registrierung ab');
         this.router.navigate(['/basic-data']);
         return false;
