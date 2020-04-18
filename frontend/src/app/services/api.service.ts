@@ -9,8 +9,6 @@ import { DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
 import { groupBy } from '@utils/groupBy';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
-import { TenantClientDto } from '@models/tenant-client';
-import { HealthDepartmentDto } from '@models/healthDepartment';
 import { ReportCaseDto } from '@models/report-case';
 
 @Injectable({

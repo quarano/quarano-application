@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
   pictureUris = new Map<string, string>([
-    ['https://www.intersoft.de/', '../../../assets/sponsored_by_intersoft.png'],
-    ['https://wirvsvirushackathon.org/', '../../../assets/Logo_Projekt_01_weiss.png'],
-    ['https://opensource.org/', '../../../assets/open_source.png'],
+    ['https://www.intersoft.de/', '../../../assets/images/sponsored_by_intersoft.png'],
+    ['https://wirvsvirushackathon.org/', '../../../assets/images/Logo_Projekt_01_weiss.png'],
+    ['https://opensource.org/', '../../../assets/images/open_source.png'],
   ]);
 }
