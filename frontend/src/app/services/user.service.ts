@@ -1,14 +1,14 @@
 import { EnrollmentService } from './enrollment.service';
-import { ClientStatusDto } from './../models/client-status';
+import { ClientStatusDto } from '@models/client-status';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
-import { HealthDepartmentDto } from '../models/healthDepartment';
-import { UserDto } from '../models/user';
-import { roles } from '../models/role';
+import { HealthDepartmentDto } from '@models/healthDepartment';
+import { UserDto } from '@models/user';
+import { roles } from '@models/role';
 
 @Injectable({
   providedIn: 'root'

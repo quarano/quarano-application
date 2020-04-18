@@ -1,4 +1,4 @@
-import { IIdentifiable } from './../../models/general';
+import { IIdentifiable } from '@models/general';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';

@@ -3,7 +3,7 @@ import { CanDeactivate } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 export interface DeactivatableComponent {
   canDeactivate: () => boolean | Observable<boolean>;

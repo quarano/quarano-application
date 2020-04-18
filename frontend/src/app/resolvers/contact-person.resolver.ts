@@ -1,5 +1,5 @@
-import { ContactPersonDto } from './../models/contact-person';
-import { ApiService } from '../services/api.service';
+import { ContactPersonDto } from '@models/contact-person';
+import { ApiService } from '@services/api.service';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';

@@ -1,17 +1,17 @@
-import { UserDto } from './../models/user';
-import { environment } from './../../environments/environment';
-import { SymptomDto } from './../models/symptom';
+import { UserDto } from '@models/user';
+import { environment } from '@environment/environment';
+import { SymptomDto } from '@models/symptom';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
-import { DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
-import { groupBy } from '../utils/groupBy';
-import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
-import { Register } from '../models/register';
-import { TenantClientDto } from '../models/tenant-client';
-import { HealthDepartmentDto } from '../models/healthDepartment';
-import {ReportCaseDto} from '../models/report-case';
+import { DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
+import { groupBy } from '@utils/groupBy';
+import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
+import { Register } from '@models/register';
+import { TenantClientDto } from '@models/tenant-client';
+import { HealthDepartmentDto } from '@models/healthDepartment';
+import { ReportCaseDto } from '@models/report-case';
 
 @Injectable({
   providedIn: 'root'
@@ -92,14 +92,6 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/contacts/${id}`, contactPerson);
   }
 
-  getReport(healthDepartmentId: string): Observable<Array<TenantClientDto>> {
-    return this.httpClient.get<Array<TenantClientDto>>(`${this.baseUrl}/report/${healthDepartmentId}`);
-  }
-
-  getHealthDepartment(healthDepartmentId: string): Observable<HealthDepartmentDto> {
-    return this.httpClient.get<HealthDepartmentDto>(`${this.baseUrl}/healthdepartments/${healthDepartmentId}`);
-  }
-
   login(username: string, password: string): Observable<{ token: string }> {
     return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
   }
@@ -119,5 +111,4 @@ export class ApiService {
   getCases(): Observable<Array<ReportCaseDto>> {
     return this.httpClient.get<Array<ReportCaseDto>>(`${this.baseUrl}/api/hd/cases`);
   }
-
 }

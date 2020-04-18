@@ -1,5 +1,4 @@
-import { ProgressBarService } from './../services/progress-bar.service';
-import { SnackbarService } from './../services/snackbar.service';
+import { SnackbarService } from '@services/snackbar.service';
 import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,

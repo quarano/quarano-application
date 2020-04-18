@@ -1,4 +1,4 @@
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 
 export class PasswordValidator {
 
@@ -35,7 +35,7 @@ export class PasswordValidator {
     }
 
     if (control.get('password').value !== control.get('passwordConfirm').value) {
-      return {passwordConfirmWrong: true};
+      return { passwordConfirmWrong: true };
     }
   }
 
@@ -45,7 +45,7 @@ export class PasswordValidator {
     }
 
     if (control.get('password').value.includes(control.get('username').value)) {
-      return {passwordIncludesUsername: true};
+      return { passwordIncludesUsername: true };
     }
   }
 }

@@ -1,8 +1,8 @@
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@services/snackbar.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserService } from '../services/user.service';
+import { UserService } from '@services/user.service';
 import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({

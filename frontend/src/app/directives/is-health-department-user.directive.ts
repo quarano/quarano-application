@@ -1,4 +1,4 @@
-import { UserService } from './../services/user.service';
+import { UserService } from '@services/user.service';
 import { Directive, OnInit, Input, ViewContainerRef, TemplateRef } from '@angular/core';
 
 @Directive({

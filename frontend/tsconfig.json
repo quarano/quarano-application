@@ -1,7 +1,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "src",
+    "paths": {
+      "@directives/*": ["app/directives/*"],
+      "@guards/*": ["app/guards/*"],
+      "@environment/*": ["environments/*"],
+      "@models/*": ["app/models/*"],
+      "@resolvers/*": ["app/resolvers/*"],
+      "@services/*": ["app/services/*"],
+      "@ui/*": ["app/ui/*"],
+      "@utils/*": ["app/utils/*"],
+      "@validators/*": ["app/validators/*"]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -11,10 +22,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

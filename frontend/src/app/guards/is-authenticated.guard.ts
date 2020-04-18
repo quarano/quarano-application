@@ -1,9 +1,8 @@
-import { UserService } from './../services/user.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { UserService } from '@services/user.service';
+import { SnackbarService } from '@services/snackbar.service';
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { TokenService } from '../services/token.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({

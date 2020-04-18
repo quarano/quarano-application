@@ -1,0 +1,21 @@
+.header-image {
+  background-image: url("../../../assets/quarano_transparent_logo.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.info-text {
+  letter-spacing: 0.2em;
+  word-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 2em;
+  font-weight: bold;
+  font-style: oblique;
+}
+
+#info-card {
+  background-image: url(../../../assets/warning.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

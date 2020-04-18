@@ -1,4 +1,4 @@
-import { AngularMaterialModule } from './../../angular-material/angular-material.module';
+import { AngularMaterialModule } from './../../modules/angular-material/angular-material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';

@@ -1,5 +1,5 @@
-import { DiaryEntryDto } from '../models/diary-entry';
-import { ApiService } from '../services/api.service';
+import { DiaryEntryDto } from '@models/diary-entry';
+import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';

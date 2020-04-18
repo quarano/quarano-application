@@ -1,6 +1,6 @@
-import { UserService } from './services/user.service';
+import { UserService } from '@services/user.service';
 import { Component, OnInit } from '@angular/core';
-import { ProgressBarService } from './services/progress-bar.service';
+import { ProgressBarService } from '@services/progress-bar.service';
 import { delay } from 'rxjs/operators';
 
 @Component({

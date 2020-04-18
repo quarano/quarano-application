@@ -1,13 +1,13 @@
-import { EncounterEntry } from './../models/encounter';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { EncounterEntry } from '@models/encounter';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
-import { QuestionnaireDto } from '../models/first-query';
-import { ClientDto } from '../models/client';
-import { tap, share, map, mergeMap } from 'rxjs/operators';
-import { ClientStatusDto } from '../models/client-status';
-import { EncounterDto, EncounterCreateDto } from '../models/encounter';
+import { QuestionnaireDto } from '@models/first-query';
+import { ClientDto } from '@models/client';
+import { share, map } from 'rxjs/operators';
+import { ClientStatusDto } from '@models/client-status';
+import { EncounterDto, EncounterCreateDto } from '@models/encounter';
 
 @Injectable({
   providedIn: 'root'
