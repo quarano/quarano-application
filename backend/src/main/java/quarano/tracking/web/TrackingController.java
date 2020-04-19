@@ -23,7 +23,6 @@ import lombok.Value;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
-import quarano.department.EnrollmentException;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.EmailAddress;
@@ -48,7 +47,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -168,10 +166,5 @@ public class TrackingController {
 		ContactPersonIdentifier getContactId() {
 			return ContactPersonIdentifier.of(contact);
 		}
-	}
-
-	@ExceptionHandler
-	ResponseEntity<?> handle(EnrollmentException o_O) {
-		return ResponseEntity.badRequest().body(o_O.getMessage());
 	}
 }

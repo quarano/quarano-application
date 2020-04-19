@@ -46,6 +46,7 @@ class RegistrationIT {
 		var registrationDto = AccountRegistrationDto.builder() //
 				.username(username) //
 				.password(password) //
+				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
 				.email("mytestmail@test.com") //
 				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
@@ -86,7 +87,7 @@ class RegistrationIT {
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
 				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN));
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
 		// then check that login does not work with new account
 		checkLoginFails(username, password);
@@ -108,10 +109,11 @@ class RegistrationIT {
 
 		// when
 		var responseBody = mvc.perform(post("/api/registration") //
-				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
+				.header("Origin", "*") //
+				.contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
 				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN)) //
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
 				.andReturn().getResponse().getContentAsString();
 
 		assertThat(responseBody).isNotBlank();

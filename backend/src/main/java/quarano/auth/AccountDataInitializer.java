@@ -2,12 +2,12 @@ package quarano.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.auth.Password.UnencryptedPassword;
 import quarano.core.DataInitializer;
 import quarano.department.DepartmentDataInitializer;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,9 +21,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class AccountDataInitializer implements DataInitializer {
 
-	private final AccountRepository accountRepository;
-	private final RoleRepository roleRepository;
-	private final PasswordEncoder passwordEncoder;
+	private final AccountService accounts;
 
 	/*
 	 * (non-Javadoc)
@@ -34,39 +32,29 @@ class AccountDataInitializer implements DataInitializer {
 
 		log.warn("Test data: creating 7 accounts");
 
-		Role userRole = roleRepository.findByName("ROLE_USER");
-		Role adminRole = roleRepository.findByName("ROLE_HD_ADMIN");
-		Role caseRole = roleRepository.findByName("ROLE_HD_CASE_AGENT");
-
 		// person 1 should not have an account yet
 
 		// account for person 2
-		Account accountPerson2 = new Account("DemoAccount", passwordEncoder.encode("DemoPassword"), "Markus", "Hanser",
+		accounts.createAccount("DemoAccount", UnencryptedPassword.of("DemoPassword"), "Markus", "Hanser",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1,
-				userRole);
-		accountRepository.save(accountPerson2);
+				RoleType.ROLE_USER);
 
 		// account for person 3
-		Account accountPerson3 = new Account("test3", passwordEncoder.encode("test123"), "Sandra", "Schubert",
+		accounts.createAccount("test3", UnencryptedPassword.of("test123"), "Sandra", "Schubert",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP2, TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2,
-				userRole);
-		accountRepository.save(accountPerson3);
+				RoleType.ROLE_USER);
 
 		// account for GA user
-		Account accountHD1 = new Account("admin", passwordEncoder.encode("admin"), "Mark", "Muster",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, adminRole);
-		accountRepository.save(accountHD1);
+		accounts.createAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, RoleType.ROLE_HD_ADMIN);
 
-		Account accountHD2 = new Account("agent1", passwordEncoder.encode("agent1"), "Horst", "Hallig",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, caseRole);
-		accountRepository.save(accountHD2);
+		accounts.createAccount("agent1", UnencryptedPassword.of("agent1"), "Horst", "Hallig",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, RoleType.ROLE_HD_CASE_AGENT);
 
-		Account accountHD3 = new Account("agent2", passwordEncoder.encode("agent2"), "Bettina", "Boot",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, caseRole);
-		accountRepository.save(accountHD3);
+		accounts.createAccount("agent2", UnencryptedPassword.of("agent2"), "Bettina", "Boot",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, null, RoleType.ROLE_HD_CASE_AGENT);
 
-		Account accountHD4 = new Account("agent3", passwordEncoder.encode("agent3"), "Heike", "Hirsch",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP2, null, caseRole);
-		accountRepository.save(accountHD4);
+		accounts.createAccount("agent3", UnencryptedPassword.of("agent3"), "Heike", "Hirsch",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP2, null, RoleType.ROLE_HD_CASE_AGENT);
 	}
 }

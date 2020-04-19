@@ -1,24 +1,16 @@
 package quarano.auth.jwt;
 
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import quarano.auth.RoleType;
 
 import java.util.Arrays;
 
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,12 +21,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * @author Patrick Otto
  * @author Oliver Drotbohm
  */
+@Slf4j
 @EnableWebSecurity
-public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+@RequiredArgsConstructor
+class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-	private final Log logger = LogFactory.getLog(QuaranoWebSecurityConfigurerAdapter.class);
-
-	@Autowired JwtTokenToAuthenticationConverter jwtAuthenticationProvider;
+	private final JwtProperties configuration;
 
 	private static final String[] SWAGGER_UI_WHITELIST = {
 
@@ -45,24 +37,17 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			"/webjars/**" };
 
 	@Bean
-	public JwtDecoder jwtDecoder(@Value("${jwt.authentication.secret}") String secret) {
-
-		var decoded = TextCodec.BASE64.decode(secret);
-		var key = new SecretKeySpec(decoded, SignatureAlgorithm.HS512.getJcaName());
-
-		return NimbusJwtDecoder.withSecretKey(key) //
-				.macAlgorithm(MacAlgorithm.HS512) //
-				.build();
+	JwtDecoder jwtDecoder() {
+		return configuration.getJwtDecoder();
 	}
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-		logger.debug(
-				"Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
+		log.debug("Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
 
 		httpSecurity.oauth2ResourceServer() //
-				.jwt(it -> it.jwtAuthenticationConverter(jwtAuthenticationProvider));
+				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter());
 
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
@@ -85,7 +70,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	}
 
 	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
+	CorsConfigurationSource corsConfigurationSource() {
 
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*")); // Problem!

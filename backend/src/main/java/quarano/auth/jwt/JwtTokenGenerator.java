@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.registration;
+package quarano.auth.jwt;
 
-import quarano.core.QuaranoRepository;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
+import quarano.auth.Account;
 
 /**
- * @author Patrick Otto
+ * @author Oliver Drotbohm
  */
-interface ActivationCodeRepository extends QuaranoRepository<ActivationCode, ActivationCodeIdentifier> {
+public interface JwtTokenGenerator {
 
+	String generateTokenFor(Account account);
 }

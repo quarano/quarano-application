@@ -1,15 +1,23 @@
-package quarano.auth.jwt;
+package quarano.auth.web;
 
+import io.vavr.control.Try;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.NotAuthorizedException;
+import quarano.auth.Account;
+import quarano.auth.AccountService;
+import quarano.auth.Password.UnencryptedPassword;
+import quarano.auth.jwt.JwtTokenGenerator;
+
+import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,16 +28,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class AuthenticationController {
 
-	private final @NonNull AuthenticationService authenticationService;
+	private final @NonNull AccountService accounts;
+	private final @NonNull JwtTokenGenerator generator;
 
 	@PostMapping({ "/login", "/api/login" })
 	HttpEntity<?> login(@RequestBody AuthenticationRequest request) {
 
-		return authenticationService.generateJWTToken(request.getUsername(), request.getPassword())
+		UnencryptedPassword password = UnencryptedPassword.of(request.getPassword());
+
+		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername())) //
+				.filter(it -> accounts.matches(password, it.getPassword()),
+						() -> new AccessDeniedException("Authentication failed!")) //
+				.map(generator::generateTokenFor).map(it -> Map.of("token", it)) //
 				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK))
 				.recover(EntityNotFoundException.class, it -> toUnauthorized(it.getMessage())) //
-				.recover(NotAuthorizedException.class, it -> toUnauthorized(it.getMessage())) //
+				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
+	}
+
+	private Account lookupAccountFor(String username) {
+
+		return accounts.findByUsername(username.trim())
+				.orElseThrow(() -> new EmptyResultDataAccessException("No user found based on this token", 1));
 	}
 
 	private static HttpEntity<?> toUnauthorized(String message) {

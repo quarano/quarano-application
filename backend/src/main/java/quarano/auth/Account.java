@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account.AccountIdentifier;
+import quarano.auth.Password.EncryptedPassword;
 import quarano.core.QuaranoAggregate;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.tracking.TrackedPerson;
@@ -35,7 +36,7 @@ import org.springframework.lang.Nullable;
 public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 	@Getter private final String username;
-	@Getter private final String password;
+	@Getter private final EncryptedPassword password;
 
 	@Getter private String firstname;
 	@Getter private String lastname;
@@ -48,7 +49,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	@ManyToMany(fetch = FetchType.EAGER) //
 	@Getter private List<Role> roles = new ArrayList<>();
 
-	Account(String username, String encryptedPassword, String firstname, String lastname,
+	Account(String username, EncryptedPassword password, String firstname, String lastname,
 			DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, Role role) {
 		super();
 
@@ -58,13 +59,13 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		this.lastname = lastname;
 		this.departmentId = departmentId;
 		this.trackedPersonId = trackedPersonId;
-		this.password = encryptedPassword;
+		this.password = password;
 
 		this.add(role);
 	}
 
 	// for testing purposes
-	Account(String username, String encryptedPassword, String firstname, String lastname,
+	Account(String username, EncryptedPassword password, String firstname, String lastname,
 			DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, Role role, UUID fixedUID) {
 
 		super();
@@ -75,7 +76,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		this.lastname = lastname;
 		this.departmentId = departmentId;
 		this.trackedPersonId = trackedPersonId;
-		this.password = encryptedPassword;
+		this.password = password;
 
 		this.add(role);
 	}

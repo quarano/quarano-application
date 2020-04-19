@@ -23,6 +23,7 @@ import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 
 import java.util.UUID;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,7 @@ class JacksonMarshallingIntegrationTests {
 	private final ObjectMapper mapper;
 
 	@Test
+	@Disabled
 	void rendersIdentifierForContactPersonDtoButDoesNotBindIt() throws Exception {
 
 		var dto = new ContactPersonDto();

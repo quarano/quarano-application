@@ -1,14 +1,12 @@
 package quarano.auth;
 
+import quarano.auth.Account.AccountIdentifier;
+
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import quarano.auth.Account.AccountIdentifier;
-
-public interface AccountRepository extends CrudRepository<Account, AccountIdentifier> {
-
-    Optional<Account> findOneByUsername(String username);
+interface AccountRepository extends CrudRepository<Account, AccountIdentifier> {
 
 	Optional<Account> findByUsername(String userName);
 }

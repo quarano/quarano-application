@@ -23,7 +23,6 @@ import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
 import quarano.department.EnrollmentCompletion;
-import quarano.department.EnrollmentException;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
@@ -40,7 +39,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -188,10 +186,5 @@ class TrackedCaseController {
 		report = dto.applyTo(mapper.map(dto, report));
 
 		return it.submitQuestionnaire(report);
-	}
-
-	@ExceptionHandler
-	ResponseEntity<?> handle(EnrollmentException o_O) {
-		return ResponseEntity.badRequest().body(o_O.getMessage());
 	}
 }

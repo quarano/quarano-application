@@ -17,7 +17,7 @@ package quarano;
 
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account;
-import quarano.auth.AccountRepository;
+import quarano.auth.AccountService;
 import quarano.auth.Role;
 
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 @RequiredArgsConstructor
 class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQuaranoUser> {
 
-	private final AccountRepository repository;
+	private final AccountService accounts;
 
 	/*
 	 * (non-Javadoc)
@@ -43,7 +43,7 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 	@Override
 	public SecurityContext createSecurityContext(WithQuaranoUser annotation) {
 
-		return repository.findByUsername(annotation.value()) //
+		return accounts.findByUsername(annotation.value()) //
 				.map(AccountAuthentication::new) //
 				.map(it -> {
 

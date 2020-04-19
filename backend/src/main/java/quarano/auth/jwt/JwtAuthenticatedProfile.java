@@ -12,12 +12,16 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
+class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
 	private static final long serialVersionUID = 6843604992995383584L;
 
 	private final String username;
 	private final TrackedPersonIdentifier trackedPersonId;
+
+	public JwtAuthenticatedProfile(JwtToken token) {
+		this(token.getUsername(), token.getRoleTypes(), token.geTrackedPersonIdentifier());
+	}
 
 	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes,
 			TrackedPersonIdentifier trackedPersonId) {

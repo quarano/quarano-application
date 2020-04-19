@@ -18,7 +18,7 @@ package quarano.auth.web;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.auth.AccountRepository;
+import quarano.auth.AccountService;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -36,12 +36,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 class AuthenticationManagerUnitTest {
 
 	@Mock TrackedPersonRepository repository;
-	@Mock AccountRepository accountRepository;
+	@Mock AccountService accounts;
 
 	@Test
 	void looksUpTrackedPersonById() {
 
-		var manager = new AuthenticationManager(repository, accountRepository);
+		var manager = new AuthenticationManager(repository, accounts);
 		var identifier = TrackedPersonIdentifier.of(UUID.randomUUID());
 
 		SecurityContextHolder.getContext() //

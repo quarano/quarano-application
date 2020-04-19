@@ -1,4 +1,4 @@
-package de.wevsvirushackathon.coronareport.infrastructure.errorhandling;
+package quarano.support;
 
 import java.time.LocalDateTime;
 import java.util.List;

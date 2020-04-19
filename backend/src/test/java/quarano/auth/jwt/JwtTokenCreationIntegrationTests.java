@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
-import quarano.auth.AccountRepository;
+import quarano.auth.AccountService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,20 +29,20 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @QuaranoIntegrationTest
 @RequiredArgsConstructor
-class JwtTokenCreationServiceIntegrationTests {
+class JwtTokenCreationIntegrationTests {
 
-	private final JwtTokenCreationService service;
-	private final JwtTokenService validation;
-	private final AccountRepository accounts;
+	private final AccountService accounts;
+	private final JwtProperties configuration;
 
 	@Test
 	@Transactional
 	void generatesTokenForDepartmentStaff() {
 
 		assertThat(accounts.findByUsername("agent1") //
-				.map(service::generateToken)) //
+				.map(configuration::generateTokenFor) //
+				.map(configuration::createToken)) //
 						.hasValueSatisfying(it -> {
-							assertThat(validation.getTrackedPersonIdFromToken(it)).isNull();
+							assertThat(it.geTrackedPersonIdentifier()).isNull();
 						});
 	}
 }

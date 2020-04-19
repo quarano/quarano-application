@@ -99,6 +99,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return Encounters.of(encounters);
 	}
 
+	public boolean hasBirthdayOf(LocalDate date) {
+		return this.dateOfBirth.equals(date);
+	}
+
 	public TrackedPerson addDiaryEntry(DiaryEntry entry) {
 
 		this.lastEntryUpdate = entry.getDateTime();

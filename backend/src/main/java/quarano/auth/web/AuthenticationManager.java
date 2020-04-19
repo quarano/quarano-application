@@ -15,18 +15,18 @@
  */
 package quarano.auth.web;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+import quarano.auth.AccountService;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
+
 import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AccountRepository;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.TrackedPersonRepository;
 
 /**
  * @author Oliver Drotbohm
@@ -36,7 +36,7 @@ import quarano.tracking.TrackedPersonRepository;
 class AuthenticationManager {
 
 	private final @NonNull TrackedPersonRepository repository;
-	private final @NonNull AccountRepository accountRepository;
+	private final @NonNull AccountService accounts;
 
 	public Optional<TrackedPerson> getLoggedInTrackedPerson() {
 
@@ -46,13 +46,13 @@ class AuthenticationManager {
 
 		return repository.findById((TrackedPersonIdentifier) id);
 	}
-	
+
 	public Optional<Account> getCurrentUser() {
-		
+
 		var username = SecurityContextHolder.getContext() //
 				.getAuthentication() //
 				.getPrincipal().toString();
 
-		return accountRepository.findOneByUsername(username);
+		return accounts.findByUsername(username);
 	}
 }

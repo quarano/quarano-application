@@ -15,12 +15,25 @@
  */
 package quarano.registration;
 
-import quarano.core.QuaranoRepository;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
+import lombok.RequiredArgsConstructor;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
- * @author Patrick Otto
+ * @author Oliver Drotbohm
  */
-interface ActivationCodeRepository extends QuaranoRepository<ActivationCode, ActivationCodeIdentifier> {
+@ConstructorBinding
+@ConfigurationProperties("quarano.account-activation")
+@RequiredArgsConstructor
+public class ActivationCodeProperties {
 
+	private final Duration expiration;
+
+	public LocalDateTime getExpiryDate() {
+		return LocalDateTime.now().plus(expiration);
+	}
 }

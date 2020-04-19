@@ -1,5 +1,6 @@
-package de.wevsvirushackathon.coronareport.infrastructure.errorhandling;
+package quarano.support;
 
+import quarano.department.EnrollmentException;
 import quarano.user.UserNotFoundException;
 
 import javax.persistence.EntityNotFoundException;
@@ -75,13 +76,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}
 
-	@ExceptionHandler(InvalidArgumentException.class)
-	protected ResponseEntity<Object> handleInvalidArgument(InvalidArgumentException ex) {
-		String error = "'" + ex.getValue() + "' is no valid value for " + ex.getType() + " " + ex.getArgumentName();
-		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, error, ex);
-		return buildResponseEntity(apiError);
-	}
-
 	@ExceptionHandler(UserNotFoundException.class)
 	protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
 		String error = "There is no user with the given username " + ex.getUsername() + "'";
@@ -89,11 +83,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}
 
-	@ExceptionHandler(InconsistentDataException.class)
-	protected ResponseEntity<Object> handleInconsistentDataException(InconsistentDataException ex) {
-		String error = "Internal server error";
-		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
-		return buildResponseEntity(apiError);
+	@ExceptionHandler
+	ResponseEntity<?> handle(EnrollmentException o_O) {
+		return ResponseEntity.badRequest().body(o_O.getMessage());
 	}
-
 }

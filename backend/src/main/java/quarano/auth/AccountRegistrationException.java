@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.registration;
-
-import quarano.core.QuaranoRepository;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
+package quarano.auth;
 
 /**
- * @author Patrick Otto
+ * @author Oliver Drotbohm
  */
-interface ActivationCodeRepository extends QuaranoRepository<ActivationCode, ActivationCodeIdentifier> {
+public class AccountRegistrationException extends RuntimeException {
 
+	private static final long serialVersionUID = 8628598426318947526L;
+
+	/**
+	 * @param message
+	 */
+	public AccountRegistrationException(String message) {
+		super(message);
+	}
 }
