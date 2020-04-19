@@ -14,6 +14,14 @@ import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './diary.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
+
+const COMPONENTS = [
+  DiaryComponent,
+  DiaryEntryComponent,
+  DiaryListItemComponent,
+  ForgottenContactBannerComponent
+];
 
 @NgModule({
   imports: [
@@ -26,7 +34,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapte
     ConfirmationDialogModule,
     MultipleAutocompleteModule
   ],
-  declarations: [DiaryComponent, DiaryEntryComponent, DiaryListItemComponent],
+  declarations: [...COMPONENTS],
+  entryComponents: [ForgottenContactBannerComponent],
   providers:
     [
       DiaryEntryResolver,

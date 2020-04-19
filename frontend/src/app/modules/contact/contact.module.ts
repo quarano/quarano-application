@@ -1,4 +1,3 @@
-import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
 import { AppFormsModule } from './../app-forms/app-forms.module';
 import { ContactPersonDialogComponent } from './contact-person-dialog/contact-person-dialog.component';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
@@ -18,7 +17,6 @@ const COMPONENTS = [
   ContactComponent,
   ContactPersonComponent,
   ContactPersonDialogComponent,
-  ForgottenContactBannerComponent
 ];
 
 @NgModule({
@@ -34,6 +32,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   providers: [ContactPersonsResolver, ContactPersonResolver],
-  entryComponents: [ContactPersonDialogComponent, ForgottenContactBannerComponent]
+  entryComponents: [ContactPersonDialogComponent]
 })
 export class ContactModule { }

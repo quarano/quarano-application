@@ -1,12 +1,16 @@
-<button type="button" mat-icon-button color="primary" routerLink="new">
-  <i class="material-icons">add</i>
-  Neuen Eintrag anlegen
-</button>
-<app-alert
-  *ngIf="diaryEntries.size === 0"
-  message="Noch keine Einträge vorhanden"
-></app-alert>
 <mat-card *ngIf="diaryEntries.size > 0">
+  <mat-card-header
+    ><mat-card-title>
+      <button type="button" mat-icon-button color="primary" routerLink="new">
+        <mat-icon>add</mat-icon>
+        Neuen Eintrag anlegen
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+  <app-alert
+    *ngIf="diaryEntries.size === 0"
+    message="Noch keine Einträge vorhanden"
+  ></app-alert>
   <mat-card-content>
     <ng-container *ngFor="let group of diaryEntries | keyvalue: originalOrder">
       <app-diary-list-item
