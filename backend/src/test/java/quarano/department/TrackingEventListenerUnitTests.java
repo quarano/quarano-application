@@ -20,6 +20,7 @@ import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactWays;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -45,7 +46,8 @@ class TrackingEventListenerUnitTests {
 		var listener = new TrackingEventListener(cases);
 
 		var person = TrackedPersonDataInitializer.createTanja();
-		var contactPerson = new ContactPerson("Michaela", "Mustermann");
+		var contactPerson = new ContactPerson("Michaela", "Mustermann",
+				ContactWays.ofEmailAddress("michaela@mustermann.de"));
 		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 
 		var trackedCase = new TrackedCase(person, new Department("Mannheim", UUID.randomUUID()));

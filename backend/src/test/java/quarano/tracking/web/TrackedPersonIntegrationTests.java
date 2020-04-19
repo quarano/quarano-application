@@ -22,6 +22,7 @@ import quarano.QuaranoIntegrationTest;
 import quarano.department.TrackingEventListener;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonRepository;
@@ -51,7 +52,8 @@ class TrackedPersonIntegrationTests {
 	void publishesEventOnEncounterReport(PublishedEvents events) {
 
 		var person = people.save(new TrackedPerson("Michael", "Mustermann"));
-		var contact = contacts.save(new ContactPerson("Michaela", "Mustermann"));
+		var contact = contacts
+				.save(new ContactPerson("Michaela", "Mustermann", ContactWays.ofEmailAddress("michaela@mustermann.de")));
 
 		person.reportContactWith(contact, LocalDate.now());
 

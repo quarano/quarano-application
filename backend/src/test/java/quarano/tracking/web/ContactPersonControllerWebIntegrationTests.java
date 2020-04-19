@@ -62,6 +62,7 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.phone", String.class)).isNotNull();
 		assertThat(document.read("$.mobilePhone", String.class)).isNotNull();
 		assertThat(document.read("$.email", String.class)).isNotNull();
+		assertThat(document.read("$.identificationHint", String.class)).isNotNull();
 	}
 
 	@TestFactory
@@ -69,7 +70,8 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var fields = Map.of("phone", "123456789", //
 				"mobilePhone", "123456789", //
-				"email", "michael@mustermann.de");
+				"email", "michael@mustermann.de", //
+				"identificationHint", "Fleischereifachverkäufer");
 
 		return DynamicTest.stream(fields.entrySet().iterator(), //
 				entry -> {

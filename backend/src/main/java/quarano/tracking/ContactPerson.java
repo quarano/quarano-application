@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
@@ -47,26 +48,30 @@ import org.jddd.core.types.Identifier;
 public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPersonIdentifier> {
 
 	private String firstName, lastName;
-	private EmailAddress emailAddress;
+	private @Setter(AccessLevel.NONE) EmailAddress emailAddress;
 
 	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
-	private PhoneNumber mobilePhoneNumber;
-	private PhoneNumber phoneNumber;
+	private @Setter(AccessLevel.NONE) PhoneNumber mobilePhoneNumber;
+	private @Setter(AccessLevel.NONE) PhoneNumber phoneNumber;
 	private Address address;
 	private TypeOfContract typeOfContract;
 	private String remark;
-	private String identificationHint;
+	private @Setter(AccessLevel.NONE) String identificationHint;
 	private Boolean isHealthStaff;
 	private Boolean isSenior;
 	private Boolean hasPreExistingConditions;
 
 	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
 
-	public ContactPerson(String firstName, String lastName) {
+	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
 
 		this.id = ContactPersonIdentifier.of(UUID.randomUUID());
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.emailAddress = contactWays.getEmailAddress();
+		this.phoneNumber = contactWays.getPhoneNumber();
+		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
+		this.identificationHint = contactWays.getIdentificationHint();
 	}
 
 	public String getFullName() {
@@ -86,6 +91,16 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 	public boolean belongsTo(TrackedPerson person) {
 		return this.ownerId.equals(person.getId());
+	}
+
+	public ContactPerson contactWays(ContactWays contactWays) {
+
+		this.emailAddress = contactWays.getEmailAddress();
+		this.phoneNumber = contactWays.getPhoneNumber();
+		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
+		this.identificationHint = contactWays.getIdentificationHint();
+
+		return this;
 	}
 
 	public enum TypeOfContract {

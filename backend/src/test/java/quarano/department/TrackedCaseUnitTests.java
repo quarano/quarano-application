@@ -18,6 +18,7 @@ package quarano.department;
 import static org.assertj.core.api.Assertions.*;
 
 import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 
@@ -61,7 +62,8 @@ class TrackedCaseUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
-		person.reportContactWith(new ContactPerson("Michaela", "Mustermann"), LocalDate.now());
+		var contact = new ContactPerson("Michaela", "Mustermann", ContactWays.ofEmailAddress("michaela@mustermann.de"));
+		person.reportContactWith(contact, LocalDate.now());
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS)) //
 				.doesNotThrowAnyException();

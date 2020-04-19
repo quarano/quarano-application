@@ -22,6 +22,7 @@ import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.ContactWays;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
@@ -46,10 +47,10 @@ import org.springframework.stereotype.Component;
 public class MappingConfiguration {
 
 	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
-			= source -> source.getSource() == null ? null : EmailAddress.of(source.getSource());
+			= source -> EmailAddress.ofNullable(source.getSource());
 
 	private static final Converter<String, PhoneNumber> STRING_TO_PHONE_NUMBER //
-			= source -> source.getSource() == null ? null : PhoneNumber.of(source.getSource());
+			= source -> PhoneNumber.ofNullable(source.getSource());
 
 	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE //
 			= source -> source.getSource() == null ? null : ZipCode.of(source.getSource());
@@ -80,18 +81,33 @@ public class MappingConfiguration {
 		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
 				UUID.class, ContactPerson.class);
 
+		mapper.typeMap(ContactPersonDto.class, ContactWays.class).setProvider(request -> {
+
+			var source = (ContactPersonDto) request.getSource();
+
+			return ContactWays.builder() //
+					.emailAddress(EmailAddress.ofNullable(source.getEmail())) //
+					.phoneNumber(PhoneNumber.ofNullable(source.getPhone())) //
+					.mobilePhoneNumber(PhoneNumber.ofNullable(source.getMobilePhone())) //
+					.identificationHint(source.getIdentificationHint()) //
+					.build();
+		});
+
 		mapper.typeMap(ContactPersonDto.class, ContactPerson.class).setProvider(request -> {
+
 			var dto = (ContactPersonDto) request.getSource();
-			return new ContactPerson(dto.getFirstName(), dto.getLastName());
+			var contactWays = mapper.map(dto, ContactWays.class);
+
+			return new ContactPerson(dto.getFirstName(), dto.getLastName(), contactWays);
+
+		}).setPreConverter(it -> {
+
+			return it.getDestination().contactWays(mapper.map(it.getSource(), ContactWays.class));
+
 		}).addMappings(it -> {
 
-			it.using(STRING_TO_PHONE_NUMBER).map(ContactPersonDto::getMobilePhone, ContactPerson::setMobilePhoneNumber);
-			it.using(STRING_TO_PHONE_NUMBER).map(ContactPersonDto::getPhone, ContactPerson::setPhoneNumber);
-			it.using(STRING_TO_EMAIL_ADDRESS).map(ContactPersonDto::getEmail, ContactPerson::setEmailAddress);
-			it.using(STRING_TO_HOUSE_NUMBER).<HouseNumber> map(ContactPersonDto::getHouseNumber,
-					(target, v) -> target.getAddress().setHouseNumber(v));
-
 			it.<String> map(ContactPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
+			it.<HouseNumber> map(ContactPersonDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
 			it.<String> map(ContactPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(ContactPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});

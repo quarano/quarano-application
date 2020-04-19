@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.validation.constraints.Pattern;
 
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 class ContactPersonDto {
+
+	private static final String INVALID_CONTACT_WAYS_KEY = "Invalid.contactWays";
 
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
@@ -53,10 +56,11 @@ class ContactPersonDto {
 
 	Errors validate(Errors errors) {
 
-		if (phone == null && email == null && mobilePhone == null) {
-			errors.rejectValue("phone", "Invalid.contactWays");
-			errors.rejectValue("mobilePhone", "Invalid.contactWays");
-			errors.rejectValue("email", "Invalid.contactWays");
+		if (phone == null && email == null && mobilePhone == null && !StringUtils.hasText(identificationHint)) {
+			errors.rejectValue("phone", INVALID_CONTACT_WAYS_KEY);
+			errors.rejectValue("mobilePhone", INVALID_CONTACT_WAYS_KEY);
+			errors.rejectValue("email", INVALID_CONTACT_WAYS_KEY);
+			errors.rejectValue("identificationHint", INVALID_CONTACT_WAYS_KEY);
 		}
 
 		return errors;

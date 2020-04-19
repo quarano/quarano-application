@@ -109,13 +109,11 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		// generate 2 contacts for Person 3
 		List<ContactPerson> contactsOfPerson3 = new ArrayList<>();
 
-		ContactPerson contact1OfPerson3 = new ContactPerson("Lora", "Laurer");
+		var contact1OfPerson3 = new ContactPerson("Lora", "Laurer", ContactWays.ofEmailAddress("lora@testtest.de")); //
 		contact1OfPerson3.assignOwner(sandra);
-		contact1OfPerson3.setEmailAddress(EmailAddress.of("lora@testtest.de"));
 		contactsOfPerson3.add(contact1OfPerson3);
 
-		ContactPerson contact2OfPerson3 = new ContactPerson("Harry", "Huber");
-		contact2OfPerson3.setEmailAddress(EmailAddress.of("harry@testtest.de"));
+		var contact2OfPerson3 = new ContactPerson("Harry", "Huber", ContactWays.ofEmailAddress("harry@testtest.de"));
 		contact2OfPerson3.assignOwner(sandra);
 		contactsOfPerson3.add(contact2OfPerson3);
 

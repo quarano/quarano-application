@@ -23,6 +23,7 @@ import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
@@ -74,11 +75,14 @@ class MappingConfigurationUnitTests {
 	@Test
 	void mapsContactPersonDtoToExistingEntity() {
 
-		ContactPerson person = new ContactPerson("Firstname", "Lastname");
+		ContactWays contactWays = ContactWays.builder().identificationHint("hint").build();
+
+		ContactPerson person = new ContactPerson("Firstname", "Lastname", contactWays);
 
 		var source = new ContactPersonDto();
 		source.setFirstName("Something");
 		source.setLastName("Different");
+		source.setEmail("foo@bar.com");
 
 		mapper.map(source, person);
 

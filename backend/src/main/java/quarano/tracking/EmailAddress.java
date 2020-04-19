@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.springframework.lang.Nullable;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -52,6 +54,11 @@ public class EmailAddress {
 		}
 
 		return new EmailAddress(email);
+	}
+
+	@Nullable
+	public static EmailAddress ofNullable(@Nullable String email) {
+		return email == null ? null : of(email);
 	}
 
 	/**
