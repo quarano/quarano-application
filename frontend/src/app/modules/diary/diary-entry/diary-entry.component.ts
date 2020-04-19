@@ -85,7 +85,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.formGroup = this.formBuilder.group(
       {
         bodyTemperature: new FormControl(
-          { value: this.diaryEntry.bodyTemperature, disabled: this.isReadonly },
+          { value: this.diaryEntry.bodyTemperature || 35, disabled: this.isReadonly },
           [Validators.required, Validators.min(35.1), Validators.max(44.0)]),
         characteristicSymptoms: new FormControl({ value: characteristicSymptomIds, disabled: this.isReadonly }),
         nonCharacteristicSymptoms: new FormControl({ value: this.nonCharacteristicSymptomIds, disabled: this.isReadonly }),
