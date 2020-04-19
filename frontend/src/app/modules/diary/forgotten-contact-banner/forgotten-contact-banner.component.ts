@@ -1,4 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
+import { ForgottenContactDialogComponent } from '../forgotten-contact-dialog/forgotten-contact-dialog.component';
 
 @Component({
   selector: 'app-forgotten-contact-banner',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForgottenContactBannerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
+  }
+
+  openContactDialog() {
+    this.dialog.open(ForgottenContactDialogComponent, {
+      height: '90vh',
+      maxWidth: '100vw',
+      data: {
+      }
+    });
   }
 
 }

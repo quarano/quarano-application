@@ -1,3 +1,4 @@
+import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { MultipleAutocompleteModule } from '@ui/multiple-autocomplete/multiple-autocomplete.module';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from '@ui/alert/alert.module';
@@ -20,7 +21,8 @@ const COMPONENTS = [
   DiaryComponent,
   DiaryEntryComponent,
   DiaryListItemComponent,
-  ForgottenContactBannerComponent
+  ForgottenContactBannerComponent,
+  ForgottenContactDialogComponent
 ];
 
 @NgModule({
@@ -35,7 +37,7 @@ const COMPONENTS = [
     MultipleAutocompleteModule
   ],
   declarations: [...COMPONENTS],
-  entryComponents: [ForgottenContactBannerComponent],
+  entryComponents: [ForgottenContactBannerComponent, ForgottenContactDialogComponent],
   providers:
     [
       DiaryEntryResolver,

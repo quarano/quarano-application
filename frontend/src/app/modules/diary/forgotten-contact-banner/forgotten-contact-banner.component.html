@@ -11,7 +11,12 @@
       Erfassung Ihrer täglichen Einträge begonnen haben.
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="button">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="openContactDialog()"
+      >
         Jetzt nachtragen
       </button>
     </mat-card-actions>

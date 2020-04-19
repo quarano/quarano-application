@@ -1,5 +1,3 @@
-import { ForgottenContactBannerComponent } from './../../contact/forgotten-contact-banner/forgotten-contact-banner.component';
-import { AsideService } from '@services/aside.service';
 import { ContactPersonDto } from '@models/contact-person';
 import { ContactPersonDialogComponent } from './../../contact/contact-person-dialog/contact-person-dialog.component';
 import { DeactivatableComponent } from '@guards/prevent-unsaved-changes.guard';

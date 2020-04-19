@@ -1,5 +1,3 @@
-import { ForgottenContactBannerComponent } from '../../diary/forgotten-contact-banner/forgotten-contact-banner.component';
-import { AsideService } from '@services/aside.service';
 import { SubSink } from 'subsink';
 import {
   Component, OnInit, OnDestroy, HostListener

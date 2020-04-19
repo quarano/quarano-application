@@ -1,3 +1,4 @@
+import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { AsideService } from '@services/aside.service';
 import { DiaryEntryDto } from '@models/diary-entry';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -5,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { KeyValue } from '@angular/common';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-diary',
@@ -19,7 +21,8 @@ export class DiaryComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private asideService: AsideService) { }
+    private asideService: AsideService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -35,5 +38,14 @@ export class DiaryComponent implements OnInit, OnDestroy {
 
   originalOrder = (a: KeyValue<string, DiaryEntryDto[]>, b: KeyValue<string, DiaryEntryDto[]>): number => {
     return 0;
+  }
+
+  openContactDialog() {
+    this.dialog.open(ForgottenContactDialogComponent, {
+      height: '90vh',
+      maxWidth: '100vw',
+      data: {
+      }
+    });
   }
 }
