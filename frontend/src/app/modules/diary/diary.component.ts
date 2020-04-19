@@ -1,3 +1,4 @@
+import { ApiService } from '@services/api.service';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { AsideService } from '@services/aside.service';
 import { DiaryEntryDto } from '@models/diary-entry';
@@ -22,7 +23,8 @@ export class DiaryComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private asideService: AsideService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private apiService: ApiService) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -41,11 +43,11 @@ export class DiaryComponent implements OnInit, OnDestroy {
   }
 
   openContactDialog() {
-    this.dialog.open(ForgottenContactDialogComponent, {
-      height: '90vh',
-      maxWidth: '100vw',
-      data: {
-      }
-    });
+    this.subs.add(this.apiService.getContactPersons()
+      .subscribe(contactPersons => this.dialog.open(ForgottenContactDialogComponent, {
+        data: {
+          contactPersons
+        }
+      })));
   }
 }

@@ -2,10 +2,10 @@ import { EncounterEntry } from '@models/encounter';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Observable } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { QuestionnaireDto } from '@models/first-query';
 import { ClientDto } from '@models/client';
-import { share, map } from 'rxjs/operators';
+import { share, map, tap } from 'rxjs/operators';
 import { ClientStatusDto } from '@models/client-status';
 import { EncounterDto, EncounterCreateDto } from '@models/encounter';
 
@@ -69,6 +69,13 @@ export class EnrollmentService {
       .pipe(map(encounter => {
         return this.mapEncounterToEncounterEntry(encounter);
       }));
+  }
+
+  createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
+    const dateString = date.getDateWithoutTime();
+    return forkJoin(
+      contactIds.map(id => this.createEncounter({ contact: id, date: dateString }))
+    );
   }
 
   deleteEncounter(encounter: EncounterDto) {

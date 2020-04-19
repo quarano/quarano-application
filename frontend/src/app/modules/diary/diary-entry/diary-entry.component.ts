@@ -13,11 +13,13 @@ import { SymptomDto } from '@models/symptom';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-diary-entry',
   templateUrl: './diary-entry.component.html',
-  styleUrls: ['./diary-entry.component.scss']
+  styleUrls: ['./diary-entry.component.scss'],
+  providers: [{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }]
 })
 export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
   formGroup: FormGroup;
