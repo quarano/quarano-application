@@ -1,5 +1,25 @@
+@import "../../../styles/variables";
+
 ::ng-deep {
   .mat-card-header-text {
     margin: 0 !important;
+    width: 100%;
+  }
+
+  mat-card-title {
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  mat-card-content {
+    margin-top: 1rem !important;
+  }
+}
+
+#contact-button {
+  margin-left: 0.5rem;
+
+  @media screen and(min-width: $break-lg) {
+    display: none;
   }
 }

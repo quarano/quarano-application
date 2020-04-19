@@ -1,9 +1,13 @@
 <mat-card *ngIf="diaryEntries.size > 0">
   <mat-card-header
     ><mat-card-title>
-      <button type="button" mat-icon-button color="primary" routerLink="new">
+      <button mat-raised-button type="button" color="primary" routerLink="new">
         <mat-icon>add</mat-icon>
         Neuen Eintrag anlegen
+      </button>
+      <button id="contact-button" mat-button type="button">
+        <mat-icon>group</mat-icon>
+        Kontakt nachtragen
       </button>
     </mat-card-title>
   </mat-card-header>
