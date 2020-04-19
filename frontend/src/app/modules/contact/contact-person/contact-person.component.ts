@@ -1,3 +1,5 @@
+import { ForgottenContactBannerComponent } from './../forgotten-contact-banner/forgotten-contact-banner.component';
+import { AsideService } from '@services/aside.service';
 import { SubSink } from 'subsink';
 import {
   Component, OnInit, OnDestroy, HostListener
@@ -23,16 +25,19 @@ export class ContactPersonComponent implements OnInit, OnDestroy, DeactivatableC
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private asideService: AsideService) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+    this.asideService.clearAsideComponentContent();
   }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.contactPerson = data.contactPerson;
     }));
+    this.asideService.setAsideComponentContent(ForgottenContactBannerComponent);
   }
 
   @HostListener('window:beforeunload')

@@ -8,15 +8,11 @@
     *ngIf="progressBarActive"
     class="mb-3"
   ></mat-progress-bar>
-  <div
-    class="mb-3"
-    style="height: 4px;"
-    *ngIf="!progressBarActive"
-  ></div>
+  <div class="mb-3" style="height: 4px;" *ngIf="!progressBarActive"></div>
   <main>
     <article><router-outlet></router-outlet></article>
     <nav></nav>
-    <aside></aside>
+    <aside><app-aside></app-aside></aside>
   </main>
   <footer><app-footer></app-footer></footer>
 </div>

@@ -26,17 +26,17 @@ main {
 }
 
 article {
-  flex: 4 0 60%;
+  flex: 4 0 50%;
   margin: 0 5px;
 }
 
 nav {
-  flex: 1 1 20%;
+  flex: 1 1 25%;
   order: -1;
 }
 
 aside {
-  flex: 1 1 20%;
+  flex: 1 1 25%;
 }
 
 footer,
@@ -62,7 +62,7 @@ header {
   ) !important;
 }
 
-@media all and (max-width: $break-sm) {
+@media all and (max-width: $break-lg) {
   main {
     flex-direction: column;
   }

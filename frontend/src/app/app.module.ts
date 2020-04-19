@@ -1,3 +1,5 @@
+import { AsideComponent } from './components/aside/aside.component';
+import { AsideHostDirective } from './directives/aside-host.directive';
 import { HasRoleDirective } from '@directives/has-role.directive';
 import { ProfileModule } from './modules/profile/profile.module';
 import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
@@ -27,16 +29,34 @@ import { IsHealthDepartmentUserDirective } from '@directives/is-health-departmen
 
 registerLocaleData(localeDe, 'de');
 
+const DIRECTIVES = [
+  HasRoleDirective,
+  IsHealthDepartmentUserDirective,
+  AsideHostDirective
+];
+
+const COMPONENTS = [
+  AppComponent,
+  NotFoundComponent,
+  FooterComponent,
+  HeaderLeftComponent,
+  HeaderRightComponent,
+  ForbiddenComponent,
+  AsideComponent
+];
+
+const SUB_MODULES = [
+  DiaryModule,
+  WelcomeModule,
+  ContactModule,
+  BasicDataModule,
+  ProfileModule
+];
+
 @NgModule({
   declarations: [
-    AppComponent,
-    NotFoundComponent,
-    FooterComponent,
-    HeaderLeftComponent,
-    HeaderRightComponent,
-    ForbiddenComponent,
-    HasRoleDirective,
-    IsHealthDepartmentUserDirective
+    ...COMPONENTS,
+    ...DIRECTIVES
   ],
   imports: [
     BrowserModule,
@@ -45,11 +65,7 @@ registerLocaleData(localeDe, 'de');
     AngularMaterialModule,
     FormsModule,
     HttpClientModule,
-    DiaryModule,
-    WelcomeModule,
-    ContactModule,
-    BasicDataModule,
-    ProfileModule
+    ...SUB_MODULES
   ],
   providers: [
     SnackbarService,

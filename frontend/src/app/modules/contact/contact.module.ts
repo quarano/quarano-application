@@ -1,3 +1,4 @@
+import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
 import { AppFormsModule } from './../app-forms/app-forms.module';
 import { ContactPersonDialogComponent } from './contact-person-dialog/contact-person-dialog.component';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
@@ -13,6 +14,13 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
 import { ContactPersonsResolver } from '@resolvers/contact-persons.resolver';
 import { ReactiveFormsModule } from '@angular/forms';
 
+const COMPONENTS = [
+  ContactComponent,
+  ContactPersonComponent,
+  ContactPersonDialogComponent,
+  ForgottenContactBannerComponent
+];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -24,8 +32,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ConfirmationDialogModule,
     AppFormsModule
   ],
-  declarations: [ContactComponent, ContactPersonComponent, ContactPersonDialogComponent],
+  declarations: [...COMPONENTS],
   providers: [ContactPersonsResolver, ContactPersonResolver],
-  entryComponents: [ContactPersonDialogComponent]
+  entryComponents: [ContactPersonDialogComponent, ForgottenContactBannerComponent]
 })
 export class ContactModule { }
