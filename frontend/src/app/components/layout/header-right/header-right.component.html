@@ -4,11 +4,7 @@
     <mat-icon style="color: white;">arrow_drop_down</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button
-      mat-menu-item
-      *ngIf="isFullyAuthenticated$ | async"
-      [routerLink]="['/profile']"
-    >
+    <button mat-menu-item *appIsEnrolledClient [routerLink]="['/profile']">
       <mat-icon>person</mat-icon> Benutzerprofil
     </button>
     <button id="tenant-admin-logout" mat-menu-item (click)="logout()">

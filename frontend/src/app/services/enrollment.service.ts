@@ -1,12 +1,13 @@
+import { UserService } from '@services/user.service';
 import { EncounterEntry } from '@models/encounter';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { QuestionnaireDto } from '@models/first-query';
 import { ClientDto } from '@models/client';
-import { share, map, tap } from 'rxjs/operators';
-import { ClientStatusDto } from '@models/client-status';
+import { share, map, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { EnrollmentStatusDto } from '@models/enrollment-status';
 import { EncounterDto, EncounterCreateDto } from '@models/encounter';
 
 @Injectable({
@@ -15,10 +16,10 @@ import { EncounterDto, EncounterCreateDto } from '@models/encounter';
 export class EnrollmentService {
   private baseUrl = `${environment.api.baseUrl}/api`;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient) { }
 
-
-  getFirstQuery(): Observable<QuestionnaireDto> {
+  getQuestionnaire(): Observable<QuestionnaireDto> {
     return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`)
       .pipe(
         share(),
@@ -30,8 +31,8 @@ export class EnrollmentService {
         }));
   }
 
-  updateFirstQuery(firstQuery: QuestionnaireDto) {
-    return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, firstQuery);
+  updateQuestionnaire(questionnaire: QuestionnaireDto) {
+    return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire);
   }
 
   getPersonalDetails(): Observable<ClientDto> {
@@ -46,13 +47,15 @@ export class EnrollmentService {
         }));
   }
 
-  updatePersonalDetails(client: ClientDto) {
-    return this.httpClient.put(`${this.baseUrl}/enrollment/details`, client);
+  updatePersonalDetails(client: ClientDto): Observable<EnrollmentStatusDto> {
+    return this.httpClient.put(`${this.baseUrl}/enrollment/details`, client)
+      .pipe(switchMap(_ => this.getEnrollmentStatus()));
   }
 
-  getEnrollmentStatus(): Observable<ClientStatusDto> {
-    return this.httpClient.get<ClientStatusDto>(`${this.baseUrl}/enrollment`)
-      .pipe(share());
+  getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
+    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`)
+      .pipe(
+        share());
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
@@ -82,11 +85,14 @@ export class EnrollmentService {
     return this.httpClient.delete(encounter._links.self.href);
   }
 
-  completeEnrollment(withoutEncounters: boolean) {
-    return this.httpClient.post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {});
+  completeEnrollment(withoutEncounters: boolean): Observable<EnrollmentStatusDto> {
+    return this.httpClient
+      .post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {})
+      .pipe(switchMap(_ => this.getEnrollmentStatus()));
   }
 
-  reopenEnrollment() {
-    return this.httpClient.delete(`${this.baseUrl}/enrollment/completion`);
+  reopenEnrollment(): Observable<EnrollmentStatusDto> {
+    return this.httpClient.delete(`${this.baseUrl}/enrollment/completion`)
+      .pipe(switchMap(_ => this.getEnrollmentStatus()));
   }
 }

@@ -1,9 +1,9 @@
-import { EnrollmentService } from './enrollment.service';
-import { ClientStatusDto } from '@models/client-status';
+import { EnrollmentStatusDto } from '@models/enrollment-status';
+import { EnrollmentService } from '@services/enrollment.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import { SnackbarService } from './snackbar.service';
 import { TokenService } from './token.service';
 import { HealthDepartmentDto } from '@models/healthDepartment';
@@ -14,12 +14,10 @@ import { roles } from '@models/role';
   providedIn: 'root'
 })
 export class UserService {
-  public get enrollmentStatus$(): Observable<ClientStatusDto> {
-    if (this.isHealthDepartmentUser) {
-      return of(null);
-    }
-    return this.enrollmentService.getEnrollmentStatus()
-      .pipe(distinctUntilChanged());
+  constructor(
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private tokenService: TokenService) {
   }
 
   public get user$(): Observable<UserDto> {
@@ -66,26 +64,10 @@ export class UserService {
       );
   }
 
-  public get enrollmentCompleted$(): Observable<boolean> {
-    return this.enrollmentStatus$
-      .pipe(
-        distinctUntilChanged(),
-        map(status => status?.complete)
-      );
-  }
-
-  constructor(
-    private apiService: ApiService,
-    private snackbarService: SnackbarService,
-    private tokenService: TokenService,
-    private enrollmentService: EnrollmentService) {
-  }
-
   public login(username: string, password: string): Observable<any> {
     return this.apiService.login(username, password)
       .pipe(
-        tap(response => this.tokenService.setToken(response.token))
-      );
+        tap(response => this.tokenService.setToken(response.token)));
   }
 
   public logout() {

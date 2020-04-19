@@ -62,7 +62,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       this.buildForms();
     }));
 
-    this.userService.enrollmentStatus$
+    this.subs.add(this.enrollmentService.getEnrollmentStatus()
       .subscribe(status => {
         if (status.completedPersonalData) {
           this.stepper.next();
@@ -70,7 +70,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
         if (status.completedQuestionnaire) {
           this.stepper.next();
         }
-      });
+      }));
   }
 
   ngOnDestroy() {
@@ -181,7 +181,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
         if (status === 'VALID' && !this.secondFormGroup.pristine) {
           const value = this.secondFormGroup.value;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-          this.enrollmentService.updateFirstQuery(value)
+          this.enrollmentService.updateQuestionnaire(value)
             .subscribe(_ => {
               this.firstQuery = value;
               this.snackbarService.success('Fragebogen erfolgreich gespeichert');

@@ -1,3 +1,4 @@
+import { IsEnrolledClientDirective } from './directives/is-enrolled-client.directive';
 import { AsideComponent } from './components/aside/aside.component';
 import { AsideHostDirective } from './directives/aside-host.directive';
 import { HasRoleDirective } from '@directives/has-role.directive';
@@ -32,7 +33,8 @@ registerLocaleData(localeDe, 'de');
 const DIRECTIVES = [
   HasRoleDirective,
   IsHealthDepartmentUserDirective,
-  AsideHostDirective
+  AsideHostDirective,
+  IsEnrolledClientDirective
 ];
 
 const COMPONENTS = [

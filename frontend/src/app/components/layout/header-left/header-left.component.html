@@ -18,9 +18,9 @@
       *appIsHealthDepartmentUser
       >Für Behörden</a
     >
-    <ng-container *ngIf="enrollmentCompleted$ | async"
+    <ng-container *appIsEnrolledClient
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
-      <a routerLink="/contacts" routerLinkActive="active">Kontakte</a>
+      <a routerLink="/contacts" routerLinkActive="active">Kontaktpersonen</a>
     </ng-container>
   </nav>
 </div>

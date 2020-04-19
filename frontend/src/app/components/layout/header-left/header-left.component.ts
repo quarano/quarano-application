@@ -8,11 +8,11 @@ import { roleNames } from '@models/role';
   styleUrls: ['./header-left.component.scss']
 })
 export class HeaderLeftComponent implements OnInit {
-  public readonly enrollmentCompleted$ = this.userService.enrollmentCompleted$;
   public readonly isLoggedIn$ = this.userService.isLoggedIn$;
   public rolesNames = roleNames;
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService) { }
 
   ngOnInit() {
   }

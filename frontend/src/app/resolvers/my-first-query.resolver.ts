@@ -9,6 +9,6 @@ export class MyFirstQueryResolver implements Resolve<QuestionnaireDto> {
   constructor(private enrollmentService: EnrollmentService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<QuestionnaireDto> {
-    return this.enrollmentService.getFirstQuery();
+    return this.enrollmentService.getQuestionnaire();
   }
 }

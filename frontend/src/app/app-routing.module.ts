@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { IsAuthenticatedGuard } from '@guards/is-authenticated.guard';
-import { IsAuthenticatedFullyClientGuard } from '@guards/is-authenticated-fully-client.guard';
+import { EnrollmentCompletedGuard } from '@guards/enrollment-completed.guard';
 import { IsHealthDepartmentUserGuard } from '@guards/is-health-department-user.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
@@ -15,17 +15,17 @@ const routes: Routes = [
   {
     path: 'diary', loadChildren: () =>
       import('./modules/diary/diary.module').then(m => m.DiaryModule),
-    canActivate: [IsAuthenticatedGuard, IsAuthenticatedFullyClientGuard]
+    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
     path: 'contacts', loadChildren: () =>
       import('./modules/contact/contact.module').then(m => m.ContactModule),
-    canActivate: [IsAuthenticatedGuard, IsAuthenticatedFullyClientGuard]
+    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
     path: 'profile', loadChildren: () =>
       import('./modules/profile/profile.module').then(m => m.ProfileModule),
-    canActivate: [IsAuthenticatedGuard, IsAuthenticatedFullyClientGuard]
+    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
     path: 'tenant-admin', loadChildren: () =>

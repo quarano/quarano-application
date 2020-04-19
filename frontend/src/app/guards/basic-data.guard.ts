@@ -1,3 +1,4 @@
+import { EnrollmentService } from '@services/enrollment.service';
 import { SnackbarService } from './../services/snackbar.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
@@ -11,6 +12,7 @@ import { map } from 'rxjs/operators';
 export class BasicDataGuard implements CanActivate {
 
   constructor(
+    private enrollmentService: EnrollmentService,
     private userService: UserService,
     private router: Router,
     private snackbarService: SnackbarService) {
@@ -20,9 +22,13 @@ export class BasicDataGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    return this.userService.enrollmentCompleted$
-      .pipe(map(enrollmentCompleted => {
-        if (enrollmentCompleted) {
+    if (this.userService.isHealthDepartmentUser) {
+      return false;
+    }
+
+    return this.enrollmentService.getEnrollmentStatus()
+      .pipe(map(status => {
+        if (status?.complete) {
           this.snackbarService.message('Sie haben die Registrierung abgeschlossen');
           this.router.navigate(['/diary']);
           return false;

@@ -1,4 +1,4 @@
-export interface ClientStatusDto {
+export interface EnrollmentStatusDto {
   completedPersonalData: boolean;
   completedQuestionnaire: boolean;
   completedContactRetro: boolean;
