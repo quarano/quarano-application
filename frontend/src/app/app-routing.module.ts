@@ -1,3 +1,4 @@
+import { BasicDataGuard } from './guards/basic-data.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -34,7 +35,7 @@ const routes: Routes = [
   {
     path: 'basic-data', loadChildren: () =>
       import('./modules/basic-data/basic-data.module').then(m => m.BasicDataModule),
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard, BasicDataGuard]
   },
   {
     path: '404/:message',
