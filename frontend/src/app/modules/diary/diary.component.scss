@@ -8,7 +8,11 @@
 
   mat-card-title {
     display: flex !important;
-    justify-content: space-between !important;
+    flex-direction: column !important;
+
+    @media screen and(max-width: $break-lg) {
+      align-items: center !important;
+    }
   }
 
   mat-card-content {
@@ -16,8 +20,12 @@
   }
 }
 
+#entry-button {
+  max-width: 210px;
+}
+
 #contact-button {
-  margin-left: 0.5rem;
+  margin-top: 1rem;
 
   @media screen and(min-width: $break-lg) {
     display: none;
