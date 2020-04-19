@@ -25,6 +25,9 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -34,18 +37,31 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class PhoneNumber {
 
-	public static final String PATTERN = "^[\\+\\(\\)0-9\\s-]*?$";
+	private static final String REMOVABLE_CHARACTERS_REGEX = "\\(\\)\\s\\-";
+	private static final String REMOVABLE_CHARACTERS_SET = "[" + REMOVABLE_CHARACTERS_REGEX + "]";
+	public static final String PATTERN = "^[\\+\\(\\)\\s\\-0-9]*?$";
 	private static final Pattern REGEX = Pattern.compile(PATTERN);
 
 	private final @Column(name = "phoneNumber") String value;
 
 	public static PhoneNumber of(String number) {
 
+		Assert.hasText(number, "Phone number must not be null!");
+
 		if (!isValid(number)) {
 			throw new IllegalArgumentException(String.format("%s is not a valid phone number!", number));
 		}
 
-		return new PhoneNumber(number);
+		return new PhoneNumber(number.replaceAll("\\s", "") //
+				.replace("(0)", "") //
+				.replaceAll(REMOVABLE_CHARACTERS_SET, "") //
+				.replace("+", "00") //
+				.replaceAll("^0049", "0"));
+	}
+
+	@Nullable
+	public static PhoneNumber ofNullable(@Nullable String number) {
+		return number == null ? null : of(number);
 	}
 
 	public static boolean isValid(String candidate) {
