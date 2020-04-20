@@ -1,4 +1,4 @@
-package quarano.registration.web;
+package quarano.auth.web;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.AccountRegistrationDetails;
+import quarano.auth.AccountRegistrationException;
 import quarano.auth.AccountService;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
+import quarano.auth.ActivationCodeException;
+import quarano.auth.ActivationCodeService;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
-import quarano.registration.ActivationCodeService;
-import quarano.user.UserDto;
 
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class RegistrationController {
+class RegistrationController {
 
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull AccountService accounts;
@@ -44,9 +45,29 @@ public class RegistrationController {
 			return ErrorsDto.toBadRequest(errors, messages);
 		}
 
-		return accounts.registerAccountForClient(mapper.map(registrationDto, AccountRegistrationDetails.class)) //
-				.fold(it -> ResponseEntity.badRequest().body(it.getMessage()),
-						__ -> ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).build());
+		var details = mapper.map(registrationDto, AccountRegistrationDetails.class);
+
+		ErrorsDto dto = ErrorsDto.of(errors, messages);
+
+		return accounts.registerAccountForClient(details) //
+				.<HttpEntity<?>> map(__ -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build())
+				.recover(AccountRegistrationException.class, it -> map(dto, it).toBadRequest()) //
+				.recover(ActivationCodeException.class, it -> dto //
+						.rejectField("clientCode", "Invalid", it.getMessage()) //
+						.toBadRequest())
+				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
+	}
+
+	private ErrorsDto map(ErrorsDto errors, AccountRegistrationException o_O) {
+
+		switch (o_O.getProblem()) {
+			case INVALID_BIRTHDAY:
+				return errors.rejectField("birthDate", "Invalid");
+			case INVALID_USERNAME:
+				return errors.rejectField("username", "Invalid");
+			default:
+				return errors;
+		}
 	}
 
 	/**
@@ -54,7 +75,7 @@ public class RegistrationController {
 	 *
 	 * @return true if the code exists, error-json otherwise
 	 */
-	@ApiOperation(value = "Check if the given activation code is valid", response = UserDto.class)
+	@ApiOperation(value = "Check if the given activation code is valid.")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 			@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
@@ -70,7 +91,7 @@ public class RegistrationController {
 	 *
 	 * @return true if the username is available and valid, error json otherwise
 	 */
-	@ApiOperation(value = "Check if the given activation code is valid", response = UserDto.class)
+	@ApiOperation(value = "Check if the given activation code is valid.")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
 			@ApiResponse(code = 404, message = "Clientcode does not exist or empty"),
 			@ApiResponse(code = 500, message = "Internal Server error") })

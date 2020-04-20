@@ -15,6 +15,8 @@
  */
 package quarano.auth;
 
+import lombok.Getter;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -22,10 +24,29 @@ public class AccountRegistrationException extends RuntimeException {
 
 	private static final long serialVersionUID = 8628598426318947526L;
 
-	/**
-	 * @param message
-	 */
+	private final @Getter Problem problem;
+
 	public AccountRegistrationException(String message) {
+		this(Problem.GENERIC, message);
+	}
+
+	private AccountRegistrationException(Problem problem, String message) {
+
 		super(message);
+
+		this.problem = problem;
+	}
+
+	public static AccountRegistrationException forInvalidUsername(AccountRegistrationDetails details) {
+		return new AccountRegistrationException(Problem.INVALID_USERNAME,
+				"Invalid username " + details.getUsername() + "!");
+	}
+
+	public static AccountRegistrationException forInvalidBirthDay(AccountRegistrationDetails details) {
+		return new AccountRegistrationException(Problem.INVALID_BIRTHDAY, "Invalid birth date!");
+	}
+
+	public enum Problem {
+		INVALID_USERNAME, INVALID_BIRTHDAY, GENERIC;
 	}
 }

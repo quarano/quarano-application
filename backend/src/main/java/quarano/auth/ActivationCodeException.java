@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.registration;
+package quarano.auth;
 
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 
 /**
  * @author Oliver Drotbohm
  */
-class ActivationCodeException extends RuntimeException {
+public class ActivationCodeException extends RuntimeException {
 
 	private static final long serialVersionUID = -1862988574924745449L;
 

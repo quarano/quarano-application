@@ -1,10 +1,10 @@
-package quarano.registration;
+package quarano.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 import quarano.core.DataInitializer;
 import quarano.department.DepartmentDataInitializer;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDateTime;

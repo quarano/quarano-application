@@ -24,6 +24,7 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.util.UUID;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.security.core.Authentication;
@@ -37,6 +38,11 @@ class AuthenticationManagerUnitTest {
 
 	@Mock TrackedPersonRepository repository;
 	@Mock AccountService accounts;
+
+	@AfterAll
+	void cleanUp() {
+		SecurityContextHolder.getContext().setAuthentication(null);
+	}
 
 	@Test
 	void looksUpTrackedPersonById() {

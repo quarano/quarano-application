@@ -6,10 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 import quarano.auth.Password.UnencryptedPassword;
 import quarano.department.Department.DepartmentIdentifier;
-import quarano.registration.ActivationCode;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 

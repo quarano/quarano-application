@@ -1,4 +1,4 @@
-package quarano.registration;
+package quarano.auth;
 
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 import quarano.core.QuaranoAggregate;
 import quarano.department.Department.DepartmentIdentifier;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;

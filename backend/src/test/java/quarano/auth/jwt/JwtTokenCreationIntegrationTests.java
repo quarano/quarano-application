@@ -22,7 +22,6 @@ import quarano.QuaranoIntegrationTest;
 import quarano.auth.AccountService;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
@@ -35,7 +34,6 @@ class JwtTokenCreationIntegrationTests {
 	private final JwtProperties configuration;
 
 	@Test
-	@Transactional
 	void generatesTokenForDepartmentStaff() {
 
 		assertThat(accounts.findByUsername("agent1") //

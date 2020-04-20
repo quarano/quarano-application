@@ -11,8 +11,6 @@ import quarano.auth.jwt.JwtTokenGenerator;
 
 import java.util.Map;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -40,8 +38,7 @@ class AuthenticationController {
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!")) //
 				.map(generator::generateTokenFor).map(it -> Map.of("token", it)) //
-				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK))
-				.recover(EntityNotFoundException.class, it -> toUnauthorized(it.getMessage())) //
+				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK)) //
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
 	}

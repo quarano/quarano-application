@@ -36,6 +36,20 @@ public class ErrorsDto {
 	private final Errors errors;
 	private final MessageSourceAccessor messages;
 
+	public ErrorsDto rejectField(String field, String errorCode) {
+		errors.rejectValue(field, errorCode);
+		return this;
+	}
+
+	public ErrorsDto rejectField(String field, String errorCode, String defaultMessage) {
+		errors.rejectValue(field, errorCode, defaultMessage);
+		return this;
+	}
+
+	public HttpEntity<?> toBadRequest() {
+		return toBadRequest(errors, messages);
+	}
+
 	public static HttpEntity<?> toBadRequest(Errors errors, MessageSourceAccessor messages) {
 		return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 	}

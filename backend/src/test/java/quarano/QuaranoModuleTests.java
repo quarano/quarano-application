@@ -38,11 +38,11 @@ class QuaranoModuleTests {
 		logger.setLevel(Level.WARN);
 
 		Modules modules = Modules.of(Quarano.class);
-		// modules.verify();
+		modules.verify();
 
 		Documenter documenter = new Documenter(modules);
 
 		documenter.writeModuleCanvases(null);
-		documenter.writeModulesAsPlantUml(Options.defaults());
+		documenter.writeModulesAsPlantUml(Options.defaults().withExclusions(it -> it.getName().equals("core")));
 	}
 }

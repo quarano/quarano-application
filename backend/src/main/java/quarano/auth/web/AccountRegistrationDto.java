@@ -1,4 +1,4 @@
-package quarano.registration.web;
+package quarano.auth.web;
 
 import io.jsonwebtoken.lang.Objects;
 import lombok.AllArgsConstructor;
@@ -32,7 +32,7 @@ public class AccountRegistrationDto {
 	Errors validate(Errors errors) {
 
 		if (!Objects.nullSafeEquals(password, passwordConfirm)) {
-			errors.rejectValue("passwordRepeated", "NonMatching.password");
+			errors.rejectValue("passwordConfirm", "NonMatching.password");
 		}
 
 		return errors;

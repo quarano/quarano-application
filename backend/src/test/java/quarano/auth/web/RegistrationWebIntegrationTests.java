@@ -1,4 +1,4 @@
-package quarano.registration;
+package quarano.auth.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
-import quarano.registration.web.AccountRegistrationDto;
+import quarano.auth.ActivationCodeDataInitializer;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -21,14 +21,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-class RegistrationIT {
+@DirtiesContext
+class RegistrationWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
@@ -57,7 +60,7 @@ class RegistrationIT {
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
 				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN));
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
 		// then check if login works with new account
 		String token = loginAndCheckSuccess(password, username);
@@ -77,17 +80,24 @@ class RegistrationIT {
 		var registrationDto = AccountRegistrationDto.builder() //
 				.username(username) //
 				.password(password) //
+				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
 				.email("mytestmail@test.com") //
 				.clientCode(UUID.randomUUID()) //
 				.build();
 
 		// when
-		mvc.perform(post("/api/registration") //
+		var result = mvc.perform(post("/api/registration") //
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
+				.andDo(MockMvcResultHandlers.print()) //
 				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.clientCode", String.class)).isNotNull();
 
 		// then check that login does not work with new account
 		checkLoginFails(username, password);
@@ -102,6 +112,7 @@ class RegistrationIT {
 		var registrationDto = AccountRegistrationDto.builder() //
 				.username("DemoAccount") //
 				.password(password) //
+				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
 				.email("mytestmail@test.com") //
 				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
@@ -117,6 +128,10 @@ class RegistrationIT {
 				.andReturn().getResponse().getContentAsString();
 
 		assertThat(responseBody).isNotBlank();
+
+		var document = JsonPath.parse(responseBody);
+
+		assertThat(document.read("$.username", String.class)).isNotNull();
 
 		checkLoginFails("DemoAccount", password);
 	}

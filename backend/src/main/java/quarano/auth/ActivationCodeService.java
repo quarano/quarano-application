@@ -1,10 +1,10 @@
-package quarano.registration;
+package quarano.auth;
 
 import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.Department.DepartmentIdentifier;
-import quarano.registration.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.stereotype.Component;

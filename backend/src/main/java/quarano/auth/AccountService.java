@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.auth.Password.EncryptedPassword;
 import quarano.auth.Password.UnencryptedPassword;
 import quarano.department.Department.DepartmentIdentifier;
-import quarano.registration.ActivationCodeService;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -37,19 +36,19 @@ public class AccountService {
 	 * @param username
 	 * @param password
 	 * @param firstname
-	 * @param lastename
+	 * @param lastname
 	 * @param departmentId
 	 * @param clientId
 	 * @param roleType
 	 * @return
 	 */
-	public Account createAccount(String username, UnencryptedPassword password, String firstname, String lastename,
+	public Account createAccount(String username, UnencryptedPassword password, String firstname, String lastname,
 			DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, RoleType roleType) {
 
 		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
 		var role = roles.findByName(roleType.toString());
 		var account = accounts
-				.save(new Account(username, encryptedPassword, firstname, lastename, departmentId, trackedPersonId, role));
+				.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, trackedPersonId, role));
 
 		log.info("Created account for client " + trackedPersonId + " with username " + username);
 
@@ -77,8 +76,7 @@ public class AccountService {
 	public Try<Account> registerAccountForClient(AccountRegistrationDetails details) {
 
 		return Try.success(details) //
-				.filter(it -> isUsernameAvailable(it.getUsername()),
-						() -> new AccountRegistrationException("Username " + details.getUsername() + " already taken!"))
+				.filter(it -> isUsernameAvailable(it.getUsername()), AccountRegistrationException::forInvalidUsername)
 				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply)) //
 				.flatMap(this::checkIdentity) //
 				.flatMap(this::applyTrackedPerson) //

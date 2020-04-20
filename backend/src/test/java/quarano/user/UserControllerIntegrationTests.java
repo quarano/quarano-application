@@ -22,7 +22,7 @@ import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-class UserControllerIT {
+class UserControllerIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
