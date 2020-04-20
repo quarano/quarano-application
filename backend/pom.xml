@@ -20,6 +20,8 @@
 		<docker.image.prefix>coronahackathon</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
+		<jddd.version>0.0.1-SNAPSHOT</jddd.version>
+		<moduliths.version>1.0.0.BUILD-SNAPSHOT</moduliths.version>
 		<spring-hateoas.version>1.1.0.BUILD-SNAPSHOT</spring-hateoas.version>
 	</properties>
 
@@ -129,28 +131,28 @@
 		<dependency>
 		<groupId>org.jddd</groupId>
 			<artifactId>jddd-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${jddd.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jddd</groupId>
 			<artifactId>jddd-events</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${jddd.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
 			<artifactId>moduliths-api</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<version>${moduliths.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
 			<artifactId>moduliths-test</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<version>${moduliths.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
 			<artifactId>moduliths-docs</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<version>${moduliths.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -185,7 +187,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.10.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
