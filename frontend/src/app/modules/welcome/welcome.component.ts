@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -14,9 +14,10 @@ export class WelcomeComponent implements OnInit {
   public enteredCode = '';
   public existingCode$$ = new BehaviorSubject<boolean>(null);
   public checkingCode = false;
+  public userType;
 
   constructor(
-    private router: Router) {
+    private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
