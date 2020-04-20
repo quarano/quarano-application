@@ -9,6 +9,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { LandingComponent } from './landing/landing.component';
 
 export const DATE_FORMAT = {
   parse: {
@@ -27,7 +28,8 @@ export const DATE_FORMAT = {
   declarations: [
     WelcomeComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    LandingComponent
   ],
   imports: [
     CommonModule,
