@@ -4,6 +4,7 @@ Epidemiemanagement für Gesundheitsbehörden durch Digitalisierung von Selbstaus
 
 Hosted at <https://quarano.de> (prod) and <https://develop.quarano.de> (dev)
 
+
 [![YouTube video](https://img.youtube.com/vi/z__mJRP8O0w/0.jpg)](https://www.youtube.com/watch?v=z__mJRP8O0wD)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
@@ -11,6 +12,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Status
 
 This is a project in development. It has been created during the [WirVsVirusHackathon](https://wirvsvirushackathon.org/).
+
+## Licence
+Licensed under the EUPL-1.2-or-later
 
 ## Backend
 
