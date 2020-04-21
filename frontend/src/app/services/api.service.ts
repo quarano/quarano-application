@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
-import { DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
+import { DiaryEntryDto, DiaryEntryModifyDto, DiaryDto } from '@models/diary-entry';
 import { groupBy } from '@utils/groupBy';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
@@ -108,5 +108,9 @@ export class ApiService {
 
   getCases(): Observable<Array<ReportCaseDto>> {
     return this.httpClient.get<Array<ReportCaseDto>>(`${this.baseUrl}/api/hd/cases`);
+  }
+
+  getDiary(): Observable<DiaryDto> {
+    return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/slotted`);
   }
 }

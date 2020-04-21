@@ -1,3 +1,4 @@
+import { DiaryDto } from '@models/diary-entry';
 import { ApiService } from '@services/api.service';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { AsideService } from '@services/aside.service';
@@ -15,10 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./diary.component.scss']
 })
 export class DiaryComponent implements OnInit, OnDestroy {
-  diaryEntries: Map<string, DiaryEntryDto[]> = new Map<string, DiaryEntryDto[]>();
+  diary: DiaryDto;
   private subs = new SubSink();
-  today = new Date().toLocaleDateString('de');
-  displayedColumns = ['dateTime', 'bodyTemperature', 'symptoms', 'contactPersonList', 'transmittedToHealthDepartment'];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +27,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
-      this.diaryEntries = data.diaryEntries;
+      this.diary = data.diary;
     }));
     this.asideService.setAsideComponentContent(ForgottenContactBannerComponent);
   }
@@ -36,10 +35,6 @@ export class DiaryComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.unsubscribe();
     this.asideService.clearAsideComponentContent();
-  }
-
-  originalOrder = (a: KeyValue<string, DiaryEntryDto[]>, b: KeyValue<string, DiaryEntryDto[]>): number => {
-    return 0;
   }
 
   openContactDialog() {

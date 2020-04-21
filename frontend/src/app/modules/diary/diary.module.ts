@@ -1,3 +1,6 @@
+import { DiaryEntrySuccessComponent } from './diary-entry-success/diary-entry-success.component';
+import { DiaryEntryWarningComponent } from './diary-entry-warning/diary-entry-warning.component';
+import { DiaryResolver } from './../../resolvers/diary.resolver';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { MultipleAutocompleteModule } from '@ui/multiple-autocomplete/multiple-autocomplete.module';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
@@ -21,7 +24,9 @@ const COMPONENTS = [
   DiaryEntryComponent,
   DiaryListItemComponent,
   ForgottenContactBannerComponent,
-  ForgottenContactDialogComponent
+  ForgottenContactDialogComponent,
+  DiaryEntryWarningComponent,
+  DiaryEntrySuccessComponent
 ];
 
 @NgModule({
@@ -42,6 +47,7 @@ const COMPONENTS = [
       DiaryEntryResolver,
       SymptomsResolver,
       GroupedDiaryEntriesResolver,
+      DiaryResolver
     ]
 })
 export class DiaryModule { }

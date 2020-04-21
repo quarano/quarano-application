@@ -8,7 +8,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { SnackbarService } from '@services/snackbar.service';
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -77,7 +77,8 @@ const SUB_MODULES = [
       useClass: ProgressBarInterceptor,
       multi: true
     },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'de-de' }
   ],
   bootstrap: [
     AppComponent

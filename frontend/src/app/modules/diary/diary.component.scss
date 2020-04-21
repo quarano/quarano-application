@@ -14,20 +14,24 @@
       align-items: center !important;
     }
   }
-
-  mat-card-content {
-    margin-top: 1rem !important;
-  }
-}
-
-#entry-button {
-  max-width: 210px;
 }
 
 #contact-button {
   margin-top: 1rem;
 
   @media screen and(min-width: $break-lg) {
+    display: none;
+  }
+}
+
+.date-header {
+  @media screen And (max-width: $break-lg) {
+    display: none;
+  }
+}
+
+.diary-header {
+  @media screen And (max-width: $break-md) {
     display: none;
   }
 }

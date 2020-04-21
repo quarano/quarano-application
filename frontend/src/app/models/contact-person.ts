@@ -1,4 +1,4 @@
-import { IIdentifiable, Link } from './general';
+import { IIdentifiable, Link, SelfLink } from './general';
 
 export interface ContactPersonDto extends IIdentifiable {
   firstName: string;
@@ -15,11 +15,7 @@ export interface ContactPersonDto extends IIdentifiable {
   isHealthStaff: boolean | null;
   isSenior: boolean | null;
   hasPreExistingConditions: boolean | null;
-  _links: ContactPersonLinks;
-}
-
-export interface ContactPersonLinks {
-  self: Link;
+  _links: SelfLink;
 }
 
 export interface ContactPersonModifyDto {

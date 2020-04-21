@@ -44,6 +44,10 @@ export class MultipleAutocompleteComponent implements OnInit {
     });
   }
 
+  get disabled(): boolean {
+    return this.control.disabled;
+  }
+
   selected(event: MatAutocompleteSelectedEvent): void {
     const selectedValue = event.option.value;
     this.selectedItemIds.push(selectedValue);

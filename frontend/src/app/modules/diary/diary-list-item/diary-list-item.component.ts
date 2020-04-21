@@ -1,3 +1,4 @@
+import { DiaryListItemDto, DiaryEntryListItemDto } from '@models/diary-entry';
 import { DiaryEntryDto } from '@models/diary-entry';
 import { Component, Input } from '@angular/core';
 
@@ -7,14 +8,25 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./diary-list-item.component.scss']
 })
 export class DiaryListItemComponent {
-  @Input() entries: DiaryEntryDto[];
-  @Input() date: string;
+  @Input() diaryListItem: DiaryListItemDto;
+  @Input() isFirst: boolean;
 
-  toStringSymptoms(entry: DiaryEntryDto): string {
-    return entry.symptoms.map(s => s.name).join(', ');
+  get morning(): DiaryEntryListItemDto {
+    if (this.diaryListItem.morning.hasOwnProperty('id')) {
+      return this.diaryListItem.morning as DiaryEntryListItemDto;
+    }
+    return null;
   }
 
-  toStringContactPersons(entry: DiaryEntryDto): string {
-    return entry.contacts.map(s => `${s.firstName} ${s.lastName}`).join(', ');
+  get evening(): DiaryEntryListItemDto {
+    if (this.diaryListItem.evening.hasOwnProperty('id')) {
+      return this.diaryListItem.evening as DiaryEntryListItemDto;
+    }
+    return null;
   }
+
+  get date(): Date {
+    return new Date(this.diaryListItem.date);
+  }
+
 }

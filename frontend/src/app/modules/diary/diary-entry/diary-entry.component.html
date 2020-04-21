@@ -9,8 +9,7 @@
         >Pflichteingaben sind mit * markiert</mat-card-subtitle
       >
       <mat-card-subtitle *ngIf="isReadonly"
-        >Dieser Eintrag wurde bereits ans Gesundheitsamt übertragen und kann
-        deshalb nicht mehr bearbeitet werden</mat-card-subtitle
+        >Dieser Eintrag kann nicht mehr bearbeitet werden</mat-card-subtitle
       >
     </mat-card-header>
     <mat-card-content>
@@ -84,6 +83,7 @@
       >
       </app-multiple-autocomplete>
       <div
+        *ngIf="!isReadonly"
         style="
           display: flex;
           flex-direction: row;

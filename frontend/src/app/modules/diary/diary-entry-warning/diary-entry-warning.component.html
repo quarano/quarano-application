@@ -1,0 +1,15 @@
+<div class="entry-container">
+  <span class="mr-3 label">{{ label }}</span>
+  <button
+    matTooltip="Eintrag anlegen"
+    matTooltipPosition="after"
+    mat-mini-fab
+    color="warn"
+    [routerLink]="['new']"
+    aria-label="Eintrag fehlt noch -
+ bitte nachtragen!"
+  >
+    <mat-icon>warning</mat-icon>
+  </button>
+  <span class="ml-3 text-muted">Eintrag fehlt noch - bitte nachtragen!</span>
+</div>

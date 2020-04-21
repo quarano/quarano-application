@@ -1,0 +1,13 @@
+@import "../../../../styles/variables";
+
+.entry-container {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  width: 52px;
+  @media screen and (min-width: $break-md) {
+    display: none;
+  }
+}

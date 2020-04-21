@@ -1,5 +1,4 @@
-import { IIdentifiable, Link } from './general';
-import { ContactPersonLinks } from './contact-person';
+import { IIdentifiable, CreateLink, SelfLink, Link } from './general';
 
 export interface DiaryEntryDto extends IIdentifiable {
   bodyTemperature: number;
@@ -14,16 +13,12 @@ export interface DiaryEntryDto extends IIdentifiable {
 export interface DiaryEntryContactDto extends IIdentifiable {
   firstName: string;
   lastName: string;
-  _links: ContactPersonLinks;
+  _links: SelfLink;
 }
 
 export interface DiaryEntrySymptomDto extends IIdentifiable {
   name: string;
   characteristic: boolean;
-}
-
-export interface DiaryEntryLinks {
-  self: Link;
 }
 
 export interface DiaryEntryModifyDto extends IIdentifiable {
@@ -32,3 +27,36 @@ export interface DiaryEntryModifyDto extends IIdentifiable {
   contacts: number[];
   date: Date;
 }
+
+export interface DiaryDto extends DiaryEntryCreateLink {
+  _embedded: DiaryEntryListDto;
+}
+
+export interface DiaryEntryListDto {
+  entries: DiaryListItemDto[];
+}
+
+export interface DiaryListItemDto {
+  date: string;
+  evening: DiaryEntryCreateLink | DiaryEntryListItemDto;
+  morning: DiaryEntryCreateLink | DiaryEntryListItemDto;
+}
+
+export interface DiaryEntryListItemDto {
+  id: string;
+  date: Date;
+  contacts: DiaryEntryContactDto[];
+  bodyTemperature: number;
+  symptoms: DiaryEntrySymptomDto[];
+  _links: DiaryEntryLinks;
+}
+
+export interface DiaryEntryLinks {
+  edit: Link;
+  self: Link;
+}
+
+export interface DiaryEntryCreateLink {
+  _links: CreateLink;
+}
+

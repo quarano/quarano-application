@@ -1,18 +1,30 @@
-.bootstrap-wrapper {
-  margin-bottom: 1rem;
-  margin-top: 0.3rem;
+@import "../../../../styles/variables";
+
+.warning {
+  color: red;
 }
 
-.card {
-  margin-bottom: 0.5rem;
-  &:hover,
-  &:active,
-  &:focus {
-    cursor: pointer;
-    background-color: #fafafa;
+.check {
+  color: green;
+}
+
+.row {
+  padding: 1rem;
+  align-items: center;
+}
+
+.mat-divider.mat-divider-horizontal {
+  position: relative;
+}
+
+.today {
+  border: 1px solid $primary-color;
+  padding: 5px 15px;
+  border-radius: 14px;
+}
+
+.line {
+  @media screen and (max-width: $break-lg) {
+    margin-top: 1rem;
   }
-}
-
-.disabled {
-  color: lightgrey;
 }
