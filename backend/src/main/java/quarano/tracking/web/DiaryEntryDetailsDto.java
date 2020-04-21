@@ -24,6 +24,8 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.DiaryEntry;
 
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -65,8 +67,16 @@ public class DiaryEntryDetailsDto {
 	public Map<String, Object> getLinks() {
 
 		var selfLink = on(DiaryController.class).getDiaryEntry(entry.getId(), null);
+		var selfUri = Map.of("href", fromMethodCall(selfLink).toUriString());
 
-		return Map.of("self", Map.of("href", fromMethodCall(selfLink).toUriString()));
+		Map<String, Object> links = new HashMap<>();
+		links.put("self", selfUri);
+
+		if (!entry.getSlot().isOlderThan(Period.ofDays(2))) {
+			links.put("edit", selfUri);
+		}
+
+		return links;
 	}
 
 	@RequiredArgsConstructor

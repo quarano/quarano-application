@@ -64,7 +64,6 @@ class DiaryEntryMappingIntegrationTests {
 
 		var source = new DiaryEntry(LocalDateTime.now(), "Note");
 		source.setBodyTemperature(BodyTemperature.of(40.0f));
-		source.setDate(LocalDateTime.now());
 
 		var result = DiaryEntryDetailsDto.of(source, mapper);
 

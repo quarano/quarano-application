@@ -135,7 +135,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		DiaryEntry entry2 = DiaryEntry.of("", LocalDateTime.now().minusDays(2));
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE2 = new ArrayList<>();
-		Symptom neckProblems = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
+		Symptom neckProblems = symptoms.findById(UUID.fromString("571a03cd-173c-4499-995c-d6a003e8c032")).orElse(null);
 		symptomsE2.add(neckProblems);
 		symptomsE2.add(cough);
 		entry2.setSymptoms(symptomsE2);

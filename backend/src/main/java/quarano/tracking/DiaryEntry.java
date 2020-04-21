@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -55,9 +56,10 @@ import org.springframework.util.Assert;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
 
-	private static final Comparator<DiaryEntry> BY_DATE = Comparator.comparing(DiaryEntry::getDateTime);
+	private static final Comparator<DiaryEntry> BY_DATE = Comparator.comparing(DiaryEntry::getDateTime).reversed();
 
-	private LocalDateTime date;
+	private LocalDateTime reportedAt;
+	private @Column(unique = true) Slot slot;
 	private @ManyToMany List<ContactPerson> contacts = new ArrayList<>();
 	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
 	private String note;
@@ -67,23 +69,28 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), date, note);
 	}
 
-	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime date, String note) {
+	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime reportedAt, String note) {
 
 		this.id = id;
-		this.date = date;
+		this.reportedAt = reportedAt;
 		this.note = note;
+		this.slot = Slot.of(reportedAt);
 	}
 
 	public static DiaryEntry of(String note, LocalDateTime date) {
 		return new DiaryEntry(date, note);
 	}
 
+	public LocalDate getSlotDate() {
+		return getSlot().getDate();
+	}
+
 	public LocalDate getDate() {
-		return date.toLocalDate();
+		return reportedAt.toLocalDate();
 	}
 
 	public LocalDateTime getDateTime() {
-		return date;
+		return reportedAt;
 	}
 
 	public DiaryEntry add(Symptom symptom) {
@@ -101,7 +108,7 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	List<Encounter> toEncounters() {
 
 		return contacts.stream() //
-				.map(it -> Encounter.with(it, date.toLocalDate())) //
+				.map(it -> Encounter.with(it, reportedAt.toLocalDate())) //
 				.collect(Collectors.toList());
 	}
 
@@ -116,6 +123,10 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 
 	public boolean hasId(DiaryEntryIdentifier identifier) {
 		return this.id.equals(identifier);
+	}
+
+	boolean hasSlot(Slot slot) {
+		return this.slot.equals(slot);
 	}
 
 	/*
@@ -146,4 +157,5 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 			return id.toString();
 		}
 	}
+
 }

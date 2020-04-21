@@ -27,6 +27,7 @@ import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
@@ -49,9 +50,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DiaryController {
 
-	private final @NonNull MapperWrapper mapper;
 	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull MessageSourceAccessor messages;
+	private final @NonNull MapperWrapper mapper;
 
 	@GetMapping("/api/diary")
 	Stream<?> getDiary(@LoggedIn TrackedPerson person) {
@@ -59,6 +60,11 @@ public class DiaryController {
 		return person.getDiary() //
 				.map(it -> DiaryEntryDetailsDto.of(it, mapper)) //
 				.stream();
+	}
+
+	@GetMapping("/api/slotted")
+	DiarySummaryDto getSlottedDiary(@LoggedIn TrackedPerson person) {
+		return DiarySummaryDto.of(person.getDiary(), LocalDate.now().minusDays(7), mapper);
 	}
 
 	@PostMapping("/api/diary")

@@ -15,12 +15,19 @@
  */
 package quarano.tracking;
 
+import static java.util.stream.Collectors.*;
+
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.util.Streamable;
 
@@ -50,6 +57,42 @@ public class Diary implements Streamable<DiaryEntry> {
 				.findFirst();
 	}
 
+	public Stream<DiaryEntryDay> toEntryDays(LocalDate startDate) {
+
+		var byDate = enties.stream() //
+				.collect(groupingBy(DiaryEntry::getSlotDate));
+
+		var now = Slot.now().getDate();
+
+		return Stream.iterate(now, it -> it.isAfter(startDate) || it.equals(startDate), it -> it.minusDays(1)) //
+				.map(it -> {
+
+					var entries = byDate.get(it);
+					var morningEntry = getSlotEntryFrom(Slot.morningOf(it), entries);
+					var eveningEntry = getSlotEntryFrom(Slot.eveningOf(it), entries);
+
+					return DiaryEntryDay.of(it, morningEntry, eveningEntry);
+				});
+	}
+
+	private static Optional<DiaryEntry> getSlotEntryFrom(Slot slot, Collection<DiaryEntry> sources) {
+
+		if (sources == null) {
+			return Optional.empty();
+		}
+
+		return sources //
+				.stream() //
+				.filter(entry -> entry.hasSlot(slot)) //
+				.findFirst();
+	}
+
+	public boolean containsCurrentEntry() {
+
+		return enties.stream() //
+				.anyMatch(it -> it.hasSlot(Slot.now()));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
@@ -57,5 +100,17 @@ public class Diary implements Streamable<DiaryEntry> {
 	@Override
 	public Iterator<DiaryEntry> iterator() {
 		return enties.iterator();
+	}
+
+	@ToString
+	@RequiredArgsConstructor(staticName = "of")
+	public static class DiaryEntryDay {
+
+		private final @Getter LocalDate date;
+		private final @Getter Optional<DiaryEntry> morning, evening;
+
+		public boolean allowCreation() {
+			return date.isAfter(LocalDate.now().minusDays(2));
+		}
 	}
 }
