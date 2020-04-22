@@ -66,7 +66,11 @@ public class DiaryRepresentations {
 	private final MapperWrapper mapper;
 
 	DiarySummary toSummary(Diary diary, LocalDate startDate) {
-		return new DiarySummary(diary, startDate);
+		return new DiarySummary(diary, startDate, Slot.now());
+	}
+
+	DiarySummary toSummary(Diary diary, LocalDate startDate, Slot reference) {
+		return new DiarySummary(diary, startDate, reference);
 	}
 
 	DiaryEntryRepresentation toRepresentation(DiaryEntry entry) {
@@ -100,7 +104,6 @@ public class DiaryRepresentations {
 			this.timeOfDay = slot.getTimeOfDay();
 		}
 
-		private UUID id;
 		private float bodyTemperature;
 		private List<UUID> symptoms = new ArrayList<>();
 		private List<UUID> contacts = new ArrayList<>();
@@ -201,6 +204,7 @@ public class DiaryRepresentations {
 
 		private final Diary diary;
 		private final LocalDate startDate;
+		private final Slot reference;
 
 		@JsonProperty("_embedded")
 		public Map<String, Object> getEmbeddeds() {
@@ -209,7 +213,7 @@ public class DiaryRepresentations {
 
 				var fields = new LinkedHashMap<>();
 				fields.put("date", it.getDate()); //
-				fields.put("evening", mapEntry(it.getEvening(), it.allowCreation()));
+				fields.put("evening", mapEntry(it.getEvening(), it.allowCreation() && !reference.isMorningOf(it.getDate())));
 				fields.put("morning", mapEntry(it.getMorning(), it.allowCreation())); //
 
 				return fields;

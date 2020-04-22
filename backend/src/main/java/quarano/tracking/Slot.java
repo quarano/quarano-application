@@ -99,6 +99,26 @@ public class Slot {
 		return Slot.of(LocalDateTime.now());
 	}
 
+	public boolean isMorning() {
+		return timeOfDay.equals(TimeOfDay.MORNING);
+	}
+
+	public boolean isMorningOf(LocalDate date) {
+		return isMorning() && this.date.equals(date);
+	}
+
+	public boolean isEvening() {
+		return timeOfDay.equals(TimeOfDay.EVENING);
+	}
+
+	public boolean isEveningOf(LocalDate date) {
+		return isEvening() && this.date.equals(date);
+	}
+
+	public boolean hasDate(LocalDate date) {
+		return this.date.equals(date);
+	}
+
 	public boolean isOlderThan(Period period) {
 
 		var reference = date.plus(period);
