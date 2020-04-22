@@ -1,6 +1,6 @@
 <div class="entry-container">
   <span class="mr-3 label">{{
-    slot === "MORNING" ? "Morgens" : "Abends"
+    slot === "morning" ? "Morgens" : "Abends"
   }}</span>
   <button
     *ngIf="canCreate"
@@ -18,5 +18,15 @@
   <span *ngIf="canCreate; else cannot_create" class="ml-3 text-muted"
     >Eintrag fehlt noch - bitte nachtragen!</span
   >
-  <ng-template #cannot_create><span>Kein Eintrag vorhanden</span></ng-template>
+  <ng-template #cannot_create
+    ><span>Kein Eintrag vorhanden</span
+    ><mat-icon
+      style="cursor: pointer;"
+      matTooltip="Text wird noch definiert"
+      matTooltipPosition="after"
+      class="ml-1 text-muted"
+    >
+      info</mat-icon
+    ></ng-template
+  >
 </div>

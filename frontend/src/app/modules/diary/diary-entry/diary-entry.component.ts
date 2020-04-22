@@ -99,7 +99,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   onSubmit() {
     if (this.formGroup.valid) {
       const diaryEntryModifyDto: DiaryEntryModifyDto
-        = { id: null, bodyTemperature: null, symptoms: [], slot: { date: null, timeOfDay: null }, contacts: [] };
+        = { id: null, bodyTemperature: null, symptoms: [], date: null, timeOfDay: null, contacts: [] };
       diaryEntryModifyDto.symptoms = this.characteristicSymptomsControl.value;
       diaryEntryModifyDto.id = this.diaryEntry.id;
       diaryEntryModifyDto.bodyTemperature = this.formGroup.controls.bodyTemperature.value;
@@ -118,17 +118,17 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     if (this.isNew) {
       return `Tagebuch-Eintrag anlegen für den ` +
         `${new Date(this.state.date).toLocaleDateString()} ` +
-        `(${this.state.slot === 'MORNING' ? 'morgens' : 'abends'})`;
+        `(${this.state.slot === 'morning' ? 'morgens' : 'abends'})`;
     } else {
       return `Tagebuch-Eintrag bearbeiten für den ` +
         `${new Date(this.diaryEntry.slot.date).toLocaleDateString()} ` +
-        `(${this.diaryEntry.slot.timeOfDay === 'MORNING' ? 'morgens' : 'abends'})`;
+        `(${this.diaryEntry.slot.timeOfDay === 'morning' ? 'morgens' : 'abends'})`;
     }
   }
 
   createEntry(diaryEntry: DiaryEntryModifyDto) {
-    diaryEntry.slot.date = this.state.date;
-    diaryEntry.slot.timeOfDay = this.state.slot;
+    diaryEntry.date = this.state.date;
+    diaryEntry.timeOfDay = this.state.slot;
     this.subs.add(this.apiService
       .createDiaryEntry(diaryEntry)
       .subscribe(_ => {
@@ -139,7 +139,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   modifyEntry(diaryEntry: DiaryEntryModifyDto) {
-    diaryEntry.slot = this.diaryEntry.slot;
+    diaryEntry.date = this.diaryEntry.slot.date;
+    diaryEntry.timeOfDay = this.diaryEntry.slot.timeOfDay;
     this.subs.add(this.apiService
       .modifyDiaryEntry(diaryEntry)
       .subscribe(_ => {
