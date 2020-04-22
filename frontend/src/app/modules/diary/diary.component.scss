@@ -1,5 +1,9 @@
 @import "../../../styles/variables";
 
+h3 {
+  text-transform: uppercase;
+}
+
 ::ng-deep {
   .mat-card-header-text {
     margin: 0 !important;

@@ -4,10 +4,10 @@
   }}</span>
   <button
     *ngIf="canCreate"
-    matTooltip="Eintrag anlegen"
+    matTooltip="Eintrag nachtragen"
     matTooltipPosition="after"
     mat-mini-fab
-    color="warn"
+    color="basic"
     [routerLink]="['new']"
     [state]="{ date: date, slot: slot }"
     aria-label="Eintrag fehlt noch -
@@ -19,7 +19,7 @@
     >Eintrag fehlt noch - bitte nachtragen!</span
   >
   <ng-template #cannot_create
-    ><span class="text-muted">Kein Eintrag vorhanden</span
+    ><span class="text-muted no-entry">Kein Eintrag vorhanden</span
     ><mat-icon
       style="cursor: pointer; opacity: 0.8;"
       matTooltip="Text wird noch definiert"

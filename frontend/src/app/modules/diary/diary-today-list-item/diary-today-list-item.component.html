@@ -1,6 +1,6 @@
 <div class="bootstrap-wrapper">
   <div class="row">
-    <div class="col-12 col-lg-2 line today">
+    <div class="col-12 col-lg-2 line">
       <span>{{ date | date: "EEEEEE, d.M.y" }}</span>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
@@ -20,14 +20,16 @@
           </app-diary-entry-warning>
         </ng-container>
         <ng-template #morning_create>
+          <span class="mr-3 label">Morgens</span>
           <button
-            mat-raised-button
+            mat-mini-fab
             color="primary"
             [routerLink]="['new']"
             [state]="{ date: date, slot: 'morning' }"
           >
-            Tagebuch-Eintrag anlegen
+            <mat-icon>add</mat-icon>
           </button>
+          <span class="ml-3 create-now">Jetzt eintragen</span>
         </ng-template>
       </ng-template>
     </div>
@@ -40,22 +42,24 @@
       </ng-container>
       <ng-template #evening_not_completed>
         <ng-container *ngIf="currentSlotIsEvening; else evening_wait">
+          <span class="mr-3 label">Abends</span>
           <button
-            mat-raised-button
+            mat-mini-fab
             color="primary"
             [routerLink]="['new']"
             [state]="{ date: date, slot: 'evening' }"
+            class="create-now-button"
           >
-            Tagebuch-Eintrag anlegen
+            <mat-icon>add</mat-icon>
           </button>
+          <span class="ml-3 create-now">Jetzt eintragen</span>
         </ng-container>
         <ng-template #evening_wait
-          ><span class="text-muted"
+          ><span class="text-muted" style="margin-left: 3.5rem;"
             >Hier kann erst ab 17 Uhr ein Eintrag erfolgen</span
           ></ng-template
         >
       </ng-template>
     </div>
   </div>
-  <mat-divider></mat-divider>
 </div>

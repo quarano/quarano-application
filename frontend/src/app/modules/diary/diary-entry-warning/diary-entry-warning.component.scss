@@ -5,6 +5,14 @@
   align-items: center;
 }
 
+.mat-focus-indicator.mat-mini-fab.mat-button-base.mat-basic.ng-star-inserted {
+  color: $warn-color;
+}
+
+.no-entry {
+  margin-left: 3.5rem;
+}
+
 .label {
   width: 52px;
   @media screen and (min-width: $break-md) {
