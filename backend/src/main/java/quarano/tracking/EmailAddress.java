@@ -26,6 +26,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -58,7 +59,7 @@ public class EmailAddress {
 
 	@Nullable
 	public static EmailAddress ofNullable(@Nullable String email) {
-		return email == null ? null : of(email);
+		return StringUtils.hasText(email) ? of(email) : null;
 	}
 
 	/**

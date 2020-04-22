@@ -27,6 +27,7 @@ import javax.persistence.Embeddable;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -46,7 +47,7 @@ public class PhoneNumber {
 
 	public static PhoneNumber of(String number) {
 
-		Assert.hasText(number, "Phone number must not be null!");
+		Assert.hasText(number, "Phone number must not be null or empty!");
 
 		if (!isValid(number)) {
 			throw new IllegalArgumentException(String.format("%s is not a valid phone number!", number));
@@ -61,7 +62,7 @@ public class PhoneNumber {
 
 	@Nullable
 	public static PhoneNumber ofNullable(@Nullable String number) {
-		return number == null ? null : of(number);
+		return StringUtils.hasText(number) ? of(number) : null;
 	}
 
 	public static boolean isValid(String candidate) {

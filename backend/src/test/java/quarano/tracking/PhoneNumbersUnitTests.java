@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 /**
@@ -49,5 +50,12 @@ class PhoneNumbersUnitTests {
 		return DynamicTest.stream(VALID_NUMBERS.entrySet().iterator(), //
 				it -> String.format("Parses %s into %s.", it.getKey(), it.getValue()), //
 				it -> assertThat(PhoneNumber.of(it.getKey())).isEqualTo(PhoneNumber.of(it.getValue())));
+	}
+
+	@Test
+	void defaultsNullAndEmptyValuesToNullNumber() {
+
+		assertThat(PhoneNumber.ofNullable(null)).isNull();
+		assertThat(PhoneNumber.ofNullable("")).isNull();
 	}
 }
