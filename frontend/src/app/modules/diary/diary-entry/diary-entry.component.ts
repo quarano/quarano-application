@@ -39,7 +39,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   get isReadonly(): boolean {
-    if (!this.isNew && this.diaryEntry._links.edit) { return true; } return false;
+    if (!this.isNew && !this.diaryEntry._links.edit) { return true; } return false;
   }
 
   constructor(

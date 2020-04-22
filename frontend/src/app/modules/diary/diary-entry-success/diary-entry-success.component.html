@@ -2,13 +2,18 @@
   <span class="mr-3 label">{{ label }}</span>
   <button
     mat-mini-fab
-    color="primary"
+    color="basic"
     aria-label="Danke für Ihren Eintrag!"
     [routerLink]="['edit', entry.id]"
-    matTooltip="Eintrag ansehen und bearbeiten"
+    [matTooltip]="isReadonly ? 'Eintrag ansehen' : 'Eintrag bearbeiten'"
     matTooltipPosition="after"
   >
-    <mat-icon>check</mat-icon>
+    <mat-icon *ngIf="isReadonly; else editable" class="text-muted"
+      >visibility</mat-icon
+    >
+    <ng-template #editable
+      ><mat-icon class="text-muted">create</mat-icon></ng-template
+    >
   </button>
   <div class="data-container text-muted">
     <div class="row-container">

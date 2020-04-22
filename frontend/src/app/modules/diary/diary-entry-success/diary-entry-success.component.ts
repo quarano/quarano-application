@@ -15,6 +15,11 @@ export class DiaryEntrySuccessComponent implements OnInit {
   ngOnInit() {
   }
 
+  get isReadonly(): boolean {
+    if (!this.entry._links.edit) { return true; }
+    return false;
+  }
+
   get symptomsString(): string {
     return this.entry.symptoms.map(s => s.name).join(', ');
   }

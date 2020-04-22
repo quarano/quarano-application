@@ -1,13 +1,22 @@
+import { Component, OnInit, Input } from '@angular/core';
 import { DiaryListItemDto, DiaryEntryListItemDto } from '@models/diary-entry';
-import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-diary-list-item',
-  templateUrl: './diary-list-item.component.html',
-  styleUrls: ['./diary-list-item.component.scss']
+  selector: 'app-diary-today-list-item',
+  templateUrl: './diary-today-list-item.component.html',
+  styleUrls: ['./diary-today-list-item.component.scss']
 })
-export class DiaryListItemComponent {
+export class DiaryTodayListItemComponent implements OnInit {
   @Input() diaryListItem: DiaryListItemDto;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  get currentSlotIsEvening(): boolean {
+    return this.diaryListItem.evening.hasOwnProperty('id') || this.canCreateEvening;
+  }
 
   get morning(): DiaryEntryListItemDto {
     console.log(this.diaryListItem.morning);
@@ -35,5 +44,4 @@ export class DiaryListItemComponent {
   get date(): Date {
     return new Date(this.diaryListItem.date);
   }
-
 }

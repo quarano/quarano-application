@@ -74,7 +74,7 @@ export class TokenService {
           filter(expDate => expDate <= new Date())
         )
         .subscribe(expDate => {
-          this.snackbarService.warning('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
+          this.snackbarService.message('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
           this.unsetToken();
         });
 

@@ -30,10 +30,13 @@
     <ng-container
       *ngFor="let listItem of diary._embedded.entries; let i = index"
     >
-      <app-diary-list-item
+      <app-diary-today-list-item
         [diaryListItem]="listItem"
-        [isFirst]="i === 0"
-      ></app-diary-list-item>
+        *ngIf="i === 0; else not_today"
+      ></app-diary-today-list-item>
+      <ng-template #not_today
+        ><app-diary-list-item [diaryListItem]="listItem"></app-diary-list-item
+      ></ng-template>
     </ng-container>
   </mat-card-content>
 </mat-card>

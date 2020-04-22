@@ -12,7 +12,6 @@ export interface DiaryEntryDto extends IIdentifiable {
   reportedAt: string;
 }
 
-
 export interface DiaryEntryContactDto extends IIdentifiable {
   firstName: string;
   lastName: string;
