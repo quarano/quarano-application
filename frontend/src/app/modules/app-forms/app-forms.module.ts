@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactPersonFormComponent } from './contact-person-form/contact-person-form.component';
+import { ContactPersonDialogComponent } from './contact-person-dialog/contact-person-dialog.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ContactPersonFormComponent } from './contact-person-form/contact-person
     AlertModule,
     AngularMaterialModule
   ],
-  declarations: [ContactPersonFormComponent, PersonalDataFormComponent],
-  exports: [ContactPersonFormComponent, PersonalDataFormComponent]
+  declarations: [ContactPersonFormComponent, PersonalDataFormComponent, ContactPersonDialogComponent],
+  exports: [ContactPersonFormComponent, PersonalDataFormComponent, ContactPersonDialogComponent],
+  entryComponents: [ContactPersonDialogComponent]
 })
 export class AppFormsModule { }

@@ -1,5 +1,5 @@
 import { ContactPersonDto } from '@models/contact-person';
-import { ContactPersonDialogComponent } from './../../contact/contact-person-dialog/contact-person-dialog.component';
+import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { DeactivatableComponent } from '@guards/prevent-unsaved-changes.guard';
 import { SubSink } from 'subsink';
 import { DiaryEntryModifyDto } from '@models/diary-entry';

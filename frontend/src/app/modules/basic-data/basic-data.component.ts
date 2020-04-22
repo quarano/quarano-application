@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import '@utils/date-extensions';
 import { MatDialog } from '@angular/material/dialog';
-import { ContactPersonDialogComponent } from '../contact/contact-person-dialog/contact-person-dialog.component';
+import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { VALIDATION_PATTERNS } from '@utils/validation';
