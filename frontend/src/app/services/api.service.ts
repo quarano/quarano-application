@@ -49,23 +49,6 @@ export class ApiService {
     return new Date(date + 'Z');
   }
 
-  getGroupedDiaryEntries(): Observable<Map<string, DiaryEntryDto[]>> {
-    return this.getDiaryEntries()
-      .pipe(
-        map(entries => groupBy<DiaryEntryDto>(entries, e => e.date.toLocaleDateString('de'))),
-      );
-  }
-
-  getDiaryEntries(): Observable<DiaryEntryDto[]> {
-    return this.httpClient.get<DiaryEntryDto[]>(`${this.baseUrl}/api/diary`)
-      .pipe(
-        share(),
-        map(entries => {
-          entries.forEach(e => e.date = this.getDate(e.date));
-          return entries;
-        }));
-  }
-
   createDiaryEntry(diaryEntry: DiaryEntryModifyDto): Observable<DiaryEntryDto> {
     return this.httpClient.post<DiaryEntryDto>(`${this.baseUrl}/api/diary`, diaryEntry)
       .pipe(map(entry => {
@@ -111,6 +94,6 @@ export class ApiService {
   }
 
   getDiary(): Observable<DiaryDto> {
-    return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/slotted`);
+    return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
   }
 }

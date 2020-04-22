@@ -6,10 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./diary-entry-warning.component.scss']
 })
 export class DiaryEntryWarningComponent implements OnInit {
-  @Input() label: string;
+  @Input() slot: 'MORNING' | 'EVENING';
+  @Input() date: Date;
+  @Input() canCreate: boolean;
   constructor() { }
 
   ngOnInit() {
   }
-
 }

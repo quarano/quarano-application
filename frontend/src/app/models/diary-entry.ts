@@ -2,13 +2,16 @@ import { IIdentifiable, CreateLink, SelfLink, Link } from './general';
 
 export interface DiaryEntryDto extends IIdentifiable {
   bodyTemperature: number;
+  slot: SlotDto;
   symptoms: DiaryEntrySymptomDto[];
   characteristicSymptoms: DiaryEntrySymptomDto[];
   nonCharacteristicSymptoms: DiaryEntrySymptomDto[];
   date: Date;
   contacts: DiaryEntryContactDto[];
   _links: DiaryEntryLinks;
+  reportedAt: string;
 }
+
 
 export interface DiaryEntryContactDto extends IIdentifiable {
   firstName: string;
@@ -25,7 +28,12 @@ export interface DiaryEntryModifyDto extends IIdentifiable {
   bodyTemperature: number;
   symptoms: number[];
   contacts: number[];
-  date: Date;
+  slot: SlotDto;
+}
+
+export interface SlotDto {
+  date: string;
+  timeOfDay: 'MORNING' | 'EVENING';
 }
 
 export interface DiaryDto extends DiaryEntryCreateLink {

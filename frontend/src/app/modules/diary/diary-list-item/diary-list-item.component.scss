@@ -1,13 +1,5 @@
 @import "../../../../styles/variables";
 
-.warning {
-  color: red;
-}
-
-.check {
-  color: green;
-}
-
 .row {
   padding: 1rem;
   align-items: center;
@@ -19,7 +11,7 @@
 
 .today {
   border: 1px solid $primary-color;
-  padding: 5px 15px;
+  padding: 5px 10px;
   border-radius: 14px;
 }
 

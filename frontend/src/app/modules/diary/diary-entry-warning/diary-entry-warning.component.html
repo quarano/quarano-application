@@ -1,15 +1,22 @@
 <div class="entry-container">
-  <span class="mr-3 label">{{ label }}</span>
+  <span class="mr-3 label">{{
+    slot === "MORNING" ? "Morgens" : "Abends"
+  }}</span>
   <button
+    *ngIf="canCreate"
     matTooltip="Eintrag anlegen"
     matTooltipPosition="after"
     mat-mini-fab
     color="warn"
     [routerLink]="['new']"
+    [state]="{ date: date, slot: slot }"
     aria-label="Eintrag fehlt noch -
  bitte nachtragen!"
   >
     <mat-icon>warning</mat-icon>
   </button>
-  <span class="ml-3 text-muted">Eintrag fehlt noch - bitte nachtragen!</span>
+  <span *ngIf="canCreate; else cannot_create" class="ml-3 text-muted"
+    >Eintrag fehlt noch - bitte nachtragen!</span
+  >
+  <ng-template #cannot_create><span>Kein Eintrag vorhanden</span></ng-template>
 </div>

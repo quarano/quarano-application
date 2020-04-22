@@ -23,7 +23,9 @@ export class DiaryEntryResolver implements Resolve<DiaryEntryDto> {
           date: new Date(),
           symptoms: [],
           contacts: [],
-          _links: null
+          _links: null,
+          reportedAt: null,
+          slot: { date: null, timeOfDay: null }
         });
     }
   }

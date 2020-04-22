@@ -1,9 +1,9 @@
 <div class="bootstrap-wrapper">
   <div class="row">
-    <div class="col-12 col-lg-2 line">
-      <span [class]="isFirst ? 'today' : ''">{{
-        date | date: "EEEEEE, d.M.y"
-      }}</span>
+    <div
+      [class]="isFirst ? 'col-12 col-lg-2 line today' : 'col-12 col-lg-2 line'"
+    >
+      <span>{{ date | date: "EEEEEE, d.M.y" }}</span>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <ng-container *ngIf="morning; else morning_warning"
@@ -13,7 +13,11 @@
         ></app-diary-entry-success
       ></ng-container>
       <ng-template #morning_warning
-        ><app-diary-entry-warning label="Morgens"></app-diary-entry-warning
+        ><app-diary-entry-warning
+          slot="MORNING"
+          [date]="diaryListItem.date"
+          [canCreate]="canCreateMorning"
+        ></app-diary-entry-warning
       ></ng-template>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
@@ -24,7 +28,11 @@
         ></app-diary-entry-success
       ></ng-container>
       <ng-template #evening_warning>
-        <app-diary-entry-warning label="Abends"></app-diary-entry-warning>
+        <app-diary-entry-warning
+          slot="EVENING"
+          [date]="diaryListItem.date"
+          [canCreate]="canCreateEvening"
+        ></app-diary-entry-warning>
       </ng-template>
     </div>
   </div>

@@ -1,13 +1,12 @@
 import { DiaryEntrySuccessComponent } from './diary-entry-success/diary-entry-success.component';
 import { DiaryEntryWarningComponent } from './diary-entry-warning/diary-entry-warning.component';
-import { DiaryResolver } from './../../resolvers/diary.resolver';
+import { DiaryResolver } from '@resolvers/diary.resolver';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { MultipleAutocompleteModule } from '@ui/multiple-autocomplete/multiple-autocomplete.module';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
 import { AlertModule } from '@ui/alert/alert.module';
 import { DiaryListItemComponent } from './diary-list-item/diary-list-item.component';
 import { RouterModule } from '@angular/router';
-import { GroupedDiaryEntriesResolver } from '@resolvers/grouped-diary-entries.resolver';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { SymptomsResolver } from '@resolvers/symptoms.resolver';
 import { DiaryEntryResolver } from '@resolvers/diary-entry.resolver';
@@ -46,7 +45,6 @@ const COMPONENTS = [
     [
       DiaryEntryResolver,
       SymptomsResolver,
-      GroupedDiaryEntriesResolver,
       DiaryResolver
     ]
 })

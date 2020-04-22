@@ -13,13 +13,11 @@ import { SymptomDto } from '@models/symptom';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-diary-entry',
   templateUrl: './diary-entry.component.html',
-  styleUrls: ['./diary-entry.component.scss'],
-  providers: [{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }]
+  styleUrls: ['./diary-entry.component.scss']
 })
 export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
   formGroup: FormGroup;
@@ -29,6 +27,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   contactPersons: ContactPersonDto[] = [];
   today = new Date();
   private subs = new SubSink();
+  state: any;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -49,13 +48,16 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private apiService: ApiService,
     private snackbarService: SnackbarService,
     private router: Router,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
   ngOnInit() {
+    this.subs.add(this.activatedRoute.paramMap
+      .subscribe(_ => this.state = window.history.state));
     this.subs.add(this.route.data.subscribe(data => {
       this.diaryEntry = data.diaryEntry;
       this.setSymptoms(data.symptoms);
@@ -97,11 +99,10 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   onSubmit() {
     if (this.formGroup.valid) {
       const diaryEntryModifyDto: DiaryEntryModifyDto
-        = { id: null, bodyTemperature: null, symptoms: [], date: null, contacts: [] };
+        = { id: null, bodyTemperature: null, symptoms: [], slot: { date: null, timeOfDay: null }, contacts: [] };
       diaryEntryModifyDto.symptoms = this.characteristicSymptomsControl.value;
       diaryEntryModifyDto.id = this.diaryEntry.id;
       diaryEntryModifyDto.bodyTemperature = this.formGroup.controls.bodyTemperature.value;
-      diaryEntryModifyDto.date = this.formGroup.controls.dateTime.value;
       diaryEntryModifyDto.symptoms.push(...this.formGroup.controls.nonCharacteristicSymptoms.value);
       diaryEntryModifyDto.contacts = this.formGroup.controls.contactPersons.value;
 
@@ -113,7 +114,21 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     }
   }
 
+  getTitle(): string {
+    if (this.isNew) {
+      return `Tagebuch-Eintrag anlegen für den ` +
+        `${new Date(this.state.date).toLocaleDateString()} ` +
+        `(${this.state.slot === 'MORNING' ? 'morgens' : 'abends'})`;
+    } else {
+      return `Tagebuch-Eintrag bearbeiten für den ` +
+        `${new Date(this.diaryEntry.slot.date).toLocaleDateString()} ` +
+        `(${this.diaryEntry.slot.timeOfDay === 'MORNING' ? 'morgens' : 'abends'})`;
+    }
+  }
+
   createEntry(diaryEntry: DiaryEntryModifyDto) {
+    diaryEntry.slot.date = this.state.date;
+    diaryEntry.slot.timeOfDay = this.state.slot;
     this.subs.add(this.apiService
       .createDiaryEntry(diaryEntry)
       .subscribe(_ => {
@@ -124,6 +139,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   modifyEntry(diaryEntry: DiaryEntryModifyDto) {
+    diaryEntry.slot = this.diaryEntry.slot;
     this.subs.add(this.apiService
       .modifyDiaryEntry(diaryEntry)
       .subscribe(_ => {

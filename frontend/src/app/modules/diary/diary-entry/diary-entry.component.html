@@ -2,9 +2,7 @@
   <mat-card class="form__card--small form__card--animated">
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
-      <mat-card-title>{{
-        isNew ? "Neuen Tagebuch-Eintrag anlegen" : "Tagebuch-Eintrag bearbeiten"
-      }}</mat-card-title>
+      <mat-card-title>{{ getTitle() }}</mat-card-title>
       <mat-card-subtitle *ngIf="!isReadonly"
         >Pflichteingaben sind mit * markiert</mat-card-subtitle
       >
@@ -13,25 +11,6 @@
       >
     </mat-card-header>
     <mat-card-content>
-      <mat-form-field>
-        <input
-          matInput
-          [ngxMatDatetimePicker]="picker"
-          placeholder="Datum des Eintrags"
-          formControlName="dateTime"
-          required
-          [max]="today"
-        />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <ngx-mat-datetime-picker
-          #picker
-          [showSpinners]="true"
-          [showSeconds]="false"
-          [stepMinute]="5"
-        >
-        </ngx-mat-datetime-picker>
-        <mat-error>Bitte geben Sie das Datum des Eintrags ein</mat-error>
-      </mat-form-field>
       <div class="radio-group">
         <mat-label class="mb-3">Körpertemperatur in °C *</mat-label>
         <div style="display: flex; flex-direction: row; align-items: center;">
