@@ -39,4 +39,8 @@ public abstract class QuaranoAggregate<T extends QuaranoAggregate<T, ID>, ID ext
 
 	protected @Getter @EmbeddedId ID id;
 	private @Getter AuditingMetadata metadata = new AuditingMetadata();
+
+	public boolean hasId(ID id) {
+		return this.id.equals(id);
+	}
 }

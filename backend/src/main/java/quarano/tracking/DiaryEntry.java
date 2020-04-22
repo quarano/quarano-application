@@ -65,20 +65,19 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	private String note;
 	private BodyTemperature bodyTemperature;
 
-	public DiaryEntry(LocalDateTime date, String note) {
-		this(DiaryEntryIdentifier.of(UUID.randomUUID()), date, note);
+	DiaryEntry(Slot slot) {
+		this(DiaryEntryIdentifier.of(UUID.randomUUID()), LocalDateTime.now(), slot);
 	}
 
-	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime reportedAt, String note) {
+	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime reportedAt, Slot slot) {
 
 		this.id = id;
 		this.reportedAt = reportedAt;
-		this.note = note;
-		this.slot = Slot.of(reportedAt);
+		this.slot = slot;
 	}
 
-	public static DiaryEntry of(String note, LocalDateTime date) {
-		return new DiaryEntry(date, note);
+	public static DiaryEntry of(Slot slot) {
+		return new DiaryEntry(slot);
 	}
 
 	public LocalDate getSlotDate() {

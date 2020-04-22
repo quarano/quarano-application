@@ -18,17 +18,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+@Transactional
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class AccountService {
 
-	private static final String INVALID_BIRTHDAY = "Given date of birth does not match date of birth of case!";
 	private final @NonNull PasswordEncoder passwordEncoder;
 	private final @NonNull AccountRepository accounts;
 	private final @NonNull RoleRepository roles;
 	private final @NonNull TrackedPersonRepository trackedPersonRepo;
 	private final @NonNull ActivationCodeService activationCodes;
+	private final @NonNull AccountProperties configuration;
+
+	public Try<Account> createTrackedPersonAccount(AccountRegistrationDetails details) {
+
+		return Try.success(details) //
+				.filter(it -> isUsernameAvailable(it.getUsername()), AccountRegistrationException::forInvalidUsername)
+				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply)) //
+				.flatMap(this::checkIdentity) //
+				.flatMap(this::applyTrackedPerson) //
+				.map(this::toAccount);
+	}
 
 	/**
 	 * creates a new account, encrypts the password and stores it
@@ -42,15 +53,33 @@ public class AccountService {
 	 * @param roleType
 	 * @return
 	 */
-	public Account createAccount(String username, UnencryptedPassword password, String firstname, String lastname,
-			DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId, RoleType roleType) {
+	Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname, String lastname,
+			DepartmentIdentifier departmentId, TrackedPersonIdentifier trackedPersonId) {
+
+		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
+		var role = roles.findByName(RoleType.ROLE_USER.toString());
+		var account = accounts
+				.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, trackedPersonId, role));
+
+		// Mark registration on TrackedPerson
+		trackedPersonRepo.findById(trackedPersonId)
+				.map(it -> it.markAccountRegistration(configuration.getRegistrationDate())) //
+				.map(trackedPersonRepo::save);
+
+		log.info("Created account for tracked person " + trackedPersonId + " with username " + username);
+
+		return account;
+	}
+
+	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname,
+			DepartmentIdentifier departmentId, RoleType roleType) {
 
 		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
 		var role = roles.findByName(roleType.toString());
 		var account = accounts
-				.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, trackedPersonId, role));
+				.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, null, role));
 
-		log.info("Created account for client " + trackedPersonId + " with username " + username);
+		log.info("Created staff account for " + username);
 
 		return account;
 	}
@@ -72,17 +101,6 @@ public class AccountService {
 		return accounts.findByUsername(userName).isEmpty();
 	}
 
-	@Transactional
-	public Try<Account> registerAccountForClient(AccountRegistrationDetails details) {
-
-		return Try.success(details) //
-				.filter(it -> isUsernameAvailable(it.getUsername()), AccountRegistrationException::forInvalidUsername)
-				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply)) //
-				.flatMap(this::checkIdentity) //
-				.flatMap(this::applyTrackedPerson) //
-				.map(this::toAccount);
-	}
-
 	public boolean matches(@Nullable UnencryptedPassword candidate, EncryptedPassword existing) {
 
 		Assert.notNull(existing, "Existing password must not be null!");
@@ -94,15 +112,9 @@ public class AccountService {
 
 	private Try<AccountRegistrationDetails> applyTrackedPerson(AccountRegistrationDetails details) {
 
-		var identifier = details.getTrackedPersonId();
-
-		if (!identifier.isPresent()) {
-			return Try.success(details);
-		}
-
-		return identifier.flatMap(trackedPersonRepo::findById) //
+		return trackedPersonRepo.findById(details.getTrackedPersonId()) //
 				.map(person -> details.apply(person)) //
-				.orElseGet(() -> Try.failure(new AccountRegistrationException("No person found!")));
+				.orElseGet(() -> Try.failure(new AccountRegistrationException("No tracked person found!")));
 	}
 
 	/**
@@ -114,25 +126,17 @@ public class AccountService {
 	 */
 	private Try<AccountRegistrationDetails> checkIdentity(AccountRegistrationDetails details) {
 
-		var identifier = details.getTrackedPersonId();
-
-		if (!identifier.isPresent()) {
-			return Try.success(details);
-		}
-
-		return identifier.flatMap(trackedPersonRepo::findById) //
-				.map(Try::success) //
+		return trackedPersonRepo.findById(details.getTrackedPersonId()).map(Try::success) //
 				.orElseGet(() -> Try.failure(new AccountRegistrationException(
 						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'")))
 				.filter(person -> person.hasBirthdayOf(details.getDateOfBirth()),
-						() -> new AccountRegistrationException(INVALID_BIRTHDAY)) //
+						() -> AccountRegistrationException.forInvalidBirthDay(details)) //
 				.map(__ -> details);
 	}
 
 	private Account toAccount(AccountRegistrationDetails details) {
 
-		return createAccount(details.getUsername(), details.getUnencryptedPassword(), details.getFirstname(),
-				details.getLastname(), details.getDepartmentId(), details.getTrackedPersonId().orElse(null),
-				RoleType.ROLE_USER);
+		return createTrackedPersonAccount(details.getUsername(), details.getUnencryptedPassword(), details.getFirstname(),
+				details.getLastname(), details.getDepartmentId(), details.getTrackedPersonId());
 	}
 }

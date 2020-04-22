@@ -13,17 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking;
+package quarano.core;
 
-import quarano.core.QuaranoRepository;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import java.time.Period;
 
-import java.util.Optional;
+import org.springframework.core.convert.converter.Converter;
 
 /**
  * @author Oliver Drotbohm
  */
-public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson, TrackedPersonIdentifier> {
+public class StringToPeriodConverter implements Converter<String, Period> {
 
-	Optional<TrackedPerson> findByEmailAddress(EmailAddress emailAddress);
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.core.convert.converter.Converter#convert(java.lang.Object)
+	 */
+	@Override
+	public Period convert(String source) {
+		return Period.parse(source);
+	}
 }

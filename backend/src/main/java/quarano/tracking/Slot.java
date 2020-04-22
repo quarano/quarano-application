@@ -81,7 +81,7 @@ public class Slot {
 	 * @param date must not be {@literal null}.
 	 * @return
 	 */
-	static Slot of(LocalDateTime date) {
+	public static Slot of(LocalDateTime date) {
 
 		Assert.notNull(date, "Date must not be null!");
 

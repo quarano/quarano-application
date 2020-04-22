@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-class RepositoryMappingConfiguration {
+public class RepositoryMappingConfiguration {
 
 	@SuppressWarnings("unchecked")
 	RepositoryMappingConfiguration(ModelMapper mapper, ApplicationContext context, ConversionService conversions) {
@@ -113,7 +113,7 @@ class RepositoryMappingConfiguration {
 	}
 
 	@Getter
-	static class AggregateReferenceMappingException extends MappingException {
+	public static class AggregateReferenceMappingException extends MappingException {
 
 		private static final long serialVersionUID = 2554385939537893357L;
 

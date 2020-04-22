@@ -32,9 +32,9 @@ public class DiaryUnitTests {
 
 		var now = LocalDateTime.now();
 
-		DiaryEntry first = new DiaryEntry(now, "");
-		DiaryEntry second = new DiaryEntry(now.minusHours(12), "");
-		DiaryEntry third = new DiaryEntry(now.minusHours(24), "");
+		DiaryEntry first = new DiaryEntry(Slot.of(now));
+		DiaryEntry second = new DiaryEntry(Slot.of(now.minusHours(12)));
+		DiaryEntry third = new DiaryEntry(Slot.of(now.minusHours(24)));
 
 		var diary = Diary.of(List.of(first, second, third));
 

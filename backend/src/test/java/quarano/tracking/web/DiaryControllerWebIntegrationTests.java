@@ -21,10 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
-import quarano.core.web.MapperWrapper;
-import quarano.tracking.DiaryEntry;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ class DiaryControllerWebIntegrationTests {
 
 	@Autowired MockMvc mvc;
 	@Autowired TrackedPersonRepository repository;
-	@Autowired MapperWrapper mapper;
+	@Autowired DiaryRepresentations representations;
 	@Autowired ObjectMapper jackson;
 
 	@Test
@@ -51,9 +50,10 @@ class DiaryControllerWebIntegrationTests {
 	void updatesDiaryEntry() throws Exception {
 
 		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		DiaryEntry entry = person.getDiary().iterator().next();
+		var entry = person.getDiary().iterator().next();
+		var slot = entry.getSlot();
 
-		DiaryEntryDto payload = mapper.map(entry, DiaryEntryDto.class);
+		DiaryEntryInput payload = new DiaryEntryInput(slot);
 		payload.setBodyTemperature(42.0f);
 
 		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId()) //
@@ -62,9 +62,13 @@ class DiaryControllerWebIntegrationTests {
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
 
+		System.out.println(response);
+
 		DocumentContext document = JsonPath.parse(response);
 
-		assertThat(document.read("$.id", String.class)).isNotNull();
+		assertThat(document.read("$.id", String.class)).isEqualTo(entry.getId().toString());
+		assertThat(document.read("$.slot.timeOfDay", String.class)).isEqualTo("morning");
+		assertThat(document.read("$.slot.date", String.class)).isEqualTo(slot.getDate().toString());
 		assertThat(document.read("$.bodyTemperature", float.class)).isEqualTo(42.0f);
 	}
 }

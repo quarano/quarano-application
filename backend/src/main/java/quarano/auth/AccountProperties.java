@@ -13,17 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking;
+package quarano.auth;
 
-import quarano.core.QuaranoRepository;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.Period;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
  * @author Oliver Drotbohm
  */
-public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson, TrackedPersonIdentifier> {
+@ConstructorBinding
+@RequiredArgsConstructor
+@ConfigurationProperties("quarano.accounts")
+class AccountProperties {
 
-	Optional<TrackedPerson> findByEmailAddress(EmailAddress emailAddress);
+	private final Period registrationShift;
+
+	public LocalDateTime getRegistrationDate() {
+
+		var shift = registrationShift == null //
+				? Period.ofDays(0) //
+				: registrationShift;
+
+		return LocalDateTime.now().plus(shift);
+	}
 }

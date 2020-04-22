@@ -107,9 +107,6 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	}
 
 	public boolean isTrackedPerson() {
-
 		return this.roles.contains(new Role(RoleType.ROLE_USER));
-
 	}
-
 }

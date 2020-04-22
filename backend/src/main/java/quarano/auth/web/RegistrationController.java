@@ -49,7 +49,7 @@ class RegistrationController {
 
 		ErrorsDto dto = ErrorsDto.of(errors, messages);
 
-		return accounts.registerAccountForClient(details) //
+		return accounts.createTrackedPersonAccount(details) //
 				.<HttpEntity<?>> map(__ -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build())
 				.recover(AccountRegistrationException.class, it -> map(dto, it).toBadRequest()) //
 				.recover(ActivationCodeException.class, it -> dto //

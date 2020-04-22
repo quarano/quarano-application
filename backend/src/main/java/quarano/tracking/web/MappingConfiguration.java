@@ -20,7 +20,6 @@ import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.ContactWays;
 import quarano.tracking.DiaryEntry;
@@ -28,10 +27,10 @@ import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
+import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -76,10 +75,6 @@ public class MappingConfiguration {
 
 		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
 		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
-
-		mapper.addConverter(context -> symptoms.findById(context.getSource()).orElse(null), UUID.class, Symptom.class);
-		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
-				UUID.class, ContactPerson.class);
 
 		mapper.typeMap(ContactPersonDto.class, ContactWays.class).setProvider(request -> {
 
@@ -141,11 +136,13 @@ public class MappingConfiguration {
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
-		mapper.typeMap(DiaryEntryDto.class, DiaryEntry.class).setProvider(request -> {
-			var dto = (DiaryEntryDto) request.getSource();
-			return new DiaryEntry(dto.getDate(), "");
+		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).setProvider(request -> {
+			var dto = (DiaryEntryInput) request.getSource();
+
+			return DiaryEntry.of(dto.getSlot());
+
 		}).addMappings(it -> {
-			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryDto::getSymptoms,
+			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
 					(target, v) -> target.setSymptoms(v));
 		});
 	}

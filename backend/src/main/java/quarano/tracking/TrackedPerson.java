@@ -66,10 +66,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
+	private LocalDateTime accountRegisteredAt;
 
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<DiaryEntry> entries;
-	private LocalDateTime lastEntryUpdate;
 
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<Encounter> encounters;
@@ -105,13 +105,21 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public TrackedPerson addDiaryEntry(DiaryEntry entry) {
 
-		this.lastEntryUpdate = entry.getDateTime();
 		this.entries.add(entry);
 		this.encounters.addAll(entry.toEncounters());
 
 		registerEvent(DiaryEntryAdded.of(entry, getId()));
 
 		return this;
+	}
+
+	public TrackedPerson markAccountRegistration(LocalDateTime date) {
+		this.accountRegisteredAt = date;
+		return this;
+	}
+
+	public LocalDate getAccountRegistrationDate() {
+		return accountRegisteredAt == null ? null : accountRegisteredAt.toLocalDate();
 	}
 
 	public Stream<ContactPerson> getContactPersons() {

@@ -20,12 +20,19 @@ import static org.assertj.core.api.Assertions.*;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
+import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMappingException;
 import quarano.tracking.BodyTemperature;
+import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.DiaryEntry;
+import quarano.tracking.Slot;
+import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
+import quarano.tracking.web.DiaryRepresentations.DiaryEntryRepresentation;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.MappingException;
 
 /**
  * @author Oliver Drotbohm
@@ -35,12 +42,12 @@ import org.junit.jupiter.api.Test;
 class DiaryEntryMappingIntegrationTests {
 
 	private final MapperWrapper mapper;
+	private final ContactPersonRepository contacts;
 
 	@Test
 	void mapsDtoToNewEntry() {
 
-		var source = new DiaryEntryDto();
-		source.setDate(LocalDateTime.now());
+		var source = new DiaryEntryInput();
 
 		var result = mapper.map(source, DiaryEntry.class);
 
@@ -49,27 +56,33 @@ class DiaryEntryMappingIntegrationTests {
 	}
 
 	@Test
-	void mapsEntityToDto() {
+	void rejectsInvalidContact() {
 
-		var source = new DiaryEntry(LocalDateTime.now(), "Note");
+		var source = new DiaryEntryInput() //
+				.setContacts(List.of(UUID.randomUUID()));
 
-		var result = mapper.map(source, DiaryEntryDto.class);
-
-		assertThat(result.getId()).isNotNull();
-		assertThat(result.getDate()).isNotNull();
+		assertThatExceptionOfType(MappingException.class) //
+				.isThrownBy(() -> mapper.map(source, DiaryEntry.class)) //
+				.satisfies(o_O -> {
+					assertThat(o_O.getCause()).isInstanceOfSatisfying(AggregateReferenceMappingException.class, cause -> {
+						assertThat(cause.getPath()).isEqualTo("contacts");
+					});
+				});
 	}
 
 	@Test
 	void mapsEntityToDetailsDto() {
 
-		var source = new DiaryEntry(LocalDateTime.now(), "Note");
+		var source = DiaryEntry.of(Slot.now());
 		source.setBodyTemperature(BodyTemperature.of(40.0f));
 
-		var result = DiaryEntryDetailsDto.of(source, mapper);
+		var result = DiaryEntryRepresentation.of(source, mapper, false);
 
 		assertThat(result.getId()).isEqualTo(source.getId().toString());
 		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());
-		assertThat(result.getDate()).isEqualTo(source.getDateTime());
+		assertThat(result.getReportedAt()).isEqualTo(source.getDateTime());
+		assertThat(result.getSlot()).containsEntry("date", source.getSlot().getDate());
+		assertThat(result.getSlot()).containsEntry("timeOfDay", source.getSlot().getTimeOfDay().name().toLowerCase());
 		assertThat(result.getSymptoms()).allSatisfy(it -> {
 			assertThat(it.getId()).isNotNull();
 			assertThat(it.getName()).isNotBlank();

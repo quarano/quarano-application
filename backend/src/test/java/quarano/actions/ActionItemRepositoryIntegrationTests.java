@@ -22,6 +22,7 @@ import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
+import quarano.tracking.Slot;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -45,7 +46,7 @@ class ActionItemRepositoryIntegrationTests {
 	@Test
 	void persistsDescriptionArguments() {
 
-		DiaryEntry entry = new DiaryEntry(LocalDateTime.now(), "");
+		DiaryEntry entry = DiaryEntry.of(Slot.of(LocalDateTime.now()));
 		entry.setBodyTemperature(BodyTemperature.of(41.0f));
 
 		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //

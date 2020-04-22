@@ -13,10 +13,7 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.lang.Nullable;
 
 @Data
 @Accessors(chain = true)
@@ -31,7 +28,7 @@ public class AccountRegistrationDetails {
 	private LocalDate dateOfBirth;
 	private UUID activationCodeLiteral;
 	private String email;
-	private @Nullable TrackedPersonIdentifier trackedPersonId;
+	private TrackedPersonIdentifier trackedPersonId;
 	private DepartmentIdentifier departmentId;
 
 	public Try<AccountRegistrationDetails> apply(TrackedPerson person) {
@@ -44,10 +41,6 @@ public class AccountRegistrationDetails {
 		this.lastname = person.getLastName();
 
 		return Try.success(this);
-	}
-
-	public Optional<TrackedPersonIdentifier> getTrackedPersonId() {
-		return Optional.ofNullable(trackedPersonId);
 	}
 
 	public ActivationCodeIdentifier getActivationCodeIdentifier() {

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  * @author Patrick Otto
  */
-@Order(600)
+@Order(400)
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -121,7 +121,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		// generate diary entries for person 3
 
-		DiaryEntry entry1 = DiaryEntry.of("", LocalDateTime.now().minusDays(3));
+		DiaryEntry entry1 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(3)));
 		entry1.setContacts(contactsOfPerson3);
 		// add 'husten'
 		List<Symptom> symptomsE1 = new ArrayList<>();
@@ -132,7 +132,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		trackedPeople.save(sandra.addDiaryEntry(entry1));
 
-		DiaryEntry entry2 = DiaryEntry.of("", LocalDateTime.now().minusDays(2));
+		DiaryEntry entry2 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(2)));
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE2 = new ArrayList<>();
 		Symptom neckProblems = symptoms.findById(UUID.fromString("571a03cd-173c-4499-995c-d6a003e8c032")).orElse(null);
@@ -143,7 +143,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		entry2.setBodyTemperature(BodyTemperature.of(37.8f));
 		trackedPeople.save(sandra.addDiaryEntry(entry2));
 
-		DiaryEntry entry3 = DiaryEntry.of("", LocalDateTime.now().minusDays(1));
+		DiaryEntry entry3 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(1)));
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE3 = new ArrayList<>();
 		symptomsE3.add(cough);

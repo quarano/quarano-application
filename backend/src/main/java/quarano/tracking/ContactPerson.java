@@ -78,10 +78,6 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		return String.format("%s %s", firstName, lastName);
 	}
 
-	public boolean hasId(ContactPersonIdentifier id) {
-		return this.id.equals(id);
-	}
-
 	public ContactPerson assignOwner(TrackedPerson person) {
 
 		this.ownerId = person.getId();
