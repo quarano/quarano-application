@@ -19,8 +19,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from 'ngx-mat-datetime-picker';
-import { NgxMatMomentModule } from 'ngx-mat-moment-adapter';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
@@ -44,9 +42,6 @@ const materialModules = [
   MatTreeModule,
   MatMomentDateModule,
   MatSlideToggleModule,
-  NgxMatDatetimePickerModule,
-  NgxMatTimepickerModule,
-  NgxMatMomentModule,
   MatSnackBarModule,
   MatToolbarModule,
   MatProgressBarModule,
