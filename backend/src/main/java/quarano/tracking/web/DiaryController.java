@@ -72,7 +72,7 @@ public class DiaryController {
 
 		return representations.from(payload, errors) //
 				.fold(entry -> handle(entry, person), //
-						error -> ErrorsDto.toBadRequest(errors, messages));
+						error -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
 
 	@GetMapping("/api/diary/{identifier}")
@@ -98,14 +98,14 @@ public class DiaryController {
 		}
 
 		if (errors.hasErrors()) {
-			return ErrorsDto.toBadRequest(errors, messages);
+			return ErrorsDto.of(errors, messages).toBadRequest();
 		}
 
 		return representations.from(payload, entry, errors) //
 				.peekLeft(__ -> people.save(person)) //
 				.mapLeft(representations::toRepresentation) //
 				.<HttpEntity<?>> fold(ResponseEntity.ok()::body, //
-						__ -> ErrorsDto.toBadRequest(errors, messages));
+						__ -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
 
 	private HttpEntity<?> handle(DiaryEntry entry, TrackedPerson person) {

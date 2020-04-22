@@ -47,11 +47,7 @@ public class ErrorsDto {
 	}
 
 	public HttpEntity<?> toBadRequest() {
-		return toBadRequest(errors, messages);
-	}
-
-	public static HttpEntity<?> toBadRequest(Errors errors, MessageSourceAccessor messages) {
-		return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		return ResponseEntity.badRequest().body(this);
 	}
 
 	@JsonAnyGetter

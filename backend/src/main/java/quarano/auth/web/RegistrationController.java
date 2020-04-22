@@ -42,7 +42,7 @@ class RegistrationController {
 	public HttpEntity<?> registerClient(@Valid @RequestBody AccountRegistrationDto registrationDto, Errors errors) {
 
 		if (registrationDto.validate(errors).hasErrors()) {
-			return ErrorsDto.toBadRequest(errors, messages);
+			return ErrorsDto.of(errors, messages).toBadRequest();
 		}
 
 		var details = mapper.map(registrationDto, AccountRegistrationDetails.class);
