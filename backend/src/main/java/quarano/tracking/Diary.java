@@ -108,9 +108,5 @@ public class Diary implements Streamable<DiaryEntry> {
 
 		private final @Getter LocalDate date;
 		private final @Getter Optional<DiaryEntry> morning, evening;
-
-		public boolean allowCreation() {
-			return date.isAfter(LocalDate.now().minusDays(2));
-		}
 	}
 }

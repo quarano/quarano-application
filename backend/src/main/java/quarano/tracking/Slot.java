@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
+import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 
 import javax.persistence.Embeddable;
@@ -55,7 +55,7 @@ public class Slot {
 	 * @param date must not be {@literal null}.
 	 * @return
 	 */
-	static Slot morningOf(LocalDate date) {
+	public static Slot morningOf(LocalDate date) {
 
 		Assert.notNull(date, "Date must not be null!");
 
@@ -68,7 +68,7 @@ public class Slot {
 	 * @param date must not be {@literal null}.
 	 * @return
 	 */
-	static Slot eveningOf(LocalDate date) {
+	public static Slot eveningOf(LocalDate date) {
 
 		Assert.notNull(date, "Date must not be null!");
 
@@ -119,16 +119,42 @@ public class Slot {
 		return this.date.equals(date);
 	}
 
-	public boolean isOlderThan(Period period) {
+	/**
+	 * Returns the official end date and time.
+	 *
+	 * @return
+	 */
+	public LocalDateTime getOfficialEnd() {
+		return LocalDateTime.of(timeOfDay == TimeOfDay.EVENING ? date.plusDays(1) : date, timeOfDay.to);
+	}
 
-		var reference = date.plus(period);
-		var now = LocalDate.now();
+	/**
+	 * Returns the actual end of the time slot, including the period after the official end and the beginning of the next
+	 * one.
+	 *
+	 * @return
+	 */
+	public LocalDateTime getEnd() {
+		return LocalDateTime.of(timeOfDay == TimeOfDay.EVENING ? date.plusDays(1) : date, timeOfDay.end);
+	}
 
-		if (reference.isBefore(now)) {
-			return true;
-		}
+	/**
+	 * Returns whether the {@link Slot}'s official end has been longer ago than the given {@link TemporalAmount}.
+	 *
+	 * @param amount must not be {@literal null}.
+	 * @return
+	 */
+	public boolean isOlderThan(TemporalAmount amount) {
 
-		return reference.equals(now) ? timeOfDay.isBefore(TimeOfDay.now()) : false;
+		Assert.notNull(amount, "Temporal amount must not be null!");
+
+		return LocalDateTime.now().minus(amount).isAfter(getOfficialEnd());
+	}
+
+	public boolean contains(LocalDateTime date) {
+
+		return this.date.equals(timeOfDay.toLocalDate(date)) //
+				&& timeOfDay.contains(date.toLocalTime());
 	}
 
 	/*
@@ -143,7 +169,7 @@ public class Slot {
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	public enum TimeOfDay {
 
-		MORNING(LocalTime.of(6, 0, 0), LocalTime.of(15, 59, 59)) {
+		MORNING(LocalTime.of(6, 0, 0), LocalTime.of(11, 59, 59), LocalTime.of(16, 59, 59)) {
 
 			/*
 			 * (non-Javadoc)
@@ -155,7 +181,7 @@ public class Slot {
 			}
 		},
 
-		EVENING(LocalTime.of(16, 0, 0), LocalTime.of(5, 59, 59)) {
+		EVENING(LocalTime.of(17, 0, 0), LocalTime.of(22, 59, 59), LocalTime.of(5, 59, 59)) {
 
 			/*
 			 * (non-Javadoc)
@@ -182,15 +208,12 @@ public class Slot {
 
 		private final LocalTime from;
 		private final LocalTime to;
+		private final LocalTime end;
 
 		abstract boolean contains(LocalTime reference);
 
 		LocalDate toLocalDate(LocalDateTime date) {
 			return date.toLocalDate();
-		}
-
-		public boolean isBefore(TimeOfDay timeOfDay) {
-			return timeOfDay.equals(EVENING) ? this.equals(MORNING) : false;
 		}
 
 		public static TimeOfDay now() {

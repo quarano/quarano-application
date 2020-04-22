@@ -26,7 +26,6 @@ import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.Slot;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
-import quarano.tracking.web.DiaryRepresentations.DiaryEntryRepresentation;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +42,7 @@ class DiaryEntryMappingIntegrationTests {
 
 	private final MapperWrapper mapper;
 	private final ContactPersonRepository contacts;
+	private final DiaryRepresentations representations;
 
 	@Test
 	void mapsDtoToNewEntry() {
@@ -76,7 +76,7 @@ class DiaryEntryMappingIntegrationTests {
 		var source = DiaryEntry.of(Slot.now());
 		source.setBodyTemperature(BodyTemperature.of(40.0f));
 
-		var result = DiaryEntryRepresentation.of(source, mapper, false);
+		var result = representations.toRepresentation(source);
 
 		assertThat(result.getId()).isEqualTo(source.getId().toString());
 		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());

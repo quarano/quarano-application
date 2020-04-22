@@ -67,7 +67,7 @@ class DiaryControllerWebIntegrationTests {
 		DocumentContext document = JsonPath.parse(response);
 
 		assertThat(document.read("$.id", String.class)).isEqualTo(entry.getId().toString());
-		assertThat(document.read("$.slot.timeOfDay", String.class)).isEqualTo("morning");
+		assertThat(document.read("$.slot.timeOfDay", String.class)).isEqualToIgnoringCase(slot.getTimeOfDay().toString());
 		assertThat(document.read("$.slot.date", String.class)).isEqualTo(slot.getDate().toString());
 		assertThat(document.read("$.bodyTemperature", float.class)).isEqualTo(42.0f);
 	}

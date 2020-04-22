@@ -29,12 +29,12 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.Diary;
 import quarano.tracking.Diary.DiaryEntryDay;
 import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryProperties;
 import quarano.tracking.Slot;
 import quarano.tracking.Slot.TimeOfDay;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,6 +64,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DiaryRepresentations {
 
 	private final MapperWrapper mapper;
+	private final DiaryProperties configuration;
 
 	DiarySummary toSummary(Diary diary, LocalDate startDate) {
 		return new DiarySummary(diary, startDate, Slot.now());
@@ -113,8 +114,8 @@ public class DiaryRepresentations {
 		}
 	}
 
-	@RequiredArgsConstructor(staticName = "of")
-	static class DiaryEntryRepresentation {
+	@RequiredArgsConstructor
+	class DiaryEntryRepresentation {
 
 		private final DiaryEntry entry;
 		private final MapperWrapper mapper;
@@ -165,7 +166,7 @@ public class DiaryRepresentations {
 			Map<String, Object> links = new HashMap<>();
 			links.put("self", selfUri);
 
-			if (!entry.getSlot().isOlderThan(Period.ofDays(2))) {
+			if (DiaryRepresentations.this.configuration.canBeEdited(entry)) {
 				links.put("edit", selfUri);
 			}
 
@@ -173,7 +174,7 @@ public class DiaryRepresentations {
 		}
 
 		@RequiredArgsConstructor
-		static class ContactSummary {
+		class ContactSummary {
 
 			private final ContactPerson contact;
 
@@ -211,10 +212,15 @@ public class DiaryRepresentations {
 
 			return Map.of("entries", getEntries().map(it -> {
 
+				var date = it.getDate();
+				var eveningIsNotInTheFuture = !reference.isMorningOf(it.getDate());
 				var fields = new LinkedHashMap<>();
-				fields.put("date", it.getDate()); //
-				fields.put("evening", mapEntry(it.getEvening(), it.allowCreation() && !reference.isMorningOf(it.getDate())));
-				fields.put("morning", mapEntry(it.getMorning(), it.allowCreation())); //
+				var config = DiaryRepresentations.this.configuration;
+
+				fields.put("date", date); //
+				fields.put("evening",
+						mapEntry(it.getEvening(), config.canBeCreated(Slot.eveningOf(date)) && eveningIsNotInTheFuture));
+				fields.put("morning", mapEntry(it.getMorning(), config.canBeCreated(Slot.morningOf(date)))); //
 
 				return fields;
 			}));

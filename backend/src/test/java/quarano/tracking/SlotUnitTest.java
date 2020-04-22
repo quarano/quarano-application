@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 import quarano.tracking.Slot.TimeOfDay;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 import org.junit.jupiter.api.Test;
@@ -27,14 +28,22 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Oliver Drotbohm
  */
-public class SlotUnitTest {
+class SlotUnitTest {
 
 	@Test
-	public void detectsOldSlots() {
+	void detectsOldSlots() {
 
 		Slot eveningTwoDaysAgo = Slot.of(LocalDate.now().minusDays(2), TimeOfDay.EVENING);
 
 		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(1))).isTrue();
 		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(2))).isFalse();
+	}
+
+	@Test
+	void detectsContainsDateTime() {
+
+		var threeThirtyThree = LocalDateTime.now().withHour(3).withMinute(33);
+
+		assertThat(Slot.of(threeThirtyThree).contains(threeThirtyThree)).isTrue();
 	}
 }
