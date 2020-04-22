@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+#logo {
+  opacity: 0.8;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -53,9 +57,5 @@ nav a {
     &:last-child {
       margin-bottom: 5px;
     }
-  }
-
-  #logo {
-    display: none;
   }
 }
