@@ -4,6 +4,9 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.Data;
 import lombok.Getter;
+import quarano.core.validation.AlphaNumeric;
+import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Textual;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
@@ -29,14 +32,14 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private String lastName, firstName;
-	private String street, houseNumber, city;
+	private @Alphabetic String lastName, firstName, street, city;
+	private @AlphaNumeric String houseNumber;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = EmailAddress.PATTERN) String email;
-	private String remark;
-	private String identificationHint;
+	private @Textual String remark;
+	private @Textual String identificationHint;
 	private Boolean isHealthStaff;
 	private Boolean isSenior;
 	private Boolean hasPreExistingConditions;

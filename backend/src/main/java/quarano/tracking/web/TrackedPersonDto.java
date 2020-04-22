@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import quarano.core.validation.AlphaNumeric;
+import quarano.core.validation.Alphabetic;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
@@ -21,11 +23,10 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class TrackedPersonDto {
 
-	private @NotEmpty String lastName;
-	private @NotEmpty String firstName;
-	private @NotEmpty String street;
-	private String houseNumber;
-	private @NotEmpty String city;
+	private @Alphabetic @NotEmpty String firstName, lastName;
+	private @Alphabetic String street;
+	private @AlphaNumeric String houseNumber;
+	private @Alphabetic @NotEmpty String city;
 	private @NotEmpty @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
