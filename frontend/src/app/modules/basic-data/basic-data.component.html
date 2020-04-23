@@ -319,7 +319,7 @@
     </div>
     <form [formGroup]="thirdFormGroup">
       <fieldset *ngFor="let date of datesForRetrospectiveContacts">
-        <legend>Kontaktpersonen vom {{ date | date: "d.M.y" }}</legend>
+        <legend>Kontaktpersonen vom {{ date | date: "dd.MM.y" }}</legend>
 
         <app-multiple-autocomplete
           [control]="

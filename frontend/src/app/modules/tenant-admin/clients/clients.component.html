@@ -12,20 +12,28 @@
 <div class="container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Status</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Status</span>
-        <mat-icon *ngIf="element.enrollmentCompleted === true"
-                  matTooltip="Registrierung komplett"
-        >done</mat-icon>
-        <mat-icon *ngIf="element.enrollmentCompleted === false"
-                  matTooltip="Registrierung nicht abgeschlossen"
-        >close</mat-icon>
+        <mat-icon
+          *ngIf="element.enrollmentCompleted === true"
+          matTooltip="Registrierung komplett"
+          >done</mat-icon
+        >
+        <mat-icon
+          *ngIf="element.enrollmentCompleted === false"
+          matTooltip="Registrierung nicht abgeschlossen"
+          >close</mat-icon
+        >
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="lastName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Nachname</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Nachname</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Nachname</span>
         <span class="value-span">{{ element.lastName }}</span>
@@ -33,7 +41,9 @@
     </ng-container>
 
     <ng-container matColumnDef="firstName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Vorname</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Vorname</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Vorname</span>
         <span class="value-span">{{ element.firstName }}</span>
@@ -44,26 +54,29 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>PLZ</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">PLZ</span>
-        <span class="value-span">{{ element.zipCode }}
-        </span>
+        <span class="value-span">{{ element.zipCode }} </span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="dateOfBirth">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Geb. Datum</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Geb. Datum</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Geb. Datum</span>
-        <span class="value-span">{{ element.dateOfBirth | date:'d.M.y' }}
+        <span class="value-span"
+          >{{ element.dateOfBirth | date: "dd.MM.y" }}
         </span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >E-Mail</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">E-Mail</span>
-        <span class="value-span">{{ element.email }}
-        </span>
+        <span class="value-span">{{ element.email }} </span>
       </mat-cell>
     </ng-container>
 
@@ -72,18 +85,26 @@
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Typ</span>
         <ng-container [ngSwitch]="element.type">
-          <span class="value-span" *ngSwitchCase="'index'"
-                matTooltip="Dies ist ein Indexfall"
-          >Indexfall</span>
-          <span class="value-span" *ngSwitchCase="'contact'"
-                matTooltip="Dieser Fall wurde aus einem Kontakt generiert"
-          >Kontaktperson</span>
+          <span
+            class="value-span"
+            *ngSwitchCase="'index'"
+            matTooltip="Dies ist ein Indexfall"
+            >Indexfall</span
+          >
+          <span
+            class="value-span"
+            *ngSwitchCase="'contact'"
+            matTooltip="Dieser Fall wurde aus einem Kontakt generiert"
+            >Kontaktperson</span
+          >
         </ng-container>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="medicalStaff">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Med. Personal</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Med. Personal</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Med. Personal</span>
         <ng-container [ngSwitch]="element.medicalStaff">
@@ -95,20 +116,27 @@
     </ng-container>
 
     <ng-container matColumnDef="quarantineStart">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Quarantäne seit</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Quarantäne seit</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">
         <span class="mobile-label">Quarantäne seit</span>
         <span class="value-span" *ngIf="!element.quarantine">-</span>
         <ng-container *ngIf="element.quarantine">
           <ng-container [ngSwitch]="isQuarantineOngoing(element.quarantine.to)">
             <span class="value-span" *ngSwitchCase="false">beendet</span>
-            <span class="value-span" *ngSwitchDefault>{{ element.quarantine.from | date:'d.M.y' }}</span>
+            <span class="value-span" *ngSwitchDefault>{{
+              element.quarantine.from | date: "dd.MM.y"
+            }}</span>
           </ng-container>
         </ng-container>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let element; columns: displayedColumns" class="example-element-row"></mat-row>
+    <mat-row
+      *matRowDef="let element; columns: displayedColumns"
+      class="example-element-row"
+    ></mat-row>
   </mat-table>
 </div>

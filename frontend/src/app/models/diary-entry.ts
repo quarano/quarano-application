@@ -28,12 +28,12 @@ export interface DiaryEntryModifyDto extends IIdentifiable {
   symptoms: number[];
   contacts: number[];
   date: string;
-  timeOfDay: 'morning' | 'evening';
+  timeOfDay: string;
 }
 
 export interface SlotDto {
   date: string;
-  timeOfDay: 'morning' | 'evening';
+  timeOfDay: string;
 }
 
 export interface DiaryDto extends DiaryEntryCreateLink {

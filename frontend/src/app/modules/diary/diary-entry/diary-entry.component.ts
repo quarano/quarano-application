@@ -27,7 +27,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   contactPersons: ContactPersonDto[] = [];
   today = new Date();
   private subs = new SubSink();
-  state: any;
+  date: string;
+  slot: string;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -56,8 +57,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   ngOnInit() {
-    this.subs.add(this.activatedRoute.paramMap
-      .subscribe(_ => this.state = window.history.state));
+    this.date = this.activatedRoute.snapshot.paramMap.get('date');
+    this.slot = this.activatedRoute.snapshot.paramMap.get('slot');
     this.subs.add(this.route.data.subscribe(data => {
       this.diaryEntry = data.diaryEntry;
       this.setSymptoms(data.symptoms);
@@ -117,18 +118,18 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   getTitle(): string {
     if (this.isNew) {
       return `Tagebuch-Eintrag anlegen für den ` +
-        `${new Date(this.state.date).toLocaleDateString()} ` +
-        `(${this.state.slot === 'morning' ? 'morgens' : 'abends'})`;
+        `${new Date(this.date).toCustomLocaleDateString()} ` +
+        `(${this.slot === 'morning' ? 'morgens' : 'abends'})`;
     } else {
       return `Tagebuch-Eintrag bearbeiten für den ` +
-        `${new Date(this.diaryEntry.slot.date).toLocaleDateString()} ` +
+        `${new Date(this.diaryEntry.slot.date).toCustomLocaleDateString()} ` +
         `(${this.diaryEntry.slot.timeOfDay === 'morning' ? 'morgens' : 'abends'})`;
     }
   }
 
   createEntry(diaryEntry: DiaryEntryModifyDto) {
-    diaryEntry.date = this.state.date;
-    diaryEntry.timeOfDay = this.state.slot;
+    diaryEntry.date = this.date;
+    diaryEntry.timeOfDay = this.slot;
     this.subs.add(this.apiService
       .createDiaryEntry(diaryEntry)
       .subscribe(_ => {
