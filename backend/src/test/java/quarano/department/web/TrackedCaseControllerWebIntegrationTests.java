@@ -87,6 +87,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.quarantineEndDate", String.class)) //
 				.isEqualTo(payload.getQuarantineEndDate().toString());
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
+		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
 
 	@Test
