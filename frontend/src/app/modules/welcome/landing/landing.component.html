@@ -24,7 +24,8 @@
                 scripta adversarium, urbanitas ullamcorper sed at.</p>
         </section>
         <mat-card-actions>
-            <button mat-raised-button color="primary" type="button" (click)="register(clientcode)">Weiter zur
+            <button mat-raised-button color="primary" type="button"
+                [routerLink]="['/welcome/register/', clientcode]">Weiter zur
                 Registrierung</button>
         </mat-card-actions>
     </mat-card-content>
@@ -51,7 +52,8 @@
                 id. Eu everti iracundia scribentur vix, no has posse instructior.</p>
         </section>
         <mat-card-actions>
-            <button mat-raised-button color="primary" type="button" (click)="register(clientcode)">Weiter zur
+            <button mat-raised-button color="primary" type="button"
+                [routerLink]="['/welcome/register/', clientcode]">Weiter zur
                 Registrierung</button>
         </mat-card-actions>
     </mat-card-content>

@@ -17,8 +17,4 @@ export class LandingComponent implements OnInit {
     this.userType = this.route.snapshot.paramMap.get('usertype') || this.userType;
     this.clientcode = this.route.snapshot.paramMap.get('clientcode');
   }
-
-  register(clientcode: string): void {
-    this.router.navigate([`welcome/register/${clientcode}`]);
-  }
 }
