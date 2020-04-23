@@ -47,7 +47,6 @@ public class Address {
 				&& zipCode != null;
 	}
 
-	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -61,6 +60,10 @@ public class Address {
 			return source == null || source.isBlank() //
 					? HouseNumber.NONE //
 					: new HouseNumber(source);
+		}
+
+		public boolean isAbsent() {
+			return NONE.equals(this);
 		}
 
 		/*

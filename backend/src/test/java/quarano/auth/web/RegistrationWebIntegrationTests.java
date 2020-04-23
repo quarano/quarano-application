@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -90,7 +89,6 @@ class RegistrationWebIntegrationTests {
 		var result = mvc.perform(post("/api/registration") //
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
-				.andDo(MockMvcResultHandlers.print()) //
 				.andExpect(status().isBadRequest()) //
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
 				.andReturn().getResponse().getContentAsString();

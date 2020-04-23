@@ -49,7 +49,7 @@ import org.jddd.core.types.Identifier;
 @Accessors(chain = true)
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	private @OneToOne TrackedPerson trackedPerson;
+	private @OneToOne(cascade = { CascadeType.ALL }) TrackedPerson trackedPerson;
 	private @ManyToOne Department department;
 
 	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
@@ -57,15 +57,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
 	private @Getter @Setter CaseType type = CaseType.INDEX;
-	private @Getter Quarantine quarantine = null;
+	private @Getter @Setter Quarantine quarantine = null;
 
-	TrackedCase() {
+	@SuppressWarnings("unused")
+	private TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
 	}
 
 	public TrackedCase(TrackedPerson person, Department department) {
+		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, department);
+	}
 
-		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
+	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, Department department) {
+
+		this.id = id;
 		this.trackedPerson = person;
 		this.department = department;
 	}
@@ -123,5 +128,14 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public static class TrackedCaseIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = -1255657328932035265L;
 		final UUID id;
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return id.toString();
+		}
 	}
 }

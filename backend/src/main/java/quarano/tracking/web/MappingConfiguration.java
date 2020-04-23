@@ -15,6 +15,8 @@
  */
 package quarano.tracking.web;
 
+import quarano.department.TrackedCase;
+import quarano.department.web.TrackedCaseDto;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
@@ -115,15 +117,38 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getHouseNumber(), ContactPersonDto::setHouseNumber);
 		});
 
-		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
+		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).setPreConverter(context -> {
+
+			TrackedPersonDto destination = context.getDestination();
+			TrackedPerson person = context.getSource();
+
+			var houseNumber = person.getAddress().getHouseNumber();
+
+			if (!houseNumber.equals(HouseNumber.NONE)) {
+				destination.setHouseNumber(houseNumber.toString());
+			}
+
+			return destination;
+
+		}).addMappings(it -> {
 
 			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);
 			it.map(source -> source.getAddress().getZipCode(), TrackedPersonDto::setZipCode);
 			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
-			it.map(source -> source.getAddress().getHouseNumber(), TrackedPersonDto::setHouseNumber);
+
+			it.skip(TrackedPersonDto::setHouseNumber);
 		});
 
-		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
+		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).setProvider(it -> {
+
+			var source = (TrackedPersonDto) it.getSource();
+
+			return new TrackedPerson(source.getFirstName(), source.getLastName());
+
+		}).addMappings(it -> {
+
+			it.skip(TrackedPerson::setFirstName);
+			it.skip(TrackedPerson::setLastName);
 
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilePhone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
@@ -144,6 +169,24 @@ public class MappingConfiguration {
 		}).addMappings(it -> {
 			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
 					(target, v) -> target.setSymptoms(v));
+		});
+
+		mapper.typeMap(TrackedCase.class, TrackedCaseDto.class).setPreConverter(it -> {
+
+			var source = it.getSource();
+			var target = it.getDestination();
+			var quarantine = source.getQuarantine();
+
+			if (quarantine != null) {
+				target.setQuarantineStartDate(quarantine.getFrom());
+				target.setQuarantineEndDate(quarantine.getTo());
+			}
+
+			return target;
+
+		}).addMappings(it -> {
+			it.skip(TrackedCaseDto::setQuarantineStartDate);
+			it.skip(TrackedCaseDto::setQuarantineEndDate);
 		});
 	}
 }

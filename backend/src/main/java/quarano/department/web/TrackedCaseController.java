@@ -19,17 +19,24 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
-import quarano.core.web.MapperWrapper;
+import quarano.department.DepartmentRepository;
 import quarano.department.EnrollmentCompletion;
+import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
+import java.net.URI;
 import java.util.stream.Stream;
+
+import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
@@ -40,6 +47,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,12 +63,70 @@ class TrackedCaseController {
 
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull MapperWrapper mapper;
+	private final @NonNull DepartmentRepository departments;
 	private final @NonNull MessageSourceAccessor accessor;
+	private final @NonNull TrackedCaseProperties configuration;
+	private final @NonNull TrackedCaseRepresentations representations;
 
 	@GetMapping("/api/hd/cases")
-	Stream<?> allCases() {
+	Stream<?> getCases() {
 		return cases.findAll().stream().map(TrackedCaseSummaryDto::of);
+	}
+
+	@PostMapping("/api/hd/cases")
+	HttpEntity<?> postCase(@Valid @RequestBody TrackedCaseDto payload, Errors errors, @LoggedIn Account account) {
+
+		if (payload.validate(errors).hasErrors()) {
+			return ErrorsDto.of(errors, accessor).toBadRequest();
+		}
+
+		var department = departments.findById(account.getDepartmentId()) //
+				.orElseThrow(() -> new IllegalStateException("No department found for currently logged in account!"));
+
+		var trackedCase = cases.save(representations.from(payload, department));
+		var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), account);
+
+		return ResponseEntity //
+				.created(URI.create(fromMethodCall(location).toUriString())) //
+				.body(representations.toRepresentation(trackedCase));
+	}
+
+	@GetMapping("/api/hd/cases/form")
+	TrackedCaseDefaults getCaseForm() {
+		return TrackedCaseDefaults.of(configuration);
+	}
+
+	@GetMapping("/api/hd/cases/{identifier}")
+	HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account) {
+
+		return ResponseEntity.of(cases.findById(identifier) //
+				.filter(it -> it.getDepartment().hasId(account.getDepartmentId())) //
+				.map(representations::toRepresentation));
+	}
+
+	@PutMapping("/api/hd/cases/{identifier}")
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, //
+			@Valid @RequestBody TrackedCaseDto payload, //
+			Errors errors) {
+
+		var existing = cases.findById(identifier).orElse(null);
+
+		if (existing == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (existing.getEnrollment().isComplete()) {
+			errors = representations.validateAfterEnrollment(payload, errors);
+		}
+
+		if (errors.hasErrors()) {
+			return ErrorsDto.of(errors, accessor).toBadRequest();
+		}
+
+		return ResponseEntity.of(cases.findById(identifier) //
+				.map(it -> representations.from(it, payload)) //
+				.map(cases::save) //
+				.map(representations::toRepresentation));
 	}
 
 	@GetMapping("/api/enrollments")
@@ -106,7 +172,7 @@ class TrackedCaseController {
 
 		var report = cases.findByTrackedPerson(person) //
 				.map(TrackedCase::getInitialReport) //
-				.map(it -> mapper.map(it, InitialReportDto.class)) //
+				.map(it -> representations.toRepresentation(it)) //
 				.orElseGet(() -> new InitialReportDto());
 
 		return ResponseEntity.ok() //
@@ -138,7 +204,9 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		trackedCase = apply(dto, trackedCase); //
+		InitialReport from = representations.from(trackedCase.getOrCreateInitialReport(), dto);
+		trackedCase.submitQuestionnaire(from);
+
 		cases.save(trackedCase);
 
 		return ResponseEntity.ok() //
@@ -177,14 +245,5 @@ class TrackedCaseController {
 
 	private static String getEnrollmentLink() {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
-	}
-
-	private TrackedCase apply(InitialReportDto dto, TrackedCase it) {
-
-		var report = it.getOrCreateInitialReport();
-		report = mapper.map(dto, report);
-		report = dto.applyTo(mapper.map(dto, report));
-
-		return it.submitQuestionnaire(report);
 	}
 }

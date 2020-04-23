@@ -17,11 +17,13 @@ package quarano.department;
 
 import lombok.RequiredArgsConstructor;
 import quarano.core.DataInitializer;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -32,11 +34,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Order(660)
-class TrackedCaseDataInitializer implements DataInitializer {
+public class TrackedCaseDataInitializer implements DataInitializer {
 
 	private final TrackedCaseRepository cases;
 	private final TrackedPersonRepository trackedPeople;
 	private final DepartmentRepository departments;
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SANDRA = TrackedCaseIdentifier
+			.of(UUID.fromString("e55ce370-7dbe-11ea-bc55-0242ac134711"));
 
 	/*
 	 * (non-Javadoc)
@@ -49,21 +54,19 @@ class TrackedCaseDataInitializer implements DataInitializer {
 		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
 		var person3 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 
-		cases.save(new TrackedCase() //
-				.setTrackedPerson(person1) //
-				.setType(CaseType.CONTACT) //
-				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
+		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
+		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
 
-		cases.save(new TrackedCase() //
-				.setTrackedPerson(person2) //
-				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElse(null)));
+		cases.save(new TrackedCase(person1, department1) //
+				.setTrackedPerson(person1) //
+				.setType(CaseType.CONTACT));
+
+		cases.save(new TrackedCase(person2, department1));
 
 		LocalDate start = LocalDate.now().minusWeeks(1);
 		LocalDate end = start.plusWeeks(4);
 
-		cases.save(new TrackedCase() //
-				.setTrackedPerson(person3) //
-				.setDepartment(departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElse(null)) //
+		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, department2) //
 				.setQuarantine(Quarantine.of(start, end)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
