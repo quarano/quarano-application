@@ -16,6 +16,7 @@
 package quarano.department;
 
 import quarano.core.QuaranoRepository;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -23,11 +24,14 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
  */
 public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, TrackedCaseIdentifier> {
+
+	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier id);
 
 	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
 

@@ -69,8 +69,11 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 
 	@GetMapping("/api/hd/cases")
-	Stream<?> getCases() {
-		return cases.findAll().stream().map(TrackedCaseSummaryDto::of);
+	Stream<?> getCases(@LoggedIn Account account) {
+
+		return cases.findByDepartmentId(account.getDepartmentId()) //
+				.map(TrackedCaseSummaryDto::of) //
+				.stream();
 	}
 
 	@PostMapping("/api/hd/cases")
