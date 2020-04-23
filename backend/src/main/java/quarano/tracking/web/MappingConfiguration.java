@@ -19,16 +19,8 @@ import quarano.department.TrackedCase;
 import quarano.department.web.TrackedCaseDto;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
+import quarano.tracking.*;
 import quarano.tracking.Address.HouseNumber;
-import quarano.tracking.BodyTemperature;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.ContactWays;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import java.util.ArrayList;
@@ -78,6 +70,8 @@ public class MappingConfiguration {
 		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
 		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
 
+		// ContactPerson
+
 		mapper.typeMap(ContactPersonDto.class, ContactWays.class).setProvider(request -> {
 
 			var source = (ContactPersonDto) request.getSource();
@@ -116,6 +110,8 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getCity(), ContactPersonDto::setCity);
 			it.map(source -> source.getAddress().getHouseNumber(), ContactPersonDto::setHouseNumber);
 		});
+
+		// TrackedPerson
 
 		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).setPreConverter(context -> {
 
@@ -161,6 +157,8 @@ public class MappingConfiguration {
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
+		// DiaryEntry
+
 		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).setProvider(request -> {
 			var dto = (DiaryEntryInput) request.getSource();
 
@@ -170,6 +168,8 @@ public class MappingConfiguration {
 			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
 					(target, v) -> target.setSymptoms(v));
 		});
+
+		// TrackedCase
 
 		mapper.typeMap(TrackedCase.class, TrackedCaseDto.class).setPreConverter(it -> {
 
@@ -187,6 +187,14 @@ public class MappingConfiguration {
 		}).addMappings(it -> {
 			it.skip(TrackedCaseDto::setQuarantineStartDate);
 			it.skip(TrackedCaseDto::setQuarantineEndDate);
+		});
+
+		mapper.typeMap(TrackedCaseDto.class, TrackedCase.class).setPreConverter(it -> {
+
+			var source = it.getSource();
+			var target = it.getDestination();
+
+			return target.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate()));
 		});
 	}
 }

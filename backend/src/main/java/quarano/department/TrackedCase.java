@@ -29,6 +29,7 @@ import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -58,6 +59,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
+	private @Getter @Setter LocalDate testDate;
 
 	@SuppressWarnings("unused")
 	private TrackedCase() {

@@ -63,8 +63,7 @@ public class TrackedCaseRepresentations {
 		var personDto = mapper.map(source, TrackedPersonDto.class);
 		var person = mapper.map(personDto, TrackedPerson.class);
 
-		return new TrackedCase(person, department)
-				.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate()));
+		return mapper.map(source, new TrackedCase(person, department));
 	}
 
 	InitialReport from(InitialReportDto source) {
