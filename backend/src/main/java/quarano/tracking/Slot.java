@@ -202,7 +202,7 @@ public class Slot {
 				var time = date.toLocalTime();
 				var result = date.toLocalDate();
 
-				return time.isBefore(EVENING.to) ? result.minusDays(1) : result;
+				return time.isBefore(EVENING.end) ? result.minusDays(1) : result;
 			}
 		};
 

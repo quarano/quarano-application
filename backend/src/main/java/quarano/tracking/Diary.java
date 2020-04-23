@@ -62,9 +62,9 @@ public class Diary implements Streamable<DiaryEntry> {
 		var byDate = enties.stream() //
 				.collect(groupingBy(DiaryEntry::getSlotDate));
 
-		var now = Slot.now().getDate();
-
-		return Stream.iterate(now, it -> it.isAfter(startDate) || it.equals(startDate), it -> it.minusDays(1)) //
+		return Stream.iterate(LocalDate.now(), //
+				it -> it.isAfter(startDate) || it.equals(startDate), //
+				it -> it.minusDays(1)) //
 				.map(it -> {
 
 					var entries = byDate.get(it);
