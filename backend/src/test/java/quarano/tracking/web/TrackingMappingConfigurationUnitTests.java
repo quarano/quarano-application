@@ -36,7 +36,7 @@ import org.modelmapper.ModelMapper;
  * @author Oliver Drotbohm
  */
 @QuaranoUnitTest
-class MappingConfigurationUnitTests {
+class TrackingMappingConfigurationUnitTests {
 
 	ModelMapper mapper = new ModelMapper();
 
@@ -45,7 +45,7 @@ class MappingConfigurationUnitTests {
 
 	@BeforeAll
 	void setUp() {
-		new MappingConfiguration(mapper, symptoms, contacts);
+		new TrackingMappingConfiguration(mapper, symptoms, contacts);
 	}
 
 	@Test
