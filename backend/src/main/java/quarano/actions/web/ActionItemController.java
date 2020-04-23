@@ -18,13 +18,20 @@ package quarano.actions.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItemRepository;
+import quarano.actions.ActionItems;
 import quarano.auth.web.LoggedIn;
+import quarano.department.Department;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,11 +44,26 @@ public class ActionItemController {
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull MessageSourceAccessor messages;
 
-	@GetMapping("/api/actions")
-	Stream<?> allActions(@LoggedIn TrackedPerson person) {
+	private final @NonNull TrackedCaseRepository cases;
 
-		return items.findByTrackedPerson(person.getId()) //
-				.map(it -> ActionItemDto.of(it, messages)) //
-				.stream();
+	@GetMapping("/api/hd/actions/{identifier}")
+	Stream<?> allActions(@PathVariable TrackedCaseIdentifier identifier) {
+
+		return cases.findById(identifier) //
+				.map(TrackedCase::getTrackedPerson) //
+				.map(TrackedPerson::getId) //
+				.map(items::findByTrackedPerson) //
+				.map(ActionItems::stream) //
+				.orElseGet(() -> Stream.empty()) //
+				.map(it -> ActionItemDto.of(it, messages)); //
+	}
+
+	@GetMapping("/api/hd/actions")
+	Stream<?> getActions(@LoggedIn Department department) {
+
+		return cases.findByDepartmentId(department.getId()) //
+				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()))) //
+				.stream() //
+				.sorted(Comparator.comparing(CaseActionSummary::getPriority));
 	}
 }

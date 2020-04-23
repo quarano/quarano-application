@@ -13,31 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking;
+package quarano.actions;
 
-import static org.assertj.core.api.Assertions.*;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Iterator;
 
-import org.junit.jupiter.api.Test;
+import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
  */
-public class DiaryUnitTests {
+@RequiredArgsConstructor(staticName = "of")
+public class ActionItems implements Streamable<ActionItem> {
 
-	@Test
-	void createsDiaryEntryDays() {
+	private final Streamable<ActionItem> items;
 
-		var now = LocalDateTime.now();
+	public float getPriority() {
 
-		DiaryEntry first = new DiaryEntry(Slot.of(now));
-		DiaryEntry second = new DiaryEntry(Slot.of(now.minusHours(12)));
-		DiaryEntry third = new DiaryEntry(Slot.of(now.minusHours(24)));
+		return items.stream() //
+				.map(ActionItem::getWeight) //
+				.reduce(0.0f, (l, r) -> l + r);
+	}
 
-		var diary = Diary.of(List.of(first, second, third));
-
-		assertThat(diary.toEntryDays(Slot.now().getDate().minusDays(4))).hasSize(5);
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
+	@Override
+	public Iterator<ActionItem> iterator() {
+		return items.iterator();
 	}
 }

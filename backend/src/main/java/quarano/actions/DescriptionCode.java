@@ -15,12 +15,24 @@
  */
 package quarano.actions;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * @author Oliver Drotbohm
  */
+@RequiredArgsConstructor()
 public enum DescriptionCode {
 
 	INCREASED_TEMPERATURE,
 
-	FIRST_CHARACTERISTIC_SYMPTOM;
+	FIRST_CHARACTERISTIC_SYMPTOM(2.0f),
+
+	DIARY_ENTRY_MISSING;
+
+	private final @Getter float multiplier;
+
+	private DescriptionCode() {
+		this(1f);
+	}
 }
