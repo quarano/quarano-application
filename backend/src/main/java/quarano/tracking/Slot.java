@@ -125,7 +125,7 @@ public class Slot {
 	 * @return
 	 */
 	public LocalDateTime getOfficialEnd() {
-		return LocalDateTime.of(timeOfDay == TimeOfDay.EVENING ? date.plusDays(1) : date, timeOfDay.to);
+		return LocalDateTime.of(date, timeOfDay.to);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class Slot {
 			 */
 			@Override
 			boolean contains(LocalTime reference) {
-				return MORNING.from.isBefore(reference) && MORNING.to.isAfter(reference);
+				return MORNING.from.isBefore(reference) && MORNING.end.isAfter(reference);
 			}
 		},
 
@@ -220,11 +220,11 @@ public class Slot {
 			return of(LocalTime.now());
 		}
 
-		private static TimeOfDay of(LocalDateTime reference) {
+		static TimeOfDay of(LocalDateTime reference) {
 			return of(reference.toLocalTime());
 		}
 
-		private static TimeOfDay of(LocalTime reference) {
+		static TimeOfDay of(LocalTime reference) {
 
 			return Arrays.stream(values()) //
 					.filter(it -> it.contains(reference)) //
