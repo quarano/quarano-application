@@ -42,6 +42,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -94,9 +95,9 @@ class TrackedCaseController {
 				.body(representations.toRepresentation(trackedCase));
 	}
 
-	@GetMapping("/api/hd/cases/form")
-	TrackedCaseDefaults getCaseForm() {
-		return TrackedCaseDefaults.of(configuration);
+	@GetMapping(path = "/api/hd/cases/form", produces = MediaType.APPLICATION_JSON_VALUE)
+	HttpEntity<?> getCaseForm() {
+		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}")

@@ -44,8 +44,8 @@ public class TrackedCaseDto {
 	Errors validate(Errors errors) {
 
 		if (!StringUtils.hasText(phone) && !StringUtils.hasText(mobilePhone)) {
-			errors.reject("phone", "PhoneOrMobile");
-			errors.reject("mobilePhone", "PhoneOrMobile");
+			errors.rejectValue("phone", "PhoneOrMobile");
+			errors.rejectValue("mobilePhone", "PhoneOrMobile");
 		}
 
 		return errors;
