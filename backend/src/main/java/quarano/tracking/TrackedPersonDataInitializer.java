@@ -24,7 +24,6 @@ import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -120,8 +119,9 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		contacts.saveAll(contactsOfPerson3);
 
 		// generate diary entries for person 3
+		Slot sameSlotYesterday = Slot.now().previous().previous();
 
-		DiaryEntry entry1 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(3)));
+		DiaryEntry entry1 = DiaryEntry.of(sameSlotYesterday);
 		entry1.setContacts(contactsOfPerson3);
 		// add 'husten'
 		List<Symptom> symptomsE1 = new ArrayList<>();
@@ -132,7 +132,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		trackedPeople.save(sandra.addDiaryEntry(entry1));
 
-		DiaryEntry entry2 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(2)));
+		DiaryEntry entry2 = DiaryEntry.of(sameSlotYesterday.previous());
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE2 = new ArrayList<>();
 		Symptom neckProblems = symptoms.findById(UUID.fromString("571a03cd-173c-4499-995c-d6a003e8c032")).orElse(null);
@@ -143,7 +143,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		entry2.setBodyTemperature(BodyTemperature.of(37.8f));
 		trackedPeople.save(sandra.addDiaryEntry(entry2));
 
-		DiaryEntry entry3 = DiaryEntry.of(Slot.of(LocalDateTime.now().minusDays(1)));
+		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous());
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE3 = new ArrayList<>();
 		symptomsE3.add(cough);

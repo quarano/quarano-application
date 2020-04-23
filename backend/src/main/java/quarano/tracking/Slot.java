@@ -99,6 +99,15 @@ public class Slot {
 		return Slot.of(LocalDateTime.now());
 	}
 
+	/**
+	 * Returns the previous {@link Slot}.
+	 * 
+	 * @return
+	 */
+	public Slot previous() {
+		return isEvening() ? Slot.morningOf(date) : Slot.eveningOf(date.minusDays(1));
+	}
+
 	public boolean isMorning() {
 		return timeOfDay.equals(TimeOfDay.MORNING);
 	}
