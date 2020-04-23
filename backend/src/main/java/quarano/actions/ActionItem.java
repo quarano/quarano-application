@@ -53,6 +53,21 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 		this.description = description;
 	}
 
+	public float getWeight() {
+		return getDescription().getCode().getMultiplier() * getTypeWeight();
+	}
+
+	private float getTypeWeight() {
+
+		switch (getType()) {
+			case MEDICAL_INCIDENT:
+				return 0.7f;
+			case PROCESS_INCIDENT:
+			default:
+				return 0.3f;
+		}
+	}
+
 	public enum ItemType {
 
 		MEDICAL_INCIDENT,

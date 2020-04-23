@@ -15,21 +15,36 @@
  */
 package quarano.actions;
 
-import quarano.actions.ActionItem.ActionItemIdentifier;
-import quarano.core.QuaranoRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.util.Streamable;
+import java.time.format.DateTimeFormatter;
+
+import javax.persistence.Entity;
 
 /**
  * @author Oliver Drotbohm
  */
-public interface ActionItemRepository extends QuaranoRepository<ActionItem, ActionItemIdentifier> {
+@Entity
+@Getter
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
+public class DiaryEntryMissingActionItem extends ActionItem {
 
-	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
-	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
+	private final @Getter Slot slot;
 
-	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
-	Streamable<ActionItem> findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+	DiaryEntryMissingActionItem(TrackedPersonIdentifier person, Slot slot) {
+
+		super(person, ItemType.PROCESS_INCIDENT, getDescription(slot));
+
+		this.slot = slot;
+	}
+
+	private static Description getDescription(Slot slot) {
+
+		var date = slot.getDate().format(DateTimeFormatter.ofPattern("dd.MM.YYYY"));
+		return Description.of(DescriptionCode.DIARY_ENTRY_MISSING, date);
+	}
 }

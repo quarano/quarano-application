@@ -16,6 +16,7 @@
 package quarano.actions;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ import org.springframework.context.MessageSourceResolvable;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Description implements MessageSourceResolvable {
 
-	private final DescriptionCode code;
+	private final @Getter DescriptionCode code;
 	private final String arguments;
 
 	public static Description of(DescriptionCode code, Object... arguments) {
