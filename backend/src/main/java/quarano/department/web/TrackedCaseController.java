@@ -19,9 +19,9 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.department.Department;
 import quarano.department.DepartmentRepository;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.InitialReport;
@@ -70,25 +70,22 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 
 	@GetMapping("/api/hd/cases")
-	Stream<?> getCases(@LoggedIn Account account) {
+	Stream<?> getCases(@LoggedIn Department department) {
 
-		return cases.findByDepartmentId(account.getDepartmentId()) //
+		return cases.findByDepartmentId(department.getId()) //
 				.map(TrackedCaseSummaryDto::of) //
 				.stream();
 	}
 
 	@PostMapping("/api/hd/cases")
-	HttpEntity<?> postCase(@Valid @RequestBody TrackedCaseDto payload, Errors errors, @LoggedIn Account account) {
+	HttpEntity<?> postCase(@Valid @RequestBody TrackedCaseDto payload, Errors errors, @LoggedIn Department department) {
 
 		if (payload.validate(errors).hasErrors()) {
 			return ErrorsDto.of(errors, accessor).toBadRequest();
 		}
 
-		var department = departments.findById(account.getDepartmentId()) //
-				.orElseThrow(() -> new IllegalStateException("No department found for currently logged in account!"));
-
 		var trackedCase = cases.save(representations.from(payload, department));
-		var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), account);
+		var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
 
 		return ResponseEntity //
 				.created(URI.create(fromMethodCall(location).toUriString())) //
@@ -101,10 +98,10 @@ class TrackedCaseController {
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}")
-	HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account) {
+	HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
 		return ResponseEntity.of(cases.findById(identifier) //
-				.filter(it -> it.getDepartment().hasId(account.getDepartmentId())) //
+				.filter(it -> it.belongsTo(department)) //
 				.map(representations::toRepresentation));
 	}
 

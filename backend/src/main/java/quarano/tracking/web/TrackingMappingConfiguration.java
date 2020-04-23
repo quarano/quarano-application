@@ -15,12 +15,18 @@
  */
 package quarano.tracking.web;
 
-import quarano.department.TrackedCase;
-import quarano.department.web.TrackedCaseDto;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
-import quarano.tracking.*;
 import quarano.tracking.Address.HouseNumber;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.ContactWays;
+import quarano.tracking.DiaryEntry;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.ZipCode;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import java.util.ArrayList;
@@ -37,7 +43,7 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-public class MappingConfiguration {
+public class TrackingMappingConfiguration {
 
 	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
 			= source -> EmailAddress.ofNullable(source.getSource());
@@ -57,7 +63,8 @@ public class MappingConfiguration {
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
 			= source -> source.getSource() == null ? null : source.getSource().getValue();
 
-	public MappingConfiguration(ModelMapper mapper, SymptomRepository symptoms, ContactPersonRepository contacts) {
+	public TrackingMappingConfiguration(ModelMapper mapper, SymptomRepository symptoms,
+			ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 		mapper.getConfiguration().setCollectionsMergeEnabled(false);
@@ -167,34 +174,6 @@ public class MappingConfiguration {
 		}).addMappings(it -> {
 			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
 					(target, v) -> target.setSymptoms(v));
-		});
-
-		// TrackedCase
-
-		mapper.typeMap(TrackedCase.class, TrackedCaseDto.class).setPreConverter(it -> {
-
-			var source = it.getSource();
-			var target = it.getDestination();
-			var quarantine = source.getQuarantine();
-
-			if (quarantine != null) {
-				target.setQuarantineStartDate(quarantine.getFrom());
-				target.setQuarantineEndDate(quarantine.getTo());
-			}
-
-			return target;
-
-		}).addMappings(it -> {
-			it.skip(TrackedCaseDto::setQuarantineStartDate);
-			it.skip(TrackedCaseDto::setQuarantineEndDate);
-		});
-
-		mapper.typeMap(TrackedCaseDto.class, TrackedCase.class).setPreConverter(it -> {
-
-			var source = it.getSource();
-			var target = it.getDestination();
-
-			return target.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate()));
 		});
 	}
 }

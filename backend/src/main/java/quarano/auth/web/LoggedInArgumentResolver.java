@@ -17,12 +17,16 @@ package quarano.auth.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+import quarano.department.Department;
+import quarano.department.DepartmentRepository;
 import quarano.tracking.TrackedPerson;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -39,12 +43,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Component
 @RequiredArgsConstructor
-class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
+class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
 
-	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current user but none available!";
-	private static final ResolvableType TRACKED_PERSON = ResolvableType.forClass(TrackedPerson.class);
+	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current %s but none available!";
+
+	private static final Set<Class<?>> ALL_TYPES = Set.of(TrackedPerson.class, Account.class, Department.class);
 
 	private final @NonNull AuthenticationManager authenticationManager;
+	private final @NonNull DepartmentRepository departments;
 
 	/*
 	 * (non-Javadoc)
@@ -54,8 +60,27 @@ class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolv
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-		return authenticationManager.getLoggedInTrackedPerson() //
-				.orElseThrow(() -> new ServletRequestBindingException(USER_ACCOUNT_EXPECTED));
+		Class<?> type = parameter.getParameterType();
+
+		return resolve(type).orElseThrow(
+				() -> new ServletRequestBindingException(String.format(USER_ACCOUNT_EXPECTED, type.getSimpleName())));
+	}
+
+	private Optional<?> resolve(Class<?> type) {
+
+		if (type.equals(TrackedPerson.class)) {
+			return authenticationManager.getLoggedInTrackedPerson(); //
+		}
+
+		Optional<Account> account = authenticationManager.getCurrentUser();
+
+		if (type.equals(Account.class)) {
+			return account;
+		} else if (type.equals(Department.class)) {
+			return account.map(Account::getDepartmentId).flatMap(departments::findById);
+		}
+
+		throw new IllegalStateException("Unsupported user account type!");
 	}
 
 	/*
@@ -65,8 +90,8 @@ class LoggedInUserAccountArgumentResolver implements HandlerMethodArgumentResolv
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 
-		return parameter.hasParameterAnnotation(LoggedIn.class)
-				&& TRACKED_PERSON.isAssignableFrom(ResolvableType.forMethodParameter(parameter));
+		return parameter.hasParameterAnnotation(LoggedIn.class) //
+				&& ALL_TYPES.contains(parameter.getParameterType());
 	}
 
 	/*
