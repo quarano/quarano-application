@@ -1,8 +1,5 @@
 package quarano.user;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account;
@@ -30,10 +27,6 @@ public class UserController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull MapperWrapper mapper;
 
-	@ApiOperation(value = "Get information about the logged in user", response = UserDto.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-			@ApiResponse(code = 403, message = "Not authorized, if there is no session"),
-			@ApiResponse(code = 404, message = "Bad request"), @ApiResponse(code = 500, message = "Internal Server error") })
 	@GetMapping("/me")
 	ResponseEntity<?> getMe(@LoggedIn Account account) {
 
