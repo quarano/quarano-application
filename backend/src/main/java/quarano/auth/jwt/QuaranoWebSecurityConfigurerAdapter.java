@@ -33,7 +33,8 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			// -- swagger ui
 			"/swagger-resources/**", //
 			"/swagger-ui.html", //
-			"/v2/api-docs", //
+			"/swagger-ui/**", //
+			"/v3/api-docs/**", //
 			"/webjars/**" };
 
 	@Bean
