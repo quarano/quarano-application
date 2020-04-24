@@ -36,6 +36,32 @@ public class ActionItems implements Streamable<ActionItem> {
 				.reduce(0.0f, (l, r) -> l + r);
 	}
 
+	public Streamable<ActionItem> getHealthItems() {
+
+		return items //
+				.filter(ActionItem::isUnresolved) //
+				.filter(ActionItem::isMedicalItem);
+	}
+
+	public Streamable<ActionItem> getProcessItems() {
+
+		return items //
+				.filter(ActionItem::isUnresolved) //
+				.filter(ActionItem::isProcessItem);
+	}
+
+	public Streamable<ActionItem> getDoneItems() {
+
+		return items //
+				.filter(ActionItem::isResolved);
+	}
+
+	public boolean hasUnresolvedItems() {
+
+		return items.stream() //
+				.anyMatch(ActionItem::isUnresolved);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
