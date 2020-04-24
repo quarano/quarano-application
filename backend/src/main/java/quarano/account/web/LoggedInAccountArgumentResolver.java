@@ -20,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AuthenticationManager;
 import quarano.account.Department;
-import quarano.account.DepartmentRepository;
 import quarano.account.Department.DepartmentIdentifier;
+import quarano.account.DepartmentRepository;
 import quarano.core.web.LoggedIn;
 import quarano.tracking.TrackedPerson;
 
