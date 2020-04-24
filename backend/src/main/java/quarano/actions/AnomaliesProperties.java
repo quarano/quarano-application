@@ -28,8 +28,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter
 @RequiredArgsConstructor
 @ConstructorBinding
-@ConfigurationProperties(prefix = "quarano.conspicuities")
-public class ConspicuityProperties {
+@ConfigurationProperties(prefix = "quarano.anomalies")
+public class AnomaliesProperties {
 
 	private final BodyTemperature temperatureThreshold;
 }
