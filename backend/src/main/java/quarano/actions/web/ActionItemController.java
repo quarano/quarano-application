@@ -18,20 +18,22 @@ package quarano.actions.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItemRepository;
-import quarano.actions.ActionItems;
 import quarano.auth.web.LoggedIn;
 import quarano.department.Department;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
-import quarano.tracking.TrackedPerson;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -47,15 +49,22 @@ public class ActionItemController {
 	private final @NonNull TrackedCaseRepository cases;
 
 	@GetMapping("/api/hd/actions/{identifier}")
-	Stream<?> allActions(@PathVariable TrackedCaseIdentifier identifier) {
+	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier) {
 
-		return cases.findById(identifier) //
-				.map(TrackedCase::getTrackedPerson) //
-				.map(TrackedPerson::getId) //
-				.map(items::findByTrackedPerson) //
-				.map(ActionItems::stream) //
-				.orElseGet(() -> Stream.empty()) //
-				.map(it -> ActionItemDto.of(it, messages)); //
+		TrackedCase trackedCase = cases.findById(identifier).orElse(null);
+
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		var id = trackedCase.getTrackedPerson().getId();
+
+		return ResponseEntity.ok(CaseActionsRepresentation.of(trackedCase, items.findByTrackedPerson(id), messages));
+	}
+
+	@PutMapping("/api/hd/actions/{identifier}/resolve")
+	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier) {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
 	}
 
 	@GetMapping("/api/hd/actions")
