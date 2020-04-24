@@ -3,7 +3,7 @@ applications:
   - name: quarano-backend-dev
     buildpacks:
       - java_buildpack
-    path: target/coronareport_backend-0.0.1-SNAPSHOT.jar
+    path: target/quarano-backend-0.0.1-SNAPSHOT.jar
     services:
       - quarano-postgres-dev
     env:
@@ -11,7 +11,7 @@ applications:
   - name: quarano-backend
     buildpacks:
       - java_buildpack
-    path: target/coronareport_backend-0.0.1-SNAPSHOT.jar
+    path: target/quarano-backend-0.0.1-SNAPSHOT.jar
     services:
       - quarano-postgres
     env:
