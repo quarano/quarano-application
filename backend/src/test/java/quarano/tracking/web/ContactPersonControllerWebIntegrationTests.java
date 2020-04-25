@@ -15,25 +15,24 @@
  */
 package quarano.tracking.web;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import lombok.RequiredArgsConstructor;
-import quarano.QuaranoWebIntegrationTest;
-import quarano.WithQuaranoUser;
-
-import java.util.Map;
-import java.util.stream.Stream;
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import quarano.QuaranoWebIntegrationTest;
+import quarano.WithQuaranoUser;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @author Oliver Drotbohm
@@ -63,6 +62,27 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.mobilePhone", String.class)).isNotNull();
 		assertThat(document.read("$.email", String.class)).isNotNull();
 		assertThat(document.read("$.identificationHint", String.class)).isNotNull();
+	}
+
+	@Test
+	@DisplayName("rejects a contact person, which has a wrong firstname and lastname")
+	void rejectsWrongFirstNameAndWrongLastName() throws Exception {
+
+		var payload = new ContactPersonDto();
+		payload.setFirstName("Test121231 ");
+		payload.setLastName("TestN121231 ");
+		payload.setMobilePhone("0123910");
+
+		String response = mvc.perform(post("/api/contacts") //
+				.content(mapper.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.firstName", String.class)).isNotNull();
+		assertThat(document.read("$.lastName", String.class)).isNotNull();
 	}
 
 	@TestFactory
