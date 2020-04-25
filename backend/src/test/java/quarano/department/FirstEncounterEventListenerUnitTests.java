@@ -20,8 +20,8 @@ import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPerson.ContactPersonAdded;
 import quarano.tracking.ContactWays;
-import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
 
@@ -30,36 +30,46 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 /**
- * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @QuaranoUnitTest
-class TrackingEventListenerUnitTests {
+class FirstEncounterEventListenerUnitTests {
 
 	@Mock TrackedCaseRepository cases;
 
 	@Test
-	void rejectsEncounterReportIfEnrollmentQuestionnaireIncomplete() {
+	void createContactCaseAutomaticallyAfterFirstEncounter() {
 
-		var listener = new TrackingEventListener(cases);
-
+		var listener = new FirstEncounterEventListener(cases);
+		
 		var person = TrackedPersonDataInitializer.createTanja();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
-		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId(), true);
+		contactPerson.assignOwner(person);
+		
+		var encounter = person.reportContactWith(contactPerson, LocalDate.now());
+		
+		var event = EncounterReported.of(encounter, person.getId(), true);
 
 		var trackedCase = new TrackedCase(person,  CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()));
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
-
-		assertThatExceptionOfType(EnrollmentException.class).isThrownBy(() -> {
-			listener.on(event);
-		});
-
-		trackedCase.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
-
+		
+		
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+		
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		TrackedCase capturedArgument = argumentCaptor.<TrackedCase> getValue();
+		assertThat(capturedArgument.getTrackedPerson().getFirstName().equals("Michaela"));
+		assertThat(capturedArgument.getTrackedPerson().getLastName().equals("Mustermann"));
+		assertThat(capturedArgument.getTrackedPerson().getEmailAddress().toString().equals("michaela@mustermann.de"));
+		assertThat(capturedArgument.getType() == CaseType.CONTACT);
+		
 	}
+	
 }

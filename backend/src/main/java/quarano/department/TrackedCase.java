@@ -66,14 +66,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
 	}
 
-	public TrackedCase(TrackedPerson person, Department department) {
-		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, department);
+	public TrackedCase(TrackedPerson person, CaseType type, Department department) {
+		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department);
 	}
 
-	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, Department department) {
+	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department) {
 
 		this.id = id;
 		this.trackedPerson = person;
+		this.type = type;
 		this.department = department;
 	}
 
