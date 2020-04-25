@@ -107,7 +107,7 @@ export class ApiService {
     return {
       dateOfBirth: new Date(item.dateOfBirth),
       caseId: item.caseId,
-      caseType: item.caseType,
+      type: item.type,
       name: item.name,
       priority: item.priority,
       firstName: item.firstName,

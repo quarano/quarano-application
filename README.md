@@ -44,7 +44,7 @@ Run `mvn spring-boot:run -P inmemory`. `Runs at http://localhost:8080/`
 
 ## Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.3.
 
 ### Development Server
 

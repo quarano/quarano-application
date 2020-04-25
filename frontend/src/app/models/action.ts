@@ -2,7 +2,7 @@ import { SelfLink } from './general';
 export interface ActionListItemDto {
   name: string;
   priority: number;
-  caseType: 'INDEX' | 'CONTACT';
+  type: 'INDEX' | 'CONTACT';
   dateOfBirth: Date;
   firstName: string;
   lastName: string;

@@ -1,6 +1,137 @@
-<ul>
-  <li *ngFor="let action of actions">{{ action.name }}</li>
-</ul>
+<ngx-datatable
+  class="material fullscreen fixed-header"
+  [count]="actions.length"
+  [draggable]="false"
+  [headerHeight]="48"
+  rowHeight="auto"
+  [rows]="rows"
+  selectionType="single"
+  [messages]="{
+    emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
+    selectedMessage: 'ausgewählt',
+    totalMessage: 'insgesamt'
+  }"
+  [loadingIndicator]="loading"
+  [footerHeight]="50"
+>
+  <ngx-datatable-column
+    prop="email"
+    name="E-Mail"
+    [sortable]="false"
+    width="80"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <a
+        *ngIf="value"
+        mat-icon-button
+        href="mailto:{{ value }}"
+        [matTooltip]="'E-Mail an ' + value"
+        matTooltipPosition="right"
+      >
+        <mat-icon>mail_outline</mat-icon>
+      </a>
+    </ng-template>
+  </ngx-datatable-column>
 
-<ngx-datatable class="material fixed-header" [rows]="rows" [columns]="columns">
+  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="190"
+    [sortable]="false"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column prop="type" name="Typ" [sortable]="false" width="80">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="dateOfBirth"
+    name="Geburtsdatum"
+    [sortable]="false"
+    width="100"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="quarantineStart"
+    name="Quarantäne Start"
+    [sortable]="false"
+    width="130"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      {{ value }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="alerts"
+    name="Auffälligkeiten"
+    [sortable]="false"
+    width="280"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      {{ column.name }}
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <div style="display: flex; flex-direction: column;">
+        <div
+          style="display: flex; align-items: center;"
+          *ngFor="let alert of value"
+        >
+          <app-action-alert [alert]="alert"></app-action-alert>
+        </div>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
 </ngx-datatable>
