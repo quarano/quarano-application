@@ -41,6 +41,14 @@ class AccountDataInitializer implements DataInitializer {
 		// account for person 3
 		accounts.createTrackedPersonAccount("test3", UnencryptedPassword.of("test123"), "Sandra", "Schubert",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP2, TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
+		
+		// account for person 4
+		accounts.createTrackedPersonAccount("test4", UnencryptedPassword.of("test123"), "Gustav", "Meier",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1);
+		
+		// account for person 5
+		accounts.createTrackedPersonAccount("test5", UnencryptedPassword.of("test123"), "Nadine", "Ebert",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1);
 
 		// account for GA user
 		accounts.createStaffAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster",
