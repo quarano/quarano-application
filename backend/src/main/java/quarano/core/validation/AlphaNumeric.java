@@ -32,7 +32,7 @@ import javax.validation.constraints.Pattern;
  * @author Felix Schultze
  */
 @ReportAsSingleViolation
-@Pattern(regexp = Strings.LETTERS)
+@Pattern(regexp = Strings.LETTERS_AND_NUMBERS)
 @Constraint(validatedBy = {})
 @Documented
 @Target(FIELD)
