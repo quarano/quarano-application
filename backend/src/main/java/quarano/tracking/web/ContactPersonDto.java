@@ -32,7 +32,9 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private @Alphabetic String lastName, firstName, street, city;
+	private @Alphabetic String lastName, firstName;
+	private @Alphabetic String city;
+	private @AlphaNumeric String street;
 	private @AlphaNumeric String houseNumber;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
@@ -52,6 +54,7 @@ class ContactPersonDto {
 			return Collections.emptyMap();
 		}
 
+		@SuppressWarnings("null")
 		var contactResource = on(ContactPersonController.class).getContact(null, id);
 
 		return Map.of("self", Map.of("href", fromMethodCall(contactResource).toUriString()));
