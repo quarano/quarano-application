@@ -19,12 +19,21 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItemRepository;
 import quarano.auth.web.LoggedIn;
-import quarano.tracking.TrackedPerson;
+import quarano.department.Department;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseRepository;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,11 +46,33 @@ public class ActionItemController {
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull MessageSourceAccessor messages;
 
-	@GetMapping("/api/actions")
-	Stream<?> allActions(@LoggedIn TrackedPerson person) {
+	private final @NonNull TrackedCaseRepository cases;
 
-		return items.findByTrackedPerson(person.getId()) //
-				.map(it -> ActionItemDto.of(it, messages)) //
-				.stream();
+	@GetMapping("/api/hd/actions/{identifier}")
+	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier) {
+
+		TrackedCase trackedCase = cases.findById(identifier).orElse(null);
+
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		var id = trackedCase.getTrackedPerson().getId();
+
+		return ResponseEntity.ok(CaseActionsRepresentation.of(trackedCase, items.findByTrackedPerson(id), messages));
+	}
+
+	@PutMapping("/api/hd/actions/{identifier}/resolve")
+	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier) {
+		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+	}
+
+	@GetMapping("/api/hd/actions")
+	Stream<?> getActions(@LoggedIn Department department) {
+
+		return cases.findByDepartmentId(department.getId()) //
+				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()))) //
+				.stream() //
+				.sorted(Comparator.comparing(CaseActionSummary::getPriority));
 	}
 }

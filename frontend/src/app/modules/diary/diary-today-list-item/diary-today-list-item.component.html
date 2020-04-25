@@ -1,7 +1,7 @@
 <div class="bootstrap-wrapper">
   <div class="row">
     <div class="col-12 col-lg-2 line">
-      <span>{{ date | date: "EEEEEE, d.M.y" }}</span>
+      <span>{{ date | date: "EEEEEE, dd.MM.y" }}</span>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <ng-container *ngIf="morning; else morning_not_completed">
@@ -24,8 +24,7 @@
           <button
             mat-mini-fab
             color="primary"
-            [routerLink]="['new']"
-            [state]="{ date: date, slot: 'morning' }"
+            [routerLink]="['new', diaryListItem.date, 'morning']"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -46,8 +45,7 @@
           <button
             mat-mini-fab
             color="primary"
-            [routerLink]="['new']"
-            [state]="{ date: date, slot: 'evening' }"
+            [routerLink]="['new', diaryListItem.date, 'evening']"
             class="create-now-button"
           >
             <mat-icon>add</mat-icon>

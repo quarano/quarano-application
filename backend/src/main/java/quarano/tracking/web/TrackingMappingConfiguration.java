@@ -43,7 +43,7 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-public class MappingConfiguration {
+public class TrackingMappingConfiguration {
 
 	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
 			= source -> EmailAddress.ofNullable(source.getSource());
@@ -63,7 +63,8 @@ public class MappingConfiguration {
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
 			= source -> source.getSource() == null ? null : source.getSource().getValue();
 
-	public MappingConfiguration(ModelMapper mapper, SymptomRepository symptoms, ContactPersonRepository contacts) {
+	public TrackingMappingConfiguration(ModelMapper mapper, SymptomRepository symptoms,
+			ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 		mapper.getConfiguration().setCollectionsMergeEnabled(false);
@@ -75,6 +76,8 @@ public class MappingConfiguration {
 
 		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
 		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
+
+		// ContactPerson
 
 		mapper.typeMap(ContactPersonDto.class, ContactWays.class).setProvider(request -> {
 
@@ -115,15 +118,40 @@ public class MappingConfiguration {
 			it.map(source -> source.getAddress().getHouseNumber(), ContactPersonDto::setHouseNumber);
 		});
 
-		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).addMappings(it -> {
+		// TrackedPerson
+
+		mapper.typeMap(TrackedPerson.class, TrackedPersonDto.class).setPreConverter(context -> {
+
+			TrackedPersonDto destination = context.getDestination();
+			TrackedPerson person = context.getSource();
+
+			var houseNumber = person.getAddress().getHouseNumber();
+
+			if (!houseNumber.equals(HouseNumber.NONE)) {
+				destination.setHouseNumber(houseNumber.toString());
+			}
+
+			return destination;
+
+		}).addMappings(it -> {
 
 			it.map(source -> source.getAddress().getStreet(), TrackedPersonDto::setStreet);
 			it.map(source -> source.getAddress().getZipCode(), TrackedPersonDto::setZipCode);
 			it.map(source -> source.getAddress().getCity(), TrackedPersonDto::setCity);
-			it.map(source -> source.getAddress().getHouseNumber(), TrackedPersonDto::setHouseNumber);
+
+			it.skip(TrackedPersonDto::setHouseNumber);
 		});
 
-		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).addMappings(it -> {
+		mapper.typeMap(TrackedPersonDto.class, TrackedPerson.class).setProvider(it -> {
+
+			var source = (TrackedPersonDto) it.getSource();
+
+			return new TrackedPerson(source.getFirstName(), source.getLastName());
+
+		}).addMappings(it -> {
+
+			it.skip(TrackedPerson::setFirstName);
+			it.skip(TrackedPerson::setLastName);
 
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilePhone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
@@ -135,6 +163,8 @@ public class MappingConfiguration {
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
+
+		// DiaryEntry
 
 		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).setProvider(request -> {
 			var dto = (DiaryEntryInput) request.getSource();

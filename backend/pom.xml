@@ -9,15 +9,14 @@
 		<version>2.2.6.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>de.wevsvirushackathon</groupId>
-	<artifactId>coronareport_backend</artifactId>
+	<groupId>de.quarano</groupId>
+	<artifactId>quarano-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>coronareport_backend</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Quarano - Backend</name>
 
 	<properties>
 		<java.version>11</java.version>
-		<docker.image.prefix>coronahackathon</docker.image.prefix>
+		<docker.image.prefix>quarano-backend</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
 		<jddd.version>0.0.1-SNAPSHOT</jddd.version>
@@ -28,10 +27,7 @@
 	<profiles>
 
 		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			<id>inmemory</id>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
 				<spring.profile.active>integrationtest</spring.profile.active>
@@ -43,6 +39,7 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
 		<profile>
 			<id>develop</id>
 			<properties>
@@ -61,10 +58,10 @@
 	</profiles>
 
 	<dependencies>
- 		<dependency>
- 			<groupId>org.springframework.boot</groupId>
- 			<artifactId>spring-boot-devtools</artifactId>
- 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -73,10 +70,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.hateoas</groupId> -->
-<!-- 			<artifactId>spring-hateoas</artifactId> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+		</dependency>
 		<!-- Spring modelmapper for DTO transformation -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -98,35 +95,35 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<!-- include web security for api protection with JWT -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
+
 		<!-- Include lombok for development convenience -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 		<groupId>org.jddd</groupId>
@@ -166,27 +163,15 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- Swagger integration for API documentation -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-
-		<!-- Swagger ui to browse API -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -207,28 +192,6 @@
 					</profiles>
 				</configuration>
 			</plugin>
-<!-- 			<plugin> -->
-<!-- 				<groupId>cz.habarta.typescript-generator</groupId> -->
-<!-- 				<artifactId>typescript-generator-maven-plugin</artifactId> -->
-<!-- 				<version>2.20.583</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<id>generate</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>generate</goal> -->
-<!-- 						</goals> -->
-<!-- 						<phase>process-classes</phase> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 				<configuration> -->
-<!-- 					<jsonLibrary>jackson2</jsonLibrary> -->
-<!-- 					<classes> -->
-<!-- 						<class>de.wevsvirushackathon.coronareport.contactperson.ContactPerson</class> -->
-<!-- 					</classes> -->
-<!-- 					<outputFile>../coronareportfrontend/src/app/models/generated/generated-dto.d.ts</outputFile> -->
-<!-- 					<outputKind>module</outputKind> -->
-<!-- 				</configuration> -->
-<!-- 			</plugin> -->
 
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
@@ -249,7 +212,7 @@
 				<executions>
 					<execution>
 						<id>reference</id>
-						<phase>package</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
 						</goals>
@@ -279,19 +242,37 @@
 					</attributes>
 				</configuration>
 			</plugin>
+			
+			<plugin> 
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration> 
+							<outputDirectory>
+								${project.build.outputDirectory}/static/docs
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+										${project.build.directory}/generated-docs
+									</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-
-			<!-- <plugin> <groupId>com.spotify</groupId> <artifactId>dockerfile-maven-plugin</artifactId> 
-				<version>1.4.12</version> <configuration> <skip>${docker.build.skip}</skip> 
-				<buildArgs> <artifact>${project.build.finalName}</artifact> <userId>${docker.build.userid}</userId> 
-				</buildArgs> <repository>${docker.image.prefix}/${project.artifactId}</repository> 
-				<tag>${project.version}</tag> </configuration> <executions> <execution> <phase>package</phase> 
-				<goals> <goal>build</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 
 
 	</build>
-	
+
 	<repositories>
 	<!-- For Moduliths & jDDD -->
 		<repository>

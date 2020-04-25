@@ -15,11 +15,14 @@
  */
 package quarano.auth.web;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+
 import java.util.List;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ResolvableType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -27,17 +30,13 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-
 /**
- * {@link HandlerMethodArgumentResolver} to inject the {@link Account} of the currently logged in health department user into Spring
- * MVC controller method parameters annotated with {@link LoggedIn}.
+ * {@link HandlerMethodArgumentResolver} to inject the {@link Account} of the currently logged in health department user
+ * into Spring MVC controller method parameters annotated with {@link LoggedIn}.
  *
  * @author Patrick Otto
  */
-@Component
+// @Component
 @RequiredArgsConstructor
 class LoggedInAccountArgumentResolver implements HandlerMethodArgumentResolver, WebMvcConfigurer {
 

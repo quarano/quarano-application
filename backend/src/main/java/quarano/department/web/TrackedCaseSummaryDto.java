@@ -50,11 +50,18 @@ public class TrackedCaseSummaryDto {
 	}
 
 	public String getDateOfBirth() {
-		return trackedCase.getTrackedPerson().getDateOfBirth().format(DateTimeFormatter.ISO_DATE);
+		var person = trackedCase.getTrackedPerson();
+		var dateOfBirth = person.getDateOfBirth();
+
+		return dateOfBirth == null ? null : dateOfBirth.format(DateTimeFormatter.ISO_DATE);
 	}
 
 	public String getEmail() {
-		return trackedCase.getTrackedPerson().getEmailAddress().toString();
+
+		var trackedPerson = trackedCase.getTrackedPerson();
+		var emailAddress = trackedPerson.getEmailAddress();
+
+		return emailAddress == null ? null : emailAddress.toString();
 	}
 
 	public String getCaseType() {

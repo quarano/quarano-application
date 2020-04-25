@@ -22,7 +22,7 @@ const routes: Routes = [
     canDeactivate: [PreventUnsavedChangesGuard]
   },
   {
-    path: 'new',
+    path: 'new/:date/:slot',
     component: DiaryEntryComponent,
     resolve: { diaryEntry: DiaryEntryResolver, symptoms: SymptomsResolver, contactPersons: ContactPersonsResolver },
     canDeactivate: [PreventUnsavedChangesGuard]

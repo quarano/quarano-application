@@ -31,7 +31,7 @@ import org.springframework.web.bind.ServletRequestBindingException;
  * first place.
  *
  * @author Oliver Drotbohm
- * @see LoggedInUserAccountArgumentResolver
+ * @see LoggedInArgumentResolver
  */
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

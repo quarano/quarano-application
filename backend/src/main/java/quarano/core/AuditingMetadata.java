@@ -15,6 +15,8 @@
  */
 package quarano.core;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -28,6 +30,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 /**
  * @author Oliver Drotbohm
  */
+@Getter
 @Embeddable
 public class AuditingMetadata {
 

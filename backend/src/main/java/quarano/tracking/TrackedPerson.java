@@ -91,6 +91,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.encounters = new ArrayList<>();
 	}
 
+	public String getFullName() {
+		return firstName.concat(" ").concat(lastName);
+	}
+
 	public Diary getDiary() {
 		return Diary.of(entries);
 	}

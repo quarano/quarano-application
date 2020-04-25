@@ -33,7 +33,8 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			// -- swagger ui
 			"/swagger-resources/**", //
 			"/swagger-ui.html", //
-			"/v2/api-docs", //
+			"/swagger-ui/**", //
+			"/v3/api-docs/**", //
 			"/webjars/**" };
 
 	@Bean
@@ -51,6 +52,7 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
+			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
 			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')"); //
 			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //

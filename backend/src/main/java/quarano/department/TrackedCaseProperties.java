@@ -13,31 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.tracking;
+package quarano.department;
 
-import static org.assertj.core.api.Assertions.*;
+import lombok.Value;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.Period;
 
-import org.junit.jupiter.api.Test;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
  * @author Oliver Drotbohm
  */
-public class DiaryUnitTests {
+@ConstructorBinding
+@Value
+@ConfigurationProperties("quarano.cases")
+public class TrackedCaseProperties {
 
-	@Test
-	void createsDiaryEntryDays() {
+	private final Period quarantinePeriod;
 
-		var now = LocalDateTime.now();
-
-		DiaryEntry first = new DiaryEntry(Slot.of(now));
-		DiaryEntry second = new DiaryEntry(Slot.of(now.minusHours(12)));
-		DiaryEntry third = new DiaryEntry(Slot.of(now.minusHours(24)));
-
-		var diary = Diary.of(List.of(first, second, third));
-
-		assertThat(diary.toEntryDays(Slot.now().getDate().minusDays(4))).hasSize(5);
+	public Period getQuarantinePeriod() {
+		return quarantinePeriod == null ? Period.ofWeeks(2) : quarantinePeriod;
 	}
 }

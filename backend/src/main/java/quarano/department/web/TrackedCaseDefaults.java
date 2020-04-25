@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.actions;
+package quarano.department.web;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import quarano.department.TrackedCaseProperties;
+
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 /**
  * @author Oliver Drotbohm
  */
-@RequiredArgsConstructor()
-public enum DescriptionCode {
+@RequiredArgsConstructor(staticName = "of")
+@JsonAutoDetect(getterVisibility = Visibility.NON_PRIVATE)
+class TrackedCaseDefaults {
 
-	INCREASED_TEMPERATURE,
+	private final LocalDate now = LocalDate.now();
+	private final TrackedCaseProperties properties;
 
-	FIRST_CHARACTERISTIC_SYMPTOM(2.0f),
+	LocalDate getTestDate() {
+		return now;
+	}
 
-	DIARY_ENTRY_MISSING;
+	LocalDate getQuarantineStart() {
+		return now;
+	}
 
-	private final @Getter float multiplier;
-
-	private DescriptionCode() {
-		this(1f);
+	LocalDate getQuarantineEnd() {
+		return now.plus(properties.getQuarantinePeriod());
 	}
 }

@@ -99,6 +99,15 @@ public class Slot {
 		return Slot.of(LocalDateTime.now());
 	}
 
+	/**
+	 * Returns the previous {@link Slot}.
+	 * 
+	 * @return
+	 */
+	public Slot previous() {
+		return isEvening() ? Slot.morningOf(date) : Slot.eveningOf(date.minusDays(1));
+	}
+
 	public boolean isMorning() {
 		return timeOfDay.equals(TimeOfDay.MORNING);
 	}
@@ -125,7 +134,7 @@ public class Slot {
 	 * @return
 	 */
 	public LocalDateTime getOfficialEnd() {
-		return LocalDateTime.of(timeOfDay == TimeOfDay.EVENING ? date.plusDays(1) : date, timeOfDay.to);
+		return LocalDateTime.of(date, timeOfDay.to);
 	}
 
 	/**
@@ -177,7 +186,7 @@ public class Slot {
 			 */
 			@Override
 			boolean contains(LocalTime reference) {
-				return MORNING.from.isBefore(reference) && MORNING.to.isAfter(reference);
+				return MORNING.from.isBefore(reference) && MORNING.end.isAfter(reference);
 			}
 		},
 
@@ -202,7 +211,7 @@ public class Slot {
 				var time = date.toLocalTime();
 				var result = date.toLocalDate();
 
-				return time.isBefore(EVENING.to) ? result.minusDays(1) : result;
+				return time.isBefore(EVENING.end) ? result.minusDays(1) : result;
 			}
 		};
 
@@ -220,11 +229,11 @@ public class Slot {
 			return of(LocalTime.now());
 		}
 
-		private static TimeOfDay of(LocalDateTime reference) {
+		static TimeOfDay of(LocalDateTime reference) {
 			return of(reference.toLocalTime());
 		}
 
-		private static TimeOfDay of(LocalTime reference) {
+		static TimeOfDay of(LocalTime reference) {
 
 			return Arrays.stream(values()) //
 					.filter(it -> it.contains(reference)) //

@@ -21,6 +21,7 @@ import quarano.tracking.Slot.TimeOfDay;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 
 import org.junit.jupiter.api.Test;
@@ -45,5 +46,11 @@ class SlotUnitTest {
 		var threeThirtyThree = LocalDateTime.now().withHour(3).withMinute(33);
 
 		assertThat(Slot.of(threeThirtyThree).contains(threeThirtyThree)).isTrue();
+	}
+
+	@Test
+	void timeOfDayCalculatedCorrectly() {
+
+		assertThat(TimeOfDay.of(LocalTime.of(15, 45))).isEqualTo(TimeOfDay.MORNING);
 	}
 }

@@ -53,6 +53,33 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 		this.description = description;
 	}
 
+	public boolean isUnresolved() {
+		return !isResolved();
+	}
+
+	public boolean isMedicalItem() {
+		return this.getType().equals(ItemType.MEDICAL_INCIDENT);
+	}
+
+	public boolean isProcessItem() {
+		return this.getType().equals(ItemType.PROCESS_INCIDENT);
+	}
+
+	public float getWeight() {
+		return getDescription().getCode().getMultiplier() * getTypeWeight();
+	}
+
+	private float getTypeWeight() {
+
+		switch (getType()) {
+			case MEDICAL_INCIDENT:
+				return 0.7f;
+			case PROCESS_INCIDENT:
+			default:
+				return 0.3f;
+		}
+	}
+
 	public enum ItemType {
 
 		MEDICAL_INCIDENT,

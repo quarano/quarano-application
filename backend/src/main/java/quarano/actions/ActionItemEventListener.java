@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class ActionItemEventListener {
 
 	private final @NonNull ActionItemRepository items;
-	private final @NonNull ConspicuityProperties config;
+	private final @NonNull AnomaliesProperties config;
 
 	@EventListener
 	void on(DiaryEntryAdded event) {

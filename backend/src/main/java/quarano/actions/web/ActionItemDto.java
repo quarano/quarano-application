@@ -24,11 +24,14 @@ import quarano.actions.DiaryEntryActionItem;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.web.DiaryController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.support.MessageSourceAccessor;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -40,14 +43,23 @@ public class ActionItemDto {
 	private final ActionItem item;
 	private final MessageSourceAccessor messages;
 
+	public LocalDateTime getDate() {
+		return item.getMetadata().getLastModified();
+	}
+
 	public ItemType getType() {
 		return item.getType();
+	}
+
+	public float getWeight() {
+		return item.getWeight();
 	}
 
 	public String getDescription() {
 		return messages.getMessage(item.getDescription());
 	}
 
+	@JsonInclude(Include.NON_EMPTY)
 	@JsonProperty("_links")
 	public Map<String, Object> getLinks() {
 

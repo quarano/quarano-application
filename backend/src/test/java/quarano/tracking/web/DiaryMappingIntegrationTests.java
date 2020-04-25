@@ -40,7 +40,7 @@ import com.jayway.jsonpath.PathNotFoundException;
  */
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-public class DiaryMappingIntegrationTests {
+class DiaryMappingIntegrationTests {
 
 	private final DiaryRepresentations representations;
 	private final TrackedPersonRepository people;
