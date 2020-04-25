@@ -1,3 +1,4 @@
+import { ReportCasesResolver } from '@resolvers/report-cases.resolver';
 import { ActionsResolver } from '@resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,8 @@ const routes: Routes = [
       },
       {
         path: 'clients',
-        component: ClientsComponent
+        component: ClientsComponent,
+        resolve: { cases: ReportCasesResolver }
       },
       {
         path: 'actions',

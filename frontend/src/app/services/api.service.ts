@@ -91,7 +91,8 @@ export class ApiService {
   }
 
   getCases(): Observable<Array<ReportCaseDto>> {
-    return this.httpClient.get<Array<ReportCaseDto>>(`${this.baseUrl}/api/hd/cases`);
+    return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/cases`)
+      .pipe(share(), map(result => result.map(item => this.mapReportCase(item))));
   }
 
   getDiary(): Observable<DiaryDto> {
@@ -100,7 +101,24 @@ export class ApiService {
 
   getAllActions(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/actions`)
-      .pipe(map(result => result.map(item => this.mapActionListItem(item))));
+      .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
+  }
+
+  private mapReportCase(item: any): ReportCaseDto {
+    return {
+      dateOfBirth: new Date(item.dateOfBirth),
+      status: item.status,
+      email: item.email,
+      phone: item.phone,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      medicalStaff: item.medicalStaff,
+      enrollmentCompleted: item.enrollmentCompleted,
+      quarantineEnd: item.quarantineEnd ? new Date(item.quarantineEnd) : null,
+      quarantineStart: item.quarantineStart ? new Date(item.quarantineStart) : null,
+      caseType: item.caseType,
+      zipCode: item.zipCode
+    };
   }
 
   private mapActionListItem(item: any): ActionListItemDto {
@@ -117,7 +135,8 @@ export class ApiService {
       quarantineEnd: new Date(item.quarantineEnd),
       quarantineStart: new Date(item.quarantineStart),
       _links: item._links,
-      alerts: item.healthSummary.concat(item.processSummary)
+      alerts: item.healthSummary.concat(item.processSummary),
+      status: item.status
     };
   }
 }

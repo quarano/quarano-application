@@ -1,3 +1,4 @@
+import { ReportCasesResolver } from '@resolvers/report-cases.resolver';
 import { ActionAlertComponent } from './action-alert/action-alert.component';
 import { ActionsResolver } from '@resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
@@ -21,6 +22,6 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     ReactiveFormsModule,
     NgxDatatableModule
   ],
-  providers: [ActionsResolver]
+  providers: [ActionsResolver, ReportCasesResolver]
 })
 export class TenantAdminModule { }

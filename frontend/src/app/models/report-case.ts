@@ -4,11 +4,16 @@ export interface ReportCaseDto {
   lastName: string;
   zipCode?: string;
   email: string;
+  phone: string;
   enrollmentCompleted: boolean;
-  caseType: 'index' | 'contact';
+  caseType: ClientType;
   medicalStaff?: boolean;
-  quarantine?: {
-    from: Date;
-    to: Date;
-  };
+  quarantineEnd: Date;
+  quarantineStart: Date;
+  status: string;
+}
+
+export enum ClientType {
+  INDEX = 'INDEX',
+  CONTACT = 'CONTACT'
 }

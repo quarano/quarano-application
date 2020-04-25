@@ -1,7 +1,6 @@
 <ngx-datatable
   class="material fullscreen fixed-header"
   [count]="actions.length"
-  [draggable]="false"
   [headerHeight]="50"
   rowHeight="auto"
   [rows]="rows"
@@ -13,6 +12,7 @@
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
+  (select)="onSelect($event)"
 >
   <ngx-datatable-column
     prop="email"
