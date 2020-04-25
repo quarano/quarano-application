@@ -1,5 +1,5 @@
 import { ActionAlertComponent } from './action-alert/action-alert.component';
-import { ActionsResolver } from './../../resolvers/actions.resolver';
+import { ActionsResolver } from '@resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

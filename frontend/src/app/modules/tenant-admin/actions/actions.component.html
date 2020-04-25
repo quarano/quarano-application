@@ -2,7 +2,7 @@
   class="material fullscreen fixed-header"
   [count]="actions.length"
   [draggable]="false"
-  [headerHeight]="48"
+  [headerHeight]="50"
   rowHeight="auto"
   [rows]="rows"
   selectionType="single"
@@ -118,7 +118,7 @@
     prop="alerts"
     name="Auffälligkeiten"
     [sortable]="false"
-    width="280"
+    width="350"
   >
     <ng-template let-column="column" ngx-datatable-header-template>
       {{ column.name }}
@@ -129,7 +129,7 @@
           style="display: flex; align-items: center;"
           *ngFor="let alert of value"
         >
-          <app-action-alert [alert]="alert"></app-action-alert>
+          <app-action-alert [alert]="alert" class="mb-1"></app-action-alert>
         </div>
       </div>
     </ng-template>

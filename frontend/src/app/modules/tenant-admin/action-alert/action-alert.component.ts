@@ -1,7 +1,7 @@
 import { Alert } from '@models/action';
 import { Component, OnInit, Input } from '@angular/core';
 
-interface AlertConfiguration {
+export interface AlertConfiguration {
   alert: Alert;
   color: string;
   icon: string;
