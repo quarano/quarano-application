@@ -51,6 +51,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @Entity
 @Accessors(chain = true)
@@ -89,6 +90,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.dateOfBirth = dateOfBirth;
 		this.entries = new ArrayList<>();
 		this.encounters = new ArrayList<>();
+	}
+
+	public TrackedPerson(ContactPerson contact) {
+		this(new TrackedPersonIdentifier(UUID.randomUUID()), contact.getFirstName(), contact.getLastName(),
+				contact.getEmailAddress(), contact.getPhoneNumber(), null);
+		this.mobilePhoneNumber = contact.getMobilePhoneNumber();
 	}
 
 	public String getFullName() {
@@ -136,8 +143,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 		var encounter = Encounter.with(person, date);
 		this.encounters.add(encounter);
+		
+		// check if this was the first encounter with target contact person
+		boolean isFirstEncounter = (encounters.stream().filter(it -> it.isEncounterWith(person)).count() == 1);
+		EncounterReported encounterReport = EncounterReported.of(encounter, id, isFirstEncounter);
 
-		registerEvent(EncounterReported.of(encounter, id));
+		registerEvent(encounterReport);
 
 		return encounter;
 	}
@@ -175,6 +186,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	public static class EncounterReported implements DomainEvent {
 		Encounter encounter;
 		TrackedPersonIdentifier personIdentifier;
+		boolean firstEncounterWithTargetPerson;
 	}
 
 	@PostLoad
