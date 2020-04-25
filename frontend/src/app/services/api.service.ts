@@ -96,4 +96,6 @@ export class ApiService {
   getDiary(): Observable<DiaryDto> {
     return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
   }
+
+  //getAllActions(): Observable<ActionListDto>
 }

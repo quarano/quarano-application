@@ -2,19 +2,19 @@
 
 Epidemiemanagement für Gesundheitsbehörden durch Digitalisierung von Selbstauskünften bestätigter Quarantänefälle und Verdachtspersonen (inkl. Informationen zu Symptomen und Kontakten)
 
+For further information please visit <https://www.quarano.de> (in German)
+
 Hosted at <https://quarano.de> (prod) and <https://develop.quarano.de> (dev)
 
-
-[![YouTube video](https://img.youtube.com/vi/z__mJRP8O0w/0.jpg)](https://www.youtube.com/watch?v=z__mJRP8O0wD)
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
+[![YouTube video](https://img.youtube.com/vi/3xkOvTBZ4ps/0.jpg)](https://www.youtube.com/watch?v=3xkOvTBZ4ps)
 
 ## Status
 
 This is a project in development. It has been created during the [WirVsVirusHackathon](https://wirvsvirushackathon.org/).
 
-## Licence
-Licensed under the EUPL-1.2-or-later
+## License
+
+Licensed under the [EUPL-1.2-or-later](https://github.com/coronareportteam/coronareport/blob/develop/LICENSE)
 
 ## Backend
 
@@ -27,7 +27,7 @@ Initial DB setup
 - `su - postgres`
 - `createuser --interactive --pwprompt`
   - rolename : `corona-report-app`
-    _ password: `corona`
+    _password: `corona`
     _ superuser: yes
 - `createdb -O corona-report-app corona-report`
 
@@ -40,9 +40,11 @@ Testamt2 ca3f3e9a-414a-4117-a623-59b109b269f1
 ### Run Locally
 
 navigate to backend folder.
-Run `./mvnw spring-boot:run`. `Runs at http://localhost:8080/`
+Run `mvn spring-boot:run -P inmemory`. `Runs at http://localhost:8080/`
 
 ## Frontend
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
 
 ### Development Server
 
