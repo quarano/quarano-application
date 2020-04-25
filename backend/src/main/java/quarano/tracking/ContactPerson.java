@@ -22,9 +22,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.Value;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
@@ -36,6 +38,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
 import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
 
 /**
  * @author Oliver Drotbohm
@@ -81,6 +84,8 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	public ContactPerson assignOwner(TrackedPerson person) {
 
 		this.ownerId = person.getId();
+		
+		registerEvent(ContactPersonAdded.of(this));
 
 		return this;
 	}
@@ -118,6 +123,11 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		TypeOfProtection(final String label) {
 			this.label = label;
 		}
+	}
+	
+	@Value(staticConstructor = "of")
+	public static class ContactPersonAdded implements DomainEvent {
+		ContactPerson contactPerson;
 	}
 
 	@Embeddable
