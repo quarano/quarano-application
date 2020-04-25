@@ -1,3 +1,6 @@
-<p>
-  actions works!
-</p>
+<ul>
+  <li *ngFor="let action of actions">{{ action.name }}</li>
+</ul>
+
+<ngx-datatable class="material fixed-header" [rows]="rows" [columns]="columns">
+</ngx-datatable>

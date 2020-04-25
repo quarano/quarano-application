@@ -10,6 +10,7 @@ import { groupBy } from '@utils/groupBy';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
 import { ReportCaseDto } from '@models/report-case';
+import { ActionListItemDto } from '@models/action';
 
 @Injectable({
   providedIn: 'root'
@@ -97,5 +98,26 @@ export class ApiService {
     return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
   }
 
-  //getAllActions(): Observable<ActionListDto>
+  getAllActions(): Observable<ActionListItemDto[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/actions`)
+      .pipe(map(result => result.map(item => this.mapActionListItem(item))));
+  }
+
+  private mapActionListItem(item: any): ActionListItemDto {
+    return {
+      dateOfBirth: new Date(item.dateOfBirth),
+      caseId: item.caseId,
+      caseType: item.caseType,
+      name: item.name,
+      priority: item.priority,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      phone: item.phone,
+      email: item.email,
+      quarantineEnd: new Date(item.quarantineEnd),
+      quarantineStart: new Date(item.quarantineStart),
+      _links: item._links,
+      alerts: item.healthSummary.concat(item.processSummary)
+    };
+  }
 }

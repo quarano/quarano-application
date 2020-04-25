@@ -1,3 +1,4 @@
+import { ActionsResolver } from './../../resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,7 @@ import { TenantAdminRoutingModule } from './tenant-admin-routing.module';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClientsComponent } from './clients/clients.component';
-
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { ClientsComponent } from './clients/clients.component';
     CommonModule,
     TenantAdminRoutingModule,
     AngularMaterialModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    NgxDatatableModule
+  ],
+  providers: [ActionsResolver]
 })
 export class TenantAdminModule { }
