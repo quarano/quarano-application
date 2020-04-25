@@ -23,9 +23,11 @@ import quarano.actions.ActionItem.ItemType;
 import quarano.actions.ActionItems;
 import quarano.actions.Description;
 import quarano.actions.DescriptionCode;
+import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +52,44 @@ public class CaseActionSummary {
 
 	String getName() {
 		return trackedCase.getTrackedPerson().getFullName();
+	}
+	
+	String getFirstName() {
+		return trackedCase.getTrackedPerson().getFirstName();
+	}
+	
+	String getLastName() {
+		return trackedCase.getTrackedPerson().getLastName();
+	}
+	
+	LocalDate getDateOfBirth() {
+		return trackedCase.getTrackedPerson().getDateOfBirth();
+	}
+	
+	CaseType getType() {
+		return trackedCase.getType();
+	}
+	
+	String getEmail() {
+		
+		return 
+				trackedCase.getTrackedPerson().getEmailAddress() != null
+					? trackedCase.getTrackedPerson().getEmailAddress().toString()
+					: null;
+	}
+	
+	LocalDate getQuarantineStart() {
+		return trackedCase.getQuarantine().getFrom();
+	}
+	
+	LocalDate getQuarantineEnd() {
+		return trackedCase.getQuarantine().getTo();
+	}
+	
+	String getPhone() {
+		return (trackedCase.getTrackedPerson().getPhoneNumber() != null)
+				? trackedCase.getTrackedPerson().getPhoneNumber().toString()
+				: null;
 	}
 
 	float getPriority() {
