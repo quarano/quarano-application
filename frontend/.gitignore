@@ -51,3 +51,5 @@ Thumbs.db
 .vs/Frontend/v16/TestStore/0/testlog.manifest
 .vs/VSWorkspaceState.json
 .vs/Frontend/v16/.suo
+
+*.iml
