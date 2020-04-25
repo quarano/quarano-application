@@ -1,9 +1,7 @@
-import { finalize } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ActionListItemDto } from '@models/action';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TableColumn } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-actions',

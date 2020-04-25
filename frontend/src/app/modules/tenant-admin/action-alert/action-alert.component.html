@@ -1,8 +1,10 @@
 <div
   style="display: flex; align-items: center; justify-content: space-between;"
 >
-  <i class="material-icons" [style]="color: {{ setting.color }}">{{
-    setting.icon
+  <i class="material-icons mr-3" [style.color]="setting?.color">{{
+    setting?.icon
   }}</i>
-  <span>{{ setting.displayName }}</span>
+  <span style="letter-spacing: 1px; font-size: 12px;">{{
+    setting?.displayName | uppercase
+  }}</span>
 </div>
