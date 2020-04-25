@@ -22,7 +22,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static quarano.core.validation.AlphaNumeric.ERROR_MSG;
+import static quarano.core.validation.Name.ERROR_MSG;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -33,18 +33,18 @@ import javax.validation.Payload;
 import javax.validation.constraints.Pattern;
 
 /**
- * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
-@Pattern(regexp = Strings.LETTERS, message = ERROR_MSG)
+
+@Pattern(regexp = Strings.NAME, message = ERROR_MSG)
 @Documented
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-public @interface AlphaNumeric {
-    String ERROR_MSG = "{Pattern.alphaNumeric}";
+public @interface Name {
+    String ERROR_MSG = "{Pattern.name}";
 
     String message() default ERROR_MSG;
-    Class<?>[]groups() default {};
+    Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
 }

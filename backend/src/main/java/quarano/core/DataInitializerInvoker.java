@@ -1,15 +1,15 @@
 package quarano.core;
 
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Internal component triggering the initialization of all {@link DataInitializer} instances registered in the

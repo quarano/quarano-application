@@ -15,22 +15,20 @@
  */
 package quarano;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.jddd.core.types.Identifier;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * @author Oliver Drotbohm
@@ -45,6 +43,11 @@ public class Quarano {
 	}
 
 	@Bean
+	public LocalValidatorFactoryBean validatorFactoryBean() {
+		return new LocalValidatorFactoryBean();
+	}
+
+	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
@@ -52,11 +55,6 @@ public class Quarano {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
-	}
-
-	@Bean
-	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
-		return new MessageSourceAccessor(source);
 	}
 
 	@Bean
@@ -70,4 +68,5 @@ public class Quarano {
 
 	@JsonSerialize(using = ToStringSerializer.class)
 	static abstract class IdentifierMixin {}
+
 }

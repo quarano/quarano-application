@@ -15,22 +15,35 @@
  */
 package quarano.core.validation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE_USE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static quarano.core.validation.Textual.ERROR_MSG;
 
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import javax.validation.constraints.Pattern;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.validation.constraints.Pattern;
-
-@Documented
-@Retention(RUNTIME)
-@Target(FIELD)
 /**
  * @author Oliver Drotbohm
  */
-@Pattern(regexp = Strings.TEXTUAL)
-public @interface Textual {
 
+@Pattern(regexp = Strings.TEXTUAL, message = ERROR_MSG)
+@Documented
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Retention(RUNTIME)
+@Constraint(validatedBy = {})
+public @interface Textual {
+    String ERROR_MSG = "{Pattern.textual}";
+
+    String message() default ERROR_MSG;
+    Class<?>[]groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
