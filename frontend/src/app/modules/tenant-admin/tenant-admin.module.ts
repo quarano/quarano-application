@@ -1,3 +1,4 @@
+import { ActionAlertComponent } from './action-alert/action-alert.component';
 import { ActionsResolver } from './../../resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
@@ -12,7 +13,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 @NgModule({
-  declarations: [TenantAdminComponent, DashboardComponent, ClientsComponent, ActionsComponent],
+  declarations: [TenantAdminComponent, DashboardComponent, ClientsComponent, ActionsComponent, ActionAlertComponent],
   imports: [
     CommonModule,
     TenantAdminRoutingModule,
