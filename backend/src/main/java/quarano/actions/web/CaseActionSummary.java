@@ -79,11 +79,15 @@ public class CaseActionSummary {
 	}
 	
 	LocalDate getQuarantineStart() {
-		return trackedCase.getQuarantine().getFrom();
+		return (trackedCase.getQuarantine() != null)
+				? trackedCase.getQuarantine().getFrom()
+				: null;		
 	}
 	
 	LocalDate getQuarantineEnd() {
-		return trackedCase.getQuarantine().getTo();
+		return (trackedCase.getQuarantine() != null)
+				? trackedCase.getQuarantine().getTo()
+				: null;		
 	}
 	
 	String getPhone() {
