@@ -16,6 +16,7 @@
 package quarano.actions;
 
 import lombok.RequiredArgsConstructor;
+import quarano.actions.ActionItem.ItemType;
 import quarano.core.DataInitializer;
 import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson;
@@ -43,8 +44,12 @@ public class ActionItemDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		TrackedPerson person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		TrackedPerson sandra = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		TrackedPerson gustav = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
+		TrackedPerson nadine = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 
-		items.save(new DiaryEntryMissingActionItem(person.getId(), Slot.now().previous()));
+		items.save(new DiaryEntryMissingActionItem(sandra.getId(), Slot.now().previous()));
+		items.save(new DiaryEntryActionItem(gustav.getId(), gustav.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT, Description.of(DescriptionCode.INCREASED_TEMPERATURE, 40.1f)));
+		items.save(new DiaryEntryActionItem(nadine.getId(), nadine.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT, Description.of(DescriptionCode.INCREASED_TEMPERATURE, 40.1f)));
 	}
 }
