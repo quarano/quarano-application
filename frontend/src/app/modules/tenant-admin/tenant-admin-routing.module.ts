@@ -1,3 +1,4 @@
+import { ActionsResolver } from '@resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -20,7 +21,8 @@ const routes: Routes = [
       },
       {
         path: 'actions',
-        component: ActionsComponent
+        component: ActionsComponent,
+        resolve: { actions: ActionsResolver }
       },
       {
         path: '',
