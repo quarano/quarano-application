@@ -86,7 +86,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             error.status === HttpStatusCode.badRequest.valueOf() &&
             (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
           ) {
-            // ToDo ggf. anpassen, wenn das Fehlerformat für 400 vom Backend vorliegt
+            // ToDo ggf. anpassen, wenn das Fehlerformat für 400 vom Backend vorliegt https://jira.quarano.de/browse/CORE-85
             if (serverError && serverError.errors) {
               const validationErrors = serverError.errors;
               modelStateErrors = new Map();
