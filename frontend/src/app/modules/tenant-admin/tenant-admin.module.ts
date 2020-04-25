@@ -1,3 +1,4 @@
+import { ActionsComponent } from './actions/actions.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TenantAdminComponent } from './tenant-admin.component';
@@ -10,7 +11,7 @@ import { ClientsComponent } from './clients/clients.component';
 
 
 @NgModule({
-  declarations: [TenantAdminComponent, DashboardComponent, ClientsComponent],
+  declarations: [TenantAdminComponent, DashboardComponent, ClientsComponent, ActionsComponent],
   imports: [
     CommonModule,
     TenantAdminRoutingModule,

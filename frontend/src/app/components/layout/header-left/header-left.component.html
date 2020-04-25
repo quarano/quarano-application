@@ -8,13 +8,17 @@
   />
 
   <nav class="ml-3" *ngIf="isLoggedIn$ | async">
-    <a
-      routerLink="/tenant-admin"
-      routerLinkActive="active"
-      id="tenant-admin-login-link"
-      *appIsHealthDepartmentUser
-      >Für Behörden</a
+    <ng-container *appIsHealthDepartmentUser
+      ><a
+        routerLink="/tenant-admin"
+        routerLinkActive="active"
+        id="tenant-admin-login-link"
+        >Nachverfolgte Fälle</a
+      ><a routerLink="/tenant-admin/actions" routerLinkActive="active"
+        >Aktionsübersicht</a
+      ></ng-container
     >
+
     <ng-container *appIsEnrolledClient
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
       <a routerLink="/contacts" routerLinkActive="active">Kontaktpersonen</a>
