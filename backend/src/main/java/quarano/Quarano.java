@@ -28,7 +28,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * @author Oliver Drotbohm
@@ -40,11 +39,6 @@ public class Quarano {
 
 	public static void main(String... args) {
 		SpringApplication.run(Quarano.class, args);
-	}
-
-	@Bean
-	public LocalValidatorFactoryBean validatorFactoryBean() {
-		return new LocalValidatorFactoryBean();
 	}
 
 	@Bean
