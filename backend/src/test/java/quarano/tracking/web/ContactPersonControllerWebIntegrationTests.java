@@ -81,8 +81,8 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.firstName", String.class)).isNotNull();
-		assertThat(document.read("$.lastName", String.class)).isNotNull();
+		assertThat(document.read("$.firstName", String.class)).startsWith("Bitte geben Sie einen");
+		assertThat(document.read("$.lastName", String.class)).startsWith("Bitte geben Sie einen");
 	}
 
 	@TestFactory
