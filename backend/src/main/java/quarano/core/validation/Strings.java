@@ -22,5 +22,5 @@ public class Strings {
 
 	public static final String LETTERS = "[\\p{L}\\s]*";
 	public static final String LETTERS_AND_NUMBERS = "[\\p{L}\\s\\d]*";
-	public static final String TEXTUAL = "[\\p{L}\\s\\d\\.\\,\\-\\n\\r]*";
+	public static final String TEXTUAL = "[\\p{L}\\s\\d\\.\\,\\?\\!\\(\\)\\-\\n\\r]*";
 }

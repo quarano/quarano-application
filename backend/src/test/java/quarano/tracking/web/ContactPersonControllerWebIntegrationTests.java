@@ -37,6 +37,7 @@ import com.jayway.jsonpath.JsonPath;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
@@ -63,6 +64,26 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.mobilePhone", String.class)).isNotNull();
 		assertThat(document.read("$.email", String.class)).isNotNull();
 		assertThat(document.read("$.identificationHint", String.class)).isNotNull();
+	}
+
+	@Test
+	void rejectsFirstAndLastNameContainingNumbers() throws Exception {
+
+		var payload = new ContactPersonDto();
+		payload.setFirstName("Test121231 ");
+		payload.setLastName("TestN121231 ");
+		payload.setMobilePhone("0123910");
+
+		String response = mvc.perform(post("/api/contacts") //
+				.content(mapper.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		assertThat(document.read("$.lastName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
 	}
 
 	@TestFactory
