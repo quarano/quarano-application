@@ -21,9 +21,6 @@ export class ActionsComponent implements OnInit, OnDestroy {
     this.subs.add(this.route.data.subscribe(
       data => {
         this.actions = data.actions;
-        // ToDo: Wieder rausnehmen
-        this.actions.push(...this.actions);
-        this.actions.push(...this.actions);
         this.rows = this.actions.map(action => this.getRowData(action));
         this.loading = false;
       },
@@ -46,5 +43,10 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  onSelect(event) {
+    console.log(event);
+    alert('Änderungsformular öffnen');
   }
 }

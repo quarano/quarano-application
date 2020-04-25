@@ -1,8 +1,10 @@
 import { SelfLink } from './general';
+import { ClientType } from './client';
+
 export interface ActionListItemDto {
   name: string;
   priority: number;
-  type: 'INDEX' | 'CONTACT';
+  type: ClientType;
   dateOfBirth: Date;
   firstName: string;
   lastName: string;
@@ -12,6 +14,7 @@ export interface ActionListItemDto {
   quarantineEnd: Date;
   quarantineStart: Date;
   alerts: Alert[];
+  status: string;
   _links: SelfLink;
 }
 
