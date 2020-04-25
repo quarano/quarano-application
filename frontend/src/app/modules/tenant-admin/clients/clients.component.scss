@@ -13,7 +13,7 @@
   .ngx-datatable.material.multi-click-selection
     .datatable-body-row.active
     .datatable-row-group {
-    background-color: $primary-color !important;
+    background-color: lighten($primary-color, 20%) !important;
   }
 
   .datatable-row-center.datatable-row-group.ng-star-inserted {
@@ -26,5 +26,13 @@
     .datatable-body-row:hover
     .datatable-row-group {
     cursor: pointer;
+  }
+
+  .ngx-datatable.material .datatable-body .progress-linear .container {
+    background-color: lighten($primary-color, 20%);
+  }
+
+  .ngx-datatable.material .datatable-body .progress-linear .container .bar {
+    background-color: $primary-color;
   }
 }
