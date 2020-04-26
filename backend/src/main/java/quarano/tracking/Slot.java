@@ -101,7 +101,7 @@ public class Slot {
 
 	/**
 	 * Returns the previous {@link Slot}.
-	 * 
+	 *
 	 * @return
 	 */
 	public Slot previous() {
@@ -223,6 +223,10 @@ public class Slot {
 
 		LocalDate toLocalDate(LocalDateTime date) {
 			return date.toLocalDate();
+		}
+
+		boolean isInOvertime(LocalTime time) {
+			return time.isAfter(to) && time.isBefore(end);
 		}
 
 		public static TimeOfDay now() {
