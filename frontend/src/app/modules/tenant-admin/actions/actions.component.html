@@ -12,29 +12,26 @@
   [loadingIndicator]="loading"
   [footerHeight]="50"
 >
-  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
-  </ngx-datatable-column>
-
   <ngx-datatable-column
-    prop="status"
-    name="Status"
-    width="190"
+    prop="alerts"
+    name="Auffälligkeiten"
     [sortable]="false"
+    width="350"
   >
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <div class="action-alert-container">
+        <app-action-alert
+          *ngFor="let alert of value"
+          [alert]="alert"
+        ></app-action-alert>
+      </div>
+    </ng-template>
   </ngx-datatable-column>
 
   <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false">
   </ngx-datatable-column>
 
   <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false">
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="caseType"
-    name="Typ"
-    [sortable]="false"
-    width="80"
-  >
   </ngx-datatable-column>
 
   <ngx-datatable-column
@@ -46,11 +43,30 @@
   </ngx-datatable-column>
 
   <ngx-datatable-column
+    prop="caseType"
+    name="Typ"
+    [sortable]="false"
+    width="80"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="190"
+    [sortable]="false"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
     prop="quarantineStart"
     name="Quarantäne seit"
     [sortable]="false"
     width="130"
   >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
   </ngx-datatable-column>
 
   <ngx-datatable-column
@@ -89,25 +105,6 @@
       >
         <mat-icon>edit</mat-icon>
       </button>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="alerts"
-    name="Auffälligkeiten"
-    [sortable]="false"
-    width="350"
-  >
-    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-      <div class="action-alert-container">
-        <app-action-alert
-          *ngFor="let alert of value"
-          [alert]="alert"
-          (click)="onEditedClick(row, alert)"
-          matTooltip="Als bearbeitet markieren"
-          matTooltipPosition="after"
-        ></app-action-alert>
-      </div>
     </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>
