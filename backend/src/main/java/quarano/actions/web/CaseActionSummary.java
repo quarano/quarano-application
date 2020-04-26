@@ -17,17 +17,14 @@ package quarano.actions.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
-import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem;
 import quarano.actions.ActionItem.ItemType;
 import quarano.actions.ActionItems;
 import quarano.actions.Description;
 import quarano.actions.DescriptionCode;
-import quarano.department.CaseType;
 import quarano.department.TrackedCase;
-import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.web.TrackedCaseSummaryDto;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,64 +35,62 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
-@RequiredArgsConstructor(staticName = "of")
 @JsonAutoDetect(getterVisibility = Visibility.NON_PRIVATE)
 public class CaseActionSummary {
 
-	private final TrackedCase trackedCase;
 	private final ActionItems items;
-
-	TrackedCaseIdentifier getCaseId() {
-		return trackedCase.getId();
+	private final TrackedCaseSummaryDto trackedCaseDto;
+	private final TrackedCase trackedCase;
+	
+  public String getCaseId() {
+		return trackedCaseDto.getCaseId();
 	}
+
+	public String getFirstName() {
+		return trackedCaseDto.getFirstName();
+	}
+
+	public String getLastName() {
+		return trackedCaseDto.getLastName();
+	}
+
+	public String getZipCode() {
+		return trackedCaseDto.getZipCode();
+	}
+
+	public String getDateOfBirth() {
+		return trackedCaseDto.getDateOfBirth();
+	}
+
+	public String getEmail() {
+		return trackedCaseDto.getEmail();
+	}
+
+	public String getCaseType() {
+		return trackedCaseDto.getCaseType();
+	}
+
+	public Map<String, Object> getQuarantine() {
+		return trackedCaseDto.getQuarantine();
+	}
+
+	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items) {
+    return new CaseActionSummary(trackedCase, items);
+  }
+  
+  private CaseActionSummary(TrackedCase trackedCase, ActionItems items) {
+  	this.trackedCase = trackedCase;
+		this.items = items;
+		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase);
+  }
+
 
 	String getName() {
 		return trackedCase.getTrackedPerson().getFullName();
 	}
-	
-	String getFirstName() {
-		return trackedCase.getTrackedPerson().getFirstName();
-	}
-	
-	String getLastName() {
-		return trackedCase.getTrackedPerson().getLastName();
-	}
-	
-	LocalDate getDateOfBirth() {
-		return trackedCase.getTrackedPerson().getDateOfBirth();
-	}
-	
-	CaseType getType() {
-		return trackedCase.getType();
-	}
-	
-	String getEmail() {
 		
-		return 
-				trackedCase.getTrackedPerson().getEmailAddress() != null
-					? trackedCase.getTrackedPerson().getEmailAddress().toString()
-					: null;
-	}
-	
-	LocalDate getQuarantineStart() {
-		return (trackedCase.getQuarantine() != null)
-				? trackedCase.getQuarantine().getFrom()
-				: null;		
-	}
-	
-	LocalDate getQuarantineEnd() {
-		return (trackedCase.getQuarantine() != null)
-				? trackedCase.getQuarantine().getTo()
-				: null;		
-	}
-	
-	String getPhone() {
-		return (trackedCase.getTrackedPerson().getPhoneNumber() != null)
-				? trackedCase.getTrackedPerson().getPhoneNumber().toString()
-				: null;
-	}
-
 	float getPriority() {
 		return items.getPriority() * 100.00f / 100.00f;
 	}
@@ -111,7 +106,7 @@ public class CaseActionSummary {
 	@JsonProperty("_links")
 	Map<String, Object> getLinks() {
 
-		var detailsLink = on(ActionItemController.class).allActions(getCaseId());
+		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId());
 
 		return Map.of("self", Map.of("href", fromMethodCall(detailsLink).toUriString()));
 	}

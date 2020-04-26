@@ -17,6 +17,7 @@ package quarano.department.web;
 
 import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase;
+import quarano.tracking.TrackedPerson;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -30,6 +31,10 @@ public class TrackedCaseSummaryDto {
 
 	private final TrackedCase trackedCase;
 
+	public String getCaseId() {
+		return trackedCase.getId().toString();
+	}
+	
 	public boolean getEnrollmentCompleted() {
 		return trackedCase.getEnrollment().isComplete();
 	}
@@ -42,6 +47,20 @@ public class TrackedCaseSummaryDto {
 		return trackedCase.getTrackedPerson().getLastName();
 	}
 
+	public String getPrimaryPhoneNumber() {
+
+		var phoneNumber = trackedCase.getTrackedPerson().getPhoneNumber();
+		var mobilePhoneNumber = trackedCase.getTrackedPerson().getMobilePhoneNumber();
+		
+		if(phoneNumber != null) {
+			return phoneNumber.toString();
+		}
+		else {
+			return mobilePhoneNumber == null ? null : mobilePhoneNumber.toString();
+		}
+
+	}
+	
 	public String getZipCode() {
 
 		var zipCode = trackedCase.getTrackedPerson().getAddress().getZipCode();
