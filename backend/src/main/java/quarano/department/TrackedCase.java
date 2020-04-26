@@ -78,6 +78,14 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.department = department;
 	}
 
+	public boolean isIndexCase() {
+		return type.equals(CaseType.INDEX);
+	}
+
+	public boolean isContactCase() {
+		return type.equals(CaseType.CONTACT);
+	}
+
 	public boolean isInQuarantine() {
 		return quarantine != null;
 	}
