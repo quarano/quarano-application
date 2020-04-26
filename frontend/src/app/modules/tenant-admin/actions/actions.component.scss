@@ -10,7 +10,7 @@
   .ngx-datatable.material:not(.cell-selection)
     .datatable-body-row:hover
     .datatable-row-group {
-    background-color: white;
+    background-color: #f4f4f4;
   }
 
   .ngx-datatable.material .datatable-body .progress-linear .container {
@@ -32,19 +32,12 @@
 .mail-link:hover,
 .mail-link:focus,
 .mail-link:active {
-  background-color: #f4f4f4;
+  background-color: darken(#f4f4f4, 30%);
+  color: white;
   cursor: pointer;
 }
 
 .action-alert-container {
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-
-  :hover,
-  :active,
-  :focus {
-    background: #f4f4f4;
-    cursor: pointer;
-  }
 }

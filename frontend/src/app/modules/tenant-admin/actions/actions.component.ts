@@ -45,8 +45,4 @@ export class ActionsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
-
-  onEditedClick(row: any, alert: string) {
-    console.log(`Alert ${alert} für Case ${row.caseId} als bearbeitet markiert`);
-  }
 }

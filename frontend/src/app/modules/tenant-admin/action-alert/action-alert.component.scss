@@ -1,7 +1,6 @@
 .action-alert-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
@@ -9,4 +8,5 @@
 .action-alert-text {
   letter-spacing: 1px;
   font-size: 12px;
+  margin-left: 0.5rem;
 }
