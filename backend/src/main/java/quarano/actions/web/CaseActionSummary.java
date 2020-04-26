@@ -71,6 +71,10 @@ public class CaseActionSummary {
 	public String getCaseType() {
 		return trackedCaseDto.getCaseType();
 	}
+	
+	public String getPrimaryPhoneNumber() {
+		return trackedCaseDto.getPrimaryPhoneNumber();
+	}
 
 	public Map<String, Object> getQuarantine() {
 		return trackedCaseDto.getQuarantine();
