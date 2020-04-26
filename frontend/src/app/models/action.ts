@@ -4,7 +4,7 @@ import { ClientType } from './client';
 export interface ActionListItemDto {
   name: string;
   priority: number;
-  type: ClientType;
+  caseType: ClientType;
   dateOfBirth: Date;
   firstName: string;
   lastName: string;

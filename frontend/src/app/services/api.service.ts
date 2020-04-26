@@ -117,7 +117,8 @@ export class ApiService {
       quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
       quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       caseType: item.caseType,
-      zipCode: item.zipCode
+      zipCode: item.zipCode,
+      caseId: item.caseId
     };
   }
 
@@ -125,7 +126,7 @@ export class ApiService {
     return {
       dateOfBirth: new Date(item.dateOfBirth),
       caseId: item.caseId,
-      type: item.type,
+      caseType: item.caseType,
       name: item.name,
       priority: item.priority,
       firstName: item.firstName,
