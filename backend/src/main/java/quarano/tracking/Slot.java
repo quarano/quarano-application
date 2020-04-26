@@ -188,6 +188,15 @@ public class Slot {
 			boolean contains(LocalTime reference) {
 				return MORNING.from.isBefore(reference) && MORNING.end.isAfter(reference);
 			}
+
+			/*
+			 * (non-Javadoc)
+			 * @see quarano.tracking.Slot.TimeOfDay#isInOvertime(java.time.LocalTime)
+			 */
+			@Override
+			boolean isInOvertime(LocalTime time) {
+				return time.isAfter(MORNING.to) && time.isBefore(MORNING.end);
+			}
 		},
 
 		EVENING(LocalTime.of(17, 0, 0), LocalTime.of(22, 59, 59), LocalTime.of(5, 59, 59)) {
@@ -213,6 +222,15 @@ public class Slot {
 
 				return time.isBefore(EVENING.end) ? result.minusDays(1) : result;
 			}
+
+			/*
+			 * (non-Javadoc)
+			 * @see quarano.tracking.Slot.TimeOfDay#isInOvertime(java.time.LocalTime)
+			 */
+			@Override
+			boolean isInOvertime(LocalTime time) {
+				return time.isAfter(EVENING.to) || time.isBefore(EVENING.end);
+			}
 		};
 
 		private final LocalTime from;
@@ -221,12 +239,10 @@ public class Slot {
 
 		abstract boolean contains(LocalTime reference);
 
+		abstract boolean isInOvertime(LocalTime time);
+
 		LocalDate toLocalDate(LocalDateTime date) {
 			return date.toLocalDate();
-		}
-
-		boolean isInOvertime(LocalTime time) {
-			return time.isAfter(to) && time.isBefore(end);
 		}
 
 		public static TimeOfDay now() {
