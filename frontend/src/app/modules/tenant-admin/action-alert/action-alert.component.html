@@ -1,10 +1,6 @@
-<div
-  style="display: flex; align-items: center; justify-content: space-between;"
->
+<div class="action-alert-container">
   <i class="material-icons mr-3" [style.color]="setting?.color">{{
     setting?.icon
   }}</i>
-  <span style="letter-spacing: 1px; font-size: 12px;">{{
-    setting?.displayName | uppercase
-  }}</span>
+  <span class="action-alert-text">{{ setting?.displayName | uppercase }}</span>
 </div>
