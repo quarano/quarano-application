@@ -26,7 +26,6 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
@@ -75,6 +74,9 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.phoneNumber = contactWays.getPhoneNumber();
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
+		
+		// register an event that will be triggered when spring saves the contact person
+		registerEvent(ContactPersonAdded.of(this));
 	}
 
 	public String getFullName() {
@@ -84,8 +86,6 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	public ContactPerson assignOwner(TrackedPerson person) {
 
 		this.ownerId = person.getId();
-		
-		registerEvent(ContactPersonAdded.of(this));
 
 		return this;
 	}

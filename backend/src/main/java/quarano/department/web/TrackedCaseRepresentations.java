@@ -17,6 +17,7 @@ package quarano.department.web;
 
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.MapperWrapper;
+import quarano.department.CaseType;
 import quarano.department.Department;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
@@ -63,7 +64,7 @@ public class TrackedCaseRepresentations {
 		var personDto = mapper.map(source, TrackedPersonDto.class);
 		var person = mapper.map(personDto, TrackedPerson.class);
 
-		return mapper.map(source, new TrackedCase(person, department));
+		return mapper.map(source, new TrackedCase(person,  CaseType.INDEX, department));
 	}
 
 	InitialReport from(InitialReportDto source) {

@@ -91,6 +91,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.encounters = new ArrayList<>();
 	}
 
+	TrackedPerson(ContactPerson contact) {
+		this(new TrackedPersonIdentifier(UUID.randomUUID()), contact.getFirstName(), contact.getLastName(),
+				contact.getEmailAddress(), contact.getPhoneNumber(), null);
+		this.mobilePhoneNumber = contact.getMobilePhoneNumber();
+	}
+
 	public String getFullName() {
 		return firstName.concat(" ").concat(lastName);
 	}
