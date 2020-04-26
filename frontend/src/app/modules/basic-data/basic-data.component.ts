@@ -1,4 +1,3 @@
-import { UserService } from '@services/user.service';
 import { EncounterEntry } from '@models/encounter';
 import { EnrollmentService } from '@services/enrollment.service';
 import { ClientDto } from '@models/client';
@@ -50,8 +49,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
-    private router: Router,
-    private userService: UserService) { }
+    private router: Router) { }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {

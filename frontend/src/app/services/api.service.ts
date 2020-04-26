@@ -114,8 +114,8 @@ export class ApiService {
       lastName: item.lastName,
       medicalStaff: item.medicalStaff,
       enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantineEnd ? new Date(item.quarantineEnd) : null,
-      quarantineStart: item.quarantineStart ? new Date(item.quarantineStart) : null,
+      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
+      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       caseType: item.caseType,
       zipCode: item.zipCode
     };
@@ -132,8 +132,8 @@ export class ApiService {
       lastName: item.lastName,
       phone: item.phone,
       email: item.email,
-      quarantineEnd: new Date(item.quarantineEnd),
-      quarantineStart: new Date(item.quarantineStart),
+      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
+      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       _links: item._links,
       alerts: item.healthSummary.concat(item.processSummary),
       status: item.status

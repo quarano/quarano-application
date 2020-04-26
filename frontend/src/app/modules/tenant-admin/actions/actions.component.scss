@@ -1,21 +1,6 @@
 @import "../../../../styles/variables";
 
 ::ng-deep {
-  .ngx-datatable.material.single-selection .datatable-body-row.active,
-  .ngx-datatable.material.single-selection
-    .datatable-body-row.active
-    .datatable-row-group,
-  .ngx-datatable.material.multi-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-selection
-    .datatable-body-row.active
-    .datatable-row-group,
-  .ngx-datatable.material.multi-click-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-click-selection
-    .datatable-body-row.active
-    .datatable-row-group {
-    background-color: lighten($primary-color, 20%) !important;
-  }
-
   .datatable-row-center.datatable-row-group.ng-star-inserted {
     display: flex !important;
     align-items: center !important;
@@ -25,7 +10,7 @@
   .ngx-datatable.material:not(.cell-selection)
     .datatable-body-row:hover
     .datatable-row-group {
-    cursor: pointer;
+    background-color: white;
   }
 
   .ngx-datatable.material .datatable-body .progress-linear .container {
@@ -34,5 +19,32 @@
 
   .ngx-datatable.material .datatable-body .progress-linear .container .bar {
     background-color: $primary-color;
+  }
+
+  .ngx-datatable.material
+    .datatable-body
+    .datatable-body-row
+    .datatable-body-cell {
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+.mail-link:hover,
+.mail-link:focus,
+.mail-link:active {
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.action-alert-container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+
+  :hover,
+  :active,
+  :focus {
+    background: #f4f4f4;
+    cursor: pointer;
   }
 }
