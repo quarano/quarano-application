@@ -37,7 +37,9 @@ class SlotUnitTest {
 		Slot eveningTwoDaysAgo = Slot.of(LocalDate.now().minusDays(2), TimeOfDay.EVENING);
 
 		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(1))).isTrue();
-		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(2))).isFalse();
+		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(2)))
+				.isEqualTo(!TimeOfDay.EVENING.isInOvertime(LocalTime.now()));
+		assertThat(eveningTwoDaysAgo.isOlderThan(Period.ofDays(3))).isFalse();
 	}
 
 	@Test
