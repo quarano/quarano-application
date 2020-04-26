@@ -5,15 +5,15 @@ import { ContactPersonResolver } from '@resolvers/contact-person.resolver';
 import { ContactPersonComponent } from './contact-person/contact-person.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContactComponent } from './contact.component';
-import { ContactRoutingModule } from './contact-routing.module';
+import { ContactRoutingModule } from './contact-persons-routing.module';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { ContactPersonsResolver } from '@resolvers/contact-persons.resolver';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
+import { ContactPersonsComponent } from './contact-persons.component';
 
 const COMPONENTS = [
-  ContactComponent,
+  ContactPersonsComponent,
   ContactPersonComponent,
 ];
 
@@ -31,4 +31,4 @@ const COMPONENTS = [
   declarations: [...COMPONENTS],
   providers: [ContactPersonsResolver, ContactPersonResolver],
 })
-export class ContactModule { }
+export class ContactPersonsModule { }
