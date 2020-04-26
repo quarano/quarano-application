@@ -16,15 +16,16 @@
 package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonAdded;
 import quarano.tracking.ContactWays;
+import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,20 +37,23 @@ import org.mockito.Mock;
  * @author Patrick Otto
  */
 @QuaranoUnitTest
-class ContactPersonEventListenerUnitTests {
+class FirstEncounterEventListenerUnitTests {
 
 	@Mock TrackedCaseRepository cases;
 
 	@Test
-	void createContactCaseAutomatically() {
+	void createContactCaseAutomaticallyAfterFirstEncounter() {
 
-		var listener = new ContactPersonCreationEventListener(cases);
+		var listener = new FirstEncounterEventListener(cases);
 		
 		var person = TrackedPersonDataInitializer.createTanja();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
 		contactPerson.assignOwner(person);
-		var event = ContactPersonAdded.of(contactPerson);
+		
+		var encounter = person.reportContactWith(contactPerson, LocalDate.now());
+		
+		var event = EncounterReported.of(encounter, person.getId(), true);
 
 		var trackedCase = new TrackedCase(person,  CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()));
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));

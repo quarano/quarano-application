@@ -48,7 +48,7 @@ class TrackingEventListenerUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
-		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId());
+		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId(), true);
 
 		var trackedCase = new TrackedCase(person,  CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()));
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));

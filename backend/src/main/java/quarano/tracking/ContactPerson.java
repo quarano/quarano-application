@@ -75,8 +75,6 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
 		
-		// register an event that will be triggered when spring saves the contact person
-		registerEvent(ContactPersonAdded.of(this));
 	}
 
 	public String getFullName() {

@@ -60,8 +60,32 @@ class TrackedPersonIntegrationTests {
 		people.save(person);
 
 		var expected = events.ofType(EncounterReported.class) //
-				.matching(it -> it.getPersonIdentifier().equals(person.getId()));
+				.matching(it -> it.getPersonIdentifier().equals(person.getId())) //
+				.matching(it -> it.isFirstEncounterWithTargetPerson());
 
 		assertThat(expected).hasSize(1);
+	}
+	
+	@Test
+	void firstEncounterFlagSetCorrectlyOnSecondEncounter(PublishedEvents events) {
+
+		var person = people.save(new TrackedPerson("Michael", "Mustermann"));
+		var contact = contacts
+				.save(new ContactPerson("Michaela", "Mustermann", ContactWays.ofEmailAddress("michaela@mustermann.de")));
+
+		person.reportContactWith(contact, LocalDate.now().minusDays(1));
+		person.reportContactWith(contact, LocalDate.now());
+
+		people.save(person);
+
+		var expectedEventsTotal = events.ofType(EncounterReported.class) //
+				.matching(it -> it.getPersonIdentifier().equals(person.getId())); //
+		assertThat(expectedEventsTotal).hasSize(2);
+		
+		var expectedEventsFirstEncounter = events.ofType(EncounterReported.class) //
+				.matching(it -> it.getPersonIdentifier().equals(person.getId())) //
+				.matching(it -> it.isFirstEncounterWithTargetPerson());
+		assertThat(expectedEventsFirstEncounter).hasSize(1);
+		
 	}
 }
