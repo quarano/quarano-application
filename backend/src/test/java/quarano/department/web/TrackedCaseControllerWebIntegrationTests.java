@@ -20,19 +20,10 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.ReadContext;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
@@ -47,6 +38,7 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -70,6 +62,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final ValidationUtils validator;
 	private final TrackedCaseRepository cases;
 	private final TrackedCaseRepresentations representations;
+	private final MessageSourceAccessor messages;
 
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
@@ -103,7 +96,6 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
-	
 
 	@Test
 	void rejectsCaseCreationWithoutRequiredFields() throws Exception {
@@ -117,7 +109,8 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test
-	void rejectsCaseCreationWithFirstNameLastNameAndCityContainingInvalidCharacters() throws Exception {
+	void rejectsInvalidCharactersForStringFields() throws Exception {
+
 		var today = LocalDate.now();
 		var payload = new TrackedCaseDto() //
 				.setFirstName("Michael 123") //
@@ -125,13 +118,26 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setTestDate(today) //
 				.setQuarantineStartDate(today) //
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
-				.setPhone("0123456789")
-				.setCity("city 123");
+				.setPhone("0123456789") //
+				.setCity("city 123") //
+				.setStreet("\\") //
+				.setHouseNumber("-") //
+				.setComment("<script />");
+
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
-		assertThat(document.read("$.lastName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
-		assertThat(document.read("$.city", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		var alphabetic = messages.getMessage("Alphabetic");
+		var alphaNumeric = messages.getMessage("AlphaNumeric");
+		var textual = messages.getMessage("Textual");
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.city", String.class)).isEqualTo(alphabetic);
+
+		assertThat(document.read("$.street", String.class)).isEqualTo(alphaNumeric);
+		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
+
+		assertThat(document.read("$.comment", String.class)).isEqualTo(textual);
 	}
 
 	@Test
@@ -156,7 +162,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isBadRequest()) //
 				.andReturn().getResponse().getContentAsString());
 	}
-	
+
 	@Test
 	void getAllCasesOrderderCorrectly() throws Exception {
 
