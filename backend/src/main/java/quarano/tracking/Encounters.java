@@ -18,8 +18,6 @@ package quarano.tracking;
 import lombok.RequiredArgsConstructor;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -34,19 +32,15 @@ public class Encounters implements Streamable<Encounter> {
 
 	private final List<Encounter> encounters;
 
-	public boolean hasBeenInTouchWith(ContactPerson person, Period period) {
+	public boolean hasBeenInTouchWith(ContactPerson person) {
 
-		var reference = LocalDate.now().minus(period);
-
-		return true;
-//		return encounters.stream() //
-//				.filter(it -> it.getDate().isAfter(reference)) //
-//				.anyMatch(it -> it.isEncounterWith(person));
+		return encounters.stream() //
+				.anyMatch(it -> it.getContact().equals(person));
 	}
 
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
 		return encounters.stream() //
-//				.filter(it -> it.hasId(id)) //
+				// .filter(it -> it.hasId(id)) //
 				.findFirst();
 	}
 

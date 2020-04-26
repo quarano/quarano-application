@@ -74,7 +74,6 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.phoneNumber = contactWays.getPhoneNumber();
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
-		
 	}
 
 	public String getFullName() {
@@ -122,7 +121,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 			this.label = label;
 		}
 	}
-	
+
 	@Value(staticConstructor = "of")
 	public static class ContactPersonAdded implements DomainEvent {
 		ContactPerson contactPerson;
