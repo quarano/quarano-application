@@ -14,7 +14,6 @@ export class WelcomeComponent implements OnInit {
   public enteredCode = '';
   public existingCode$$ = new BehaviorSubject<boolean>(null);
   public checkingCode = false;
-  public userType;
 
   constructor(
     private router: Router) {
