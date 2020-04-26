@@ -29,24 +29,20 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   getRowData(action: ActionListItemDto): any {
     return {
-      lastName: action.lastName,
-      firstName: action.firstName,
-      type: action.type,
+      lastName: action.lastName || '-',
+      firstName: action.firstName || '-',
+      caseType: action.caseType.toString().toUpperCase(),
       dateOfBirth: action.dateOfBirth.toCustomLocaleDateString(),
       email: action.email,
-      phone: action.phone,
-      quarantineStart: action.quarantineStart.toCustomLocaleDateString(),
-      status: 'Nachverfolgung_aktiv',
-      alerts: action.alerts
+      phone: action.phone || '-',
+      quarantineStart: action.quarantineStart ? action.quarantineStart.toCustomLocaleDateString() : '-',
+      status: action.status,
+      alerts: action.alerts || [],
+      caseId: action.caseId
     };
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
-  }
-
-  onSelect(event) {
-    console.log(event);
-    alert('Änderungsformular öffnen');
   }
 }

@@ -109,15 +109,16 @@ export class ApiService {
       dateOfBirth: new Date(item.dateOfBirth),
       status: item.status,
       email: item.email,
-      phone: item.phone,
+      phone: item.primaryPhoneNumber,
       firstName: item.firstName,
       lastName: item.lastName,
       medicalStaff: item.medicalStaff,
       enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantineEnd ? new Date(item.quarantineEnd) : null,
-      quarantineStart: item.quarantineStart ? new Date(item.quarantineStart) : null,
+      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
+      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       caseType: item.caseType,
-      zipCode: item.zipCode
+      zipCode: item.zipCode,
+      caseId: item.caseId
     };
   }
 
@@ -125,15 +126,15 @@ export class ApiService {
     return {
       dateOfBirth: new Date(item.dateOfBirth),
       caseId: item.caseId,
-      type: item.type,
+      caseType: item.caseType,
       name: item.name,
       priority: item.priority,
       firstName: item.firstName,
       lastName: item.lastName,
-      phone: item.phone,
+      phone: item.primaryPhoneNumber,
       email: item.email,
-      quarantineEnd: new Date(item.quarantineEnd),
-      quarantineStart: new Date(item.quarantineStart),
+      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
+      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       _links: item._links,
       alerts: item.healthSummary.concat(item.processSummary),
       status: item.status

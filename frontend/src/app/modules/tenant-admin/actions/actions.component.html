@@ -4,86 +4,34 @@
   [headerHeight]="50"
   rowHeight="auto"
   [rows]="rows"
-  selectionType="single"
   [messages]="{
     emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
     selectedMessage: 'ausgewählt',
-    totalMessage: 'insgesamt'
+    totalMessage: 'Fälle'
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
-  (select)="onSelect($event)"
 >
   <ngx-datatable-column
-    prop="email"
-    name="E-Mail"
+    prop="alerts"
+    name="Auffälligkeiten"
     [sortable]="false"
-    width="80"
+    width="350"
   >
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <a
-        *ngIf="value"
-        mat-icon-button
-        href="mailto:{{ value }}"
-        [matTooltip]="'E-Mail an ' + value"
-        matTooltipPosition="right"
-      >
-        <mat-icon>mail_outline</mat-icon>
-      </a>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="status"
-    name="Status"
-    width="190"
-    [sortable]="false"
-  >
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <div class="action-alert-container">
+        <app-action-alert
+          *ngFor="let alert of value"
+          [alert]="alert"
+        ></app-action-alert>
+      </div>
     </ng-template>
   </ngx-datatable-column>
 
   <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
-    </ng-template>
   </ngx-datatable-column>
 
   <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column prop="type" name="Typ" [sortable]="false" width="80">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
-    </ng-template>
   </ngx-datatable-column>
 
   <ngx-datatable-column
@@ -92,46 +40,71 @@
     [sortable]="false"
     width="100"
   >
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
-    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="caseType"
+    name="Typ"
+    [sortable]="false"
+    width="80"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="190"
+    [sortable]="false"
+  >
   </ngx-datatable-column>
 
   <ngx-datatable-column
     prop="quarantineStart"
-    name="Quarantäne Start"
+    name="Quarantäne seit"
     [sortable]="false"
     width="130"
   >
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="email"
+    name="E-Mail"
+    [sortable]="false"
+    width="80"
+  >
     <ng-template let-value="value" ngx-datatable-cell-template>
-      {{ value }}
+      <a
+        *ngIf="value"
+        mat-icon-button
+        href="mailto:{{ value }}"
+        [matTooltip]="'E-Mail an ' + value"
+        matTooltipPosition="right"
+        class="mail-link"
+      >
+        <mat-icon>mail_outline</mat-icon>
+      </a>
     </ng-template>
   </ngx-datatable-column>
 
   <ngx-datatable-column
-    prop="alerts"
-    name="Auffälligkeiten"
+    prop="caseId"
+    name="Bearbeiten"
     [sortable]="false"
-    width="350"
+    width="100"
   >
-    <ng-template let-column="column" ngx-datatable-header-template>
-      {{ column.name }}
-    </ng-template>
     <ng-template let-value="value" ngx-datatable-cell-template>
-      <div style="display: flex; flex-direction: column;">
-        <div
-          style="display: flex; align-items: center;"
-          *ngFor="let alert of value"
-        >
-          <app-action-alert [alert]="alert" class="mb-1"></app-action-alert>
-        </div>
-      </div>
+      <button
+        mat-icon-button
+        matTooltip="Fall bearbeiten"
+        matTooltipPosition="right"
+        class="mail-link"
+        [routerLink]="['/tenant-admin/client', value]"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
     </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>

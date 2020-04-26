@@ -61,16 +61,26 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   getRowData(c: ReportCaseDto): any {
     return {
-      lastName: c.lastName,
-      firstName: c.firstName,
-      type: c.caseType,
+      lastName: c.lastName || '-',
+      firstName: c.firstName || '-',
+      type: c.caseType.toString().toUpperCase(),
       dateOfBirth: c.dateOfBirth.toCustomLocaleDateString(),
       email: c.email,
-      phone: c.phone,
-      quarantineEnd: c.quarantineEnd?.toCustomLocaleDateString(),
+      phone: c.phone || '-',
+      quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
       status: c.status,
-      zipCode: c.zipCode
+      zipCode: c.zipCode || '-',
+      caseId: c.caseId
     };
+  }
+
+  getQuarantineEndString(quarantineEnd: Date): string {
+    if (!quarantineEnd) { return '-'; }
+
+    if (quarantineEnd.isDateInPast()) { return 'beendet'; }
+
+    return quarantineEnd.toCustomLocaleDateString();
+
   }
 
   updateFilter(event) {
@@ -90,10 +100,5 @@ export class ClientsComponent implements OnInit, OnDestroy {
     const transformedFilter = filter.trim().toLowerCase();
 
     return dataStr.indexOf(transformedFilter) !== -1;
-  }
-
-  onSelect(event) {
-    console.log(event);
-    alert('Änderungsformular öffnen');
   }
 }
