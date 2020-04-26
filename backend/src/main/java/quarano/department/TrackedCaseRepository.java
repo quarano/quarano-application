@@ -32,6 +32,9 @@ import org.springframework.data.util.Streamable;
 public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, TrackedCaseIdentifier> {
 
 	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier id);
+	
+	@Query("select c from TrackedCase c JOIN c.trackedPerson p WHERE c.department.id = :id ORDER BY p.lastName")
+	Streamable<TrackedCase> findByDepartmentIdOrderByLastNameAsc(DepartmentIdentifier id);
 
 	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
 

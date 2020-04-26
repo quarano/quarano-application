@@ -17,6 +17,7 @@ package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -31,7 +32,11 @@ import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -89,6 +94,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
+	
 
 	@Test
 	void rejectsCaseCreationWithoutRequiredFields() throws Exception {
@@ -123,4 +129,28 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isBadRequest()) //
 				.andReturn().getResponse().getContentAsString());
 	}
+	
+	@Test
+	void getAllCasesOrderderCorrectly() throws Exception {
+
+		var response = mvc.perform(get("/api/hd/cases") //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andDo(print()) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+		
+		var document = JsonPath.parse(response);
+
+		List<String> lastnamesFromResponse = new ArrayList<>();
+		lastnamesFromResponse.add(document.read("$[0].lastName", String.class));
+		lastnamesFromResponse.add(document.read("$[1].lastName", String.class));
+		lastnamesFromResponse.add(document.read("$[2].lastName", String.class));
+		
+		List<String> expectedList = Lists.newArrayList(lastnamesFromResponse);
+		Collections.sort(expectedList);
+		
+		assertIterableEquals(lastnamesFromResponse, expectedList);
+		
+	}
+	
 }

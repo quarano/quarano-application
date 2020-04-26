@@ -72,7 +72,7 @@ class TrackedCaseController {
 	@GetMapping("/api/hd/cases")
 	Stream<?> getCases(@LoggedIn Department department) {
 
-		return cases.findByDepartmentId(department.getId()) //
+		return cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
 				.map(TrackedCaseSummaryDto::of) //
 				.stream();
 	}
