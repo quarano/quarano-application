@@ -4,11 +4,11 @@ import { ContactPersonDto } from '@models/contact-person';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  selector: 'app-contact-persons',
+  templateUrl: './contact-persons.component.html',
+  styleUrls: ['./contact-persons.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactPersonsComponent implements OnInit {
   contacts: ContactPersonDto[] = [];
   private subs = new SubSink();
 
