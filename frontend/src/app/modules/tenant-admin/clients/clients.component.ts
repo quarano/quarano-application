@@ -63,13 +63,14 @@ export class ClientsComponent implements OnInit, OnDestroy {
     return {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
-      type: c.caseType,
+      type: c.caseType.toString().toUpperCase(),
       dateOfBirth: c.dateOfBirth.toCustomLocaleDateString(),
       email: c.email,
       phone: c.phone || '-',
       quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
       status: c.status,
-      zipCode: c.zipCode || '-'
+      zipCode: c.zipCode || '-',
+      caseId: c.caseId
     };
   }
 

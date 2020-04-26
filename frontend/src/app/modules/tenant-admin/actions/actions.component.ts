@@ -31,7 +31,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      type: action.type,
+      caseType: action.caseType.toString().toUpperCase(),
       dateOfBirth: action.dateOfBirth.toCustomLocaleDateString(),
       email: action.email,
       phone: action.phone || '-',
