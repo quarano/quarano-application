@@ -17,7 +17,6 @@ package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
@@ -145,6 +143,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
+		@SuppressWarnings("null")
 		var payload = representations.toRepresentation(trackedCase) //
 				.setEmail(null)//
 				.setDateOfBirth(null);
@@ -164,26 +163,23 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test
-	void getAllCasesOrderderCorrectly() throws Exception {
+	void getAllCasesOrderdCorrectly() throws Exception {
 
 		var response = mvc.perform(get("/api/hd/cases") //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
-		
+
 		var document = JsonPath.parse(response);
 
-		List<String> lastnamesFromResponse = new ArrayList<>();
-		lastnamesFromResponse.add(document.read("$[0].lastName", String.class));
-		lastnamesFromResponse.add(document.read("$[1].lastName", String.class));
-		lastnamesFromResponse.add(document.read("$[2].lastName", String.class));
-		
-		List<String> expectedList = Lists.newArrayList(lastnamesFromResponse);
+		var lastnamesFromResponse = List.of( //
+				document.read("$[0].lastName", String.class), //
+				document.read("$[1].lastName", String.class), //
+				document.read("$[2].lastName", String.class));
+
+		var expectedList = new ArrayList<>(lastnamesFromResponse);
 		Collections.sort(expectedList);
-		
-		assertIterableEquals(lastnamesFromResponse, expectedList);
-		
+
+		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
 	}
-	
 }
