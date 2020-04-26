@@ -43,8 +43,8 @@ public class CaseActionSummary {
 	private final ActionItems items;
 	private final TrackedCaseSummaryDto trackedCaseDto;
 	private final TrackedCase trackedCase;
-	
-  public String getCaseId() {
+
+	public String getCaseId() {
 		return trackedCaseDto.getCaseId();
 	}
 
@@ -71,7 +71,7 @@ public class CaseActionSummary {
 	public String getCaseType() {
 		return trackedCaseDto.getCaseType();
 	}
-	
+
 	public String getPrimaryPhoneNumber() {
 		return trackedCaseDto.getPrimaryPhoneNumber();
 	}
@@ -81,20 +81,19 @@ public class CaseActionSummary {
 	}
 
 	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items) {
-    return new CaseActionSummary(trackedCase, items);
-  }
-  
-  private CaseActionSummary(TrackedCase trackedCase, ActionItems items) {
-  	this.trackedCase = trackedCase;
+		return new CaseActionSummary(trackedCase, items);
+	}
+
+	private CaseActionSummary(TrackedCase trackedCase, ActionItems items) {
+		this.trackedCase = trackedCase;
 		this.items = items;
 		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase);
-  }
-
+	}
 
 	String getName() {
 		return trackedCase.getTrackedPerson().getFullName();
 	}
-		
+
 	float getPriority() {
 		return items.getPriority() * 100.00f / 100.00f;
 	}
@@ -105,6 +104,11 @@ public class CaseActionSummary {
 
 	List<DescriptionCode> getProcessSummary() {
 		return getDescriptionCodes(ItemType.PROCESS_INCIDENT);
+	}
+
+	public int getNumberOfActionItems() {
+		return getDescriptionCodes(ItemType.MEDICAL_INCIDENT).size()
+				+ getDescriptionCodes(ItemType.PROCESS_INCIDENT).size();
 	}
 
 	@JsonProperty("_links")

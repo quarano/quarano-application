@@ -73,6 +73,7 @@ public class ActionItemController {
 		return cases.findByDepartmentId(department.getId()) //
 				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()))) //
 				.stream() //
-				.sorted(Comparator.comparing(CaseActionSummary::getPriority));
+				.filter(c -> c.getNumberOfActionItems() > 0)
+				.sorted((c1, c2) -> Float.compare(c2.getPriority(), c1.getPriority())); // highest priority first
 	}
 }
