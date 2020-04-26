@@ -2,17 +2,22 @@ package quarano.reference;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import quarano.core.web.ErrorsDto;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Transactional
 @RestController
@@ -23,6 +28,7 @@ class SymptomController {
 
 	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ModelMapper modelMapper;
+	private final @NonNull MessageSourceAccessor messages;
 
 	/**
 	 * Returns all symptom entries. Should be used as master-data for other api calls;
@@ -44,19 +50,26 @@ class SymptomController {
 	 * @return
 	 */
 	@PostMapping("/api/symptoms")
-	public SymptomDto addSymptom(@RequestBody SymptomDto symptomDto) {
+	public HttpEntity<?> addSymptom(@Valid @RequestBody SymptomDto symptomDto, Errors errors) {
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		}
+
 		var symptom = modelMapper.map(symptomDto, Symptom.class);
-		return modelMapper.map(symptoms.save(symptom), SymptomDto.class);
+		var savedSymptom = modelMapper.map(symptoms.save(symptom), SymptomDto.class);
+
+		return ResponseEntity.ok().body(savedSymptom);
 	}
 
 	/**
+	 * //TODO: needed?
 	 * Stores an array
 	 *
 	 * @param symptomDtos
 	 * @return
 	 */
 	@PostMapping("/api/allsymptoms")
-	public Stream<SymptomDto> addSymptoms(@RequestBody List<SymptomDto> symptomDtos) {
+	public Stream<SymptomDto> addSymptoms(@Valid @RequestBody List<SymptomDto> symptomDtos) {
 
 		symptomDtos.stream() //
 				.map(x -> modelMapper.map(x, Symptom.class)) //
