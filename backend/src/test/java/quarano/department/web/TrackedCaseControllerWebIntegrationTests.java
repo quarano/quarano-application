@@ -15,14 +15,24 @@
  */
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.ReadContext;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
@@ -31,16 +41,6 @@ import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
 
 import java.time.LocalDate;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.ReadContext;
 
 /**
  * @author Oliver Drotbohm
@@ -99,6 +99,24 @@ class TrackedCaseControllerWebIntegrationTests {
 				.forEach(it -> {
 					assertThat(response.read("$." + it, String.class)).isNotNull();
 				});
+	}
+
+	@Test
+	void rejectsCaseCreationWithFirstNameLastNameAndCityContainingInvalidCharacters() throws Exception {
+		var today = LocalDate.now();
+		var payload = new TrackedCaseDto() //
+				.setFirstName("Michael 123") //
+				.setLastName("Mustermann 123") //
+				.setTestDate(today) //
+				.setQuarantineStartDate(today) //
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
+				.setPhone("0123456789")
+				.setCity("city 123");
+		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		assertThat(document.read("$.lastName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		assertThat(document.read("$.city", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
 	}
 
 	@Test

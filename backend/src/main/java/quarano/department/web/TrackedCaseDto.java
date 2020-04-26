@@ -3,34 +3,33 @@ package quarano.department.web;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
+import quarano.core.validation.Alphabetic;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
-
-import java.time.LocalDate;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-
-import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
+import java.time.LocalDate;
 
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 public class TrackedCaseDto {
 
-	private @NotEmpty String lastName;
-	private @NotEmpty String firstName;
+	private @NotEmpty @Alphabetic String lastName;
+	private @NotEmpty @Alphabetic String firstName;
 	private @NotNull LocalDate testDate;
 	private @NotNull LocalDate quarantineStartDate;
 	private @NotNull LocalDate quarantineEndDate;
 
 	private String street;
 	private String houseNumber;
-	private String city;
+	private @Alphabetic String city;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
