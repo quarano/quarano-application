@@ -46,7 +46,8 @@ export class RegisterComponent implements OnInit {
     validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]
   });
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
@@ -64,7 +65,14 @@ export class RegisterComponent implements OnInit {
       map((params: ParamMap) => params.get('clientcode')),
       filter(code => code != null),
       tap(code => urlParamCode = code),
-      switchMap(code => this.apiService.checkClientCode(code))
+      switchMap(code => this.apiService.checkClientCode(code)),
+      tap(response => {
+        if (!response) {
+          this.snackbarService.error(
+            'Der verwendete Code ist leider ungültig. Bitte wenden Sie sich zur Klärung an Ihr Gesundheitsamt');
+          this.router.navigate(['/welcome/login']);
+        }
+      })
     ).subscribe(
       (response) => {
         if (urlParamCode && response) {

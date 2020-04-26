@@ -18,7 +18,7 @@
     [sortable]="false"
     width="350"
   >
-    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
       <div class="action-alert-container">
         <app-action-alert
           *ngFor="let alert of value"
