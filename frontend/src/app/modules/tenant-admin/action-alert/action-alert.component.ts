@@ -41,43 +41,43 @@ export class ActionAlertComponent implements OnInit {
         alert: Alert.FIRST_CHARACTERISTIC_SYMPTOM,
         color: 'burlywood',
         icon: 'healing',
-        displayName: 'Erstes charakteristisches Symptom'
+        displayName: 'Erste Symptome'
       },
       {
         alert: Alert.INCREASED_TEMPERATURE,
-        color: 'darkkhaki',
+        color: 'lightpink',
         icon: 'trending_up',
-        displayName: 'Hohe Körpertemperatur'
+        displayName: 'Symptome auffällig'
       },
       {
         alert: Alert.INITIAL_CALL_OPEN_CONTACT,
-        color: 'darksalmon',
-        icon: 'group_add',
-        displayName: 'Initialer Anruf Kontaktperson'
+        color: 'lavender',
+        icon: 'local_phone',
+        displayName: 'Initialer Anruf offen'
       },
       {
         alert: Alert.INITIAL_CALL_OPEN_INDEX,
         color: 'lavender',
-        icon: 'person_add',
-        displayName: 'Initialer Anruf Indexpatient'
+        icon: 'local_phone',
+        displayName: 'Initialer Anruf offen'
       },
       {
         alert: Alert.MISSING_DETAILS_CONTACT,
-        color: 'lightgoldenrodyellow',
+        color: 'darkkhaki',
         icon: 'device_unknown',
-        displayName: 'Fehlende Stammdaten Kontaktperson'
+        displayName: 'Recherche notwendig'
       },
       {
         alert: Alert.MISSING_DETAILS_INDEX,
-        color: 'lightpink',
-        icon: 'not_listed_location',
-        displayName: 'Fehlende Stammdaten Indexpatient'
+        color: 'darkkhaki',
+        icon: 'device_unknown',
+        displayName: 'Recherche notwendig'
       },
       {
         alert: Alert.QUARANTINE_END,
         color: 'palegreen',
         icon: 'event_available',
-        displayName: 'Ende der Quarantäne'
+        displayName: 'Quarantäne Ende prüfen'
       }
     ];
   }
