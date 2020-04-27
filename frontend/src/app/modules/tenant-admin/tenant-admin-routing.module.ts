@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TenantAdminComponent } from './tenant-admin.component';
 import { ClientsComponent } from './clients/clients.component';
+import {ReportCaseResolver} from '@resolvers/report-case.resolver';
+import {ClientComponent} from './client/client.component';
 
 const routes: Routes = [
   {
@@ -20,6 +22,15 @@ const routes: Routes = [
         path: 'clients',
         component: ClientsComponent,
         resolve: { cases: ReportCasesResolver }
+      },
+      {
+        path: 'client/:id',
+        component: ClientComponent,
+        resolve: { case: ReportCaseResolver }
+      },
+      {
+        path: 'client',
+        component: ClientComponent,
       },
       {
         path: 'actions',

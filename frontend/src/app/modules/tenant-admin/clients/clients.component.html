@@ -1,5 +1,5 @@
 <div style="display: flex; justify-content: space-between;">
-  <button class="mb-3" mat-raised-button color="primary">
+  <button class="mb-3" mat-raised-button color="primary" [routerLink]="['/tenant-admin/client']">
     <mat-icon>add</mat-icon>Neuen Fall anlegen
   </button>
   <button class="mb-3" mat-button>
@@ -148,7 +148,7 @@
         matTooltip="Fall bearbeiten"
         matTooltipPosition="right"
         class="mail-link"
-        [routerLink]="[value]"
+        [routerLink]="['/tenant-admin/client',value]"
       >
         <mat-icon>edit</mat-icon>
       </button>

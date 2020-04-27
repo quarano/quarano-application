@@ -1,0 +1,19 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title *ngIf="caseDetail$ | async; else newCase">Fall bearbeiten</mat-card-title>
+    <ng-template #newCase>
+      <mat-card-title>Neuen Fall anlegen</mat-card-title>
+    </ng-template>
+    <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Falldaten">
+        <app-client-edit [caseDetail]="caseDetail$ | async" (submittedValues)="saveCaseData($event)"></app-client-edit>
+      </mat-tab>
+      <mat-tab label="Krankheitsverlauf" *ngIf="caseDetail$ | async"></mat-tab>
+
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

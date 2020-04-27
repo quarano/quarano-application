@@ -1,12 +1,10 @@
-import { ActivatedRoute } from '@angular/router';
-import { SubSink } from 'subsink';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
-import { ReportCaseDto } from '@models/report-case';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { map } from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+import {SubSink} from 'subsink';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {BehaviorSubject} from 'rxjs';
+import {ReportCaseDto} from '@models/report-case';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-clients',
@@ -19,11 +17,21 @@ export class ClientsComponent implements OnInit, OnDestroy {
   loading = false;
   rows = [];
   @ViewChild(DatatableComponent) table: DatatableComponent;
-  get filter(): string { return this._filter.value; }
-  set filter(filter: string) { this._filter.next(filter); }
+
+  get filter(): string {
+    return this._filter.value;
+  }
+
+  set filter(filter: string) {
+    this._filter.next(filter);
+  }
+
   private readonly _filter = new BehaviorSubject<string>('');
   private _filteredData = new BehaviorSubject<ReportCaseDto[]>([]);
-  get filteredData(): ReportCaseDto[] { return this._filteredData.value; }
+  get filteredData(): ReportCaseDto[] {
+    return this._filteredData.value;
+  }
+
   set filteredData(filteredData: ReportCaseDto[]) {
     this._filteredData.next(filteredData);
     this.rows = filteredData.map(c => this.getRowData(c));
@@ -31,7 +39,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   private dateTimeNow = new Date();
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
     private route: ActivatedRoute) {
@@ -45,7 +53,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
         this.filteredData = [...data.cases];
         this.loading = false;
       },
-      error => this.loading = false));
+      () => this.loading = false));
   }
 
   ngOnDestroy(): void {
@@ -75,9 +83,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   getQuarantineEndString(quarantineEnd: Date): string {
-    if (!quarantineEnd) { return '-'; }
+    if (!quarantineEnd) {
+      return '-';
+    }
 
-    if (quarantineEnd.isDateInPast()) { return 'beendet'; }
+    if (quarantineEnd.isDateInPast()) {
+      return 'beendet';
+    }
 
     return quarantineEnd.toCustomLocaleDateString();
 
