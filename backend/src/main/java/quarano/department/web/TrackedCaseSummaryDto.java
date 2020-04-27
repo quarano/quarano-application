@@ -15,13 +15,15 @@
  */
 package quarano.department.web;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase;
-import quarano.tracking.TrackedPerson;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
+
+import org.springframework.context.support.MessageSourceAccessor;
 
 /**
  * @author Oliver Drotbohm
@@ -30,11 +32,12 @@ import java.util.Map;
 public class TrackedCaseSummaryDto {
 
 	private final TrackedCase trackedCase;
+	private final @NonNull MessageSourceAccessor messages;
 
 	public String getCaseId() {
 		return trackedCase.getId().toString();
 	}
-	
+
 	public boolean getEnrollmentCompleted() {
 		return trackedCase.getEnrollment().isComplete();
 	}
@@ -47,20 +50,25 @@ public class TrackedCaseSummaryDto {
 		return trackedCase.getTrackedPerson().getLastName();
 	}
 
+	public String getStatus() {
+		var statusKey = (trackedCase.resolveStatus());
+		var messageKey = ("department.casestatus." + statusKey).toLowerCase(Locale.US).replace("_", "-");
+		return messages.getMessage(messageKey);
+	}
+
 	public String getPrimaryPhoneNumber() {
 
 		var phoneNumber = trackedCase.getTrackedPerson().getPhoneNumber();
 		var mobilePhoneNumber = trackedCase.getTrackedPerson().getMobilePhoneNumber();
-		
-		if(phoneNumber != null) {
+
+		if (phoneNumber != null) {
 			return phoneNumber.toString();
-		}
-		else {
+		} else {
 			return mobilePhoneNumber == null ? null : mobilePhoneNumber.toString();
 		}
 
 	}
-	
+
 	public String getZipCode() {
 
 		var zipCode = trackedCase.getTrackedPerson().getAddress().getZipCode();
