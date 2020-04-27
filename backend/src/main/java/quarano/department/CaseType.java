@@ -1,5 +1,5 @@
 package quarano.department;
 
 public enum CaseType {
-	INDEX, CONTACT;
+	INDEX, CONTACT, CONTACT_MEDICAL;
 }

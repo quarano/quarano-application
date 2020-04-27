@@ -23,6 +23,8 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.Encounter;
+import quarano.tracking.RiskAssessment;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
 
@@ -49,11 +51,12 @@ class TrackingEventListenerUnitTests {
 		var listener = new TrackingEventListener(cases);
 
 		var person = TrackedPersonDataInitializer.createTanja();
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
+				.submitEnrollmentDetails();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
 		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
-
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()));
+		
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
 
 		assertThatExceptionOfType(EnrollmentException.class).isThrownBy(() -> {
@@ -70,15 +73,10 @@ class TrackingEventListenerUnitTests {
 	void createContactCaseAutomaticallyAfterFirstEncounter() {
 
 		var person = TrackedPersonDataInitializer.createTanja();
-		var contactWays = ContactWays.ofEmailAddress("michaela@mustermann.de");
-		var contactPerson = new ContactPerson("Michaela", "Mustermann", contactWays) //
-				.assignOwner(person);
+		var encounter = createFirstEncounterWithMichaelaFor(person);
+		var trackedCase = createIndexCaseFor(person);
 
-		var encounter = person.reportContactWith(contactPerson, LocalDate.now());
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
-				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
 
@@ -90,10 +88,83 @@ class TrackingEventListenerUnitTests {
 
 		TrackedCase capturedArgument = argumentCaptor.getValue();
 
+		assertIdentityOfMichaela(capturedArgument);
+		
+		assertThat(capturedArgument.isContactCase()).isTrue();
+	}
+	
+	@Test
+	void createNoContactCaseAutomaticallyForSubsequentEncounter() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var encounter1 = createFirstEncounterWithMichaelaFor(person);
+		var encounter2 = person.reportContactWith(encounter1.getContact(), LocalDate.now().minusDays(1));
+		var trackedCase = createIndexCaseFor(person);
+		var event = EncounterReported.firstEncounter(encounter1, person.getId());
+		var event2 = EncounterReported.subsequentEncounter(encounter2, person.getId());
+
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+
+		var listener = new TrackingEventListener(cases);
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+		assertThatCode(() -> listener.on(event2)).doesNotThrowAnyException();
+		
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+	}
+
+
+	@Test
+	void createContactCaseWithTypeContactMedical() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var encounter = createFirstEncounterWithMichaelaFor(person);
+		var assessment = new RiskAssessment();
+		assessment.setIsHealthStaff(Boolean.TRUE);
+		encounter.getContact().setRisk(assessment);
+		var trackedCase = createIndexCaseFor(person);
+
+		var event = EncounterReported.firstEncounter(encounter, person.getId());
+		
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+
+		var listener = new TrackingEventListener(cases);
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		TrackedCase capturedArgument = argumentCaptor.getValue();
+
+		assertIdentityOfMichaela(capturedArgument);
+		assertThat(capturedArgument.isMedicalContactCase()).isTrue();
+		
+	}
+
+	private void assertIdentityOfMichaela(TrackedCase capturedArgument) {
 		assertThat(capturedArgument.getTrackedPerson().getFirstName()).isEqualTo("Michaela");
 		assertThat(capturedArgument.getTrackedPerson().getLastName()).isEqualTo("Mustermann");
 		assertThat(capturedArgument.getTrackedPerson().getEmailAddress())
 				.isEqualTo(EmailAddress.of("michaela@mustermann.de"));
-		assertThat(capturedArgument.isContactCase()).isTrue();
+	}
+	
+	
+	private Encounter createFirstEncounterWithMichaelaFor(TrackedPerson person) {
+		
+		var contactWays = ContactWays.ofEmailAddress("michaela@mustermann.de");
+		var contactPerson = new ContactPerson("Michaela", "Mustermann", contactWays) //
+				.assignOwner(person);
+		var encounter = person.reportContactWith(contactPerson, LocalDate.now());
+		
+		return encounter;
+	}
+	
+
+	private TrackedCase createIndexCaseFor(TrackedPerson person) {
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
+				.submitEnrollmentDetails() //
+				.submitQuestionnaire(new CompletedInitialReport());
+		return trackedCase;
 	}
 }

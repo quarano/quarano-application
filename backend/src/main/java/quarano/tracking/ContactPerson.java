@@ -59,9 +59,8 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private TypeOfContract typeOfContract;
 	private String remark;
 	private @Setter(AccessLevel.NONE) String identificationHint;
-	private Boolean isHealthStaff;
-	private Boolean isSenior;
-	private Boolean hasPreExistingConditions;
+
+	private @Setter @Getter RiskAssessment risk;
 
 	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
 
@@ -74,6 +73,21 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.phoneNumber = contactWays.getPhoneNumber();
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
+	}
+	
+	
+	public boolean hasRiskAssessment() {
+		return risk != null;
+	}
+	
+	public boolean isHealthStaff() {
+		
+		if(risk == null) {
+			return false;
+		}
+		else {
+			return risk.getIsHealthStaff() == null ? false : risk.getIsHealthStaff();
+		}
 	}
 
 	public String getFullName() {

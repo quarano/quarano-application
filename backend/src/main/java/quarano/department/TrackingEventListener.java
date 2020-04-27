@@ -73,8 +73,10 @@ public class TrackingEventListener {
 				if (caseOfContactInitializer.isIndexCase()) {
 
 					var person = new TrackedPerson(contactPerson);
-
-					cases.save(new TrackedCase(person, CaseType.CONTACT, caseOfContactInitializer.getDepartment()));
+					
+					var caseType = contactPerson.isHealthStaff() ? CaseType.CONTACT_MEDICAL : CaseType.CONTACT;
+					
+					cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment()));
 
 					log.info("Created automatic contact-case from contact " + contactPerson.getId());
 				}
