@@ -15,12 +15,11 @@
  */
 package quarano.actions;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.util.Streamable;
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm

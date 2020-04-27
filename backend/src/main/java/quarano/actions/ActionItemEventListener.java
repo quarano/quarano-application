@@ -17,11 +17,11 @@ package quarano.actions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.TrackedPerson.DiaryEntryAdded;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import quarano.actions.ActionItem.ItemType;
+import quarano.department.TrackedCase.TrackedCaseUpdated;
+import quarano.tracking.TrackedPerson.DiaryEntryAdded;
 
 /**
  * @author Oliver Drotbohm
@@ -57,6 +57,27 @@ public class ActionItemEventListener {
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
 					Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM)));
+		}
+	}
+
+	@EventListener
+	void on(TrackedCaseUpdated event) {
+		var trackedCase = event.getTrackedCase();
+
+		if (trackedCase.isIndexCase()) {
+			// TODO: check for closed
+
+			var person = trackedCase.getTrackedPerson();
+			var detailsMissing = (person.getPhoneNumber() == null && person.getMobilePhoneNumber() == null)
+					 || person.getEmailAddress() == null
+					 || person.getDateOfBirth() == null;
+			DescriptionCode missingDetailsIndex = DescriptionCode.MISSING_DETAILS_INDEX;
+
+			if (detailsMissing &&
+					items.findByDescriptionCode(person.getId(), missingDetailsIndex).isEmpty()) {
+
+				items.save(new TrackedCaseMissingDetailsActionItem(person.getId(), trackedCase.getId()));
+			}
 		}
 	}
 }

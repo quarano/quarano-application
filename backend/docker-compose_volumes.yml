@@ -1,0 +1,15 @@
+version: '3'
+
+volumes:
+  postgres-data:
+services:
+
+  postgres:
+    image: postgres:12.2
+    container_name: corona.report.postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=corona # BY ALL MEANS CHANGE THIS IN PRODUCTION (using docker secrets or using a non-dockerized database

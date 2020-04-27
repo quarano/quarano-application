@@ -15,28 +15,29 @@
  */
 package quarano.actions;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+
+import javax.persistence.Entity;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
-@RequiredArgsConstructor()
-public enum DescriptionCode {
+@Entity
+@Getter
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
+public class TrackedCaseMissingDetailsActionItem extends ActionItem {
 
-	INCREASED_TEMPERATURE,
+	private final @Getter TrackedCaseIdentifier caseIdentifier;
 
-	FIRST_CHARACTERISTIC_SYMPTOM(2.0f),
+	TrackedCaseMissingDetailsActionItem(TrackedPersonIdentifier person, TrackedCaseIdentifier caseIdentifier) {
 
-	DIARY_ENTRY_MISSING,
+		super(person, ItemType.PROCESS_INCIDENT, Description.of(DescriptionCode.MISSING_DETAILS_INDEX));
 
-	MISSING_DETAILS_INDEX
-
-	;
-
-	private final @Getter float multiplier;
-
-	private DescriptionCode() {
-		this(1f);
+		this.caseIdentifier = caseIdentifier;
 	}
 }

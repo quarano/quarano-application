@@ -24,17 +24,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
@@ -43,11 +39,13 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
-
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
-import org.springframework.lang.Nullable;
-import org.springframework.util.StringUtils;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * @author Oliver Drotbohm

@@ -36,15 +36,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
 import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
 
 /**
@@ -89,12 +88,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department,
 			@Nullable ContactPerson originContact) {
-
 		this.id = id;
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
 		this.concluded = false;
+
+		this.registerEvent(TrackedCaseUpdated.of(this));
 
 		if (originContact != null) {
 			this.originContacts.add(originContact);
@@ -185,6 +185,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Value(staticConstructor = "of")
 	public static class CaseConcluded {
 		TrackedCaseIdentifier caseIdentifier;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class TrackedCaseUpdated implements DomainEvent {
+		TrackedCase trackedCase;
 	}
 
 	@Embeddable
