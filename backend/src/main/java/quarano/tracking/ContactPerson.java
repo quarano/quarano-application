@@ -60,8 +60,10 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private String remark;
 	private @Setter(AccessLevel.NONE) String identificationHint;
 
-	private @Setter @Getter RiskAssessment risk;
-
+	private @Getter @Setter Boolean isHealthStaff;
+	private @Getter @Setter Boolean isSenior;
+	private @Getter @Setter Boolean hasPreExistingConditions;
+	
 	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
@@ -75,21 +77,6 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.identificationHint = contactWays.getIdentificationHint();
 	}
 	
-	
-	public boolean hasRiskAssessment() {
-		return risk != null;
-	}
-	
-	public boolean isHealthStaff() {
-		
-		if(risk == null) {
-			return false;
-		}
-		else {
-			return risk.getIsHealthStaff() == null ? false : risk.getIsHealthStaff();
-		}
-	}
-
 	public String getFullName() {
 		return String.format("%s %s", firstName, lastName);
 	}
