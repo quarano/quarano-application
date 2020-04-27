@@ -21,9 +21,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Locale;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Range;
 import org.springframework.util.NumberUtils;
 
@@ -77,6 +80,9 @@ public class BodyTemperature {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s°C", value);
+
+		Locale locale = LocaleContextHolder.getLocale();
+
+		return String.format(locale, "%.1f°C", value);
 	}
 }
