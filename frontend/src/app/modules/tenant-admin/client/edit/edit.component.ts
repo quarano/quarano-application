@@ -4,7 +4,7 @@ import {CaseDetailDto} from '@models/case-detail';
 import {VALIDATION_PATTERNS} from '@utils/validation';
 import {Subject} from 'rxjs';
 import * as moment from 'moment';
-import {takeUntil} from 'rxjs/operators';
+import {SubSink} from 'subsink';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
@@ -19,8 +19,7 @@ const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit, OnChanges, OnDestroy {
-
-  destroy$$: Subject<void> = new Subject<void>();
+  private subs: SubSink = new SubSink();
 
   today = new Date();
 
@@ -37,9 +36,9 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.formGroup.get('quarantineStartDate').valueChanges.pipe(takeUntil(this.destroy$$)).subscribe((value) => {
+    this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges.subscribe((value) => {
       this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
-    });
+    }));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -49,8 +48,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$$.next();
-    this.destroy$$.complete();
+    this.subs.unsubscribe();
   }
 
   createFormGroup() {
