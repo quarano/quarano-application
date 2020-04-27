@@ -7,15 +7,11 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContactPersonDto } from '@models/contact-person';
 import { Moment } from 'moment';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-forgotten-contact-dialog',
   templateUrl: './forgotten-contact-dialog.component.html',
   styleUrls: ['./forgotten-contact-dialog.component.scss'],
-  providers: [{ provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
-  ]
 })
 export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   encounters: EncounterEntry[] = [];

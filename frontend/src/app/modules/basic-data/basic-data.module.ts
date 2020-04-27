@@ -10,8 +10,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BasicDataComponent } from './basic-data.component';
 import { BasicDataRoutingModule } from './basic-data-routing.module';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
@@ -32,7 +30,6 @@ import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-d
       MyFirstQueryResolver,
       MyClientDataResolver,
       EncountersResolver,
-      { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
     ]
 })
 export class BasicDataModule { }
