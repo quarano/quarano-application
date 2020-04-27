@@ -25,17 +25,21 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.jddd.core.types.Identifier;
@@ -60,6 +64,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 	private @Getter @Setter LocalDate testDate;
+	
+	private @OneToMany(cascade = { CascadeType.ALL }) @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
 	@SuppressWarnings("unused")
 	private TrackedCase() {
@@ -67,17 +73,31 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	public TrackedCase(TrackedPerson person, CaseType type, Department department) {
-		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department);
+		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department, null);
+	}
+	
+	public TrackedCase(TrackedPerson person, CaseType type, Department department, ContactPerson contactPerson) {
+		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department, contactPerson);
 	}
 
-	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department) {
-
+	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department, ContactPerson originContact) {
 		this.id = id;
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
+		
+		if(null != originContact) {
+			this.originContacts.add(originContact);
+		}
 	}
 
+
+	public void addOriginContact(ContactPerson contact) {
+		if(!originContacts.contains(contact)) {
+			this.originContacts.add(contact);
+		}
+	}
+	
 	public boolean isIndexCase() {
 		return type.equals(CaseType.INDEX);
 	}

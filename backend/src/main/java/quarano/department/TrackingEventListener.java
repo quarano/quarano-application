@@ -76,7 +76,7 @@ public class TrackingEventListener {
 					
 					var caseType = (contactPerson.getIsHealthStaff() == Boolean.TRUE) ? CaseType.CONTACT_MEDICAL : CaseType.CONTACT;
 					
-					cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment()));
+					cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
 
 					log.info("Created automatic contact-case from contact " + contactPerson.getId());
 				}

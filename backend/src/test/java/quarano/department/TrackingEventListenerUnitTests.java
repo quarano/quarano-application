@@ -23,7 +23,6 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.Encounter;
-import quarano.tracking.RiskAssessment;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -139,6 +138,29 @@ class TrackingEventListenerUnitTests {
 		assertThat(capturedArgument.isMedicalContactCase()).isTrue();
 		
 	}
+	
+	@Test
+	void originContactIsSetCorrectly() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var encounter = createFirstEncounterWithMichaelaFor(person);
+		var trackedCase = createIndexCaseFor(person);
+
+		var event = EncounterReported.firstEncounter(encounter, person.getId());
+
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+
+		var listener = new TrackingEventListener(cases);
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		var origins = argumentCaptor.getValue().getOriginContacts();
+		assertThat(origins.size() == 1);
+		assertThat(origins.get(0).equals(encounter.getContact()));
+	}	
+	
 
 	private void assertIdentityOfMichaela(TrackedCase capturedArgument) {
 		assertThat(capturedArgument.getTrackedPerson().getFirstName()).isEqualTo("Michaela");

@@ -74,7 +74,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate start = LocalDate.now().minusWeeks(1);
 		LocalDate end = start.plusWeeks(4);
 
-		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2) //
+		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2, null) //
 				.setQuarantine(Quarantine.of(start, end)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
@@ -94,7 +94,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null) //
 				.setQuarantine(Quarantine.of(startG, endG)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
@@ -114,7 +114,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startN = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endN = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1, null) //
 				.setQuarantine(Quarantine.of(startN, endN)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
