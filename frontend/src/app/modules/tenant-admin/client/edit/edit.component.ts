@@ -1,25 +1,28 @@
-import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {CaseDetailDto} from '@models/case-detail';
 import {VALIDATION_PATTERNS} from '@utils/validation';
 import {Subject} from 'rxjs';
-import {isMoment} from 'moment';
+import * as moment from 'moment';
+import {takeUntil} from 'rxjs/operators';
 
-/*const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
+const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
   const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone === '' && mobilePhone === '' ? { phoneMissing: true  } : null;
+  return phone || mobilePhone ? null : {phoneMissing: true};
 };
-*/
+
 
 @Component({
   selector: 'app-client-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit, OnChanges {
+export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
-  today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  destroy$$: Subject<void> = new Subject<void>();
+
+  today = new Date();
 
   @Input()
   caseDetail: CaseDetailDto;
@@ -34,10 +37,8 @@ export class EditComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-
-    this.formGroup.valueChanges.subscribe((value) => {
-      console.log('Valid: ' + this.formGroup.valid);
-      console.log(value);
+    this.formGroup.get('quarantineStartDate').valueChanges.pipe(takeUntil(this.destroy$$)).subscribe((value) => {
+      this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
     });
   }
 
@@ -47,6 +48,11 @@ export class EditComponent implements OnInit, OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$$.next();
+    this.destroy$$.complete();
+  }
+
   createFormGroup() {
     return new FormGroup({
       firstName: new FormControl('', [Validators.required]),
@@ -54,8 +60,8 @@ export class EditComponent implements OnInit, OnChanges {
 
       testDate: new FormControl(this.today),
 
-      quarantineStartDate: new FormControl(null, []),
-      quarantineEndDate: new FormControl(null, []),
+      quarantineStartDate: new FormControl(new Date(), []),
+      quarantineEndDate: new FormControl(moment().add(2, 'weeks').toDate(), []),
 
       street: new FormControl(''),
       houseNumber: new FormControl(''),
@@ -63,9 +69,13 @@ export class EditComponent implements OnInit, OnChanges {
       zipCode: new FormControl('', [Validators.minLength(5), Validators.maxLength(5)]),
 
       mobilePhone: new FormControl('', [
-        Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+        Validators.minLength(5), Validators.maxLength(17),
+        Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
+      ]),
       phone: new FormControl('', [
-        Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+        Validators.minLength(5), Validators.maxLength(17),
+        Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
+      ]),
 
       email: new FormControl('', []),
 
@@ -74,7 +84,7 @@ export class EditComponent implements OnInit, OnChanges {
       comment: new FormControl('', []),
 
       infected: new FormControl(true, []),
-    });
+    }, [PhoneOrMobilePhoneValidator]);
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
@@ -95,7 +105,7 @@ export class EditComponent implements OnInit, OnChanges {
     const submitData: any = {...this.formGroup.value};
 
     Object.keys(submitData).forEach((key) => {
-      if (isMoment(submitData[key])) {
+      if (moment.isMoment(submitData[key])) {
         submitData[key] = submitData[key].toDate();
       }
     });

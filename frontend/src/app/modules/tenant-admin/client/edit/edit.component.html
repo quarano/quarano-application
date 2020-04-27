@@ -25,7 +25,6 @@
       <mat-label>Geburtsdatum</mat-label>
       <input
         matInput
-        required
         [max]="today"
         [matDatepicker]="dateOfBirthPicker"
         formControlName="dateOfBirth"
@@ -174,7 +173,18 @@
       <input matInput placeholder="Ort" formControlName="city" type="text" />
       <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
     </mat-form-field>
-  </fieldset>
+  </fieldset><fieldset class="mb-3">
+  <legend>Kommentar</legend>
+
+  <mat-form-field class="full-width">
+    <textarea
+      matInput
+      formControlName="comment"
+      type="text"
+    ></textarea>
+    <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+  </mat-form-field>
+</fieldset>
   <div class="button-area">
     <button
       type="submit"
