@@ -1,3 +1,4 @@
+import { Link } from './../models/general';
 import { UserDto } from '@models/user';
 import { environment } from '@environment/environment';
 import { SymptomDto } from '@models/symptom';
@@ -98,6 +99,10 @@ export class ApiService {
   getCaseActions(caseId: string): Observable<CaseActionDto> {
     return this.httpClient.get<CaseActionDto>(`${this.baseUrl}/api/hd/actions/${caseId}`)
       .pipe(share());
+  }
+
+  resolveAnomalies(link: Link, comment: string) {
+    return this.httpClient.put(link.href, { comment });
   }
 
   createCase(caseDetail: CaseDetailDto): Observable<any> {

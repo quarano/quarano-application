@@ -13,4 +13,11 @@ export class AnomalyComponent implements OnInit {
   ngOnInit() {
   }
 
+  getAnomalyDate(date: string): string {
+    return new Date(date).toCustomLocaleDateString();
+  }
+
+  getItemTime(date: string): string {
+    return new Date(date + 'Z').toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  }
 }

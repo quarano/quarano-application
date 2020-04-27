@@ -1,7 +1,49 @@
-<h1>Auffälligkeiten</h1>
-<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mb-5">
+<h1 class="mt-3">Auffälligkeiten</h1>
+<mat-accordion [multi]="true">
+  <mat-expansion-panel
+    *ngIf="caseAction.anomalies.health.length > 0"
+    [expanded]="true"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span
+          [matBadge]="caseAction.anomalies.health.length"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          Gesundheit
+        </span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.health"
+    ></app-client-action-anomaly
+  ></mat-expansion-panel>
+  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Prozess
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.process"
+    ></app-client-action-anomaly>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="caseAction.anomalies.done.length > 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Gesundheit
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.done"
+    ></app-client-action-anomaly> </mat-expansion-panel
+></mat-accordion>
+
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-5">
   <fieldset>
-    <legend>Auffälligkeiten als bearbeitet kennzeichnen</legend>
+    <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
     <mat-form-field class="full-width">
       <mat-label>Bemerkung</mat-label>
       <textarea
@@ -22,23 +64,3 @@
     </button>
   </fieldset>
 </form>
-<ul>
-  <li>
-    <h2>Gesundheit</h2>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.health"
-    ></app-client-action-anomaly>
-  </li>
-  <li>
-    <h2>Prozess</h2>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.process"
-    ></app-client-action-anomaly>
-  </li>
-  <li>
-    <h2>Erledigt</h2>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.done"
-    ></app-client-action-anomaly>
-  </li>
-</ul>
