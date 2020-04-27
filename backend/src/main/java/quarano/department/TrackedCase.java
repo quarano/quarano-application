@@ -140,6 +140,16 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this.department.equals(department);
 	}
 
+	public CaseStatus resolveStatus() {
+		
+		if(enrollment.isComplete()) {
+			return CaseStatus.TRACKING_ACTIVE;
+		}
+		else {
+			return CaseStatus.OPENED;
+		}
+	}
+	
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")

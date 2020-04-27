@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.context.support.MessageSourceAccessor;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -80,14 +82,18 @@ public class CaseActionSummary {
 		return trackedCaseDto.getQuarantine();
 	}
 
-	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items) {
-		return new CaseActionSummary(trackedCase, items);
+	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
+		return new CaseActionSummary(trackedCase, items, messages);
 	}
 
-	private CaseActionSummary(TrackedCase trackedCase, ActionItems items) {
+	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
 		this.trackedCase = trackedCase;
 		this.items = items;
-		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase);
+		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase, messages);
+	}
+	
+	public String getStatus() {
+		return trackedCaseDto.getStatus();
 	}
 
 	String getName() {

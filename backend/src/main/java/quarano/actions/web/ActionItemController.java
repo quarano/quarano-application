@@ -71,7 +71,7 @@ public class ActionItemController {
 	Stream<?> getActions(@LoggedIn Department department) {
 
 		return cases.findByDepartmentId(department.getId()) //
-				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()))) //
+				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()), messages)) //
 				.stream() //
 				.filter(c -> c.getNumberOfActionItems() > 0)
 				.sorted((c1, c2) -> Float.compare(c2.getPriority(), c1.getPriority())); // highest priority first
