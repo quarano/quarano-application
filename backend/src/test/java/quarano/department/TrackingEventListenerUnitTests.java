@@ -21,6 +21,7 @@ import static org.mockito.Mockito.*;
 import quarano.QuaranoUnitTest;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
+import quarano.tracking.EmailAddress;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -30,10 +31,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @QuaranoUnitTest
 class TrackingEventListenerUnitTests {
@@ -48,9 +51,9 @@ class TrackingEventListenerUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
-		var event = EncounterReported.of(Encounter.with(contactPerson, LocalDate.now()), person.getId());
+		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 
-		var trackedCase = new TrackedCase(person, new Department("Mannheim", UUID.randomUUID()));
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()));
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
 
 		assertThatExceptionOfType(EnrollmentException.class).isThrownBy(() -> {
@@ -61,5 +64,36 @@ class TrackingEventListenerUnitTests {
 				.submitQuestionnaire(new CompletedInitialReport());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+	}
+
+	@Test
+	void createContactCaseAutomaticallyAfterFirstEncounter() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var contactWays = ContactWays.ofEmailAddress("michaela@mustermann.de");
+		var contactPerson = new ContactPerson("Michaela", "Mustermann", contactWays) //
+				.assignOwner(person);
+
+		var encounter = person.reportContactWith(contactPerson, LocalDate.now());
+		var event = EncounterReported.firstEncounter(encounter, person.getId());
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
+				.submitEnrollmentDetails() //
+				.submitQuestionnaire(new CompletedInitialReport());
+
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+
+		var listener = new TrackingEventListener(cases);
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		TrackedCase capturedArgument = argumentCaptor.getValue();
+
+		assertThat(capturedArgument.getTrackedPerson().getFirstName()).isEqualTo("Michaela");
+		assertThat(capturedArgument.getTrackedPerson().getLastName()).isEqualTo("Mustermann");
+		assertThat(capturedArgument.getTrackedPerson().getEmailAddress())
+				.isEqualTo(EmailAddress.of("michaela@mustermann.de"));
+		assertThat(capturedArgument.isContactCase()).isTrue();
 	}
 }

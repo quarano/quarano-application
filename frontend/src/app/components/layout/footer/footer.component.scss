@@ -8,8 +8,26 @@
   height: 100%;
 }
 
-#twitter-link {
+.link-wrapper {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
+
+  a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  @media screen and (max-width: $break-sm) {
+    margin: 1rem 0;
+  }
 }
 
 img {
@@ -22,7 +40,8 @@ h3 {
   letter-spacing: 0.1rem;
 }
 
-a {
+anchor-wrapper a,
+#hack-link {
   color: #fff;
   text-decoration: none;
   cursor: pointer;

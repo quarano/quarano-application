@@ -65,17 +65,16 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
 
-		cases.save(new TrackedCase(person1, department1) //
-				.setTrackedPerson(person1) //
-				.setType(CaseType.CONTACT));
+		cases.save(new TrackedCase(person1, CaseType.CONTACT, department1) //
+				.setTrackedPerson(person1));
 
 		// CASE Sandra
-		cases.save(new TrackedCase(person2, department1));
+		cases.save(new TrackedCase(person2, CaseType.INDEX, department1));
 
 		LocalDate start = LocalDate.now().minusWeeks(1);
 		LocalDate end = start.plusWeeks(4);
 
-		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, department2) //
+		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2) //
 				.setQuarantine(Quarantine.of(start, end)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
@@ -95,7 +94,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, department1) //
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1) //
 				.setQuarantine(Quarantine.of(startG, endG)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //
@@ -115,7 +114,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startN = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endN = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, department1) //
+		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1) //
 				.setQuarantine(Quarantine.of(startN, endN)) //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new InitialReport() //

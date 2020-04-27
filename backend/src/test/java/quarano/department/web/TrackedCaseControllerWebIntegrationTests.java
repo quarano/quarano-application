@@ -17,7 +17,6 @@ package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -36,8 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -61,6 +60,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final ValidationUtils validator;
 	private final TrackedCaseRepository cases;
 	private final TrackedCaseRepresentations representations;
+	private final MessageSourceAccessor messages;
 
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
@@ -94,7 +94,6 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
-	
 
 	@Test
 	void rejectsCaseCreationWithoutRequiredFields() throws Exception {
@@ -108,10 +107,43 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test
+	void rejectsInvalidCharactersForStringFields() throws Exception {
+
+		var today = LocalDate.now();
+		var payload = new TrackedCaseDto() //
+				.setFirstName("Michael 123") //
+				.setLastName("Mustermann 123") //
+				.setTestDate(today) //
+				.setQuarantineStartDate(today) //
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
+				.setPhone("0123456789") //
+				.setCity("city 123") //
+				.setStreet("\\") //
+				.setHouseNumber("-") //
+				.setComment("<script />");
+
+		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
+
+		var alphabetic = messages.getMessage("Alphabetic");
+		var alphaNumeric = messages.getMessage("AlphaNumeric");
+		var textual = messages.getMessage("Textual");
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.city", String.class)).isEqualTo(alphabetic);
+
+		assertThat(document.read("$.street", String.class)).isEqualTo(alphaNumeric);
+		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
+
+		assertThat(document.read("$.comment", String.class)).isEqualTo(textual);
+	}
+
+	@Test
 	void rejectsEmptyTrackedPersonDetailsIfEnrollmentDone() throws Exception {
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
+		@SuppressWarnings("null")
 		var payload = representations.toRepresentation(trackedCase) //
 				.setEmail(null)//
 				.setDateOfBirth(null);
@@ -129,28 +161,25 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isBadRequest()) //
 				.andReturn().getResponse().getContentAsString());
 	}
-	
+
 	@Test
-	void getAllCasesOrderderCorrectly() throws Exception {
+	void getAllCasesOrderdCorrectly() throws Exception {
 
 		var response = mvc.perform(get("/api/hd/cases") //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
-		
+
 		var document = JsonPath.parse(response);
 
-		List<String> lastnamesFromResponse = new ArrayList<>();
-		lastnamesFromResponse.add(document.read("$[0].lastName", String.class));
-		lastnamesFromResponse.add(document.read("$[1].lastName", String.class));
-		lastnamesFromResponse.add(document.read("$[2].lastName", String.class));
-		
-		List<String> expectedList = Lists.newArrayList(lastnamesFromResponse);
+		var lastnamesFromResponse = List.of( //
+				document.read("$[0].lastName", String.class), //
+				document.read("$[1].lastName", String.class), //
+				document.read("$[2].lastName", String.class));
+
+		var expectedList = new ArrayList<>(lastnamesFromResponse);
 		Collections.sort(expectedList);
-		
-		assertIterableEquals(lastnamesFromResponse, expectedList);
-		
+
+		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
 	}
-	
 }

@@ -1,3 +1,6 @@
+import { DataProtectionComponent } from './components/data-protection/data-protection.component';
+import { ImpressumComponent } from './components/impressum/impressum.component';
+import { AgbComponent } from './components/agb/agb.component';
 import { IsEnrolledClientDirective } from './directives/is-enrolled-client.directive';
 import { AsideComponent } from './components/aside/aside.component';
 import { AsideHostDirective } from './directives/aside-host.directive';
@@ -19,7 +22,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { WelcomeModule } from './modules/welcome/welcome.module';
-import { ContactModule } from './modules/contact/contact.module';
+import { ContactPersonsModule } from './modules/contact-persons/contact-persons.module';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
@@ -27,6 +30,7 @@ import { HeaderRightComponent } from './components/layout/header-right/header-ri
 import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
 import { BasicDataModule } from './modules/basic-data/basic-data.module';
 import { IsHealthDepartmentUserDirective } from '@directives/is-health-department-user.directive';
+import { ContactComponent } from './components/contact/contact.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -44,13 +48,17 @@ const COMPONENTS = [
   HeaderLeftComponent,
   HeaderRightComponent,
   ForbiddenComponent,
-  AsideComponent
+  AsideComponent,
+  AgbComponent,
+  ContactComponent,
+  ImpressumComponent,
+  DataProtectionComponent
 ];
 
 const SUB_MODULES = [
   DiaryModule,
   WelcomeModule,
-  ContactModule,
+  ContactPersonsModule,
   BasicDataModule,
   ProfileModule
 ];

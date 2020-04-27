@@ -45,6 +45,6 @@ export class ContactPersonComponent implements OnInit, OnDestroy, DeactivatableC
   }
 
   navigateBack() {
-    this.router.navigate(['/contacts']);
+    this.router.navigate(['/contact-persons']);
   }
 }

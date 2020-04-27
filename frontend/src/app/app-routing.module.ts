@@ -1,3 +1,6 @@
+import { DataProtectionComponent } from './components/data-protection/data-protection.component';
+import { ImpressumComponent } from './components/impressum/impressum.component';
+import { AgbComponent } from './components/agb/agb.component';
 import { BasicDataGuard } from './guards/basic-data.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -6,6 +9,7 @@ import { IsAuthenticatedGuard } from '@guards/is-authenticated.guard';
 import { EnrollmentCompletedGuard } from '@guards/enrollment-completed.guard';
 import { IsHealthDepartmentUserGuard } from '@guards/is-health-department-user.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 const routes: Routes = [
   {
@@ -18,8 +22,8 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
-    path: 'contacts', loadChildren: () =>
-      import('./modules/contact/contact.module').then(m => m.ContactModule),
+    path: 'contact-persons', loadChildren: () =>
+      import('./modules/contact-persons/contact-persons.module').then(m => m.ContactPersonsModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
@@ -36,6 +40,18 @@ const routes: Routes = [
     path: 'basic-data', loadChildren: () =>
       import('./modules/basic-data/basic-data.module').then(m => m.BasicDataModule),
     canActivate: [IsAuthenticatedGuard, BasicDataGuard]
+  },
+  {
+    path: 'contact', component: ContactComponent
+  },
+  {
+    path: 'agb', component: AgbComponent
+  },
+  {
+    path: 'impressum', component: ImpressumComponent
+  },
+  {
+    path: 'data-protection', component: DataProtectionComponent
   },
   {
     path: '404/:message',

@@ -31,7 +31,6 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,10 +46,12 @@ import javax.persistence.PostLoad;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @Entity
 @Accessors(chain = true)
@@ -91,6 +92,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.encounters = new ArrayList<>();
 	}
 
+	public TrackedPerson(ContactPerson contact) {
+		this(new TrackedPersonIdentifier(UUID.randomUUID()), contact.getFirstName(), contact.getLastName(),
+				contact.getEmailAddress(), contact.getPhoneNumber(), null);
+		this.mobilePhoneNumber = contact.getMobilePhoneNumber();
+	}
+
 	public String getFullName() {
 		return firstName.concat(" ").concat(lastName);
 	}
@@ -122,6 +129,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return this;
 	}
 
+	@Nullable
 	public LocalDate getAccountRegistrationDate() {
 		return accountRegisteredAt == null ? null : accountRegisteredAt.toLocalDate();
 	}
@@ -135,15 +143,15 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	public Encounter reportContactWith(ContactPerson person, LocalDate date) {
 
 		var encounter = Encounter.with(person, date);
+		var event = !getEncounters().hasBeenInTouchWith(person) //
+				? EncounterReported.firstEncounter(encounter, id) //
+				: EncounterReported.subsequentEncounter(encounter, id);
+
 		this.encounters.add(encounter);
 
-		registerEvent(EncounterReported.of(encounter, id));
+		registerEvent(event);
 
 		return encounter;
-	}
-
-	public boolean hasBeenInTouchWith(ContactPerson person, Period period) {
-		return Encounters.of(encounters).hasBeenInTouchWith(person, period);
 	}
 
 	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {
@@ -171,10 +179,21 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		TrackedPersonIdentifier personIdentifier;
 	}
 
-	@Value(staticConstructor = "of")
+	@Value
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class EncounterReported implements DomainEvent {
+
 		Encounter encounter;
 		TrackedPersonIdentifier personIdentifier;
+		boolean firstEncounterWithTargetPerson;
+
+		public static EncounterReported firstEncounter(Encounter encounter, TrackedPersonIdentifier id) {
+			return new EncounterReported(encounter, id, true);
+		}
+
+		public static EncounterReported subsequentEncounter(Encounter encounter, TrackedPersonIdentifier id) {
+			return new EncounterReported(encounter, id, false);
+		}
 	}
 
 	@PostLoad
