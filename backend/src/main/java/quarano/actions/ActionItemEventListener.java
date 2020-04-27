@@ -17,11 +17,12 @@ package quarano.actions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import quarano.actions.ActionItem.ItemType;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson.DiaryEntryAdded;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
@@ -65,18 +66,15 @@ public class ActionItemEventListener {
 		var trackedCase = event.getTrackedCase();
 
 		if (trackedCase.isIndexCase()) {
-			// TODO: check for closed
+			// TODO check for beendet
 
 			var person = trackedCase.getTrackedPerson();
 			var detailsMissing = (person.getPhoneNumber() == null && person.getMobilePhoneNumber() == null)
-					 || person.getEmailAddress() == null
-					 || person.getDateOfBirth() == null;
-			DescriptionCode missingDetailsIndex = DescriptionCode.MISSING_DETAILS_INDEX;
-
-			if (detailsMissing &&
-					items.findByDescriptionCode(person.getId(), missingDetailsIndex).isEmpty()) {
-
-				items.save(new TrackedCaseMissingDetailsActionItem(person.getId(), trackedCase.getId()));
+					|| person.getEmailAddress() == null
+					|| person.getDateOfBirth() == null;
+			if (detailsMissing && items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX).isEmpty()) {
+				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
+						DescriptionCode.MISSING_DETAILS_INDEX));
 			}
 		}
 	}

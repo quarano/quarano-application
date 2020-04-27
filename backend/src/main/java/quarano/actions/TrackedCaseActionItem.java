@@ -30,13 +30,13 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
-public class TrackedCaseMissingDetailsActionItem extends ActionItem {
+public class TrackedCaseActionItem extends ActionItem {
 
 	private final @Getter TrackedCaseIdentifier caseIdentifier;
 
-	TrackedCaseMissingDetailsActionItem(TrackedPersonIdentifier person, TrackedCaseIdentifier caseIdentifier) {
+	TrackedCaseActionItem(TrackedPersonIdentifier person, TrackedCaseIdentifier caseIdentifier, ItemType itemType, DescriptionCode descriptionCode) {
 
-		super(person, ItemType.PROCESS_INCIDENT, Description.of(DescriptionCode.MISSING_DETAILS_INDEX));
+		super(person, itemType, Description.of(descriptionCode));
 
 		this.caseIdentifier = caseIdentifier;
 	}

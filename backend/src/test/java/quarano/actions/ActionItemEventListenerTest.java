@@ -1,20 +1,9 @@
 package quarano.actions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.data.util.Streamable;
 import quarano.QuaranoUnitTest;
 import quarano.department.CaseType;
 import quarano.department.Department;
@@ -28,6 +17,14 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.data.util.Streamable;
 
 @QuaranoUnitTest
 class ActionItemEventListenerTest {
@@ -64,7 +61,7 @@ class ActionItemEventListenerTest {
 
                     assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
-                    var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseMissingDetailsActionItem.class);
+                    var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
                     verify(items, times(1)).save(actionItemCaptor.capture());
 
                     var actionItem = actionItemCaptor.getValue();
@@ -87,7 +84,7 @@ class ActionItemEventListenerTest {
         var event = TrackedCaseUpdated.of(trackedCase);
 
         when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX)).thenReturn(Streamable.of(
-                new TrackedCaseMissingDetailsActionItem(null, null)
+                new TrackedCaseActionItem(null, null, ActionItem.ItemType.PROCESS_INCIDENT, DescriptionCode.MISSING_DETAILS_INDEX)
         ));
 
         assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
