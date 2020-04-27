@@ -47,6 +47,32 @@ class ContactPersonControllerWebIntegrationTests {
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
 
+	
+	@Test
+	void addContactPersonSuccess() throws Exception {
+
+		var payload = new ContactPersonDto();
+		payload.setFirstName("TestNameFirst");
+		payload.setLastName("TestName");
+		payload.setIsHealthStaff(true);
+		payload.setEmail("test@testtest.de");
+		payload.setMobilePhone("0123910");
+
+		String response = mvc.perform(post("/api/contacts") //
+				.content(mapper.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isCreated()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo("TestNameFirst");
+		assertThat(document.read("$.lastName", String.class)).isEqualTo("TestName");
+		assertThat(document.read("$.isHealthStaff", String.class)).isEqualTo("true");
+		assertThat(document.read("$.email", String.class)).isEqualTo("test@testtest.de");
+		assertThat(document.read("$.mobilePhone", String.class)).isEqualTo("0123910");
+	}
+	
 	@Test
 	void rejectsMissingContactWays() throws Exception {
 
@@ -85,6 +111,7 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.firstName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
 		assertThat(document.read("$.lastName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
 	}
+	
 
 	@TestFactory
 	Stream<DynamicTest> acceptsRequestIfOneContactWayIsGiven() {

@@ -70,7 +70,7 @@ class TrackingEventListenerUnitTests {
 	}
 
 	@Test
-	void createContactCaseAutomaticallyAfterFirstEncounter() {
+	void createContactCaseAutomaticallyOnFirstEncounter() {
 
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
@@ -120,9 +120,7 @@ class TrackingEventListenerUnitTests {
 
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
-		var assessment = new RiskAssessment();
-		assessment.setIsHealthStaff(Boolean.TRUE);
-		encounter.getContact().setRisk(assessment);
+		encounter.getContact().setIsHealthStaff(Boolean.TRUE);
 		var trackedCase = createIndexCaseFor(person);
 
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
