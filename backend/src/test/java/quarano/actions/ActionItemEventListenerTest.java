@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
+import quarano.department.CaseStatus;
 import quarano.department.CaseType;
 import quarano.department.Department;
 import quarano.department.TrackedCase;
@@ -39,7 +40,7 @@ class ActionItemEventListenerTest {
     }
 
     @TestFactory
-    Stream<DynamicTest> createNewTrackedCaseMissingDetailsActionItem() {
+    Stream<DynamicTest> createNewTrackedCaseActionItem() {
         var trackedPersons = Map.of(
                 "only firstName and lastName", new TrackedPerson("firstName", "lastName")
                 , "empty phoneNumber and mobilenumber", new TrackedPerson("firstName", "lastName", EmailAddress.of("test@test.de"), null, null, null, LocalDate.now(), null, Collections.emptyList(), Collections.emptyList())
@@ -76,7 +77,7 @@ class ActionItemEventListenerTest {
     }
 
     @Test
-    void doesNotCreateNewTrackedCaseMissingDetailsActionItemForExisting() {
+    void doesNotCreateNewTrackedCaseActionItemForExisting() {
         var person = new TrackedPerson("firstName", "lastName");
         var personId = person.getId();
         var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("test"));
@@ -93,10 +94,24 @@ class ActionItemEventListenerTest {
     }
 
     @Test
-    void doesNotCreateNewTrackedCaseMissingDetailsActionItemForWrongType() {
+    void doesNotCreateNewTrackedCaseActionItemForWrongType() {
         var person = new TrackedPerson("firstName", "lastName");
         var trackedCase = new TrackedCase(person, CaseType.CONTACT, new Department("test"));
         var event = TrackedCaseUpdated.of(trackedCase);
+
+        assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+        verify(items, times(0)).findByDescriptionCode(any(), any());
+        verify(items, times(0)).save(any());
+    }
+
+    @Test
+    void doesNotCreateNewTrackedCaseActionItemForStoppedCase() {
+        var person = new TrackedPerson("firstName", "lastName");
+        var trackedCase = spy(new TrackedCase(person, CaseType.INDEX, new Department("test")));
+        var event = TrackedCaseUpdated.of(trackedCase);
+
+        when(trackedCase.resolveStatus()).thenReturn(CaseStatus.STOPPED);
 
         assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 

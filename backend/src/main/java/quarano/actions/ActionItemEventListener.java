@@ -18,6 +18,7 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
+import quarano.department.CaseStatus;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson.DiaryEntryAdded;
 
@@ -65,8 +66,9 @@ public class ActionItemEventListener {
 	void on(TrackedCaseUpdated event) {
 		var trackedCase = event.getTrackedCase();
 
-		if (trackedCase.isIndexCase() && !trackedCase.getEnrollment().isCompletedPersonalData()) {
-			// TODO check for beendet
+		if (trackedCase.isIndexCase()
+				&& trackedCase.resolveStatus() != CaseStatus.STOPPED
+				&& !trackedCase.getEnrollment().isCompletedPersonalData()) {
 
 			var person = trackedCase.getTrackedPerson();
 			var detailsMissing = (person.getPhoneNumber() == null && person.getMobilePhoneNumber() == null)
