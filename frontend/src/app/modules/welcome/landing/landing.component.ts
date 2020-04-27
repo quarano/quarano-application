@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ClientType } from '../../../models/report-case';
 
 @Component({
   selector: 'app-landing',
@@ -8,8 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LandingComponent implements OnInit {
 
-  public userType = 'index';
-  public clientcode;
+  public userType = ClientType.index.valueOf();
+  public clientcode: string;
 
   constructor(private router: Router, private route: ActivatedRoute) { }
 
