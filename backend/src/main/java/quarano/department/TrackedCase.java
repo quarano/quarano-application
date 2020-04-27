@@ -85,6 +85,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public boolean isContactCase() {
 		return type.equals(CaseType.CONTACT);
 	}
+	
+	public boolean isMedicalContactCase() {
+		return type.equals(CaseType.CONTACT_MEDICAL);
+	}
 
 	public boolean isInQuarantine() {
 		return quarantine != null;
