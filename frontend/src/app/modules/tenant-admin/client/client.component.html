@@ -2,7 +2,7 @@
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
     <mat-card-title *ngIf="caseDetail$ | async; else newCase"
-      >Fall bearbeiten</mat-card-title
+    ><span>Fall bearbeiten</span> <span class="status">Fallstatus</span></mat-card-title
     >
     <ng-template #newCase>
       <mat-card-title>Neuen Fall anlegen</mat-card-title>

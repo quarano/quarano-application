@@ -2,3 +2,17 @@
   background-image: url("../../../../assets/images/diary.png");
   background-size: cover;
 }
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+
+  .status {
+    font-size: 12px;
+    line-height: 12px;
+    border-radius: 19px;
+    border: 1px solid;
+    display: inline-block;
+    padding: 4px 10px 2px;
+  }
+}
