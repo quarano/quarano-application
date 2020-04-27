@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import quarano.core.EnumMessageSourceResolvable;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -39,9 +40,11 @@ public class Description implements MessageSourceResolvable {
 	private final String arguments;
 
 	public static Description of(DescriptionCode code, Object... arguments) {
+
 		var collect = Arrays.stream(arguments) //
 				.map(Object::toString) //
 				.collect(Collectors.joining(","));
+
 		return new Description(code, collect);
 	}
 
@@ -51,12 +54,7 @@ public class Description implements MessageSourceResolvable {
 	 */
 	@Override
 	public String[] getCodes() {
-		return new String[] { //
-				"actions.description." + //
-						Arrays.stream(code.name().split("_")) //
-								.map(String::toLowerCase) //
-								.collect(Collectors.joining("-")) //
-		};
+		return EnumMessageSourceResolvable.of(code).getCodes();
 	}
 
 	/*

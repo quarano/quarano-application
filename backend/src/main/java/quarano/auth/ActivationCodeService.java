@@ -7,6 +7,8 @@ import quarano.auth.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,11 +18,20 @@ public class ActivationCodeService {
 	private final @NonNull ActivationCodeRepository activationCodes;
 	private final @NonNull ActivationCodeProperties configuration;
 
-	public ActivationCode createActivationCode(TrackedPersonIdentifier personIdentifier,
+	public Try<ActivationCode> createActivationCode(TrackedPersonIdentifier personIdentifier,
 			DepartmentIdentifier departmentIdentifier) {
 
-		return activationCodes
-				.save(new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier));
+		ActivationCodes codes = activationCodes.findByTrackedPersonId(personIdentifier);
+
+		if (codes.hasRedeemedCode()) {
+			return Try.failure(ActivationCodeException.activationConcluded());
+		}
+
+		codes.map(ActivationCode::cancel) //
+				.map(it -> it.map(activationCodes::save));
+
+		return Try.ofSupplier(() -> activationCodes
+				.save(new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier)));
 	}
 
 	/**
@@ -47,6 +58,13 @@ public class ActivationCodeService {
 		return findCode(identifier) //
 				.filter(ActivationCode::isExpired, ActivationCodeException::expired) //
 				.filter(it -> !it.isWaitingForActivation(), ActivationCodeException::usedOrCanceled);
+	}
+
+	public Optional<ActivationCode> getPendingActivationCode(TrackedPersonIdentifier id) {
+
+		ActivationCodes codes = activationCodes.findByTrackedPersonId(id);
+
+		return codes.getPendingActivationCode();
 	}
 
 	private Try<ActivationCode> findCode(ActivationCodeIdentifier identifier) {

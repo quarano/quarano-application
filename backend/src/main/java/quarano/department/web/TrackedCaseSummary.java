@@ -15,8 +15,12 @@
  */
 package quarano.department.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import quarano.core.EnumMessageSourceResolvable;
+import quarano.department.CaseStatus;
 import quarano.department.TrackedCase;
 
 import java.time.format.DateTimeFormatter;
@@ -24,15 +28,37 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author Oliver Drotbohm
  */
-@RequiredArgsConstructor(staticName = "of")
-public class TrackedCaseSummaryDto {
+@Relation(collectionRelation = "cases")
+public class TrackedCaseSummary extends RepresentationModel<TrackedCaseSummary> {
 
-	private final TrackedCase trackedCase;
+	private final @Getter(onMethod = @__(@JsonIgnore)) TrackedCase trackedCase;
 	private final @NonNull MessageSourceAccessor messages;
+
+	@SuppressWarnings("null")
+	private TrackedCaseSummary(TrackedCase trackedCase, MessageSourceAccessor messages) {
+
+		this.trackedCase = trackedCase;
+		this.messages = messages;
+
+		var controller = on(TrackedCaseController.class);
+
+		add(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
+				TrackedCaseRepresentations.CONCLUDE));
+	}
+
+	public static TrackedCaseSummary of(TrackedCase trackedCase, MessageSourceAccessor messages) {
+		return new TrackedCaseSummary(trackedCase, messages);
+	}
 
 	public String getCaseId() {
 		return trackedCase.getId().toString();
@@ -51,22 +77,20 @@ public class TrackedCaseSummaryDto {
 	}
 
 	public String getStatus() {
-		var statusKey = (trackedCase.resolveStatus());
-		var messageKey = ("department.casestatus." + statusKey).toLowerCase(Locale.US).replace("_", "-");
-		return messages.getMessage(messageKey);
+		return messages.getMessage(EnumMessageSourceResolvable.of(resolveStatus()));
 	}
 
 	public String getPrimaryPhoneNumber() {
 
-		var phoneNumber = trackedCase.getTrackedPerson().getPhoneNumber();
-		var mobilePhoneNumber = trackedCase.getTrackedPerson().getMobilePhoneNumber();
+		var trackedPerson = trackedCase.getTrackedPerson();
+		var phoneNumber = trackedPerson.getPhoneNumber();
+		var mobilePhoneNumber = trackedPerson.getMobilePhoneNumber();
 
 		if (phoneNumber != null) {
 			return phoneNumber.toString();
 		} else {
 			return mobilePhoneNumber == null ? null : mobilePhoneNumber.toString();
 		}
-
 	}
 
 	public String getZipCode() {
@@ -102,6 +126,7 @@ public class TrackedCaseSummaryDto {
 		return initialReport == null ? null : initialReport.getBelongToMedicalStaff();
 	}
 
+	@Nullable
 	public Map<String, Object> getQuarantine() {
 
 		if (!trackedCase.isInQuarantine()) {
@@ -112,5 +137,24 @@ public class TrackedCaseSummaryDto {
 
 		return Map.of("from", quarantine.getFrom().format(DateTimeFormatter.ISO_DATE), //
 				"to", quarantine.getTo().format(DateTimeFormatter.ISO_DATE));
+	}
+
+	private CaseStatus resolveStatus() {
+
+		if (trackedCase.isConcluded()) {
+			return CaseStatus.STOPPED;
+		}
+
+		if (hasLink(TrackedCaseRepresentations.START_TRACKING)) {
+			return CaseStatus.OPENED;
+		}
+
+		if (hasLink(TrackedCaseRepresentations.RENEW)) {
+			return CaseStatus.IN_REGISTRATION;
+		}
+
+		return trackedCase.getEnrollment().isComplete() //
+				? CaseStatus.TRACKING_ACTIVE //
+				: CaseStatus.REGISTRATION_COMPLETED;
 	}
 }

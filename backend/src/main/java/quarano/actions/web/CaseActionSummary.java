@@ -23,7 +23,7 @@ import quarano.actions.ActionItems;
 import quarano.actions.Description;
 import quarano.actions.DescriptionCode;
 import quarano.department.TrackedCase;
-import quarano.department.web.TrackedCaseSummaryDto;
+import quarano.department.web.TrackedCaseSummary;
 
 import java.util.List;
 import java.util.Map;
@@ -43,14 +43,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CaseActionSummary {
 
 	private final ActionItems items;
-	private final TrackedCaseSummaryDto trackedCaseDto;
+	private final TrackedCaseSummary trackedCaseDto;
 	private final TrackedCase trackedCase;
 
 	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
 
 		this.trackedCase = trackedCase;
 		this.items = items;
-		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase, messages);
+		this.trackedCaseDto = TrackedCaseSummary.of(trackedCase, messages);
 	}
 
 	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {

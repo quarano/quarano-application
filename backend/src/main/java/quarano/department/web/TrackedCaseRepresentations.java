@@ -25,6 +25,7 @@ import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
@@ -35,6 +36,10 @@ import org.springframework.validation.SmartValidator;
 @Component
 @RequiredArgsConstructor
 public class TrackedCaseRepresentations {
+
+	public static final LinkRelation START_TRACKING = LinkRelation.of("start-tracking");
+	public static final LinkRelation CONCLUDE = LinkRelation.of("conclude");
+	public static final LinkRelation RENEW = LinkRelation.of("renew");
 
 	private final MapperWrapper mapper;
 	private final SmartValidator validator;
@@ -64,7 +69,7 @@ public class TrackedCaseRepresentations {
 		var personDto = mapper.map(source, TrackedPersonDto.class);
 		var person = mapper.map(personDto, TrackedPerson.class);
 
-		return mapper.map(source, new TrackedCase(person,  CaseType.INDEX, department));
+		return mapper.map(source, new TrackedCase(person, CaseType.INDEX, department));
 	}
 
 	InitialReport from(InitialReportDto source) {

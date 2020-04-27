@@ -49,6 +49,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	public static final TrackedCaseIdentifier TRACKED_CASE_NADINE = TrackedCaseIdentifier
 			.of(UUID.fromString("03ea6953-f06c-418a-975c-bb2ff79c1ff3"));
 
+	public static final TrackedCaseIdentifier TRACKED_CASE_HARRY = TrackedCaseIdentifier
+			.of(UUID.fromString("bb2ff79c-f06c-418a-975c-03ea69537d41"));
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -61,6 +64,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var person3 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
 		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
 
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
@@ -129,5 +133,8 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 						.setNursingActionOnC19Pat(false) //
 						.withoutSymptoms()) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
+
+		cases.save(new TrackedCase(harry, CaseType.INDEX, department1) //
+				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))));
 	}
 }

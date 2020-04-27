@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
 import quarano.department.Department;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.DepartmentRepository;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.InitialReport;
@@ -39,10 +40,11 @@ import java.util.stream.Stream;
 import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -71,11 +73,11 @@ class TrackedCaseController {
 	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/api/hd/cases")
-	Stream<?> getCases(@LoggedIn Department department) {
+	RepresentationModel<?> getCases(@LoggedIn Department department) {
 
-		return cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
-				.map(it -> TrackedCaseSummaryDto.of(it, messages)) //
-				.stream();
+		return CollectionModel.of(cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
+				.map(it -> TrackedCaseSummary.of(it, messages)) //
+				.toList());
 	}
 
 	@PostMapping("/api/hd/cases")
@@ -93,7 +95,7 @@ class TrackedCaseController {
 				.body(representations.toRepresentation(trackedCase));
 	}
 
-	@GetMapping(path = "/api/hd/cases/form", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/api/hd/cases/form")
 	HttpEntity<?> getCaseForm() {
 		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
@@ -129,6 +131,16 @@ class TrackedCaseController {
 				.map(it -> representations.from(it, payload)) //
 				.map(cases::save) //
 				.map(representations::toRepresentation));
+	}
+
+	@DeleteMapping("/api/hd/cases/{identifier}")
+	HttpEntity<?> concludeCase(@PathVariable TrackedCaseIdentifier identifier,
+			@LoggedIn DepartmentIdentifier department) {
+
+		return ResponseEntity.of(cases.findById(identifier) //
+				.filter(it -> it.belongsTo(department)) //
+				.map(TrackedCase::conclude) //
+				.map(cases::save));
 	}
 
 	@GetMapping("/api/enrollments")

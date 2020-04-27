@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.auth.Password.EncryptedPassword;
 import quarano.auth.Password.UnencryptedPassword;
 import quarano.department.Department.DepartmentIdentifier;
+import quarano.department.TrackedCase;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -91,6 +92,10 @@ public class AccountService {
 		}
 		// check username pattern
 		return true;
+	}
+
+	public Optional<Account> findByCase(TrackedCase trackedCase) {
+		return accounts.findByTrackedPersonId(trackedCase.getTrackedPerson().getId());
 	}
 
 	public Optional<Account> findByUsername(String username) {

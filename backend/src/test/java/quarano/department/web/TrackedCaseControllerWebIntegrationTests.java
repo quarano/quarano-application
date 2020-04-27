@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
@@ -78,7 +77,6 @@ class TrackedCaseControllerWebIntegrationTests {
 		var response = mvc.perform(post("/api/hd/cases") //
 				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
 				.andExpect(status().isCreated()) //
 				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
 				.andReturn().getResponse().getContentAsString();
@@ -174,9 +172,9 @@ class TrackedCaseControllerWebIntegrationTests {
 		var document = JsonPath.parse(response);
 
 		var lastnamesFromResponse = List.of( //
-				document.read("$[0].lastName", String.class), //
-				document.read("$[1].lastName", String.class), //
-				document.read("$[2].lastName", String.class));
+				document.read("$._embedded.cases[0].lastName", String.class), //
+				document.read("$._embedded.cases[1].lastName", String.class), //
+				document.read("$._embedded.cases[2].lastName", String.class));
 
 		var expectedList = new ArrayList<>(lastnamesFromResponse);
 		Collections.sort(expectedList);
