@@ -68,12 +68,13 @@ class TrackedCaseController {
 	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/api/hd/cases")
 	Stream<?> getCases(@LoggedIn Department department) {
 
 		return cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
-				.map(TrackedCaseSummaryDto::of) //
+				.map(it -> TrackedCaseSummaryDto.of(it, messages)) //
 				.stream();
 	}
 

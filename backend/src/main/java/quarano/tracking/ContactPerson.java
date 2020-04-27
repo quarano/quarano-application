@@ -59,10 +59,11 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private TypeOfContract typeOfContract;
 	private String remark;
 	private @Setter(AccessLevel.NONE) String identificationHint;
-	private Boolean isHealthStaff;
-	private Boolean isSenior;
-	private Boolean hasPreExistingConditions;
 
+	private @Getter @Setter Boolean isHealthStaff;
+	private @Getter @Setter Boolean isSenior;
+	private @Getter @Setter Boolean hasPreExistingConditions;
+	
 	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
@@ -75,7 +76,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
 	}
-
+	
 	public String getFullName() {
 		return String.format("%s %s", firstName, lastName);
 	}
