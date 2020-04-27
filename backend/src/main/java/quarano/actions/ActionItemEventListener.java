@@ -65,7 +65,7 @@ public class ActionItemEventListener {
 	void on(TrackedCaseUpdated event) {
 		var trackedCase = event.getTrackedCase();
 
-		if (trackedCase.isIndexCase()) {
+		if (trackedCase.isIndexCase() && !trackedCase.getEnrollment().isCompletedPersonalData()) {
 			// TODO check for beendet
 
 			var person = trackedCase.getTrackedPerson();
