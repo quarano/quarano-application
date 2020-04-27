@@ -1,16 +1,17 @@
-import {UserDto} from '@models/user';
-import {environment} from '@environment/environment';
-import {SymptomDto} from '@models/symptom';
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map, share} from 'rxjs/operators';
-import {DiaryDto, DiaryEntryDto, DiaryEntryModifyDto} from '@models/diary-entry';
-import {ContactPersonDto, ContactPersonModifyDto} from '@models/contact-person';
-import {Register} from '@models/register';
-import {ReportCaseDto} from '@models/report-case';
-import {ActionListItemDto} from '@models/action';
-import {CaseDetailDto} from '@models/case-detail';
+import { UserDto } from '@models/user';
+import { environment } from '@environment/environment';
+import { SymptomDto } from '@models/symptom';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map, share } from 'rxjs/operators';
+import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
+import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
+import { Register } from '@models/register';
+import { ReportCaseDto } from '@models/report-case';
+import { ActionListItemDto } from '@models/action';
+import { CaseDetailDto } from '@models/case-detail';
+import { CaseActionDto } from '@models/case-action';
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +64,7 @@ export class ApiService {
   }
 
   registerClient(registerClient: Register): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, {responseType: 'text'});
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, { responseType: 'text' });
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
@@ -75,7 +76,7 @@ export class ApiService {
   }
 
   login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, {username, password});
+    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
   }
 
   getMe(): Observable<UserDto> {
@@ -92,6 +93,11 @@ export class ApiService {
 
   getCase(caseId: string): Observable<CaseDetailDto> {
     return this.httpClient.get<CaseDetailDto>(`${this.baseUrl}/api/hd/cases/${caseId}`);
+  }
+
+  getCaseActions(caseId: string): Observable<CaseActionDto> {
+    return this.httpClient.get<CaseActionDto>(`${this.baseUrl}/api/hd/actions/${caseId}`)
+      .pipe(share());
   }
 
   createCase(caseDetail: CaseDetailDto): Observable<any> {

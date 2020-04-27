@@ -1,10 +1,11 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit} from '@angular/core';
-import {CaseDetailDto} from '@models/case-detail';
-import {Observable} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import {ApiService} from '@services/api.service';
-import {SnackbarService} from '@services/snackbar.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CaseDetailDto } from '@models/case-detail';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { ApiService } from '@services/api.service';
+import { SnackbarService } from '@services/snackbar.service';
+import { CaseActionDto } from '@models/case-action';
 
 
 @Component({
@@ -14,6 +15,7 @@ import {SnackbarService} from '@services/snackbar.service';
 })
 export class ClientComponent implements OnInit {
   caseDetail$: Observable<CaseDetailDto>;
+  caseAction$: Observable<CaseActionDto>;
 
   constructor(
     private route: ActivatedRoute, private router: Router,
@@ -22,6 +24,7 @@ export class ClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.caseDetail$ = this.route.data.pipe(map((data) => data.case));
+    this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
   }
 
 

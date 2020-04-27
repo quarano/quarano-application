@@ -1,0 +1,44 @@
+<h1>Auffälligkeiten</h1>
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mb-5">
+  <fieldset>
+    <legend>Auffälligkeiten als bearbeitet kennzeichnen</legend>
+    <mat-form-field class="full-width">
+      <mat-label>Bemerkung</mat-label>
+      <textarea
+        [mat-autosize]="true"
+        [matAutosizeMinRows]="5"
+        matInput
+        formControlName="comment"
+        placeholder="Bemerkung"
+      ></textarea>
+    </mat-form-field>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="formGroup.invalid"
+    >
+      <mat-icon>check</mat-icon> Abschließen
+    </button>
+  </fieldset>
+</form>
+<ul>
+  <li>
+    <h2>Gesundheit</h2>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.health"
+    ></app-client-action-anomaly>
+  </li>
+  <li>
+    <h2>Prozess</h2>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.process"
+    ></app-client-action-anomaly>
+  </li>
+  <li>
+    <h2>Erledigt</h2>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.done"
+    ></app-client-action-anomaly>
+  </li>
+</ul>

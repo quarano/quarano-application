@@ -1,3 +1,4 @@
+import { ReportCaseActionsResolver } from '@resolvers/report-case-actions.resolver';
 import { ReportCasesResolver } from '@resolvers/report-cases.resolver';
 import { ActionsResolver } from '@resolvers/actions.resolver';
 import { ActionsComponent } from './actions/actions.component';
@@ -6,8 +7,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TenantAdminComponent } from './tenant-admin.component';
 import { ClientsComponent } from './clients/clients.component';
-import {ReportCaseResolver} from '@resolvers/report-case.resolver';
-import {ClientComponent} from './client/client.component';
+import { ReportCaseResolver } from '@resolvers/report-case.resolver';
+import { ClientComponent } from './client/client.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       {
         path: 'client/:id',
         component: ClientComponent,
-        resolve: { case: ReportCaseResolver }
+        resolve: { case: ReportCaseResolver, actions: ReportCaseActionsResolver }
       },
       {
         path: 'client',

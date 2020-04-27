@@ -1,0 +1,10 @@
+<ul>
+  <li *ngFor="let healthAnomaly of actions">
+    {{ healthAnomaly.date }}
+    <ul>
+      <li *ngFor="let item of healthAnomaly.items">
+        {{ item.description }}
+      </li>
+    </ul>
+  </li>
+</ul>
