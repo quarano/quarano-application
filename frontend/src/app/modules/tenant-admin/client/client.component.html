@@ -17,7 +17,19 @@
           (submittedValues)="saveCaseData($event)"
         ></app-client-edit>
       </mat-tab>
-      <mat-tab label="Aktionen" *ngIf="caseDetail$ | async">
+      <mat-tab *ngIf="caseAction$ | async">
+        <ng-template mat-tab-label>
+          <span
+            [matBadge]="
+              (caseAction$ | async).anomalies.health.length +
+              (caseAction$ | async).anomalies.process.length
+            "
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+            >Aktionen</span
+          >
+        </ng-template>
         <app-client-action
           [caseAction]="caseAction$ | async"
         ></app-client-action>
