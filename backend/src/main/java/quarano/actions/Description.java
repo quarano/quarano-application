@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.core.EnumMessageSourceResolvable;
+import quarano.tracking.BodyTemperature;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -43,9 +44,13 @@ public class Description implements MessageSourceResolvable {
 
 		var collect = Arrays.stream(arguments) //
 				.map(Object::toString) //
-				.collect(Collectors.joining(","));
+				.collect(Collectors.joining("|"));
 
 		return new Description(code, collect);
+	}
+
+	public static Description forIncreasedTemperature(BodyTemperature temperature, BodyTemperature reference) {
+		return of(DescriptionCode.INCREASED_TEMPERATURE, temperature, reference);
 	}
 
 	/*
@@ -63,6 +68,6 @@ public class Description implements MessageSourceResolvable {
 	 */
 	@Override
 	public Object[] getArguments() {
-		return arguments.split(",");
+		return arguments.split("\\|");
 	}
 }

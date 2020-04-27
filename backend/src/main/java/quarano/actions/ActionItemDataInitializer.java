@@ -18,6 +18,7 @@ package quarano.actions;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
 import quarano.core.DataInitializer;
+import quarano.tracking.BodyTemperature;
 import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -36,6 +37,7 @@ public class ActionItemDataInitializer implements DataInitializer {
 
 	private final TrackedPersonRepository people;
 	private final ActionItemRepository items;
+	private final AnomaliesProperties config;
 
 	/*
 	 * (non-Javadoc)
@@ -49,7 +51,9 @@ public class ActionItemDataInitializer implements DataInitializer {
 		TrackedPerson nadine = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 
 		items.save(new DiaryEntryMissingActionItem(sandra.getId(), Slot.now().previous()));
-		items.save(new DiaryEntryActionItem(gustav.getId(), gustav.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT, Description.of(DescriptionCode.INCREASED_TEMPERATURE, 40.1f)));
-		items.save(new DiaryEntryActionItem(nadine.getId(), nadine.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT, Description.of(DescriptionCode.INCREASED_TEMPERATURE, 40.1f)));
+		items.save(new DiaryEntryActionItem(gustav.getId(), gustav.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT,
+				Description.forIncreasedTemperature(BodyTemperature.of(40.1f), config.getTemperatureThreshold())));
+		items.save(new DiaryEntryActionItem(nadine.getId(), nadine.getDiary().iterator().next(), ItemType.MEDICAL_INCIDENT,
+				Description.forIncreasedTemperature(BodyTemperature.of(40.1f), config.getTemperatureThreshold())));
 	}
 }
