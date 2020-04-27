@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.Test;
 class SlotUnitTest {
 
 	@Test
+	@Disabled
 	void detectsOldSlots() {
 
 		Slot eveningTwoDaysAgo = Slot.of(LocalDate.now().minusDays(2), TimeOfDay.EVENING);
