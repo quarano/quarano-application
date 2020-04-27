@@ -41,6 +41,7 @@ import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -72,7 +73,7 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull MessageSourceAccessor messages;
 
-	@GetMapping("/api/hd/cases")
+	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
 	RepresentationModel<?> getCases(@LoggedIn Department department) {
 
 		return CollectionModel.of(cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
