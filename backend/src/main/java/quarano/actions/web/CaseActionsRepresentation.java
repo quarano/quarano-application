@@ -25,7 +25,7 @@ import quarano.actions.ActionItems;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 	private List<DailyItems> toDailyItems(Streamable<ActionItem> items, boolean done) {
 
 		return items.stream() //
-				.collect(Collectors.groupingBy(it -> it.getMetadata().getLastModified())) //
+				.collect(Collectors.groupingBy(it -> it.getMetadata().getLastModified().toLocalDate())) //
 				.entrySet() //
 				.stream() //
 				.map(it -> new DailyItems(it.getKey(), it.getValue(), messages)) //
@@ -87,14 +87,15 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	private static class DailyItems extends RepresentationModel<DailyItems> {
 
-		private final LocalDateTime date;
+		private final LocalDate date;
 		private final List<ActionItemDto> items;
 
-		public DailyItems(LocalDateTime date, List<ActionItem> items, MessageSourceAccessor messages) {
+		public DailyItems(LocalDate date, List<ActionItem> items, MessageSourceAccessor messages) {
 
 			this.date = date;
 			this.items = items.stream() //
 					.map(it -> ActionItemDto.of(it, messages)) //
+					.sorted(Comparator.comparing(ActionItemDto::getDate)) //
 					.collect(Collectors.toUnmodifiableList());
 		}
 	}

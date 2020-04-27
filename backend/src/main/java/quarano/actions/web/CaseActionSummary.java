@@ -46,6 +46,17 @@ public class CaseActionSummary {
 	private final TrackedCaseSummaryDto trackedCaseDto;
 	private final TrackedCase trackedCase;
 
+	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
+
+		this.trackedCase = trackedCase;
+		this.items = items;
+		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase, messages);
+	}
+
+	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
+		return new CaseActionSummary(trackedCase, items, messages);
+	}
+
 	public String getCaseId() {
 		return trackedCaseDto.getCaseId();
 	}
@@ -82,16 +93,6 @@ public class CaseActionSummary {
 		return trackedCaseDto.getQuarantine();
 	}
 
-	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
-		return new CaseActionSummary(trackedCase, items, messages);
-	}
-
-	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
-		this.trackedCase = trackedCase;
-		this.items = items;
-		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase, messages);
-	}
-	
 	public String getStatus() {
 		return trackedCaseDto.getStatus();
 	}
