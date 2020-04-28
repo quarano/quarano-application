@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -81,8 +82,8 @@ class JwtProperties implements JwtTokenGenerator {
 				.build();
 	}
 
-	Converter<Jwt, ? extends AbstractAuthenticationToken> getJwtConverter() {
-		return jwt -> new JwtAuthenticatedProfile(createToken(jwt.getTokenValue()));
+	Converter<Jwt, ? extends AbstractAuthenticationToken> getJwtConverter(Function<String, Account> accountSource) {
+		return jwt -> new JwtAuthenticatedProfile(createToken(jwt.getTokenValue()), accountSource);
 	}
 
 	JwtToken createToken(String source) {

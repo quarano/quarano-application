@@ -81,6 +81,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		this.add(role);
 	}
 
+	public UUID getIdAsUuid() {
+		return id.accountId;
+	}
+
 	/**
 	 * Adds a role to the roles list of the user if is not already included
 	 *

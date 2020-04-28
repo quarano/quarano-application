@@ -1,10 +1,11 @@
 package quarano.auth.jwt;
 
+import quarano.auth.Account;
 import quarano.auth.RoleType;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
@@ -16,20 +17,17 @@ class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
 	private static final long serialVersionUID = 6843604992995383584L;
 
-	private final String username;
-	private final TrackedPersonIdentifier trackedPersonId;
+	private final Account account;
 
-	public JwtAuthenticatedProfile(JwtToken token) {
-		this(token.getUsername(), token.getRoleTypes(), token.geTrackedPersonIdentifier());
+	public JwtAuthenticatedProfile(JwtToken token, Function<String, Account> account) {
+		this(account.apply(token.getUsername()), token.getRoleTypes());
 	}
 
-	public JwtAuthenticatedProfile(String username, List<RoleType> grantedRoleTypes,
-			TrackedPersonIdentifier trackedPersonId) {
+	public JwtAuthenticatedProfile(Account account, List<RoleType> grantedRoleTypes) {
 
 		super(toAuthorities(grantedRoleTypes));
 
-		this.username = username;
-		this.trackedPersonId = trackedPersonId;
+		this.account = account;
 	}
 
 	private static Collection<? extends GrantedAuthority> toAuthorities(List<RoleType> roles) {
@@ -48,12 +46,12 @@ class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 	@Override
 	@Nullable
 	public Object getDetails() {
-		return this.trackedPersonId;
+		return account.getTrackedPersonId();
 	}
 
 	@Override
 	public Object getPrincipal() {
-		return username;
+		return account;
 	}
 
 	@Override
@@ -68,6 +66,6 @@ class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
 	@Override
 	public String getName() {
-		return username;
+		return account.getUsername();
 	}
 }

@@ -25,6 +25,7 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -40,19 +41,19 @@ class AuthenticationManager {
 
 	public Optional<TrackedPerson> getLoggedInTrackedPerson() {
 
-		var id = SecurityContextHolder.getContext() //
-				.getAuthentication() //
-				.getDetails();
-
-		return repository.findById((TrackedPersonIdentifier) id);
+		return Optional.ofNullable(SecurityContextHolder.getContext() //
+				.getAuthentication()) //
+				.map(Authentication::getDetails) //
+				.map(TrackedPersonIdentifier.class::cast) //
+				.flatMap(repository::findById);
 	}
 
 	public Optional<Account> getCurrentUser() {
 
-		var username = SecurityContextHolder.getContext() //
-				.getAuthentication() //
-				.getPrincipal().toString();
-
-		return accounts.findByUsername(username);
+		return Optional.ofNullable(SecurityContextHolder.getContext() //
+				.getAuthentication()) //
+				.map(Authentication::getPrincipal) //
+				.filter(Account.class::isInstance) //
+				.map(Account.class::cast);
 	}
 }

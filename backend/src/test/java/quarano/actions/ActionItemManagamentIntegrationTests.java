@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
  */
 @QuaranoIntegrationTest
 @RequiredArgsConstructor
-public class ActionItemManagamentIntegrationTests {
+class ActionItemManagamentIntegrationTests {
 
 	private final TrackedCaseRepository cases;
 	private final ActionItemRepository repository;
