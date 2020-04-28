@@ -18,6 +18,8 @@ import { ClientComponent } from './client/client.component';
 import { ReportCaseResolver } from '@resolvers/report-case.resolver';
 import { EditComponent } from './client/edit/edit.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CommentsComponent } from './client/comments/comments.component';
+import { MailComponent } from './client/mail/mail.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     ActionAlertComponent,
     EditComponent,
     ActionComponent,
-    AnomalyComponent
+    AnomalyComponent,
+    CommentsComponent,
+    MailComponent
   ],
   imports: [
     CommonModule,
