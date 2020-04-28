@@ -2,6 +2,9 @@
   background-image: url("../../../../assets/images/diary.png");
   background-size: cover;
 }
+mat-card {
+  width: 700px;
+}
 
 mat-card-title {
   display: flex;
