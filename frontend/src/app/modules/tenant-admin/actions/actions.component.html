@@ -7,7 +7,7 @@
   [messages]="{
     emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
     selectedMessage: 'ausgewählt',
-    totalMessage: 'Fälle'
+    totalMessage: actions.length === 1 ? 'Fall' : 'Fälle'
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
