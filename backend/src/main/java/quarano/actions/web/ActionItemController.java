@@ -103,6 +103,6 @@ public class ActionItemController {
 				.map(it -> new CaseActionSummary(it, items.findByCase(it), trackedCaseRepresentations.toSummary(it))) //
 				.stream() //
 				.filter(it -> it.hasUnresolvedItems()) //
-				.sorted(Comparator.comparing(CaseActionSummary::getPriority));
+				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());
 	}
 }
