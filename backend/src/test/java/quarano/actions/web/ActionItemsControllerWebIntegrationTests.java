@@ -59,7 +59,7 @@ public class ActionItemsControllerWebIntegrationTests {
 		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.comments", JSONArray.class)).isEmpty();
-		assertThat(document.read("$.anomalies.done", JSONArray.class)).isEmpty();
+		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isEmpty();
 
 		ActionsReviewed reviewed = new ActionsReviewed();
 		reviewed.setComment("Comment!");
@@ -74,7 +74,7 @@ public class ActionItemsControllerWebIntegrationTests {
 		document = JsonPath.parse(response);
 
 		assertThat(document.read("$.comments[0].comment", String.class)).isEqualTo(reviewed.getComment());
-		assertThat(document.read("$.anomalies.done", JSONArray.class)).isNotEmpty();
+		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isNotEmpty();
 		assertThat(document.read("$.anomalies.process", JSONArray.class)).isEmpty();
 		assertThat(document.read("$.anomalies.health", JSONArray.class)).isEmpty();
 	}
