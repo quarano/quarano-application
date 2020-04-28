@@ -41,6 +41,7 @@ public class ActionItemsManagement {
 	public void resolveItemsFor(TrackedCase trackedCase, @Nullable String comment) {
 
 		if (StringUtils.hasText(comment)) {
+
 			trackedCase = cases.save(trackedCase.addComment(comment));
 		}
 

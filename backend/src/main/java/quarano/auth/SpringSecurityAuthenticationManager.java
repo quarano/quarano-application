@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.auth.web;
+package quarano.auth;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AccountService;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
@@ -34,11 +32,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-class AuthenticationManager {
+class SpringSecurityAuthenticationManager implements AuthenticationManager {
 
 	private final @NonNull TrackedPersonRepository repository;
-	private final @NonNull AccountService accounts;
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.auth.AuthenticationManager#getLoggedInTrackedPerson()
+	 */
+	@Override
 	public Optional<TrackedPerson> getLoggedInTrackedPerson() {
 
 		return Optional.ofNullable(SecurityContextHolder.getContext() //
@@ -48,6 +50,11 @@ class AuthenticationManager {
 				.flatMap(repository::findById);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.auth.AuthenticationManager#getCurrentUser()
+	 */
+	@Override
 	public Optional<Account> getCurrentUser() {
 
 		return Optional.ofNullable(SecurityContextHolder.getContext() //

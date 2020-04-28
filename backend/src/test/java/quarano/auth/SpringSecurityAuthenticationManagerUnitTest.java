@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.auth.web;
+package quarano.auth;
 
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.auth.AccountService;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -34,7 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @author Oliver Drotbohm
  */
 @QuaranoUnitTest
-class AuthenticationManagerUnitTest {
+class SpringSecurityAuthenticationManagerUnitTest {
 
 	@Mock TrackedPersonRepository repository;
 	@Mock AccountService accounts;
@@ -47,7 +46,7 @@ class AuthenticationManagerUnitTest {
 	@Test
 	void looksUpTrackedPersonById() {
 
-		var manager = new AuthenticationManager(repository, accounts);
+		var manager = new SpringSecurityAuthenticationManager(repository);
 		var identifier = TrackedPersonIdentifier.of(UUID.randomUUID());
 
 		SecurityContextHolder.getContext() //

@@ -13,33 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.auth.web;
+package quarano.auth;
 
-import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AuthenticationManager;
+import quarano.tracking.TrackedPerson;
 
 import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.stereotype.Component;
 
 /**
+ *
  * @author Oliver Drotbohm
  */
-@Component
-@RequiredArgsConstructor
-public class QuaranoAuditorAware implements AuditorAware<UUID> {
+public interface AuthenticationManager {
 
-	private final AuthenticationManager authentication;
+	Optional<TrackedPerson> getLoggedInTrackedPerson();
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.data.domain.AuditorAware#getCurrentAuditor()
-	 */
-	@Override
-	public Optional<UUID> getCurrentAuditor() {
-		return authentication.getCurrentUser().map(Account::getIdAsUuid);
-	}
+	Optional<Account> getCurrentUser();
+
 }

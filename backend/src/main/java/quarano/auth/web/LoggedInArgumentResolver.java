@@ -18,6 +18,7 @@ package quarano.auth.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account;
+import quarano.auth.AuthenticationManager;
 import quarano.department.Department;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.DepartmentRepository;
