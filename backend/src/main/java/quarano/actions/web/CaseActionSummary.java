@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -41,62 +40,58 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Patrick Otto
  */
 @JsonAutoDetect(getterVisibility = Visibility.NON_PRIVATE)
-public class CaseActionSummary {
+class CaseActionSummary {
 
 	private final ActionItems items;
-	private final TrackedCaseSummary trackedCaseDto;
+	private final TrackedCaseSummary summary;
 	private final TrackedCase trackedCase;
 
-	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
+	CaseActionSummary(TrackedCase trackedCase, ActionItems items, TrackedCaseSummary summary) {
 
 		this.trackedCase = trackedCase;
 		this.items = items;
-		this.trackedCaseDto = TrackedCaseSummary.of(trackedCase, messages);
-	}
-
-	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
-		return new CaseActionSummary(trackedCase, items, messages);
+		this.summary = summary;
 	}
 
 	public String getCaseId() {
-		return trackedCaseDto.getCaseId();
+		return summary.getCaseId();
 	}
 
 	public String getFirstName() {
-		return trackedCaseDto.getFirstName();
+		return summary.getFirstName();
 	}
 
 	public String getLastName() {
-		return trackedCaseDto.getLastName();
+		return summary.getLastName();
 	}
 
 	public String getZipCode() {
-		return trackedCaseDto.getZipCode();
+		return summary.getZipCode();
 	}
 
 	public String getDateOfBirth() {
-		return trackedCaseDto.getDateOfBirth();
+		return summary.getDateOfBirth();
 	}
 
 	public String getEmail() {
-		return trackedCaseDto.getEmail();
+		return summary.getEmail();
 	}
 
 	public String getCaseType() {
-		return trackedCaseDto.getCaseType();
+		return summary.getCaseType();
 	}
 
 	public String getPrimaryPhoneNumber() {
-		return trackedCaseDto.getPrimaryPhoneNumber();
+		return summary.getPrimaryPhoneNumber();
 	}
 
 	@Nullable
 	public Map<String, Object> getQuarantine() {
-		return trackedCaseDto.getQuarantine();
+		return summary.getQuarantine();
 	}
 
 	public String getStatus() {
-		return trackedCaseDto.getStatus();
+		return summary.getStatus();
 	}
 
 	String getName() {

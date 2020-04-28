@@ -26,6 +26,7 @@ import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.ExternalTrackedCaseRepresentations;
 
 import java.util.stream.Stream;
 
@@ -52,6 +53,7 @@ public class ActionItemController {
 	private final @NonNull ActionItemsManagement actionItems;
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull ExternalTrackedCaseRepresentations trackedCaseRepresentations;
 
 	@GetMapping("/api/hd/actions/{identifier}")
 	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier, //
@@ -97,7 +99,8 @@ public class ActionItemController {
 	Stream<?> getActions(@LoggedIn Department department) {
 
 		return cases.findByDepartmentId(department.getId()) //
-				.map(it -> CaseActionSummary.of(it, items.findByTrackedPerson(it.getTrackedPerson().getId()), messages)) //
+				.map(it -> new CaseActionSummary(it, items.findByTrackedPerson(it.getTrackedPerson().getId()),
+						trackedCaseRepresentations.toSummary(it))) //
 				.stream() //
 				.filter(c -> c.getNumberOfActionItems() > 0)
 				.sorted((c1, c2) -> Float.compare(c2.getPriority(), c1.getPriority())); // highest priority first

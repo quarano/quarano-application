@@ -10,7 +10,7 @@ import quarano.WithQuaranoUser;
 import quarano.auth.ActivationCodeDataInitializer;
 import quarano.auth.ActivationCodeService;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.web.TrackedCaseRepresentations;
+import quarano.department.web.TrackedCaseLinkRelations;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -186,8 +186,8 @@ class RegistrationWebIntegrationTests {
 		assertThat(document.read("$.expirationDate", String.class)).isNotBlank();
 		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
 
-		assertThat(links.findLinkWithRel(TrackedCaseRepresentations.RENEW, response)).isPresent();
-		assertThat(links.findLinkWithRel(TrackedCaseRepresentations.CONCLUDE, response)).isPresent();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.RENEW, response)).isPresent();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.CONCLUDE, response)).isPresent();
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
 	}

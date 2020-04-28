@@ -20,8 +20,8 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import lombok.RequiredArgsConstructor;
 import quarano.auth.AccountService;
 import quarano.auth.ActivationCodeService;
-import quarano.department.web.TrackedCaseRepresentations;
-import quarano.department.web.TrackedCaseSummary;
+import quarano.department.web.TrackedCaseLinkRelations;
+import quarano.department.web.TrackedCaseStatusAware;
 
 import java.util.function.Supplier;
 
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<TrackedCaseSummary> {
+class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<TrackedCaseStatusAware<?>> {
 
 	private final AccountService accounts;
 	private final ActivationCodeService codes;
@@ -48,7 +48,7 @@ class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<Tr
 	 */
 	@Override
 	@SuppressWarnings("null")
-	public TrackedCaseSummary process(TrackedCaseSummary model) {
+	public TrackedCaseStatusAware<?> process(TrackedCaseStatusAware<?> model) {
 
 		var trackedCase = model.getTrackedCase();
 
@@ -57,12 +57,12 @@ class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<Tr
 
 		// No account yet? Offer creation.
 		if (accounts.findByCase(trackedCase).isEmpty()) {
-			model.add(Link.of(uri.get(), TrackedCaseRepresentations.START_TRACKING));
+			model.add(Link.of(uri.get(), TrackedCaseLinkRelations.START_TRACKING));
 		}
 
 		// Pending activation code? Offer renewal.
 		if (codes.getPendingActivationCode(trackedCase.getTrackedPerson().getId()).isPresent()) {
-			model.add(Link.of(uri.get(), TrackedCaseRepresentations.RENEW));
+			model.add(Link.of(uri.get(), TrackedCaseLinkRelations.RENEW));
 		}
 
 		return model;

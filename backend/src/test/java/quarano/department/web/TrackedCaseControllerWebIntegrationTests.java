@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
@@ -28,14 +29,17 @@ import quarano.WithQuaranoUser;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -62,6 +66,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final TrackedCaseRepository cases;
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
+	private final LinkDiscoverer discoverer;
 
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
@@ -71,6 +76,10 @@ class TrackedCaseControllerWebIntegrationTests {
 		var document = JsonPath.parse(response);
 
 		assertMinimalFieldsSet(document, payload);
+
+		Stream.of(START_TRACKING, CONCLUDE).forEach(it -> {
+			assertThat(discoverer.findLinkWithRel(it, response)).isPresent();
+		});
 	}
 
 	@Test
@@ -143,8 +152,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
 		@SuppressWarnings("null")
-		var payload = representations.toRepresentation(trackedCase) //
-				.setEmail(null)//
+		var payload = representations.toInputRepresentation(trackedCase) //
+				.setEmail(null) //
 				.setDateOfBirth(null);
 
 		var document = expectBadRequest(HttpMethod.PUT, "/api/hd/cases/" + trackedCase.getId(), payload);
@@ -152,17 +161,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.email", String.class)).isNotNull();
 	}
 
-	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
-
-		return JsonPath.parse(mvc.perform(request(method, uri) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
-				.andReturn().getResponse().getContentAsString());
-	}
-
 	@Test
-	void getAllCasesOrderdCorrectly() throws Exception {
+	void getAllCasesOrderedCorrectly() throws Exception {
 
 		var response = mvc.perform(get("/api/hd/cases") //
 				.contentType(MediaType.APPLICATION_JSON)) //
@@ -180,6 +180,15 @@ class TrackedCaseControllerWebIntegrationTests {
 		Collections.sort(expectedList);
 
 		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
+	}
+
+	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
+
+		return JsonPath.parse(mvc.perform(request(method, uri) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString());
 	}
 
 	private TrackedCaseDto createMinimalPayload() {

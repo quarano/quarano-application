@@ -23,15 +23,14 @@ import quarano.core.EmailTemplates;
 import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.department.web.TrackedCaseRepresentations;
-import quarano.department.web.TrackedCaseSummary;
+import quarano.department.web.TrackedCaseLinkRelations;
+import quarano.department.web.TrackedCaseStatusAware;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Map;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
@@ -46,7 +45,6 @@ import org.springframework.stereotype.Component;
 class RegistrationRepresentations {
 
 	private final EmailTemplates templates;
-	private final MessageSourceAccessor messages;
 
 	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
 
@@ -57,11 +55,9 @@ class RegistrationRepresentations {
 				"activationCode", code.getId().toString());
 
 		var email = templates.getTemplate(Keys.REGISTRATION, placeholders);
-
-		var caseLinks = TrackedCaseSummary.of(trackedCase, messages).getLinks();
 		var result = PendingRegistration.of(trackedCase.getId(), code, email);
 
-		return result.add(caseLinks);
+		return result.add(TrackedCaseStatusAware.getDefaultLinks(trackedCase));
 	}
 
 	RepresentationModel<?> toNoRegistration(TrackedCase trackedCase) {
@@ -70,7 +66,7 @@ class RegistrationRepresentations {
 
 		return new RepresentationModel<>(
 				Link.of(fromMethodCall(controller.createRegistration(trackedCase.getId(), null)).toUriString(),
-						TrackedCaseRepresentations.START_TRACKING));
+						TrackedCaseLinkRelations.START_TRACKING));
 	}
 
 	@RequiredArgsConstructor(staticName = "of")
@@ -106,7 +102,7 @@ class RegistrationRepresentations {
 					Link.of(fromMethodCall(controller.getRegistrationDetails(trackedCaseIdentifier, null)).toUriString(),
 							IanaLinkRelations.SELF),
 					Link.of(fromMethodCall(controller.createRegistration(trackedCaseIdentifier, null)).toUriString(),
-							TrackedCaseRepresentations.RENEW)));
+							TrackedCaseLinkRelations.RENEW)));
 		}
 	}
 }

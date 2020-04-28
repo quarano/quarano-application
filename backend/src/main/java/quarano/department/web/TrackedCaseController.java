@@ -30,6 +30,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -71,13 +72,12 @@ class TrackedCaseController {
 	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
-	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
 	RepresentationModel<?> getCases(@LoggedIn Department department) {
 
 		return CollectionModel.of(cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
-				.map(it -> TrackedCaseSummary.of(it, messages)) //
+				.map(representations::toSummary) //
 				.toList());
 	}
 

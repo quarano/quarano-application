@@ -16,6 +16,7 @@
 package quarano.department.web;
 
 import quarano.department.TrackedCase;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.Quarantine;
 
 import org.modelmapper.ModelMapper;
