@@ -28,6 +28,7 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.ExternalTrackedCaseRepresentations;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
@@ -99,10 +100,9 @@ public class ActionItemController {
 	Stream<?> getActions(@LoggedIn Department department) {
 
 		return cases.findByDepartmentId(department.getId()) //
-				.map(it -> new CaseActionSummary(it, items.findByTrackedPerson(it.getTrackedPerson().getId()),
-						trackedCaseRepresentations.toSummary(it))) //
+				.map(it -> new CaseActionSummary(it, items.findByCase(it), trackedCaseRepresentations.toSummary(it))) //
 				.stream() //
-				.filter(c -> c.getNumberOfActionItems() > 0)
-				.sorted((c1, c2) -> Float.compare(c2.getPriority(), c1.getPriority())); // highest priority first
+				.filter(it -> it.hasUnresolvedItems()) //
+				.sorted(Comparator.comparing(CaseActionSummary::getPriority));
 	}
 }

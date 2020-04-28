@@ -31,15 +31,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Oliver Drotbohm
  * @author Patrick Otto
  */
-@JsonAutoDetect(getterVisibility = Visibility.NON_PRIVATE)
 class CaseActionSummary {
 
 	private final ActionItems items;
@@ -94,29 +91,28 @@ class CaseActionSummary {
 		return summary.getStatus();
 	}
 
-	String getName() {
+	public String getName() {
 		return trackedCase.getTrackedPerson().getFullName();
 	}
 
-	float getPriority() {
+	public float getPriority() {
 		return items.getPriority() * 100.00f / 100.00f;
 	}
 
-	List<DescriptionCode> getHealthSummary() {
+	public List<DescriptionCode> getHealthSummary() {
 		return getDescriptionCodes(ItemType.MEDICAL_INCIDENT);
 	}
 
-	List<DescriptionCode> getProcessSummary() {
+	public List<DescriptionCode> getProcessSummary() {
 		return getDescriptionCodes(ItemType.PROCESS_INCIDENT);
 	}
 
-	public int getNumberOfActionItems() {
-		return getDescriptionCodes(ItemType.MEDICAL_INCIDENT).size()
-				+ getDescriptionCodes(ItemType.PROCESS_INCIDENT).size();
+	boolean hasUnresolvedItems() {
+		return items.hasUnresolvedItems();
 	}
 
 	@JsonProperty("_links")
-	Map<String, Object> getLinks() {
+	public Map<String, Object> getLinks() {
 
 		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId(), null);
 

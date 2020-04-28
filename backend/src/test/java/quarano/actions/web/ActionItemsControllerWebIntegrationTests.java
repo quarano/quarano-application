@@ -39,7 +39,7 @@ import com.jayway.jsonpath.JsonPath;
  */
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-public class ActionItemsControllerWebIntegrationTests {
+class ActionItemsControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final TrackedCaseRepository cases;
@@ -60,18 +60,26 @@ public class ActionItemsControllerWebIntegrationTests {
 
 		assertThat(document.read("$.comments", JSONArray.class)).isEmpty();
 		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isEmpty();
+	}
+
+	@Test
+	@WithQuaranoUser("agent3")
+	void resolvesAnomalies() throws Exception {
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
+				.orElseThrow();
 
 		ActionsReviewed reviewed = new ActionsReviewed();
 		reviewed.setComment("Comment!");
 
-		response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
+		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
 				.content(jackson.writeValueAsString(reviewed)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
 
-		document = JsonPath.parse(response);
+		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.comments[0].comment", String.class)).isEqualTo(reviewed.getComment());
 		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isNotEmpty();
