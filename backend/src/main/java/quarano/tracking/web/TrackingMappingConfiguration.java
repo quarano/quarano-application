@@ -166,12 +166,7 @@ public class TrackingMappingConfiguration {
 
 		// DiaryEntry
 
-		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).setProvider(request -> {
-			var dto = (DiaryEntryInput) request.getSource();
-
-			return DiaryEntry.of(dto.getSlot());
-
-		}).addMappings(it -> {
+		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).addMappings(it -> {
 			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
 					(target, v) -> target.setSymptoms(v));
 		});

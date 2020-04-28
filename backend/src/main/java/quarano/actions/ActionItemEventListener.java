@@ -18,7 +18,7 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.TrackedPerson.DiaryEntryAdded;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,7 @@ public class ActionItemEventListener {
 	void on(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
-		var person = event.getPersonIdentifier();
+		var person = entry.getTrackedPersonId();
 
 		// Body temperature exceeds reference
 

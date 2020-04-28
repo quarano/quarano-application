@@ -22,6 +22,7 @@ import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryEntryRepository;
 import quarano.tracking.Slot;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -41,17 +42,17 @@ class ActionItemRepositoryIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
+	private final DiaryEntryRepository entries;
 	private final EntityManager em;
 
 	@Test
 	void persistsDescriptionArguments() {
 
-		DiaryEntry entry = DiaryEntry.of(Slot.of(LocalDateTime.now()));
-		entry.setBodyTemperature(BodyTemperature.of(41.0f));
+		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		var entry = DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
+				.setBodyTemperature(BodyTemperature.of(41.0f));
 
-		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
-				.map(it -> it.addDiaryEntry(entry)) //
-				.map(persons::save).orElseThrow();
+		entries.save(entry);
 
 		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.INCREASED_TEMPERATURE, BodyTemperature.of(36.0f), BodyTemperature.of(40.0f)));

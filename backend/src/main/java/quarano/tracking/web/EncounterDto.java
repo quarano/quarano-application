@@ -20,6 +20,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import quarano.tracking.Diary;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 
@@ -37,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EncounterDto {
 
 	private Encounter encounter;
+	private Diary diary;
 	private TrackedPerson person;
 
 	public LocalDate getDate() {
@@ -63,7 +65,7 @@ public class EncounterDto {
 		links.put("self", Map.of("href", fromMethodCall(encounterUri).toUriString()));
 		links.put("contact", Map.of("href", fromMethodCall(contactHandlerMethod).toUriString()));
 
-		person.getDiary().getEntryFor(encounter).ifPresent(it -> {
+		diary.getEntryFor(encounter).ifPresent(it -> {
 			var handlerMethod = on(DiaryController.class).getDiaryEntry(it.getId(), person);
 			links.put("diaryEntry", Map.of("href", fromMethodCall(handlerMethod).toUriString()));
 		});

@@ -25,11 +25,11 @@ import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.util.Streamable;
+import org.springframework.lang.Nullable;
 
 /**
  * @author Oliver Drotbohm
@@ -37,7 +37,7 @@ import org.springframework.data.util.Streamable;
 @RequiredArgsConstructor(staticName = "of")
 public class Diary implements Streamable<DiaryEntry> {
 
-	private final List<DiaryEntry> enties;
+	private final Streamable<DiaryEntry> enties;
 
 	public boolean contains(Encounter encounter) {
 		return getEntryFor(encounter).isPresent();
@@ -75,7 +75,7 @@ public class Diary implements Streamable<DiaryEntry> {
 				});
 	}
 
-	private static Optional<DiaryEntry> getSlotEntryFrom(Slot slot, Collection<DiaryEntry> sources) {
+	private static Optional<DiaryEntry> getSlotEntryFrom(Slot slot, @Nullable Collection<DiaryEntry> sources) {
 
 		if (sources == null) {
 			return Optional.empty();
