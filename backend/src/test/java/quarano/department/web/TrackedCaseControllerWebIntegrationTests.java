@@ -189,6 +189,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		return new TrackedCaseDto() //
 				.setFirstName("Michael") //
 				.setLastName("Mustermann") //
+				.setEmail("") // empty email to verify it gets bound to null and does not trigger validation
 				.setTestDate(today) //
 				.setQuarantineStartDate(today) //
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
