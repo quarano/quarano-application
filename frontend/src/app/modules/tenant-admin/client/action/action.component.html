@@ -30,7 +30,7 @@
       [actions]="caseAction.anomalies.process"
     ></app-client-action-anomaly>
   </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="caseAction.anomalies.resolved.length > 0">
+  <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Gesundheit
