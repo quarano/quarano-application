@@ -33,7 +33,7 @@
   <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Gesundheit
+        Abgeschlossen
       </mat-panel-title>
     </mat-expansion-panel-header>
     <app-client-action-anomaly
@@ -41,7 +41,12 @@
     ></app-client-action-anomaly> </mat-expansion-panel
 ></mat-accordion>
 
-<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-5">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="submitForm()"
+  class="mt-5"
+  *ngIf="hasOpenAnomalies()"
+>
   <fieldset>
     <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
     <mat-form-field class="full-width">

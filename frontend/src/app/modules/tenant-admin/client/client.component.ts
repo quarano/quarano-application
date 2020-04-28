@@ -27,6 +27,10 @@ export class ClientComponent implements OnInit {
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
   }
 
+  hasOpenAnomalies(): Observable<boolean> {
+    return this.caseAction$.pipe(map(a => (a.anomalies.health.length + a.anomalies.process.length) > 0));
+  }
+
 
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;

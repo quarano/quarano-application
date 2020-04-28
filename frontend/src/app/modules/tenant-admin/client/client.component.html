@@ -2,7 +2,8 @@
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
     <mat-card-title *ngIf="caseDetail$ | async; else newCase"
-    ><span>Fall bearbeiten</span> <span class="status">Fallstatus</span></mat-card-title
+      ><span>Fall bearbeiten</span>
+      <span class="status">Fallstatus</span></mat-card-title
     >
     <ng-template #newCase>
       <mat-card-title>Neuen Fall anlegen</mat-card-title>
@@ -20,6 +21,7 @@
       <mat-tab *ngIf="caseAction$ | async">
         <ng-template mat-tab-label>
           <span
+            *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
             [matBadge]="
               (caseAction$ | async).anomalies.health.length +
               (caseAction$ | async).anomalies.process.length
@@ -28,6 +30,9 @@
             matBadgeSize="small"
             matBadgeColor="warn"
             >Aktionen</span
+          >
+          <ng-template #has_no_open_anomalies
+            ><span>Aktionen</span></ng-template
           >
         </ng-template>
         <app-client-action
@@ -38,8 +43,8 @@
         <app-client-comments></app-client-comments>
       </mat-tab>
       <mat-tab label="Registrierungs E-Mail">
-      <app-client-comments></app-client-comments>
-    </mat-tab>
+        <app-client-comments></app-client-comments>
+      </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </mat-card>

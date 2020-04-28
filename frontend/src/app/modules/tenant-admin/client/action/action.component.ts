@@ -57,4 +57,8 @@ export class ActionComponent implements OnInit {
         this.router.navigate(['/tenant-admin/actions']);
       });
   }
+
+  hasOpenAnomalies(): boolean {
+    return (this.caseAction.anomalies.health.length + this.caseAction.anomalies.process.length) > 0;
+  }
 }
