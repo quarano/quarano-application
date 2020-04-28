@@ -21,7 +21,7 @@
 		<docker.build.userid>1001</docker.build.userid>
 		<jddd.version>0.0.1-SNAPSHOT</jddd.version>
 		<moduliths.version>1.0.0.BUILD-SNAPSHOT</moduliths.version>
-		<spring-hateoas.version>1.1.0.BUILD-SNAPSHOT</spring-hateoas.version>
+		<spring-hateoas.version>1.1.0.RC1</spring-hateoas.version>
 	</properties>
 
 	<profiles>
