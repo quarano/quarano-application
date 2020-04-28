@@ -30,14 +30,14 @@
       [actions]="caseAction.anomalies.process"
     ></app-client-action-anomaly>
   </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="caseAction.anomalies.done.length > 0">
+  <mat-expansion-panel *ngIf="caseAction.anomalies.resolved.length > 0">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Gesundheit
       </mat-panel-title>
     </mat-expansion-panel-header>
     <app-client-action-anomaly
-      [actions]="caseAction.anomalies.done"
+      [actions]="caseAction.anomalies.resolved"
     ></app-client-action-anomaly> </mat-expansion-panel
 ></mat-accordion>
 

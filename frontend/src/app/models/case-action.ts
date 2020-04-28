@@ -13,7 +13,7 @@ export interface ResolveLink {
 
 export interface AnomaliesDto {
   process: ActionDto[];
-  done: ActionDto[];
+  resolved: ActionDto[];
   health: ActionDto[];
 }
 
