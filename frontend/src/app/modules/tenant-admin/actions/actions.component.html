@@ -11,6 +11,8 @@
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
+  selectionType="single"
+  (select)="onSelect($event)"
 >
   <ngx-datatable-column
     prop="alerts"
@@ -79,32 +81,13 @@
       <a
         *ngIf="value"
         mat-icon-button
-        href="mailto:{{ value }}"
+        (click)="sendMail($event, value)"
         [matTooltip]="'E-Mail an ' + value"
         matTooltipPosition="right"
         class="mail-link"
       >
         <mat-icon>mail_outline</mat-icon>
       </a>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="caseId"
-    name="Bearbeiten"
-    [sortable]="false"
-    width="100"
-  >
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <button
-        mat-icon-button
-        matTooltip="Fall bearbeiten"
-        matTooltipPosition="right"
-        class="mail-link"
-        [routerLink]="['/tenant-admin/client', value]"
-      >
-        <mat-icon>edit</mat-icon>
-      </button>
     </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>

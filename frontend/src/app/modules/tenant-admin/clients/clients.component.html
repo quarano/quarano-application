@@ -1,5 +1,10 @@
 <div style="display: flex; justify-content: space-between;">
-  <button class="mb-3" mat-raised-button color="primary" [routerLink]="['/tenant-admin/client']">
+  <button
+    class="mb-3"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/tenant-admin/client']"
+  >
     <mat-icon>add</mat-icon>Neuen Fall anlegen
   </button>
   <button class="mb-3" mat-button>
@@ -136,25 +141,6 @@
         (click)="sendMail($event, value)"
       >
         <mat-icon>mail_outline</mat-icon>
-      </button>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="caseId"
-    name="Bearbeiten"
-    [sortable]="false"
-    width="100"
-  >
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <button
-        mat-icon-button
-        matTooltip="Fall bearbeiten"
-        matTooltipPosition="right"
-        class="mail-link"
-        [routerLink]="['/tenant-admin/client',value]"
-      >
-        <mat-icon>edit</mat-icon>
       </button>
     </ng-template>
   </ngx-datatable-column>

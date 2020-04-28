@@ -40,30 +40,34 @@
   <fieldset class="mb-3">
     <legend>Krankheitsdaten</legend>
     <div class="form-flex">
-    <mat-form-field class="half-width">
-      <mat-label>Abstrichdatum (Test)</mat-label>
-      <input
-        matInput
-        required
-        [max]="today"
-        [matDatepicker]="testDatePicker"
-        formControlName="testDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="testDatePicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #testDatePicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
-    </mat-form-field>
+      <mat-form-field class="half-width">
+        <mat-label>Abstrichdatum (Test)</mat-label>
+        <input
+          matInput
+          required
+          [max]="today"
+          [matDatepicker]="testDatePicker"
+          formControlName="testDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="testDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #testDatePicker></mat-datepicker>
+        <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      </mat-form-field>
 
-    <div class="half-width form-field form-field-radio">
-      <label class="example-margin">Covid-19 Test:</label>
-      <mat-radio-group formControlName="infected">
-        <mat-radio-button class="example-margin" [value]="true">Positiv</mat-radio-button>
-        <mat-radio-button class="example-margin" [value]="false">Negativ</mat-radio-button>
-      </mat-radio-group>
-    </div>
+      <div class="half-width form-field form-field-radio">
+        <label class="example-margin">Covid-19 Test:</label>
+        <mat-radio-group formControlName="infected">
+          <mat-radio-button class="example-margin" [value]="true"
+            >Positiv</mat-radio-button
+          >
+          <mat-radio-button class="example-margin" [value]="false"
+            >Negativ</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
     </div>
     <mat-form-field class="half-width">
       <mat-label>Beginn Quarantäne / häusliche Isolation</mat-label>
@@ -171,18 +175,15 @@
       <input matInput placeholder="Ort" formControlName="city" type="text" />
       <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
     </mat-form-field>
-  </fieldset><fieldset class="mb-3">
-  <legend>Kommentar</legend>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Kommentar</legend>
 
-  <mat-form-field class="full-width">
-    <textarea
-      matInput
-      formControlName="comment"
-      type="text"
-    ></textarea>
-    <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
-  </mat-form-field>
-</fieldset>
+    <mat-form-field class="full-width">
+      <textarea matInput formControlName="comment" type="text"></textarea>
+      <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+    </mat-form-field>
+  </fieldset>
   <div class="button-area">
     <button
       type="submit"
@@ -196,7 +197,7 @@
       type="button"
       mat-raised-button
       color="secondary"
-      [routerLink]="['/tenant-admin/cases']"
+      [routerLink]="['/tenant-admin/clients']"
     >
       Abbrechen
     </button>
