@@ -34,6 +34,17 @@
   (select)="onSelect($event)"
 >
   <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="190"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
     prop="lastName"
     name="Nachname"
     [resizeable]="true"
@@ -75,16 +86,7 @@
   >
   </ngx-datatable-column>
 
-  <ngx-datatable-column
-    prop="status"
-    name="Status"
-    width="190"
-    [resizeable]="true"
-    [sortable]="true"
-    [draggable]="true"
-    [canAutoResize]="true"
-  >
-  </ngx-datatable-column>
+
 
   <ngx-datatable-column
     prop="quarantineEnd"
