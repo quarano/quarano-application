@@ -23,5 +23,7 @@ export interface CaseDetailDto {
 
   comment?: string;
 
+  status?: string;
+
   infected: boolean;
 }

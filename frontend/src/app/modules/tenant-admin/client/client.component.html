@@ -1,9 +1,9 @@
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title *ngIf="caseDetail$ | async; else newCase"
+    <mat-card-title *ngIf="caseDetail$ | async as caseDetail; else newCase"
       ><span>Falldetails</span>
-      <span class="status">Fallstatus</span></mat-card-title
+      <span class="status">{{caseDetail.status}}</span></mat-card-title
     >
     <ng-template #newCase>
       <mat-card-title>Neuen Fall anlegen</mat-card-title>
