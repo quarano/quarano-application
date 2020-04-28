@@ -1,10 +1,10 @@
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SubSink} from 'subsink';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {BehaviorSubject} from 'rxjs';
 import {ReportCaseDto} from '@models/report-case';
-import {DatatableComponent} from '@swimlane/ngx-datatable';
+import {DatatableComponent, SelectionType} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-clients',
@@ -15,6 +15,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   cases: ReportCaseDto[] = [];
   loading = false;
+  selectionType = SelectionType.single;
   rows = [];
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
@@ -42,7 +43,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -104,7 +105,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.table.offset = 0;
   }
 
-  filterPredicate: ((obj: ReportCaseDto, filter: string) => boolean) = (obj: ReportCaseDto, filter: string): boolean => {
+  filterPredicate(obj: ReportCaseDto, filter: string): boolean {
     const dataStr = Object.keys(obj).reduce((currentTerm: string, key: string) => {
       return currentTerm + (obj as { [key: string]: any })[key] + '◬';
     }, '').toLowerCase();
@@ -112,5 +113,15 @@ export class ClientsComponent implements OnInit, OnDestroy {
     const transformedFilter = filter.trim().toLowerCase();
 
     return dataStr.indexOf(transformedFilter) !== -1;
+  }
+
+  sendMail(event, to: string) {
+    event.stopPropagation();
+    window.location.href = `mailto:${to}`;
+  }
+
+  onSelect(event) {
+    console.log(event);
+    this.router.navigate(['/tenant-admin/client',  event?.selected[0]?.caseId]);
   }
 }

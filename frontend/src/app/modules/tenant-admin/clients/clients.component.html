@@ -30,6 +30,8 @@
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
+  [selectionType]="selectionType"
+  (select)="onSelect($event)"
 >
   <ngx-datatable-column
     prop="lastName"
@@ -123,16 +125,16 @@
     [sortable]="false"
   >
     <ng-template let-value="value" ngx-datatable-cell-template>
-      <a
+      <button
         *ngIf="value"
         class="mail-link"
         mat-icon-button
-        href="mailto:{{ value }}"
         [matTooltip]="'E-Mail an ' + value"
         matTooltipPosition="right"
+        (click)="sendMail($event, value)"
       >
         <mat-icon>mail_outline</mat-icon>
-      </a>
+      </button>
     </ng-template>
   </ngx-datatable-column>
 
