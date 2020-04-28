@@ -18,14 +18,11 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
-import quarano.department.CaseStatus;
+import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import quarano.actions.ActionItem.ItemType;
-import quarano.department.TrackedCase.TrackedCaseUpdated;
-import quarano.tracking.TrackedPerson.DiaryEntryAdded;
 
 /**
  * @author Oliver Drotbohm
@@ -66,20 +63,28 @@ public class ActionItemEventListener {
 
 	@EventListener
 	void on(TrackedCaseUpdated event) {
+
 		var trackedCase = event.getTrackedCase();
 
-		if (trackedCase.isIndexCase()
-				&& trackedCase.resolveStatus() != CaseStatus.STOPPED
-				&& !trackedCase.getEnrollment().isCompletedPersonalData()) {
+		if (!trackedCase.isIndexCase() //
+				|| trackedCase.isConcluded() //
+				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
+			return;
+		}
 
-			var person = trackedCase.getTrackedPerson();
-			var detailsMissing = (person.getPhoneNumber() == null && person.getMobilePhoneNumber() == null)
-					|| person.getEmailAddress() == null
-					|| person.getDateOfBirth() == null;
-			if (detailsMissing && items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX).isEmpty()) {
-				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-						DescriptionCode.MISSING_DETAILS_INDEX));
-			}
+		var person = trackedCase.getTrackedPerson();
+		var detailsMissing = person.getPhoneNumber() == null //
+				&& person.getMobilePhoneNumber() == null //
+				|| person.getEmailAddress() == null //
+				|| person.getDateOfBirth() == null;
+
+		if (!detailsMissing) {
+			return;
+		}
+
+		if (items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX).isEmpty()) {
+			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
+					DescriptionCode.MISSING_DETAILS_INDEX));
 		}
 	}
 }
