@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -89,6 +90,7 @@ public class CaseActionSummary {
 		return trackedCaseDto.getPrimaryPhoneNumber();
 	}
 
+	@Nullable
 	public Map<String, Object> getQuarantine() {
 		return trackedCaseDto.getQuarantine();
 	}
@@ -121,7 +123,7 @@ public class CaseActionSummary {
 	@JsonProperty("_links")
 	Map<String, Object> getLinks() {
 
-		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId());
+		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId(), null);
 
 		return Map.of("self", Map.of("href", fromMethodCall(detailsLink).toUriString()));
 	}

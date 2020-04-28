@@ -18,22 +18,27 @@ package quarano.actions.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItemRepository;
+import quarano.actions.ActionItemsManagement;
 import quarano.auth.web.LoggedIn;
+import quarano.core.web.ErrorsDto;
 import quarano.department.Department;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 
-import java.util.Comparator;
 import java.util.stream.Stream;
+
+import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -44,14 +49,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActionItemController {
 
 	private final @NonNull ActionItemRepository items;
+	private final @NonNull ActionItemsManagement actionItems;
 	private final @NonNull MessageSourceAccessor messages;
-
 	private final @NonNull TrackedCaseRepository cases;
 
 	@GetMapping("/api/hd/actions/{identifier}")
-	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier) {
+	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier, //
+			@LoggedIn DepartmentIdentifier department) {
 
-		TrackedCase trackedCase = cases.findById(identifier).orElse(null);
+		var trackedCase = cases.findById(identifier) //
+				.filter(it -> it.belongsTo(department)) //
+				.orElse(null);
 
 		if (trackedCase == null) {
 			return ResponseEntity.notFound().build();
@@ -63,8 +71,26 @@ public class ActionItemController {
 	}
 
 	@PutMapping("/api/hd/actions/{identifier}/resolve")
-	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier) {
-		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier, //
+			@Valid @RequestBody ActionsReviewed payload, //
+			Errors errors, //
+			@LoggedIn DepartmentIdentifier department) {
+
+		TrackedCase trackedCase = cases.findById(identifier) //
+				.filter(it -> it.belongsTo(department)) //
+				.orElse(null);
+
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (errors.hasErrors()) {
+			return ErrorsDto.of(errors, messages).toBadRequest();
+		}
+
+		actionItems.resolveItemsFor(trackedCase, payload.getComment());
+
+		return allActions(identifier, department);
 	}
 
 	@GetMapping("/api/hd/actions")

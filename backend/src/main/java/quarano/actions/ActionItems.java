@@ -50,10 +50,16 @@ public class ActionItems implements Streamable<ActionItem> {
 				.filter(ActionItem::isProcessItem);
 	}
 
-	public Streamable<ActionItem> getDoneItems() {
+	public Streamable<ActionItem> getResolvedItems() {
 
 		return items //
 				.filter(ActionItem::isResolved);
+	}
+
+	public Streamable<ActionItem> getUnresolvedItems() {
+
+		return items //
+				.filter(ActionItem::isUnresolved);
 	}
 
 	public boolean hasUnresolvedItems() {

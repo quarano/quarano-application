@@ -46,6 +46,7 @@ import javax.persistence.OneToOne;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -70,6 +71,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
 	private List<ContactPerson> originContacts = new ArrayList<>();
+
+	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
+	private List<Comment> comments = new ArrayList<>();
 
 	private @Getter @Setter boolean infected;
 	private @Getter boolean concluded;
@@ -101,6 +105,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		if (originContact != null) {
 			this.originContacts.add(originContact);
 		}
+	}
+
+	public TrackedCase addComment(String comment) {
+
+		Assert.hasText(comment, "Comment must not be null or empty!");
+
+		this.comments.add(new Comment(comment));
+
+		return this;
 	}
 
 	public void addOriginContact(ContactPerson contact) {
