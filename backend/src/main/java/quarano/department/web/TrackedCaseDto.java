@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
@@ -31,9 +32,9 @@ public class TrackedCaseDto {
 	private @NotNull LocalDate quarantineStartDate;
 	private @NotNull LocalDate quarantineEndDate;
 
-	private @AlphaNumeric String street;
+	private @Pattern(regexp = Strings.STREET) String street;
 	private @AlphaNumeric String houseNumber;
-	private @Alphabetic String city;
+	private @Pattern(regexp = Strings.CITY) String city;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;

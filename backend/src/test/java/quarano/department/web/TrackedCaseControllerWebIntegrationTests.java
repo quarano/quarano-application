@@ -129,9 +129,9 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
-		assertThat(document.read("$.city", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
 
-		assertThat(document.read("$.street", String.class)).isEqualTo(alphaNumeric);
+		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
 
 		assertThat(document.read("$.comment", String.class)).isEqualTo(textual);
