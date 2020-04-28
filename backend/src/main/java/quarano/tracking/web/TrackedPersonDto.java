@@ -33,6 +33,4 @@ public class TrackedPersonDto {
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @NotEmpty @Pattern(regexp = EmailAddress.PATTERN) String email;
 	private @NotNull @Past LocalDate dateOfBirth;
-
-	private boolean infected;
 }

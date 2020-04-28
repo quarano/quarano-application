@@ -39,9 +39,11 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 
@@ -64,34 +66,32 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
 
-		var today = LocalDate.now();
-
-		var payload = new TrackedCaseDto() //
-				.setFirstName("Michael") //
-				.setLastName("Mustermann") //
-				.setTestDate(today) //
-				.setQuarantineStartDate(today) //
-				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
-				.setPhone("0123456789");
-
-		var response = mvc.perform(post("/api/hd/cases") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isCreated()) //
-				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
-				.andReturn().getResponse().getContentAsString();
-
+		var payload = createMinimalPayload();
+		var response = issueCaseCreation(payload).getContentAsString();
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
-		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
-		assertThat(document.read("$.quarantineStartDate", String.class)) //
-				.isEqualTo(payload.getQuarantineStartDate().toString());
-		assertThat(document.read("$.quarantineEndDate", String.class)) //
-				.isEqualTo(payload.getQuarantineEndDate().toString());
-		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
-		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
-		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
+		assertMinimalFieldsSet(document, payload);
+	}
+
+	@Test
+	@SuppressWarnings("null")
+	void updatesCaseWithMinimalPayload() throws Exception {
+
+		var payload = createMinimalPayload();
+		var response = issueCaseCreation(payload);
+
+		String location = response.getHeader(HttpHeaders.LOCATION);
+
+		response = mvc.perform(put(location) //
+				.content(jackson.writeValueAsString(payload.setInfected(true))) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse();
+
+		var document = JsonPath.parse(response.getContentAsString());
+
+		assertMinimalFieldsSet(document, payload);
+		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
 
 	@Test
@@ -180,5 +180,40 @@ class TrackedCaseControllerWebIntegrationTests {
 		Collections.sort(expectedList);
 
 		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
+	}
+
+	private TrackedCaseDto createMinimalPayload() {
+
+		var today = LocalDate.now();
+
+		return new TrackedCaseDto() //
+				.setFirstName("Michael") //
+				.setLastName("Mustermann") //
+				.setTestDate(today) //
+				.setQuarantineStartDate(today) //
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
+				.setPhone("0123456789");
+	}
+
+	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload) throws Exception {
+
+		return mvc.perform(post("/api/hd/cases") //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isCreated()) //
+				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+				.andReturn().getResponse();
+	}
+
+	private static void assertMinimalFieldsSet(DocumentContext document, TrackedCaseDto payload) {
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
+		assertThat(document.read("$.quarantineStartDate", String.class)) //
+				.isEqualTo(payload.getQuarantineStartDate().toString());
+		assertThat(document.read("$.quarantineEndDate", String.class)) //
+				.isEqualTo(payload.getQuarantineEndDate().toString());
+		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
+		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
 }

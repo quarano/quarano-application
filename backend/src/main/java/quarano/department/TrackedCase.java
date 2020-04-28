@@ -71,6 +71,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
 	private List<ContactPerson> originContacts = new ArrayList<>();
 
+	private @Getter @Setter boolean infected;
 	private @Getter boolean concluded;
 
 	@SuppressWarnings("unused")
@@ -94,6 +95,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
+		this.infected = false;
 		this.concluded = false;
 
 		if (originContact != null) {
