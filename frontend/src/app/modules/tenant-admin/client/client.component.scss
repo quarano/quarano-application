@@ -6,9 +6,18 @@ mat-card {
   width: 700px;
 }
 
+p.hint {
+  margin: 12px 0;
+}
+
 mat-card-title {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 24px;
+  /* padding-top: 6px; */
+  height: 40px;
 
   .status {
     font-size: 12px;

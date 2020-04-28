@@ -2,17 +2,17 @@
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
     <mat-card-title *ngIf="caseDetail$ | async; else newCase"
-      ><span>Fall bearbeiten</span>
+      ><span>Falldetails</span>
       <span class="status">Fallstatus</span></mat-card-title
     >
     <ng-template #newCase>
       <mat-card-title>Neuen Fall anlegen</mat-card-title>
     </ng-template>
-    <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Falldaten">
+        <p class="hint secondary-text-color">Pflichteingaben sind mit * markiert</p>
         <app-client-edit
           [caseDetail]="caseDetail$ | async"
           (submittedValues)="saveCaseData($event)"
