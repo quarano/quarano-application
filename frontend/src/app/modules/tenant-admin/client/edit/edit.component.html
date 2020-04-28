@@ -39,15 +39,7 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>Krankheitsdaten</legend>
-    <div class="form-field">
-      Positiver Covid-19 Test:
-      <mat-checkbox
-        class="half-width"
-        color="primary"
-        formControlName="infected"
-      >
-      </mat-checkbox>
-    </div>
+    <div class="form-flex">
     <mat-form-field class="half-width">
       <mat-label>Abstrichdatum (Test)</mat-label>
       <input
@@ -65,8 +57,14 @@
       <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
     </mat-form-field>
 
-    <div class="half-width"></div>
-
+    <div class="half-width form-field form-field-radio">
+      <label class="example-margin">Covid-19 Test:</label>
+      <mat-radio-group formControlName="infected">
+        <mat-radio-button class="example-margin" [value]="true">Positiv</mat-radio-button>
+        <mat-radio-button class="example-margin" [value]="false">Negativ</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    </div>
     <mat-form-field class="half-width">
       <mat-label>Beginn Quarantäne / häusliche Isolation</mat-label>
       <input

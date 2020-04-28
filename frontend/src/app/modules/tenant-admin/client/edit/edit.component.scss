@@ -1,9 +1,22 @@
 .flex {
   display: flex;
 }
+.form-flex {
+  display: flex;
+  align-items: center;
+}
 
-mat-checkbox {
-  margin-left: 15px;
+.form-field {
+  display: inline-block;
+}
+
+.form-field-radio {
+  label {
+    margin-left: 10px;
+  }
+  mat-radio-button {
+    margin: 10px;
+  }
 }
 
 .button-area {
