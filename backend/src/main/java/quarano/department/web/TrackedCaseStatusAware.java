@@ -64,16 +64,18 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 			return CaseStatus.STOPPED;
 		}
 
+		if (trackedCase.getEnrollment().isComplete()) {
+			return CaseStatus.TRACKING_ACTIVE;
+		}
+
 		if (hasLink(TrackedCaseLinkRelations.RENEW)) {
 			return CaseStatus.IN_REGISTRATION;
 		}
 
-		if (hasLink(TrackedCaseLinkRelations.START_TRACKING)) {
-			return CaseStatus.OPENED;
+		if (trackedCase.getTrackedPerson().hasAccount()) {
+			return CaseStatus.REGISTRATION_COMPLETED;
 		}
 
-		return trackedCase.getEnrollment().isComplete() //
-				? CaseStatus.TRACKING_ACTIVE //
-				: CaseStatus.REGISTRATION_COMPLETED;
+		return CaseStatus.OPENED;
 	}
 }

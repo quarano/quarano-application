@@ -57,7 +57,7 @@ public class TrackedCaseSummaryPostProcessor<T extends TrackedCaseStatusAware<T>
 				on(RegistrationController.class).createRegistration(trackedCase.getId(), null)).toUriString();
 
 		// No account yet? Offer creation.
-		if (accounts.findByCase(trackedCase).isEmpty()) {
+		if (accounts.findByCase(trackedCase).isEmpty() && trackedCase.isEligibleForTracking()) {
 			model.add(Link.of(uri.get(), TrackedCaseLinkRelations.START_TRACKING));
 		}
 
