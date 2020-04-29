@@ -35,7 +35,7 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
-@TestInstance(Lifecycle.PER_METHOD)
+@TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @ExtendWith(MockitoExtension.class)
 public @interface QuaranoUnitTest {
