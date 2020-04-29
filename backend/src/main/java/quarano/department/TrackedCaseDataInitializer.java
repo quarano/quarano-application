@@ -52,6 +52,31 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	public static final TrackedCaseIdentifier TRACKED_CASE_HARRY = TrackedCaseIdentifier
 			.of(UUID.fromString("bb2ff79c-f06c-418a-975c-03ea69537d41"));
 
+	// security test cases
+	public static final TrackedCaseIdentifier TRACKED_CASE_SARAH = TrackedCaseIdentifier
+			.of(UUID.fromString("20158af7-56da-4bca-a9c6-72035d1b27b6"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SYLVIA = TrackedCaseIdentifier
+			.of(UUID.fromString("29590262-c4e7-4047-a4a8-693ad8ffbcd6"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SIGGI = TrackedCaseIdentifier
+			.of(UUID.fromString("01d8b3bd-041e-4493-b491-42f9bf40323d"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SONJA = TrackedCaseIdentifier
+			.of(UUID.fromString("903b819b-ce2c-41ec-88b4-9c04d4359b92"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_STEVEN = TrackedCaseIdentifier
+			.of(UUID.fromString("5018227d-96c9-47d9-864c-94acf5b07cd6"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_STEFFEN = TrackedCaseIdentifier
+			.of(UUID.fromString("2ec51662-da01-4841-ad50-da6d7a8e204e"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SAMUEL = TrackedCaseIdentifier
+			.of(UUID.fromString("94f6f81c-909f-42ae-8248-3e8ea8b7dae5"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_SUNNY = TrackedCaseIdentifier
+			.of(UUID.fromString("cbb52d97-fb3e-45a1-b7a3-d2cb5d9c65a2"));
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -66,18 +91,29 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
 
+		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
+		var sarah = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1).orElseThrow();
+		var sonja = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC3_ID_DEP1).orElseThrow();
+		var samuel = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC4_ID_DEP1).orElseThrow();
+		var sylvia = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC5_ID_DEP1).orElseThrow();
+		var steve = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC6_ID_DEP1).orElseThrow();
+		var steffen = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC7_ID_DEP1).orElseThrow();
+		var sunny = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1).orElseThrow();
+
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
 
+		// CASE Tanja
 		cases.save(new TrackedCase(person1, CaseType.CONTACT, department1) //
 				.setTrackedPerson(person1));
 
-		// CASE Sandra
+		// CASE Markus
 		cases.save(new TrackedCase(person2, CaseType.INDEX, department1));
 
 		LocalDate start = LocalDate.now().minusWeeks(1);
 		LocalDate end = start.plusWeeks(4);
 
+		// CASE Sandra
 		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2, null) //
 				.setQuarantine(Quarantine.of(start, end)) //
 				.submitEnrollmentDetails() //
@@ -136,5 +172,29 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 		cases.save(new TrackedCase(harry, CaseType.INDEX, department1) //
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))));
+		
+		cases.save(new TrackedCase(siggi, CaseType.INDEX, department1) //
+				.setTrackedPerson(siggi));		
+		
+		cases.save(new TrackedCase(sarah, CaseType.INDEX, department1) //
+				.setTrackedPerson(sarah));	
+		
+		cases.save(new TrackedCase(sonja, CaseType.INDEX, department1) //
+				.setTrackedPerson(sonja));			
+		
+		cases.save(new TrackedCase(steve, CaseType.INDEX, department1) //
+				.setTrackedPerson(steve));		
+		
+		cases.save(new TrackedCase(steffen, CaseType.INDEX, department1) //
+				.setTrackedPerson(steffen));			
+		
+		cases.save(new TrackedCase(samuel, CaseType.INDEX, department1) //
+				.setTrackedPerson(samuel));			
+		
+		cases.save(new TrackedCase(sunny, CaseType.INDEX, department1) //
+				.setTrackedPerson(sunny));				
+		
+		cases.save(new TrackedCase(sylvia, CaseType.INDEX, department1) //
+				.setTrackedPerson(sylvia));				
 	}
 }
