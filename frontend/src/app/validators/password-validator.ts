@@ -13,7 +13,7 @@ export class PasswordValidator {
     if (password.length <= 7) {
       errors.minLength = true;
     }
-    if (password.length > 30) {
+    if (password.length > 500) {
       errors.maxLength = true;
     }
     if (!password.match(/(?=.*[A-Z])/)) {
