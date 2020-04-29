@@ -2,6 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ActionListItemDto } from '@models/action';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ClientType } from '@models/report-case';
 
 @Component({
   selector: 'app-actions',
@@ -33,7 +34,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      caseType: action.caseType.toString().toUpperCase(),
+      caseType: this.getTypeName(action.caseType),
       dateOfBirth: action.dateOfBirth.toCustomLocaleDateString(),
       email: action.email,
       phone: action.phone || '-',
@@ -42,6 +43,17 @@ export class ActionsComponent implements OnInit, OnDestroy {
       alerts: action.alerts || [],
       caseId: action.caseId
     };
+  }
+
+  private getTypeName(clientType: ClientType): string {
+    switch (clientType) {
+      case ClientType.Contact:
+        return 'Kontakt';
+      case ClientType.Index:
+        return 'Index';
+      default:
+        return '-';
+    }
   }
 
   ngOnDestroy() {

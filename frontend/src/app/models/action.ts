@@ -1,5 +1,5 @@
 import { SelfLink } from './general';
-import { ClientType } from './client';
+import { ClientType } from './report-case';
 
 export interface ActionListItemDto {
   name: string;

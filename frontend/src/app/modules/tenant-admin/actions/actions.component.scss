@@ -21,11 +21,11 @@
     background-color: $primary-color !important;
   }
 
-  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
-  .ngx-datatable.material:not(.cell-selection)
-    .datatable-body-row:hover
-    .datatable-row-group {
+  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover {
     cursor: pointer;
+    border-left: 0.3rem solid $primary-color;
+    background-color: inherit;
+    transition: none;
   }
 
   .ngx-datatable.material .datatable-body .progress-linear .container {
@@ -40,7 +40,11 @@
     .datatable-body
     .datatable-body-row
     .datatable-body-cell {
-    padding: 0.5rem 1.2rem;
+    padding: 0.2rem 1.2rem;
+  }
+
+  .datatable-row-even {
+    background-color: #f4f4f4 !important;
   }
 }
 

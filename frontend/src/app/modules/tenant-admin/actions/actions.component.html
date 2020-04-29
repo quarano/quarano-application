@@ -18,7 +18,7 @@
     prop="alerts"
     name="Auffälligkeiten"
     [sortable]="false"
-    width="350"
+    width="250"
   >
     <ng-template let-value="value" ngx-datatable-cell-template>
       <div class="action-alert-container">
@@ -30,10 +30,20 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false">
+  <ngx-datatable-column
+    prop="lastName"
+    name="Nachname"
+    [sortable]="false"
+    width="90"
+  >
   </ngx-datatable-column>
 
-  <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false">
+  <ngx-datatable-column
+    prop="firstName"
+    name="Vorname"
+    [sortable]="false"
+    width="90"
+  >
   </ngx-datatable-column>
 
   <ngx-datatable-column
@@ -55,7 +65,7 @@
   <ngx-datatable-column
     prop="status"
     name="Status"
-    width="190"
+    width="150"
     [sortable]="false"
   >
   </ngx-datatable-column>
@@ -68,7 +78,12 @@
   >
   </ngx-datatable-column>
 
-  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false">
+  <ngx-datatable-column
+    prop="phone"
+    name="Telefon"
+    [sortable]="false"
+    width="130"
+  >
   </ngx-datatable-column>
 
   <ngx-datatable-column
