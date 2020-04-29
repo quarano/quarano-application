@@ -49,6 +49,20 @@ class ActionItemsControllerWebIntegrationTests {
 	@WithQuaranoUser("agent3")
 	void rendersAnomalies() throws Exception {
 
+		var response = mvc.perform(get("/api/hd/actions")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$[0].processSummary", JSONArray.class)).isNotEmpty();
+		assertThat(document.read("$[0].healthSummary", JSONArray.class)).isNotEmpty();
+	}
+
+	@Test
+	@WithQuaranoUser("agent3")
+	void rendersAnomaly() throws Exception {
+
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
 				.orElseThrow();
 

@@ -37,7 +37,6 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 	private final @Getter(onMethod = @__(@JsonIgnore)) TrackedCase trackedCase;
 	private final MessageSourceAccessor messages;
 
-	@SuppressWarnings("null")
 	protected TrackedCaseStatusAware(TrackedCase trackedCase, MessageSourceAccessor messages) {
 
 		this.trackedCase = trackedCase;
@@ -46,6 +45,7 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 		add(getDefaultLinks(trackedCase));
 	}
 
+	@SuppressWarnings("null")
 	public static Links getDefaultLinks(TrackedCase trackedCase) {
 
 		var controller = on(TrackedCaseController.class);

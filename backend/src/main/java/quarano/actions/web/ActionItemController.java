@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItemRepository;
 import quarano.actions.ActionItemsManagement;
 import quarano.auth.web.LoggedIn;
+import quarano.auth.web.TrackedCaseSummaryPostProcessor;
 import quarano.core.web.ErrorsDto;
 import quarano.department.Department;
 import quarano.department.Department.DepartmentIdentifier;
@@ -27,6 +28,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.ExternalTrackedCaseRepresentations;
+import quarano.department.web.TrackedCaseSummary;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
@@ -55,6 +57,7 @@ public class ActionItemController {
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull ExternalTrackedCaseRepresentations trackedCaseRepresentations;
+	private final @NonNull TrackedCaseSummaryPostProcessor<TrackedCaseSummary> processor;
 
 	@GetMapping("/api/hd/actions/{identifier}")
 	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier, //
@@ -100,7 +103,14 @@ public class ActionItemController {
 	Stream<?> getActions(@LoggedIn Department department) {
 
 		return cases.findByDepartmentId(department.getId()) //
-				.map(it -> new CaseActionSummary(it, items.findByCase(it), trackedCaseRepresentations.toSummary(it))) //
+				.map(it -> {
+
+					var summary = trackedCaseRepresentations.toSummary(it);
+					var result = processor.process(summary);
+
+					return new CaseActionSummary(it, items.findByCase(it), result);
+
+				}) //
 				.stream() //
 				.filter(it -> it.hasUnresolvedItems()) //
 				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());

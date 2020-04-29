@@ -37,7 +37,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<TrackedCaseStatusAware<?>> {
+public class TrackedCaseSummaryPostProcessor<T extends TrackedCaseStatusAware<T>>
+		implements RepresentationModelProcessor<T> {
 
 	private final AccountService accounts;
 	private final ActivationCodeService codes;
@@ -48,7 +49,7 @@ class TrackedCaseSummaryPostProcessor implements RepresentationModelProcessor<Tr
 	 */
 	@Override
 	@SuppressWarnings("null")
-	public TrackedCaseStatusAware<?> process(TrackedCaseStatusAware<?> model) {
+	public T process(T model) {
 
 		var trackedCase = model.getTrackedCase();
 
