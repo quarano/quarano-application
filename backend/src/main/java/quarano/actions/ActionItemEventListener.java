@@ -22,6 +22,7 @@ import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -78,11 +79,18 @@ public class ActionItemEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
+		Streamable<ActionItem> item = items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX);
+
 		if (!detailsMissing) {
+
+			item.stream() //
+					.map(ActionItem::resolve) //
+					.forEach(items::save);
+
 			return;
 		}
 
-		if (items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX).isEmpty()) {
+		if (item.isEmpty()) {
 			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
 					DescriptionCode.MISSING_DETAILS_INDEX));
 		}

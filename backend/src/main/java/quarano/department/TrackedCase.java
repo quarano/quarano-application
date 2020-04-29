@@ -178,6 +178,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	public TrackedCase markEdited() {
+
+		registerEvent(TrackedCaseUpdated.of(this));
+
+		return this;
+	}
+
 	public TrackedCase markEnrollmentCompleted(EnrollmentCompletion completion) {
 
 		if (!completion.verify(trackedPerson.getEncounters())) {
