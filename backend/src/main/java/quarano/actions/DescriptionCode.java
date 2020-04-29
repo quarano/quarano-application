@@ -30,7 +30,9 @@ public enum DescriptionCode {
 
 	DIARY_ENTRY_MISSING,
 
-	MISSING_DETAILS_INDEX;
+	MISSING_DETAILS_INDEX,
+	
+	INITIAL_CALL_OPEN_INDEX;
 
 	private final @Getter float multiplier;
 

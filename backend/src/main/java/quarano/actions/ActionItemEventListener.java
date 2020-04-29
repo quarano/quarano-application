@@ -18,6 +18,7 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
+import quarano.auth.ActivationCodeService;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
@@ -34,6 +35,7 @@ public class ActionItemEventListener {
 
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull AnomaliesProperties config;
+	private final @NonNull ActivationCodeService activations;
 
 	@EventListener
 	void on(DiaryEntryAdded event) {
@@ -65,15 +67,40 @@ public class ActionItemEventListener {
 	@EventListener
 	void on(TrackedCaseUpdated event) {
 
+		if (event.getTrackedCase().isIndexCase()) {
+
+			handleIndexCaseEvent(event);
+			
+		} else {
+			
+			handleContactCaseEvent(event);
+			
+		}
+	}
+
+	private void handleIndexCaseEvent(TrackedCaseUpdated event) {
+
 		var trackedCase = event.getTrackedCase();
 
-		if (!trackedCase.isIndexCase() //
-				|| trackedCase.isConcluded() //
+		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 			return;
 		}
-
+		
 		var person = trackedCase.getTrackedPerson();
+
+		// create "initial call open" action if applicable
+		if (trackedCase.isNew()) {
+			
+			// check if case is already in registration
+			if(activations.getPendingActivationCode(person.getId()).isEmpty()){
+			
+				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
+						DescriptionCode.INITIAL_CALL_OPEN_INDEX));
+			}
+		}
+
+		// create "missing-detail-action" if data is not complete
 		var detailsMissing = person.getPhoneNumber() == null //
 				&& person.getMobilePhoneNumber() == null //
 				|| person.getEmailAddress() == null //
@@ -94,5 +121,10 @@ public class ActionItemEventListener {
 			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
 					DescriptionCode.MISSING_DETAILS_INDEX));
 		}
+	}
+
+	private void handleContactCaseEvent(TrackedCaseUpdated event) {
+		// TODO Auto-generated method stub
+
 	}
 }
