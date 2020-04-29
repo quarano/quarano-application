@@ -2,6 +2,8 @@ import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angul
 import {StartTracking} from '@models/start-tracking';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
 
 @Component({
   selector: 'app-client-mail',
@@ -19,7 +21,8 @@ export class MailComponent implements OnInit, OnChanges {
   @Output()
   renewTrackingCode$$: Subject<void> = new Subject<void>();
 
-  constructor(private domSanitizer: DomSanitizer) {
+  constructor(private domSanitizer: DomSanitizer,
+              private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -35,9 +38,12 @@ export class MailComponent implements OnInit, OnChanges {
 
   renewTrackickng() {
     this.renewTrackingCode$$.next();
+    this.snackbarService.success('Der Aktivierungscode wurde erneuert.');
+
   }
 
   copyToClipBoard() {
+    this.snackbarService.success('Der E-Mail Text wurde in die Zwischenablage kopiert.');
     navigator.clipboard.writeText(this.tracking.email);
   }
 

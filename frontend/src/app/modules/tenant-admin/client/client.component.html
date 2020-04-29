@@ -29,8 +29,8 @@
           <span
             *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
             [matBadge]="
-              (caseAction$ | async).anomalies.health.length + '' +
-              (caseAction$ | async).anomalies.process.length
+              ((caseAction$ | async).anomalies.health.length +
+              (caseAction$ | async).anomalies.process.length).toString()
             "
             matBadgeOverlap="false"
             matBadgeSize="small"
