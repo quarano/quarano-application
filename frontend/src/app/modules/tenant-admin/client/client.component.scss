@@ -3,7 +3,8 @@
   background-size: cover;
 }
 mat-card {
-  width: 700px;
+  width: 800px;
+  max-width: 900px;
 }
 
 p.hint {
@@ -19,12 +20,21 @@ mat-card-title {
   /* padding-top: 6px; */
   height: 40px;
 
-  .status {
-    font-size: 12px;
-    line-height: 12px;
-    border-radius: 19px;
-    border: 1px solid;
-    display: inline-block;
-    padding: 4px 10px;
+  & > span {
+    display: flex;
+    align-items: center;
+    .status {
+      font-size: 12px;
+      line-height: 12px;
+      border-radius: 19px;
+      border: 1px solid;
+      display: inline-block;
+      padding: 4px 10px;
+      margin-left: 15px;
+    }
   }
+
+
+
+
 }

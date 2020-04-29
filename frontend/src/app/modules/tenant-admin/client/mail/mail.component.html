@@ -1,1 +1,7 @@
-<p>mail works!</p>
+<div class="mail-text">
+  <pre [innerHTML]="mailText"></pre>
+</div>
+<div class="button-area">
+  <button type="submit" mat-raised-button color="primary" (click)="copyToClipBoard()">In die Zwischenablage kopieren</button>
+  <button type="button" mat-raised-button color="secondary" (click)="renewTrackickng()">Aktivierungscode erneuern</button>
+</div>

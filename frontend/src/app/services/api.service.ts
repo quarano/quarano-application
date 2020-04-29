@@ -1,18 +1,19 @@
-import { Link } from './../models/general';
-import { UserDto } from '@models/user';
-import { environment } from '@environment/environment';
-import { SymptomDto } from '@models/symptom';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
-import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
-import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
-import { Register } from '@models/register';
-import { ReportCaseDto } from '@models/report-case';
-import { ActionListItemDto } from '@models/action';
-import { CaseDetailDto } from '@models/case-detail';
-import { CaseActionDto } from '@models/case-action';
+import {Link} from '@models/general';
+import {UserDto} from '@models/user';
+import {environment} from '@environment/environment';
+import {SymptomDto} from '@models/symptom';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {map, share} from 'rxjs/operators';
+import {DiaryDto, DiaryEntryDto, DiaryEntryModifyDto} from '@models/diary-entry';
+import {ContactPersonDto, ContactPersonModifyDto} from '@models/contact-person';
+import {Register} from '@models/register';
+import {ReportCaseDto} from '@models/report-case';
+import {ActionListItemDto} from '@models/action';
+import {CaseDetailDto} from '@models/case-detail';
+import {CaseActionDto} from '@models/case-action';
+import {HalResponse} from '@models/hal-response';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class ApiService {
   }
 
   registerClient(registerClient: Register): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, { responseType: 'text' });
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, {responseType: 'text'});
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
@@ -77,7 +78,7 @@ export class ApiService {
   }
 
   login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
+    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, {username, password});
   }
 
   getMe(): Observable<UserDto> {
@@ -102,7 +103,7 @@ export class ApiService {
   }
 
   resolveAnomalies(link: Link, comment: string) {
-    return this.httpClient.put(link.href, { comment });
+    return this.httpClient.put(link.href, {comment});
   }
 
   createCase(caseDetail: CaseDetailDto): Observable<any> {
@@ -111,6 +112,20 @@ export class ApiService {
 
   updateCase(caseDetail: CaseDetailDto): Observable<any> {
     return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
+  }
+
+  getApiCall<T>(halResponse: HalResponse, key): Observable<T> {
+    if (halResponse._links?.hasOwnProperty(key)) {
+      return this.httpClient.get<T>(halResponse._links[key].href);
+    }
+    return of();
+  }
+
+  putApiCall<T>(halResponse: HalResponse, key: string, body: any = {}): Observable<T> {
+    if (halResponse._links?.hasOwnProperty(key)) {
+      return this.httpClient.put<T>(halResponse._links[key].href, body);
+    }
+    return of();
   }
 
   getCases(): Observable<Array<ReportCaseDto>> {

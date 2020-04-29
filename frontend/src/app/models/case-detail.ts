@@ -1,4 +1,6 @@
-export interface CaseDetailDto {
+import {HalResponse} from '@models/hal-response';
+
+export interface CaseDetailDto extends HalResponse {
   caseId?: string;
 
   firstName: string;
