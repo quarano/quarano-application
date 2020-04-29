@@ -57,6 +57,10 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 		return LocalDateTime.now().isAfter(expirationTime);
 	}
 
+	public boolean isNotExpired() {
+		return !isExpired();
+	}
+
 	/**
 	 * Checks validity of the code and sets the state of the code to REDEEMED. Only possible if code was in status
 	 * 'WAITING_FOR_ACTIVATION' before.

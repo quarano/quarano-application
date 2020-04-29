@@ -56,8 +56,8 @@ public class ActivationCodeService {
 	public Try<ActivationCode> getValidCode(ActivationCodeIdentifier identifier) {
 
 		return findCode(identifier) //
-				.filter(ActivationCode::isExpired, ActivationCodeException::expired) //
-				.filter(it -> !it.isWaitingForActivation(), ActivationCodeException::usedOrCanceled);
+				.filter(ActivationCode::isNotExpired, ActivationCodeException::expired) //
+				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled);
 	}
 
 	public Optional<ActivationCode> getPendingActivationCode(TrackedPersonIdentifier id) {
