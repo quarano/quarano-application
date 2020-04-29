@@ -1,3 +1,5 @@
+import { ClientType } from './report-case';
+
 export interface ClientDto {
   clientCode?: string;
   clientId: number;
@@ -17,6 +19,3 @@ export interface ClientDto {
   type: ClientType;
 }
 
-export enum ClientType {
-  INDEX_CASE, CONTACT_CASE
-}

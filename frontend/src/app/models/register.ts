@@ -5,4 +5,5 @@ export interface Register {
   dateOfBirth: string;
   clientCode: string;
   email: string;
+  dataProtectionConfirmed: boolean;
 }

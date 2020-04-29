@@ -1,10 +1,11 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {SubSink} from 'subsink';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSort} from '@angular/material/sort';
-import {BehaviorSubject} from 'rxjs';
-import {ReportCaseDto} from '@models/report-case';
-import {DatatableComponent, SelectionType} from '@swimlane/ngx-datatable';
+import { ClientType } from '@models/report-case';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SubSink } from 'subsink';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { BehaviorSubject } from 'rxjs';
+import { ReportCaseDto } from '@models/report-case';
+import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-clients',
@@ -40,7 +41,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   private dateTimeNow = new Date();
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private route: ActivatedRoute, private router: Router) {
@@ -72,7 +73,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     return {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
-      type: c.caseType.toString().toUpperCase(),
+      type: this.getTypeName(c.caseType),
       dateOfBirth: c.dateOfBirth.toCustomLocaleDateString(),
       email: c.email,
       phone: c.phone || '-',
@@ -81,6 +82,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
       zipCode: c.zipCode || '-',
       caseId: c.caseId
     };
+  }
+
+  private getTypeName(clientType: ClientType): string {
+    switch (clientType) {
+      case ClientType.Contact:
+        return 'Kontakt';
+      case ClientType.Index:
+        return 'Index';
+      default:
+        return '-';
+    }
   }
 
   getQuarantineEndString(quarantineEnd: Date): string {
@@ -122,6 +134,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     console.log(event);
-    this.router.navigate(['/tenant-admin/client',  event?.selected[0]?.caseId]);
+    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.caseId]);
   }
 }
