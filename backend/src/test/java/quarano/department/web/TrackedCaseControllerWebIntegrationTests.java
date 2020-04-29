@@ -72,6 +72,21 @@ class TrackedCaseControllerWebIntegrationTests {
 	void successfullyCreatesNewTrackedCase() throws Exception {
 
 		var payload = createMinimalPayload();
+
+		var response = issueCaseCreation(payload).getContentAsString();
+		var document = JsonPath.parse(response);
+
+		assertMinimalFieldsSet(document, payload);
+		assertThat(discoverer.findLinkWithRel(CONCLUDE, response)).isPresent();
+	}
+
+	@Test
+	void indicateStartTrackingIfRequiredDataIsSet() throws Exception {
+
+		var payload = createMinimalPayload() //
+				.setEmail("foo@bar.com") //
+				.setDateOfBirth(LocalDate.now().minusYears(25));
+
 		var response = issueCaseCreation(payload).getContentAsString();
 		var document = JsonPath.parse(response);
 

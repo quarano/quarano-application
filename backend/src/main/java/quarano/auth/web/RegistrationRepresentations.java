@@ -64,9 +64,11 @@ class RegistrationRepresentations {
 
 		var controller = on(RegistrationController.class);
 
-		return new RepresentationModel<>(
-				Link.of(fromMethodCall(controller.createRegistration(trackedCase.getId(), null)).toUriString(),
-						TrackedCaseLinkRelations.START_TRACKING));
+		return trackedCase.isEligibleForTracking() //
+				? new RepresentationModel<>(
+						Link.of(fromMethodCall(controller.createRegistration(trackedCase.getId(), null)).toUriString(),
+								TrackedCaseLinkRelations.START_TRACKING)) //
+				: RepresentationModel.of(null);
 	}
 
 	@RequiredArgsConstructor(staticName = "of")

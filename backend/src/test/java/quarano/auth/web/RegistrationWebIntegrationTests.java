@@ -158,7 +158,7 @@ class RegistrationWebIntegrationTests {
 	@WithQuaranoUser("agent2")
 	void noPendingRegistrationExposesLinkToEnableTracking() throws Exception {
 
-		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
+		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 
 		var response = mvc.perform(get("/api/hd/cases/{id}/registration", harryCase.getId())) //
 				.andExpect(status().isOk()) //

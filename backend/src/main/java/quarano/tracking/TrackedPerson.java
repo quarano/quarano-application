@@ -94,6 +94,14 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.mobilePhoneNumber = contact.getMobilePhoneNumber();
 	}
 
+	public boolean isEligibleForTracking() {
+		return emailAddress != null && dateOfBirth != null;
+	}
+
+	public boolean hasAccount() {
+		return accountRegisteredAt != null;
+	}
+
 	public String getFullName() {
 		return firstName.concat(" ").concat(lastName);
 	}

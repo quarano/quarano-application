@@ -126,6 +126,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		}
 	}
 
+	public boolean isEligibleForTracking() {
+		return trackedPerson.isEligibleForTracking();
+	}
+
 	public boolean isIndexCase() {
 		return type.equals(CaseType.INDEX);
 	}
@@ -170,6 +174,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		if (report.isComplete()) {
 			enrollment.markQuestionaireSubmitted();
 		}
+
+		return this;
+	}
+
+	public TrackedCase markEdited() {
+
+		registerEvent(TrackedCaseUpdated.of(this));
 
 		return this;
 	}
