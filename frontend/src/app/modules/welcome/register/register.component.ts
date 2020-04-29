@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PasswordValidator } from '@validators/password-validator';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { filter, finalize, map, switchMap, take, tap } from 'rxjs/operators';
-import { ApiService } from '@services/api.service';
-import { Register } from '@models/register';
-import { SnackbarService } from '@services/snackbar.service';
-import { DatePipe } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {PasswordValidator} from '@validators/password-validator';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {filter, finalize, map, take, tap} from 'rxjs/operators';
+import {ApiService} from '@services/api.service';
+import {Register} from '@models/register';
+import {SnackbarService} from '@services/snackbar.service';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -21,13 +21,13 @@ export class RegisterComponent implements OnInit {
   public registrationForm = new FormGroup({
     clientCode: new FormControl(null, [
       Validators.required,
-      () => this.codeIsValid ? null : { codeInvalid: true }
+      () => this.codeIsValid ? null : {codeInvalid: true}
     ]),
     username: new FormControl(null, [
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30),
-      () => this.usernameIsValid ? null : { usernameInvalid: true }
+      () => this.usernameIsValid ? null : {usernameInvalid: true}
     ]),
     password: new FormControl(null, [
       PasswordValidator.secure
@@ -59,12 +59,11 @@ export class RegisterComponent implements OnInit {
   }
 
   private checkUrlCode() {
-    let urlParamCode: string;
     this.route.paramMap.pipe(
       take(1),
       map((params: ParamMap) => params.get('clientcode')),
       filter(code => code != null),
-      tap(code => urlParamCode = code),
+      /*tap(code => urlParamCode = code),
       switchMap(code => this.apiService.checkClientCode(code)),
       tap(response => {
         if (!response) {
@@ -72,12 +71,12 @@ export class RegisterComponent implements OnInit {
             'Der verwendete Code ist leider ungültig. Bitte wenden Sie sich zur Klärung an Ihr Gesundheitsamt');
           this.router.navigate(['/welcome/login']);
         }
-      })
+      })*/
     ).subscribe(
-      (response) => {
-        if (urlParamCode && response) {
+      (code) => {
+        if (code) {
           this.codeIsValid = true;
-          this.registrationForm.get('clientCode').setValue(urlParamCode);
+          this.registrationForm.get('clientCode').setValue(code);
           this.registrationForm.get('clientCode').updateValueAndValidity();
         }
       },
@@ -138,6 +137,7 @@ export class RegisterComponent implements OnInit {
     const register: Register = {
       username: this.registrationForm.get('username').value,
       password: this.registrationForm.get('password').value,
+      passwordConfirm: this.registrationForm.get('passwordConfirm').value,
       dateOfBirth: this.parseDate(this.registrationForm.get('dateOfBirth').value),
       email: this.registrationForm.get('email').value,
       clientCode: this.registrationForm.get('clientCode').value,
