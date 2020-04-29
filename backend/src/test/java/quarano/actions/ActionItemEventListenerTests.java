@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -30,8 +31,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.util.Streamable;
 
+@Disabled
 @QuaranoUnitTest
-class ActionItemEventListenerTests {
+class ActionItemEventListenerTests{
 
 	@Mock ActionItemRepository items;
 	@Mock AnomaliesProperties config;
