@@ -21,11 +21,21 @@
     background-color: $primary-color !important;
   }
 
+  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
+  .ngx-datatable.material:not(.cell-selection)
+    .datatable-body-row:hover
+    .datatable-row-group {
+    background-color: initial;
+    transition: none;
+  }
+
   .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover {
     cursor: pointer;
     border-left: 0.3rem solid $primary-color;
-    background-color: inherit;
-    transition: none;
+
+    & > * > .datatable-body-cell {
+      padding-left: 0.9rem;
+    }
   }
 
   .ngx-datatable.material .datatable-body .progress-linear .container {
