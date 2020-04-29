@@ -48,7 +48,7 @@ class RegistrationRepresentations {
 
 	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
 
-		var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+		var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 		var placeholders = Map.of("lastName", trackedCase.getTrackedPerson().getLastName(), //
 				"quarantineEndDate", trackedCase.getQuarantine().getTo().format(formatter), //
