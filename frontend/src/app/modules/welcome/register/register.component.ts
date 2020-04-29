@@ -90,7 +90,6 @@ export class RegisterComponent implements OnInit {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
-    console.log(this.registrationForm.value);
     const register: Register = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
