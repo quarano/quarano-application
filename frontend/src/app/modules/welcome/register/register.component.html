@@ -17,7 +17,6 @@
           formControlName="clientCode"
           placeholder="Anmeldecode"
           id="client-code"
-          (change)="changeCode(null)"
         />
         <mat-error
           *ngIf="registrationForm.controls.clientCode.hasError('codeInvalid')"

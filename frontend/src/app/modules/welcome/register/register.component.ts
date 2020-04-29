@@ -14,13 +14,11 @@ import { SnackbarService } from '@services/snackbar.service';
 })
 export class RegisterComponent implements OnInit {
 
-  private codeIsValid = false;
   private usernameIsValid = false;
 
   public registrationForm = new FormGroup({
     clientCode: new FormControl(null, [
       Validators.required,
-      () => this.codeIsValid ? null : { codeInvalid: true }
     ]),
     username: new FormControl(null, [
       Validators.required,
@@ -47,63 +45,12 @@ export class RegisterComponent implements OnInit {
   });
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
-    this.checkUrlCode();
-  }
-
-  private checkUrlCode() {
-    this.route.paramMap.pipe(
-      take(1),
-      map((params: ParamMap) => params.get('clientcode')),
-      filter(code => code != null),
-      /*tap(code => urlParamCode = code),
-      switchMap(code => this.apiService.checkClientCode(code)),
-      tap(response => {
-        if (!response) {
-          this.snackbarService.error(
-            'Der verwendete Code ist leider ungültig. Bitte wenden Sie sich zur Klärung an Ihr Gesundheitsamt');
-          this.router.navigate(['/welcome/login']);
-        }
-      })*/
-    ).subscribe(
-      (code) => {
-        if (code) {
-          this.codeIsValid = true;
-          this.registrationForm.get('clientCode').setValue(code);
-          this.registrationForm.get('clientCode').updateValueAndValidity();
-        }
-      },
-      () => {
-        console.log('The code provided as URL parameter is invalid.');
-      }
-    );
-  }
-
-  public changeCode(code: string | null) {
-    const clientCode = code != null ? code : this.registrationForm.controls.clientCode.value;
-    this.apiService.checkClientCode(clientCode)
-      .pipe(
-        tap(() => {
-          this.registrationForm.get('clientCode').disable();
-        })
-      )
-      .subscribe(
-        () => {
-          this.codeIsValid = true;
-        },
-        () => {
-          this.codeIsValid = false;
-        },
-        () => {
-          this.registrationForm.get('clientCode').enable();
-        }
-      );
   }
 
   public changeUsername() {
@@ -132,17 +79,15 @@ export class RegisterComponent implements OnInit {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
-
+    console.log(this.registrationForm.value);
     const register: Register = Object.assign(this.registrationForm.value);
+    register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
     this.apiService.registerClient(register)
       .subscribe(
         () => {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
           this.router.navigate(['/welcome/login']);
-        },
-        () => {
-          this.snackbarService.error('Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.');
         }
       );
   }
