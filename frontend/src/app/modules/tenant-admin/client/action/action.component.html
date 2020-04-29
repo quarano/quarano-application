@@ -20,20 +20,39 @@
       [actions]="caseAction.anomalies.health"
     ></app-client-action-anomaly
   ></mat-expansion-panel>
-  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0">
+
+  <mat-expansion-panel
+    *ngIf="caseAction.anomalies.process.length > 0"
+    [expanded]="true"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Prozess
+        <span
+          [matBadge]="caseAction.anomalies.process.length"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          Prozess
+        </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <app-client-action-anomaly
       [actions]="caseAction.anomalies.process"
     ></app-client-action-anomaly>
   </mat-expansion-panel>
+
   <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Abgeschlossen
+        <span
+          [matBadge]="caseAction.anomalies?.resolved?.length"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="primary"
+        >
+          Abgeschlossen
+        </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <app-client-action-anomaly
@@ -66,6 +85,15 @@
       [disabled]="formGroup.invalid"
     >
       <mat-icon>check</mat-icon> Abschließen
+    </button>
+    <button
+      class="ml-3"
+      type="button"
+      mat-raised-button
+      color="secondary"
+      [routerLink]="['/tenant-admin/actions']"
+    >
+      Abbrechen
     </button>
   </fieldset>
 </form>
