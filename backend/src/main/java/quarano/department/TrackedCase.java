@@ -22,8 +22,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.Value;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
@@ -43,6 +45,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -64,8 +69,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 	private @Getter @Setter LocalDate testDate;
-	
-	private @OneToMany(cascade = { CascadeType.ALL }) @Getter List<ContactPerson> originContacts = new ArrayList<>();
+
+	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
+	private List<ContactPerson> originContacts = new ArrayList<>();
+
+	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
+	private List<Comment> comments = new ArrayList<>();
+
+	private @Getter @Setter boolean infected;
+	private @Getter boolean concluded;
 
 	@SuppressWarnings("unused")
 	private TrackedCase() {
@@ -75,29 +87,45 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase(TrackedPerson person, CaseType type, Department department) {
 		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department, null);
 	}
-	
-	public TrackedCase(TrackedPerson person, CaseType type, Department department, ContactPerson contactPerson) {
+
+	public TrackedCase(TrackedPerson person, CaseType type, Department department,
+			@Nullable ContactPerson contactPerson) {
 		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department, contactPerson);
 	}
 
-	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department, ContactPerson originContact) {
+	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department,
+			@Nullable ContactPerson originContact) {
+
 		this.id = id;
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
-		
-		if(null != originContact) {
+		this.infected = false;
+		this.concluded = false;
+
+		this.registerEvent(TrackedCaseUpdated.of(this));
+
+		if (originContact != null) {
 			this.originContacts.add(originContact);
 		}
 	}
 
+	public TrackedCase addComment(String comment) {
+
+		Assert.hasText(comment, "Comment must not be null or empty!");
+
+		this.comments.add(new Comment(comment));
+
+		return this;
+	}
 
 	public void addOriginContact(ContactPerson contact) {
-		if(!originContacts.contains(contact)) {
+
+		if (!originContacts.contains(contact)) {
 			this.originContacts.add(contact);
 		}
 	}
-	
+
 	public boolean isIndexCase() {
 		return type.equals(CaseType.INDEX);
 	}
@@ -105,7 +133,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public boolean isContactCase() {
 		return type.equals(CaseType.CONTACT);
 	}
-	
+
 	public boolean isMedicalContactCase() {
 		return type.equals(CaseType.CONTACT_MEDICAL);
 	}
@@ -123,6 +151,14 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		if (trackedPerson.isDetailsCompleted()) {
 			this.enrollment.markDetailsSubmitted();
 		}
+
+		return this;
+	}
+
+	public TrackedCase conclude() {
+
+		this.concluded = true;
+		registerEvent(CaseConcluded.of(id));
 
 		return this;
 	}
@@ -160,16 +196,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this.department.equals(department);
 	}
 
-	public CaseStatus resolveStatus() {
-		
-		if(enrollment.isComplete()) {
-			return CaseStatus.TRACKING_ACTIVE;
-		}
-		else {
-			return CaseStatus.OPENED;
-		}
+	public boolean belongsTo(DepartmentIdentifier id) {
+		return this.department.hasId(id);
 	}
-	
+
+	@Value(staticConstructor = "of")
+	public static class CaseConcluded {
+		TrackedCaseIdentifier caseIdentifier;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class TrackedCaseUpdated implements DomainEvent {
+		TrackedCase trackedCase;
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")

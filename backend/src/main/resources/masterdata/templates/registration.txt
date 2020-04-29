@@ -1,0 +1,13 @@
+Sehr geehrte/geehrter Frau/Herr {lastName},
+
+wie Sie bereits wissen, sind Sie bis einschließlich {quarantineEndDate} in häuslicher Isolation.
+
+Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserem Tool zur Erfassung der Kontakte und Symptome an unter:
+
+https://www.quarano.de/welcome/landing/contact/{activationCode}
+
+Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen nach, so dass wir zu diesen Kontakt aufnehmen können. Zudembitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptomen (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
+
+Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt an oder den Ärztlicher Bereitschaftsdienst (Tel: 116117). Bei sonstigen Rückfragen melden Sie sich bitte auf unserem Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).
+
+Mit freundlichen Grüßen

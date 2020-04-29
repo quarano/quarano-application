@@ -21,10 +21,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.experimental.Accessors;
-import quarano.core.QuaranoEntity;
+import quarano.core.QuaranoAggregate;
 import quarano.reference.Symptom;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -41,6 +43,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
 import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
 import org.springframework.util.Assert;
 
 /**
@@ -54,7 +57,7 @@ import org.springframework.util.Assert;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
+public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifier> implements Comparable<DiaryEntry> {
 
 	private static final Comparator<DiaryEntry> BY_DATE = Comparator.comparing(DiaryEntry::getDateTime).reversed();
 
@@ -64,20 +67,28 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
 	private String note;
 	private BodyTemperature bodyTemperature;
+	private TrackedPersonIdentifier trackedPersonId;
 
-	DiaryEntry(Slot slot) {
-		this(DiaryEntryIdentifier.of(UUID.randomUUID()), LocalDateTime.now(), slot);
+	DiaryEntry(Slot slot, TrackedPersonIdentifier id) {
+		this(DiaryEntryIdentifier.of(UUID.randomUUID()), id, LocalDateTime.now(), slot);
 	}
 
-	DiaryEntry(DiaryEntryIdentifier id, LocalDateTime reportedAt, Slot slot) {
+	DiaryEntry(DiaryEntryIdentifier id, TrackedPersonIdentifier person, LocalDateTime reportedAt, Slot slot) {
 
 		this.id = id;
 		this.reportedAt = reportedAt;
 		this.slot = slot;
+		this.trackedPersonId = person;
+
+		registerEvent(DiaryEntryAdded.of(this));
 	}
 
-	public static DiaryEntry of(Slot slot) {
-		return new DiaryEntry(slot);
+	public static DiaryEntry of(Slot slot, TrackedPerson person) {
+		return DiaryEntry.of(slot, person.getId());
+	}
+
+	public static DiaryEntry of(Slot slot, TrackedPersonIdentifier id) {
+		return new DiaryEntry(slot, id);
 	}
 
 	public LocalDate getSlotDate() {
@@ -120,6 +131,7 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		return contacts.contains(encounter.getContact());
 	}
 
+	@Override
 	public boolean hasId(DiaryEntryIdentifier identifier) {
 		return this.id.equals(identifier);
 	}
@@ -157,4 +169,8 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		}
 	}
 
+	@Value(staticConstructor = "of")
+	public static class DiaryEntryAdded implements DomainEvent {
+		DiaryEntry entry;
+	}
 }

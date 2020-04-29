@@ -1,22 +1,7 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.department.web;
 
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase;
 
 import java.time.format.DateTimeFormatter;
@@ -24,15 +9,24 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
 
-/**
- * @author Oliver Drotbohm
- */
-@RequiredArgsConstructor(staticName = "of")
-public class TrackedCaseSummaryDto {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-	private final TrackedCase trackedCase;
+@Relation(collectionRelation = "cases")
+public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummary> {
+
+	private final @Getter(onMethod = @__(@JsonIgnore)) TrackedCase trackedCase;
 	private final @NonNull MessageSourceAccessor messages;
+
+	TrackedCaseSummary(TrackedCase trackedCase, MessageSourceAccessor messages) {
+
+		super(trackedCase, messages);
+
+		this.trackedCase = trackedCase;
+		this.messages = messages;
+	}
 
 	public String getCaseId() {
 		return trackedCase.getId().toString();
@@ -50,23 +44,17 @@ public class TrackedCaseSummaryDto {
 		return trackedCase.getTrackedPerson().getLastName();
 	}
 
-	public String getStatus() {
-		var statusKey = (trackedCase.resolveStatus());
-		var messageKey = ("department.casestatus." + statusKey).toLowerCase(Locale.US).replace("_", "-");
-		return messages.getMessage(messageKey);
-	}
-
 	public String getPrimaryPhoneNumber() {
 
-		var phoneNumber = trackedCase.getTrackedPerson().getPhoneNumber();
-		var mobilePhoneNumber = trackedCase.getTrackedPerson().getMobilePhoneNumber();
+		var trackedPerson = trackedCase.getTrackedPerson();
+		var phoneNumber = trackedPerson.getPhoneNumber();
+		var mobilePhoneNumber = trackedPerson.getMobilePhoneNumber();
 
 		if (phoneNumber != null) {
 			return phoneNumber.toString();
 		} else {
 			return mobilePhoneNumber == null ? null : mobilePhoneNumber.toString();
 		}
-
 	}
 
 	public String getZipCode() {
@@ -102,6 +90,7 @@ public class TrackedCaseSummaryDto {
 		return initialReport == null ? null : initialReport.getBelongToMedicalStaff();
 	}
 
+	@Nullable
 	public Map<String, Object> getQuarantine() {
 
 		if (!trackedCase.isInQuarantine()) {

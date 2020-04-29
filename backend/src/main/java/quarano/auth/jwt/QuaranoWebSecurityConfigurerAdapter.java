@@ -2,9 +2,12 @@ package quarano.auth.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.auth.Account;
+import quarano.auth.AccountService;
 import quarano.auth.RoleType;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 	private final JwtProperties configuration;
+	private final AccountService accounts;
 
 	private static final String[] SWAGGER_UI_WHITELIST = {
 
@@ -47,8 +51,10 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 		log.debug("Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
 
+		Function<String, Account> accountSource = username -> accounts.findByUsername(username).orElseThrow();
+
 		httpSecurity.oauth2ResourceServer() //
-				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter());
+				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter(accountSource));
 
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();

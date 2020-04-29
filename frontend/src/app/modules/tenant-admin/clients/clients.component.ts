@@ -1,12 +1,10 @@
-import { ActivatedRoute } from '@angular/router';
-import { SubSink } from 'subsink';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
-import { ReportCaseDto } from '@models/report-case';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { map } from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SubSink} from 'subsink';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {BehaviorSubject} from 'rxjs';
+import {ReportCaseDto} from '@models/report-case';
+import {DatatableComponent, SelectionType} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-clients',
@@ -17,13 +15,24 @@ export class ClientsComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   cases: ReportCaseDto[] = [];
   loading = false;
+  selectionType = SelectionType.single;
   rows = [];
   @ViewChild(DatatableComponent) table: DatatableComponent;
-  get filter(): string { return this._filter.value; }
-  set filter(filter: string) { this._filter.next(filter); }
+
+  get filter(): string {
+    return this._filter.value;
+  }
+
+  set filter(filter: string) {
+    this._filter.next(filter);
+  }
+
   private readonly _filter = new BehaviorSubject<string>('');
   private _filteredData = new BehaviorSubject<ReportCaseDto[]>([]);
-  get filteredData(): ReportCaseDto[] { return this._filteredData.value; }
+  get filteredData(): ReportCaseDto[] {
+    return this._filteredData.value;
+  }
+
   set filteredData(filteredData: ReportCaseDto[]) {
     this._filteredData.next(filteredData);
     this.rows = filteredData.map(c => this.getRowData(c));
@@ -31,10 +40,10 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   private dateTimeNow = new Date();
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -45,7 +54,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
         this.filteredData = [...data.cases];
         this.loading = false;
       },
-      error => this.loading = false));
+      () => this.loading = false));
   }
 
   ngOnDestroy(): void {
@@ -75,9 +84,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   getQuarantineEndString(quarantineEnd: Date): string {
-    if (!quarantineEnd) { return '-'; }
+    if (!quarantineEnd) {
+      return '-';
+    }
 
-    if (quarantineEnd.isDateInPast()) { return 'beendet'; }
+    if (quarantineEnd.isDateInPast()) {
+      return 'beendet';
+    }
 
     return quarantineEnd.toCustomLocaleDateString();
 
@@ -92,7 +105,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.table.offset = 0;
   }
 
-  filterPredicate: ((obj: ReportCaseDto, filter: string) => boolean) = (obj: ReportCaseDto, filter: string): boolean => {
+  filterPredicate(obj: ReportCaseDto, filter: string): boolean {
     const dataStr = Object.keys(obj).reduce((currentTerm: string, key: string) => {
       return currentTerm + (obj as { [key: string]: any })[key] + '◬';
     }, '').toLowerCase();
@@ -100,5 +113,15 @@ export class ClientsComponent implements OnInit, OnDestroy {
     const transformedFilter = filter.trim().toLowerCase();
 
     return dataStr.indexOf(transformedFilter) !== -1;
+  }
+
+  sendMail(event, to: string) {
+    event.stopPropagation();
+    window.location.href = `mailto:${to}`;
+  }
+
+  onSelect(event) {
+    console.log(event);
+    this.router.navigate(['/tenant-admin/client',  event?.selected[0]?.caseId]);
   }
 }

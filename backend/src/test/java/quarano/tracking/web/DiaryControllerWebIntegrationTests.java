@@ -19,42 +19,41 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.tracking.DiaryEntryRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
-import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 /**
  * @author Oliver Drotbohm
  */
 @QuaranoWebIntegrationTest
+@RequiredArgsConstructor
 class DiaryControllerWebIntegrationTests {
 
-	@Autowired MockMvc mvc;
-	@Autowired TrackedPersonRepository repository;
-	@Autowired DiaryRepresentations representations;
-	@Autowired ObjectMapper jackson;
+	private final MockMvc mvc;
+	private final DiaryEntryRepository entries;
+	private final ObjectMapper jackson;
 
 	@Test
 	@WithQuaranoUser("test3")
 	void updatesDiaryEntry() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var entry = person.getDiary().iterator().next();
+		var entry = entries.findByTrackedPersonId(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
+				.iterator().next();
 		var slot = entry.getSlot();
 
-		DiaryEntryInput payload = new DiaryEntryInput(slot);
-		payload.setBodyTemperature(42.0f);
+		DiaryEntryInput payload = new DiaryEntryInput(slot) //
+				.setBodyTemperature(42.0f);
 
 		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId()) //
 				.content(jackson.writeValueAsString(payload)) //
@@ -62,9 +61,7 @@ class DiaryControllerWebIntegrationTests {
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
 
-		System.out.println(response);
-
-		DocumentContext document = JsonPath.parse(response);
+		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.id", String.class)).isEqualTo(entry.getId().toString());
 		assertThat(document.read("$.slot.timeOfDay", String.class)).isEqualToIgnoringCase(slot.getTimeOfDay().toString());

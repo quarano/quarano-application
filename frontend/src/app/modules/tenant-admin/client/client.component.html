@@ -1,0 +1,56 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title *ngIf="caseDetail$ | async as caseDetail; else newCase">
+      <span>Falldetails <span class="status">{{caseDetail.status}}</span></span>
+
+      <div class="button-area">
+        <button *ngIf="caseDetail._links.hasOwnProperty('start-tracking')"
+                (click)="startTracking(caseDetail)"
+                mat-raised-button color="primary">
+          Nachverfolgung <span *ngIf="trackingStart$$ | async">erneut </span>starten</button>
+      </div>
+    </mat-card-title>
+    <ng-template #newCase>
+      <mat-card-title>Neuen Fall anlegen</mat-card-title>
+    </ng-template>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group #tabs [selectedIndex]="tabIndex">
+      <mat-tab label="Falldaten">
+        <p class="hint secondary-text-color">Pflichteingaben sind mit * markiert</p>
+        <app-client-edit
+          [caseDetail]="caseDetail$ | async"
+          (submittedValues)="saveCaseData($event)"
+        ></app-client-edit>
+      </mat-tab>
+      <mat-tab *ngIf="caseAction$ | async">
+        <ng-template mat-tab-label>
+          <span
+            *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
+            [matBadge]="
+              ((caseAction$ | async).anomalies.health.length +
+              (caseAction$ | async).anomalies.process.length).toString()
+            "
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+            >Aktionen</span
+          >
+          <ng-template #has_no_open_anomalies
+            ><span>Aktionen</span></ng-template
+          >
+        </ng-template>
+        <app-client-action
+          [caseAction]="caseAction$ | async"
+        ></app-client-action>
+      </mat-tab>
+      <mat-tab label="Kommentare">
+        <app-client-comments></app-client-comments>
+      </mat-tab>
+      <mat-tab *ngIf="trackingStart$$ | async as tracking" label="E-Mail Vorlage">
+        <app-client-mail [tracking]="tracking" (renewTrackingCode$$)="renewTracking(tracking)"></app-client-mail>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

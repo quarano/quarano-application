@@ -18,7 +18,9 @@ package quarano.auth.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account;
+import quarano.auth.AuthenticationManager;
 import quarano.department.Department;
+import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.DepartmentRepository;
 import quarano.tracking.TrackedPerson;
 
@@ -47,7 +49,8 @@ class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcC
 
 	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current %s but none available!";
 
-	private static final Set<Class<?>> ALL_TYPES = Set.of(TrackedPerson.class, Account.class, Department.class);
+	private static final Set<Class<?>> ALL_TYPES = Set.of(TrackedPerson.class, Account.class, Department.class,
+			DepartmentIdentifier.class);
 
 	private final @NonNull AuthenticationManager authenticationManager;
 	private final @NonNull DepartmentRepository departments;
@@ -76,6 +79,8 @@ class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcC
 
 		if (type.equals(Account.class)) {
 			return account;
+		} else if (type.equals(DepartmentIdentifier.class)) {
+			return account.map(Account::getDepartmentId);
 		} else if (type.equals(Department.class)) {
 			return account.map(Account::getDepartmentId).flatMap(departments::findById);
 		}

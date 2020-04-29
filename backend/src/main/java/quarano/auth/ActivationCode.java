@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import org.jddd.core.types.Identifier;
 
 @Entity
+@EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationCodeIdentifier> {
 
@@ -32,7 +33,6 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 
 	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId,
 			DepartmentIdentifier departmentId) {
-
 		this(expirationTime, trackedPersonId, departmentId, ActivationCodeIdentifier.of(UUID.randomUUID()));
 	}
 
@@ -55,6 +55,10 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	 */
 	public boolean isExpired() {
 		return LocalDateTime.now().isAfter(expirationTime);
+	}
+
+	public boolean isNotExpired() {
+		return !isExpired();
 	}
 
 	/**

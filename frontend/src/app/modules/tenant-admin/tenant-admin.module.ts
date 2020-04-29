@@ -1,3 +1,6 @@
+import { AnomalyComponent } from './client/anomaly/anomaly.component';
+import { ReportCaseActionsResolver } from '@resolvers/report-case-actions.resolver';
+import { ActionComponent } from './client/action/action.component';
 import { ReportCasesResolver } from '@resolvers/report-cases.resolver';
 import { ActionAlertComponent } from './action-alert/action-alert.component';
 import { ActionsResolver } from '@resolvers/actions.resolver';
@@ -11,17 +14,37 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClientsComponent } from './clients/clients.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ClientComponent } from './client/client.component';
+import { ReportCaseResolver } from '@resolvers/report-case.resolver';
+import { EditComponent } from './client/edit/edit.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CommentsComponent } from './client/comments/comments.component';
+import { MailComponent } from './client/mail/mail.component';
 
 
 @NgModule({
-  declarations: [TenantAdminComponent, DashboardComponent, ClientsComponent, ActionsComponent, ActionAlertComponent],
+  declarations: [
+    TenantAdminComponent,
+    DashboardComponent,
+    ClientsComponent,
+    ClientComponent,
+    ActionsComponent,
+    ActionAlertComponent,
+    EditComponent,
+    ActionComponent,
+    AnomalyComponent,
+    CommentsComponent,
+    MailComponent
+  ],
   imports: [
     CommonModule,
     TenantAdminRoutingModule,
     AngularMaterialModule,
     ReactiveFormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    MatTabsModule
   ],
-  providers: [ActionsResolver, ReportCasesResolver]
+  providers: [ActionsResolver, ReportCasesResolver, ReportCaseResolver, ReportCaseActionsResolver]
 })
-export class TenantAdminModule { }
+export class TenantAdminModule {
+}

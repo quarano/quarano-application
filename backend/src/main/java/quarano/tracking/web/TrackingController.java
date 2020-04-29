@@ -25,6 +25,7 @@ import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.DiaryEntryRepository;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.PhoneNumber;
@@ -64,6 +65,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public class TrackingController {
 
 	private final @NonNull TrackedPersonRepository repository;
+	private final @NonNull DiaryEntryRepository entries;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
@@ -105,8 +107,10 @@ public class TrackingController {
 	@GetMapping("/api/encounters")
 	public Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
 
+		var diary = entries.findByTrackedPerson(person);
+
 		return person.getEncounters().stream() //
-				.map(it -> EncounterDto.of(it, person));
+				.map(it -> EncounterDto.of(it, diary, person));
 	}
 
 	@PostMapping("/api/encounters")
@@ -115,6 +119,8 @@ public class TrackingController {
 		if (errors.hasErrors() && errors.hasFieldErrors("contact")) {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
+
+		var diary = entries.findByTrackedPerson(person);
 
 		return contacts.findById(payload.getContactId()) //
 				.filter(it -> it.belongsTo(person)) //
@@ -128,7 +134,7 @@ public class TrackingController {
 					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId(), person);
 					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
 
-					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
+					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, diary, person));
 
 				}).orElseGet(() -> {
 
@@ -141,9 +147,11 @@ public class TrackingController {
 	@GetMapping("/api/encounters/{identifier}")
 	HttpEntity<?> getEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
+		var diary = entries.findByTrackedPerson(person);
+
 		return ResponseEntity.of(person.getEncounters() //
 				.havingIdOf(identifier) //
-				.map(it -> EncounterDto.of(it, person)));
+				.map(it -> EncounterDto.of(it, diary, person)));
 	}
 
 	@DeleteMapping("/api/encounters/{identifier}")

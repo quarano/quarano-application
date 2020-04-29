@@ -1,16 +1,31 @@
 @import "../../../../styles/variables";
 
 ::ng-deep {
-  .datatable-row-center.datatable-row-group.ng-star-inserted {
-    display: flex !important;
-    align-items: center !important;
+  .ngx-datatable.material.single-selection .datatable-body-row.active,
+  .ngx-datatable.material.single-selection
+    .datatable-body-row.active
+    .datatable-row-group,
+  .ngx-datatable.material.multi-selection .datatable-body-row.active,
+  .ngx-datatable.material.multi-selection
+    .datatable-body-row.active
+    .datatable-row-group,
+  .ngx-datatable.material.multi-click-selection .datatable-body-row.active,
+  .ngx-datatable.material.multi-click-selection
+    .datatable-body-row.active
+    .datatable-row-group {
+    background-color: $primary-color !important;
   }
 
   .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
   .ngx-datatable.material:not(.cell-selection)
     .datatable-body-row:hover
     .datatable-row-group {
-    background-color: #f4f4f4;
+    cursor: pointer;
+  }
+
+  .datatable-row-center.datatable-row-group.ng-star-inserted {
+    display: flex !important;
+    align-items: center !important;
   }
 
   .ngx-datatable.material .datatable-body .progress-linear .container {

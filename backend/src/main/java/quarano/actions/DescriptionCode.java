@@ -28,7 +28,9 @@ public enum DescriptionCode {
 
 	FIRST_CHARACTERISTIC_SYMPTOM(2.0f),
 
-	DIARY_ENTRY_MISSING;
+	DIARY_ENTRY_MISSING,
+
+	MISSING_DETAILS_INDEX;
 
 	private final @Getter float multiplier;
 

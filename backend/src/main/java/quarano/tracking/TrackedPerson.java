@@ -70,9 +70,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private LocalDateTime accountRegisteredAt;
 
 	@OneToMany(cascade = CascadeType.ALL) //
-	private List<DiaryEntry> entries;
-
-	@OneToMany(cascade = CascadeType.ALL) //
 	private List<Encounter> encounters;
 
 	public TrackedPerson(String firstName, String lastName) {
@@ -88,7 +85,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.emailAddress = emailAddress;
 		this.phoneNumber = phoneNumber;
 		this.dateOfBirth = dateOfBirth;
-		this.entries = new ArrayList<>();
 		this.encounters = new ArrayList<>();
 	}
 
@@ -102,10 +98,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return firstName.concat(" ").concat(lastName);
 	}
 
-	public Diary getDiary() {
-		return Diary.of(entries);
-	}
-
 	public Encounters getEncounters() {
 		return Encounters.of(encounters);
 	}
@@ -114,12 +106,9 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return this.dateOfBirth.equals(date);
 	}
 
-	public TrackedPerson addDiaryEntry(DiaryEntry entry) {
+	TrackedPerson registerEncounter(Encounter encounter) {
 
-		this.entries.add(entry);
-		this.encounters.addAll(entry.toEncounters());
-
-		registerEvent(DiaryEntryAdded.of(entry, getId()));
+		this.encounters.add(encounter);
 
 		return this;
 	}
@@ -171,12 +160,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				&& emailAddress != null //
 				&& address.isComplete() //
 				&& dateOfBirth != null;
-	}
-
-	@Value(staticConstructor = "of")
-	public static class DiaryEntryAdded implements DomainEvent {
-		DiaryEntry entry;
-		TrackedPersonIdentifier personIdentifier;
 	}
 
 	@Value

@@ -89,7 +89,7 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 		 */
 		@Override
 		public Object getPrincipal() {
-			return account.getUsername();
+			return account;
 		}
 	}
 }

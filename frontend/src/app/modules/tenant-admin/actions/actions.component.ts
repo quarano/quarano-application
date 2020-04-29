@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ActionListItemDto } from '@models/action';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -14,7 +14,9 @@ export class ActionsComponent implements OnInit, OnDestroy {
   loading = false;
   rows = [];
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     this.loading = true;
@@ -44,5 +46,15 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  sendMail(event, to: string) {
+    event.stopPropagation();
+    window.location.href = `mailto:${to}`;
+  }
+
+  onSelect(event) {
+    console.log(event);
+    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.caseId]);
   }
 }

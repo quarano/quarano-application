@@ -1,0 +1,81 @@
+<mat-card class="form__card--animated">
+    <mat-card-header>
+        <mat-card-title>
+            <h1>Herzlich Willkommen bei quarano, dem Online-Dokumentationstool Ihrer Gesundheitsbehörde!</h1>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="userType === ClientType.Index">
+        <section>
+            <p>Mit dem persönlichen Registrierungs-Code bzw. dem personalisierten Link melden Sie sich nun bitte auf den
+                folgenden Seiten an und nutzen dieses Tool als online Dokumentation*.</p>
+            <p>Dazu werden Sie im ersten Schritt aufgefordert, sich mit einem Benutzernamen und einem Passwort zu
+                registrieren. Im darauf folgenden Schritt werden ein paar notwendige Basisdaten abgefragt, bevor Sie
+                dann die sogenannten „direkten Kontaktpersonen” angeben können, zu denen Sie seit Symptombeginn (und bis
+                zu 48h zuvor) Kontakt hatten.</p>
+            <p>Diese Informationen müssen Sie nur einmal initial eingeben. Danach können Sie direkt mit dem ersten
+                Symptomtagebucheintrag beginnen. Hier tragen Sie möglicherweise auftretenden Symptome tagesaktuell ein
+                (wie z.B. Fieber, Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall, …)</p>
+            <p>Diese Informationen sind von Ihnen ab sofort und während der gesamten Quarantäne / der häuslichen
+                Isolation 2x am Tag (morgens und abends) einzugeben.</p>
+            <p>Wichtig: Wenn mehrere betroffene Personen im selben Haushalt leben, ist es wichtig, dass sich jede Person
+                mit einem eigenen Code / Zugangslink vom Gesundheitsamt jeweils einen eigenen Benutzer anlegt. So können
+                alle Einträge immer richtig zugeordnet werden.</p>
+            <p>Vielen Dank, dass Sie uns mit der Selbsteingabe in unser Online-Dokumentationstool quarano unterstützen,
+                der dynamischen Entwicklung und der steigenden Fallzahlen gerecht zu werden.</p>
+            <p>Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt
+                an oder den Ärztlicher Bereitschaftsdienst (Tel: 116 117). Bei sonstigen Rückfragen melden Sie sich
+                bitte auf unserem</p>
+            <p>Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).</p>
+            <p>Ihr Gesundheitsamt Mannheim</p>
+            <p class="footnote"><em>*Ihre Daten werden sicher auf deutschen Servern gespeichert und nur Ihr
+                    Gesundheitsamt hat Zugriff
+                    auf
+                    die Daten. Bei Fragen sprechen Sie uns gerne an.</em></p>
+        </section>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="button"
+                [routerLink]="['/welcome/register/', clientcode]">WEITER</button>
+        </mat-card-actions>
+    </mat-card-content>
+    <mat-card-content *ngIf="userType === ClientType.Contact">
+        <section>
+            <p>Wie bereits in der Email beschrieben, wurden Sie von einem Mitbürger als direkte Kontaktperson (Kat I
+                oder III)* angegeben. Ein Mitarbeiter wird sich in Kürze bei Ihnen melden.</p>
+            <p>Mit dem persönlichen Registrierungs-Code bzw. dem personalisierten Link melden Sie sich bitte bereits
+                schon einmal auf den folgenden Seiten an und nutzen dieses Tool als online Dokumentation**.</p>
+            <p>Dazu werden Sie im ersten Schritt aufgefordert, sich mit einem Benutzernamen und einem Passwort zu
+                registrieren. Im darauf folgenden Schritt werden ein paar notwendige Basisdaten abgefragt, bevor Sie
+                dann die sogenannten „direkten Kontaktpersonen” angeben können, falls Sie selbst bereits COVID-19
+                Symptome haben.</p>
+            <p>Diese Informationen müssen Sie nur einmal initial eingeben. Danach können Sie direkt mit dem ersten
+                Symptomtagebucheintrag beginnen. Hier tragen Sie möglicherweise auftretenden Symptome tagesaktuell ein
+                (wie z.B. Fieber, Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall, …)</p>
+            <p>Diese Informationen sind von Ihnen ab sofort und während der gesamten Quarantäne / der häuslichen
+                Isolation 2x am Tag (morgens und abends) einzugeben.</p>
+            <p>Wichtig: Wenn mehrere betroffene Personen im selben Haushalt leben, ist es wichtig, dass sich jede Person
+                mit einem eigenen Code / Zugangslink vom Gesundheitsamt jeweils einen eigenen Benutzer anlegt. So können
+                alle Einträge immer richtig zugeordnet werden.</p>
+            <p>Vielen Dank, dass Sie uns mit der Selbsteingabe in unser Online-Dokumentationstool quarano unterstützen,
+                der dynamischen Entwicklung und der steigenden Fallzahlen gerecht zu werden.</p>
+            <p>Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt
+                an oder den Ärztlicher Bereitschaftsdienst (Tel: 116 117).</p>
+            <p>Bei sonstigen Rückfragen melden Sie sich bitte auf unserem</p>
+            <p>Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).</p>
+            <p>Ihr Gesundheitsamt Mannheim</p>
+            <p class="footnote"><em>*nähere Informationen hierzu finden Sie auf den Seiten des Robert Koch
+                    Instituts<br /><a
+                        href="https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Kontaktperson/Management.html"
+                        target="_blank">https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Kontaktperson/Management.html</a>
+                </em></p>
+            <p class="footnote"><em>**Ihre Daten werden sicher auf deutschen Servern gespeichert und nur Ihr
+                    Gesundheitsamt hat Zugriff
+                    auf
+                    die Daten. Bei Fragen sprechen Sie uns gerne an.</em></p>
+        </section>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="button" [routerLink]="['/welcome/register/', clientcode]">
+                WEITER
+            </button>
+        </mat-card-actions>
+    </mat-card-content>
+</mat-card>

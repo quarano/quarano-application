@@ -5,8 +5,6 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile.component';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 @NgModule({
   imports: [
@@ -18,7 +16,5 @@ import { MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
     AppFormsModule
   ],
   declarations: [ProfileComponent],
-  providers: [{ provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
-  ]
 })
 export class ProfileModule { }

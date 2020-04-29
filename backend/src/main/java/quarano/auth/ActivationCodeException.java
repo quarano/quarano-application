@@ -40,6 +40,10 @@ public class ActivationCodeException extends RuntimeException {
 				"Activation code " + code.getId() + " was already used or canceled!");
 	}
 
+	public static ActivationCodeException activationConcluded() {
+		return new ActivationCodeException(null, Status.USED_OR_CANCELED, "Account was already activated!");
+	}
+
 	private ActivationCodeException(ActivationCodeIdentifier code, Status status, String message) {
 
 		super(message);

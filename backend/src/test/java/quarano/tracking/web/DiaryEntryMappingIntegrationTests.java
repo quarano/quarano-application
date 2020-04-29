@@ -22,9 +22,9 @@ import quarano.QuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
 import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMappingException;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.Slot;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import java.util.List;
@@ -41,19 +41,7 @@ import org.modelmapper.MappingException;
 class DiaryEntryMappingIntegrationTests {
 
 	private final MapperWrapper mapper;
-	private final ContactPersonRepository contacts;
 	private final DiaryRepresentations representations;
-
-	@Test
-	void mapsDtoToNewEntry() {
-
-		var source = new DiaryEntryInput();
-
-		var result = mapper.map(source, DiaryEntry.class);
-
-		assertThat(result.getId()).isNotNull();
-		assertThat(result.getDateTime()).isNotNull();
-	}
 
 	@Test
 	void rejectsInvalidContact() {
@@ -73,8 +61,8 @@ class DiaryEntryMappingIntegrationTests {
 	@Test
 	void mapsEntityToDetailsDto() {
 
-		var source = DiaryEntry.of(Slot.now());
-		source.setBodyTemperature(BodyTemperature.of(40.0f));
+		var source = DiaryEntry.of(Slot.now(), TrackedPersonIdentifier.of(UUID.randomUUID()))//
+				.setBodyTemperature(BodyTemperature.of(40.0f));
 
 		var result = representations.toRepresentation(source);
 

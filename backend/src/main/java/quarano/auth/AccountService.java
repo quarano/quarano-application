@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.auth.Password.EncryptedPassword;
 import quarano.auth.Password.UnencryptedPassword;
 import quarano.department.Department.DepartmentIdentifier;
+import quarano.department.TrackedCase;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -27,7 +28,7 @@ public class AccountService {
 	private final @NonNull PasswordEncoder passwordEncoder;
 	private final @NonNull AccountRepository accounts;
 	private final @NonNull RoleRepository roles;
-	private final @NonNull TrackedPersonRepository trackedPersonRepo;
+	private final @NonNull TrackedPersonRepository trackedPeople;
 	private final @NonNull ActivationCodeService activationCodes;
 	private final @NonNull AccountProperties configuration;
 
@@ -62,9 +63,8 @@ public class AccountService {
 				.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, trackedPersonId, role));
 
 		// Mark registration on TrackedPerson
-		trackedPersonRepo.findById(trackedPersonId)
-				.map(it -> it.markAccountRegistration(configuration.getRegistrationDate())) //
-				.map(trackedPersonRepo::save);
+		trackedPeople.findById(trackedPersonId).map(it -> it.markAccountRegistration(configuration.getRegistrationDate())) //
+				.map(trackedPeople::save);
 
 		log.info("Created account for tracked person " + trackedPersonId + " with username " + username);
 
@@ -93,6 +93,10 @@ public class AccountService {
 		return true;
 	}
 
+	public Optional<Account> findByCase(TrackedCase trackedCase) {
+		return accounts.findByTrackedPersonId(trackedCase.getTrackedPerson().getId());
+	}
+
 	public Optional<Account> findByUsername(String username) {
 		return accounts.findByUsername(username);
 	}
@@ -112,7 +116,7 @@ public class AccountService {
 
 	private Try<AccountRegistrationDetails> applyTrackedPerson(AccountRegistrationDetails details) {
 
-		return trackedPersonRepo.findById(details.getTrackedPersonId()) //
+		return trackedPeople.findById(details.getTrackedPersonId()) //
 				.map(person -> details.apply(person)) //
 				.orElseGet(() -> Try.failure(new AccountRegistrationException("No tracked person found!")));
 	}
@@ -126,7 +130,7 @@ public class AccountService {
 	 */
 	private Try<AccountRegistrationDetails> checkIdentity(AccountRegistrationDetails details) {
 
-		return trackedPersonRepo.findById(details.getTrackedPersonId()).map(Try::success) //
+		return trackedPeople.findById(details.getTrackedPersonId()).map(Try::success) //
 				.orElseGet(() -> Try.failure(new AccountRegistrationException(
 						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'")))
 				.filter(person -> person.hasBirthdayOf(details.getDateOfBirth()),

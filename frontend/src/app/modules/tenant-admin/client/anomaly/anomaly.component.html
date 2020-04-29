@@ -1,0 +1,12 @@
+<ul>
+  <li *ngFor="let anomaly of actions">
+    <span>{{ getAnomalyDate(anomaly.date) }}</span>
+    <ul>
+      <li *ngFor="let item of anomaly.items" class="item">
+        <mat-icon class="mr-2" color="warn">notification_important</mat-icon
+        ><span class="mr-3">{{ getItemTime(item.date) }}</span>
+        {{ item.description }}
+      </li>
+    </ul>
+  </li>
+</ul>

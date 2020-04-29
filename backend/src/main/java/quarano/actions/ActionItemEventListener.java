@@ -18,7 +18,8 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.TrackedPerson.DiaryEntryAdded;
+import quarano.department.TrackedCase.TrackedCaseUpdated;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class ActionItemEventListener {
 	void on(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
-		var person = event.getPersonIdentifier();
+		var person = entry.getTrackedPersonId();
 
 		// Body temperature exceeds reference
 
@@ -57,6 +58,33 @@ public class ActionItemEventListener {
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
 					Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM)));
+		}
+	}
+
+	@EventListener
+	void on(TrackedCaseUpdated event) {
+
+		var trackedCase = event.getTrackedCase();
+
+		if (!trackedCase.isIndexCase() //
+				|| trackedCase.isConcluded() //
+				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
+			return;
+		}
+
+		var person = trackedCase.getTrackedPerson();
+		var detailsMissing = person.getPhoneNumber() == null //
+				&& person.getMobilePhoneNumber() == null //
+				|| person.getEmailAddress() == null //
+				|| person.getDateOfBirth() == null;
+
+		if (!detailsMissing) {
+			return;
+		}
+
+		if (items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX).isEmpty()) {
+			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
+					DescriptionCode.MISSING_DETAILS_INDEX));
 		}
 	}
 }

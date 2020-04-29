@@ -15,6 +15,6 @@ export interface ReportCaseDto {
 }
 
 export enum ClientType {
-  index = 'index',
-  contact = 'contact'
+  Index = 'index',
+  Contact = 'contact'
 }

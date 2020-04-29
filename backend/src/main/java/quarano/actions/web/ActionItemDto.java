@@ -59,6 +59,7 @@ public class ActionItemDto {
 		return messages.getMessage(item.getDescription());
 	}
 
+	@SuppressWarnings("null")
 	@JsonInclude(Include.NON_EMPTY)
 	@JsonProperty("_links")
 	public Map<String, Object> getLinks() {
@@ -70,7 +71,8 @@ public class ActionItemDto {
 
 			DiaryEntry entry = ((DiaryEntryActionItem) item).getEntry();
 
-			links.put("entry", fromMethodCall(diaryController.getDiaryEntry(entry.getId(), null)).toUriString());
+			links.put("entry",
+					Map.of("href", fromMethodCall(diaryController.getDiaryEntry(entry.getId(), null)).toUriString()));
 		}
 
 		return links;

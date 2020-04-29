@@ -1,5 +1,10 @@
 <div style="display: flex; justify-content: space-between;">
-  <button class="mb-3" mat-raised-button color="primary">
+  <button
+    class="mb-3"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/tenant-admin/client']"
+  >
     <mat-icon>add</mat-icon>Neuen Fall anlegen
   </button>
   <button class="mb-3" mat-button>
@@ -26,11 +31,24 @@
   [messages]="{
     emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
     selectedMessage: 'ausgewählt',
-    totalMessage: 'Fälle'
+    totalMessage: cases.length === 1 ? 'Fall' : 'Fälle'
   }"
   [loadingIndicator]="loading"
   [footerHeight]="50"
+  [selectionType]="selectionType"
+  (select)="onSelect($event)"
 >
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="190"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+
   <ngx-datatable-column
     prop="lastName"
     name="Nachname"
@@ -66,17 +84,6 @@
     prop="type"
     name="Typ"
     width="80"
-    [resizeable]="true"
-    [sortable]="true"
-    [draggable]="true"
-    [canAutoResize]="true"
-  >
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="status"
-    name="Status"
-    width="190"
     [resizeable]="true"
     [sortable]="true"
     [draggable]="true"
@@ -123,34 +130,15 @@
     [sortable]="false"
   >
     <ng-template let-value="value" ngx-datatable-cell-template>
-      <a
+      <button
         *ngIf="value"
         class="mail-link"
         mat-icon-button
-        href="mailto:{{ value }}"
         [matTooltip]="'E-Mail an ' + value"
         matTooltipPosition="right"
+        (click)="sendMail($event, value)"
       >
         <mat-icon>mail_outline</mat-icon>
-      </a>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="caseId"
-    name="Bearbeiten"
-    [sortable]="false"
-    width="100"
-  >
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <button
-        mat-icon-button
-        matTooltip="Fall bearbeiten"
-        matTooltipPosition="right"
-        class="mail-link"
-        [routerLink]="[value]"
-      >
-        <mat-icon>edit</mat-icon>
       </button>
     </ng-template>
   </ngx-datatable-column>

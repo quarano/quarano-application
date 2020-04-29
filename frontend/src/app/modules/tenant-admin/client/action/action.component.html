@@ -1,0 +1,71 @@
+<h1 class="mt-3">Auffälligkeiten</h1>
+<mat-accordion [multi]="true">
+  <mat-expansion-panel
+    *ngIf="caseAction.anomalies.health.length > 0"
+    [expanded]="true"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span
+          [matBadge]="caseAction.anomalies.health.length"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+        >
+          Gesundheit
+        </span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.health"
+    ></app-client-action-anomaly
+  ></mat-expansion-panel>
+  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Prozess
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.process"
+    ></app-client-action-anomaly>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Abgeschlossen
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-client-action-anomaly
+      [actions]="caseAction.anomalies.resolved"
+    ></app-client-action-anomaly> </mat-expansion-panel
+></mat-accordion>
+
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="submitForm()"
+  class="mt-5"
+  *ngIf="hasOpenAnomalies()"
+>
+  <fieldset>
+    <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
+    <mat-form-field class="full-width">
+      <mat-label>Bemerkung</mat-label>
+      <textarea
+        [mat-autosize]="true"
+        [matAutosizeMinRows]="5"
+        matInput
+        formControlName="comment"
+        placeholder="Bemerkung"
+      ></textarea>
+    </mat-form-field>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="formGroup.invalid"
+    >
+      <mat-icon>check</mat-icon> Abschließen
+    </button>
+  </fieldset>
+</form>

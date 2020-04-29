@@ -6,7 +6,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.WithQuaranoUser;
 import quarano.auth.ActivationCodeDataInitializer;
+import quarano.auth.ActivationCodeService;
+import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseLinkRelations;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -20,8 +24,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +33,14 @@ import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-@DirtiesContext
 class RegistrationWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
 	private final TrackedPersonRepository repository;
+	private final TrackedCaseRepository cases;
+	private final ActivationCodeService codes;
+	private final HalLinkDiscoverer links;
 
 	@Test
 	public void registerNewAccountForClientSuccess() throws Exception {
@@ -146,6 +152,44 @@ class RegistrationWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString();
 		Assertions.assertTrue(Boolean.parseBoolean(resultAsString));
 
+	}
+
+	@Test
+	@WithQuaranoUser("agent2")
+	void noPendingRegistrationExposesLinkToEnableTracking() throws Exception {
+
+		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
+
+		var response = mvc.perform(get("/api/hd/cases/{id}/registration", harryCase.getId())) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$._links.start-tracking.href", String.class)).isNotBlank();
+	}
+
+	@Test
+	@WithQuaranoUser("agent2")
+	void startsTracking() throws Exception {
+
+		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
+
+		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId())) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+		var harry = harryCase.getTrackedPerson();
+
+		assertThat(document.read("$.email", String.class)).contains(harry.getLastName());
+		assertThat(document.read("$.expirationDate", String.class)).isNotBlank();
+		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
+
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.RENEW, response)).isPresent();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.CONCLUDE, response)).isPresent();
+
+		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
 	}
 
 	@Test

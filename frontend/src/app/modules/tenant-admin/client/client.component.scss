@@ -1,0 +1,40 @@
+.header-image {
+  background-image: url("../../../../assets/images/diary.png");
+  background-size: cover;
+}
+mat-card {
+  width: 800px;
+  max-width: 900px;
+}
+
+p.hint {
+  margin: 12px 0;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  font-size: 24px;
+  /* padding-top: 6px; */
+  height: 40px;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    .status {
+      font-size: 12px;
+      line-height: 12px;
+      border-radius: 19px;
+      border: 1px solid;
+      display: inline-block;
+      padding: 4px 10px;
+      margin-left: 15px;
+    }
+  }
+
+
+
+
+}

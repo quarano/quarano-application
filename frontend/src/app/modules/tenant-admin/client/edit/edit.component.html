@@ -1,0 +1,205 @@
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-3">
+  <fieldset class="mb-3">
+    <legend>Basisdaten</legend>
+    <mat-form-field class="half-width">
+      <input
+        required
+        matInput
+        placeholder="Vorname"
+        formControlName="firstName"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <input
+        matInput
+        required
+        placeholder="Nachname"
+        formControlName="lastName"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <mat-label>Geburtsdatum</mat-label>
+      <input
+        matInput
+        [max]="today"
+        [matDatepicker]="dateOfBirthPicker"
+        formControlName="dateOfBirth"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="dateOfBirthPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Krankheitsdaten</legend>
+    <div class="form-flex">
+      <mat-form-field class="half-width">
+        <mat-label>Abstrichdatum (Test)</mat-label>
+        <input
+          matInput
+          required
+          [max]="today"
+          [matDatepicker]="testDatePicker"
+          formControlName="testDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="testDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #testDatePicker></mat-datepicker>
+        <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      </mat-form-field>
+
+      <div class="half-width form-field form-field-radio">
+        <label class="example-margin">Covid-19 Test:</label>
+        <mat-radio-group formControlName="infected">
+          <mat-radio-button class="example-margin" [value]="true"
+            >Positiv</mat-radio-button
+          >
+          <mat-radio-button class="example-margin" [value]="false"
+            >Negativ</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+    </div>
+    <mat-form-field class="half-width">
+      <mat-label>Beginn Quarantäne / häusliche Isolation</mat-label>
+      <input
+        matInput
+        required
+        [max]="today"
+        [matDatepicker]="quarantineStartPicker"
+        formControlName="quarantineStartDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="quarantineStartPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #quarantineStartPicker></mat-datepicker>
+      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="half-width">
+      <mat-label>Ende Quarantäne / häusliche Isolation</mat-label>
+      <input
+        matInput
+        required
+        [matDatepicker]="quarantineEndDatePicker"
+        formControlName="quarantineEndDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="quarantineEndDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
+      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Kontaktmöglichkeiten *</legend>
+    <mat-form-field class="half-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (Festnetz)"
+        formControlName="phone"
+        type="phone"
+      />
+      <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (mobil)"
+        formControlName="mobilePhone"
+        type="phone"
+      />
+      <mat-error
+        >Bitte geben Sie eine gültige mobile Telefonnummer ein
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        placeholder="E-Mail"
+        formControlName="email"
+        type="email"
+      />
+      <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Adresse</legend>
+
+    <mat-form-field style="width: 70%;">
+      <input
+        matInput
+        placeholder="Straße"
+        formControlName="street"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine Straße ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        placeholder="Hausnummer"
+        maxlength="6"
+        formControlName="houseNumber"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        placeholder="Postleitzahl"
+        minlength="5"
+        maxlength="5"
+        formControlName="zipCode"
+        type="text"
+      />
+      <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 70%;">
+      <input matInput placeholder="Ort" formControlName="city" type="text" />
+      <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Kommentar</legend>
+
+    <mat-form-field class="full-width">
+      <textarea matInput formControlName="comment" type="text"></textarea>
+      <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+    </mat-form-field>
+  </fieldset>
+  <div class="button-area">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="formGroup.invalid || formGroup.pristine"
+    >
+      Speichern
+    </button>
+    <button
+      type="button"
+      mat-raised-button
+      color="secondary"
+      [routerLink]="['/tenant-admin/clients']"
+    >
+      Abbrechen
+    </button>
+  </div>
+</form>

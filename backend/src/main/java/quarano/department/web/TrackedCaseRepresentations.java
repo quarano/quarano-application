@@ -15,36 +15,71 @@
  */
 package quarano.department.web;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import quarano.core.validation.AlphaNumeric;
+import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Strings;
+import quarano.core.validation.Textual;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Department;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
 
+import java.time.LocalDate;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
+
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * @author Oliver Drotbohm
  */
 @Component
 @RequiredArgsConstructor
-public class TrackedCaseRepresentations {
+class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 	private final MapperWrapper mapper;
 	private final SmartValidator validator;
+	private final MessageSourceAccessor messages;
 
-	TrackedCaseDto toRepresentation(TrackedCase trackedCase) {
+	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
 
 		var personDto = mapper.map(trackedCase.getTrackedPerson(), TrackedPersonDto.class);
-		var result = mapper.map(trackedCase, TrackedCaseDto.class);
+		var caseDto = mapper.map(trackedCase, TrackedCaseDto.class);
 
-		return mapper.map(personDto, result);
+		return mapper.map(personDto, caseDto);
+	}
+
+	TrackedCaseDetails toRepresentation(TrackedCase trackedCase) {
+
+		var dto = toInputRepresentation(trackedCase);
+
+		return new TrackedCaseDetails(trackedCase, dto, messages);
+	}
+
+	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
+		return new TrackedCaseSummary(trackedCase, messages);
 	}
 
 	InitialReportDto toRepresentation(InitialReport report) {
@@ -64,7 +99,7 @@ public class TrackedCaseRepresentations {
 		var personDto = mapper.map(source, TrackedPersonDto.class);
 		var person = mapper.map(personDto, TrackedPerson.class);
 
-		return mapper.map(source, new TrackedCase(person,  CaseType.INDEX, department));
+		return mapper.map(source, new TrackedCase(person, CaseType.INDEX, department));
 	}
 
 	InitialReport from(InitialReportDto source) {
@@ -81,5 +116,53 @@ public class TrackedCaseRepresentations {
 		validator.validate(dto, errors);
 
 		return errors;
+	}
+
+	@Data
+	@Accessors(chain = true)
+	@NoArgsConstructor
+	static class TrackedCaseDto {
+
+		private @NotEmpty @Alphabetic String lastName;
+		private @NotEmpty @Alphabetic String firstName;
+		private @NotNull LocalDate testDate;
+		private @NotNull LocalDate quarantineStartDate;
+		private @NotNull LocalDate quarantineEndDate;
+
+		private @Pattern(regexp = Strings.STREET) String street;
+		private @AlphaNumeric String houseNumber;
+		private @Pattern(regexp = Strings.CITY) String city;
+		private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
+		private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
+		private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
+		private @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Past LocalDate dateOfBirth;
+
+		private @Textual String comment;
+
+		private boolean infected;
+
+		Errors validate(Errors errors) {
+
+			if (!StringUtils.hasText(phone) && !StringUtils.hasText(mobilePhone)) {
+				errors.rejectValue("phone", "PhoneOrMobile");
+				errors.rejectValue("mobilePhone", "PhoneOrMobile");
+			}
+
+			return errors;
+		}
+	}
+
+	@Relation(collectionRelation = "cases")
+	static class TrackedCaseDetails extends TrackedCaseStatusAware<TrackedCaseDetails> {
+
+		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
+
+		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages) {
+
+			super(trackedCase, messages);
+
+			this.dto = dto;
+		}
 	}
 }

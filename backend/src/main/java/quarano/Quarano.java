@@ -15,7 +15,10 @@
  */
 package quarano;
 
-import org.jddd.core.types.Identifier;
+import quarano.core.EmailTemplates;
+
+import java.util.Map;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,14 +26,10 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 /**
  * @author Oliver Drotbohm
@@ -42,6 +41,14 @@ public class Quarano {
 
 	public static void main(String... args) {
 		SpringApplication.run(Quarano.class, args);
+	}
+
+	@Bean
+	EmailTemplates emailTemplates(ResourceLoader loader) {
+
+		var templates = Map.of(EmailTemplates.Keys.REGISTRATION, "classpath:masterdata/templates/registration.txt");
+
+		return new EmailTemplates(loader, templates);
 	}
 
 	@Bean
@@ -58,16 +65,4 @@ public class Quarano {
 	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
 		return new MessageSourceAccessor(source);
 	}
-
-	@Bean
-	Module quaranoModule() {
-
-		var module = new SimpleModule();
-		module.setMixInAnnotation(Identifier.class, IdentifierMixin.class);
-
-		return module;
-	}
-
-	@JsonSerialize(using = ToStringSerializer.class)
-	static abstract class IdentifierMixin {}
 }

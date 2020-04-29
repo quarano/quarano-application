@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
+import quarano.tracking.DiaryEntryRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -35,12 +36,13 @@ class DiaryControllerIntegrationTests {
 
 	private final DiaryController controller;
 	private final TrackedPersonRepository repository;
+	private final DiaryEntryRepository entries;
 
 	@Test
 	void rendersDiaryEntryCorrectly() throws Exception {
 
 		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var entry = person.getDiary().iterator().next();
+		var entry = entries.findByTrackedPerson(person).iterator().next();
 
 		ResponseEntity<?> entity = controller.getDiaryEntry(entry.getId(), person);
 

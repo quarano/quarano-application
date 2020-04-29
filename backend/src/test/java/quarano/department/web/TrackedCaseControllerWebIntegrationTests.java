@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
@@ -29,20 +29,25 @@ import quarano.WithQuaranoUser;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 
@@ -61,39 +66,41 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final TrackedCaseRepository cases;
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
+	private final LinkDiscoverer discoverer;
 
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
 
-		var today = LocalDate.now();
-
-		var payload = new TrackedCaseDto() //
-				.setFirstName("Michael") //
-				.setLastName("Mustermann") //
-				.setTestDate(today) //
-				.setQuarantineStartDate(today) //
-				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
-				.setPhone("0123456789");
-
-		var response = mvc.perform(post("/api/hd/cases") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
-				.andExpect(status().isCreated()) //
-				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
-				.andReturn().getResponse().getContentAsString();
-
+		var payload = createMinimalPayload();
+		var response = issueCaseCreation(payload).getContentAsString();
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
-		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
-		assertThat(document.read("$.quarantineStartDate", String.class)) //
-				.isEqualTo(payload.getQuarantineStartDate().toString());
-		assertThat(document.read("$.quarantineEndDate", String.class)) //
-				.isEqualTo(payload.getQuarantineEndDate().toString());
-		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
-		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
-		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
+		assertMinimalFieldsSet(document, payload);
+
+		Stream.of(START_TRACKING, CONCLUDE).forEach(it -> {
+			assertThat(discoverer.findLinkWithRel(it, response)).isPresent();
+		});
+	}
+
+	@Test
+	@SuppressWarnings("null")
+	void updatesCaseWithMinimalPayload() throws Exception {
+
+		var payload = createMinimalPayload();
+		var response = issueCaseCreation(payload);
+
+		String location = response.getHeader(HttpHeaders.LOCATION);
+
+		response = mvc.perform(put(location) //
+				.content(jackson.writeValueAsString(payload.setInfected(true))) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse();
+
+		var document = JsonPath.parse(response.getContentAsString());
+
+		assertMinimalFieldsSet(document, payload);
+		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
 
 	@Test
@@ -131,9 +138,9 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
-		assertThat(document.read("$.city", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
 
-		assertThat(document.read("$.street", String.class)).isEqualTo(alphaNumeric);
+		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
 
 		assertThat(document.read("$.comment", String.class)).isEqualTo(textual);
@@ -145,13 +152,34 @@ class TrackedCaseControllerWebIntegrationTests {
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
 		@SuppressWarnings("null")
-		var payload = representations.toRepresentation(trackedCase) //
-				.setEmail(null)//
+		var payload = representations.toInputRepresentation(trackedCase) //
+				.setEmail(null) //
 				.setDateOfBirth(null);
 
 		var document = expectBadRequest(HttpMethod.PUT, "/api/hd/cases/" + trackedCase.getId(), payload);
 
 		assertThat(document.read("$.email", String.class)).isNotNull();
+	}
+
+	@Test
+	void getAllCasesOrderedCorrectly() throws Exception {
+
+		var response = mvc.perform(get("/api/hd/cases") //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		var lastnamesFromResponse = List.of( //
+				document.read("$._embedded.cases[0].lastName", String.class), //
+				document.read("$._embedded.cases[1].lastName", String.class), //
+				document.read("$._embedded.cases[2].lastName", String.class));
+
+		var expectedList = new ArrayList<>(lastnamesFromResponse);
+		Collections.sort(expectedList);
+
+		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
@@ -163,24 +191,39 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString());
 	}
 
-	@Test
-	void getAllCasesOrderdCorrectly() throws Exception {
+	private TrackedCaseDto createMinimalPayload() {
 
-		var response = mvc.perform(get("/api/hd/cases") //
+		var today = LocalDate.now();
+
+		return new TrackedCaseDto() //
+				.setFirstName("Michael") //
+				.setLastName("Mustermann") //
+				.setEmail("") // empty email to verify it gets bound to null and does not trigger validation
+				.setTestDate(today) //
+				.setQuarantineStartDate(today) //
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
+				.setPhone("0123456789");
+	}
+
+	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload) throws Exception {
+
+		return mvc.perform(post("/api/hd/cases") //
+				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse().getContentAsString();
+				.andExpect(status().isCreated()) //
+				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+				.andReturn().getResponse();
+	}
 
-		var document = JsonPath.parse(response);
+	private static void assertMinimalFieldsSet(DocumentContext document, TrackedCaseDto payload) {
 
-		var lastnamesFromResponse = List.of( //
-				document.read("$[0].lastName", String.class), //
-				document.read("$[1].lastName", String.class), //
-				document.read("$[2].lastName", String.class));
-
-		var expectedList = new ArrayList<>(lastnamesFromResponse);
-		Collections.sort(expectedList);
-
-		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
+		assertThat(document.read("$.quarantineStartDate", String.class)) //
+				.isEqualTo(payload.getQuarantineStartDate().toString());
+		assertThat(document.read("$.quarantineEndDate", String.class)) //
+				.isEqualTo(payload.getQuarantineEndDate().toString());
+		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
+		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
 }

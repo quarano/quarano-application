@@ -23,104 +23,98 @@ import quarano.actions.ActionItems;
 import quarano.actions.Description;
 import quarano.actions.DescriptionCode;
 import quarano.department.TrackedCase;
-import quarano.department.web.TrackedCaseSummaryDto;
+import quarano.department.web.TrackedCaseSummary;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.lang.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Oliver Drotbohm
  * @author Patrick Otto
  */
-@JsonAutoDetect(getterVisibility = Visibility.NON_PRIVATE)
-public class CaseActionSummary {
+class CaseActionSummary {
 
 	private final ActionItems items;
-	private final TrackedCaseSummaryDto trackedCaseDto;
+	private final TrackedCaseSummary summary;
 	private final TrackedCase trackedCase;
 
+	CaseActionSummary(TrackedCase trackedCase, ActionItems items, TrackedCaseSummary summary) {
+
+		this.trackedCase = trackedCase;
+		this.items = items;
+		this.summary = summary;
+	}
+
 	public String getCaseId() {
-		return trackedCaseDto.getCaseId();
+		return summary.getCaseId();
 	}
 
 	public String getFirstName() {
-		return trackedCaseDto.getFirstName();
+		return summary.getFirstName();
 	}
 
 	public String getLastName() {
-		return trackedCaseDto.getLastName();
+		return summary.getLastName();
 	}
 
 	public String getZipCode() {
-		return trackedCaseDto.getZipCode();
+		return summary.getZipCode();
 	}
 
 	public String getDateOfBirth() {
-		return trackedCaseDto.getDateOfBirth();
+		return summary.getDateOfBirth();
 	}
 
 	public String getEmail() {
-		return trackedCaseDto.getEmail();
+		return summary.getEmail();
 	}
 
 	public String getCaseType() {
-		return trackedCaseDto.getCaseType();
+		return summary.getCaseType();
 	}
 
 	public String getPrimaryPhoneNumber() {
-		return trackedCaseDto.getPrimaryPhoneNumber();
+		return summary.getPrimaryPhoneNumber();
 	}
 
+	@Nullable
 	public Map<String, Object> getQuarantine() {
-		return trackedCaseDto.getQuarantine();
+		return summary.getQuarantine();
 	}
 
-	public static CaseActionSummary of(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
-		return new CaseActionSummary(trackedCase, items, messages);
-	}
-
-	private CaseActionSummary(TrackedCase trackedCase, ActionItems items, MessageSourceAccessor messages) {
-		this.trackedCase = trackedCase;
-		this.items = items;
-		this.trackedCaseDto = TrackedCaseSummaryDto.of(trackedCase, messages);
-	}
-	
 	public String getStatus() {
-		return trackedCaseDto.getStatus();
+		return summary.getStatus();
 	}
 
-	String getName() {
+	public String getName() {
 		return trackedCase.getTrackedPerson().getFullName();
 	}
 
-	float getPriority() {
+	public float getPriority() {
 		return items.getPriority() * 100.00f / 100.00f;
 	}
 
-	List<DescriptionCode> getHealthSummary() {
+	public List<DescriptionCode> getHealthSummary() {
 		return getDescriptionCodes(ItemType.MEDICAL_INCIDENT);
 	}
 
-	List<DescriptionCode> getProcessSummary() {
+	public List<DescriptionCode> getProcessSummary() {
 		return getDescriptionCodes(ItemType.PROCESS_INCIDENT);
 	}
 
-	public int getNumberOfActionItems() {
-		return getDescriptionCodes(ItemType.MEDICAL_INCIDENT).size()
-				+ getDescriptionCodes(ItemType.PROCESS_INCIDENT).size();
+	boolean hasUnresolvedItems() {
+		return items.hasUnresolvedItems();
 	}
 
 	@JsonProperty("_links")
-	Map<String, Object> getLinks() {
+	public Map<String, Object> getLinks() {
 
-		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId());
+		var detailsLink = on(ActionItemController.class).allActions(trackedCase.getId(), null);
 
 		return Map.of("self", Map.of("href", fromMethodCall(detailsLink).toUriString()));
 	}

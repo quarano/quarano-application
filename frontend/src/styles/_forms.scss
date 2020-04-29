@@ -11,7 +11,9 @@
   max-width: 700px;
 
   .mat-card-header-text {
+    flex: 1;
     margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .mat-card-avatar {

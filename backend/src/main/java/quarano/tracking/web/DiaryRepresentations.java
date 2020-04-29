@@ -32,6 +32,7 @@ import quarano.tracking.DiaryEntry;
 import quarano.tracking.DiaryProperties;
 import quarano.tracking.Slot;
 import quarano.tracking.Slot.TimeOfDay;
+import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -82,8 +83,11 @@ public class DiaryRepresentations {
 		return new DiaryEntryRepresentation(entry, mapper, true);
 	}
 
-	Either<DiaryEntry, Errors> from(DiaryEntryInput input, Errors errors) {
-		return mapper.map(input, DiaryEntry.class, errors);
+	Either<DiaryEntry, Errors> from(DiaryEntryInput input, TrackedPerson person, Errors errors) {
+
+		var entry = DiaryEntry.of(input.getSlot(), person);
+
+		return mapper.map(input, entry, errors);
 	}
 
 	Either<DiaryEntry, Errors> from(DiaryEntryInput input, DiaryEntry existing, Errors errors) {

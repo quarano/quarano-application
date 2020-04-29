@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.auth.web;
+package quarano.auth;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AccountService;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -33,26 +32,35 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-class AuthenticationManager {
+class SpringSecurityAuthenticationManager implements AuthenticationManager {
 
 	private final @NonNull TrackedPersonRepository repository;
-	private final @NonNull AccountService accounts;
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.auth.AuthenticationManager#getLoggedInTrackedPerson()
+	 */
+	@Override
 	public Optional<TrackedPerson> getLoggedInTrackedPerson() {
 
-		var id = SecurityContextHolder.getContext() //
-				.getAuthentication() //
-				.getDetails();
-
-		return repository.findById((TrackedPersonIdentifier) id);
+		return Optional.ofNullable(SecurityContextHolder.getContext() //
+				.getAuthentication()) //
+				.map(Authentication::getDetails) //
+				.map(TrackedPersonIdentifier.class::cast) //
+				.flatMap(repository::findById);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.auth.AuthenticationManager#getCurrentUser()
+	 */
+	@Override
 	public Optional<Account> getCurrentUser() {
 
-		var username = SecurityContextHolder.getContext() //
-				.getAuthentication() //
-				.getPrincipal().toString();
-
-		return accounts.findByUsername(username);
+		return Optional.ofNullable(SecurityContextHolder.getContext() //
+				.getAuthentication()) //
+				.map(Authentication::getPrincipal) //
+				.filter(Account.class::isInstance) //
+				.map(Account.class::cast);
 	}
 }

@@ -17,6 +17,7 @@ package quarano.actions;
 
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
+import quarano.department.TrackedCase;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,10 @@ import org.springframework.data.util.Streamable;
  * @author Oliver Drotbohm
  */
 public interface ActionItemRepository extends QuaranoRepository<ActionItem, ActionItemIdentifier> {
+
+	default ActionItems findByCase(TrackedCase trackedCase) {
+		return findByTrackedPerson(trackedCase.getTrackedPerson().getId());
+	}
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
 	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
