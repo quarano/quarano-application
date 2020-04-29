@@ -47,10 +47,21 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private snackbarService: SnackbarService) {
+    private snackbarService: SnackbarService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.checkUrlCode();
+  }
+
+  private checkUrlCode() {
+    const clientCode = this.route.snapshot.paramMap.get('clientcode');
+
+    if (clientCode) {
+      this.registrationForm.get('clientCode').setValue(clientCode);
+      this.registrationForm.get('clientCode').updateValueAndValidity();
+    }
   }
 
   public changeUsername() {
