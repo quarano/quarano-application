@@ -121,14 +121,25 @@
           >Bitte geben Sie zur Verifizierung Ihr Geburtsdatum ein.</mat-error
         >
       </mat-form-field>
-      <mat-checkbox formControlName="data-protection"
-        >Hiermit akzeptiere ich die <a>Datenschutzerklärung</a></mat-checkbox
-      >
+      <div class="data-protection-wrapper">
+        <mat-checkbox formControlName="dataProtectionConfirmed"
+          >Hiermit akzeptiere ich die <a>Datenschutzerklärung</a></mat-checkbox
+        >
+        <mat-icon
+          style="cursor: pointer; opacity: 0.8;"
+          matTooltip="Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt."
+          matTooltipPosition="after"
+          class="ml-1 text-muted"
+        >
+          info</mat-icon
+        >
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button
         mat-button
         mat-raised-button
+        color="primary"
         type="submit"
         [disabled]="registrationForm.invalid"
       >

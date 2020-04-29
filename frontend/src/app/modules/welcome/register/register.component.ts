@@ -1,12 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {PasswordValidator} from '@validators/password-validator';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {filter, finalize, map, take, tap} from 'rxjs/operators';
-import {ApiService} from '@services/api.service';
-import {Register} from '@models/register';
-import {SnackbarService} from '@services/snackbar.service';
-import {DatePipe} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PasswordValidator } from '@validators/password-validator';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { filter, finalize, map, take, tap } from 'rxjs/operators';
+import { ApiService } from '@services/api.service';
+import { Register } from '@models/register';
+import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
   selector: 'app-register',
@@ -21,13 +20,13 @@ export class RegisterComponent implements OnInit {
   public registrationForm = new FormGroup({
     clientCode: new FormControl(null, [
       Validators.required,
-      () => this.codeIsValid ? null : {codeInvalid: true}
+      () => this.codeIsValid ? null : { codeInvalid: true }
     ]),
     username: new FormControl(null, [
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30),
-      () => this.usernameIsValid ? null : {usernameInvalid: true}
+      () => this.usernameIsValid ? null : { usernameInvalid: true }
     ]),
     password: new FormControl(null, [
       PasswordValidator.secure
@@ -41,7 +40,8 @@ export class RegisterComponent implements OnInit {
     ]),
     dateOfBirth: new FormControl(null, [
       Validators.required
-    ])
+    ]),
+    dataProtectionConfirmed: new FormControl(null, [Validators.required])
   }, {
     validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]
   });
@@ -50,8 +50,7 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
-    private snackbarService: SnackbarService,
-    private datePipe: DatePipe) {
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -134,14 +133,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const register: Register = {
-      username: this.registrationForm.get('username').value,
-      password: this.registrationForm.get('password').value,
-      passwordConfirm: this.registrationForm.get('passwordConfirm').value,
-      dateOfBirth: this.parseDate(this.registrationForm.get('dateOfBirth').value),
-      email: this.registrationForm.get('email').value,
-      clientCode: this.registrationForm.get('clientCode').value,
-    };
+    const register: Register = Object.assign(this.registrationForm.value);
 
     this.apiService.registerClient(register)
       .subscribe(
@@ -153,9 +145,5 @@ export class RegisterComponent implements OnInit {
           this.snackbarService.error('Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.');
         }
       );
-  }
-
-  private parseDate(date: Date) {
-    return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
 }
