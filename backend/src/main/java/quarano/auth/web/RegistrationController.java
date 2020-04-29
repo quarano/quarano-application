@@ -95,9 +95,9 @@ class RegistrationController {
 
 		switch (o_O.getProblem()) {
 			case INVALID_BIRTHDAY:
-				return errors.rejectField("dateOfBirth", "Invalid");
+				return errors.rejectField("dateOfBirth", "Invalid", o_O.getMessage());
 			case INVALID_USERNAME:
-				return errors.rejectField("username", "Invalid");
+				return errors.rejectField("username", "Invalid", o_O.getMessage());
 			default:
 				return errors;
 		}
