@@ -30,6 +30,7 @@ import org.jddd.core.types.Identifier;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.NonNull;
 
 /**
  * @author Oliver Drotbohm
@@ -41,7 +42,7 @@ public abstract class QuaranoAggregate<T extends QuaranoAggregate<T, ID>, ID ext
 		extends AbstractAggregateRoot<T> //
 		implements AggregateRoot<T, ID>, Persistable<ID> {
 
-	protected @Getter @EmbeddedId ID id;
+	protected @Getter(onMethod = @__(@NonNull)) @EmbeddedId ID id;
 	private @Getter AuditingMetadata metadata = new AuditingMetadata();
 	private @Transient boolean isNew = true;
 
