@@ -55,29 +55,28 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	// Persons for security
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("4bcb1da9-1e03-4ca0-9da1-f86d80aaa1ab"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC2_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("e69c29f4-93c8-42dc-8066-c721b7227b39"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC3_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("0bc8cd7a-60ed-4f4c-8360-22c9c711174d"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC4_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("7e570cff-7528-45e8-ae1a-38d89b9911f8"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC5_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("5380173a-f1b5-44da-a7c1-91c7aa19d71d"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC6_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("ab146a01-09d1-4ce7-8c28-aae293833754"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC7_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("3caa29c6-f3b5-4201-8f23-5ca2d5d1714a"));
-	
+
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC8_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("ca5f631e-c7ba-495f-9a54-77e90a71100f"));
-	
-	
+
 	/**
 	 * A persona with all contact details submitted, ready to take the next steps in enrollment.
 	 *
@@ -135,7 +134,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	}
 
 	/**
-	 * A persona without account created.
+	 * A persona without account created and no invite link generated
 	 *
 	 * @return
 	 */
@@ -143,19 +142,21 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"), null,
 				null);
 	}
-	
+
 	/**
-	 * A persona without account created.
+	 * A registered and in the middle of tracking
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSiggi() {
-		return new TrackedPerson(VALID_TRACKED_SEC1_ID_DEP1, "Siggi", "Seufert", EmailAddress.of("siggi@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
+
+		return new TrackedPerson(VALID_TRACKED_SEC1_ID_DEP1, "Siggi", "Seufert", EmailAddress.of("siggi@testtest.de"),
+				PhoneNumber.of("0621883322"), LocalDate.of(1980, 1, 1))
+						.setAddress(new Address("Baumstr.", HouseNumber.of("6"), "Mannheim", ZipCode.of("68309")));
 	}
-	
+
 	/**
-	 * A persona without account created.
+	 * A persona ready to start the enrolement
 	 *
 	 * @return
 	 */
@@ -163,66 +164,66 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		return new TrackedPerson(VALID_TRACKED_SEC2_ID_DEP1, "Sarah", "Siebel", EmailAddress.of("sarah@testtest.de"), null,
 				LocalDate.of(1980, 1, 1));
 	}
-	
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSonja() {
-		return new TrackedPerson(VALID_TRACKED_SEC3_ID_DEP1, "Sonja", "Straßmann", EmailAddress.of("sonja@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
+		return new TrackedPerson(VALID_TRACKED_SEC3_ID_DEP1, "Sonja", "Straßmann", EmailAddress.of("sonja@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
 	}
-	
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSamuel() {
-		return new TrackedPerson(VALID_TRACKED_SEC4_ID_DEP1, "Samuel", "Soller", EmailAddress.of("samuel@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
+		return new TrackedPerson(VALID_TRACKED_SEC4_ID_DEP1, "Samuel", "Soller", EmailAddress.of("samuel@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
 	}
-	
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSylvia() {
-		return new TrackedPerson(VALID_TRACKED_SEC5_ID_DEP1, "Sylvia", "Sander", EmailAddress.of("sylvia@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
+		return new TrackedPerson(VALID_TRACKED_SEC5_ID_DEP1, "Sylvia", "Sander", EmailAddress.of("sylvia@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
 	}
-	
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSteven() {
-		return new TrackedPerson(VALID_TRACKED_SEC6_ID_DEP1, "Steven", "Sperber", EmailAddress.of("steven@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
+		return new TrackedPerson(VALID_TRACKED_SEC6_ID_DEP1, "Steven", "Sperber", EmailAddress.of("steven@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
 	}
-	
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSteffen() {
-		return new TrackedPerson(VALID_TRACKED_SEC7_ID_DEP1, "Steffen", "Schön", EmailAddress.of("steffen@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
-	}	
-	
+		return new TrackedPerson(VALID_TRACKED_SEC7_ID_DEP1, "Steffen", "Schön", EmailAddress.of("steffen@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
+	}
+
 	/**
 	 * A persona without account created.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createSunny() {
-		return new TrackedPerson(VALID_TRACKED_SEC8_ID_DEP1, "Sunny", "Schuster", EmailAddress.of("sunny@testtest.de"), null,
-				LocalDate.of(1980, 1, 1));
-	}		
+		return new TrackedPerson(VALID_TRACKED_SEC8_ID_DEP1, "Sunny", "Schuster", EmailAddress.of("sunny@testtest.de"),
+				null, LocalDate.of(1980, 1, 1));
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -243,15 +244,14 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createNadine());
 		trackedPeople.save(createSandra());
 		trackedPeople.save(createHarry());
-		trackedPeople.save(createSiggi());		
+		trackedPeople.save(createSiggi());
 		trackedPeople.save(createSarah());
 		trackedPeople.save(createSonja());
 		trackedPeople.save(createSamuel());
-		trackedPeople.save(createSylvia());		
+		trackedPeople.save(createSylvia());
 		trackedPeople.save(createSteven());
 		trackedPeople.save(createSunny());
-		trackedPeople.save(createSteffen());		
-		
+		trackedPeople.save(createSteffen());
 
 		log.info("Test data: Generated 14 tracked persons.");
 	}

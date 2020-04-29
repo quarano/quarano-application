@@ -169,32 +169,49 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 						.setNursingActionOnC19Pat(false) //
 						.withoutSymptoms()) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
+		
+		
+		// CASE Siggi
 
+		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null) //
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3)))	//
+				.submitEnrollmentDetails() //
+				.submitQuestionnaire(new InitialReport() //
+						.setBelongToLaboratoryStaff(true) //
+						.setBelongToMedicalStaff(true) //
+						.setBelongToNursingStaff(true) //
+						.setDirectContactWithLiquidsOfC19pat(false) //
+						.setFamilyMember(true) //
+						.setFlightCrewMemberWithC19Pat(false) //
+						.setFlightPassengerCloseRowC19Pat(true) //
+						.setMin15MinutesContactWithC19Pat(true) //
+						.setNursingActionOnC19Pat(false) //
+						.withoutSymptoms()) //
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));		
+
+		
 		cases.save(new TrackedCase(harry, CaseType.INDEX, department1) //
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))));
 		
-		cases.save(new TrackedCase(siggi, CaseType.INDEX, department1) //
-				.setTrackedPerson(siggi));		
-		
 		cases.save(new TrackedCase(sarah, CaseType.INDEX, department1) //
-				.setTrackedPerson(sarah));	
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(4), LocalDate.now().plusWeeks(2).minusDays(4))));	
 		
 		cases.save(new TrackedCase(sonja, CaseType.INDEX, department1) //
-				.setTrackedPerson(sonja));			
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(1), LocalDate.now().plusWeeks(2).minusDays(1))));			
 		
 		cases.save(new TrackedCase(steve, CaseType.INDEX, department1) //
-				.setTrackedPerson(steve));		
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(8), LocalDate.now().plusWeeks(2).minusDays(8))));			
 		
 		cases.save(new TrackedCase(steffen, CaseType.INDEX, department1) //
-				.setTrackedPerson(steffen));			
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(13), LocalDate.now().plusWeeks(2).minusDays(13))));			
 		
 		cases.save(new TrackedCase(samuel, CaseType.INDEX, department1) //
-				.setTrackedPerson(samuel));			
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3))));			
 		
 		cases.save(new TrackedCase(sunny, CaseType.INDEX, department1) //
-				.setTrackedPerson(sunny));				
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(1), LocalDate.now().plusWeeks(2).minusDays(1))));					
 		
-		cases.save(new TrackedCase(sylvia, CaseType.INDEX, department1) //
-				.setTrackedPerson(sylvia));				
+		cases.save(new TrackedCase(sylvia, CaseType.INDEX, department1) //s
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(9), LocalDate.now().plusWeeks(2).minusDays(9))));				
 	}
 }

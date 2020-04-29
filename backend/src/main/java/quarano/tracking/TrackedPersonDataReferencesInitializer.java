@@ -44,16 +44,6 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 	private final ContactPersonRepository contacts;
 	private final SymptomRepository symptoms;
 
-	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON1_ID_DEP1 = TrackedPersonIdentifier
-			.of(UUID.fromString("738d3d1f-a9f1-4619-9896-2b5cb3a89c22"));
-	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON2_ID_DEP1 = TrackedPersonIdentifier
-			.of(UUID.fromString("0c434624-7dbe-11ea-bc55-0242ac130003"));
-	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP1 = TrackedPersonIdentifier
-			.of(UUID.fromString("a8bd1d2d-b824-4989-ad9f-73be224654d6"));
-	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON5_ID_DEP1 = TrackedPersonIdentifier
-			.of(UUID.fromString("29206992-84f0-4a0e-9267-ed0a2b5b7507"));
-	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
-			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 
 	/*
 	 * (non-Javadoc)
@@ -66,6 +56,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		var gustav = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
 		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
 		log.info("Start creating diary and contacts for test persons");
 
@@ -121,6 +112,57 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry3.setSymptoms(symptomsE3);
 
 		entries.save(entry3);
+		
+		
+		// ==================== SIGGI ==================
+		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
+
+		var contactOfSiggi = new ContactPerson("Melanie", "Maurer", ContactWays.ofEmailAddress("malanie@testtest.de")); //
+		contactOfSiggi.assignOwner(siggi);
+		contactsOfSiggi.add(contactOfSiggi);
+
+		var contactOfSiggi2 = new ContactPerson("Dorothea", "Drogler", ContactWays.ofEmailAddress("doro@testtest.de"));
+		contactOfSiggi2.assignOwner(siggi);
+		contactsOfSiggi.add(contactOfSiggi2);
+
+		contacts.saveAll(contactsOfSiggi);
+
+		// generate diary entries for person 3
+		Slot sameSlotYesterdaySiggi = Slot.now().previous().previous();
+
+		DiaryEntry entry1Siggi = DiaryEntry.of(sameSlotYesterdaySiggi, siggi) //
+				.setContacts(contactsOfSiggi);
+		// add 'husten'
+		List<Symptom> symptomsS1 = new ArrayList<>();
+		symptomsS1.add(cough);
+		entry1Siggi.setSymptoms(symptomsS1);
+		entry1Siggi.setBodyTemperature(BodyTemperature.of(38.5f));
+
+		entries.save(entry1Siggi);
+
+		DiaryEntry entry2Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous(), siggi) //
+				.setContacts(contactsOfSiggi.subList(0, 0)) //
+				.setBodyTemperature(BodyTemperature.of(37.8f));
+
+		// add 'husten' and 'Nackenschmerzen'
+		List<Symptom> symptomsS2 = new ArrayList<>();
+		symptomsS2.add(neckProblems);
+		symptomsS2.add(cough);
+		entry2Siggi.setSymptoms(symptomsS2);
+
+		entries.save(entry2Siggi);
+
+		DiaryEntry entry3Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous().previous(), siggi) //
+				.setContacts(contactsOfSiggi.subList(1, 1)) //
+				.setBodyTemperature(BodyTemperature.of(39.7f));
+
+		// add 'husten' and 'Nackenschmerzen'
+		List<Symptom> symptomsS3 = new ArrayList<>();
+		symptomsE3.add(cough);
+		entry3Siggi.setSymptoms(symptomsS3);
+
+		entries.save(entry3Siggi);		
+		
 
 		// ==================== GUSTAV ==================
 		List<ContactPerson> contactsOfPerson4 = new ArrayList<>();
