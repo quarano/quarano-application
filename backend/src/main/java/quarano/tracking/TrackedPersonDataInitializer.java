@@ -139,7 +139,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createHarry() {
-		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"), null,
+		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"), PhoneNumber.of("0621 115545"),
 				null);
 	}
 
@@ -161,7 +161,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createSarah() {
-		return new TrackedPerson(VALID_TRACKED_SEC2_ID_DEP1, "Sarah", "Siebel", EmailAddress.of("sarah@testtest.de"), null,
+		return new TrackedPerson(VALID_TRACKED_SEC2_ID_DEP1, "Sarah", "Siebel", EmailAddress.of("sarah@testtest.de"), PhoneNumber.of("0621883322"),
 				LocalDate.of(1980, 1, 1));
 	}
 
@@ -172,7 +172,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSonja() {
 		return new TrackedPerson(VALID_TRACKED_SEC3_ID_DEP1, "Sonja", "Straßmann", EmailAddress.of("sonja@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621556464"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSamuel() {
 		return new TrackedPerson(VALID_TRACKED_SEC4_ID_DEP1, "Samuel", "Soller", EmailAddress.of("samuel@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621889977"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSylvia() {
 		return new TrackedPerson(VALID_TRACKED_SEC5_ID_DEP1, "Sylvia", "Sander", EmailAddress.of("sylvia@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621447785"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSteven() {
 		return new TrackedPerson(VALID_TRACKED_SEC6_ID_DEP1, "Steven", "Sperber", EmailAddress.of("steven@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621779988"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSteffen() {
 		return new TrackedPerson(VALID_TRACKED_SEC7_ID_DEP1, "Steffen", "Schön", EmailAddress.of("steffen@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621443311"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSunny() {
 		return new TrackedPerson(VALID_TRACKED_SEC8_ID_DEP1, "Sunny", "Schuster", EmailAddress.of("sunny@testtest.de"),
-				null, LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621884466"), LocalDate.of(1980, 1, 1));
 	}
 
 	/*
