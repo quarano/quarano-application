@@ -17,7 +17,6 @@
           formControlName="clientCode"
           placeholder="Anmeldecode"
           id="client-code"
-          (change)="changeCode(null)"
         />
         <mat-error
           *ngIf="registrationForm.controls.clientCode.hasError('codeInvalid')"
@@ -113,7 +112,6 @@
           matInput
           formControlName="dateOfBirth"
           [matDatepicker]="picker"
-          readonly
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>

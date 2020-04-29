@@ -74,6 +74,7 @@ public class DiaryController {
 		}
 
 		return representations.from(payload, person, errors) //
+				.mapLeft(entries::save) //
 				.fold(entry -> handle(entry, person), //
 						error -> ErrorsDto.of(errors, messages).toBadRequest());
 	}

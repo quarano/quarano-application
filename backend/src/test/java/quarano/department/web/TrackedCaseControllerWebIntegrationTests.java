@@ -142,8 +142,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setPhone("0123456789") //
 				.setCity("city 123") //
 				.setStreet("\\") //
-				.setHouseNumber("-") //
-				.setComment("<script />");
+				.setHouseNumber("-");
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
@@ -157,8 +156,6 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
-
-		assertThat(document.read("$.comment", String.class)).isEqualTo(textual);
 	}
 
 	@Test

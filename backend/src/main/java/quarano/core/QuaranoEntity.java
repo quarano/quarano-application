@@ -28,6 +28,7 @@ import javax.persistence.Transient;
 import org.jddd.core.types.Entity;
 import org.jddd.core.types.Identifier;
 import org.springframework.data.domain.Persistable;
+import org.springframework.lang.NonNull;
 
 /**
  * @author Oliver Drotbohm
@@ -37,7 +38,7 @@ import org.springframework.data.domain.Persistable;
 public abstract class QuaranoEntity<T extends QuaranoAggregate<T, ?>, ID extends Identifier>
 		implements Entity<T, ID>, Persistable<ID> {
 
-	protected @Getter @Id @GeneratedValue ID id;
+	protected @Getter(onMethod = @__(@NonNull)) @Id @GeneratedValue ID id;
 	private @Transient boolean isNew = true;
 
 	@Override

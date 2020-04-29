@@ -23,9 +23,9 @@ import lombok.experimental.Accessors;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Strings;
-import quarano.core.validation.Textual;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
+import quarano.department.Comment;
 import quarano.department.Department;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
@@ -37,6 +37,10 @@ import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -139,8 +143,6 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Past LocalDate dateOfBirth;
 
-		private @Textual String comment;
-
 		private boolean infected;
 
 		Errors validate(Errors errors) {
@@ -164,6 +166,32 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			super(trackedCase, messages);
 
 			this.dto = dto;
+		}
+
+		public List<CommentRepresentation> getComments() {
+
+			return getTrackedCase().getComments().stream() //
+					.sorted(Comparator.comparing(Comment::getDate).reversed()) //
+					.map(CommentRepresentation::new) //
+					.collect(Collectors.toUnmodifiableList());
+		}
+	}
+
+	@RequiredArgsConstructor
+	static class CommentRepresentation {
+
+		private final Comment comment;
+
+		public LocalDateTime getDate() {
+			return comment.getDate();
+		}
+
+		public String getComment() {
+			return comment.getComment();
+		}
+
+		public String getAuthor() {
+			return comment.getAuthor();
 		}
 	}
 }

@@ -24,12 +24,16 @@
     transition: none;
   }
 
-  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover {
+  .ngx-datatable.material:not(.cell-selection) .datatable-body-row {
     cursor: pointer;
-    border-left: 0.3rem solid $primary-color;
 
-    & > * > .datatable-body-cell {
-      padding-left: 0.9rem;
+    & .datatable-row-group:hover:before {
+      content: "";
+      display: block;
+      width: 5px;
+      position: absolute;
+      background-color: $primary-color;
+      height: 100%;
     }
   }
 

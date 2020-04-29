@@ -17,6 +17,9 @@ package quarano.actions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
+import quarano.auth.AuthenticationManager;
+import quarano.department.Comment;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 
@@ -36,13 +39,16 @@ public class ActionItemsManagement {
 
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull ActionItemRepository items;
+	private final @NonNull AuthenticationManager authentication;
 
 	@SuppressWarnings("null")
 	public void resolveItemsFor(TrackedCase trackedCase, @Nullable String comment) {
 
 		if (StringUtils.hasText(comment)) {
 
-			trackedCase = cases.save(trackedCase.addComment(comment));
+			var author = authentication.getCurrentUser().map(Account::getFullName).orElse("");
+
+			trackedCase = cases.save(trackedCase.addComment(new Comment(comment, author)));
 		}
 
 		items.findByCase(trackedCase) //
