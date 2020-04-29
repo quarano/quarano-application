@@ -22,6 +22,8 @@ import quarano.auth.ActivationCodeService;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 
+import java.time.LocalDateTime;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
@@ -90,7 +92,7 @@ public class ActionItemEventListener {
 		var person = trackedCase.getTrackedPerson();
 
 		// create "initial call open" action if applicable
-		if (trackedCase.isNew()) {
+		if (trackedCase.getMetadata().getCreated().isBefore(LocalDateTime.now().minusSeconds(5))) {
 			
 			// check if case is already in registration
 			if(activations.getPendingActivationCode(person.getId()).isEmpty()){
