@@ -81,6 +81,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		this.add(role);
 	}
 
+	public String getFullName() {
+		return firstname.concat(" ").concat(lastname);
+	}
+
 	public UUID getIdAsUuid() {
 		return id.accountId;
 	}

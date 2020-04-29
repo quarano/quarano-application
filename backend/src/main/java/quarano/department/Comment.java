@@ -32,6 +32,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
 import org.jddd.core.types.Identifier;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -46,12 +47,16 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 
 	private LocalDateTime date;
 	private String comment;
+	private String author;
 
-	public Comment(String comment) {
+	public Comment(String comment, String author) {
+
+		Assert.hasText(comment, "Comment must not be null or empty!");
 
 		this.id = CommentIdentifier.of(UUID.randomUUID());
 		this.date = LocalDateTime.now();
 		this.comment = comment;
+		this.author = author;
 	}
 
 	/*

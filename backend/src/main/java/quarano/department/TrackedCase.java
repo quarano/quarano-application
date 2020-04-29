@@ -110,11 +110,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		}
 	}
 
-	public TrackedCase addComment(String comment) {
+	public TrackedCase addComment(Comment comment) {
 
-		Assert.hasText(comment, "Comment must not be null or empty!");
+		Assert.notNull(comment, "Comment must not be null!");
 
-		this.comments.add(new Comment(comment));
+		this.comments.add(comment);
 
 		return this;
 	}
