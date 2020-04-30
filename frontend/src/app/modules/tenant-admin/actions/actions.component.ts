@@ -67,6 +67,10 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     console.log(event);
-    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.caseId]);
+    this.router.navigate(
+      ['/tenant-admin/client', event?.selected[0]?.caseId],
+      {
+        queryParams: { tab: 1 }
+      });
   }
 }

@@ -1,15 +1,15 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {CaseDetailDto} from '@models/case-detail';
-import {Observable, Subject} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
-import {ApiService} from '@services/api.service';
-import {SnackbarService} from '@services/snackbar.service';
-import {CaseActionDto} from '@models/case-action';
-import {MatTabGroup} from '@angular/material/tabs';
-import {StartTracking} from '@models/start-tracking';
-import {HalResponse} from '@models/hal-response';
-import {CaseCommentDto} from '@models/case-comment';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CaseDetailDto } from '@models/case-detail';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
+import { ApiService } from '@services/api.service';
+import { SnackbarService } from '@services/snackbar.service';
+import { CaseActionDto } from '@models/case-action';
+import { MatTabGroup } from '@angular/material/tabs';
+import { StartTracking } from '@models/start-tracking';
+import { HalResponse } from '@models/hal-response';
+import { CaseCommentDto } from '@models/case-comment';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class ClientComponent implements OnInit {
 
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
-  @ViewChild('tabs', {static: false})
+  @ViewChild('tabs', { static: false })
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
@@ -33,12 +33,17 @@ export class ClientComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, private router: Router,
     private apiService: ApiService, private snackbarService: SnackbarService) {
+
   }
 
   ngOnInit(): void {
     this.caseDetail$ = this.route.data.pipe(map((data) => data.case));
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details.comments));
+    if (this.route.snapshot.queryParamMap.has('tab')) {
+      this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
+    }
+
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
@@ -50,7 +55,7 @@ export class ClientComponent implements OnInit {
             this.trackingStart$$.next(sartTracking);
           });
       }
-    );
+      );
   }
 
   hasOpenAnomalies(): Observable<boolean> {
