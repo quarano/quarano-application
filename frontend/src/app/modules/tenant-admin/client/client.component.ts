@@ -1,15 +1,15 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CaseDetailDto } from '@models/case-detail';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
-import { ApiService } from '@services/api.service';
-import { SnackbarService } from '@services/snackbar.service';
-import { CaseActionDto } from '@models/case-action';
-import { MatTabGroup } from '@angular/material/tabs';
-import { StartTracking } from '@models/start-tracking';
-import { HalResponse } from '@models/hal-response';
-import { CaseCommentDto } from '@models/case-comment';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CaseDetailDto} from '@models/case-detail';
+import {merge, Observable, Subject} from 'rxjs';
+import {filter, map, take} from 'rxjs/operators';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
+import {CaseActionDto} from '@models/case-action';
+import {MatTabGroup} from '@angular/material/tabs';
+import {StartTracking} from '@models/start-tracking';
+import {HalResponse} from '@models/hal-response';
+import {CaseCommentDto} from '@models/case-comment';
 
 
 @Component({
@@ -18,14 +18,17 @@ import { CaseCommentDto } from '@models/case-comment';
   styleUrls: ['./client.component.scss']
 })
 export class ClientComponent implements OnInit {
+  caseId: string;
+
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
 
   caseComments$: Observable<CaseCommentDto[]>;
 
+  updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
-  @ViewChild('tabs', { static: false })
+  @ViewChild('tabs', {static: false})
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
@@ -37,13 +40,18 @@ export class ClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.caseDetail$ = this.route.data.pipe(map((data) => data.case));
+    this.caseDetail$ = merge(
+      this.route.data.pipe(map((data) => data.case)),
+      this.updatedDetail$$
+    ).pipe(map((data) => data));
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details.comments));
     if (this.route.snapshot.queryParamMap.has('tab')) {
       this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
     }
-
+    if (this.route.snapshot.paramMap.has('id')) {
+      this.caseId = this.route.snapshot.paramMap.get('id');
+    }
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
@@ -55,7 +63,7 @@ export class ClientComponent implements OnInit {
             this.trackingStart$$.next(sartTracking);
           });
       }
-      );
+    );
   }
 
   hasOpenAnomalies(): Observable<boolean> {
@@ -71,14 +79,13 @@ export class ClientComponent implements OnInit {
       saveData$ = this.apiService.updateCase(caseDetail);
     }
 
-    saveData$.pipe(take(1)).subscribe(() => {
+    saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       this.router.navigate(['/tenant-admin/clients']);
     });
   }
 
   startTracking(caseDetail: CaseDetailDto) {
-
     this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
@@ -92,5 +99,12 @@ export class ClientComponent implements OnInit {
         this.trackingStart$$.next(data);
         this.tabIndex = 3;
       });
+  }
+
+  addComment(commentText: string) {
+    this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
+      this.snackbarService.success('Kommentar erfolgreich eingetragen.');
+      this.updatedDetail$$.next(data);
+    });
   }
 }

@@ -114,6 +114,10 @@ export class ApiService {
     return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
   }
 
+  addComment(caseId: string, comment: string): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/api/hd/cases/${caseId}/comments`, {comment});
+  }
+
   getApiCall<T>(halResponse: HalResponse, key): Observable<T> {
     if (halResponse._links?.hasOwnProperty(key)) {
       return this.httpClient.get<T>(halResponse._links[key].href);

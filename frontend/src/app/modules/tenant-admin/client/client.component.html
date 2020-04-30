@@ -58,7 +58,7 @@
         ></app-client-action>
       </mat-tab>
       <mat-tab label="Kommentare ({{(caseComments$ | async)?.length}})">
-        <app-client-comments [comments]="caseComments$ | async"></app-client-comments>
+        <app-client-comments [comments]="caseComments$ | async" (newComment)="addComment($event)"></app-client-comments>
       </mat-tab>
       <mat-tab
         *ngIf="trackingStart$$ | async as tracking"
@@ -66,7 +66,7 @@
       >
         <app-client-mail
           [tracking]="tracking"
-          (renewTrackingCode$$)="renewTracking(tracking)"
+          (renewTrackingCode)="renewTracking(tracking)"
         ></app-client-mail>
       </mat-tab>
     </mat-tab-group>

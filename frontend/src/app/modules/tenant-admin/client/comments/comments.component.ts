@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {CaseCommentDto} from '@models/case-comment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-client-comments',
@@ -11,6 +12,9 @@ export class CommentsComponent implements OnInit {
 
   @Input()
   comments: CaseCommentDto[];
+
+  @Output()
+  newComment: Subject<string> = new Subject<string>();
 
   formGroup: FormGroup = new FormGroup({
     comment: new FormControl(null, [Validators.required])
@@ -24,7 +28,7 @@ export class CommentsComponent implements OnInit {
 
   submitComment() {
     if (this.formGroup.valid) {
-      alert('Send comment: ' + this.formGroup.get('comment').value);
+      this.newComment.next(this.formGroup.get('comment').value);
     }
   }
 }
