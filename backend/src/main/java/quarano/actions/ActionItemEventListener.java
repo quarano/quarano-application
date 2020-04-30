@@ -19,11 +19,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
 import quarano.auth.ActivationCodeService;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
+import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDateTime;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
@@ -81,25 +82,37 @@ public class ActionItemEventListener {
 	}
 
 	private void handleIndexCaseEvent(TrackedCaseUpdated event) {
-
 		var trackedCase = event.getTrackedCase();
+		var person = trackedCase.getTrackedPerson();
 
+		handleTrackedCaseInitialCallOpen(trackedCase, person);
+		handleTrackedCaseMissingDetails(trackedCase, person);
+	}
+
+	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person) {
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 			return;
 		}
 		
-		var person = trackedCase.getTrackedPerson();
-
 		// create "initial call open" action if applicable
 		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
-			
+
 			// check if case is already in registration
 			if(activations.getPendingActivationCode(person.getId()).isEmpty()){
-			
+
 				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
 						DescriptionCode.INITIAL_CALL_OPEN_INDEX));
 			}
+		}
+	}
+
+	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person) {
+		if (trackedCase.isConcluded() //
+				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
+
+			resolveItems(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX));
+			return;
 		}
 
 		// create "missing-detail-action" if data is not complete
@@ -108,18 +121,14 @@ public class ActionItemEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
-		Streamable<ActionItem> item = items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX);
+		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX);
 
 		if (!detailsMissing) {
-
-			item.stream() //
-					.map(ActionItem::resolve) //
-					.forEach(items::save);
-
+			resolveItems(actionItems);
 			return;
 		}
 
-		if (item.isEmpty()) {
+		if (actionItems.isEmpty()) {
 			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
 					DescriptionCode.MISSING_DETAILS_INDEX));
 		}
@@ -128,5 +137,11 @@ public class ActionItemEventListener {
 	private void handleContactCaseEvent(TrackedCaseUpdated event) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void resolveItems(Streamable<? extends ActionItem> actionItems) {
+		actionItems
+			.map(ActionItem::resolve)
+			.forEach(items::save);
 	}
 }
