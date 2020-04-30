@@ -19,6 +19,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.auth.Account;
 import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
 import quarano.department.Department;
@@ -30,6 +31,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
@@ -142,6 +144,27 @@ class TrackedCaseController {
 				.filter(it -> it.belongsTo(department)) //
 				.map(TrackedCase::conclude) //
 				.map(cases::save));
+	}
+
+	@PostMapping("/api/hd/cases/{identifier}/comments")
+	HttpEntity<?> postComment(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account,
+			@Valid @RequestBody CommentInput payload, Errors errors) {
+
+		var trackedCase = cases.findById(identifier) //
+				.filter(it -> it.belongsTo(account.getDepartmentId())) //
+				.orElse(null);
+
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (errors.hasErrors()) {
+			return ErrorsDto.of(errors, accessor).toBadRequest();
+		}
+
+		trackedCase.addComment(representations.from(payload, account));
+
+		return ResponseEntity.ok(representations.toRepresentation(cases.save(trackedCase)));
 	}
 
 	@GetMapping("/api/enrollments")

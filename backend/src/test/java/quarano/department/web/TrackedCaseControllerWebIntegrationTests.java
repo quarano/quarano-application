@@ -29,6 +29,7 @@ import quarano.WithQuaranoUser;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 
 import java.time.LocalDate;
@@ -148,7 +149,6 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var alphabetic = messages.getMessage("Alphabetic");
 		var alphaNumeric = messages.getMessage("AlphaNumeric");
-		var textual = messages.getMessage("Textual");
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
@@ -192,6 +192,27 @@ class TrackedCaseControllerWebIntegrationTests {
 		Collections.sort(expectedList);
 
 		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
+	}
+
+	@Test
+	void addsComment() throws Exception {
+
+		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV).orElseThrow();
+
+		var payload = new CommentInput();
+		payload.setComment("Kommentar!");
+
+		var response = mvc.perform(post("/api/hd/cases/{id}/comments", trackedCase.getId()) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.comments[0].comment", String.class)).isEqualTo(payload.getComment());
+		assertThat(document.read("$.comments[0].date", String.class)).isNotBlank();
+		assertThat(document.read("$.comments[0].author", String.class)).isNotBlank();
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {

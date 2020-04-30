@@ -20,9 +20,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import quarano.auth.Account;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Strings;
+import quarano.core.validation.Textual;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
@@ -115,6 +117,10 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return source.applyTo(mapper.map(source, existing));
 	}
 
+	Comment from(CommentInput payload, Account account) {
+		return new Comment(payload.getComment(), account.getFullName());
+	}
+
 	Errors validateAfterEnrollment(TrackedCaseDto source, Errors errors) {
 
 		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
@@ -193,5 +199,10 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		public String getAuthor() {
 			return comment.getAuthor();
 		}
+	}
+
+	@Data
+	static class CommentInput {
+		@Textual String comment;
 	}
 }
