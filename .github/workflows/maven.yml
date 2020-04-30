@@ -6,6 +6,8 @@ name: Build Backend
 on:
   push:
     branches: [ develop ]
+    paths-ignore: 
+      - frontend/**
 
 jobs:
   build:
