@@ -9,6 +9,7 @@ import {CaseActionDto} from '@models/case-action';
 import {MatTabGroup} from '@angular/material/tabs';
 import {StartTracking} from '@models/start-tracking';
 import {HalResponse} from '@models/hal-response';
+import {CaseCommentDto} from '@models/case-comment';
 
 
 @Component({
@@ -19,6 +20,8 @@ import {HalResponse} from '@models/hal-response';
 export class ClientComponent implements OnInit {
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
+
+  caseComments$: Observable<CaseCommentDto[]>;
 
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
@@ -33,9 +36,9 @@ export class ClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.caseDetail$ = this.route.data.pipe(
-      map((data) => data.case));
+    this.caseDetail$ = this.route.data.pipe(map((data) => data.case));
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
+    this.caseComments$ = this.caseDetail$.pipe(map((details) => details.comments));
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),

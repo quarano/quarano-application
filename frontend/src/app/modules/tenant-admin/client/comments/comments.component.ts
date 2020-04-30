@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {CaseCommentDto} from '@models/case-comment';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-client-comments',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommentsComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  comments: CaseCommentDto[];
+
+  formGroup: FormGroup = new FormGroup({
+    comment: new FormControl(null, [Validators.required])
+  });
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  submitComment() {
+    if (this.formGroup.valid) {
+      alert('Send comment: ' + this.formGroup.get('comment').value);
+    }
+  }
 }

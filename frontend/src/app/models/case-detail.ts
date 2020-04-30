@@ -1,4 +1,5 @@
 import {HalResponse} from '@models/hal-response';
+import {CaseCommentDto} from '@models/case-comment';
 
 export interface CaseDetailDto extends HalResponse {
   caseId?: string;
@@ -23,7 +24,7 @@ export interface CaseDetailDto extends HalResponse {
 
   dateOfBirth: Date;
 
-  comment?: string;
+  comments?: CaseCommentDto[];
 
   status?: string;
 

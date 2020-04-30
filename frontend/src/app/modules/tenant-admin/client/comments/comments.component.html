@@ -1,1 +1,30 @@
-<p>comments works!</p>
+
+<div class="comment-area" *ngIf="comments && comments.length > 0; else noComments">
+  <div *ngFor="let comment of comments" class="comment">
+    <div class="comment-headline">
+      <div class="date">{{comment.date | date: 'dd.MM.yyyy hh:mm'}}</div>
+      <div class="author">{{comment.author}}</div>
+    </div>
+    <div class="comment-body">
+      {{comment.comment}}
+    </div>
+  </div>
+</div>
+<ng-template #noComments>
+  <div class="no-comments">
+    Noch keine Kommentare vorhanden.
+  </div>
+</ng-template>
+<form [formGroup]="formGroup">
+<fieldset class="mb-3">
+  <legend>Neuen Kommentar schreiben:</legend>
+
+  <mat-form-field class="full-width">
+    <textarea matInput formControlName="comment" type="text"></textarea>
+    <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+  </mat-form-field>
+</fieldset>
+<div class="button-area">
+  <button mat-flat-button color="primary" (click)="submitComment()" [disabled]="!formGroup.valid" >Kommentar absenden</button>
+</div>
+</form>
