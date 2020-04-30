@@ -121,7 +121,16 @@
       </mat-form-field>
       <div class="data-protection-wrapper">
         <mat-checkbox formControlName="dataProtectionConfirmed"
-          >Hiermit akzeptiere ich die <a>Datenschutzerklärung</a></mat-checkbox
+          >Hiermit akzeptiere ich die
+          <button
+            type="button"
+            class="p-0"
+            style="margin: 0 !important;"
+            mat-button
+            (click)="openDataProtection()"
+          >
+            Datenschutzerklärung
+          </button></mat-checkbox
         >
         <mat-icon
           style="cursor: pointer; opacity: 0.8;"

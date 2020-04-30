@@ -1,3 +1,5 @@
+import { DataProtectionComponent } from './../../../components/data-protection/data-protection.component';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PasswordValidator } from '@validators/password-validator';
@@ -48,7 +50,8 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -100,5 +103,9 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(['/welcome/login']);
         }
       );
+  }
+
+  openDataProtection() {
+    this.dialog.open(DataProtectionComponent, { maxHeight: '95vh' });
   }
 }
