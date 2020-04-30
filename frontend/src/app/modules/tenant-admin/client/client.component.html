@@ -58,6 +58,9 @@
         ></app-client-action>
       </mat-tab>
       <mat-tab label="Kommentare ({{(caseComments$ | async)?.length}})">
+        <ng-template mat-tab-label>
+          Kommentare <span class="comment-cnt">{{(caseComments$ | async)?.length}}</span>
+        </ng-template>
         <app-client-comments [comments]="caseComments$ | async" (newComment)="addComment($event)"></app-client-comments>
       </mat-tab>
       <mat-tab
