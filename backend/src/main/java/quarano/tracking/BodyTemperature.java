@@ -26,7 +26,6 @@ import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Range;
 import org.springframework.util.NumberUtils;
 
@@ -80,9 +79,6 @@ public class BodyTemperature {
 	 */
 	@Override
 	public String toString() {
-
-		Locale locale = LocaleContextHolder.getLocale();
-
-		return String.format(locale, "%.1f°C", value);
+		return String.format(Locale.GERMAN, "%.1f°C", value);
 	}
 }
