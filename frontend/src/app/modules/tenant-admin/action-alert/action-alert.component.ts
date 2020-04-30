@@ -51,13 +51,13 @@ export class ActionAlertComponent implements OnInit {
       },
       {
         alert: Alert.INITIAL_CALL_OPEN_CONTACT,
-        color: 'lavender',
+        color: 'lightblue',
         icon: 'local_phone',
         displayName: 'Initialer Anruf offen'
       },
       {
         alert: Alert.INITIAL_CALL_OPEN_INDEX,
-        color: 'lavender',
+        color: 'lightblue',
         icon: 'local_phone',
         displayName: 'Initialer Anruf offen'
       },
