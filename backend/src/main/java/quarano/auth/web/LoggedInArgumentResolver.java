@@ -19,6 +19,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.auth.Account;
 import quarano.auth.AuthenticationManager;
+import quarano.department.AccountInfo;
 import quarano.department.Department;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.DepartmentRepository;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -49,8 +51,8 @@ class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcC
 
 	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current %s but none available!";
 
-	private static final Set<Class<?>> ALL_TYPES = Set.of(TrackedPerson.class, Account.class, Department.class,
-			DepartmentIdentifier.class);
+	private static final Set<Class<?>> ALL_TYPES = Set.of(TrackedPerson.class, AccountInfo.class, Account.class,
+			Department.class, DepartmentIdentifier.class);
 
 	private final @NonNull AuthenticationManager authenticationManager;
 	private final @NonNull DepartmentRepository departments;
@@ -60,8 +62,11 @@ class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcC
 	 * @see org.springframework.web.method.support.HandlerMethodArgumentResolver#resolveArgument(org.springframework.core.MethodParameter, org.springframework.web.method.support.ModelAndViewContainer, org.springframework.web.context.request.NativeWebRequest, org.springframework.web.bind.support.WebDataBinderFactory)
 	 */
 	@Override
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+	@org.springframework.lang.NonNull
+	public Object resolveArgument(MethodParameter parameter, //
+			@Nullable ModelAndViewContainer mavContainer, //
+			NativeWebRequest webRequest, //
+			@Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		Class<?> type = parameter.getParameterType();
 
@@ -77,7 +82,7 @@ class LoggedInArgumentResolver implements HandlerMethodArgumentResolver, WebMvcC
 
 		Optional<Account> account = authenticationManager.getCurrentUser();
 
-		if (type.equals(Account.class)) {
+		if (AccountInfo.class.isAssignableFrom(type)) {
 			return account;
 		} else if (type.equals(DepartmentIdentifier.class)) {
 			return account.map(Account::getDepartmentId);

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.auth.Account.AccountIdentifier;
 import quarano.auth.Password.EncryptedPassword;
 import quarano.core.QuaranoAggregate;
+import quarano.department.AccountInfo;
 import quarano.department.Department.DepartmentIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -33,7 +34,7 @@ import org.springframework.lang.Nullable;
  */
 @Entity
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
+public class Account extends QuaranoAggregate<Account, AccountIdentifier> implements AccountInfo {
 
 	@Getter private final String username;
 	@Getter private final EncryptedPassword password;
