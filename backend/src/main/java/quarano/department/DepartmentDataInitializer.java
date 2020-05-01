@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-@Order(510)
+@Order(490)
 @Slf4j
 public class DepartmentDataInitializer implements DataInitializer {
 
