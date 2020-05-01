@@ -11,7 +11,11 @@ declare namespace Cypress {
 }
 
 const login = (username: string, password: string) => {
-  cy.visit( 'http://localhost:4200');
+  cy.visit( 'http://localhost:4200', {
+    onBeforeLoad(win) {
+      cy.stub(win, 'open').as('windowOpen');
+    }
+  });
 
   cy.get('#username').type(username);
   cy.get('#password').type(password);
