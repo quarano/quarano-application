@@ -15,21 +15,25 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
 @Entity
+@Table(name = "activation_codes")
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationCodeIdentifier> {
 
 	private @Getter LocalDateTime expirationTime;
-	private @Getter TrackedPersonIdentifier trackedPersonId;
+	private @Getter @AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier trackedPersonId;
 	private @Getter ActivationCodeStatus status;
 	private @Getter int activationTries;
-	private @Getter DepartmentIdentifier departmentId;
+	private @Getter @AttributeOverride(name = "departmentId", column = @Column(name = "departement_id")) DepartmentIdentifier departmentId;
 
 	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId,
 			DepartmentIdentifier departmentId) {
@@ -108,11 +112,13 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class ActivationCodeIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID id;
+		
+		@Column(name = "id")
+		final UUID activationCodeId;
 
 		@Override
 		public String toString() {
-			return id.toString();
+			return activationCodeId.toString();
 		}
 	}
 

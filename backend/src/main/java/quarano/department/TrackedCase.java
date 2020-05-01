@@ -38,11 +38,13 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -51,8 +53,10 @@ import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "tracked_cases")
 @Data
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true, of = {})
@@ -66,7 +70,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private InitialReport initialReport;
 
 	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
-	private @Getter @Setter CaseType type = CaseType.INDEX;
+	private @Column(name = "case_type") @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 	private @Getter @Setter LocalDate testDate;
 

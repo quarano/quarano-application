@@ -19,9 +19,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.util.Assert;
@@ -37,13 +39,15 @@ import quarano.tracking.Encounter.EncounterIdentifier;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "encounters")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
 	private final @Getter @ManyToOne ContactPerson contact;
-	private final @Getter LocalDate date;
+	private final @Column(name = "encounter_date")@Getter LocalDate date;
 
 	private Encounter(ContactPerson contact, LocalDate date) {
 
@@ -77,6 +81,6 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 	public static class EncounterIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = -5998761917714158567L;
-		private final UUID encounterId;
+		private final @Column(name = "id") UUID encounterId;
 	}
 }

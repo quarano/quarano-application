@@ -18,10 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.lang.Nullable;
@@ -31,8 +34,10 @@ import org.springframework.lang.Nullable;
  * HD employee account
  *
  * @author Patrick Otto
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "accounts")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Account extends QuaranoAggregate<Account, AccountIdentifier> implements AccountInfo {
 
@@ -42,10 +47,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> implem
 	@Getter private String firstname;
 	@Getter private String lastname;
 
-	@Getter private DepartmentIdentifier departmentId;
+	@Getter @AttributeOverride(name = "departmentId", column = @Column(name = "departement_id")) private DepartmentIdentifier departmentId;
 
 	// will be null if account belongs to a health department employee
-	@Getter private @Nullable TrackedPersonIdentifier trackedPersonId;
+	@Getter private @Nullable @AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier trackedPersonId;
 
 	@ManyToMany(fetch = FetchType.EAGER) //
 	@Getter private List<Role> roles = new ArrayList<>();
@@ -112,7 +117,8 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> implem
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class AccountIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID accountId;
+
+		final @Column(name = "id") UUID accountId;
 	}
 
 	public boolean isTrackedPerson() {

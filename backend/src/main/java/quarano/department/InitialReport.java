@@ -32,14 +32,17 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "initial_reports")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)

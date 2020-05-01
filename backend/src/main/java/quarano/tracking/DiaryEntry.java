@@ -37,10 +37,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -50,9 +52,11 @@ import org.springframework.util.Assert;
  * A bi-daily diary entry capturing a report of medical conditions and potential {@link ContactPerson}s.
  *
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @EqualsAndHashCode(callSuper = true, of = {})
 @Entity
+@Table(name = "diary_entries")
 @Accessors(chain = true)
 @Data
 @AllArgsConstructor
@@ -67,7 +71,7 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
 	private String note;
 	private BodyTemperature bodyTemperature;
-	private TrackedPersonIdentifier trackedPersonId;
+	private @AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier trackedPersonId;
 
 	DiaryEntry(Slot slot, TrackedPersonIdentifier id) {
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), id, LocalDateTime.now(), slot);

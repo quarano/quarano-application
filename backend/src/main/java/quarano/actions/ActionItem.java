@@ -27,21 +27,26 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "action_items")
 @Getter
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItemIdentifier> {
 
-	private TrackedPersonIdentifier personIdentifier;
-	private ItemType type;
+	private @AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier personIdentifier;
+	private @Column(name = "item_type") ItemType type;
 	private Description description;
 	private boolean resolved;
 
@@ -100,6 +105,8 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class ActionItemIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID departmentId;
+		
+		@Column(name = "ifd")
+		final UUID actionItemId;
 	}
 }
