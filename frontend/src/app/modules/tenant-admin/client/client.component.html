@@ -57,7 +57,7 @@
           [caseAction]="caseAction$ | async"
         ></app-client-action>
       </mat-tab>
-      <mat-tab label="Kommentare ({{(caseComments$ | async)?.length}})">
+      <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{caseComments.length}})">
         <ng-template mat-tab-label>
           Kommentare <span class="comment-cnt">{{(caseComments$ | async)?.length}}</span>
         </ng-template>

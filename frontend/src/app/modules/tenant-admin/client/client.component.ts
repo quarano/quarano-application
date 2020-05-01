@@ -44,8 +44,10 @@ export class ClientComponent implements OnInit {
       this.route.data.pipe(map((data) => data.case)),
       this.updatedDetail$$
     ).pipe(map((data) => data));
+
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
-    this.caseComments$ = this.caseDetail$.pipe(map((details) => details.comments));
+    this.caseComments$ = this.caseDetail$.pipe(map((details) => details?.comments));
+
     if (this.route.snapshot.queryParamMap.has('tab')) {
       this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
     }
@@ -55,7 +57,7 @@ export class ClientComponent implements OnInit {
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
-      filter((data) => data._links.hasOwnProperty('renew') && data._links.hasOwnProperty('start-tracking')),
+      filter((data) => data?._links.hasOwnProperty('renew') && data?._links.hasOwnProperty('start-tracking')),
       take(1)).subscribe((data) => {
         this.apiService
           .getApiCall<StartTracking>(data, 'start-tracking')
