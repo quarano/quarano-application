@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {HealthDepartmentDto} from '@models/healthDepartment';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-hd-contact',
@@ -7,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HdContactComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: HealthDepartmentDto) {
+  }
 
   ngOnInit(): void {
   }

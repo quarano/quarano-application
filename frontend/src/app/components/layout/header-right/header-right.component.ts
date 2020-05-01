@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '@services/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {HdContactComponent} from '../../hd-contact/hd-contact.component';
+import {HealthDepartmentDto} from '@models/healthDepartment';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-header-right',
@@ -11,6 +13,7 @@ import {HdContactComponent} from '../../hd-contact/hd-contact.component';
 export class HeaderRightComponent implements OnInit {
   public isLoggedIn$ = this.userService.isLoggedIn$;
   public currentUserName$ = this.userService.currentUserName$;
+  public healthDepartment$: Observable<HealthDepartmentDto> = this.userService.healthDepartment$;
 
   constructor(
     private userService: UserService, private matDialog: MatDialog) { }
@@ -22,7 +25,7 @@ export class HeaderRightComponent implements OnInit {
     this.userService.logout();
   }
 
-  showContact() {
-    this.matDialog.open(HdContactComponent);
+  showContact(department: HealthDepartmentDto) {
+    this.matDialog.open(HdContactComponent, {data: department});
   }
 }

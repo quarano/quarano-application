@@ -3,10 +3,17 @@
   flex-direction: column;
 
 
-  margin: 40px 20px;
+  margin: 30px 20px 40px;
 
   .contact-item {
     display: flex;
+    & + .contact-item {
+      margin-top: 10px;
+    }
+
+    h2 {
+      margin-bottom: 0;
+    }
 
     .label {
       font-weight: bold;
