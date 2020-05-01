@@ -20,8 +20,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.department.Department.DepartmentIdentifier;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -36,10 +40,14 @@ import org.jddd.core.types.Identifier;
  * @author Oliver Drotbohm
  */
 @Entity
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
 
-	private final @Getter @Column(unique = true) String name;
+	private @Getter @Column(unique = true) String name;
+	private @Getter @Setter EmailAddress emailAddress;
+	private @Getter @Setter PhoneNumber phoneNumber;
 
 	public Department(String name) {
 		this(name, UUID.randomUUID());
