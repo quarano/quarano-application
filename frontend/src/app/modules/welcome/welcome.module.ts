@@ -8,7 +8,6 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatStepperModule } from '@angular/material/stepper';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { LandingComponent } from './landing/landing.component';
 
 export const DATE_FORMAT = {
@@ -41,7 +40,6 @@ export const DATE_FORMAT = {
     ReactiveFormsModule,
   ],
   providers: [
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT },
     DatePipe
   ]
 })

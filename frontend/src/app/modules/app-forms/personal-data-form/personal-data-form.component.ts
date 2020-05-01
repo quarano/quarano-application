@@ -4,7 +4,7 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-personal-data-form',
   templateUrl: './personal-data-form.component.html',
-  styleUrls: ['./personal-data-form.component.css']
+  styleUrls: ['./personal-data-form.component.scss']
 })
 export class PersonalDataFormComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());

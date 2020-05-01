@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PasswordValidator } from '@validators/password-validator';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { filter, finalize, map, take, tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize, tap } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
 import { Register } from '@models/register';
 import { SnackbarService } from '@services/snackbar.service';
@@ -15,6 +15,7 @@ import { SnackbarService } from '@services/snackbar.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   private usernameIsValid = false;
 
