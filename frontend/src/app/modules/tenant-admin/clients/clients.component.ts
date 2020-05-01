@@ -129,7 +129,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   sendMail(event, to: string) {
     event.stopPropagation();
-    window.location.href = `mailto:${to}`;
+    window.open(`mailto:${to}`);
   }
 
   onSelect(event) {
