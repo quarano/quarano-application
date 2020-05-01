@@ -35,7 +35,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
       caseType: this.getTypeName(action.caseType),
-      dateOfBirth: action.dateOfBirth.toCustomLocaleDateString(),
+      dateOfBirth: action.dateOfBirth ? action.dateOfBirth.toCustomLocaleDateString() : '-',
       email: action.email,
       phone: action.phone || '-',
       quarantineStart: action.quarantineStart ? action.quarantineStart.toCustomLocaleDateString() : '-',

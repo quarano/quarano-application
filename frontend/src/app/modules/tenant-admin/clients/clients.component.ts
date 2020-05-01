@@ -74,7 +74,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: this.getTypeName(c.caseType),
-      dateOfBirth: c.dateOfBirth.toCustomLocaleDateString(),
+      dateOfBirth: c.dateOfBirth ? c.dateOfBirth.toCustomLocaleDateString() : '-',
       email: c.email,
       phone: c.phone || '-',
       quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
