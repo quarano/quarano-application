@@ -1,4 +1,5 @@
 <div class="container" *ngIf="isLoggedIn$ | async">
+  <button mat-stroked-button data-cy="contact-button" class="contact-button" *appIsEnrolledClient (click)="showContact()">Kontakt</button>
   <button data-cy="profile-user-button" mat-button [matMenuTriggerFor]="profilemenu">
     <span>{{ currentUserName$ | async }} </span>
     <mat-icon style="color: white;">arrow_drop_down</mat-icon>

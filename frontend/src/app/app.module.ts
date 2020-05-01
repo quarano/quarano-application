@@ -32,6 +32,7 @@ import {BasicDataModule} from './modules/basic-data/basic-data.module';
 import {IsHealthDepartmentUserDirective} from '@directives/is-health-department-user.directive';
 import {ContactComponent} from './components/contact/contact.component';
 import {DateInterceptor} from './interceptors/date-interceptor';
+import { HdContactComponent } from './components/hd-contact/hd-contact.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -53,7 +54,8 @@ const COMPONENTS = [
   AgbComponent,
   ContactComponent,
   ImpressumComponent,
-  DataProtectionComponent
+  DataProtectionComponent,
+  HdContactComponent
 ];
 
 const SUB_MODULES = [
@@ -77,6 +79,9 @@ const SUB_MODULES = [
     FormsModule,
     HttpClientModule,
     ...SUB_MODULES
+  ],
+  entryComponents: [
+    HdContactComponent
   ],
   providers: [
     SnackbarService,

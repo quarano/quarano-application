@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '@services/user.service';
+import {MatDialog} from '@angular/material/dialog';
+import {HdContactComponent} from '../../hd-contact/hd-contact.component';
 
 @Component({
   selector: 'app-header-right',
@@ -11,12 +13,16 @@ export class HeaderRightComponent implements OnInit {
   public currentUserName$ = this.userService.currentUserName$;
 
   constructor(
-    private userService: UserService) { }
+    private userService: UserService, private matDialog: MatDialog) { }
 
   ngOnInit() {
   }
 
-  public logout() {
+  logout() {
     this.userService.logout();
+  }
+
+  showContact() {
+    this.matDialog.open(HdContactComponent);
   }
 }

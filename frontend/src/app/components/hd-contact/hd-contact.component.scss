@@ -1,0 +1,32 @@
+.contact-fields {
+  display: flex;
+  flex-direction: column;
+
+
+  margin: 40px 20px;
+
+  .contact-item {
+    display: flex;
+
+    .label {
+      font-weight: bold;
+      width: 160px;
+    }
+  }
+
+
+}
+.notice {
+  background: #eee;
+  padding: 20px;
+}
+p {
+  max-width: 750px;
+  .important {
+    font-weight: bold;
+  }
+}
+
+button {
+  margin: 8px 0;
+}
