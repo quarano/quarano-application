@@ -1,4 +1,3 @@
-import { UserService } from '@services/user.service';
 import { EncounterEntry } from '@models/encounter';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -6,7 +5,7 @@ import { environment } from '@environment/environment';
 import { Observable, forkJoin } from 'rxjs';
 import { QuestionnaireDto } from '@models/first-query';
 import { ClientDto } from '@models/client';
-import { share, map, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { share, map, switchMap } from 'rxjs/operators';
 import { EnrollmentStatusDto } from '@models/enrollment-status';
 import { EncounterDto, EncounterCreateDto } from '@models/encounter';
 
