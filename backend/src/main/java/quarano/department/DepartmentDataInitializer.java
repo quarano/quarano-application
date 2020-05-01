@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
 import quarano.department.Department.DepartmentIdentifier;
+import quarano.tracking.EmailAddress;
+import quarano.tracking.PhoneNumber;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +55,12 @@ public class DepartmentDataInitializer implements DataInitializer {
 		log.warn("Testdata: creating two health departmens");
 
 		departments.saveAll(List.of( //
-				new Department("GA Mannheim", DEPARTMENT_ID_DEP1), //
-				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2)));
+				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //
+						.setEmailAddress(EmailAddress.of("email@gamannheim.de")) //
+						.setPhoneNumber(PhoneNumber.of("0123456789")), //
+				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2) //
+						.setEmailAddress(EmailAddress.of("email@gadarmstadt.de")) //
+						.setPhoneNumber(PhoneNumber.of("0123456789")) //
+		));
 	}
 }
