@@ -1,0 +1,18 @@
+# App Manifest
+applications:
+- name: quarano-frontend-dev
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend-dev.cfapps.io
+- name: quarano-frontend
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend.cfapps.io
