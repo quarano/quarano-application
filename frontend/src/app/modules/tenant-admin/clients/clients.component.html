@@ -2,12 +2,13 @@
   <button
     class="mb-3"
     mat-raised-button
+    data-cy="new-case-button"
     color="primary"
     [routerLink]="['/tenant-admin/client']"
   >
     <mat-icon>add</mat-icon>Neuen Fall anlegen
   </button>
-  <button class="mb-3" mat-button>
+  <button class="mb-3" data-cy="export-cases-button" mat-button>
     <mat-icon>get_app</mat-icon>csv-Export speichern
   </button>
 </div>
@@ -15,6 +16,7 @@
 <mat-form-field appearance="outline" class="full-width">
   <input
     matInput
+    data-cy="search-case-input"
     type="text"
     placeholder="Suchen..."
     (keyup)="updateFilter($event)"
@@ -23,6 +25,7 @@
 
 <ngx-datatable
   #table
+  data-cy="case-data-table"
   class="material fullscreen fixed-header"
   [count]="cases.length"
   [headerHeight]="50"
