@@ -15,17 +15,6 @@
  */
 package quarano.tracking;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.UUID;
-
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
-import org.jddd.core.types.Identifier;
-import org.springframework.util.Assert;
-
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,15 +23,33 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.QuaranoEntity;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "encounters")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
-	private final @Getter @ManyToOne ContactPerson contact;
+	@ManyToOne @JoinColumn(name = "contact_person_id") //
+	private final @Getter ContactPerson contact;
+
+	@Column(name = "encounter_date") //
 	private final @Getter LocalDate date;
 
 	private Encounter(ContactPerson contact, LocalDate date) {

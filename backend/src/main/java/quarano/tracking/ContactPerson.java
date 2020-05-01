@@ -37,6 +37,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -44,7 +45,8 @@ import org.jddd.event.types.DomainEvent;
 /**
  * @author Oliver Drotbohm
  */
-@Entity(name = "newContactPerson")
+@Entity
+@Table(name = "contact_people")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Accessors(chain = true)
@@ -65,8 +67,9 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Getter @Setter Boolean isHealthStaff;
 	private @Getter @Setter Boolean isSenior;
 	private @Getter @Setter Boolean hasPreExistingConditions;
-	
-	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
+
+	private @Column(nullable = false) @AttributeOverride(name = "trackedPersonId",
+			column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier ownerId;
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
 
@@ -78,7 +81,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
 	}
-	
+
 	public String getFullName() {
 		return String.format("%s %s", firstName, lastName);
 	}
@@ -138,7 +141,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 		private static final long serialVersionUID = -8869631517068092437L;
 
-		final UUID id;
+		final UUID contactPersonId;
 
 		/*
 		 * (non-Javadoc)
@@ -146,7 +149,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		 */
 		@Override
 		public String toString() {
-			return id.toString();
+			return contactPersonId.toString();
 		}
 	}
 }

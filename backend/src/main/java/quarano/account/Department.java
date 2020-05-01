@@ -33,13 +33,16 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "departments")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -70,6 +73,7 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class DepartmentIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
+
 		final UUID departmentId;
 
 		@Override

@@ -30,14 +30,17 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "comments")
 @Getter
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -46,16 +49,15 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 	public static final Comparator<Comment> BY_DATE_DESCENDING = Comparator.comparing(Comment::getDate);
 
 	private LocalDateTime date;
-	private String comment;
-	private String author;
+	private String text, author;
 
-	public Comment(String comment, String author) {
+	public Comment(String text, String author) {
 
-		Assert.hasText(comment, "Comment must not be null or empty!");
+		Assert.hasText(text, "Comment text must not be null or empty!");
 
 		this.id = CommentIdentifier.of(UUID.randomUUID());
 		this.date = LocalDateTime.now();
-		this.comment = comment;
+		this.text = text;
 		this.author = author;
 	}
 
@@ -77,11 +79,11 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 
 		private static final long serialVersionUID = 7871473225101042167L;
 
-		final UUID departmentId;
+		final UUID commentId;
 
 		@Override
 		public String toString() {
-			return departmentId.toString();
+			return commentId.toString();
 		}
 	}
 }

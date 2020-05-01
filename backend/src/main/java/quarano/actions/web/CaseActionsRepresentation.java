@@ -72,8 +72,7 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 
 		return trackedCase.getComments().stream() //
 				.sorted(Comment.BY_DATE_DESCENDING) //
-				.map(it -> Map.of("date", it.getDate(), //
-						"comment", it.getComment())) //
+				.map(it -> Map.of("date", it.getDate(), "comment", it.getText())) //
 				.collect(Collectors.toList());
 	}
 

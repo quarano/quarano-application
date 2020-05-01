@@ -17,10 +17,10 @@ package quarano.tracking;
 
 import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.persistence.Column;
@@ -31,6 +31,7 @@ import org.springframework.util.NumberUtils;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Embeddable
 @RequiredArgsConstructor(staticName = "of")
@@ -39,8 +40,12 @@ public class BodyTemperature {
 
 	private static final Range<Float> VALID = Range.open(35.0f, 42.0f);
 
-	@Column(name = "temperature") //
-	private final @Getter float value;
+	@Column(name = "temperature", precision = 5, scale = 3) //
+	private final BigDecimal value;
+	
+	public static BodyTemperature of(float value) {
+		return new BodyTemperature(BigDecimal.valueOf(value));
+	}
 
 	/**
 	 * Returns whether the current {@link BodyTemperature} exceeds the given one.
@@ -52,7 +57,7 @@ public class BodyTemperature {
 
 		Assert.notNull(that, "BodyTemperature must not be null!");
 
-		return this.value > that.value;
+		return this.value.compareTo(that.value) >= 1;
 	}
 
 	public static boolean isValid(float value) {
@@ -70,7 +75,11 @@ public class BodyTemperature {
 
 		Assert.hasText(source, "No body temperature source value given!");
 
-		return new BodyTemperature(NumberUtils.parseNumber(source, Float.class));
+		return BodyTemperature.of(NumberUtils.parseNumber(source, Float.class));
+	}
+
+	public float getValue() {
+		return this.value.floatValue();
 	}
 
 	/*
@@ -79,6 +88,6 @@ public class BodyTemperature {
 	 */
 	@Override
 	public String toString() {
-		return String.format(Locale.GERMAN, "%.1f°C", value);
+		return String.format(Locale.GERMAN, "%.1f°C", value.floatValue());
 	}
 }

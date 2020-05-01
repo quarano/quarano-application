@@ -39,14 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
+import javax.persistence.*;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -59,6 +52,7 @@ import org.springframework.util.StringUtils;
  * @author Patrick Otto
  */
 @Entity
+@Table(name = "tracked_people")
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -72,9 +66,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
-	private @OneToOne Account account;
+
+	@OneToOne @JoinColumn(name = "account_id") //
+	private Account account;
 
 	@OneToMany(cascade = CascadeType.ALL) //
+	@JoinColumn(name = "tracked_person_id") //
 	private List<Encounter> encounters;
 
 	public TrackedPerson(String firstName, String lastName) {
