@@ -42,9 +42,6 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, BasicDataGuard]
   },
   {
-    path: 'contact', component: ContactComponent
-  },
-  {
     path: 'agb', component: AgbComponent
   },
   {
