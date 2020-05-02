@@ -2,3 +2,9 @@ a {
   color: black;
   text-decoration: none;
 }
+
+::ng-deep {
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+}

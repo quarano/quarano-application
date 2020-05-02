@@ -18,14 +18,12 @@
     >Eintrag fehlt noch - bitte nachtragen!</span
   >
   <ng-template #cannot_create
-    ><span class="text-muted no-entry">Kein Eintrag vorhanden</span
-    ><mat-icon
-      style="cursor: pointer; opacity: 0.8;"
-      matTooltip="Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends ihren Gesundheitszustand, sowie Ihre Kontakte zu erfassen."
-      matTooltipPosition="after"
-      class="ml-1 text-muted"
-    >
-      info</mat-icon
-    ></ng-template
+    ><button mat-mini-fab disabled>
+      <mat-icon
+        matTooltip="Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends ihren Gesundheitszustand, sowie Ihre Kontakte zu erfassen."
+        matTooltipPosition="after"
+        >info</mat-icon
+      ></button
+    ><span class="text-muted ml-3">Kein Eintrag vorhanden</span></ng-template
   >
 </div>

@@ -25,6 +25,7 @@
             mat-mini-fab
             color="primary"
             [routerLink]="['new', diaryListItem.date, 'morning']"
+            class="create-now-button"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -52,10 +53,16 @@
           </button>
           <span class="ml-3 create-now">Jetzt eintragen</span>
         </ng-container>
-        <ng-template #evening_wait
-          ><span class="text-muted" style="margin-left: 3.5rem;"
-            >Hier kann erst ab 17 Uhr ein Eintrag erfolgen</span
-          ></ng-template
+        <ng-template #evening_wait>
+          <div style="display: flex; align-items: center;">
+            <span class="mr-3 label">Abends</span>
+            <button mat-mini-fab disabled>
+              <mat-icon>info</mat-icon>
+            </button>
+            <span class="text-muted ml-3"
+              >Hier kann erst ab 17 Uhr ein Eintrag erfolgen</span
+            >
+          </div></ng-template
         >
       </ng-template>
     </div>

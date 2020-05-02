@@ -3,3 +3,9 @@ ul {
   margin: 0;
   padding: 0;
 }
+
+::ng-deep {
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+}
