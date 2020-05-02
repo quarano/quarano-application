@@ -1,8 +1,23 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ActionListItemDto } from '@models/action';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ClientType } from '@models/report-case';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+
+export class ActionRowViewModel {
+  lastName: string;
+  firstName: string;
+  caseType: string;
+  dateOfBirth: string;
+  email: string;
+  phone: string;
+  quarantineStart: string;
+  status: string;
+  alerts: string[];
+  caseId: string;
+}
 
 @Component({
   selector: 'app-actions',
@@ -13,7 +28,9 @@ export class ActionsComponent implements OnInit, OnDestroy {
   actions: ActionListItemDto[] = [];
   private subs = new SubSink();
   loading = false;
-  rows = [];
+  rows: ActionRowViewModel[] = [];
+  filteredRows: ActionRowViewModel[] = [];
+  @ViewChild(MatSelect) filterSelect: MatSelect;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,12 +42,20 @@ export class ActionsComponent implements OnInit, OnDestroy {
       data => {
         this.actions = data.actions;
         this.rows = this.actions.map(action => this.getRowData(action));
+        this.filteredRows = [...this.rows];
         this.loading = false;
       },
-      error => this.loading = false));
+      () => this.loading = false));
   }
 
-  getRowData(action: ActionListItemDto): any {
+  get isFiltered(): boolean {
+    if (this.filterSelect) {
+      return (this.filterSelect.selected as MatOption[]).length > 0;
+    }
+    return false;
+  }
+
+  getRowData(action: ActionListItemDto): ActionRowViewModel {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
@@ -56,6 +81,18 @@ export class ActionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getAvailableAlerts(): string[] {
+    return this.actions.reduce((acc, next) => {
+      next.alerts.forEach(alert => {
+        if (!acc.includes(alert)) {
+          acc.push(alert);
+        }
+      });
+
+      return acc;
+    }, []);
+  }
+
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
@@ -72,5 +109,15 @@ export class ActionsComponent implements OnInit, OnDestroy {
       {
         queryParams: { tab: 1 }
       });
+  }
+
+  onAlertFilterChanged(selectedValues: string[]) {
+    if (selectedValues.length === 0) { this.filteredRows = this.rows; return; }
+    this.filteredRows = this.rows.filter(r => r.alerts.filter(a => selectedValues.includes(a)).length > 0);
+  }
+
+  resetFilter() {
+    this.filterSelect.value = null;
+    this.onAlertFilterChanged([]);
   }
 }

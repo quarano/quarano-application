@@ -60,6 +60,14 @@
   .datatable-row-even {
     background-color: #f4f4f4 !important;
   }
+
+  div.mat-select-value {
+    display: none;
+  }
+
+  .mat-select {
+    width: initial !important;
+  }
 }
 
 .mail-link:hover,
@@ -72,4 +80,10 @@
 .action-alert-container {
   display: flex;
   flex-direction: column;
+}
+
+#filter-button {
+  width: initial;
+  height: initial;
+  line-height: initial;
 }

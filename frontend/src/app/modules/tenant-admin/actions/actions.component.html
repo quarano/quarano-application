@@ -3,7 +3,7 @@
   [count]="actions.length"
   [headerHeight]="50"
   rowHeight="auto"
-  [rows]="rows"
+  [rows]="filteredRows"
   [messages]="{
     emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
     selectedMessage: 'ausgewählt',
@@ -20,6 +20,27 @@
     [sortable]="false"
     width="250"
   >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      <button
+        mat-icon-button
+        id="filter-button"
+        *ngIf="isFiltered"
+        (click)="resetFilter()"
+        matTooltip="Filter löschen"
+      >
+        <mat-icon>filter_list</mat-icon>
+      </button>
+      <span>{{ column.name }}</span>
+      <mat-select
+        multiple
+        matTooltip="Filtern"
+        (selectionChange)="onAlertFilterChanged($event.value)"
+      >
+        <mat-option *ngFor="let alert of getAvailableAlerts()" [value]="alert">
+          <app-action-alert [alert]="alert"></app-action-alert>
+        </mat-option>
+      </mat-select>
+    </ng-template>
     <ng-template let-value="value" ngx-datatable-cell-template>
       <div class="action-alert-container">
         <app-action-alert
