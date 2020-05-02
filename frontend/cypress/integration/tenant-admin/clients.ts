@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('tenant case overview', () => {
   beforeEach(() => {
     cy.server();

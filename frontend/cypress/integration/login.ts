@@ -1,5 +1,5 @@
 describe('login', () => {
-  const login = (username, password) => {
+  const login = (username: string, password: string) => {
     cy.server();
     cy.route('POST', '/login').as('login');
     cy.get('#submitBtn').should('be.disabled');
