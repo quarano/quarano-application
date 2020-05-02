@@ -5,6 +5,6 @@ set -e
 
 mvn -B clean package --file backend/pom.xml
 npm run build-prod --prefix frontend/
-cf push quarano-backend -f backend/manifest.yml
-cf push quarano-frontend -f frontend/manifest.yml
+cf push quarano-backend
+cf push quarano-frontend
 
