@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SnackbarService } from '@services/snackbar.service';
-import { UserService } from '@services/user.service';
-import { Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SnackbarService} from '@services/snackbar.service';
+import {UserService} from '@services/user.service';
+import {Router} from '@angular/router';
+import {filter, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   public loginFormGroup = new FormGroup({
     username: new FormControl(null, Validators.required),
@@ -21,6 +21,15 @@ export class LoginComponent {
     private userService: UserService,
     private snackbarService: SnackbarService,
     private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.userService.isLoggedIn$.pipe(
+      take(1),
+      filter((loggedin) => loggedin)
+    ).subscribe(() => {
+      this.userService.logout();
+    });
   }
 
   public submitForm() {
