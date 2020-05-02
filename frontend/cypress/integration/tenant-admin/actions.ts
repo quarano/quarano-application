@@ -14,11 +14,20 @@ describe('tenant actions overview', () => {
       cy.url().should('include', '/tenant-admin/actions');
     });
 
-    /*it('should have correct page components', () => {
-      cy.get('[data-cy="new-case-button"]').should('exist');
-      cy.get('[data-cy="export-cases-button"]').should('exist');
-      cy.get('[data-cy="search-case-input"]').should('exist');
-      cy.get('[data-cy="case-data-table"]').should('exist');
-    });*/
+    it('should have correct page components', () => {
+      cy.get('[data-cy="action-data-table"]').should('exist');
+    });
+  });
+
+  describe('case list', () => {
+    it('should get a list of cases and display in table', () => {
+      cy.wait('@allactions').its('status').should('eq', 200);
+      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').should('have.length', 5);
+    });
+
+    it('should open selected case', () => {
+      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').eq(2).click();
+      cy.url().should('include', '/tenant-admin/client/').should('include', '?tab=1');
+    });
   });
 });
