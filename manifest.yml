@@ -1,0 +1,35 @@
+# App Manifest
+applications:
+- name: quarano-frontend-dev
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend-dev.cfapps.io
+- name: quarano-frontend
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend.cfapps.io
+- name: quarano-backend-dev
+  buildpacks:
+    - java_buildpack
+  path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  services:
+    - quarano-postgres-dev
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+- name: quarano-backend
+  buildpacks:
+    - java_buildpack
+  path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  services:
+    - quarano-postgres
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+
