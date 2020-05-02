@@ -24,5 +24,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm run build-stage --prefix frontend/
+    - run: cd frontend
+    - run: npm run build-stage
     - run: npm test
