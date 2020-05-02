@@ -9,6 +9,11 @@ on:
     paths-ignore: 
       - backend/**
 
+defaults:
+  run:
+    shell: bash
+    working-directory: frontend
+
 jobs:
   build:
 
@@ -24,6 +29,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd frontend
+    - run: npm install
     - run: npm run build-stage
     - run: npm test
