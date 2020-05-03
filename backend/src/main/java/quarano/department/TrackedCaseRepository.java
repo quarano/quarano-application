@@ -40,4 +40,7 @@ public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, Tr
 
 	@Query("select c from TrackedCase c where c.trackedPerson.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	@Query("select new quarano.department.TrackedCasePerson(c.trackedPerson) from TrackedCase c where c.concluded = true")
+	Streamable<TrackedCasePerson> findPersonsForOpenedCases();
 }

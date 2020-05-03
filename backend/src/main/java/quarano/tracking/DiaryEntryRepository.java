@@ -18,7 +18,11 @@ package quarano.tracking;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
@@ -30,4 +34,12 @@ public interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEn
 	}
 
 	Diary findByTrackedPersonId(TrackedPersonIdentifier id);
+
+	@Query("select distinct c.trackedPerson.id from TrackedCase c " +
+			"	where c.concluded = false" +
+			"	and c.trackedPerson.id not in (" +
+			"		select distinct d.trackedPersonId from DiaryEntry d" +
+			" 		where d.slot in :slots" +
+			"	)")
+	Streamable<TrackedPersonIdentifier> findMissingDiaryEntryPersons(@Param("slots") List<Slot> slots);
 }

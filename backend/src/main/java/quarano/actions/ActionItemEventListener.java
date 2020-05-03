@@ -21,7 +21,6 @@ import quarano.actions.ActionItem.ItemType;
 import quarano.auth.ActivationCodeService;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
-import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDateTime;
@@ -41,35 +40,7 @@ public class ActionItemEventListener {
 	private final @NonNull ActivationCodeService activations;
 
 	@EventListener
-	void on(DiaryEntryAdded event) {
-
-		var entry = event.getEntry();
-		var person = entry.getTrackedPersonId();
-
-		// Body temperature exceeds reference
-
-		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
-
-			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE, //
-					entry.getBodyTemperature(), //
-					config.getTemperatureThreshold());
-
-			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
-		}
-
-		// First characteristic symptom reported
-
-		if (entry.getSymptoms().hasCharacteristicSymptom() && //
-				items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM).isEmpty()) {
-
-			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
-					Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM)));
-		}
-	}
-
-	@EventListener
 	void on(TrackedCaseUpdated event) {
-
 		if (event.getTrackedCase().isIndexCase()) {
 
 			handleIndexCaseEvent(event);
@@ -108,6 +79,7 @@ public class ActionItemEventListener {
 	}
 
 	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person) {
+		// TODO: trackedCase.isConcluded(): einfach alle schließen
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 

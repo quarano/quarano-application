@@ -1,4 +1,7 @@
 version: '3'
+
+volumes:
+  postgres-data:
 services:
 
   postgres:
@@ -7,6 +10,6 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgres_dbdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=corona # BY ALL MEANS CHANGE THIS IN PRODUCTION (using docker secrets or using a non-dockerized database

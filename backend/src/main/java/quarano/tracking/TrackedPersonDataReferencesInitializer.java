@@ -20,12 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -242,5 +240,18 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry2N.setSymptoms(symptomsE2N);
 
 		entries.save(entry2N);
+
+		Slot samelastSlot = Slot.now().previous();
+
+		DiaryEntry entry3N = DiaryEntry.of(samelastSlot, nadine) //
+				.setContacts(contactsOfPerson5) //
+				.setBodyTemperature(BodyTemperature.of(36.5f));
+
+		// add 'husten'
+		List<Symptom> symptomsE3N = new ArrayList<>();
+		symptomsE3N.add(cough);
+		entry3N.setSymptoms(symptomsE3N);
+
+		entries.save(entry3N);
 	}
 }
