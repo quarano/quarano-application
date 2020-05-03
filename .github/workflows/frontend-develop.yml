@@ -31,4 +31,21 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build-stage
-    - run: npm test
+#    - run: npm test
+    - name: Set up CF CLI
+        if: success()
+        uses: jvalkeal/setup-cf-cli-action@master
+        with:
+          version: 6.51.0
+    - name: CF Login
+      if: success()
+      run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
+      env:
+        CF_API: ${{ secrets.CF_API }}
+        CF_ORG: ${{ secrets.CF_ORG }}
+        CF_SPACE: ${{ secrets.CF_SPACE }}
+        CF_USERNAME: ${{ secrets.CF_USERNAME }}
+        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+    - name: Deploy Frontend STAGE
+      if: success()
+      run: cf push
