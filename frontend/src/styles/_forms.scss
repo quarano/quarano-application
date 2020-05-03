@@ -27,7 +27,10 @@
   }
 
   .mat-button {
-    margin-right: 15px !important;
+    & + .mat-button {
+      margin-left: 15px !important;
+    }
+
     & ~ .mat-button {
       margin-top: 20px !important;
       margin-left: 0;
@@ -59,9 +62,7 @@
     padding: 0 !important;
   }
 
-  .cdk-overlay-container
-    .cdk-global-overlay-wrapper
-    .cdk-overlay-pane:not(.mat-snack-bar-handset) {
+  .cdk-overlay-container .cdk-global-overlay-wrapper .cdk-overlay-pane:not(.mat-snack-bar-handset) {
     max-width: 100vw !important;
     width: 100vw !important;
     height: 100vh !important;
