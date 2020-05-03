@@ -7,7 +7,7 @@ import { SymptomDto } from '@models/symptom';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { map, share, filter, find } from 'rxjs/operators';
 import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
@@ -158,44 +158,64 @@ export class ApiService {
   getHealthDepartmentUsers(): Observable<UserListItemDto[]> {
     // ToDo: Anpassen, sobald Endpunkt vorliegt
     return of(
-      [
-        {
-          id: '1',
-          username: 'meierlein',
-          lastName: 'Meier',
-          firstName: 'Petra',
-          roles: [roleNames.healthDepartmentAdmin],
-          _links: { delete: { href: '#' } }
-        },
-        {
-          id: '2',
-          username: 'bauernfrau',
-          lastName: 'Henninger',
-          firstName: 'Nadine',
-          roles: [roleNames.healthDepartmentCaseAgent],
-          _links: { delete: { href: '#' } }
-        },
-        {
-          id: '3',
-          username: 'tevilaguru',
-          lastName: 'Krause',
-          firstName: 'Hans-Jürgen',
-          roles: [roleNames.healthDepartmentAdmin, roleNames.healthDepartmentCaseAgent],
-          _links: { delete: { href: '#' } }
-        },
-        {
-          id: '4',
-          username: 'nirfreak',
-          lastName: 'Neitzel',
-          firstName: 'Uwe',
-          roles: [roleNames.healthDepartmentCaseAgent, roleNames.user],
-          _links: { delete: { href: '#' } }
-        }
-      ]);
+      this.testUsers
+    );
+  }
+
+  private get testUsers(): UserListItemDto[] {
+    return [
+      {
+        id: '1',
+        username: 'p.meier@ga-mannheim.de',
+        lastName: 'Meier',
+        firstName: 'Petra',
+        roles: [roleNames.healthDepartmentAdmin],
+        _links: { delete: { href: '#' } }
+      },
+      {
+        id: '2',
+        username: 'n.henninger@ga-mannheim.de',
+        lastName: 'Henninger',
+        firstName: 'Nadine',
+        roles: [roleNames.healthDepartmentCaseAgent],
+        _links: { delete: { href: '#' } }
+      },
+      {
+        id: '3',
+        username: 'h.krause@ga-mannheim.de',
+        lastName: 'Krause',
+        firstName: 'Hans-Jürgen',
+        roles: [roleNames.healthDepartmentAdmin, roleNames.healthDepartmentCaseAgent],
+        _links: { delete: { href: '#' } }
+      },
+      {
+        id: '4',
+        username: 'nirfreak',
+        lastName: 'Neitzel',
+        firstName: 'Uwe',
+        roles: [roleNames.healthDepartmentCaseAgent, roleNames.user],
+        _links: { delete: { href: '#' } }
+      }
+    ];
+  }
+
+  getHealthDepartmentUser(id: string): Observable<UserListItemDto> {
+    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
+    return of(this.testUsers.find(u => u.id === id));
   }
 
   delete(deleteLink: DeleteLink) {
     return this.httpClient.delete(deleteLink.delete.href);
+  }
+
+  createHealthDepartmentUser(userToCreate: UserListItemDto): Observable<UserListItemDto> {
+    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
+    return of(userToCreate);
+  }
+
+  editHealthDepartmentUser(userToEdit: UserListItemDto) {
+    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
+    return of(userToEdit);
   }
 
   private mapReportCase(item: any): ReportCaseDto {

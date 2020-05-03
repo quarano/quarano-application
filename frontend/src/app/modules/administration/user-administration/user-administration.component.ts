@@ -43,7 +43,7 @@ export class UserAdministrationComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     this.router.navigate(
-      ['edit', event?.selected[0]?.id]);
+      ['/administration/users/edit', event?.selected[0]?.id]);
   }
 
   deleteUser(event, user: UserListItemDto) {

@@ -2,6 +2,7 @@ export interface IRole {
   name: string;
   isHealthDepartmentUser: boolean;
   isAdmin: boolean;
+  displayName: string;
 }
 
 export const roleNames = {
@@ -12,8 +13,8 @@ export const roleNames = {
 };
 
 export const roles: IRole[] = [
-  { name: roleNames.user, isHealthDepartmentUser: false, isAdmin: false },
-  { name: roleNames.healthDepartmentAdmin, isHealthDepartmentUser: true, isAdmin: true },
-  { name: roleNames.healthDepartmentCaseAgent, isHealthDepartmentUser: true, isAdmin: false },
-  { name: roleNames.quaranoAdmin, isHealthDepartmentUser: false, isAdmin: true },
+  { name: roleNames.user, isHealthDepartmentUser: false, isAdmin: false, displayName: 'Bürger' },
+  { name: roleNames.healthDepartmentAdmin, isHealthDepartmentUser: true, isAdmin: true, displayName: 'Gesundheitsamtsadmin' },
+  { name: roleNames.healthDepartmentCaseAgent, isHealthDepartmentUser: true, isAdmin: false, displayName: 'Fallbearbeiter' },
+  { name: roleNames.quaranoAdmin, isHealthDepartmentUser: false, isAdmin: true, displayName: 'Quarano-Admin' },
 ];
