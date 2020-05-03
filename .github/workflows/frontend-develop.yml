@@ -33,10 +33,10 @@ jobs:
     - run: npm run build-stage
 #    - run: npm test
     - name: Set up CF CLI
-        if: success()
-        uses: jvalkeal/setup-cf-cli-action@master
-        with:
-          version: 6.51.0
+      if: success()
+      uses: jvalkeal/setup-cf-cli-action@master
+      with:
+        version: 6.51.0
     - name: CF Login
       if: success()
       run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
