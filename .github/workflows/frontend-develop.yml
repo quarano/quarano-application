@@ -5,9 +5,15 @@ name: Build Frontend STAGE
 
 on:
   push:
-    branches: [ develop ]
-    paths-ignore: 
-      - backend/**
+    branches:
+      - develop
+    paths:
+      - frontend/**
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - frontend/**
 
 defaults:
   run:
