@@ -48,4 +48,4 @@ jobs:
         CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
     - name: Deploy Frontend STAGE
       if: success()
-      run: cf push
+      run: cf push quarano-frontend-dev -f ../manifest.yml
