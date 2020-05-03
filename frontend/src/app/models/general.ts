@@ -17,3 +17,7 @@ export interface CreateLink {
 export interface EditLink {
   edit: Link;
 }
+
+export interface DeleteLink {
+  delete: Link;
+}

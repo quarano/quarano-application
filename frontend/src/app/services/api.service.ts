@@ -1,5 +1,7 @@
+import { DeleteLink } from './../models/general';
+import { roleNames } from '@models/role';
 import { Link } from '@models/general';
-import { UserDto } from '@models/user';
+import { UserDto, UserListItemDto } from '@models/user';
 import { environment } from '@environment/environment';
 import { SymptomDto } from '@models/symptom';
 import { Injectable } from '@angular/core';
@@ -151,6 +153,49 @@ export class ApiService {
   getAllActions(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/actions`)
       .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
+  }
+
+  getHealthDepartmentUsers(): Observable<UserListItemDto[]> {
+    // ToDo: Anpassen, sobald Endpunkt vorliegt
+    return of(
+      [
+        {
+          id: '1',
+          username: 'meierlein',
+          lastName: 'Meier',
+          firstName: 'Petra',
+          roles: [roleNames.healthDepartmentAdmin],
+          _links: { delete: { href: '#' } }
+        },
+        {
+          id: '2',
+          username: 'bauernfrau',
+          lastName: 'Henninger',
+          firstName: 'Nadine',
+          roles: [roleNames.healthDepartmentCaseAgent],
+          _links: { delete: { href: '#' } }
+        },
+        {
+          id: '3',
+          username: 'tevilaguru',
+          lastName: 'Krause',
+          firstName: 'Hans-Jürgen',
+          roles: [roleNames.healthDepartmentAdmin, roleNames.healthDepartmentCaseAgent],
+          _links: { delete: { href: '#' } }
+        },
+        {
+          id: '4',
+          username: 'nirfreak',
+          lastName: 'Neitzel',
+          firstName: 'Uwe',
+          roles: [roleNames.healthDepartmentCaseAgent, roleNames.user],
+          _links: { delete: { href: '#' } }
+        }
+      ]);
+  }
+
+  delete(deleteLink: DeleteLink) {
+    return this.httpClient.delete(deleteLink.delete.href);
   }
 
   private mapReportCase(item: any): ReportCaseDto {

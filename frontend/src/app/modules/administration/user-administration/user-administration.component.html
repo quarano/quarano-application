@@ -1,0 +1,40 @@
+<div style="max-width: 1110px;">
+  <button class="mb-3" mat-raised-button data-cy="new-case-button" color="primary" [routerLink]="['new']">
+    <mat-icon>add</mat-icon>Neuen User anlegen
+  </button>
+
+  <ngx-datatable class="material fixed-header" style="max-width: 1110px;" [count]="users.length" [headerHeight]="50"
+    rowHeight="auto" [rows]="users" [messages]="{
+    emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
+    selectedMessage: 'ausgewählt',
+    totalMessage: users.length === 1 ? 'User' : 'Users'
+  }" [loadingIndicator]="loading" [footerHeight]="50" selectionType="single" (select)="onSelect($event)">
+
+    <ngx-datatable-column prop="lastName" name="Nachname" width="255">
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="firstName" name="Vorname" width="255">
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="username" name="Username" width="255">
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="roles" name="Rollen" width="265">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <div style="display: flex; flex-direction: column;">
+          <span *ngFor="let role of value">{{role}}</span>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="_links" name="Löschen" width="80" [sortable]="false">
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <button *ngIf="value" class="ngx-icon-button" mat-icon-button
+          [matTooltip]="row.firstName + ' ' + row.lastName + ' löschen'" matTooltipPosition="right"
+          (click)="deleteUser($event, row)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>

@@ -1,3 +1,4 @@
+import { IsAdminGuard } from './guards/is-admin.guard';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
@@ -40,6 +41,12 @@ const routes: Routes = [
       import('./modules/basic-data/basic-data.module').then(m => m.BasicDataModule),
     canActivate: [IsAuthenticatedGuard, BasicDataGuard]
   },
+  {
+    path: 'administration', loadChildren: () =>
+      import('./modules/administration/administration.module').then(m => m.AdministrationModule),
+    canActivate: [IsAuthenticatedGuard, IsAdminGuard]
+  },
+
   {
     path: 'agb', component: AgbComponent
   },

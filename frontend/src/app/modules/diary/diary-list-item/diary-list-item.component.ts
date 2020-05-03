@@ -10,7 +10,6 @@ export class DiaryListItemComponent {
   @Input() diaryListItem: DiaryListItemDto;
 
   get morning(): DiaryEntryListItemDto {
-    console.log(this.diaryListItem.morning);
     if (this.diaryListItem.morning.hasOwnProperty('id')) {
       return this.diaryListItem.morning as DiaryEntryListItemDto;
     }

@@ -23,13 +23,14 @@ export class BasicDataGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     if (this.userService.isHealthDepartmentUser) {
+      this.router.navigate(['/forbidden']);
       return false;
     }
 
     return this.enrollmentService.getEnrollmentStatus()
       .pipe(map(status => {
         if (status?.complete) {
-          this.snackbarService.message('Sie haben die Registrierung abgeschlossen');
+          this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
           this.router.navigate(['/diary']);
           return false;
         }
