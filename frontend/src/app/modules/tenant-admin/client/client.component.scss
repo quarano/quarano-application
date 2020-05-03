@@ -5,6 +5,24 @@
 mat-card {
   width: 800px;
   max-width: 900px;
+
+  mat-card-content > .button-area {
+    display: flex;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    //border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 20px;
+
+    button.mat-button {
+      span {
+        vertical-align: inherit;
+      }
+      margin-top: 0 !important;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+  }
 }
 
 p.hint {
@@ -44,3 +62,4 @@ mat-card-title {
     }
   }
 }
+
