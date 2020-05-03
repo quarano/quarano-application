@@ -90,6 +90,9 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "es5": {
+              "tsConfig": "./tsconfig-es5.app.json"
             }
           }
         },
@@ -101,6 +104,9 @@
           "configurations": {
             "production": {
               "browserTarget": "coronareportfrontend:build:production"
+            },
+            "es5": {
+              "browserTarget": "coronareportfrontend:build:es5"
             }
           }
         },
