@@ -19,12 +19,12 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.web.LoggedIn;
+import quarano.account.Account;
+import quarano.account.Department;
+import quarano.account.DepartmentRepository;
+import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.web.ErrorsDto;
-import quarano.department.AccountInfo;
-import quarano.department.Department;
-import quarano.department.Department.DepartmentIdentifier;
-import quarano.department.DepartmentRepository;
+import quarano.core.web.LoggedIn;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
@@ -171,7 +171,7 @@ class TrackedCaseController {
 	}
 
 	@PostMapping("/api/hd/cases/{identifier}/comments")
-	HttpEntity<?> postComment(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn AccountInfo account,
+	HttpEntity<?> postComment(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account,
 			@Valid @RequestBody CommentInput payload, Errors errors) {
 
 		var trackedCase = cases.findById(identifier) //

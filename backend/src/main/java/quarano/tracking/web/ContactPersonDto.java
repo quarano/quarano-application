@@ -4,12 +4,12 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.Data;
 import lombok.Getter;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Textual;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
 import java.util.Collections;

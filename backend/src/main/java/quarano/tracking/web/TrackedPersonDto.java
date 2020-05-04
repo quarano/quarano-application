@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Strings;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
 import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;

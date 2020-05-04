@@ -18,12 +18,13 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
-import quarano.auth.ActivationCodeService;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.Status;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDateTime;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
@@ -37,18 +38,17 @@ public class ActionItemEventListener {
 
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull AnomaliesProperties config;
-	private final @NonNull ActivationCodeService activations;
 
 	@EventListener
 	void on(TrackedCaseUpdated event) {
 		if (event.getTrackedCase().isIndexCase()) {
 
 			handleIndexCaseEvent(event);
-			
+
 		} else {
-			
+
 			handleContactCaseEvent(event);
-			
+
 		}
 	}
 
@@ -65,13 +65,11 @@ public class ActionItemEventListener {
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 			return;
 		}
-		
+
 		// create "initial call open" action if applicable
 		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
 
-			// check if case is already in registration
-			if(activations.getPendingActivationCode(person.getId()).isEmpty()){
-
+			if (trackedCase.getStatus().equals(Status.OPEN)) {
 				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
 						DescriptionCode.INITIAL_CALL_OPEN_INDEX));
 			}
@@ -93,7 +91,8 @@ public class ActionItemEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
-		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX);
+		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(),
+				DescriptionCode.MISSING_DETAILS_INDEX);
 
 		if (!detailsMissing) {
 			resolveItems(actionItems);
@@ -112,8 +111,6 @@ public class ActionItemEventListener {
 	}
 
 	private void resolveItems(Streamable<? extends ActionItem> actionItems) {
-		actionItems
-			.map(ActionItem::resolve)
-			.forEach(items::save);
+		actionItems.map(ActionItem::resolve).forEach(items::save);
 	}
 }

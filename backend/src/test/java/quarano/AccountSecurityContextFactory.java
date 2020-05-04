@@ -16,9 +16,9 @@
 package quarano;
 
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AccountService;
-import quarano.auth.Role;
+import quarano.account.Account;
+import quarano.account.AccountService;
+import quarano.account.Role;
 
 import java.util.stream.Collectors;
 
@@ -71,7 +71,6 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 			this.account = account;
 
 			setAuthenticated(true);
-			setDetails(account.getTrackedPersonId());
 		}
 
 		/*

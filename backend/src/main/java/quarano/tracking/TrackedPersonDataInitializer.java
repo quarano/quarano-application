@@ -18,6 +18,8 @@ package quarano.tracking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 

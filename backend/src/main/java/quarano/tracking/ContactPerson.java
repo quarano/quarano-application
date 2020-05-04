@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;

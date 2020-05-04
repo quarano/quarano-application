@@ -5,20 +5,16 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.auth.ActivationCode;
-import quarano.auth.ActivationCodeService;
+import quarano.account.Department;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.department.CaseType;
-import quarano.department.Department;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseUpdated;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,24 +29,22 @@ import org.springframework.data.util.Streamable;
 
 @Disabled
 @QuaranoUnitTest
-class ActionItemEventListenerTests{
+class ActionItemEventListenerTests {
 
 	@Mock ActionItemRepository items;
 	@Mock AnomaliesProperties config;
-	@Mock ActivationCodeService activationService;
 
 	ActionItemEventListener listener;
 
 	@BeforeEach
 	void setup() {
-		listener = new ActionItemEventListener(items, config, activationService);
+		listener = new ActionItemEventListener(items, config);
 	}
 
 	@TestFactory
 	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSave() {
 
 		var now = LocalDate.now();
-
 		var trackedPersons = createTrackedPersons(now);
 
 		return DynamicTest.stream(trackedPersons.entrySet().iterator(),
@@ -61,8 +55,6 @@ class ActionItemEventListenerTests{
 					var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("test"));
 					when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
 							.thenReturn(Streamable.empty());
-					when(activationService.getPendingActivationCode(personId))
-					.thenReturn(Optional.empty());
 
 					assertThatCode(() -> listener.on(TrackedCaseUpdated.of(trackedCase))) //
 							.doesNotThrowAnyException();
@@ -76,10 +68,9 @@ class ActionItemEventListenerTests{
 					assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
 					assertThat(actionItem.getDescription().getCode()).isEqualTo(DescriptionCode.MISSING_DETAILS_INDEX);
 
-					Mockito.reset(items, config, activationService);
+					Mockito.reset(items, config);
 				});
 	}
-	
 
 	@Test
 	void doesNotCreateNewTrackedCaseActionItemForExisting() {
@@ -88,7 +79,7 @@ class ActionItemEventListenerTests{
 		var personId = person.getId();
 		var trackedCase = spy(new TrackedCase(person, CaseType.INDEX, new Department("test")));
 		var event = TrackedCaseUpdated.of(trackedCase);
-		
+
 		when(trackedCase.isNew()).thenReturn(false);
 
 		when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
@@ -127,50 +118,47 @@ class ActionItemEventListenerTests{
 		verify(items, times(0)).findByDescriptionCode(any(), any());
 		verify(items, times(0)).save(any());
 	}
-	
+
 	@Test
 	void createInitialCallOpenActionItem() {
 
 		var trackedPerson = createTrackedPersonWithMinimalData();
-		
+
 		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("test"));
 		var event = TrackedCaseUpdated.of(trackedCase);
-		
+
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-		.thenReturn(Streamable.empty());
-		when(activationService.getPendingActivationCode(trackedPerson.getId()))
-		.thenReturn(Optional.empty());
-		
+				.thenReturn(Streamable.empty());
+
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
-		
+
 		var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
 		// one for "initial-call-action" and one for "missing-data-action"
 		verify(items, times(2)).save(actionItemCaptor.capture());
 
 		var actionItems = actionItemCaptor.getAllValues();
-		
-		assertThat(actionItems.stream().findAny().filter(it -> it.getDescription().getCode() == DescriptionCode.INITIAL_CALL_OPEN_INDEX).isPresent());;
+
+		assertThat(actionItems.stream().findAny()
+				.filter(it -> it.getDescription().getCode() == DescriptionCode.INITIAL_CALL_OPEN_INDEX).isPresent());
+		;
 		assertThat(actionItems.stream()).allMatch(it -> it.getCaseIdentifier().equals(trackedCase.getId()));
 
-		Mockito.reset(items, config, activationService);
-
+		Mockito.reset(items, config);
 	}
-	
+
 	@Test
 	void createNoInitialCallOpenActionItemIfActivationExists() {
 
 		var trackedPerson = createTrackedPersonWithMinimalData();
-		
+
 		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("test"));
 		var event = TrackedCaseUpdated.of(trackedCase);
-		
+
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-		.thenReturn(Streamable.empty());
-		when(activationService.getPendingActivationCode(trackedPerson.getId()))
-		.thenReturn(Optional.of(new ActivationCode(LocalDateTime.now(), trackedPerson.getId(), trackedCase.getDepartment().getId())));
-		
+				.thenReturn(Streamable.empty());
+
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
-		
+
 		var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
 		// one for "initial-call-action" and one for "missing-data-action"
 		verify(items, times(1)).save(actionItemCaptor.capture());
@@ -180,12 +168,12 @@ class ActionItemEventListenerTests{
 		assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
 		assertThat(actionItem.getDescription().getCode()).isNotEqualTo(DescriptionCode.INITIAL_CALL_OPEN_INDEX);
 
-		Mockito.reset(items, config, activationService);
+		Mockito.reset(items, config);
 
 	}
-	
+
 	private TrackedPerson createTrackedPersonWithMinimalData() {
-		var person =  new TrackedPerson("firstName", "lastName");
+		var person = new TrackedPerson("firstName", "lastName");
 		person.setMobilePhoneNumber(PhoneNumber.of("0125125464565"));
 		return person;
 	}
@@ -207,5 +195,5 @@ class ActionItemEventListenerTests{
 						.setPhoneNumber(PhoneNumber.of("0123901")) //
 						.setMobilePhoneNumber(PhoneNumber.of("0123901293")));
 		return trackedPersons;
-	}	
+	}
 }

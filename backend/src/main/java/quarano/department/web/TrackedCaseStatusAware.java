@@ -19,8 +19,10 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.Getter;
 import quarano.core.EnumMessageSourceResolvable;
-import quarano.department.CaseStatus;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.Status;
+
+import java.util.function.Supplier;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.Link;
@@ -50,32 +52,25 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 
 		var controller = on(TrackedCaseController.class);
 
-		return Links.of(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
+		var links = Links.of(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
 				TrackedCaseLinkRelations.CONCLUDE));
+
+		Supplier<String> uri = () -> fromMethodCall(
+				on(RegistrationController.class).createRegistration(trackedCase.getId(), null)).toUriString();
+
+		if (trackedCase.getStatus().equals(Status.IN_REGISTRATION)) {
+			links = links.and(Link.of(uri.get(), TrackedCaseLinkRelations.RENEW));
+		}
+
+		// No account yet? Offer creation.
+		if (trackedCase.isEligibleForTracking()) {
+			links = links.and(Link.of(uri.get(), TrackedCaseLinkRelations.START_TRACKING));
+		}
+
+		return links;
 	}
 
 	public String getStatus() {
-		return messages.getMessage(EnumMessageSourceResolvable.of(resolveStatus()));
-	}
-
-	private CaseStatus resolveStatus() {
-
-		if (trackedCase.isConcluded()) {
-			return CaseStatus.STOPPED;
-		}
-
-		if (trackedCase.getEnrollment().isComplete()) {
-			return CaseStatus.TRACKING_ACTIVE;
-		}
-
-		if (hasLink(TrackedCaseLinkRelations.RENEW)) {
-			return CaseStatus.IN_REGISTRATION;
-		}
-
-		if (trackedCase.getTrackedPerson().hasAccount()) {
-			return CaseStatus.REGISTRATION_COMPLETED;
-		}
-
-		return CaseStatus.OPENED;
+		return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getStatus()));
 	}
 }

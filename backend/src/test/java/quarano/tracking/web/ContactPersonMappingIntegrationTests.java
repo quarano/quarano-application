@@ -19,11 +19,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
+import quarano.core.EmailAddress;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.EmailAddress;
 
 import org.junit.jupiter.api.Test;
 

@@ -16,6 +16,8 @@
 package quarano.department;
 
 import lombok.RequiredArgsConstructor;
+import quarano.account.DepartmentDataInitializer;
+import quarano.account.DepartmentRepository;
 import quarano.core.DataInitializer;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.Quarantine;

@@ -47,6 +47,8 @@ public class EnumMessageSourceResolvable implements MessageSourceResolvable {
 				.toLowerCase(Locale.US) //
 				.replace("_", "-");
 
-		return new String[] { String.format("%s.%s", value.getClass().getName(), name) };
+		var type = value.getClass().getName().replace("$", ".");
+
+		return new String[] { String.format("%s.%s", type, name) };
 	}
 }

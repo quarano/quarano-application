@@ -17,6 +17,8 @@ package quarano.tracking;
 
 import static org.assertj.core.api.Assertions.*;
 
+import quarano.core.EmailAddress;
+
 import org.junit.jupiter.api.Test;
 
 /**

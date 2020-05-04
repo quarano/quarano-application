@@ -17,8 +17,8 @@ package quarano.actions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AuthenticationManager;
+import quarano.account.Account;
+import quarano.account.AuthenticationManager;
 import quarano.department.Comment;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
