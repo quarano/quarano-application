@@ -3,7 +3,7 @@ package quarano.actions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
 import quarano.tracking.DiaryEntryMissing;
 
 import org.springframework.context.event.EventListener;
@@ -18,18 +18,24 @@ public class DiaryEventListener {
 
 
 	@EventListener
-	void on(DiaryEntry.DiaryEntryAdded event) {
+	void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
 		var slot = entry.getSlot();
 
+		// resolve missing entry item
 		items.findDiaryEntryMissingActionItemsFor(person, slot)
 				.map(ActionItem::resolve)
 				.forEach(items::save);
+	}
+
+	@EventListener
+	void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
+		var entry = event.getEntry();
+		var person = entry.getTrackedPersonId();
 
 		// Body temperature exceeds reference
-
 		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
 
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE, //
@@ -37,7 +43,18 @@ public class DiaryEventListener {
 					config.getTemperatureThreshold());
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
+		} else {
+			items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
+					.map(ActionItem::resolve)
+					.forEach(items::save);
 		}
+
+	}
+
+	@EventListener
+	void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
+		var entry = event.getEntry();
+		var person = entry.getTrackedPersonId();
 
 		// First characteristic symptom reported
 

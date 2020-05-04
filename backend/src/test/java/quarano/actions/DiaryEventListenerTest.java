@@ -38,14 +38,12 @@ class DiaryEventListenerTest {
 
 	@Test
 	void testOnDiaryEntryAddedWithExceedingTemperature() {
-		when(items.findDiaryEntryMissingActionItemsFor(any(), any())).thenReturn(Streamable.empty());
-
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		Slot slot = Slot.now();
 		var entry = DiaryEntry.DiaryEntryAdded.of(DiaryEntry.of(slot, person));
 		entry.getEntry().setBodyTemperature(BodyTemperature.of(41F));
 
-		listener.on(entry);
+		listener.onDiaryEntryAddedForBodyTemperature(entry);
 
 		var itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
 		verify(items, times(1)).save(itemCaptor.capture());
@@ -56,9 +54,23 @@ class DiaryEventListenerTest {
 	}
 
 	@Test
-	void testOnDiaryEntryAddedWithCharacteristicSymptoms() {
-		when(items.findDiaryEntryMissingActionItemsFor(any(), any())).thenReturn(Streamable.empty());
+	void testOnDiaryEntryAddedWithExceedingTemperatureResolved() {
+		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
+		Slot slot = Slot.now();
+		var entry = DiaryEntry.DiaryEntryAdded.of(DiaryEntry.of(slot, person));
+		entry.getEntry().setBodyTemperature(BodyTemperature.of(39F));
+		ActionItem actionItem = mock(ActionItem.class);
+		when(actionItem.resolve()).thenReturn(actionItem);
+		when(items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)).thenReturn(Streamable.of(actionItem));
 
+		listener.onDiaryEntryAddedForBodyTemperature(entry);
+
+		verify(actionItem, times(1)).resolve();
+		verify(items, times(1)).save(actionItem);
+	}
+
+	@Test
+	void testOnDiaryEntryAddedWithCharacteristicSymptoms() {
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		Slot slot = Slot.now();
 		var event = DiaryEntry.DiaryEntryAdded.of(DiaryEntry.of(slot, person));
@@ -68,7 +80,7 @@ class DiaryEventListenerTest {
 		event.getEntry().setBodyTemperature(BodyTemperature.of(36));
 		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM)).thenReturn(Streamable.empty());
 
-		listener.on(event);
+		listener.onDiaryEntryAddedForCharacteristicSymptoms(event);
 
 		var itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
 		verify(items, times(1)).save(itemCaptor.capture());
@@ -79,8 +91,6 @@ class DiaryEventListenerTest {
 
 	@Test
 	void testOnDiaryEntryAddedWithCharacteristicSymptomsNotOverwritingExisting() {
-		when(items.findDiaryEntryMissingActionItemsFor(any(), any())).thenReturn(Streamable.empty());
-
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		Slot slot = Slot.now();
 		var event = DiaryEntry.DiaryEntryAdded.of(DiaryEntry.of(slot, person));
@@ -92,7 +102,7 @@ class DiaryEventListenerTest {
 				List.of(mock(DiaryEntryActionItem.class))
 		));
 
-		listener.on(event);
+		listener.onDiaryEntryAddedForCharacteristicSymptoms(event);
 
 		verify(items, times(0)).save(any());
 	}
