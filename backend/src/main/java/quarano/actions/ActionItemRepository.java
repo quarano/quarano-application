@@ -39,11 +39,6 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
 	Streamable<ActionItem> findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
 
-	@Query("select count(i) from DiaryEntryMissingActionItem i" +
-			" where i.slot = :slot" +
-			" and i.personIdentifier = :personIdentifier")
-	long countDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
-
 	@Query("select i from DiaryEntryMissingActionItem i" +
 			" where i.slot = :slot" +
 			" and i.personIdentifier = :personIdentifier")

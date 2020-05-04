@@ -55,7 +55,7 @@ public class DiaryEventListener {
 
 		diaryEntryMissing.getMissingSlots().stream()
 			.map(slot -> new DiaryEntryMissingActionItem(diaryEntryMissing.getTrackedPersonIdentifier(), slot))
-			.filter(item -> items.countDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()) == 0)
+			.filter(item -> items.findDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()).isEmpty())
 			.forEach(items::save);
 	}
 }
