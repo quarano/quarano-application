@@ -9,7 +9,6 @@ import { IsAuthenticatedGuard } from '@guards/is-authenticated.guard';
 import { EnrollmentCompletedGuard } from '@guards/enrollment-completed.guard';
 import { IsHealthDepartmentUserGuard } from '@guards/is-health-department-user.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { ContactComponent } from './components/contact/contact.component';
 
 const routes: Routes = [
   {

@@ -5,9 +5,15 @@ name: Build Backend
 
 on:
   push:
-    branches: [ develop ]
-    paths-ignore: 
-      - frontend/**
+    branches:
+      - develop
+    paths:
+      - backend/**
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - backend/**
 
 jobs:
   build:

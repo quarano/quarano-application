@@ -64,7 +64,9 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       street: new FormControl(''),
       houseNumber: new FormControl(''),
       city: new FormControl(''),
-      zipCode: new FormControl('', [Validators.minLength(5), Validators.maxLength(5)]),
+      zipCode: new FormControl('', [
+        Validators.minLength(5), Validators.maxLength(5),
+        Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
 
       mobilePhone: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(17),
@@ -75,7 +77,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
       ]),
 
-      email: new FormControl('', []),
+      email: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
 

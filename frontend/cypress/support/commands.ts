@@ -11,6 +11,9 @@ declare namespace Cypress {
 }
 
 const login = (username: string, password: string) => {
+  cy.server();
+  cy.route('POST', '/login').as('login');
+
   cy.visit( 'http://localhost:4200', {
     onBeforeLoad(win) {
       cy.stub(win, 'open').as('windowOpen');
@@ -21,7 +24,7 @@ const login = (username: string, password: string) => {
   cy.get('#password').type(password);
   cy.get('#submitBtn').click();
 
-  cy.wait(5);
+  cy.wait('@login');
 };
 
 Cypress.Commands.add('loginAgent', () => {
