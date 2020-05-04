@@ -10,7 +10,6 @@
         type="text"
       />
       <mat-error id="required" *ngIf="formGroup.get('firstName').getError('required')">Bitte geben Sie einen Vornamen ein</mat-error>
-      <mat-error id="nodigits" *ngIf="formGroup.get('firstName').getError('pattern')">Der Vorname darf keine Zahlen enthalten</mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-lastname">
       <input
@@ -41,7 +40,7 @@
   <fieldset class="mb-3">
     <legend>Krankheitsdaten</legend>
     <div class="form-flex">
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="input-testdate">
         <mat-label>Abstrichdatum (Test)</mat-label>
         <input
           matInput
@@ -70,7 +69,7 @@
         </mat-radio-group>
       </div>
     </div>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-quarantinestart">
       <mat-label>Beginn Quarantäne / häusliche Isolation</mat-label>
       <input
         matInput
@@ -87,7 +86,7 @@
       <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-quarantineend">
       <mat-label>Ende Quarantäne / häusliche Isolation</mat-label>
       <input
         matInput
@@ -125,11 +124,9 @@
         formControlName="mobilePhone"
         type="phone"
       />
-      <mat-error
-        >Bitte geben Sie eine gültige mobile Telefonnummer ein
-      </mat-error>
+      <mat-error>Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="input-email">
       <input
         matInput
         placeholder="E-Mail"
@@ -161,7 +158,7 @@
       />
       <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;">
+    <mat-form-field style="width: 30%;" data-cy="input-zipcode">
       <input
         matInput
         placeholder="Postleitzahl"
