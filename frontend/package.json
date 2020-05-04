@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-es5": "ng serve --configuration es5",
     "start-no-host-check": "ng serve --disable-host-check",
     "build": "ng build",
     "build-prod": "ng build --prod",

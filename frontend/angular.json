@@ -23,7 +23,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.ico", "src/assets", "src/Staticfile"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/Staticfile"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
@@ -91,6 +95,9 @@
                 }
               ]
             },
+            "es5": {
+              "tsConfig": "./tsconfig-es5.app.json"
+            },
             "test": {
               "fileReplacements": [
                 {
@@ -118,8 +125,8 @@
                   "maximumError": "10kb"
                 }
               ]
-            },		
-		     "sec": {
+            },
+            "sec": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -147,7 +154,7 @@
                 }
               ]
             },
-		     "autotest": {
+            "autotest": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -174,7 +181,7 @@
                   "maximumError": "10kb"
                 }
               ]
-            }				
+            }
           }
         },
         "serve": {
@@ -185,6 +192,9 @@
           "configurations": {
             "production": {
               "browserTarget": "coronareportfrontend:build:production"
+            },
+            "es5": {
+              "browserTarget": "coronareportfrontend:build:es5"
             }
           }
         },
@@ -201,7 +211,10 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
@@ -221,7 +234,9 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
