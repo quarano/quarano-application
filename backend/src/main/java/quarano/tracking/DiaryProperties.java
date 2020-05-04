@@ -48,6 +48,11 @@ public class DiaryProperties {
 	private final Duration editTolerance;
 
 	/**
+	 * Defines the number of slots, which may not be filled.
+	 */
+	private final int toleratedSlotCount;
+
+	/**
 	 * Defines the {@link Duration} that {@link DiaryEntry} can still be created.
 	 */
 	private final Duration createDuration;
@@ -69,5 +74,9 @@ public class DiaryProperties {
 		var duration = createDuration == null ? DEFAULT_POST_SLOT : createDuration;
 
 		return !slot.isOlderThan(duration);
+	}
+
+	public int getToleratedSlotCount() {
+		return this.toleratedSlotCount;
 	}
 }
