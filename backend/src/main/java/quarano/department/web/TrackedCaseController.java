@@ -33,6 +33,9 @@ import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
+import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
+import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
+import quarano.department.web.TrackedCaseRepresentations.ValidationGroups;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -41,6 +44,7 @@ import java.net.URI;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
+import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.CollectionModel;
@@ -51,6 +55,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,6 +79,7 @@ class TrackedCaseController {
 	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
+	private final @NonNull SmartValidator validator;
 
 	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
 	RepresentationModel<?> getCases(@LoggedIn Department department) {
@@ -83,8 +89,21 @@ class TrackedCaseController {
 				.toList());
 	}
 
+	@PostMapping(path = "/api/hd/cases", params = "type=contact")
+	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto payload, Errors errors,
+			@LoggedIn Department department) {
+		return postCase(payload, errors, department);
+	}
+
+	@PostMapping(path = "/api/hd/cases", params = "type=index")
+	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
+			@LoggedIn Department department) {
+		return postCase(payload, errors, department);
+	}
+
 	@PostMapping("/api/hd/cases")
-	HttpEntity<?> postCase(@Valid @RequestBody TrackedCaseDto payload, Errors errors, @LoggedIn Department department) {
+	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
+			@LoggedIn Department department) {
 
 		if (payload.validate(errors).hasErrors()) {
 			return ErrorsDto.of(errors, accessor).toBadRequest();
@@ -112,8 +131,7 @@ class TrackedCaseController {
 	}
 
 	@PutMapping("/api/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, //
-			@Valid @RequestBody TrackedCaseDto payload, //
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, @RequestBody TrackedCaseDto payload, //
 			Errors errors) {
 
 		var existing = cases.findById(identifier).orElse(null);
@@ -125,6 +143,12 @@ class TrackedCaseController {
 		if (existing.getEnrollment().isComplete()) {
 			errors = representations.validateAfterEnrollment(payload, errors);
 		}
+
+		var validationGroup = existing.isIndexCase() //
+				? ValidationGroups.Index.class //
+				: Default.class;
+
+		validator.validate(payload, errors, validationGroup);
 
 		if (errors.hasErrors()) {
 			return ErrorsDto.of(errors, accessor).toBadRequest();
