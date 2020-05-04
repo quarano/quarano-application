@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-3">
   <fieldset class="mb-3">
     <legend>Basisdaten</legend>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-firstname">
       <input
         required
         matInput
@@ -9,9 +9,9 @@
         formControlName="firstName"
         type="text"
       />
-      <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
+      <mat-error id="required" *ngIf="formGroup.get('firstName').getError('required')">Bitte geben Sie einen Vornamen ein</mat-error>
     </mat-form-field>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-lastname">
       <input
         matInput
         required
@@ -21,7 +21,7 @@
       />
       <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
     </mat-form-field>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-dayofbirth">
       <mat-label>Geburtsdatum</mat-label>
       <input
         matInput
@@ -40,7 +40,7 @@
   <fieldset class="mb-3">
     <legend>Krankheitsdaten</legend>
     <div class="form-flex">
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="input-testdate">
         <mat-label>Abstrichdatum (Test)</mat-label>
         <input
           matInput
@@ -69,7 +69,7 @@
         </mat-radio-group>
       </div>
     </div>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-quarantinestart">
       <mat-label>Beginn Quarantäne / häusliche Isolation</mat-label>
       <input
         matInput
@@ -86,7 +86,7 @@
       <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-quarantineend">
       <mat-label>Ende Quarantäne / häusliche Isolation</mat-label>
       <input
         matInput
@@ -104,7 +104,7 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>Kontaktmöglichkeiten *</legend>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-phone">
       <input
         matInput
         maxlength="17"
@@ -115,7 +115,7 @@
       />
       <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
     </mat-form-field>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="input-mobile">
       <input
         matInput
         maxlength="17"
@@ -124,11 +124,9 @@
         formControlName="mobilePhone"
         type="phone"
       />
-      <mat-error
-        >Bitte geben Sie eine gültige mobile Telefonnummer ein
-      </mat-error>
+      <mat-error>Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="input-email">
       <input
         matInput
         placeholder="E-Mail"
@@ -160,7 +158,7 @@
       />
       <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;">
+    <mat-form-field style="width: 30%;" data-cy="input-zipcode">
       <input
         matInput
         placeholder="Postleitzahl"
@@ -181,6 +179,7 @@
       type="submit"
       mat-raised-button
       color="primary"
+      data-cy="client-submit-button"
       [disabled]="formGroup.invalid || formGroup.pristine"
     >
       Speichern

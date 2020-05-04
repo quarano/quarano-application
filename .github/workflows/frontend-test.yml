@@ -6,7 +6,7 @@ name: Build Frontend and deploy to DEV
 on:
   push:
     branches:
-      - develop
+      - stage-on-test
     paths:
       - frontend/**
 
@@ -32,7 +32,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: npm run build-stage
+    - run: npm run build-test
     - run: npm test
 
     - name: Set up CF CLI
@@ -49,6 +49,6 @@ jobs:
         CF_SPACE: ${{ secrets.CF_SPACE }}
         CF_USERNAME: ${{ secrets.CF_USERNAME }}
         CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-    - name: Deploy Frontend STAGE
+    - name: Deploy Frontend TEST
       if: success()
-      run: cf push quarano-frontend-dev -f ../manifest.yml
+      run: cf push quarano-frontend-test -f ../manifest.yml

@@ -8,6 +8,7 @@ import quarano.auth.RoleType;
 
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,16 +61,14 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
-			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')"); //
-			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //
+			it.mvcMatchers("/api/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN)); //
+			it.mvcMatchers("/api/hd/accounts").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
 			it.mvcMatchers("/api/login").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
 			it.mvcMatchers("/api/user/me").authenticated(); //
-			it.mvcMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')"); //
-			it.mvcMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')"); //
-			it.mvcMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //
+			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')"); //
 		});
 
 		httpSecurity.csrf().disable().cors(it -> {
@@ -90,5 +89,12 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
+	}
+
+	private static String hasAnyRole(RoleType... roleType) {
+
+		return Arrays.stream(roleType) //
+				.map(RoleType::name) //
+				.collect(Collectors.joining("', '", "hasAnyRole('", "')"));
 	}
 }

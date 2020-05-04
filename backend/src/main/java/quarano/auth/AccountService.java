@@ -4,6 +4,7 @@ import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.auth.Account.AccountIdentifier;
 import quarano.auth.Password.EncryptedPassword;
 import quarano.auth.Password.UnencryptedPassword;
 import quarano.department.Department.DepartmentIdentifier;
@@ -11,6 +12,7 @@ import quarano.department.TrackedCase;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -142,5 +144,40 @@ public class AccountService {
 
 		return createTrackedPersonAccount(details.getUsername(), details.getUnencryptedPassword(), details.getFirstname(),
 				details.getLastname(), details.getDepartmentId(), details.getTrackedPersonId());
+	}
+
+	public List<Account> findStaffAccountsOfDepartmentOrderedByLastNameASC(DepartmentIdentifier departmentId) {
+		return accounts.findStaffAccountsOfDepartmentOrderedByLastNameASC(departmentId);
+	}
+
+	public Optional<Account> findById(AccountIdentifier accountId) {
+		return accounts.findById(accountId);
+	}
+
+	public Try<Account> deleteAccount(AccountIdentifier accountIdToDelete, Account deletingAdminAccount) {
+		
+		// check if deleting user belongs to same department and is admin 
+		Try<Account> accountTry = Try.ofSupplier(() -> accounts.findById(accountIdToDelete).get())
+				.andThenTry(it -> accountBelongsToDepartmentOfAdmin(it, deletingAdminAccount))
+				.andThen(it -> deletingAdminAccount.hasAdminRole());
+		
+		return accountTry.onSuccess(it -> accounts.deleteById(accountIdToDelete));
+		
+	}
+
+	private boolean accountBelongsToDepartmentOfAdmin(Account accountToDelete, Account accountOfDeletingUser)
+			throws InvalidAdminAccessException {
+
+		if(accountToDelete.belongsTo(accountOfDeletingUser.getDepartmentId())){
+			return true;
+		}
+		else {
+			throw new InvalidAdminAccessException("Admin-user does not belong to the same department as the acount that should be deleted; admin-user department: " + accountOfDeletingUser.getDepartmentId() + ", target account department: " + accountToDelete.getDepartmentId());
+		}
+	}
+
+	public Account addStaffAccount(Object object) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

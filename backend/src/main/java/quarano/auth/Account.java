@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
@@ -81,6 +82,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> implem
 
 		this.add(role);
 	}
+	
+	public boolean belongsTo(DepartmentIdentifier id) {
+		return this.departmentId == id;
+	}
 
 	public String getFullName() {
 		return firstname.concat(" ").concat(lastname);
@@ -117,5 +122,14 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> implem
 
 	public boolean isTrackedPerson() {
 		return this.roles.contains(new Role(RoleType.ROLE_USER));
+	}
+
+	/**
+	 * Determines if a user has any kind of admin role
+	 * @return
+	 */
+	public boolean hasAdminRole() {
+		return this.roles.contains(Role.of(RoleType.ROLE_HD_ADMIN))
+				|| this.roles.contains(Role.of(RoleType.ROLE_QUARANO_ADMIN));
 	}
 }

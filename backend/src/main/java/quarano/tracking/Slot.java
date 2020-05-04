@@ -44,7 +44,7 @@ import org.springframework.util.Assert;
 @EqualsAndHashCode
 @RequiredArgsConstructor(staticName = "of")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class Slot {
+public class Slot implements Comparable<Slot> {
 
 	private final LocalDate date;
 	private final TimeOfDay timeOfDay;
@@ -175,6 +175,16 @@ public class Slot {
 		return String.format("%s of %s", timeOfDay, date);
 	}
 
+	@Override
+	public int compareTo(Slot slot) {
+		var dateComparison = this.date.compareTo(slot.date);
+		if (dateComparison != 0) {
+			return dateComparison;
+		}
+		return this.timeOfDay == slot.timeOfDay ? 0
+				: this.timeOfDay == TimeOfDay.MORNING ? -1 : 1;
+	}
+
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	public enum TimeOfDay {
 
@@ -229,7 +239,7 @@ public class Slot {
 			 */
 			@Override
 			boolean isInOvertime(LocalTime time) {
-				return time.isAfter(EVENING.to) || time.isBefore(EVENING.end);
+				return time.isAfter(EVENING.to) && time.isBefore(EVENING.end);
 			}
 		};
 

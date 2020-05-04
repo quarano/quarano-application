@@ -1,5 +1,6 @@
 # App Manifest
 applications:
+###############   develop system #########################
 - name: quarano-frontend-dev
   memory: 128M
   buildpacks:
@@ -8,14 +9,6 @@ applications:
   command: "$HOME/boot.sh"
   routes:
     - route: quarano-frontend-dev.cfapps.io
-- name: quarano-frontend
-  memory: 128M
-  buildpacks:
-   - https://github.com/cloudfoundry/staticfile-buildpack
-  path: ./frontend/dist/coronareportfrontend
-  command: "$HOME/boot.sh"
-  routes:
-    - route: quarano-frontend.cfapps.io
 - name: quarano-backend-dev
   buildpacks:
     - java_buildpack
@@ -24,6 +17,16 @@ applications:
     - quarano-postgres-dev
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    
+###############   demo system #########################
+- name: quarano-frontend
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend.cfapps.io
 - name: quarano-backend
   buildpacks:
     - java_buildpack
@@ -32,4 +35,59 @@ applications:
     - quarano-postgres
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    
+###############   test system #########################
+- name: quarano-frontend-test
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend-test.cfapps.io
+- name: quarano-backend-test
+  buildpacks:
+    - java_buildpack
+  path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  services:
+    - quarano-test
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"  
+    
+###############   security-test system #########################
+- name: quarano-frontend-sec
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend-sec.cfapps.io
+- name: quarano-backend-sec
+  buildpacks:
+    - java_buildpack
+  path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  services:
+    - quarano-security
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"    
+    
+
+###############   cypress-test system #########################
+- name: quarano-frontend-autotest
+  memory: 128M
+  buildpacks:
+   - https://github.com/cloudfoundry/staticfile-buildpack
+  path: ./frontend/dist/coronareportfrontend
+  command: "$HOME/boot.sh"
+  routes:
+    - route: quarano-frontend-autotest.cfapps.io
+- name: quarano-backend-autotest
+  buildpacks:
+    - java_buildpack
+  path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  services:
+    - quarano-autotest
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"   
 

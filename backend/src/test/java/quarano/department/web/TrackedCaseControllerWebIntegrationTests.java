@@ -31,14 +31,21 @@ import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
+import quarano.department.web.TrackedCaseRepresentations.ValidationGroups.Index;
+import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.validation.groups.Default;
+
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
@@ -72,9 +79,9 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void successfullyCreatesNewTrackedCase() throws Exception {
 
-		var payload = createMinimalPayload();
+		var payload = createMinimalIndexPayload();
 
-		var response = issueCaseCreation(payload).getContentAsString();
+		var response = issueIndexCaseCreation(payload).getContentAsString();
 		var document = JsonPath.parse(response);
 
 		assertMinimalFieldsSet(document, payload);
@@ -84,11 +91,11 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void indicateStartTrackingIfRequiredDataIsSet() throws Exception {
 
-		var payload = createMinimalPayload() //
+		var payload = createMinimalIndexPayload() //
 				.setEmail("foo@bar.com") //
 				.setDateOfBirth(LocalDate.now().minusYears(25));
 
-		var response = issueCaseCreation(payload).getContentAsString();
+		var response = issueIndexCaseCreation(payload).getContentAsString();
 		var document = JsonPath.parse(response);
 
 		assertMinimalFieldsSet(document, payload);
@@ -102,8 +109,8 @@ class TrackedCaseControllerWebIntegrationTests {
 	@SuppressWarnings("null")
 	void updatesCaseWithMinimalPayload() throws Exception {
 
-		var payload = createMinimalPayload();
-		var response = issueCaseCreation(payload);
+		var payload = createMinimalIndexPayload();
+		var response = issueIndexCaseCreation(payload);
 
 		String location = response.getHeader(HttpHeaders.LOCATION);
 
@@ -119,14 +126,25 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
 
-	@Test
-	void rejectsCaseCreationWithoutRequiredFields() throws Exception {
+	@TestFactory
+	Stream<DynamicTest> rejectsIndexCaseCreationWithoutRequiredFields() throws Exception {
 
-		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases", new TrackedCaseDto());
+		var source = Map.of("", Index.class, //
+				"type=index", Index.class, //
+				"type=contact", Default.class);
 
-		validator.getRequiredProperties(TrackedCaseDto.class) //
-				.forEach(it -> {
-					assertThat(response.read("$." + it, String.class)).isNotNull();
+		return DynamicTest.stream(source.entrySet().iterator(), //
+				it -> String.format("POST to /api/hd/cases%s rejects missing properties",
+						!it.getKey().isBlank() ? "?".concat(it.getKey()) : ""), //
+				test -> {
+
+					var baseUri = "/api/hd/cases";
+					var uri = baseUri.concat(!test.getKey().isBlank() ? "?".concat(test.getKey()) : "");
+					var response = expectBadRequest(HttpMethod.POST, uri, new TrackedCaseDto());
+					var group = test.getValue() == Default.class ? null : test.getValue();
+
+					validator.getRequiredProperties(TrackedCaseDto.class, group) //
+							.forEach(it -> assertThat(response.read("$." + it, String.class)).isNotNull());
 				});
 	}
 
@@ -153,7 +171,6 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
 		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);
 	}
@@ -215,6 +232,18 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.comments[0].author", String.class)).isNotBlank();
 	}
 
+	@Test
+	void updatingContactCaseDoesNotRequireQuarantineData() throws Exception {
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+
+		mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId()) //
+				.content(jackson.writeValueAsString(createMinimalContactPayload())) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk());
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri) //
@@ -224,21 +253,26 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString());
 	}
 
-	private TrackedCaseDto createMinimalPayload() {
-
-		var today = LocalDate.now();
+	private TrackedCaseDto createMinimalContactPayload() {
 
 		return new TrackedCaseDto() //
 				.setFirstName("Michael") //
 				.setLastName("Mustermann") //
 				.setEmail("") // empty email to verify it gets bound to null and does not trigger validation
-				.setTestDate(today) //
-				.setQuarantineStartDate(today) //
-				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
 				.setPhone("0123456789");
 	}
 
-	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload) throws Exception {
+	private TrackedCaseDto createMinimalIndexPayload() {
+
+		var today = LocalDate.now();
+
+		return createMinimalContactPayload() //
+				.setTestDate(today) //
+				.setQuarantineStartDate(today) //
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()));
+	}
+
+	private MockHttpServletResponse issueIndexCaseCreation(TrackedCaseDto payload) throws Exception {
 
 		return mvc.perform(post("/api/hd/cases") //
 				.content(jackson.writeValueAsString(payload)) //

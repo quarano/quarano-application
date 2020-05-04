@@ -2,7 +2,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
 import {merge, Observable, Subject} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
+import {filter, map, switchMap, take} from 'rxjs/operators';
 import {ApiService} from '@services/api.service';
 import {SnackbarService} from '@services/snackbar.service';
 import {CaseActionDto} from '@models/case-action';
@@ -57,7 +57,7 @@ export class ClientComponent implements OnInit {
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
-      filter((data) => data?._links.hasOwnProperty('renew') && data?._links.hasOwnProperty('start-tracking')),
+      filter((data) => data?._links?.hasOwnProperty('renew') && data?._links?.hasOwnProperty('start-tracking')),
       take(1)).subscribe((data) => {
         this.apiService
           .getApiCall<StartTracking>(data, 'start-tracking')
@@ -107,6 +107,16 @@ export class ClientComponent implements OnInit {
     this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
       this.snackbarService.success('Kommentar erfolgreich eingetragen.');
       this.updatedDetail$$.next(data);
+    });
+  }
+
+  closeCase(halResponse: HalResponse) {
+    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
+      switchMap(() => this.apiService.getCase(this.caseId))
+    ).subscribe((data) => {
+      this.snackbarService.success('Fall abgeschlossen.');
+      this.updatedDetail$$.next(data);
+
     });
   }
 }

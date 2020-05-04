@@ -132,6 +132,13 @@ export class ApiService {
     return of();
   }
 
+  deleteApiCall<T>(halResponse: HalResponse, key: string): Observable<T> {
+    if (halResponse._links?.hasOwnProperty(key)) {
+      return this.httpClient.delete<T>(halResponse._links[key].href);
+    }
+    return of();
+  }
+
   getCases(): Observable<Array<ReportCaseDto>> {
     return this.httpClient.get<any>(`${this.baseUrl}/api/hd/cases`)
       .pipe(share(), map(result => result._embedded.cases.map(item => this.mapReportCase(item))));

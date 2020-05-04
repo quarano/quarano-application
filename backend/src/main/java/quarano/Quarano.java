@@ -18,16 +18,18 @@ package quarano;
 import quarano.core.EmailTemplates;
 
 import java.util.Map;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -64,5 +66,12 @@ public class Quarano {
 	@Bean
 	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
 		return new MessageSourceAccessor(source);
+	}
+
+	@Configuration
+	@EnableScheduling
+	@Profile("!integrationtest")
+	public static class SchedulingProperties {
+
 	}
 }
