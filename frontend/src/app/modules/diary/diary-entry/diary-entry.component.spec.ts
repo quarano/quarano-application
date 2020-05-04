@@ -1,9 +1,15 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DiaryEntryComponent } from './diary-entry.component';
+import {DiaryEntryComponent} from './diary-entry.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
+import {MatDialog} from '@angular/material/dialog';
+import {FormBuilder} from '@angular/forms';
+import {DiaryEntryDto} from '@models/diary-entry';
+import {ActivatedRoute} from '@angular/router';
+import {of} from 'rxjs';
 
 describe('DiaryEntryComponent', () => {
   let component: DiaryEntryComponent;
@@ -11,14 +17,32 @@ describe('DiaryEntryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiaryEntryComponent ]
+      imports: [RouterTestingModule],
+      declarations: [DiaryEntryComponent],
+      providers: [
+        FormBuilder,
+        {provide: ApiService, useValue: jasmine.createSpyObj(['createDiaryEntry'])},
+        {provide: SnackbarService, useValue: jasmine.createSpyObj(['warning', 'success'])},
+        {provide: MatDialog, useValue: {}},
+        {
+          provide: ActivatedRoute, useValue: {
+            data: of({
+              diaryEntry: {characteristicSymptoms: [], nonCharacteristicSymptoms: [], contacts: []},
+              symptoms: [],
+              contactPersons: []
+            }),
+            snapshot: {paramMap: {get: (value) => ''}}
+          }
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DiaryEntryComponent);
     component = fixture.componentInstance;
+    component.diaryEntry = {} as DiaryEntryDto;
     fixture.detectChanges();
   });
 

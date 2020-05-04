@@ -6,8 +6,10 @@ describe('UserService', () => {
   let service: UserService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(UserService);
+    const apiService = jasmine.createSpyObj(['getMe']);
+    const snackbarService = jasmine.createSpyObj(['success', 'warning', 'message']);
+    const tokenService = jasmine.createSpyObj(['unsetToken']);
+    service = new UserService(apiService, snackbarService, tokenService);
   });
 
   it('should be created', () => {
