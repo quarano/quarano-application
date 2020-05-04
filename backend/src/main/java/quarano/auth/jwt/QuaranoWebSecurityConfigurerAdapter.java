@@ -60,6 +60,7 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
+			it.mvcMatchers("/api/hd/accounts").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //			
 			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')"); //
 			it.mvcMatchers("/api/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //
 			it.mvcMatchers("/api/login").permitAll();
@@ -67,9 +68,11 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
 			it.mvcMatchers("/api/user/me").authenticated(); //
+			
 			it.mvcMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')"); //
 			it.mvcMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_CASE_AGENT + "')"); //
 			it.mvcMatchers("/hd/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')"); //
+
 		});
 
 		httpSecurity.csrf().disable().cors(it -> {

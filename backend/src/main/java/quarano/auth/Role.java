@@ -1,10 +1,10 @@
 package quarano.auth;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -59,6 +59,9 @@ public class Role {
 		return true;
 	}
 	
+	public static Role of(RoleType type) {
+		return new Role(type);
+	}
 	
 	
 }
