@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { HeaderLeftComponent } from './header-left.component';
+import {UserService} from '@services/user.service';
+import {Observable, of} from 'rxjs';
 
 describe('HeaderLeftComponent', () => {
   let component: HeaderLeftComponent;
@@ -11,7 +13,10 @@ describe('HeaderLeftComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderLeftComponent ]
+      declarations: [ HeaderLeftComponent ],
+      providers: [
+        {provide: UserService, useValue: { isLoggedIn$: of() }}
+      ]
     })
     .compileComponents();
   }));

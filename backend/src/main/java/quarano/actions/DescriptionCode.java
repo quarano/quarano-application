@@ -31,8 +31,11 @@ public enum DescriptionCode {
 	DIARY_ENTRY_MISSING,
 
 	MISSING_DETAILS_INDEX,
-	
-	INITIAL_CALL_OPEN_INDEX;
+	MISSING_DETAILS_CONTACT,
+
+	INITIAL_CALL_OPEN_INDEX,
+	INITIAL_CALL_OPEN_CONTACT;
+
 
 	private final @Getter float multiplier;
 

@@ -19,7 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
-import quarano.department.DepartmentDataInitializer;
+import quarano.account.DepartmentDataInitializer;
+import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import org.junit.jupiter.api.Test;

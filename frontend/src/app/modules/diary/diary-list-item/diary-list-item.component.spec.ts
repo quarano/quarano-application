@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { DiaryListItemComponent } from './diary-list-item.component';
+import {DiaryListItemDto} from '@models/diary-entry';
 
 describe('DiaryListItemComponent', () => {
   let component: DiaryListItemComponent;
@@ -19,6 +20,7 @@ describe('DiaryListItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DiaryListItemComponent);
     component = fixture.componentInstance;
+    component.diaryListItem = { morning: {}, evening: {}, date: '2020-03-01'} as DiaryListItemDto;
     fixture.detectChanges();
   });
 

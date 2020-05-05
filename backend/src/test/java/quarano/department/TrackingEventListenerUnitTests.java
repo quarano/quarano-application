@@ -19,9 +19,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
+import quarano.account.Department;
+import quarano.core.EmailAddress;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
-import quarano.tracking.EmailAddress;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;

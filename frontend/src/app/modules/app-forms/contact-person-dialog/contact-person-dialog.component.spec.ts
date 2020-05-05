@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ContactPersonDialogComponent } from './contact-person-dialog.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 describe('ContactPersonDialogComponent', () => {
   let component: ContactPersonDialogComponent;
@@ -11,7 +12,12 @@ describe('ContactPersonDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactPersonDialogComponent ]
+      declarations: [ ContactPersonDialogComponent ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} }
+
+      ]
     })
     .compileComponents();
   }));

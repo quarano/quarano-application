@@ -2,11 +2,15 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { SnackbarService } from './snackbar.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 describe('Service: Snackbar', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SnackbarService]
+      providers: [
+        SnackbarService,
+        {provide: MatSnackBar, useValue: {}}
+      ]
     });
   });
 

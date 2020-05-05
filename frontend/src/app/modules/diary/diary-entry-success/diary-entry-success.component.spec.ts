@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { DiaryEntrySuccessComponent } from './diary-entry-success.component';
+import {DiaryEntryListItemDto} from '@models/diary-entry';
 
 describe('DiaryEntrySuccessComponent', () => {
   let component: DiaryEntrySuccessComponent;
@@ -19,6 +20,8 @@ describe('DiaryEntrySuccessComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DiaryEntrySuccessComponent);
     component = fixture.componentInstance;
+    component.entry = { contacts: [], symptoms: [], _links: { edit: {} }} as DiaryEntryListItemDto;
+    component.label = '';
     fixture.detectChanges();
   });
 

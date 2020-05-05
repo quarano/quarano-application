@@ -24,6 +24,7 @@ import quarano.reference.SymptomRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,6 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 	private final DiaryEntryRepository entries;
 	private final ContactPersonRepository contacts;
 	private final SymptomRepository symptoms;
-
 
 	/*
 	 * (non-Javadoc)
@@ -110,8 +110,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry3.setSymptoms(symptomsE3);
 
 		entries.save(entry3);
-		
-		
+
 		// ==================== SIGGI ==================
 		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
 
@@ -159,8 +158,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE3.add(cough);
 		entry3Siggi.setSymptoms(symptomsS3);
 
-		entries.save(entry3Siggi);		
-		
+		entries.save(entry3Siggi);
 
 		// ==================== GUSTAV ==================
 		List<ContactPerson> contactsOfPerson4 = new ArrayList<>();
@@ -229,7 +227,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 
 		entries.save(entry1N);
 
-		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), gustav) //
+		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), nadine) //
 				.setContacts(contactsOfPerson5.subList(0, 0)) //
 				.setBodyTemperature(BodyTemperature.of(35.8f));
 

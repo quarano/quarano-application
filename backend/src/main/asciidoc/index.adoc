@@ -9,6 +9,9 @@ plantuml::{moduliths-docs}/components.uml[,,svg,title="Quarano component overvie
 === Core
 include::{moduliths-docs}/module-core.adoc[]
 
+=== Accounts
+include::{moduliths-docs}/module-auth.adoc[]
+
 === Tracking
 include::{moduliths-docs}/module-tracking.adoc[]
 
@@ -18,8 +21,8 @@ include::{moduliths-docs}/module-department.adoc[]
 === Actions
 include::{moduliths-docs}/module-actions.adoc[]
 
-=== Authentication
-include::{moduliths-docs}/module-auth.adoc[]
+=== Security
+include::{moduliths-docs}/module-security.adoc[]
 
 === Reference
 include::{moduliths-docs}/module-reference.adoc[]

@@ -10,7 +10,7 @@
         Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um ihre
         Symptome online zu melden, können Sie sich hier registrieren.
       </p>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-client-code">
         <mat-label>Anmeldecode</mat-label>
         <input
           matInput
@@ -24,7 +24,7 @@
           Der angegebene Code ist ungültig.
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-email">
         <mat-label>E-Mailadresse</mat-label>
         <input
           matInput
@@ -36,7 +36,7 @@
           Sie müssen eine richtige E-Mailadresse angeben.
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-username">
         <mat-label>Benutzername</mat-label>
         <input
           matInput
@@ -51,7 +51,7 @@
           Der angegebene Benutzername kann nicht verwendet werden.
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password">
         <mat-label>Passwort</mat-label>
         <input
           matInput
@@ -84,11 +84,11 @@
           Das Passwort muss mindestens eines der folgenden Sonderzeichen
           beinhalten: @ # $ % ^ & * ( ) , . ? : | < >
         </mat-error>
+        <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
+          Das Passwort darf nicht den Benutzernamen beinhalten.
+        </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
-        Das Passwort darf nicht den Benutzernamen beinhalten.
-      </mat-error>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password-confirm">
         <mat-label>Passwort bestätigen</mat-label>
         <input
           matInput
@@ -106,7 +106,7 @@
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>
       </div>
-      <mat-form-field class="form__input--full-width" appearance="outline">
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">
         <mat-label>Geburtsdatum</mat-label>
         <input
           matInput
@@ -121,7 +121,7 @@
         >
       </mat-form-field>
       <div class="data-protection-wrapper">
-        <mat-checkbox formControlName="dataProtectionConfirmed"
+        <mat-checkbox formControlName="dataProtectionConfirmed" data-cy="input-privacy-policy"
           >Hiermit akzeptiere ich die
           <button
             type="button"
@@ -149,6 +149,7 @@
         mat-raised-button
         color="primary"
         type="submit"
+        data-cy="registration-submit-button"
         [disabled]="registrationForm.invalid"
       >
         Registrieren

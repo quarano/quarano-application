@@ -6,8 +6,9 @@ describe('TokenService', () => {
   let service: TokenService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(TokenService);
+    const snackbarService = jasmine.createSpyObj(['success', 'warning', 'message']);
+    const router = jasmine.createSpyObj(['navigate']);
+    service = new TokenService(snackbarService, router);
   });
 
   it('should be created', () => {

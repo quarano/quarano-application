@@ -4,6 +4,12 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ContactPersonFormComponent } from './contact-person-form.component';
+import {FormBuilder} from '@angular/forms';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
+import {ContactPerson} from '../../../../../../coronareportfrontend/src/app/models/generated/generated-dto';
+import {ContactPersonDto} from '@models/contact-person';
+import {of} from 'rxjs';
 
 describe('ContactPersonFormComponent', () => {
   let component: ContactPersonFormComponent;
@@ -11,7 +17,12 @@ describe('ContactPersonFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactPersonFormComponent ]
+      declarations: [ ContactPersonFormComponent ],
+      providers: [
+        FormBuilder,
+        {provide: ApiService, useValue: jasmine.createSpyObj(['modifyContactPerson'])},
+        {provide: SnackbarService, useValue: jasmine.createSpyObj(['warning', 'success'])}
+      ]
     })
     .compileComponents();
   }));
@@ -19,6 +30,7 @@ describe('ContactPersonFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactPersonFormComponent);
     component = fixture.componentInstance;
+    component.contactPerson = {} as ContactPersonDto;
     fixture.detectChanges();
   });
 

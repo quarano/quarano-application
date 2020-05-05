@@ -15,6 +15,8 @@
  */
 package quarano.tracking.web;
 
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.Address.HouseNumber;
@@ -23,8 +25,6 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.ContactWays;
 import quarano.tracking.DiaryEntry;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;

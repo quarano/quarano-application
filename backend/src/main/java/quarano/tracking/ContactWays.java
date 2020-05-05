@@ -17,6 +17,8 @@ package quarano.tracking;
 
 import lombok.Builder;
 import lombok.Getter;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 
 import org.springframework.util.StringUtils;
 

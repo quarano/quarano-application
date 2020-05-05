@@ -24,8 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import quarano.account.Department;
+import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
-import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
@@ -77,7 +78,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private List<Comment> comments = new ArrayList<>();
 
 	private @Getter @Setter boolean infected;
-	private @Getter boolean concluded;
+
+	private @Getter Status status;
 
 	@SuppressWarnings("unused")
 	private TrackedCase() {
@@ -101,7 +103,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.type = type;
 		this.department = department;
 		this.infected = false;
-		this.concluded = false;
+		this.status = Status.OPEN;
 
 		this.registerEvent(TrackedCaseUpdated.of(this));
 
@@ -127,7 +129,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	public boolean isEligibleForTracking() {
-		return trackedPerson.isEligibleForTracking();
+		return status.equals(Status.OPEN) && trackedPerson.isEligibleForTracking();
 	}
 
 	public boolean isIndexCase() {
@@ -161,7 +163,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public TrackedCase conclude() {
 
-		this.concluded = true;
+		this.status = Status.CONCLUDED;
 		registerEvent(CaseConcluded.of(id));
 
 		return this;
@@ -211,6 +213,25 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this.department.hasId(id);
 	}
 
+	public boolean isConcluded() {
+		return status.equals(Status.CONCLUDED);
+	}
+
+	public static enum Status {
+
+		OPEN,
+
+		IN_REGISTRATION,
+
+		REGISTERED,
+
+		ENROLLING,
+
+		TRACKING,
+
+		CONCLUDED;
+	}
+
 	@Value(staticConstructor = "of")
 	public static class CaseConcluded {
 		TrackedCaseIdentifier caseIdentifier;
@@ -237,5 +258,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		public String toString() {
 			return id.toString();
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	TrackedCase markInRegistration() {
+
+		this.status = Status.IN_REGISTRATION;
+
+		return this;
 	}
 }

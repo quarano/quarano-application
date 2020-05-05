@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClientComponent } from './client.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
 
 describe('ClientComponent', () => {
   let component: ClientComponent;
@@ -8,7 +11,12 @@ describe('ClientComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClientComponent ]
+      imports: [RouterTestingModule],
+      declarations: [ ClientComponent ],
+      providers: [
+        {provide: ApiService, useValue: jasmine.createSpyObj([''])},
+        {provide: SnackbarService, useValue: jasmine.createSpyObj([''])},
+      ]
     })
     .compileComponents();
   }));

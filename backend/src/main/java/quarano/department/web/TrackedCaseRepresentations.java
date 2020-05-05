@@ -20,24 +20,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import quarano.account.Account;
+import quarano.account.Department;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.core.web.MapperWrapper;
-import quarano.department.AccountInfo;
 import quarano.department.CaseType;
 import quarano.department.Comment;
-import quarano.department.Department;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
-import quarano.tracking.EmailAddress;
-import quarano.tracking.PhoneNumber;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -48,6 +52,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.server.core.Relation;
@@ -55,6 +60,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
+import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
@@ -117,7 +123,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return source.applyTo(mapper.map(source, existing));
 	}
 
-	Comment from(CommentInput payload, AccountInfo account) {
+	Comment from(CommentInput payload, Account account) {
 		return new Comment(payload.getComment(), account.getFullName());
 	}
 
@@ -136,9 +142,9 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		private @NotEmpty @Alphabetic String lastName;
 		private @NotEmpty @Alphabetic String firstName;
-		private @NotNull LocalDate testDate;
-		private @NotNull LocalDate quarantineStartDate;
-		private @NotNull LocalDate quarantineEndDate;
+		private @NotNull(groups = ValidationGroups.Index.class) LocalDate testDate;
+		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineStartDate;
+		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineEndDate;
 
 		private @Pattern(regexp = Strings.STREET) String street;
 		private @AlphaNumeric String houseNumber;
@@ -204,5 +210,24 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	@Data
 	static class CommentInput {
 		@Textual String comment;
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Validated({ Default.class, ValidationGroups.Index.class })
+	static @interface ValidatedIndexCase {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Validated
+	static @interface ValidatedContactCase {
+	}
+
+	static class ValidationGroups {
+
+		interface Index {}
+
+		interface Contact {}
 	}
 }

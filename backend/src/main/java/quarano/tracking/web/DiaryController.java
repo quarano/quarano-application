@@ -19,8 +19,8 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.web.LoggedIn;
 import quarano.core.web.ErrorsDto;
+import quarano.core.web.LoggedIn;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.DiaryEntryRepository;

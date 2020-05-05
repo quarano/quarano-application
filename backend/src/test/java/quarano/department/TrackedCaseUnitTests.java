@@ -17,6 +17,7 @@ package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
 
+import quarano.account.Department;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;

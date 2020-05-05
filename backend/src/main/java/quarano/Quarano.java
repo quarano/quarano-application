@@ -18,6 +18,7 @@ package quarano;
 import quarano.core.EmailTemplates;
 
 import java.util.Map;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,7 +38,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Oliver Drotbohm
  */
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(dateTimeProviderRef = "quaranoDateTimeProvider")
 @ConfigurationPropertiesScan
 public class Quarano {
 

@@ -24,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import quarano.account.Account;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -33,6 +36,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -42,6 +46,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 
 import org.jddd.core.types.Identifier;
@@ -67,7 +72,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
-	private LocalDateTime accountRegisteredAt;
+	private @OneToOne Account account;
 
 	@OneToMany(cascade = CascadeType.ALL) //
 	private List<Encounter> encounters;
@@ -99,7 +104,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	}
 
 	public boolean hasAccount() {
-		return accountRegisteredAt != null;
+		return account != null;
 	}
 
 	public String getFullName() {
@@ -121,14 +126,18 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return this;
 	}
 
-	public TrackedPerson markAccountRegistration(LocalDateTime date) {
-		this.accountRegisteredAt = date;
+	public Optional<Account> getAccount() {
+		return Optional.ofNullable(account);
+	}
+
+	public TrackedPerson markAccountRegistration(Account account, LocalDateTime date) {
+		this.account = account;
 		return this;
 	}
 
 	@Nullable
 	public LocalDate getAccountRegistrationDate() {
-		return accountRegisteredAt == null ? null : accountRegisteredAt.toLocalDate();
+		return account == null ? null : account.getMetadata().getCreated().toLocalDate();
 	}
 
 	public Stream<ContactPerson> getContactPersons() {

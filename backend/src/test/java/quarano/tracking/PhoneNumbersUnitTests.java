@@ -17,6 +17,8 @@ package quarano.tracking;
 
 import static org.assertj.core.api.Assertions.*;
 
+import quarano.core.PhoneNumber;
+
 import java.util.Map;
 import java.util.stream.Stream;
 

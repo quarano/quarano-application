@@ -15,8 +15,8 @@
  */
 package quarano.department;
 
+import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoRepository;
-import quarano.department.Department.DepartmentIdentifier;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -32,7 +32,7 @@ import org.springframework.data.util.Streamable;
 public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, TrackedCaseIdentifier> {
 
 	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier id);
-	
+
 	@Query("select c from TrackedCase c JOIN c.trackedPerson p WHERE c.department.id = :id ORDER BY p.lastName")
 	Streamable<TrackedCase> findByDepartmentIdOrderByLastNameAsc(DepartmentIdentifier id);
 
@@ -40,7 +40,4 @@ public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, Tr
 
 	@Query("select c from TrackedCase c where c.trackedPerson.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
-
-	@Query("select new quarano.department.TrackedCasePerson(c.trackedPerson) from TrackedCase c where c.concluded = true")
-	Streamable<TrackedCasePerson> findPersonsForOpenedCases();
 }

@@ -1,17 +1,21 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { AsideHostDirective } from '@directives/aside-host.directive';
+import { AsideService } from '@services/aside.service';
 import { AsideComponent } from './aside.component';
+
 
 describe('AsideComponent', () => {
   let component: AsideComponent;
   let fixture: ComponentFixture<AsideComponent>;
 
   beforeEach(async(() => {
+
     TestBed.configureTestingModule({
-      declarations: [ AsideComponent ]
+      declarations: [ AsideHostDirective, AsideComponent ],
+      providers: [
+        { provide: AsideService, useValue: new AsideService() }
+      ]
     })
     .compileComponents();
   }));
