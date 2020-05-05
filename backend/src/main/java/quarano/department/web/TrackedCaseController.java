@@ -21,8 +21,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Department;
-import quarano.account.DepartmentRepository;
 import quarano.account.Department.DepartmentIdentifier;
+import quarano.account.DepartmentRepository;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 import quarano.department.EnrollmentCompletion;
@@ -140,7 +140,7 @@ class TrackedCaseController {
 			return ResponseEntity.notFound().build();
 		}
 
-		if (existing.getEnrollment().isComplete()) {
+		if (existing.isEnrollmentCompleted()) {
 			errors = representations.validateAfterEnrollment(payload, errors);
 		}
 

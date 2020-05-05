@@ -19,8 +19,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.CaseUpdated;
 import quarano.department.TrackedCase.Status;
-import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ public class TrackedCaseEventListener {
 	private final @NonNull ActionItemRepository items;
 
 	@EventListener
-	void on(TrackedCaseUpdated event) {
+	void on(CaseUpdated event) {
 		if (event.getTrackedCase().isIndexCase()) {
 
 			handleIndexCaseEvent(event);
@@ -51,7 +51,7 @@ public class TrackedCaseEventListener {
 		}
 	}
 
-	private void handleIndexCaseEvent(TrackedCaseUpdated event) {
+	private void handleIndexCaseEvent(CaseUpdated event) {
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
@@ -75,14 +75,15 @@ public class TrackedCaseEventListener {
 		}
 	}
 
-	private void handleContactCaseEvent(TrackedCaseUpdated event) {
+	private void handleContactCaseEvent(CaseUpdated event) {
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
 		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
 	}
 
-	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person, DescriptionCode descriptionCode) {
+	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person,
+			DescriptionCode descriptionCode) {
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 
@@ -96,8 +97,7 @@ public class TrackedCaseEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
-		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(),
-				descriptionCode);
+		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(), descriptionCode);
 
 		if (!detailsMissing) {
 			resolveItems(actionItems);
@@ -105,8 +105,8 @@ public class TrackedCaseEventListener {
 		}
 
 		if (actionItems.isEmpty()) {
-			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-					descriptionCode));
+			items.save(
+					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
 		}
 	}
 

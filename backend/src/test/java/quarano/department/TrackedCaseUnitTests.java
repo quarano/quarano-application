@@ -16,8 +16,11 @@
 package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import quarano.account.Account;
 import quarano.account.Department;
+import quarano.department.TrackedCase.Status;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
@@ -43,7 +46,7 @@ class TrackedCaseUnitTests {
 
 		assertThatExceptionOfType(EnrollmentException.class)
 				.isThrownBy(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS));
-		assertThat(trackedCase.getEnrollment().isComplete()).isFalse();
+		assertThat(trackedCase.isEnrollmentCompleted()).isFalse();
 	}
 
 	@Test
@@ -54,7 +57,7 @@ class TrackedCaseUnitTests {
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
 				.doesNotThrowAnyException();
-		assertThat(trackedCase.getEnrollment().isComplete()).isTrue();
+		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 	}
 
 	@Test
@@ -68,7 +71,7 @@ class TrackedCaseUnitTests {
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS)) //
 				.doesNotThrowAnyException();
-		assertThat(trackedCase.getEnrollment().isComplete()).isTrue();
+		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 	}
 
 	@Test
@@ -79,7 +82,7 @@ class TrackedCaseUnitTests {
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
 				.doesNotThrowAnyException();
-		assertThat(trackedCase.getEnrollment().isComplete()).isTrue();
+		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 
 		trackedCase.reopenEnrollment();
 
@@ -96,6 +99,16 @@ class TrackedCaseUnitTests {
 
 		assertThatExceptionOfType(EnrollmentException.class) //
 				.isThrownBy(() -> trackedCase.submitQuestionnaire(new CompletedInitialReport()));
+	}
+
+	@Test
+	void initializesCaseWithRegistrationCompletedIfPersonHasAccount() {
+
+		var account = mock(Account.class);
+		var markus = TrackedPersonDataInitializer.createMarkus().markAccountRegistration(account);
+		var department = new Department("Musterstadt", UUID.randomUUID());
+
+		assertThat(new TrackedCase(markus, CaseType.INDEX, department).getStatus()).isEqualTo(Status.REGISTERED);
 	}
 
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {

@@ -1,7 +1,7 @@
 package quarano.actions;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
@@ -11,13 +11,14 @@ import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.department.CaseType;
 import quarano.department.TrackedCase;
-import quarano.department.TrackedCase.TrackedCaseUpdated;
+import quarano.department.TrackedCase.CaseUpdated;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -43,13 +44,15 @@ class TrackedCaseEventListenerTests {
 	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSaveForIndexCases() {
 		return testFactoryForMissingDetails(CaseType.INDEX);
 	}
+
 	@TestFactory
 	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSaveForContactCases() {
 		return testFactoryForMissingDetails(CaseType.CONTACT);
 	}
 
 	private Stream<DynamicTest> testFactoryForMissingDetails(final CaseType caseType) {
-		final var descriptionCode = caseType == CaseType.INDEX ? DescriptionCode.MISSING_DETAILS_INDEX : DescriptionCode.MISSING_DETAILS_CONTACT;
+		final var descriptionCode = caseType == CaseType.INDEX ? DescriptionCode.MISSING_DETAILS_INDEX
+				: DescriptionCode.MISSING_DETAILS_CONTACT;
 
 		return DynamicTest.stream(createTrackedPersons(LocalDate.now()).entrySet().iterator(),
 				(entry) -> String.format("Saves %s action item for %s", descriptionCode, entry.getKey()), (entry) -> {
@@ -57,10 +60,9 @@ class TrackedCaseEventListenerTests {
 					var person = entry.getValue();
 					var personId = person.getId();
 					var trackedCase = trackedCase(person, caseType);
-					when(items.findByDescriptionCode(personId, descriptionCode))
-							.thenReturn(Streamable.empty());
+					when(items.findByDescriptionCode(personId, descriptionCode)).thenReturn(Streamable.empty());
 
-					assertThatCode(() -> listener.on(TrackedCaseUpdated.of(trackedCase))) //
+					assertThatCode(() -> listener.on(CaseUpdated.of(trackedCase))) //
 							.doesNotThrowAnyException();
 
 					var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
@@ -82,7 +84,7 @@ class TrackedCaseEventListenerTests {
 		var person = new TrackedPerson("firstName", "lastName");
 		var personId = person.getId();
 		var trackedCase = trackedCase(person, CaseType.INDEX);
-		var event = TrackedCaseUpdated.of(trackedCase);
+		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
 				.thenReturn(Streamable.of(new TrackedCaseActionItem(null, null, ActionItem.ItemType.PROCESS_INCIDENT,
@@ -93,8 +95,8 @@ class TrackedCaseEventListenerTests {
 		var itemCaptor = ArgumentCaptor.forClass(ActionItem.class);
 		verify(items).save(itemCaptor.capture());
 		assertThat(itemCaptor.getAllValues()).hasSize(1);
-		assertThat(itemCaptor.getValue().getDescription().getCode()).isNotEqualByComparingTo(DescriptionCode.MISSING_DETAILS_INDEX);
-
+		assertThat(itemCaptor.getValue().getDescription().getCode())
+				.isNotEqualByComparingTo(DescriptionCode.MISSING_DETAILS_INDEX);
 
 		reset(items);
 	}
@@ -104,10 +106,11 @@ class TrackedCaseEventListenerTests {
 
 		var person = new TrackedPerson("firstName", "lastName");
 		var trackedCase = spy(trackedCase(person, CaseType.INDEX));
-		var event = TrackedCaseUpdated.of(trackedCase);
+		var event = CaseUpdated.of(trackedCase);
 
 		when(trackedCase.isConcluded()).thenReturn(true);
-		when(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX)).thenReturn(Streamable.empty());
+		when(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
+				.thenReturn(Streamable.empty());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
@@ -123,7 +126,7 @@ class TrackedCaseEventListenerTests {
 		var trackedPerson = createTrackedPersonWithMinimalData();
 
 		var trackedCase = trackedCase(trackedPerson, CaseType.INDEX);
-		var event = TrackedCaseUpdated.of(trackedCase);
+		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
 				.thenReturn(Streamable.empty());
@@ -149,8 +152,8 @@ class TrackedCaseEventListenerTests {
 		var trackedPerson = createTrackedPersonWithMinimalData();
 
 		var trackedCase = trackedCase(trackedPerson, CaseType.INDEX);
-		when(trackedCase.getStatus()).thenReturn(TrackedCase.Status.ENROLLING);
-		var event = TrackedCaseUpdated.of(trackedCase);
+		when(trackedCase.getStatus()).thenReturn(TrackedCase.Status.REGISTERED);
+		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
 				.thenReturn(Streamable.empty());

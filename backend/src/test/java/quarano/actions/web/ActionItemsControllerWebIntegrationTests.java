@@ -17,7 +17,6 @@ package quarano.actions.web;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
@@ -89,7 +88,6 @@ class ActionItemsControllerWebIntegrationTests {
 		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
 				.content(jackson.writeValueAsString(reviewed)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
 
