@@ -34,10 +34,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class ActionItemEventListener {
+public class TrackedCaseEventListener {
 
 	private final @NonNull ActionItemRepository items;
-	private final @NonNull AnomaliesProperties config;
 
 	@EventListener
 	void on(TrackedCaseUpdated event) {
@@ -57,7 +56,7 @@ public class ActionItemEventListener {
 		var person = trackedCase.getTrackedPerson();
 
 		handleTrackedCaseInitialCallOpen(trackedCase, person);
-		handleTrackedCaseMissingDetails(trackedCase, person);
+		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_INDEX);
 	}
 
 	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person) {
@@ -76,12 +75,18 @@ public class ActionItemEventListener {
 		}
 	}
 
-	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person) {
-		// TODO: trackedCase.isConcluded(): einfach alle schließen
+	private void handleContactCaseEvent(TrackedCaseUpdated event) {
+		var trackedCase = event.getTrackedCase();
+		var person = trackedCase.getTrackedPerson();
+
+		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
+	}
+
+	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person, DescriptionCode descriptionCode) {
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 
-			resolveItems(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX));
+			resolveItems(items.findByDescriptionCode(person.getId(), descriptionCode));
 			return;
 		}
 
@@ -92,7 +97,7 @@ public class ActionItemEventListener {
 				|| person.getDateOfBirth() == null;
 
 		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(),
-				DescriptionCode.MISSING_DETAILS_INDEX);
+				descriptionCode);
 
 		if (!detailsMissing) {
 			resolveItems(actionItems);
@@ -101,13 +106,8 @@ public class ActionItemEventListener {
 
 		if (actionItems.isEmpty()) {
 			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-					DescriptionCode.MISSING_DETAILS_INDEX));
+					descriptionCode));
 		}
-	}
-
-	private void handleContactCaseEvent(TrackedCaseUpdated event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void resolveItems(Streamable<? extends ActionItem> actionItems) {

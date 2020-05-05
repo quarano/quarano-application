@@ -1,11 +1,12 @@
 package quarano.actions;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.account.Department;
+import quarano.core.AuditingMetadata;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.department.CaseType;
@@ -14,11 +15,10 @@ import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -27,48 +27,52 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.util.Streamable;
 
-@Disabled
 @QuaranoUnitTest
-class ActionItemEventListenerTests {
+class TrackedCaseEventListenerTests {
 
 	@Mock ActionItemRepository items;
-	@Mock AnomaliesProperties config;
 
-	ActionItemEventListener listener;
+	TrackedCaseEventListener listener;
 
 	@BeforeEach
 	void setup() {
-		listener = new ActionItemEventListener(items, config);
+		listener = new TrackedCaseEventListener(items);
 	}
 
 	@TestFactory
-	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSave() {
+	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSaveForIndexCases() {
+		return testFactoryForMissingDetails(CaseType.INDEX);
+	}
+	@TestFactory
+	Stream<DynamicTest> createNewMissingDetailsActionItemOnFirstSaveForContactCases() {
+		return testFactoryForMissingDetails(CaseType.CONTACT);
+	}
 
-		var now = LocalDate.now();
-		var trackedPersons = createTrackedPersons(now);
+	private Stream<DynamicTest> testFactoryForMissingDetails(final CaseType caseType) {
+		final var descriptionCode = caseType == CaseType.INDEX ? DescriptionCode.MISSING_DETAILS_INDEX : DescriptionCode.MISSING_DETAILS_CONTACT;
 
-		return DynamicTest.stream(trackedPersons.entrySet().iterator(),
-				(entry) -> String.format("Saves MISSING_DETAILS_INDEX action item for %s", entry.getKey()), (entry) -> {
+		return DynamicTest.stream(createTrackedPersons(LocalDate.now()).entrySet().iterator(),
+				(entry) -> String.format("Saves %s action item for %s", descriptionCode, entry.getKey()), (entry) -> {
 
 					var person = entry.getValue();
 					var personId = person.getId();
-					var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("test"));
-					when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
+					var trackedCase = trackedCase(person, caseType);
+					when(items.findByDescriptionCode(personId, descriptionCode))
 							.thenReturn(Streamable.empty());
 
 					assertThatCode(() -> listener.on(TrackedCaseUpdated.of(trackedCase))) //
 							.doesNotThrowAnyException();
 
 					var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
-					verify(items, times(2)).save(actionItemCaptor.capture());
+					verify(items, atLeastOnce()).save(actionItemCaptor.capture());
 
 					var actionItem = actionItemCaptor.getValue();
 
 					assertThat(actionItem.getPersonIdentifier()).isEqualTo(personId);
 					assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
-					assertThat(actionItem.getDescription().getCode()).isEqualTo(DescriptionCode.MISSING_DETAILS_INDEX);
+					assertThat(actionItem.getDescription().getCode()).isEqualTo(descriptionCode);
 
-					Mockito.reset(items, config);
+					Mockito.reset(items);
 				});
 	}
 
@@ -77,10 +81,8 @@ class ActionItemEventListenerTests {
 
 		var person = new TrackedPerson("firstName", "lastName");
 		var personId = person.getId();
-		var trackedCase = spy(new TrackedCase(person, CaseType.INDEX, new Department("test")));
+		var trackedCase = trackedCase(person, CaseType.INDEX);
 		var event = TrackedCaseUpdated.of(trackedCase);
-
-		when(trackedCase.isNew()).thenReturn(false);
 
 		when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
 				.thenReturn(Streamable.of(new TrackedCaseActionItem(null, null, ActionItem.ItemType.PROCESS_INCIDENT,
@@ -88,35 +90,31 @@ class ActionItemEventListenerTests {
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
-		verify(items, times(0)).save(any());
-	}
+		var itemCaptor = ArgumentCaptor.forClass(ActionItem.class);
+		verify(items).save(itemCaptor.capture());
+		assertThat(itemCaptor.getAllValues()).hasSize(1);
+		assertThat(itemCaptor.getValue().getDescription().getCode()).isNotEqualByComparingTo(DescriptionCode.MISSING_DETAILS_INDEX);
 
-	@Test
-	void doesNotCreateNewTrackedCaseActionItemForWrongType() {
 
-		var person = new TrackedPerson("firstName", "lastName");
-		var trackedCase = new TrackedCase(person, CaseType.CONTACT, new Department("test"));
-		var event = TrackedCaseUpdated.of(trackedCase);
-
-		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
-
-		verify(items, times(0)).findByDescriptionCode(any(), any());
-		verify(items, times(0)).save(any());
+		reset(items);
 	}
 
 	@Test
 	void doesNotCreateNewTrackedCaseActionItemForConcludedCase() {
 
 		var person = new TrackedPerson("firstName", "lastName");
-		var trackedCase = spy(new TrackedCase(person, CaseType.INDEX, new Department("test")));
+		var trackedCase = spy(trackedCase(person, CaseType.INDEX));
 		var event = TrackedCaseUpdated.of(trackedCase);
 
 		when(trackedCase.isConcluded()).thenReturn(true);
+		when(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX)).thenReturn(Streamable.empty());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
-		verify(items, times(0)).findByDescriptionCode(any(), any());
+		verify(items, times(1)).findByDescriptionCode(any(), any());
 		verify(items, times(0)).save(any());
+
+		reset(items);
 	}
 
 	@Test
@@ -124,7 +122,7 @@ class ActionItemEventListenerTests {
 
 		var trackedPerson = createTrackedPersonWithMinimalData();
 
-		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("test"));
+		var trackedCase = trackedCase(trackedPerson, CaseType.INDEX);
 		var event = TrackedCaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
@@ -140,18 +138,18 @@ class ActionItemEventListenerTests {
 
 		assertThat(actionItems.stream().findAny()
 				.filter(it -> it.getDescription().getCode() == DescriptionCode.INITIAL_CALL_OPEN_INDEX).isPresent());
-		;
 		assertThat(actionItems.stream()).allMatch(it -> it.getCaseIdentifier().equals(trackedCase.getId()));
 
-		Mockito.reset(items, config);
+		Mockito.reset(items);
 	}
 
 	@Test
-	void createNoInitialCallOpenActionItemIfActivationExists() {
+	void createNoInitialCallOpenActionItemIfStatusIsNotOpen() {
 
 		var trackedPerson = createTrackedPersonWithMinimalData();
 
-		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("test"));
+		var trackedCase = trackedCase(trackedPerson, CaseType.INDEX);
+		when(trackedCase.getStatus()).thenReturn(TrackedCase.Status.ENROLLING);
 		var event = TrackedCaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
@@ -161,15 +159,22 @@ class ActionItemEventListenerTests {
 
 		var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
 		// one for "initial-call-action" and one for "missing-data-action"
-		verify(items, times(1)).save(actionItemCaptor.capture());
+		verify(items).save(actionItemCaptor.capture());
 
 		var actionItem = actionItemCaptor.getValue();
 
 		assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
 		assertThat(actionItem.getDescription().getCode()).isNotEqualTo(DescriptionCode.INITIAL_CALL_OPEN_INDEX);
 
-		Mockito.reset(items, config);
+		Mockito.reset(items);
+	}
 
+	private TrackedCase trackedCase(TrackedPerson person, CaseType caseType) {
+		AuditingMetadata auditingMetadata = mock(AuditingMetadata.class);
+		lenient().when(auditingMetadata.getCreated()).then((invocation) -> LocalDateTime.now());
+		TrackedCase trackedCase = spy(new TrackedCase(person, caseType, new Department("test")));
+		lenient().when(trackedCase.getMetadata()).thenReturn(auditingMetadata);
+		return trackedCase;
 	}
 
 	private TrackedPerson createTrackedPersonWithMinimalData() {
