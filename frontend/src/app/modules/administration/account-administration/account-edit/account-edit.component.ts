@@ -64,13 +64,15 @@ export class AccountEditComponent implements OnInit, OnDestroy {
         ]),
         username: new FormControl(this.account.username, [
           Validators.required,
-          () => this.usernameIsValid || this.isNew ? null : { usernameInvalid: true }
+          () => this.usernameIsValid ? null : { usernameInvalid: true }
         ]),
         email: new FormControl(this.account.email, [
           Validators.required,
           Validators.email]),
         roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)])
-      }
+      }, {
+      validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]
+    }
     );
     this.formGroup.controls.username.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(1000))
@@ -78,7 +80,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   }
 
   get isNew(): boolean {
-    return this.account?.id == null;
+    return this.account?.accountId == null;
   }
 
   public changeUsername(username: string) {
@@ -92,8 +94,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(
-        () => {
-          this.usernameIsValid = true;
+        (result) => {
+          this.usernameIsValid = result;
         },
         () => {
           this.usernameIsValid = false;
@@ -120,6 +122,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           this.snackbarService.success(`Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`);
+          this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
         }
       );
@@ -129,7 +132,9 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     this.apiService.editHealthDepartmentUser(this.account)
       .subscribe(
         () => {
-          this.snackbarService.success(`Die Accountdaten für ${this.account.firstName} ${this.account.lastName} wurden erfolgreich aktualisiert`);
+          this.snackbarService.success(`Die Accountdaten für ${this.account.firstName} ` +
+            `${this.account.lastName} wurden erfolgreich aktualisiert`);
+          this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
         }
       );

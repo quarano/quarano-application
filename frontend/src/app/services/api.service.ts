@@ -174,7 +174,7 @@ export class ApiService {
   }
 
   editHealthDepartmentUser(account: AccountDto) {
-    return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.id}`, account);
+    return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.accountId}`, account);
   }
 
   private mapReportCase(item: any): ReportCaseDto {

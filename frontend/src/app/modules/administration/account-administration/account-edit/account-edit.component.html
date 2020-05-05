@@ -1,7 +1,7 @@
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <mat-card-title>
-      <h1>{{ isNew ? 'User für Mitarbeiter anlegen' : 'Userdaten für Mitarbeiter bearbeiten'}}</h1>
+      <h1>{{ isNew ? 'Mitarbeiter-Account anlegen' : 'Account-Daten für Mitarbeiter bearbeiten'}}</h1>
     </mat-card-title>
     <mat-card-subtitle>
       Pflichtfelder sind mit * markiert
@@ -84,7 +84,7 @@
       <button mat-button mat-raised-button color="primary" type="submit" [disabled]="formGroup.invalid">
         Speichern
       </button>
-      <button type="button" mat-raised-button color="secondary" [routerLink]="['/administration/users']">
+      <button type="button" mat-raised-button color="secondary" [routerLink]="['/administration/accounts']">
         Abbrechen
       </button>
     </mat-card-actions>

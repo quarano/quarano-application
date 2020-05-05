@@ -16,7 +16,7 @@ export class AccountResolver implements Resolve<AccountDto> {
     } else {
       return of(
         {
-          id: null,
+          accountId: null,
           firstName: null,
           lastName: null,
           username: null,

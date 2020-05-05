@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: AccountAdministrationComponent,
-    resolve: { users: AccountsResolver }
+    resolve: { accounts: AccountsResolver }
   },
   {
     path: 'edit/:id',

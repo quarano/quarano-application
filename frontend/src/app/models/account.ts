@@ -1,7 +1,8 @@
 import { Link } from '@models/general';
 import { IIdentifiable } from './general';
 
-export interface AccountDto extends IIdentifiable {
+export interface AccountDto {
+  accountId: string;
   lastName: string;
   firstName: string;
   username: string;
@@ -12,5 +13,5 @@ export interface AccountDto extends IIdentifiable {
 
 export interface AccountLinks {
   delete: Link;
-  details: Link;
+  self: Link;
 }

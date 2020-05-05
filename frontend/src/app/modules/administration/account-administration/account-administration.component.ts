@@ -1,3 +1,4 @@
+import { roles, IRole } from '@models/role';
 import { SnackbarService } from '@services/snackbar.service';
 import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
@@ -17,8 +18,9 @@ import '@utils/array-extensions';
 })
 export class AccountAdministrationComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
-  users: AccountDto[] = [];
+  accounts: AccountDto[] = [];
   loading = false;
+  roles: IRole[] = roles;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +33,7 @@ export class AccountAdministrationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.subs.add(this.route.data.subscribe(
       data => {
-        this.users = data.users;
+        this.accounts = data.accounts;
         this.loading = false;
       },
       () => this.loading = false));
@@ -43,7 +45,11 @@ export class AccountAdministrationComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     this.router.navigate(
-      ['/administration/users/edit', event?.selected[0]?.id]);
+      ['/administration/accounts/edit', event?.selected[0]?.accountId]);
+  }
+
+  getRoleDisplayName(role: string) {
+    return this.roles.find(r => r.name === role).displayName;
   }
 
   deleteUser(event, user: AccountDto) {
@@ -54,7 +60,7 @@ export class AccountAdministrationComponent implements OnInit, OnDestroy {
           this.apiService.delete(user._links)
             .subscribe(_ => {
               this.snackbarService.success(`${user.firstName} ${user.lastName} wurde erfolgreich gelöscht.`);
-              this.users.remove(user);
+              this.accounts.remove(user);
             });
         }
       });
