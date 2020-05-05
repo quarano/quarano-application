@@ -71,7 +71,7 @@
 
       <mat-form-field class="form__input--full-width">
         <mat-label>Rollen</mat-label>
-        <mat-select formControlName="roles" multiple>
+        <mat-select formControlName="roles" multiple required>
           <mat-option *ngFor="let role of roles" [value]="role.name">{{role.displayName}}</mat-option>
         </mat-select>
         <mat-error *ngIf="formGroup.controls.roles.hasError('minLengthArray')">
