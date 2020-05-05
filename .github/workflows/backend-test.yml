@@ -9,6 +9,7 @@ on:
       - stage-on-test
     paths:
       - backend/**
+      - .github/workflows/backend*.yml
 
 jobs:
   build:

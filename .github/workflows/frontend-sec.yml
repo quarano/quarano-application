@@ -9,6 +9,7 @@ on:
       - stage-on-sec
     paths:
       - frontend/**
+      - .github/workflows/frontend*.yml
 
 defaults:
   run:

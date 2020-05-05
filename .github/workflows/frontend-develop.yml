@@ -9,6 +9,7 @@ on:
       - develop
     paths:
       - frontend/**
+      - .github/workflows/frontend*.yml
 
 defaults:
   run:

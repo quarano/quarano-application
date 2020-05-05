@@ -9,6 +9,7 @@ on:
       - stage-on-test
     paths:
       - frontend/**
+      - .github/workflows/frontend*.yml
 
 defaults:
   run:
