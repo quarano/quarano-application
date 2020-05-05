@@ -2,7 +2,6 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 name: Build Backend
-## TODO: deploy to dev, refer to frontend-develop.yml
 
 on:
   push:
@@ -10,6 +9,10 @@ on:
       - develop
     paths:
       - backend/**
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
@@ -24,3 +27,21 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn -B package --file backend/pom.xml
+
+    - name: Set up CF CLI
+      if: success()
+      uses: jvalkeal/setup-cf-cli-action@master
+      with:
+        version: 6.51.0
+    - name: CF Login
+     if: success()
+     run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
+     env:
+       CF_API: ${{ secrets.CF_API }}
+       CF_ORG: ${{ secrets.CF_ORG }}
+       CF_SPACE: ${{ secrets.CF_SPACE }}
+       CF_USERNAME: ${{ secrets.CF_USERNAME }}
+       CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+    - name: Deploy Backend DEV
+     if: success()
+     run: cf push quarano-backend-dev
