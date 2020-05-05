@@ -52,6 +52,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			.of(UUID.fromString("29206992-84f0-4a0e-9267-ed0a2b5b7507"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON6_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("e5e71192-a007-43e6-851a-c53bb0c90d3b"));
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON7_ID_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("c53bb0c9-a007-43e6-851a-e5e711920d3c"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 
@@ -137,13 +139,23 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	}
 
 	/**
-	 * A persona without account created and no invite link generated
+	 * A persona without account created and missing basic data.
 	 *
 	 * @return
 	 */
 	public static TrackedPerson createHarry() {
 		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"),
 				PhoneNumber.of("0621 115545"), null);
+	}
+
+	/**
+	 * A persona without account created but all basic data available.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createHarriette() {
+		return new TrackedPerson(VALID_TRACKED_PERSON7_ID_DEP1, "Harriette", "Hirsch",
+				EmailAddress.of("harriette@hirsch.de"), PhoneNumber.of("0621 115545"), LocalDate.of(1991, 3, 15));
 	}
 
 	/**
@@ -247,6 +259,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createNadine());
 		trackedPeople.save(createSandra());
 		trackedPeople.save(createHarry());
+		trackedPeople.save(createHarriette());
 		trackedPeople.save(createSiggi());
 		trackedPeople.save(createSarah());
 		trackedPeople.save(createSonja());
@@ -256,6 +269,6 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
 
-		log.info("Test data: Generated 14 tracked persons.");
+		log.info("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}
 }

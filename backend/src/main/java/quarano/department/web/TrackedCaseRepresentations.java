@@ -100,7 +100,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 	TrackedCase from(TrackedCase existing, TrackedCaseDto source) {
 
-		mapper.map(mapper.map(source, TrackedPersonDto.class), existing.getTrackedPerson());
+		var personSource = mapper.map(source, TrackedPersonDto.class);
+		mapper.map(personSource, existing.getTrackedPerson());
 
 		return mapper.map(source, existing)
 				.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate())) //

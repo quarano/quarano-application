@@ -1,20 +1,25 @@
 package quarano.tracking;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 
 import java.util.List;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 @QuaranoIntegrationTest
 @RequiredArgsConstructor
 class DiaryEntryRepositoryIntegrationTest {
+
 	private final DiaryEntryRepository diaries;
-	
+
 	@Test
 	void testFindMissingDiaryEntryPersonsForTwoSlots() {
+
 		Slot now = Slot.now();
 		Slot previous = now.previous();
 
@@ -26,6 +31,7 @@ class DiaryEntryRepositoryIntegrationTest {
 
 	@Test
 	void testFindMissingDiaryEntryPersonsForThreeSlots() {
+
 		Slot now = Slot.now();
 		Slot previous = now.previous();
 

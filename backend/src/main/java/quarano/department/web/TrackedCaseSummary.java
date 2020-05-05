@@ -33,7 +33,7 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 	}
 
 	public boolean getEnrollmentCompleted() {
-		return trackedCase.getEnrollment().isComplete();
+		return trackedCase.isEnrollmentCompleted();
 	}
 
 	public String getFirstName() {

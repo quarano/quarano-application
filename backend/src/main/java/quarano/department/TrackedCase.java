@@ -66,7 +66,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
 	private InitialReport initialReport;
 
-	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
+	@Setter(AccessLevel.NONE) //
+	private Enrollment enrollment = new Enrollment();
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 	private @Getter @Setter LocalDate testDate;
@@ -105,10 +106,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.infected = false;
 		this.status = Status.OPEN;
 
-		this.registerEvent(TrackedCaseUpdated.of(this));
+		this.registerEvent(CaseCreated.of(this));
 
 		if (originContact != null) {
 			this.originContacts.add(originContact);
+		}
+
+		if (person.hasAccount()) {
+			markInRegistration();
+			markRegistrationCompleted();
 		}
 	}
 
@@ -164,6 +170,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase conclude() {
 
 		this.status = Status.CONCLUDED;
+
 		registerEvent(CaseConcluded.of(id));
 
 		return this;
@@ -182,7 +189,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public TrackedCase markEdited() {
 
-		registerEvent(TrackedCaseUpdated.of(this));
+		registerEvent(CaseUpdated.of(this));
 
 		return this;
 	}
@@ -193,7 +200,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 			throw new EnrollmentException("No encounters registered so far! Explicit acknowledgement needed!");
 		}
 
+		assertStatus(Status.REGISTERED, "Cannot mark enrollment completion for case %s in status %s!", id, status);
+
 		this.enrollment.markEnrollmentCompleted();
+		this.status = Status.TRACKING;
 
 		return this;
 	}
@@ -201,6 +211,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase reopenEnrollment() {
 
 		this.enrollment.reopenEnrollment();
+		this.status = Status.REGISTERED;
 
 		return this;
 	}
@@ -217,6 +228,38 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return status.equals(Status.CONCLUDED);
 	}
 
+	public boolean isEnrollmentCompleted() {
+		return getEnrollment().isComplete();
+	}
+
+	/**
+	 * @return
+	 */
+	TrackedCase markInRegistration() {
+
+		assertStatus(Status.OPEN, "Cannot start registration for case %s in status %s!", id, status);
+
+		this.status = Status.IN_REGISTRATION;
+
+		return this;
+	}
+
+	TrackedCase markRegistrationCompleted() {
+
+		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
+
+		this.status = Status.REGISTERED;
+
+		return this;
+	}
+
+	private static void assertStatus(Status status, String message, Object... args) {
+
+		if (!status.equals(status)) {
+			throw new IllegalStateException(String.format(message, args));
+		}
+	}
+
 	public static enum Status {
 
 		OPEN,
@@ -225,21 +268,24 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		REGISTERED,
 
-		ENROLLING,
-
 		TRACKING,
 
 		CONCLUDED;
 	}
 
 	@Value(staticConstructor = "of")
-	public static class CaseConcluded {
-		TrackedCaseIdentifier caseIdentifier;
+	public static class CaseCreated implements DomainEvent {
+		TrackedCase trackedCase;
 	}
 
 	@Value(staticConstructor = "of")
-	public static class TrackedCaseUpdated implements DomainEvent {
+	public static class CaseUpdated implements DomainEvent {
 		TrackedCase trackedCase;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class CaseConcluded {
+		TrackedCaseIdentifier caseIdentifier;
 	}
 
 	@Embeddable
@@ -258,15 +304,5 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		public String toString() {
 			return id.toString();
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	TrackedCase markInRegistration() {
-
-		this.status = Status.IN_REGISTRATION;
-
-		return this;
 	}
 }

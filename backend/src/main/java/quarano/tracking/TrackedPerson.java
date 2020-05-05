@@ -33,7 +33,6 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +51,7 @@ import javax.persistence.PostLoad;
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -81,8 +81,8 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);
 	}
 
-	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, EmailAddress emailAddress,
-			PhoneNumber phoneNumber, LocalDate dateOfBirth) {
+	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, @Nullable EmailAddress emailAddress,
+			@Nullable PhoneNumber phoneNumber, @Nullable LocalDate dateOfBirth) {
 
 		this.id = fixedId;
 		this.firstName = firstName;
@@ -130,8 +130,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return Optional.ofNullable(account);
 	}
 
-	public TrackedPerson markAccountRegistration(Account account, LocalDateTime date) {
+	public TrackedPerson markAccountRegistration(Account account) {
+
+		Assert.notNull(account, "Account must not be null!");
+
 		this.account = account;
+
 		return this;
 	}
 

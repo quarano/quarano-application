@@ -52,9 +52,6 @@ public class ActionItemsManagement {
 		}
 
 		items.findByCase(trackedCase) //
-				.getUnresolvedItems() //
-				.map(ActionItem::resolve) //
-				.map(items::save) //
-				.toList();
+				.resolve(items::save);
 	}
 }

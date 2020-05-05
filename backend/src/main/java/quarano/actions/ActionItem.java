@@ -80,7 +80,7 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 		}
 	}
 
-	public ActionItem resolve() {
+	ActionItem resolve() {
 
 		this.resolved = true;
 

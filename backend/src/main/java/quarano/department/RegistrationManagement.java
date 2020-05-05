@@ -12,7 +12,6 @@ import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -24,8 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationManagement {
 
 	private final @NonNull AccountService accounts;
-	private final @NonNull TrackedPersonRepository trackedPeople;
 	private final @NonNull ActivationCodeService activationCodes;
+	private final @NonNull TrackedPersonRepository trackedPeople;
+	private final @NonNull TrackedCaseRepository cases;
 
 	public Try<ActivationCode> initiateRegistration(TrackedCase trackedCase) {
 
@@ -84,8 +84,12 @@ public class RegistrationManagement {
 				details.getFirstname(), details.getLastname(), details.getDepartmentId());
 
 		trackedPeople.findById(details.getTrackedPersonId()) //
-				.map(it -> it.markAccountRegistration(account, LocalDateTime.now())) //
+				.map(it -> it.markAccountRegistration(account)) //
 				.map(trackedPeople::save);
+
+		cases.findByTrackedPerson(details.getTrackedPersonId()) //
+				.map(TrackedCase::markRegistrationCompleted) //
+				.map(cases::save);
 
 		return account;
 	}

@@ -18,6 +18,7 @@ package quarano.actions;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 import org.springframework.data.util.Streamable;
 
@@ -28,6 +29,14 @@ import org.springframework.data.util.Streamable;
 public class ActionItems implements Streamable<ActionItem> {
 
 	private final Streamable<ActionItem> items;
+
+	public static ActionItems empty() {
+		return of(Streamable.empty());
+	}
+
+	public static ActionItems of(ActionItem... items) {
+		return of(Streamable.of(items));
+	}
 
 	public float getPriority() {
 
@@ -66,6 +75,15 @@ public class ActionItems implements Streamable<ActionItem> {
 
 		return items.stream() //
 				.anyMatch(ActionItem::isUnresolved);
+	}
+
+	public ActionItems resolve(Consumer<ActionItem> callback) {
+
+		getUnresolvedItems() //
+				.map(ActionItem::resolve) //
+				.forEach(callback);
+
+		return this;
 	}
 
 	/*

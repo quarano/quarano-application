@@ -19,14 +19,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.CaseUpdated;
 import quarano.department.TrackedCase.Status;
-import quarano.department.TrackedCase.TrackedCaseUpdated;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDateTime;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,54 +38,57 @@ public class TrackedCaseEventListener {
 	private final @NonNull ActionItemRepository items;
 
 	@EventListener
-	void on(TrackedCaseUpdated event) {
+	void on(CaseUpdated event) {
+
 		if (event.getTrackedCase().isIndexCase()) {
-
 			handleIndexCaseEvent(event);
-
 		} else {
-
 			handleContactCaseEvent(event);
-
 		}
 	}
 
-	private void handleIndexCaseEvent(TrackedCaseUpdated event) {
+	private void handleIndexCaseEvent(CaseUpdated event) {
+
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
-		handleTrackedCaseInitialCallOpen(trackedCase, person);
+		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_INDEX);
 		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_INDEX);
 	}
 
-	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person) {
-		if (trackedCase.isConcluded() //
-				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
+	private void handleContactCaseEvent(CaseUpdated event) {
+
+		var trackedCase = event.getTrackedCase();
+		var person = trackedCase.getTrackedPerson();
+
+		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_CONTACT);
+		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
+	}
+
+	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person,
+			DescriptionCode descriptionCode) {
+
+		if (!trackedCase.getStatus().equals(Status.OPEN)) {
+			items.findByDescriptionCode(person.getId(), descriptionCode).map(ActionItem::resolve).forEach(items::save);
 			return;
 		}
 
 		// create "initial call open" action if applicable
 		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
-
-			if (trackedCase.getStatus().equals(Status.OPEN)) {
-				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-						DescriptionCode.INITIAL_CALL_OPEN_INDEX));
-			}
+			items.save(
+					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
 		}
 	}
 
-	private void handleContactCaseEvent(TrackedCaseUpdated event) {
-		var trackedCase = event.getTrackedCase();
-		var person = trackedCase.getTrackedPerson();
+	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person,
+			DescriptionCode descriptionCode) {
 
-		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
-	}
-
-	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person, DescriptionCode descriptionCode) {
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 
-			resolveItems(items.findByDescriptionCode(person.getId(), descriptionCode));
+			items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX) //
+					.resolve(items::save);
+
 			return;
 		}
 
@@ -96,21 +98,16 @@ public class TrackedCaseEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
-		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(),
-				descriptionCode);
+		ActionItems actionItems = items.findByDescriptionCode(person.getId(), descriptionCode);
 
 		if (!detailsMissing) {
-			resolveItems(actionItems);
+			actionItems.resolve(items::save);
 			return;
 		}
 
 		if (actionItems.isEmpty()) {
-			items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-					descriptionCode));
+			items.save(
+					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
 		}
-	}
-
-	private void resolveItems(Streamable<? extends ActionItem> actionItems) {
-		actionItems.map(ActionItem::resolve).forEach(items::save);
 	}
 }
