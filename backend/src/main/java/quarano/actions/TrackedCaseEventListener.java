@@ -39,39 +39,21 @@ public class TrackedCaseEventListener {
 
 	@EventListener
 	void on(CaseUpdated event) {
+
 		if (event.getTrackedCase().isIndexCase()) {
-
 			handleIndexCaseEvent(event);
-
 		} else {
-
 			handleContactCaseEvent(event);
-
 		}
 	}
 
 	private void handleIndexCaseEvent(CaseUpdated event) {
+
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
-		handleTrackedCaseInitialCallOpen(trackedCase, person);
+		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_INDEX);
 		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_INDEX);
-	}
-
-	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person) {
-		if (trackedCase.isConcluded() //
-				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
-			return;
-		}
-
-		// create "initial call open" action if applicable
-		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
-
-			if (trackedCase.getStatus().equals(Status.OPEN)) {
-				items.save(new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT,
-						DescriptionCode.INITIAL_CALL_OPEN_INDEX));
-			}
-		}
 	}
 
 	private void handleContactCaseEvent(CaseUpdated event) {
@@ -79,7 +61,23 @@ public class TrackedCaseEventListener {
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
+		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_CONTACT);
 		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
+	}
+
+	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person,
+			DescriptionCode descriptionCode) {
+
+		if (!trackedCase.getStatus().equals(Status.OPEN)) {
+			items.findByDescriptionCode(person.getId(), descriptionCode).map(ActionItem::resolve).forEach(items::save);
+			return;
+		}
+
+		// create "initial call open" action if applicable
+		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
+			items.save(
+					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
+		}
 	}
 
 	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person,

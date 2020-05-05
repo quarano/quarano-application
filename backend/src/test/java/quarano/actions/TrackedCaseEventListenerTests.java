@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 @QuaranoUnitTest
 class TrackedCaseEventListenerTests {
@@ -37,6 +37,11 @@ class TrackedCaseEventListenerTests {
 	@BeforeEach
 	void setup() {
 		listener = new TrackedCaseEventListener(items);
+	}
+
+	@AfterEach
+	void resetMocks() {
+		reset(items);
 	}
 
 	@TestFactory
@@ -72,8 +77,6 @@ class TrackedCaseEventListenerTests {
 					assertThat(actionItem.getPersonIdentifier()).isEqualTo(personId);
 					assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
 					assertThat(actionItem.getDescription().getCode()).isEqualTo(descriptionCode);
-
-					Mockito.reset(items);
 				});
 	}
 
@@ -92,35 +95,38 @@ class TrackedCaseEventListenerTests {
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
 		var itemCaptor = ArgumentCaptor.forClass(ActionItem.class);
+
 		verify(items).save(itemCaptor.capture());
+
 		assertThat(itemCaptor.getAllValues()).hasSize(1);
 		assertThat(itemCaptor.getValue().getDescription().getCode())
 				.isNotEqualByComparingTo(DescriptionCode.MISSING_DETAILS_INDEX);
-
-		reset(items);
 	}
 
 	@Test
 	void doesNotCreateNewTrackedCaseActionItemForConcludedCase() {
 
 		var person = new TrackedPerson("firstName", "lastName");
-		var trackedCase = spy(trackedCase(person, CaseType.INDEX));
+		var trackedCase = trackedCase(person, CaseType.INDEX);
+		when(trackedCase.getStatus()).thenReturn(TrackedCase.Status.CONCLUDED);
+		when(trackedCase.isConcluded()).thenReturn(true);
+
 		var event = CaseUpdated.of(trackedCase);
 
 		when(trackedCase.isConcluded()).thenReturn(true);
-		when(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(ActionItems.empty());
+
+		Stream.of(DescriptionCode.INITIAL_CALL_OPEN_INDEX, DescriptionCode.MISSING_DETAILS_INDEX) //
+				.forEach(it -> doReturn(ActionItems.empty()).when(items) //
+						.findByDescriptionCode(person.getId(), it));
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
-		verify(items, times(1)).findByDescriptionCode(any(), any());
+		verify(items, times(2)).findByDescriptionCode(any(), any());
 		verify(items, times(0)).save(any());
-
-		reset(items);
 	}
 
 	@Test
-	void createInitialCallOpenActionItem() {
+	void createInitialCallOpenActionItemForIndex() {
 
 		var trackedPerson = createTrackedPersonWithMinimalData();
 
@@ -141,8 +147,30 @@ class TrackedCaseEventListenerTests {
 		assertThat(actionItems.stream().findAny()
 				.filter(it -> it.getDescription().getCode() == DescriptionCode.INITIAL_CALL_OPEN_INDEX).isPresent());
 		assertThat(actionItems.stream()).allMatch(it -> it.getCaseIdentifier().equals(trackedCase.getId()));
+	}
 
-		Mockito.reset(items);
+	@Test
+	void createInitialCallOpenActionItemForContacts() {
+
+		var trackedPerson = createTrackedPersonWithMinimalData();
+
+		var trackedCase = trackedCase(trackedPerson, CaseType.CONTACT);
+		var event = CaseUpdated.of(trackedCase);
+
+		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_CONTACT))
+				.thenReturn(ActionItems.empty());
+
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		var actionItemCaptor = ArgumentCaptor.forClass(TrackedCaseActionItem.class);
+		// one for "initial-call-action" and one for "missing-data-action"
+		verify(items, times(2)).save(actionItemCaptor.capture());
+
+		var actionItems = actionItemCaptor.getAllValues();
+
+		assertThat(actionItems.stream().findAny()
+				.filter(it -> it.getDescription().getCode() == DescriptionCode.INITIAL_CALL_OPEN_CONTACT).isPresent());
+		assertThat(actionItems.stream()).allMatch(it -> it.getCaseIdentifier().equals(trackedCase.getId()));
 	}
 
 	@Test
@@ -154,8 +182,9 @@ class TrackedCaseEventListenerTests {
 		when(trackedCase.getStatus()).thenReturn(TrackedCase.Status.REGISTERED);
 		var event = CaseUpdated.of(trackedCase);
 
-		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(ActionItems.empty());
+		Stream.of(DescriptionCode.INITIAL_CALL_OPEN_INDEX, DescriptionCode.MISSING_DETAILS_INDEX) //
+				.forEach(it -> doReturn(ActionItems.empty()).when(items) //
+						.findByDescriptionCode(trackedPerson.getId(), it));
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
@@ -167,14 +196,12 @@ class TrackedCaseEventListenerTests {
 
 		assertThat(actionItem.getCaseIdentifier()).isEqualTo(trackedCase.getId());
 		assertThat(actionItem.getDescription().getCode()).isNotEqualTo(DescriptionCode.INITIAL_CALL_OPEN_INDEX);
-
-		Mockito.reset(items);
 	}
 
 	private static TrackedPerson createTrackedPersonWithMinimalData() {
-		var person = new TrackedPerson("firstName", "lastName");
-		person.setMobilePhoneNumber(PhoneNumber.of("0125125464565"));
-		return person;
+
+		return new TrackedPerson("firstName", "lastName") //
+				.setMobilePhoneNumber(PhoneNumber.of("0125125464565"));
 	}
 
 	private static Map<String, TrackedPerson> createTrackedPersons(LocalDate now) {
