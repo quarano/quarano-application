@@ -1,7 +1,7 @@
 import { roles, IRole } from '@models/role';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
-import { UserListItemDto } from '@models/user';
+import { AccountDto } from '@models/account';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@services/api.service';
@@ -12,12 +12,12 @@ import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operator
 import { ArrayValidator } from '@validators/array-validator';
 
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss']
+  selector: 'app-account-edit',
+  templateUrl: './account-edit.component.html',
+  styleUrls: ['./account-edit.component.scss']
 })
-export class UserEditComponent implements OnInit, OnDestroy {
-  user: UserListItemDto;
+export class AccountEditComponent implements OnInit, OnDestroy {
+  account: AccountDto;
   private subs = new SubSink();
   formGroup: FormGroup;
   private usernameIsValid = false;
@@ -33,7 +33,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
-      this.user = data.user;
+      this.account = data.account;
     }));
     this.buildForm();
   }
@@ -51,10 +51,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.formGroup = this.formBuilder.group(
       {
         firstName: new FormControl(
-          { value: this.user.firstName, disabled: !this.isNew },
+          this.account.firstName,
           [Validators.required]),
         lastName: new FormControl(
-          { value: this.user.lastName, disabled: !this.isNew },
+          this.account.lastName,
           [Validators.required]),
         password: new FormControl({ value: null, disabled: !this.isNew }, [
           PasswordValidator.secure
@@ -62,12 +62,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
         passwordConfirm: new FormControl({ value: null, disabled: !this.isNew }, [
           Validators.required
         ]),
-        username: new FormControl({ value: this.user.username, disabled: !this.isNew }, [
+        username: new FormControl(this.account.username, [
           Validators.required,
-          Validators.email,
           () => this.usernameIsValid || this.isNew ? null : { usernameInvalid: true }
         ]),
-        roles: new FormControl(this.user.roles, [ArrayValidator.minLengthArray(1)])
+        email: new FormControl(this.account.email, [
+          Validators.required,
+          Validators.email]),
+        roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)])
       }
     );
     this.formGroup.controls.username.valueChanges
@@ -76,7 +78,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   get isNew(): boolean {
-    return this.user?.id == null;
+    return this.account?.id == null;
   }
 
   public changeUsername(username: string) {
@@ -104,31 +106,31 @@ export class UserEditComponent implements OnInit, OnDestroy {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
-    Object.assign(this.user, this.formGroup.value);
+    Object.assign(this.account, this.formGroup.value);
 
     if (this.isNew) {
-      this.createUser();
+      this.createAccount();
     } else {
-      this.editUser();
+      this.editAccount();
     }
   }
 
-  private createUser() {
-    this.apiService.createHealthDepartmentUser(this.user)
+  private createAccount() {
+    this.apiService.createHealthDepartmentUser(this.account)
       .subscribe(
         () => {
-          this.snackbarService.success(`Der User ${this.user.firstName} ${this.user.lastName} wurde erfolgreich angelegt`);
-          this.router.navigate(['/administration/users']);
+          this.snackbarService.success(`Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`);
+          this.router.navigate(['/administration/accounts']);
         }
       );
   }
 
-  private editUser() {
-    this.apiService.editHealthDepartmentUser(this.user)
+  private editAccount() {
+    this.apiService.editHealthDepartmentUser(this.account)
       .subscribe(
         () => {
-          this.snackbarService.success(`Die Userdaten für ${this.user.firstName} ${this.user.lastName} wurden erfolgreich aktualisiert`);
-          this.router.navigate(['/administration/users']);
+          this.snackbarService.success(`Die Accountdaten für ${this.account.firstName} ${this.account.lastName} wurden erfolgreich aktualisiert`);
+          this.router.navigate(['/administration/accounts']);
         }
       );
   }

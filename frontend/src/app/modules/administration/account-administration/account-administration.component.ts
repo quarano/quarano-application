@@ -3,7 +3,7 @@ import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserListItemDto } from '@models/user';
+import { AccountDto } from '@models/account';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
@@ -11,13 +11,13 @@ import { map } from 'rxjs/operators';
 import '@utils/array-extensions';
 
 @Component({
-  selector: 'app-user-administration',
-  templateUrl: './user-administration.component.html',
-  styleUrls: ['./user-administration.component.scss']
+  selector: 'app-account-administration',
+  templateUrl: './account-administration.component.html',
+  styleUrls: ['./account-administration.component.scss']
 })
-export class UserAdministrationComponent implements OnInit, OnDestroy {
+export class AccountAdministrationComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
-  users: UserListItemDto[] = [];
+  users: AccountDto[] = [];
   loading = false;
 
   constructor(
@@ -46,7 +46,7 @@ export class UserAdministrationComponent implements OnInit, OnDestroy {
       ['/administration/users/edit', event?.selected[0]?.id]);
   }
 
-  deleteUser(event, user: UserListItemDto) {
+  deleteUser(event, user: AccountDto) {
     event.stopPropagation();
     this.confirmDeletion(user)
       .subscribe(result => {
@@ -60,7 +60,7 @@ export class UserAdministrationComponent implements OnInit, OnDestroy {
       });
   }
 
-  confirmDeletion(user: UserListItemDto): Observable<boolean> {
+  confirmDeletion(user: AccountDto): Observable<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Löschen?',

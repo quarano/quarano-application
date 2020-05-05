@@ -8,11 +8,11 @@ const routes: Routes = [
     path: '',
     canActivate: [IsAuthenticatedGuard, IsAdminGuard],
     canActivateChild: [IsAuthenticatedGuard, IsAdminGuard],
-    redirectTo: 'users'
+    redirectTo: 'accounts'
   },
   {
-    path: 'users', loadChildren: () =>
-      import('./user-administration/user-administration.module').then(m => m.UserAdministrationModule)
+    path: 'accounts', loadChildren: () =>
+      import('./account-administration/account-administration.module').then(m => m.AccountAdministrationModule)
   },
 
 ];

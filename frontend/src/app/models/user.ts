@@ -9,11 +9,3 @@ export interface UserDto {
   firstName: string;
   lastName: string;
 }
-
-export interface UserListItemDto extends IIdentifiable {
-  lastName: string;
-  firstName: string;
-  username: string;
-  roles: string[];
-  _links: DeleteLink;
-}

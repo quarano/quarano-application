@@ -1,13 +1,12 @@
-import { DeleteLink } from './../models/general';
-import { roleNames } from '@models/role';
+import { DeleteLink } from '@models/general';
 import { Link } from '@models/general';
-import { UserDto, UserListItemDto } from '@models/user';
+import { UserDto } from '@models/user';
 import { environment } from '@environment/environment';
 import { SymptomDto } from '@models/symptom';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, share, filter, find } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
@@ -16,6 +15,7 @@ import { ActionListItemDto } from '@models/action';
 import { CaseDetailDto } from '@models/case-detail';
 import { CaseActionDto } from '@models/case-action';
 import { HalResponse } from '@models/hal-response';
+import { AccountDto } from '@models/account';
 
 @Injectable({
   providedIn: 'root'
@@ -155,67 +155,26 @@ export class ApiService {
       .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
   }
 
-  getHealthDepartmentUsers(): Observable<UserListItemDto[]> {
-    // ToDo: Anpassen, sobald Endpunkt vorliegt
-    return of(
-      this.testUsers
-    );
+  getHealthDepartmentUsers(): Observable<AccountDto[]> {
+    return this.httpClient.get<AccountDto[]>(`${this.baseUrl}/api/hd/accounts`)
+      .pipe(share());
   }
 
-  private get testUsers(): UserListItemDto[] {
-    return [
-      {
-        id: '1',
-        username: 'p.meier@ga-mannheim.de',
-        lastName: 'Meier',
-        firstName: 'Petra',
-        roles: [roleNames.healthDepartmentAdmin],
-        _links: { delete: { href: '#' } }
-      },
-      {
-        id: '2',
-        username: 'n.henninger@ga-mannheim.de',
-        lastName: 'Henninger',
-        firstName: 'Nadine',
-        roles: [roleNames.healthDepartmentCaseAgent],
-        _links: { delete: { href: '#' } }
-      },
-      {
-        id: '3',
-        username: 'h.krause@ga-mannheim.de',
-        lastName: 'Krause',
-        firstName: 'Hans-Jürgen',
-        roles: [roleNames.healthDepartmentAdmin, roleNames.healthDepartmentCaseAgent],
-        _links: { delete: { href: '#' } }
-      },
-      {
-        id: '4',
-        username: 'nirfreak',
-        lastName: 'Neitzel',
-        firstName: 'Uwe',
-        roles: [roleNames.healthDepartmentCaseAgent, roleNames.user],
-        _links: { delete: { href: '#' } }
-      }
-    ];
-  }
-
-  getHealthDepartmentUser(id: string): Observable<UserListItemDto> {
-    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
-    return of(this.testUsers.find(u => u.id === id));
+  getHealthDepartmentUser(id: string): Observable<AccountDto> {
+    return this.httpClient.get<AccountDto>(`${this.baseUrl}/api/hd/accounts/${id}`)
+      .pipe(share());
   }
 
   delete(deleteLink: DeleteLink) {
     return this.httpClient.delete(deleteLink.delete.href);
   }
 
-  createHealthDepartmentUser(userToCreate: UserListItemDto): Observable<UserListItemDto> {
-    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
-    return of(userToCreate);
+  createHealthDepartmentUser(account: AccountDto): Observable<AccountDto> {
+    return this.httpClient.post<AccountDto>(`${this.baseUrl}/api/hd/accounts`, account);
   }
 
-  editHealthDepartmentUser(userToEdit: UserListItemDto) {
-    // ToDo: Anpassen, sobald Api Endpunkt vorliegt
-    return of(userToEdit);
+  editHealthDepartmentUser(account: AccountDto) {
+    return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.id}`, account);
   }
 
   private mapReportCase(item: any): ReportCaseDto {

@@ -20,8 +20,13 @@
         <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
       </mat-form-field>
 
+      <mat-form-field class="full-width">
+        <input matInput required placeholder="E-Mail" formControlName="email" type="email" />
+        <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+      </mat-form-field>
+
       <mat-form-field class="form__input--full-width">
-        <mat-label>E-Mail Adresse</mat-label>
+        <mat-label>Username</mat-label>
         <input required matInput formControlName="username" placeholder="E-Mail Adresse" id="username" />
         <mat-error *ngIf="formGroup.controls.username.hasError('usernameInvalid')">
           Der angegebene Benutzername kann nicht verwendet werden.
