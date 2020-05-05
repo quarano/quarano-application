@@ -13,6 +13,7 @@
     "build-sec": "ng build --configuration=sec",
     "build-autotest": "ng build --configuration=autotest",
     "test": "ng test",
+    "ci-test": "ng test -- --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "cy:open": "cypress open",

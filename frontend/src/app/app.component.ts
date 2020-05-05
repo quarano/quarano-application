@@ -11,7 +11,7 @@ import { delay } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   public progressBarActive = false;
 
-  constructor(private progressBarService: ProgressBarService, private userService: UserService) {
+  constructor(private progressBarService: ProgressBarService) {
   }
 
   ngOnInit(): void {

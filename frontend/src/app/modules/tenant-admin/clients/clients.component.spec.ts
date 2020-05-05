@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ClientsComponent } from './clients.component';
+import {ClientsComponent} from './clients.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ActivatedRoute} from '@angular/router';
+import {of} from 'rxjs';
 
 describe('ClientsComponent', () => {
   let component: ClientsComponent;
@@ -8,9 +11,13 @@ describe('ClientsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClientsComponent ]
+      imports: [RouterTestingModule],
+      declarations: [ClientsComponent],
+      providers: [
+        {provide: ActivatedRoute, useValue: { data: of({ cases: [] })}}
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

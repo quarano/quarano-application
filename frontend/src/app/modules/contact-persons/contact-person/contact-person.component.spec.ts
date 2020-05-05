@@ -4,13 +4,15 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ContactPersonComponent } from './contact-person.component';
+import {RouterTestingModule} from '@angular/router/testing';
 
-describe('ContactEntryComponent', () => {
+describe('ContactPersonComponent', () => {
   let component: ContactPersonComponent;
   let fixture: ComponentFixture<ContactPersonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [ContactPersonComponent]
     })
       .compileComponents();

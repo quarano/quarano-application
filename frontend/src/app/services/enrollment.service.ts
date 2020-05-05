@@ -8,6 +8,7 @@ import { ClientDto } from '@models/client';
 import { share, map, switchMap } from 'rxjs/operators';
 import { EnrollmentStatusDto } from '@models/enrollment-status';
 import { EncounterDto, EncounterCreateDto } from '@models/encounter';
+import '@utils/date-extensions';
 
 @Injectable({
   providedIn: 'root'

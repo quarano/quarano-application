@@ -4,6 +4,8 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '@services/api.service';
 
 describe('ForgottenContactBannerComponent', () => {
   let component: ForgottenContactBannerComponent;
@@ -11,7 +13,11 @@ describe('ForgottenContactBannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForgottenContactBannerComponent ]
+      declarations: [ ForgottenContactBannerComponent ],
+      providers: [
+        {provide: MatDialog, useValue: {}},
+        {provide: ApiService, useValue: jasmine.createSpyObj(['getContactPersons'])}
+      ]
     })
     .compileComponents();
   }));
