@@ -34,14 +34,14 @@ jobs:
       with:
         version: 6.51.0
     - name: CF Login
-     if: success()
-     run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
-     env:
-       CF_API: ${{ secrets.CF_API }}
-       CF_ORG: ${{ secrets.CF_ORG }}
-       CF_SPACE: ${{ secrets.CF_SPACE }}
-       CF_USERNAME: ${{ secrets.CF_USERNAME }}
-       CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      if: success()
+      run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
+      env:
+        CF_API: ${{ secrets.CF_API }}
+        CF_ORG: ${{ secrets.CF_ORG }}
+        CF_SPACE: ${{ secrets.CF_SPACE }}
+        CF_USERNAME: ${{ secrets.CF_USERNAME }}
+        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
     - name: Deploy Backend DEV
-     if: success()
-     run: cf push quarano-backend-dev
+      if: success()
+      run: cf push quarano-backend-dev
