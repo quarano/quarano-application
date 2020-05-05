@@ -37,14 +37,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
@@ -118,6 +116,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		}
 	}
 
+	private static void assertStatus(Status status, String message, Object... args) {
+
+		if (!status.equals(status)) {
+			throw new IllegalStateException(String.format(message, args));
+		}
+	}
+
 	public TrackedCase addComment(Comment comment) {
 
 		Assert.notNull(comment, "Comment must not be null!");
@@ -152,6 +157,18 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public boolean isInQuarantine() {
 		return quarantine != null;
+	}
+
+	public boolean isInitialCallNeeded() {
+		return status.equals(Status.OPEN) && trackedPerson.getDateOfBirth() != null
+				&& trackedPerson.getEmailAddress() != null
+				&& (trackedPerson.getPhoneNumber() != null || trackedPerson.getMobilePhoneNumber() != null);
+	}
+
+	public boolean isInvestigationNeeded() {
+		return !isConcluded() && ((trackedPerson.getPhoneNumber() == null && trackedPerson.getMobilePhoneNumber() == null)
+				|| trackedPerson.getEmailAddress() == null //
+				|| trackedPerson.getDateOfBirth() == null);
 	}
 
 	public InitialReport getOrCreateInitialReport() {
@@ -251,13 +268,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.status = Status.REGISTERED;
 
 		return this;
-	}
-
-	private static void assertStatus(Status status, String message, Object... args) {
-
-		if (!status.equals(status)) {
-			throw new IllegalStateException(String.format(message, args));
-		}
 	}
 
 	public static enum Status {

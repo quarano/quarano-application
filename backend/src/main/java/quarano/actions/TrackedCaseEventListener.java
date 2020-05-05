@@ -17,13 +17,9 @@ package quarano.actions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.actions.ActionItem.ItemType;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCase.CaseUpdated;
-import quarano.department.TrackedCase.Status;
-import quarano.tracking.TrackedPerson;
-
-import java.time.LocalDateTime;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -35,79 +31,21 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TrackedCaseEventListener {
 
-	private final @NonNull ActionItemRepository items;
+	private final @NonNull InitialCallHandler initialCallHandler;
+	private final @NonNull MissingDetailsHandler missingDetailsHandler;
 
 	@EventListener
-	void on(CaseUpdated event) {
-
-		if (event.getTrackedCase().isIndexCase()) {
-			handleIndexCaseEvent(event);
-		} else {
-			handleContactCaseEvent(event);
-		}
+	public void on(CaseCreated event) {
+		handleCreatedOrUpdatedCase(event.getTrackedCase());
 	}
 
-	private void handleIndexCaseEvent(CaseUpdated event) {
-
-		var trackedCase = event.getTrackedCase();
-		var person = trackedCase.getTrackedPerson();
-
-		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_INDEX);
-		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_INDEX);
+	@EventListener
+	public void on(CaseUpdated event) {
+		handleCreatedOrUpdatedCase(event.getTrackedCase());
 	}
 
-	private void handleContactCaseEvent(CaseUpdated event) {
-
-		var trackedCase = event.getTrackedCase();
-		var person = trackedCase.getTrackedPerson();
-
-		handleTrackedCaseInitialCallOpen(trackedCase, person, DescriptionCode.INITIAL_CALL_OPEN_CONTACT);
-		handleTrackedCaseMissingDetails(trackedCase, person, DescriptionCode.MISSING_DETAILS_CONTACT);
-	}
-
-	private void handleTrackedCaseInitialCallOpen(TrackedCase trackedCase, TrackedPerson person,
-			DescriptionCode descriptionCode) {
-
-		if (!trackedCase.getStatus().equals(Status.OPEN)) {
-			items.findByDescriptionCode(person.getId(), descriptionCode).map(ActionItem::resolve).forEach(items::save);
-			return;
-		}
-
-		// create "initial call open" action if applicable
-		if (trackedCase.getMetadata().getCreated().isAfter(LocalDateTime.now().minusSeconds(5))) {
-			items.save(
-					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
-		}
-	}
-
-	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person,
-			DescriptionCode descriptionCode) {
-
-		if (trackedCase.isConcluded() //
-				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
-
-			items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX) //
-					.resolve(items::save);
-
-			return;
-		}
-
-		// create "missing-detail-action" if data is not complete
-		var detailsMissing = person.getPhoneNumber() == null //
-				&& person.getMobilePhoneNumber() == null //
-				|| person.getEmailAddress() == null //
-				|| person.getDateOfBirth() == null;
-
-		ActionItems actionItems = items.findByDescriptionCode(person.getId(), descriptionCode);
-
-		if (!detailsMissing) {
-			actionItems.resolve(items::save);
-			return;
-		}
-
-		if (actionItems.isEmpty()) {
-			items.save(
-					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
-		}
+	private void handleCreatedOrUpdatedCase(TrackedCase trackedCase) {
+		initialCallHandler.handleInitialCallOpen(trackedCase);
+		missingDetailsHandler.handleTrackedCaseMissingDetails(trackedCase);
 	}
 }

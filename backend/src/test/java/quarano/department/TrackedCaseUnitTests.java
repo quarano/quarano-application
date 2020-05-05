@@ -15,21 +15,27 @@
  */
 package quarano.department;
 
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.Mockito.mock;
 
 import quarano.account.Account;
 import quarano.account.Department;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.department.TrackedCase.Status;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 
-import java.time.LocalDate;
 import java.util.UUID;
-
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Unit tests for {@link TrackedCase}.
@@ -37,6 +43,15 @@ import org.junit.jupiter.api.Test;
  * @author Oliver Drotbohm
  */
 class TrackedCaseUnitTests {
+
+	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
+
+		var department = new Department("Musterstadt", UUID.randomUUID());
+
+		return new TrackedCase(person, CaseType.INDEX, department) //
+				.submitEnrollmentDetails() //
+				.submitQuestionnaire(new CompletedInitialReport());
+	}
 
 	@Test
 	void rejectsEnrollmentCompletionForRequiredEncountersButNoneRegistered() {
@@ -67,7 +82,7 @@ class TrackedCaseUnitTests {
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
 		var contact = new ContactPerson("Michaela", "Mustermann", ContactWays.ofEmailAddress("michaela@mustermann.de"));
-		person.reportContactWith(contact, LocalDate.now());
+		person.reportContactWith(contact, now());
 
 		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS)) //
 				.doesNotThrowAnyException();
@@ -111,12 +126,72 @@ class TrackedCaseUnitTests {
 		assertThat(new TrackedCase(markus, CaseType.INDEX, department).getStatus()).isEqualTo(Status.REGISTERED);
 	}
 
-	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
+	@ParameterizedTest
+	@MethodSource(value = "initialCallSource")
+	void testIsInitialCallNeeded(Status status, TrackedPerson trackedPerson, boolean isNeeded) {
+		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("Musterstadt"))
+				.setStatus(status);
+		assertThat(trackedCase.isInitialCallNeeded()).isEqualTo(isNeeded);
+	}
 
-		var department = new Department("Musterstadt", UUID.randomUUID());
+	private static Stream<Arguments> initialCallSource() {
+		return Stream.of(
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901")), true),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setMobilePhoneNumber(PhoneNumber.of("0123901")), true),
+				arguments(Status.TRACKING, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901")), false),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(null)
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901")), false),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(null)
+						.setPhoneNumber(PhoneNumber.of("0123901")), false),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(null)
+						.setMobilePhoneNumber(null), false)
+		);
+	}
 
-		return new TrackedCase(person, CaseType.INDEX, department) //
-				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
+	@ParameterizedTest
+	@MethodSource(value = "missingDetailsSource")
+	void testIsInvestigationNeeded(Status status, TrackedPerson trackedPerson, boolean isNeeded) {
+		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, new Department("Musterstadt"))
+				.setStatus(status);
+		assertThat(trackedCase.isInvestigationNeeded()).isEqualTo(isNeeded);
+	}
+
+	private static Stream<Arguments> missingDetailsSource() {
+		return Stream.of(
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName"), true),
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
+						.setEmailAddress(EmailAddress.of("test@test.de")) //
+						.setDateOfBirth(now()), true),
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
+						.setPhoneNumber(PhoneNumber.of("0123901")) //
+						.setMobilePhoneNumber(PhoneNumber.of("0123901293")) //
+						.setDateOfBirth(now()), true),
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
+								.setEmailAddress(EmailAddress.of("test@test.de")) //
+								.setPhoneNumber(PhoneNumber.of("0123901")) //
+								.setMobilePhoneNumber(PhoneNumber.of("0123901293")), true),
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
+								.setEmailAddress(EmailAddress.of("test@test.de")) //
+								.setPhoneNumber(PhoneNumber.of("0123901")) //
+								.setMobilePhoneNumber(PhoneNumber.of("0123901293"))
+								.setDateOfBirth(now()), false),
+				arguments(Status.CONCLUDED, new TrackedPerson("firstName", "lastName"), false)
+		);
 	}
 }
