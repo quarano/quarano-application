@@ -2,7 +2,6 @@ package quarano.auth.web;
 
 import quarano.auth.Account;
 import quarano.auth.Role;
-import quarano.auth.RoleType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +23,11 @@ public class StaffAccountMappingConfiguration {
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 
 		mapper.typeMap(Account.class, StaffAccountDto.class).addMappings(it -> {
-
-			it. map( Account::getRoles, StaffAccountDto::setRoles);
+			
+				//it.<List<Role>> map( Account::getRoles,  (target, v) -> target.setRoles(v.stream().collect(Collectors.toList()))
+			;
+			//it.<List<String>> map( Account::getRoles,  (x, y) -> );
+			
 		});
 			
 //			it.<List<Role>> map( Account::getRoles, 
@@ -35,4 +37,5 @@ public class StaffAccountMappingConfiguration {
 //					));
 
 	}
+
 }

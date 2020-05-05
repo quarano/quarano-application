@@ -154,27 +154,10 @@ public class AccountService {
 		return accounts.findById(accountId);
 	}
 
-	public Try<Account> deleteAccount(AccountIdentifier accountIdToDelete, Account deletingAdminAccount) {
-		
-		// check if deleting user belongs to same department and is admin 
-		Try<Account> accountTry = Try.ofSupplier(() -> accounts.findById(accountIdToDelete).get())
-				.andThenTry(it -> accountBelongsToDepartmentOfAdmin(it, deletingAdminAccount))
-				.andThen(it -> deletingAdminAccount.hasAdminRole());
-		
-		return accountTry.onSuccess(it -> accounts.deleteById(accountIdToDelete));
-		
+	public void deleteAccount(AccountIdentifier accountIdToDelete) {
+		accounts.deleteById(accountIdToDelete);
 	}
 
-	private boolean accountBelongsToDepartmentOfAdmin(Account accountToDelete, Account accountOfDeletingUser)
-			throws InvalidAdminAccessException {
-
-		if(accountToDelete.belongsTo(accountOfDeletingUser.getDepartmentId())){
-			return true;
-		}
-		else {
-			throw new InvalidAdminAccessException("Admin-user does not belong to the same department as the acount that should be deleted; admin-user department: " + accountOfDeletingUser.getDepartmentId() + ", target account department: " + accountToDelete.getDepartmentId());
-		}
-	}
 
 	public Account addStaffAccount(Object object) {
 		// TODO Auto-generated method stub

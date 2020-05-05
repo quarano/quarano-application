@@ -1,5 +1,6 @@
 package quarano.auth;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -63,5 +64,9 @@ public class Role {
 		return new Role(type);
 	}
 	
+	public RoleType getRoleType() {
+		return RoleType.valueOf(this.name);
+	}
+
 	
 }

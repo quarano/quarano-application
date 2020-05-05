@@ -84,7 +84,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> implem
 	}
 	
 	public boolean belongsTo(DepartmentIdentifier id) {
-		return this.departmentId == id;
+		return this.departmentId.equals(id);
 	}
 
 	public String getFullName() {
