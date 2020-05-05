@@ -36,10 +36,9 @@ public interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEn
 	Diary findByTrackedPersonId(TrackedPersonIdentifier id);
 
 	@Query("select distinct c.trackedPerson.id from TrackedCase c " + //
-			"	where c.status != quarano.department.TrackedCase$Status.CONCLUDED" + //
+			"	where c.status = quarano.department.TrackedCase$Status.TRACKING" + //
 			"	and c.trackedPerson.id not in (" + //
-			"		select distinct d.trackedPersonId from DiaryEntry d" + //
-			" 		where d.slot in :slots" + //
+			"		select distinct d.trackedPersonId from DiaryEntry d where d.slot in :slots" + //
 			"	)")
 	Streamable<TrackedPersonIdentifier> findMissingDiaryEntryPersons(List<Slot> slots);
 }

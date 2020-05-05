@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class DiaryEventListener {
+
 	private final AnomaliesProperties config;
 	private final ActionItemRepository items;
-
 
 	@EventListener
 	void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
@@ -25,13 +25,13 @@ public class DiaryEventListener {
 		var slot = entry.getSlot();
 
 		// resolve missing entry item
-		items.findDiaryEntryMissingActionItemsFor(person, slot)
-				.map(ActionItem::resolve)
-				.forEach(items::save);
+		items.findDiaryEntryMissingActionItemsFor(person, slot) //
+				.resolve(items::save);
 	}
 
 	@EventListener
 	void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
+
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
 
@@ -44,15 +44,14 @@ public class DiaryEventListener {
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
 		} else {
-			items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
-					.map(ActionItem::resolve)
-					.forEach(items::save);
+			items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE) //
+					.resolve(items::save);
 		}
-
 	}
 
 	@EventListener
 	void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
+
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
 
@@ -67,12 +66,13 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	public void on(DiaryEntryMissing diaryEntryMissing) {
+	void on(DiaryEntryMissing diaryEntryMissing) {
+
 		log.debug("Caught diaryEntryMissing Event {}. Save it as DiaryEntryMissingActionItem", diaryEntryMissing);
 
 		diaryEntryMissing.getMissingSlots().stream()
-			.map(slot -> new DiaryEntryMissingActionItem(diaryEntryMissing.getTrackedPersonIdentifier(), slot))
-			.filter(item -> items.findDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()).isEmpty())
-			.forEach(items::save);
+				.map(slot -> new DiaryEntryMissingActionItem(diaryEntryMissing.getTrackedPersonIdentifier(), slot))
+				.filter(item -> items.findDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()).isEmpty())
+				.forEach(items::save);
 	}
 }

@@ -22,7 +22,6 @@ import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
@@ -37,10 +36,10 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
-	Streamable<ActionItem> findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+	ActionItems findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
 
-	@Query("select i from DiaryEntryMissingActionItem i" +
-			" where i.slot = :slot" +
-			" and i.personIdentifier = :personIdentifier")
-	Streamable<DiaryEntryMissingActionItem> findDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
+	@Query("select i from DiaryEntryMissingActionItem i" //
+			+ " where i.slot = :slot" //
+			+ " and i.personIdentifier = :personIdentifier")
+	ActionItems findDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
 }

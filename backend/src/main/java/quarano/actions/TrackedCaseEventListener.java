@@ -26,7 +26,6 @@ import quarano.tracking.TrackedPerson;
 import java.time.LocalDateTime;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -76,6 +75,7 @@ public class TrackedCaseEventListener {
 	}
 
 	private void handleContactCaseEvent(CaseUpdated event) {
+
 		var trackedCase = event.getTrackedCase();
 		var person = trackedCase.getTrackedPerson();
 
@@ -84,10 +84,13 @@ public class TrackedCaseEventListener {
 
 	private void handleTrackedCaseMissingDetails(TrackedCase trackedCase, TrackedPerson person,
 			DescriptionCode descriptionCode) {
+
 		if (trackedCase.isConcluded() //
 				|| trackedCase.getEnrollment().isCompletedPersonalData()) {
 
-			resolveItems(items.findByDescriptionCode(person.getId(), descriptionCode));
+			items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX) //
+					.resolve(items::save);
+
 			return;
 		}
 
@@ -97,10 +100,10 @@ public class TrackedCaseEventListener {
 				|| person.getEmailAddress() == null //
 				|| person.getDateOfBirth() == null;
 
-		Streamable<ActionItem> actionItems = items.findByDescriptionCode(person.getId(), descriptionCode);
+		ActionItems actionItems = items.findByDescriptionCode(person.getId(), descriptionCode);
 
 		if (!detailsMissing) {
-			resolveItems(actionItems);
+			actionItems.resolve(items::save);
 			return;
 		}
 
@@ -108,9 +111,5 @@ public class TrackedCaseEventListener {
 			items.save(
 					new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
 		}
-	}
-
-	private void resolveItems(Streamable<? extends ActionItem> actionItems) {
-		actionItems.map(ActionItem::resolve).forEach(items::save);
 	}
 }

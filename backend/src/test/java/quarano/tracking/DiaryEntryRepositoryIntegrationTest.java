@@ -14,10 +14,12 @@ import org.junit.jupiter.api.Test;
 @QuaranoIntegrationTest
 @RequiredArgsConstructor
 class DiaryEntryRepositoryIntegrationTest {
+
 	private final DiaryEntryRepository diaries;
 
 	@Test
 	void testFindMissingDiaryEntryPersonsForTwoSlots() {
+
 		Slot now = Slot.now();
 		Slot previous = now.previous();
 
@@ -29,6 +31,7 @@ class DiaryEntryRepositoryIntegrationTest {
 
 	@Test
 	void testFindMissingDiaryEntryPersonsForThreeSlots() {
+
 		Slot now = Slot.now();
 		Slot previous = now.previous();
 

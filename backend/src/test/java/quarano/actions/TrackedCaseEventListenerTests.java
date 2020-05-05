@@ -26,7 +26,6 @@ import org.junit.jupiter.api.TestFactory;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.data.util.Streamable;
 
 @QuaranoUnitTest
 class TrackedCaseEventListenerTests {
@@ -60,7 +59,7 @@ class TrackedCaseEventListenerTests {
 					var person = entry.getValue();
 					var personId = person.getId();
 					var trackedCase = trackedCase(person, caseType);
-					when(items.findByDescriptionCode(personId, descriptionCode)).thenReturn(Streamable.empty());
+					when(items.findByDescriptionCode(personId, descriptionCode)).thenReturn(ActionItems.empty());
 
 					assertThatCode(() -> listener.on(CaseUpdated.of(trackedCase))) //
 							.doesNotThrowAnyException();
@@ -87,7 +86,7 @@ class TrackedCaseEventListenerTests {
 		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(personId, DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(Streamable.of(new TrackedCaseActionItem(null, null, ActionItem.ItemType.PROCESS_INCIDENT,
+				.thenReturn(ActionItems.of(new TrackedCaseActionItem(null, null, ActionItem.ItemType.PROCESS_INCIDENT,
 						DescriptionCode.MISSING_DETAILS_INDEX)));
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
@@ -110,7 +109,7 @@ class TrackedCaseEventListenerTests {
 
 		when(trackedCase.isConcluded()).thenReturn(true);
 		when(items.findByDescriptionCode(person.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(Streamable.empty());
+				.thenReturn(ActionItems.empty());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
@@ -129,7 +128,7 @@ class TrackedCaseEventListenerTests {
 		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(Streamable.empty());
+				.thenReturn(ActionItems.empty());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
@@ -156,7 +155,7 @@ class TrackedCaseEventListenerTests {
 		var event = CaseUpdated.of(trackedCase);
 
 		when(items.findByDescriptionCode(trackedPerson.getId(), DescriptionCode.MISSING_DETAILS_INDEX))
-				.thenReturn(Streamable.empty());
+				.thenReturn(ActionItems.empty());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 
@@ -172,21 +171,14 @@ class TrackedCaseEventListenerTests {
 		Mockito.reset(items);
 	}
 
-	private TrackedCase trackedCase(TrackedPerson person, CaseType caseType) {
-		AuditingMetadata auditingMetadata = mock(AuditingMetadata.class);
-		lenient().when(auditingMetadata.getCreated()).then((invocation) -> LocalDateTime.now());
-		TrackedCase trackedCase = spy(new TrackedCase(person, caseType, new Department("test")));
-		lenient().when(trackedCase.getMetadata()).thenReturn(auditingMetadata);
-		return trackedCase;
-	}
-
-	private TrackedPerson createTrackedPersonWithMinimalData() {
+	private static TrackedPerson createTrackedPersonWithMinimalData() {
 		var person = new TrackedPerson("firstName", "lastName");
 		person.setMobilePhoneNumber(PhoneNumber.of("0125125464565"));
 		return person;
 	}
 
-	private Map<String, TrackedPerson> createTrackedPersons(LocalDate now) {
+	private static Map<String, TrackedPerson> createTrackedPersons(LocalDate now) {
+
 		var trackedPersons = Map.of(//
 				"only firstName and lastName", //
 				new TrackedPerson("firstName", "lastName"), //
@@ -202,6 +194,18 @@ class TrackedCaseEventListenerTests {
 						.setEmailAddress(EmailAddress.of("test@test.de")) //
 						.setPhoneNumber(PhoneNumber.of("0123901")) //
 						.setMobilePhoneNumber(PhoneNumber.of("0123901293")));
+
 		return trackedPersons;
+	}
+
+	private static TrackedCase trackedCase(TrackedPerson person, CaseType caseType) {
+
+		AuditingMetadata auditingMetadata = mock(AuditingMetadata.class);
+		lenient().when(auditingMetadata.getCreated()).then((invocation) -> LocalDateTime.now());
+
+		TrackedCase trackedCase = spy(new TrackedCase(person, caseType, new Department("test")));
+		lenient().when(trackedCase.getMetadata()).thenReturn(auditingMetadata);
+
+		return trackedCase;
 	}
 }
