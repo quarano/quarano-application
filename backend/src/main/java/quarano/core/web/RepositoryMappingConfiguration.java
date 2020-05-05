@@ -16,6 +16,7 @@
 package quarano.core.web;
 
 import lombok.Getter;
+import quarano.account.Role;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -98,6 +99,10 @@ public class RepositoryMappingConfiguration {
 
 		repositories.forEach(type -> {
 
+			if(type.equals(Role.class)) {
+				return;
+			}
+			
 			var information = repositories.getPersistentEntity(type);
 			var domainIdType = information.getIdProperty().getType();
 			var idTypes = new HashSet<Class<?>>();

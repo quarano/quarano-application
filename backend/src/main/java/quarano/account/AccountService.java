@@ -65,6 +65,15 @@ public class AccountService {
 		return account;
 	}
 	
+	public Account saveStaffAccount(Account account) {
+
+		var storedAccount = accounts.save(account);
+
+		log.info("Updated staff account for " + storedAccount.getUsername());
+
+		return storedAccount;
+	}	
+	
 	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname, EmailAddress email,
 			DepartmentIdentifier departmentId, RoleType roleType) {
 
@@ -101,7 +110,21 @@ public class AccountService {
 	}
 
 	public List<Account> findStaffAccountsFor(DepartmentIdentifier departmentId) {
-		return accounts.findStaffAccountsFor(departmentId);
+		return accounts.findAccountsFor(departmentId) //
+				.filter(it -> hasDepartmentRoles(it)) // 
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Check if the account has at least one role that is a department-role
+	 * @param account
+	 * @return
+	 */
+	private boolean hasDepartmentRoles(Account account) {
+		return account.getRoles().stream() //
+				.filter(it -> it.getRoleType().isDepartmentRole()) //
+				.findFirst() //
+				.isPresent();
 	}
 
 	public Optional<Account> findById(AccountIdentifier accountId) {

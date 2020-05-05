@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
+import quarano.account.AccountService;
+import quarano.account.RoleRepository;
 import quarano.core.EmailAddress;
 import quarano.core.web.MapperWrapper;
 
@@ -18,14 +20,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -39,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 class StaffAccountRepresentations {
 
 	private final @NonNull MapperWrapper mapper;
-	private final MessageSourceAccessor messages;
+	private final @NonNull RoleRepository roles;
 
 	StaffAccountSummaryDto toSummary(Account account) {
 
@@ -52,7 +55,24 @@ class StaffAccountRepresentations {
 
 		return dto;
 	}
+	
+	
+	Account from(Account existing, @Valid StaffAccountUpdateInputDto payload) {
 
+		var mappedAccount = mapper.map(payload, existing);
+		
+		return mappedAccount;
+	}
+	
+	
+	Account from(Account existing, @Valid StaffAccountCreateInputDto payload) {
+
+		var mappedAccount = mapper.map(payload, existing);
+
+		return mappedAccount;
+	}
+
+	@Relation(collectionRelation = "accounts")
 	@Accessors(chain = true)
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountSummaryDto extends RepresentationModel<StaffAccountSummaryDto> {
@@ -82,24 +102,51 @@ class StaffAccountRepresentations {
 	}
 
 	@RequiredArgsConstructor(staticName = "of")
-	static class StaffAccountInputDto extends RepresentationModel<StaffAccountInputDto> {
+	static class StaffAccountCreateInputDto extends RepresentationModel<StaffAccountCreateInputDto> {
 
 		private @Setter @Getter @NotBlank String firstName, lastName, password, username, passwordConfirm;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
-		@JsonIgnore private @Setter @Getter String departmentId;
 		private @Setter @Getter String unencryptedPassword;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
-		@Setter @Getter private String accountId;
 
-		Errors validate(Errors errors) {
+		Errors validate(Errors errors, AccountService accounts) {
 
 			if (!Objects.nullSafeEquals(password, passwordConfirm)) {
 				errors.rejectValue("passwordConfirm", "NonMatching.password");
 			}
+			
+			validateUsername(errors, this.username, accounts);			
 
 			return errors;
 		}
-
 	}
+	
+	@RequiredArgsConstructor(staticName = "of")
+	static class StaffAccountUpdateInputDto extends RepresentationModel<StaffAccountUpdateInputDto> {
 
+		private @Setter @Getter @NotBlank String firstName, lastName, username;
+		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Setter @Getter List<String> roles = new ArrayList<>();
+
+		Errors validate(Errors errors, Account existing, AccountService accounts) {
+			
+			// validate username only if it has changed
+			if(!existing.getUsername().equals(this.username)) {
+				validateUsername(errors, this.username, accounts);	
+			}
+
+			return errors;
+		}
+	}	
+
+	
+	static void validateUsername(Errors errors, String username, AccountService accounts) {
+		if(!accounts.isUsernameAvailable(username)) {
+			errors.rejectValue("username", "UserNameNotAvailable");
+		}
+		
+		if(!accounts.isValidUsername(username)) {
+			errors.rejectValue("username", "InvalidUserName");
+		}
+	}
 }

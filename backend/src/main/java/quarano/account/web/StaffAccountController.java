@@ -10,7 +10,8 @@ import quarano.account.AccountService;
 import quarano.account.Department;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.account.RoleType;
-import quarano.account.web.StaffAccountRepresentations.StaffAccountInputDto;
+import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
+import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 import quarano.core.EmailAddress;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
@@ -19,12 +20,13 @@ import quarano.core.web.MapperWrapper;
 import java.net.URI;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,10 +51,9 @@ class StaffAccountController {
 	
 
 	@PostMapping("/api/hd/accounts")
-	public HttpEntity<?> addStaffAccount(@Valid @RequestBody StaffAccountInputDto payload, @LoggedIn Department department, Errors errors) {
+	public HttpEntity<?> addStaffAccount(@Valid @RequestBody StaffAccountCreateInputDto payload, @LoggedIn Department department, Errors errors) {
 
-
-		if (payload.validate(errors).hasErrors()) {
+		if (payload.validate(errors, accounts).hasErrors()) {
 			return ErrorsDto.of(errors, messages).toBadRequest();
 		}		
 		
@@ -73,51 +75,33 @@ class StaffAccountController {
 	}
 	
 
-//	@PutMapping("/api/hd/accounts/{accountId}")
-//	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, @Valid @RequestBody StaffAccountInputDto payload, @LoggedIn Department department, Errors errors) {
-//
-//
-//		if (payload.validate(errors).hasErrors()) {
-//			return ErrorsDto.of(errors, messages).toBadRequest();
-//		}		
-//		
-//		Account newAccount = new Account();
-//		Optional<Account> account = accounts.findById(accountId);
-//		
-//		if(account.isPresent()) {
-//			account = mapper.map(payload, account);
-//			
-//			account.get().
-//			
-//			var storedAccount = accounts.saveAccount(payload.getUsername(),  //
-//					UnencryptedPassword.of(payload.getPassword()), //
-//					payload.getFirstName(), // 
-//					payload.getLastName(),  //
-//					EmailAddress.of(payload.getEmail()), //
-//					department.getId(), //
-//					payload.getRoles().stream() //
-//						.map(it -> RoleType.valueOf(it)) //
-//						.collect(Collectors.toList()));					
-//			
-//		}
-//		
-//		
-//
-//		
-//		var location = on(StaffAccountController.class).getStaffAccount(storedAccount.getId(), storedAccount);
-//
-//		return ResponseEntity //
-//				.created(URI.create(fromMethodCall(location).toUriString())) //
-//				.body(representations.toSummary(storedAccount));		
-//	}	
+	@PutMapping("/api/hd/accounts/{accountId}")
+	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, @Valid @RequestBody StaffAccountUpdateInputDto payload, @LoggedIn Department department, Errors errors) {
+
+		var existing = accounts.findById(accountId).orElse(null);
+
+		if (existing == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		if (payload.validate(errors, existing, accounts).hasErrors()) {
+			return ErrorsDto.of(errors, messages).toBadRequest();
+		}		
+		
+		return ResponseEntity.of(accounts.findById(accountId) //
+				.map(it -> representations.from(it, payload)) //
+				.map(accounts::saveStaffAccount) //
+				.map(representations::toSummary));
+	}		
 
 	@GetMapping(path = "/api/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
-	public Stream<?> getStaffAccounts(@LoggedIn Account admin) {
+	public RepresentationModel<?> getStaffAccounts(@LoggedIn Account admin) {
 
 		var departmentAccounts = accounts.findStaffAccountsFor(admin.getDepartmentId());
 
 		return departmentAccounts.stream() //
-				.map(it -> representations.toSummary(it));
+				.map(it -> representations.toSummary(it)) //
+				.collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
 	}
 
 	@GetMapping(path = "/api/hd/accounts/{accountId}" , produces = MediaTypes.HAL_JSON_VALUE)

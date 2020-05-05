@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.EncryptedPassword;
@@ -35,18 +36,18 @@ import org.jddd.core.types.Identifier;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
-	@Getter private final String username;
+	@Getter @Setter private String username;
 	@Getter private final EncryptedPassword password;
 
-	@Getter private String firstname;
-	@Getter private String lastname;
+	@Getter @Setter private String firstname;
+	@Getter @Setter private String lastname;
 	
-	@Getter private EmailAddress email;
+	@Getter @Setter private EmailAddress email;
 
-	@Getter private DepartmentIdentifier departmentId;
+	@Getter  private DepartmentIdentifier departmentId;
 
 	@ManyToMany(fetch = FetchType.EAGER) //
-	@Getter private List<Role> roles = new ArrayList<>();
+	@Getter @Setter private List<Role> roles = new ArrayList<>();
 
 	public Account(String username, EncryptedPassword password, String firstname, String lastname, EmailAddress email,
 			DepartmentIdentifier departmentId, List<Role> roles) {
