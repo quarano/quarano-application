@@ -1,3 +1,4 @@
+import { IsAdminDirective } from './directives/is-admin.directive';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
@@ -39,7 +40,8 @@ const DIRECTIVES = [
   HasRoleDirective,
   IsHealthDepartmentUserDirective,
   AsideHostDirective,
-  IsEnrolledClientDirective
+  IsEnrolledClientDirective,
+  IsAdminDirective
 ];
 
 const COMPONENTS = [

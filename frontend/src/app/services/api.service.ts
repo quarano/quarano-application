@@ -1,3 +1,4 @@
+import { DeleteLink } from '@models/general';
 import { Link } from '@models/general';
 import { UserDto } from '@models/user';
 import { environment } from '@environment/environment';
@@ -14,6 +15,7 @@ import { ActionListItemDto } from '@models/action';
 import { CaseDetailDto } from '@models/case-detail';
 import { CaseActionDto } from '@models/case-action';
 import { HalResponse } from '@models/hal-response';
+import { AccountDto } from '@models/account';
 
 @Injectable({
   providedIn: 'root'
@@ -151,6 +153,28 @@ export class ApiService {
   getAllActions(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/actions`)
       .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
+  }
+
+  getHealthDepartmentUsers(): Observable<AccountDto[]> {
+    return this.httpClient.get<AccountDto[]>(`${this.baseUrl}/api/hd/accounts`)
+      .pipe(share());
+  }
+
+  getHealthDepartmentUser(id: string): Observable<AccountDto> {
+    return this.httpClient.get<AccountDto>(`${this.baseUrl}/api/hd/accounts/${id}`)
+      .pipe(share());
+  }
+
+  delete(deleteLink: DeleteLink) {
+    return this.httpClient.delete(deleteLink.delete.href);
+  }
+
+  createHealthDepartmentUser(account: AccountDto): Observable<AccountDto> {
+    return this.httpClient.post<AccountDto>(`${this.baseUrl}/api/hd/accounts`, account);
+  }
+
+  editHealthDepartmentUser(account: AccountDto) {
+    return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.accountId}`, account);
   }
 
   private mapReportCase(item: any): ReportCaseDto {

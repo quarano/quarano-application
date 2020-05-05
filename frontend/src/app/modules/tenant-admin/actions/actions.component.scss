@@ -1,66 +1,6 @@
-@import "../../../../styles/variables";
+@import "../../../../styles/ngx-table";
 
 ::ng-deep {
-  .datatable-row-center.datatable-row-group.ng-star-inserted {
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  .ngx-datatable.material.single-selection .datatable-body-row.active,
-  .ngx-datatable.material.single-selection
-    .datatable-body-row.active
-    .datatable-row-group,
-  .ngx-datatable.material.multi-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-selection
-    .datatable-body-row.active
-    .datatable-row-group,
-  .ngx-datatable.material.multi-click-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-click-selection
-    .datatable-body-row.active
-    .datatable-row-group {
-    background-color: $primary-color !important;
-  }
-
-  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
-  .ngx-datatable.material:not(.cell-selection)
-    .datatable-body-row:hover
-    .datatable-row-group {
-    background-color: initial;
-    transition: none;
-  }
-
-  .ngx-datatable.material:not(.cell-selection) .datatable-body-row {
-    cursor: pointer;
-
-    & .datatable-row-group:hover:before {
-      content: "";
-      display: block;
-      width: 5px;
-      position: absolute;
-      background-color: $primary-color;
-      height: 100%;
-    }
-  }
-
-  .ngx-datatable.material .datatable-body .progress-linear .container {
-    background-color: lighten($primary-color, 20%);
-  }
-
-  .ngx-datatable.material .datatable-body .progress-linear .container .bar {
-    background-color: $primary-color;
-  }
-
-  .ngx-datatable.material
-    .datatable-body
-    .datatable-body-row
-    .datatable-body-cell {
-    padding: 0.2rem 1.2rem;
-  }
-
-  .datatable-row-even {
-    background-color: #f4f4f4 !important;
-  }
-
   div.mat-select-value {
     display: none;
   }
@@ -68,13 +8,6 @@
   .mat-select {
     width: initial !important;
   }
-}
-
-.mail-link:hover,
-.mail-link:focus {
-  background-color: darken(#f4f4f4, 30%);
-  color: white;
-  cursor: pointer;
 }
 
 .action-alert-container {

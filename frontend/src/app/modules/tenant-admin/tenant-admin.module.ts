@@ -17,7 +17,6 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ClientComponent } from './client/client.component';
 import { ReportCaseResolver } from '@resolvers/report-case.resolver';
 import { EditComponent } from './client/edit/edit.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { CommentsComponent } from './client/comments/comments.component';
 import { MailComponent } from './client/mail/mail.component';
 
@@ -41,8 +40,7 @@ import { MailComponent } from './client/mail/mail.component';
     TenantAdminRoutingModule,
     AngularMaterialModule,
     ReactiveFormsModule,
-    NgxDatatableModule,
-    MatTabsModule
+    NgxDatatableModule
   ],
   providers: [ActionsResolver, ReportCasesResolver, ReportCaseResolver, ReportCaseActionsResolver]
 })

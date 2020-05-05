@@ -22,7 +22,10 @@ export class EnrollmentCompletedGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (this.userService.isHealthDepartmentUser) { return true; }
+    if (this.userService.isHealthDepartmentUser) {
+      this.router.navigate(['/forbidden']);
+      return false;
+    }
 
     return this.enrollmentService.getEnrollmentStatus()
       .pipe(map(status => {

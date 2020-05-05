@@ -25,4 +25,4 @@ Date.prototype.isDateInPast = function () {
   const date = new Date(this.valueOf());
   const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   return today.getDateWithoutTime() > date.getDateWithoutTime();
-}
+};

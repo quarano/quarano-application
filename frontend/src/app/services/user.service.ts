@@ -84,4 +84,8 @@ export class UserService {
   public get isHealthDepartmentUser(): boolean {
     return this.roleMatch(roles.filter(r => r.isHealthDepartmentUser).map(r => r.name));
   }
+
+  public get isAdmin(): boolean {
+    return this.roleMatch(roles.filter(r => r.isAdmin).map(r => r.name));
+  }
 }

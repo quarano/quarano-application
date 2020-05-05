@@ -1,3 +1,4 @@
+import { IIdentifiable, DeleteLink } from './general';
 import { ClientDto } from './client';
 import { HealthDepartmentDto } from './healthDepartment';
 

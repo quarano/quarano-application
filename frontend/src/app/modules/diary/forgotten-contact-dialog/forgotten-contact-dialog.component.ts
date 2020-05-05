@@ -1,3 +1,4 @@
+import { ArrayValidator } from './../../../validators/array-validator';
 import { SubSink } from 'subsink';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { EncounterEntry } from '@models/encounter';
@@ -40,18 +41,11 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   buildForm() {
     this.formGroup = this.formBuilder.group({
       day: new FormControl(null, [Validators.required]),
-      contactIds: new FormControl([], [this.minLengthArray(1)])
+      contactIds: new FormControl([], [ArrayValidator.minLengthArray(1)])
     });
   }
 
-  minLengthArray(min: number) {
-    return (c: AbstractControl): { [key: string]: any } => {
-      if (c.value.length >= min) {
-        return null;
-      }
-      return { minLengthArray: { valid: false } };
-    };
-  }
+
 
   cancel() {
     this.matDialogRef.close();

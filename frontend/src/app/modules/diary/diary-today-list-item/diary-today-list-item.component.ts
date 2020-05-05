@@ -19,7 +19,6 @@ export class DiaryTodayListItemComponent implements OnInit {
   }
 
   get morning(): DiaryEntryListItemDto {
-    console.log(this.diaryListItem.morning);
     if (this.diaryListItem.morning.hasOwnProperty('id')) {
       return this.diaryListItem.morning as DiaryEntryListItemDto;
     }
