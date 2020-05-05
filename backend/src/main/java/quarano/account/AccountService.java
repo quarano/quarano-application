@@ -27,7 +27,6 @@ public class AccountService {
 	private final @NonNull PasswordEncoder passwordEncoder;
 	private final @NonNull AccountRepository accounts;
 	private final @NonNull RoleRepository roles;
-	private final @NonNull AccountProperties configuration;
 
 	/**
 	 * creates a new account, encrypts the password and stores it

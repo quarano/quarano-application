@@ -15,6 +15,7 @@
  */
 package quarano.tracking;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
@@ -39,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TrackedPersonDataInitializer implements DataInitializer {
 
-	private final TrackedPersonRepository trackedPeople;
+	private final @NonNull TrackedPersonRepository trackedPeople;
 
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("738d3d1f-a9f1-4619-9896-2b5cb3a89c22"));
@@ -141,8 +142,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createHarry() {
-		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"), PhoneNumber.of("0621 115545"),
-				null);
+		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"),
+				PhoneNumber.of("0621 115545"), null);
 	}
 
 	/**
@@ -163,8 +164,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createSarah() {
-		return new TrackedPerson(VALID_TRACKED_SEC2_ID_DEP1, "Sarah", "Siebel", EmailAddress.of("sarah@testtest.de"), PhoneNumber.of("0621883322"),
-				LocalDate.of(1980, 1, 1));
+		return new TrackedPerson(VALID_TRACKED_SEC2_ID_DEP1, "Sarah", "Siebel", EmailAddress.of("sarah@testtest.de"),
+				PhoneNumber.of("0621883322"), LocalDate.of(1980, 1, 1));
 	}
 
 	/**

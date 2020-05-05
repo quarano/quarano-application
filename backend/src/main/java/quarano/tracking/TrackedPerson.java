@@ -72,7 +72,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
-	private LocalDateTime accountRegisteredAt;
 	private @OneToOne Account account;
 
 	@OneToMany(cascade = CascadeType.ALL) //
@@ -133,13 +132,12 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public TrackedPerson markAccountRegistration(Account account, LocalDateTime date) {
 		this.account = account;
-		this.accountRegisteredAt = date;
 		return this;
 	}
 
 	@Nullable
 	public LocalDate getAccountRegistrationDate() {
-		return accountRegisteredAt == null ? null : accountRegisteredAt.toLocalDate();
+		return account == null ? null : account.getMetadata().getCreated().toLocalDate();
 	}
 
 	public Stream<ContactPerson> getContactPersons() {

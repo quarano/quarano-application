@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.core.DataInitializer;
+import quarano.core.QuaranoDateTimeProvider;
 import quarano.tracking.TrackedPersonDataInitializer;
+
+import java.time.Period;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,16 @@ import org.springframework.stereotype.Component;
 class RegistrationDataInitializer implements DataInitializer {
 
 	private final RegistrationManagement registration;
+	private final QuaranoDateTimeProvider dateTimeProvider;
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#preInitialize()
+	 */
+	@Override
+	public void preInitialize() {
+		dateTimeProvider.setDelta(Period.ofDays(-3));
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -62,5 +75,14 @@ class RegistrationDataInitializer implements DataInitializer {
 
 		registration.createTrackedPersonAccount("secUser4", UnencryptedPassword.of("secur1tyTest!"), "Samuel", "Soller",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_SEC4_ID_DEP1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.DataInitializer#postInitialize()
+	 */
+	@Override
+	public void postInitialize() {
+		dateTimeProvider.reset();
 	}
 }

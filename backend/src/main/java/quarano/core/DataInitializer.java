@@ -13,9 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("!prod")
 public interface DataInitializer {
 
+	default void preInitialize() {}
+
 	/**
 	 * Called on application startup to trigger data initialization. Will run inside a transaction.
 	 */
 	@Transactional
 	void initialize();
+
+	default void postInitialize() {}
 }

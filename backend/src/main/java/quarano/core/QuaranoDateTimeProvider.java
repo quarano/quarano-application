@@ -13,32 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.account;
-
-import lombok.RequiredArgsConstructor;
+package quarano.core;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.TemporalAccessor;
+import java.util.Optional;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
  */
-@ConstructorBinding
-@RequiredArgsConstructor
-@ConfigurationProperties("quarano.accounts")
-class AccountProperties {
+@Component
+public class QuaranoDateTimeProvider implements DateTimeProvider {
 
-	private final Period registrationShift;
+	private Period delta = Period.ZERO;
 
-	public LocalDateTime getRegistrationDate() {
+	/**
+	 * @param delta the delta to set
+	 */
+	public void setDelta(Period delta) {
+		this.delta = delta;
+	}
 
-		var shift = registrationShift == null //
-				? Period.ofDays(0) //
-				: registrationShift;
+	public void reset() {
+		this.delta = Period.ZERO;
+	}
 
-		return LocalDateTime.now().plus(shift);
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.auditing.DateTimeProvider#getNow()
+	 */
+	@Override
+	public Optional<TemporalAccessor> getNow() {
+		return Optional.of(LocalDateTime.now().plus(delta));
 	}
 }

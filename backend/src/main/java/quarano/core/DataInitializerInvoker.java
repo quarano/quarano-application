@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,11 +30,16 @@ class DataInitializerInvoker implements ApplicationRunner {
 	 * @see org.springframework.boot.ApplicationRunner#run(org.springframework.boot.ApplicationArguments)
 	 */
 	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	public void run(@Nullable ApplicationArguments args) throws Exception {
 
 		initializers.stream() //
 				.peek(it -> log.info("Invoking " + it.getClass().getName())) //
-				.forEach(DataInitializer::initialize);
+				.forEach(it -> {
+
+					it.preInitialize();
+					it.initialize();
+					it.postInitialize();
+				});
 	}
 
 	/**
