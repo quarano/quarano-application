@@ -80,8 +80,8 @@ export class RegisterComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
-          this.usernameIsValid = true;
+        (result) => {
+          this.usernameIsValid = result;
         },
         () => {
           this.usernameIsValid = false;
