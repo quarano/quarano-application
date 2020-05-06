@@ -81,7 +81,8 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button mat-raised-button color="primary" type="submit" [disabled]="formGroup.invalid">
+      <button mat-button mat-raised-button color="primary" type="submit"
+        [disabled]="formGroup.invalid || formGroup.pristine">
         Speichern
       </button>
       <button type="button" mat-raised-button color="secondary" [routerLink]="['/administration/accounts']">

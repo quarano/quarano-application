@@ -19,7 +19,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.core.EmailAddress;
@@ -101,7 +100,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	TrackedCase from(TrackedCase existing, TrackedCaseDto source) {
 
 		var personSource = mapper.map(source, TrackedPersonDto.class);
-		mapper.map(personSource, existing.getTrackedPerson());
+		var person = mapper.map(personSource, existing.getTrackedPerson());
 
 		return mapper.map(source, existing)
 				.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate())) //
@@ -137,7 +136,6 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	}
 
 	@Data
-	@Accessors(chain = true)
 	@NoArgsConstructor
 	static class TrackedCaseDto {
 
@@ -200,7 +198,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		}
 
 		public String getComment() {
-			return comment.getComment();
+			return comment.getText();
 		}
 
 		public String getAuthor() {

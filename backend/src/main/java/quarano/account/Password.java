@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.springframework.util.Assert;
@@ -42,7 +43,7 @@ public abstract class Password {
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE, onConstructor = @__(@Deprecated))
 	public static class EncryptedPassword extends Password {
 
-		private final String value;
+		private final @Column(name = "password") String value;
 
 		/*
 		 * (non-Javadoc)

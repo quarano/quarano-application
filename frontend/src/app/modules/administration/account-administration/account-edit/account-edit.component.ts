@@ -34,6 +34,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
       this.account = data.account;
+      if (!this.isNew) { this.usernameIsValid = true; }
     }));
     this.buildForm();
   }
@@ -84,23 +85,25 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   }
 
   public changeUsername(username: string) {
-    this.apiService.checkUsername(username)
-      .pipe(
-        tap(() => {
-          this.formGroup.get('username').disable();
-        }),
-        finalize(() => {
-          this.formGroup.get('username').enable();
-        })
-      )
-      .subscribe(
-        (result) => {
-          this.usernameIsValid = result;
-        },
-        () => {
-          this.usernameIsValid = false;
-        }
-      );
+    if (this.isNew || username !== this.account.username) {
+      this.subs.add(this.apiService.checkUsername(username)
+        .pipe(
+          tap(() => {
+            this.formGroup.get('username').disable();
+          }),
+          finalize(() => {
+            this.formGroup.get('username').enable();
+          })
+        )
+        .subscribe(
+          (result) => {
+            this.usernameIsValid = result;
+          },
+          () => {
+            this.usernameIsValid = false;
+          }
+        ));
+    }
   }
 
   public submitForm() {

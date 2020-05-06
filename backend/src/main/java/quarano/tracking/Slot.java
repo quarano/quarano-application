@@ -27,17 +27,19 @@ import java.time.LocalTime;
 import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.springframework.util.Assert;
 
 /**
- * Represents a time slot, a {@link DiaryEntry} is assigned to and lives in. I consists of a date and a
+ * Represents a time slot, a {@link DiaryEntry} is assigned to and lives in. It consists of a date and a
  * {@link TimeOfDay} that covers certain time spans (6am-4pm, 4pm-6am). Interesting about esp. the latter period is that
  * e.g. the Slot for e.g. 2am of a day is the evening slot of the day before. {@link Slot#of(LocalDateTime)} correctly
  * considers this.
  *
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Embeddable
 @Getter
@@ -46,7 +48,7 @@ import org.springframework.util.Assert;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Slot implements Comparable<Slot> {
 
-	private final LocalDate date;
+	private final @Column(name = "date_of_slot") LocalDate date;
 	private final TimeOfDay timeOfDay;
 
 	/**

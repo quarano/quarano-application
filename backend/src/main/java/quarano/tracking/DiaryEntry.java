@@ -22,7 +22,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.reference.Symptom;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
@@ -37,10 +36,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -50,10 +51,11 @@ import org.springframework.util.Assert;
  * A bi-daily diary entry capturing a report of medical conditions and potential {@link ContactPerson}s.
  *
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @EqualsAndHashCode(callSuper = true, of = {})
 @Entity
-@Accessors(chain = true)
+@Table(name = "diary_entries")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -67,7 +69,8 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
 	private String note;
 	private BodyTemperature bodyTemperature;
-	private TrackedPersonIdentifier trackedPersonId;
+	private @AttributeOverride(name = "trackedPersonId",
+			column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier trackedPersonId;
 
 	DiaryEntry(Slot slot, TrackedPersonIdentifier id) {
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), id, LocalDateTime.now(), slot);
@@ -157,7 +160,7 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 
 		private static final long serialVersionUID = -8938479214117686141L;
 
-		private final UUID id;
+		private final UUID diaryEntryId;
 
 		/*
 		 * (non-Javadoc)
@@ -165,7 +168,7 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 		 */
 		@Override
 		public String toString() {
-			return id.toString();
+			return diaryEntryId.toString();
 		}
 	}
 

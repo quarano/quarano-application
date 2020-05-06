@@ -23,6 +23,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
@@ -31,23 +32,22 @@ import org.jddd.core.types.Identifier;
  * HD employee account
  *
  * @author Patrick Otto
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "accounts")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@Getter
 public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
-	@Getter @Setter private String username;
-	@Getter private final EncryptedPassword password;
+	private @Setter EncryptedPassword password;
+	private @Setter String username, firstname, lastname;
+	private @Setter EmailAddress email;
 
-	@Getter @Setter private String firstname;
-	@Getter @Setter private String lastname;
-	
-	@Getter @Setter private EmailAddress email;
-
-	@Getter  private DepartmentIdentifier departmentId;
+	private DepartmentIdentifier departmentId;
 
 	@ManyToMany(fetch = FetchType.EAGER) //
-	@Getter @Setter private List<Role> roles = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 
 	public Account(String username, EncryptedPassword password, String firstname, String lastname, EmailAddress email,
 			DepartmentIdentifier departmentId, List<Role> roles) {
@@ -63,10 +63,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 		roles.stream().forEach(it -> this.roles.add(it));
 	}
-	
+
 	public Account(String username, EncryptedPassword password, String firstname, String lastname,
 			DepartmentIdentifier departmentId, Role role) {
-	
+
 		this(username, password, firstname, lastname, null, departmentId, new ArrayList<>());
 		this.add(role);
 	}
@@ -115,19 +115,6 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		return this;
 	}
 
-	@Embeddable
-	@EqualsAndHashCode
-	@RequiredArgsConstructor(staticName = "of")
-	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-	public static class AccountIdentifier implements Identifier, Serializable {
-		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID accountId;
-
-		public String toString() {
-			return accountId.toString();
-		}
-	}
-
 	public boolean isTrackedPerson() {
 		return this.roles.contains(new Role(RoleType.ROLE_USER));
 	}
@@ -140,5 +127,25 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	public boolean hasAdminRole() {
 		return this.roles.contains(Role.of(RoleType.ROLE_HD_ADMIN))
 				|| this.roles.contains(Role.of(RoleType.ROLE_QUARANO_ADMIN));
+	}
+
+	@Embeddable
+	@EqualsAndHashCode
+	@RequiredArgsConstructor(staticName = "of")
+	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	public static class AccountIdentifier implements Identifier, Serializable {
+
+		private static final long serialVersionUID = 7871473225101042167L;
+
+		final UUID accountId;
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return accountId.toString();
+		}
 	}
 }

@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
@@ -37,12 +36,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
@@ -50,34 +54,43 @@ import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "tracked_cases")
 @Data
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true, of = {})
-@Accessors(chain = true)
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	private @OneToOne(cascade = { CascadeType.ALL }) TrackedPerson trackedPerson;
-	private @ManyToOne Department department;
+	@OneToOne(cascade = { CascadeType.ALL }) //
+	@JoinColumn(name = "tracked_person_id") //
+	private TrackedPerson trackedPerson;
 
-	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
+	@ManyToOne @JoinColumn(name = "department_id", nullable = false) //
+	private Department department;
+
+	@Setter(AccessLevel.NONE) //
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
+	@JoinColumn(name = "initial_report_id") //
 	private InitialReport initialReport;
 
 	@Setter(AccessLevel.NONE) //
 	private Enrollment enrollment = new Enrollment();
-	private @Getter @Setter CaseType type = CaseType.INDEX;
+	private @Column(name = "case_type") @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 	private @Getter @Setter LocalDate testDate;
 
-	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
-	private List<ContactPerson> originContacts = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) //
+	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL }) @Getter //
-	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) //
+	@JoinColumn(name = "tracked_case_id") //
+	private @Getter List<Comment> comments = new ArrayList<>();
 
 	private @Getter @Setter boolean infected;
 
+	@Column(nullable = false) //
 	private @Getter Status status;
 
 	@SuppressWarnings("unused")
@@ -113,13 +126,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		if (person.hasAccount()) {
 			markInRegistration();
 			markRegistrationCompleted();
-		}
-	}
-
-	private static void assertStatus(Status status, String message, Object... args) {
-
-		if (!status.equals(status)) {
-			throw new IllegalStateException(String.format(message, args));
 		}
 	}
 
@@ -166,7 +172,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	public boolean isInvestigationNeeded() {
-		return !isConcluded() && ((trackedPerson.getPhoneNumber() == null && trackedPerson.getMobilePhoneNumber() == null)
+		return !isConcluded() && (trackedPerson.getPhoneNumber() == null && trackedPerson.getMobilePhoneNumber() == null
 				|| trackedPerson.getEmailAddress() == null //
 				|| trackedPerson.getDateOfBirth() == null);
 	}
@@ -270,6 +276,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	private static void assertStatus(Status status, String message, Object... args) {
+
+		if (!status.equals(status)) {
+			throw new IllegalStateException(String.format(message, args));
+		}
+	}
+
 	public static enum Status {
 
 		OPEN,
@@ -303,8 +316,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class TrackedCaseIdentifier implements Identifier, Serializable {
+
 		private static final long serialVersionUID = -1255657328932035265L;
-		final UUID id;
+
+		final UUID trackedCaseId;
 
 		/*
 		 * (non-Javadoc)
@@ -312,7 +327,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		 */
 		@Override
 		public String toString() {
-			return id.toString();
+			return trackedCaseId.toString();
 		}
 	}
 }

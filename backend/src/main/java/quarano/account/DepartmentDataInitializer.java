@@ -52,7 +52,12 @@ public class DepartmentDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		log.warn("Testdata: creating two health departmens");
+		if (departments.count() > 0) {
+			log.info("Departments found, skipping test data creation.");
+			return;
+		} else {
+			log.info("Testdata: creating two health departmens");
+		}
 
 		departments.saveAll(List.of( //
 				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //

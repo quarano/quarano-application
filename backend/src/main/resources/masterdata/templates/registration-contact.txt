@@ -1,0 +1,25 @@
+Sehr geehrte/geehrter Frau/Herr {lastName}, 
+
+Sie wurden von einem bestätigtem COVID-19 Fall als Kontaktperson angegeben. Dies bedeutet, dass Sie zu ihr / ihm in den letzten Tagen einen direkten Kontakt hatten und deshalb das Risiko besteht, dass Sie sich auch mit dem Virus infiziert haben.
+
+Bitte bleiben Sie in den nächsten Tagen zu Hause und vermeiden Sie Kontakte. Wir bitten Sie außerdem, auf mögliche Krankheitszeichen zu achten – wir (als Ihr zuständiges Gesundheitsamt) werden uns so schnell wie möglich bei Ihnen melden, um die nächsten Schritte zu besprechen.
+
+Aufgrund der dynamischen Entwicklung der positiven Fälle und der Flut an Anfragen kann sich unser Anruf etwas verzögern. Um den Ablauf zu erleichtern und zu beschleunigen, melden Sie sich bitte umgehend umgehend in unserem Tool zur Erfassung der Kontakte und Symptome an unter:
+
+https://{host}/welcome/landing/contact/{activationCode}
+
+In dem für Sie persönlich bereitgestelltem Zugang erfassen Sie bitte Ihre Stammdaten sowie mögliche Krankheitszeichen. Wir bitten Sie, ab jetzt täglich zweimal Fieber zu messen, die Temperatur einzutragen und mögliche andere Krankheitszeichen direkt in unserer Online-Anwendung anzugeben.
+
+WICHTIG:
+Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt an. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung:
+
+• Hausärztlicher Bereitschaftsdienst, Telefon: 116117
+• Zentrale Notaufnahme der Universitätsmedizin Mannheim (UMM), Telefon: 0621/383-4472
+• Für Patienten unter 18 Jahren: Kinder-Notaufnahme der Universitätsmedizin Mannheim (UMM), Telefon: 0621/383-2504
+• Notaufnahme Theresienkrankenhaus (TKH), Telefon: 0621/424-0
+• Notaufnahme Diakonissenkrankenhaus, Telefon: 0621/8102-0 
+In akuten Notfällen rufen Sie den Notruf: 112. Bei sonstigen Rückfragen melden Sie sich bitte auf unserem CoronaHotline-Telefon (0621-293-2253 Mo-Fr 7:30 -18 Uhr und Sa u. So 9-15 Uhr).
+
+Anbei finden Sie ein PDF mit weiteren Infos zu SARS-CoV-2, sowie zu Übertragung und häuslicher Isolation. Mehr Informationen finden Sie dazu auch immer aktuell auf der Website des Robert Koch Instituts unter: www.rki.de/covid-19.
+
+Mit freundlichen Grüßen

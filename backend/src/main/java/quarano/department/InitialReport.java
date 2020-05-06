@@ -21,7 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
 import quarano.department.InitialReport.InitialReportIdentifier;
 
@@ -32,18 +31,20 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
+@Table(name = "initial_reports")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
-@Accessors(chain = true)
 public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdentifier> {
 
 	private Boolean min15MinutesContactWithC19Pat, //
@@ -105,6 +106,6 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class InitialReportIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 5716082490854001737L;
-		final UUID id;
+		final UUID initialReportId;
 	}
 }

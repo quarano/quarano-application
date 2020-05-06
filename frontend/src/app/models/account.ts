@@ -1,5 +1,4 @@
 import { Link } from '@models/general';
-import { IIdentifiable } from './general';
 
 export interface AccountDto {
   accountId: string;
@@ -9,6 +8,10 @@ export interface AccountDto {
   email: string;
   roles: string[];
   _links: AccountLinks;
+}
+
+export interface AccountListDto {
+  accounts: AccountDto[];
 }
 
 export interface AccountLinks {

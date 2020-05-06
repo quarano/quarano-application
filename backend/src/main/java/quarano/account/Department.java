@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
@@ -33,14 +32,16 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
  */
 @Entity
-@Accessors(chain = true)
+@Table(name = "departments")
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
@@ -70,6 +71,7 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class DepartmentIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
+
 		final UUID departmentId;
 
 		@Override

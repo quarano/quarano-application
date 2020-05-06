@@ -17,10 +17,12 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
 @Entity
+@Table(name = "activation_codes")
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationCodeIdentifier> {
@@ -108,16 +110,16 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class ActivationCodeIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
-		final UUID id;
+
+		final UUID activationCodeId;
 
 		@Override
 		public String toString() {
-			return id.toString();
+			return activationCodeId.toString();
 		}
 	}
 
 	public enum ActivationCodeStatus {
 		WAITING_FOR_ACTIVATION, REDEEMED, CANCELED
 	}
-
 }

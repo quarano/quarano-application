@@ -22,7 +22,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import quarano.core.web.MapperWrapper;
 import quarano.reference.SymptomDto;
 import quarano.tracking.ContactPerson;
@@ -95,7 +94,6 @@ public class DiaryRepresentations {
 	}
 
 	@Data
-	@Accessors(chain = true)
 	@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 	@NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
 	static class DiaryEntryInput {

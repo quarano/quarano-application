@@ -18,6 +18,7 @@ package quarano.department.web;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.RequiredArgsConstructor;
+import quarano.core.CoreProperties;
 import quarano.core.EmailTemplates;
 import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase;
@@ -26,8 +27,7 @@ import quarano.department.activation.ActivationCode;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -42,20 +42,34 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class RegistrationRepresentations {
 
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
 	private final EmailTemplates templates;
+	private final CoreProperties configuration;
 
 	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
 
-		var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-		var placeholders = Map.of("lastName", trackedCase.getTrackedPerson().getLastName(), //
-				"quarantineEndDate", trackedCase.getQuarantine().getTo().format(formatter), //
-				"activationCode", code.getId().toString());
-
-		var email = templates.getTemplate(Keys.REGISTRATION, placeholders);
+		var email = getEmailTemplateFor(trackedCase, code);
 		var result = PendingRegistration.of(trackedCase.getId(), code, email);
 
 		return result.add(TrackedCaseStatusAware.getDefaultLinks(trackedCase));
+	}
+
+	private String getEmailTemplateFor(TrackedCase trackedCase, ActivationCode code) {
+
+		var placeholders = new HashMap<String, Object>();
+
+		placeholders.put("lastName", trackedCase.getTrackedPerson().getLastName());
+		placeholders.put("host", configuration.getHost());
+		placeholders.put("activationCode", code.getId().toString());
+
+		if (trackedCase.isIndexCase()) {
+			placeholders.put("quarantineEndDate", trackedCase.getQuarantine().getTo().format(FORMATTER));
+		}
+
+		var key = trackedCase.isIndexCase() ? Keys.REGISTRATION_INDEX : Keys.REGISTRATION_CONTACT;
+
+		return templates.getTemplate(key, placeholders);
 	}
 
 	RepresentationModel<?> toNoRegistration(TrackedCase trackedCase) {

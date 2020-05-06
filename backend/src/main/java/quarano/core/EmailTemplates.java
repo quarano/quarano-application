@@ -41,7 +41,7 @@ public class EmailTemplates {
 		this.cache = new ConcurrentHashMap<>(templates.size());
 	}
 
-	public String getTemplate(Keys name, Map<String, String> placeholders) {
+	public String getTemplate(Keys name, Map<String, Object> placeholders) {
 
 		String template = cache.computeIfAbsent(name, it -> {
 
@@ -57,14 +57,14 @@ public class EmailTemplates {
 			}
 		});
 
-		for (Entry<String, String> replacement : placeholders.entrySet()) {
-			template = template.replace(String.format("{%s}", replacement.getKey()), replacement.getValue());
+		for (Entry<String, Object> replacement : placeholders.entrySet()) {
+			template = template.replace(String.format("{%s}", replacement.getKey()), replacement.getValue().toString());
 		}
 
 		return template;
 	}
 
 	public enum Keys {
-		REGISTRATION;
+		REGISTRATION_INDEX, REGISTRATION_CONTACT;
 	}
 }

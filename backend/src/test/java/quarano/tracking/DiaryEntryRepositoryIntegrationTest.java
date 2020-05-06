@@ -1,12 +1,12 @@
 package quarano.tracking;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 @QuaranoIntegrationTest
@@ -20,11 +20,12 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		Slot now = Slot.now();
 
-		var diaryEntries = diaries.findMissingDiaryEntryPersons(List.of(now));
+		var result = diaries.findMissingDiaryEntryPersons(List.of(now)).toList();
 
-		List<TrackedPersonIdentifier> personIds = diaryEntries.toList();
-		assertThat(personIds).containsExactly(TrackedPersonDataInitializer.createSandra().getId(),
-				TrackedPersonDataInitializer.createNadine().getId(), TrackedPersonDataInitializer.createSiggi().getId(),
+		assertThat(result).containsExactlyInAnyOrder( //
+				TrackedPersonDataInitializer.createSandra().getId(), //
+				TrackedPersonDataInitializer.createNadine().getId(), //
+				TrackedPersonDataInitializer.createSiggi().getId(), //
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
 
@@ -34,10 +35,11 @@ class DiaryEntryRepositoryIntegrationTest {
 		Slot now = Slot.now();
 		Slot previous = now.previous();
 
-		var diaryEntries = diaries.findMissingDiaryEntryPersons(List.of(now, previous));
+		var result = diaries.findMissingDiaryEntryPersons(List.of(now, previous)).toList();
 
-		List<TrackedPersonIdentifier> personIds = diaryEntries.toList();
-		assertThat(personIds).containsExactly(TrackedPersonDataInitializer.createSandra().getId(),
-				TrackedPersonDataInitializer.createSiggi().getId(), TrackedPersonDataInitializer.createGustav().getId());
+		assertThat(result).containsExactlyInAnyOrder( //
+				TrackedPersonDataInitializer.createSandra().getId(), //
+				TrackedPersonDataInitializer.createSiggi().getId(), //
+				TrackedPersonDataInitializer.createGustav().getId());
 	}
 }
