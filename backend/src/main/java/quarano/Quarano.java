@@ -49,7 +49,7 @@ public class Quarano {
 	@Bean
 	EmailTemplates emailTemplates(ResourceLoader loader) {
 
-		var templates = Map.of(EmailTemplates.Keys.REGISTRATION, "classpath:masterdata/templates/registration.txt");
+		var templates = Map.of(EmailTemplates.Keys.REGISTRATION, "classpath:masterdata/templates/registration-index.txt");
 
 		return new EmailTemplates(loader, templates);
 	}

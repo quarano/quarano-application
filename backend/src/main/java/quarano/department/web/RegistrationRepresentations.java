@@ -18,6 +18,7 @@ package quarano.department.web;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.RequiredArgsConstructor;
+import quarano.core.CoreProperties;
 import quarano.core.EmailTemplates;
 import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase;
@@ -26,7 +27,6 @@ import quarano.department.activation.ActivationCode;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Map;
 
 import org.springframework.hateoas.IanaLinkRelations;
@@ -43,6 +43,7 @@ import org.springframework.stereotype.Component;
 class RegistrationRepresentations {
 
 	private final EmailTemplates templates;
+	private final CoreProperties configuration;
 
 	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
 
@@ -50,6 +51,7 @@ class RegistrationRepresentations {
 
 		var placeholders = Map.of("lastName", trackedCase.getTrackedPerson().getLastName(), //
 				"quarantineEndDate", trackedCase.getQuarantine().getTo().format(formatter), //
+				"host", configuration.getHost(), //
 				"activationCode", code.getId().toString());
 
 		var email = templates.getTemplate(Keys.REGISTRATION, placeholders);
