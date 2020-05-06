@@ -17,6 +17,7 @@ applications:
     - quarano-postgres-dev
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    SPRING_PROFILES_ACTIVE: develop
     
 ###############   demo system #########################
 - name: quarano-frontend
@@ -35,6 +36,7 @@ applications:
     - quarano-postgres
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    SPRING_PROFILES_ACTIVE: prod
     
 ###############   test system #########################
 - name: quarano-frontend-test
