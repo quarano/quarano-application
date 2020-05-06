@@ -19,7 +19,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.core.EmailAddress;
@@ -137,7 +136,6 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	}
 
 	@Data
-	@Accessors(chain = true)
 	@NoArgsConstructor
 	static class TrackedCaseDto {
 

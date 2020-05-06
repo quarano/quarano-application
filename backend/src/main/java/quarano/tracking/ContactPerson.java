@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
@@ -49,7 +48,6 @@ import org.jddd.event.types.DomainEvent;
 @Table(name = "contact_people")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
-@Accessors(chain = true)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPersonIdentifier> {
 

@@ -1,7 +1,6 @@
 package quarano.department.web;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 import quarano.department.InitialReport;
 
 import java.time.LocalDate;
@@ -11,7 +10,6 @@ import javax.validation.constraints.Past;
 import org.springframework.validation.Errors;
 
 @Data
-@Accessors(chain = true)
 public class InitialReportDto {
 
 	private Boolean min15MinutesContactWithC19Pat;

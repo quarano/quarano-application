@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
@@ -53,7 +52,6 @@ import org.springframework.util.StringUtils;
  */
 @Entity
 @Table(name = "tracked_people")
-@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {

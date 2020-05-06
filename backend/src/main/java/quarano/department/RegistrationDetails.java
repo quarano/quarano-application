@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.department.activation.ActivationCode;
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
-@Accessors(chain = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class RegistrationDetails {

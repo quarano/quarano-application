@@ -21,7 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import quarano.core.QuaranoEntity;
 import quarano.department.InitialReport.InitialReportIdentifier;
 
@@ -46,7 +45,6 @@ import org.springframework.util.ReflectionUtils;
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
-@Accessors(chain = true)
 public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdentifier> {
 
 	private Boolean min15MinutesContactWithC19Pat, //

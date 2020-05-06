@@ -22,7 +22,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
 import quarano.reference.Symptom;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
@@ -57,7 +56,6 @@ import org.springframework.util.Assert;
 @EqualsAndHashCode(callSuper = true, of = {})
 @Entity
 @Table(name = "diary_entries")
-@Accessors(chain = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)

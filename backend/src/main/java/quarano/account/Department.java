@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
@@ -43,7 +42,6 @@ import org.jddd.core.types.Identifier;
  */
 @Entity
 @Table(name = "departments")
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
