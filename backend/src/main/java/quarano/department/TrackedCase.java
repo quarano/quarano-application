@@ -72,7 +72,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE) //
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
-	@JoinColumn(name = "initial_report_id", nullable = false) //
+	@JoinColumn(name = "initial_report_id") //
 	private InitialReport initialReport;
 
 	@Setter(AccessLevel.NONE) //
