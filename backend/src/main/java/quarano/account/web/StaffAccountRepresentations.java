@@ -102,11 +102,10 @@ class StaffAccountRepresentations {
 	}
 
 	@RequiredArgsConstructor(staticName = "of")
-	static class StaffAccountCreateInputDto extends RepresentationModel<StaffAccountCreateInputDto> {
+	static class StaffAccountCreateInputDto {
 
 		private @Setter @Getter @NotBlank String firstName, lastName, password, username, passwordConfirm;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
-		private @Setter @Getter String unencryptedPassword;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, AccountService accounts) {
@@ -122,7 +121,7 @@ class StaffAccountRepresentations {
 	}
 	
 	@RequiredArgsConstructor(staticName = "of")
-	static class StaffAccountUpdateInputDto extends RepresentationModel<StaffAccountUpdateInputDto> {
+	static class StaffAccountUpdateInputDto{
 
 		private @Setter @Getter @NotBlank String firstName, lastName, username;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;

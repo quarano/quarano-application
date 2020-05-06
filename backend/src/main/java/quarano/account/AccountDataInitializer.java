@@ -29,7 +29,7 @@ class AccountDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		log.warn("Test data: creating 7 accounts");
+		log.warn("Test data: creating 12 accounts");
 
 		// account for GA user
 		accounts.createStaffAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster", EmailAddress.of("muster@department1.de"),

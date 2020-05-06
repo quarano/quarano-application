@@ -138,21 +138,5 @@ public class AccountService {
 		log.info("Account with accountId " + accountIdToDelete + " has been deleted.");
 	}
 
-	public Account addStaffAccount(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	private boolean accountBelongsToDepartmentOfAdmin(Account accountToDelete, Account accountOfDeletingUser)
-			throws InvalidAdminAccessException {
-
-		if (accountToDelete.belongsTo(accountOfDeletingUser.getDepartmentId())) {
-			return true;
-		} else {
-			throw new InvalidAdminAccessException(
-					"Admin-user does not belong to the same department as the acount that should be deleted; admin-user department: "
-							+ accountOfDeletingUser.getDepartmentId() + ", target account department: "
-							+ accountToDelete.getDepartmentId());
-		}
-	}
 }
