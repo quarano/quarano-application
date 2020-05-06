@@ -40,7 +40,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   get isReadonly(): boolean {
-    if (!this.isNew && !this.diaryEntry._links.edit) { return true; } return false;
+    return !this.isNew && !this.diaryEntry._links.edit;
   }
 
   constructor(
@@ -191,6 +191,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
       if (createdContact) {
         this.contactPersons.push(createdContact);
+        this.formGroup.get('contactPersons').patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
       }
     }));
   }

@@ -1,8 +1,8 @@
 import { IIdentifiable } from '@models/general';
 import { FormControl } from '@angular/forms';
-import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import {Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -11,7 +11,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
   templateUrl: './multiple-autocomplete.component.html',
   styleUrls: ['./multiple-autocomplete.component.scss']
 })
-export class MultipleAutocompleteComponent implements OnInit {
+export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() nameProperties: string[];
   @Input() control: FormControl;
   @Input() placeholder: string;
@@ -24,13 +24,26 @@ export class MultipleAutocompleteComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
 
+  destroy$: Subject<void> = new Subject<void>();
+
   ngOnInit() {
-    this.selectedItemIds = this.control.value;
+    this.control.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data) => {
+      this.selectedItemIds = data;
+    });
+
     this.filteredItems = this.inputControl.valueChanges.pipe(
+      takeUntil(this.destroy$),
       startWith(null as string),
       map((searchTerm: number | string | null) => {
         return typeof (searchTerm) === 'string' ? this._filter(searchTerm) : this.selectableItems.slice();
       }));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private _filter(searchTerm: string): IIdentifiable[] {
