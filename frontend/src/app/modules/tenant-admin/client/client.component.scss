@@ -8,11 +8,12 @@ mat-card {
 
   mat-card-content > .button-area {
     display: flex;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-    //border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    margin-bottom: 20px;
+    margin: 10px 0 20px;
 
     button.mat-button {
+      border: 1px solid;
+      line-height: 26px;
+
       span {
         vertical-align: inherit;
       }
