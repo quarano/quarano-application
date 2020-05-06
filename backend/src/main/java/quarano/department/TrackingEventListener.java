@@ -19,14 +19,25 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.tracking.ContactPerson;
+import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
+import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @Component
 @RequiredArgsConstructor
@@ -34,17 +45,91 @@ import org.springframework.stereotype.Component;
 public class TrackingEventListener {
 
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull TrackedPersonRepository trackedPeople;
+	private final @NonNull DiaryEntryRepository diaryEntries;
 
 	@EventListener
 	void on(EncounterReported event) {
 
 		verifyEnrollmentCompleted(event);
-		createContactCaseFor(event);
+		checkContactCaseCreationFor(event);
+	}
+
+	/**
+	 * If a DiaryEntry is added it might contain new contacts to new ContactPerson, which need to be turned into
+	 * contact-cases
+	 * 
+	 * @param event
+	 */
+	@EventListener
+	void createContactCaseFor(DiaryEntryAdded event) {
+
+		try {
+			List<ContactPerson> contactPersons = event.getEntry().getContacts();
+
+			for (ContactPerson person : contactPersons) {
+				if (isFirstContactTo(person, event.getEntry() , null )) {
+					createContactCase(event.getEntry().getTrackedPersonId(), person);
+				}
+			}
+		} catch (Exception e) {
+
+			// just log the error, do not stop usual saving process of the diary entry
+			log.error("Error during automatical contact-case creation check for diary entry " + event.getEntry().getId(), e);
+		}
+
+	}
+
+	/**
+	 * Checks if there has been a contact to target person before, either as encounter given during enrolement or by
+	 * adding it later or via diary-entry
+	 * 
+	 * @param person
+	 * @return
+	 */
+	private boolean isFirstContactTo(ContactPerson newContactPerson, DiaryEntry entry, Encounter encounter) {
+
+		var trackedPersonId = newContactPerson.getOwnerId();
+
+		// get all contact person of diary entries
+		Stream<DiaryEntry> entries = diaryEntries.findByTrackedPersonId(trackedPersonId).stream();
+
+		List<DiaryEntry> entriesAsList = entries.collect(Collectors.toList());
+		
+		// ignore current diary entry if this came from a diary, because it will always contain current contact
+		if(entry != null) {
+			entriesAsList.remove(entry);
+		}
+		
+		List<ContactPerson> allContactPersonOfTrackedPerson = entriesAsList.stream().flatMap(it -> it.getContacts().stream())
+				.collect(Collectors.toList());
+
+		// get all contact person of encounters
+		var contactOwner = trackedPeople.findById(trackedPersonId);
+
+		
+		// ignore current encounter if there is one
+		if(encounter == null) {
+			allContactPersonOfTrackedPerson.addAll( //
+					contactOwner.get().getEncounters()
+							.map(Encounter::getContact) //
+							.toList());
+		}
+		else {
+			allContactPersonOfTrackedPerson.addAll( //
+					contactOwner.get().getEncounters()
+							.filter(it -> !it.getId().equals(encounter.getId())) //
+							.map(Encounter::getContact) //
+							.toList());
+		}
+
+
+		return !allContactPersonOfTrackedPerson.contains(newContactPerson);
 	}
 
 	private void verifyEnrollmentCompleted(EncounterReported event) {
 
-		var trackedCase = findTrackedCaseFor(event);
+		var trackedCase = findTrackedCaseFor(event.getPersonIdentifier());
 		var enrollment = trackedCase.getEnrollment();
 
 		if (!enrollment.isCompletedQuestionnaire()) {
@@ -58,27 +143,15 @@ public class TrackingEventListener {
 	 *
 	 * @param event
 	 */
-	private void createContactCaseFor(EncounterReported event) {
+	private void checkContactCaseCreationFor(EncounterReported event) {
 
 		ContactPerson contactPerson = event.getEncounter().getContact();
 
 		try {
 
-			if (event.isFirstEncounterWithTargetPerson()) {
+			if (event.isFirstEncounterWithTargetPerson() && this.isFirstContactTo(contactPerson, null,  event.getEncounter() )) {
 
-				var caseOfContactInitializer = findTrackedCaseFor(event);
-
-				// Only contacts of index-cases shall be converted to new cases automatically
-
-				if (caseOfContactInitializer.isIndexCase()) {
-
-					var person = new TrackedPerson(contactPerson);
-					var caseType = contactPerson.getIsHealthStaff() == Boolean.TRUE ? CaseType.CONTACT_MEDICAL : CaseType.CONTACT;
-
-					cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
-
-					log.info("Created automatic contact-case from contact " + contactPerson.getId());
-				}
+				createContactCase(event.getPersonIdentifier(), contactPerson);
 			}
 
 		} catch (Exception e) {
@@ -88,10 +161,25 @@ public class TrackingEventListener {
 		}
 	}
 
-	private TrackedCase findTrackedCaseFor(EncounterReported event) {
+	private void createContactCase(TrackedPersonIdentifier trackedPersonId, ContactPerson contactPerson) {
+		var caseOfContactInitializer = findTrackedCaseFor(trackedPersonId);
 
-		return cases.findByTrackedPerson(event.getPersonIdentifier()) //
-				.orElseThrow(() -> new IllegalStateException(
-						"No tracked case found for tracked person " + event.getPersonIdentifier() + "!"));
+		// Only contacts of index-cases shall be converted to new cases automatically
+
+		if (caseOfContactInitializer.isIndexCase()) {
+
+			var person = new TrackedPerson(contactPerson);
+			var caseType = contactPerson.getIsHealthStaff() == Boolean.TRUE ? CaseType.CONTACT_MEDICAL : CaseType.CONTACT;
+
+			cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
+
+			log.info("Created automatic contact-case from contact " + contactPerson.getId());
+		}
+	}
+
+	private TrackedCase findTrackedCaseFor(TrackedPersonIdentifier identifier) {
+
+		return cases.findByTrackedPerson(identifier) //
+				.orElseThrow(() -> new IllegalStateException("No tracked case found for tracked person " + identifier + "!"));
 	}
 }
