@@ -1,15 +1,16 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {CaseDetailDto} from '@models/case-detail';
-import {VALIDATION_PATTERNS} from '@utils/validation';
-import {Subject} from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { CaseDetailDto } from '@models/case-detail';
+import { VALIDATION_PATTERNS } from '@utils/validation';
+import { Subject } from 'rxjs';
 import * as moment from 'moment';
-import {SubSink} from 'subsink';
+import { SubSink } from 'subsink';
+import { ClientType } from '@models/report-case';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
   const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone || mobilePhone ? null : {phoneMissing: true};
+  return phone || mobilePhone ? null : { phoneMissing: true };
 };
 
 
@@ -20,11 +21,13 @@ const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
 })
 export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
-
+  ClientType = ClientType;
   today = new Date();
 
   @Input()
   caseDetail: CaseDetailDto;
+  @Input()
+  type: ClientType;
 
   formGroup: FormGroup;
 
@@ -32,7 +35,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
   constructor() {
-    this.formGroup = this.createFormGroup();
+    this.createFormGroup();
   }
 
   ngOnInit(): void {
@@ -52,14 +55,14 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createFormGroup() {
-    return new FormGroup({
+    this.formGroup = new FormGroup({
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
 
-      testDate: new FormControl(this.today),
+      testDate: new FormControl(this.type === ClientType.Index ? this.today : null),
 
-      quarantineStartDate: new FormControl(new Date(), []),
-      quarantineEndDate: new FormControl(moment().add(2, 'weeks').toDate(), []),
+      quarantineStartDate: new FormControl(this.type === ClientType.Index ? new Date() : null, []),
+      quarantineEndDate: new FormControl(this.type === ClientType.Index ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl(''),
       houseNumber: new FormControl(''),
@@ -83,8 +86,19 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
       comment: new FormControl('', []),
 
-      infected: new FormControl(true, []),
-    }, [PhoneOrMobilePhoneValidator]);
+      infected: new FormControl(this.type === ClientType.Index ? true : false, []),
+    });
+    this.setValidators();
+  }
+
+  setValidators() {
+    if (this.type === ClientType.Index) {
+      this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
+    } else {
+      this.formGroup.clearValidators();
+    }
+    this.formGroup.updateValueAndValidity();
+    console.log(this.formGroup);
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
@@ -102,7 +116,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   submitForm() {
-    const submitData: any = {...this.formGroup.value};
+    const submitData: any = { ...this.formGroup.value };
 
     Object.keys(submitData).forEach((key) => {
       if (moment.isMoment(submitData[key])) {

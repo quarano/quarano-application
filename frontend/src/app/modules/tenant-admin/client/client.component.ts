@@ -1,15 +1,16 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {CaseDetailDto} from '@models/case-detail';
-import {merge, Observable, Subject} from 'rxjs';
-import {filter, map, switchMap, take} from 'rxjs/operators';
-import {ApiService} from '@services/api.service';
-import {SnackbarService} from '@services/snackbar.service';
-import {CaseActionDto} from '@models/case-action';
-import {MatTabGroup} from '@angular/material/tabs';
-import {StartTracking} from '@models/start-tracking';
-import {HalResponse} from '@models/hal-response';
-import {CaseCommentDto} from '@models/case-comment';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CaseDetailDto } from '@models/case-detail';
+import { merge, Observable, Subject } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
+import { ApiService } from '@services/api.service';
+import { SnackbarService } from '@services/snackbar.service';
+import { CaseActionDto } from '@models/case-action';
+import { MatTabGroup } from '@angular/material/tabs';
+import { StartTracking } from '@models/start-tracking';
+import { HalResponse } from '@models/hal-response';
+import { CaseCommentDto } from '@models/case-comment';
+import { ClientType } from '@models/report-case';
 
 
 @Component({
@@ -19,6 +20,8 @@ import {CaseCommentDto} from '@models/case-comment';
 })
 export class ClientComponent implements OnInit {
   caseId: string;
+  type: ClientType;
+  ClientType = ClientType;
 
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
@@ -28,7 +31,7 @@ export class ClientComponent implements OnInit {
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
-  @ViewChild('tabs', {static: false})
+  @ViewChild('tabs', { static: false })
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
@@ -54,6 +57,9 @@ export class ClientComponent implements OnInit {
     if (this.route.snapshot.paramMap.has('id')) {
       this.caseId = this.route.snapshot.paramMap.get('id');
     }
+    if (this.route.snapshot.paramMap.has('type')) {
+      this.type = this.route.snapshot.paramMap.get('type') as ClientType;
+    }
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
@@ -65,7 +71,7 @@ export class ClientComponent implements OnInit {
             this.trackingStart$$.next(sartTracking);
           });
       }
-    );
+      );
   }
 
   hasOpenAnomalies(): Observable<boolean> {
@@ -76,9 +82,9 @@ export class ClientComponent implements OnInit {
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;
     if (!caseDetail.caseId) {
-      saveData$ = this.apiService.createCase(caseDetail);
+      saveData$ = this.apiService.createCase(caseDetail, this.type);
     } else {
-      saveData$ = this.apiService.updateCase(caseDetail);
+      saveData$ = this.apiService.updateCase(caseDetail, this.type);
     }
 
     saveData$.subscribe(() => {

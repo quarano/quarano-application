@@ -10,7 +10,7 @@ import { map, share } from 'rxjs/operators';
 import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
 import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
 import { Register } from '@models/register';
-import { ReportCaseDto } from '@models/report-case';
+import { ReportCaseDto, ClientType } from '@models/report-case';
 import { ActionListItemDto } from '@models/action';
 import { CaseDetailDto } from '@models/case-detail';
 import { CaseActionDto } from '@models/case-action';
@@ -108,12 +108,12 @@ export class ApiService {
     return this.httpClient.put(link.href, { comment });
   }
 
-  createCase(caseDetail: CaseDetailDto): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/api/hd/cases`, caseDetail);
+  createCase(caseDetail: CaseDetailDto, type: ClientType): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/api/hd/cases?type=${type}`, caseDetail);
   }
 
-  updateCase(caseDetail: CaseDetailDto): Observable<any> {
-    return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
+  updateCase(caseDetail: CaseDetailDto, type: ClientType): Observable<any> {
+    return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}?type=${type}`, caseDetail);
   }
 
   addComment(caseId: string, comment: string): Observable<any> {

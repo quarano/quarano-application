@@ -87,7 +87,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
           ) {
             // ToDo ggf. anpassen, wenn das Fehlerformat für 400 vom Backend vorliegt https://jira.quarano.de/browse/CORE-85
-            this.snackbarService.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt.')
+            this.snackbarService.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt.');
             const errorJson = JSON.parse(serverError);
             if (errorJson && errorJson.message) {
               console.log(errorJson.message);

@@ -8,7 +8,8 @@
       </span>
     </mat-card-title>
     <ng-template #newCase>
-      <mat-card-title><span>Neuen Fall anlegen</span></mat-card-title>
+      <mat-card-title><span>Neuen {{type === ClientType.Index ? 'Indexfall' : 'Kontaktfall'}} anlegen</span>
+      </mat-card-title>
     </ng-template>
   </mat-card-header>
   <mat-card-content>
@@ -37,16 +38,12 @@
         <p class="hint secondary-text-color">
           Pflichteingaben sind mit * markiert
         </p>
-        <app-client-edit
-          [caseDetail]="caseDetail$ | async"
-          (submittedValues)="saveCaseData($event)"
-        ></app-client-edit>
+        <app-client-edit [caseDetail]="caseDetail$ | async" (submittedValues)="saveCaseData($event)" [type]="type">
+        </app-client-edit>
       </mat-tab>
       <mat-tab *ngIf="caseAction$ | async">
         <ng-template mat-tab-label>
-          <span
-            *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
-            [matBadge]="
+          <span *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies" [matBadge]="
               (
                 (caseAction$ | async).anomalies.health.length +
                 (caseAction$ | async).anomalies.process.length
@@ -61,9 +58,7 @@
           ><span>Aktionen</span></ng-template
           >
         </ng-template>
-        <app-client-action
-          [caseAction]="caseAction$ | async"
-        ></app-client-action>
+        <app-client-action [caseAction]="caseAction$ | async"></app-client-action>
       </mat-tab>
       <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{caseComments.length}})">
         <ng-template mat-tab-label>
@@ -71,14 +66,8 @@
         </ng-template>
         <app-client-comments [comments]="caseComments$ | async" (newComment)="addComment($event)"></app-client-comments>
       </mat-tab>
-      <mat-tab
-        *ngIf="trackingStart$$ | async as tracking"
-        label="E-Mail Vorlage"
-      >
-        <app-client-mail
-          [tracking]="tracking"
-          (renewTrackingCode)="renewTracking(tracking)"
-        ></app-client-mail>
+      <mat-tab *ngIf="trackingStart$$ | async as tracking" label="E-Mail Vorlage">
+        <app-client-mail [tracking]="tracking" (renewTrackingCode)="renewTracking(tracking)"></app-client-mail>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
