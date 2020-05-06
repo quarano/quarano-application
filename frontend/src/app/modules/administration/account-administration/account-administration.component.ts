@@ -60,7 +60,7 @@ export class AccountAdministrationComponent implements OnInit, OnDestroy {
           this.apiService.delete(user._links)
             .subscribe(_ => {
               this.snackbarService.success(`${user.firstName} ${user.lastName} wurde erfolgreich gelöscht.`);
-              this.accounts.remove(user);
+              this.accounts = this.accounts.remove(user);
             });
         }
       });

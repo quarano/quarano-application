@@ -15,7 +15,7 @@ import { ActionListItemDto } from '@models/action';
 import { CaseDetailDto } from '@models/case-detail';
 import { CaseActionDto } from '@models/case-action';
 import { HalResponse } from '@models/hal-response';
-import { AccountDto } from '@models/account';
+import { AccountDto, AccountListDto } from '@models/account';
 
 @Injectable({
   providedIn: 'root'
@@ -155,9 +155,9 @@ export class ApiService {
       .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
   }
 
-  getHealthDepartmentUsers(): Observable<AccountDto[]> {
-    return this.httpClient.get<AccountDto[]>(`${this.baseUrl}/api/hd/accounts`)
-      .pipe(share());
+  getHealthDepartmentUsers(): Observable<AccountListDto> {
+    return this.httpClient.get<any>(`${this.baseUrl}/api/hd/accounts`)
+      .pipe(share(), map(result => result._embedded));
   }
 
   getHealthDepartmentUser(id: string): Observable<AccountDto> {
