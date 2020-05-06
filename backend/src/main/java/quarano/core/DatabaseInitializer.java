@@ -18,55 +18,53 @@ package quarano.core;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.sql.DataSource;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
  */
-@Profile("!prod & !integrationtest")
+@Profile("develop")
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class DatabaseInitializer implements BeanPostProcessor {
-
-	private final DataSourceProperties configuration;
+public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
+	 * @see org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer#customize(org.flywaydb.core.api.configuration.FluentConfiguration)
 	 */
 	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+	public void customize(FluentConfiguration configuration) {
 
-		if (!DataSource.class.isInstance(bean)) {
-			return bean;
-		}
+		DataSource dataSource = configuration.getDataSource();
 
-		if (!configuration.getUrl().contains("postgres")) {
-			log.info("Database is not a Postgres! Skipping data wiping!");
-		} else {
-			log.info("Wiping database tables from: " + configuration.getUrl());
-		}
+		String url;
+		try {
+			url = JdbcUtils.extractDatabaseMetaData(dataSource, "getURL");
 
-		JdbcTemplate template = new JdbcTemplate((DataSource) bean);
-		List<Map<String, Object>> result = template.queryForList("select tablename from pg_tables;");
+			if (!url.contains("postgres")) {
+				log.info("Database is not a Postgres! Skipping data wiping!");
+				return;
+			}
 
-		result.stream() //
+		} catch (MetaDataAccessException e) {}
+
+		log.info("Wiping database tables.");
+
+		var template = new JdbcTemplate(dataSource);
+
+		template.queryForList("select tablename from pg_tables;").stream() //
 				.map(it -> it.get("tablename").toString()) //
 				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_")) //
 				.peek(it -> log.info("Dropping database table " + it)) //
 				.forEach(it -> template.execute(String.format("DROP TABLE \"%s\" CASCADE;", it)));
-
-		return bean;
 	}
 }
