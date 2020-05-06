@@ -1,15 +1,21 @@
 <div style="max-width: 1110px;">
   <div style="display: flex; justify-content: space-between;">
-    <button class="mb-3" mat-raised-button data-cy="new-case-button" color="primary"
-      [routerLink]="['/tenant-admin/client']">
-      <mat-icon>add</mat-icon>Neuen Fall anlegen
-    </button>
-    <button class="mb-3" data-cy="export-cases-button" mat-button>
+    <div style="display:flex">
+      <button mat-raised-button data-cy="new-case-button" color="primary"
+        [routerLink]="['/tenant-admin/client', 'index']">
+        <mat-icon>add</mat-icon>Neuen Fall anlegen
+      </button>
+      <button class="ml-3" mat-raised-button color="primary" [routerLink]="['/tenant-admin/client', 'contact']">
+        <mat-icon>add</mat-icon>Neuen Kontakt anlegen
+      </button>
+    </div>
+
+    <button data-cy="export-cases-button" mat-button>
       <mat-icon>get_app</mat-icon>csv-Export speichern
     </button>
   </div>
 
-  <mat-form-field appearance="outline" class="full-width">
+  <mat-form-field appearance="outline" class="full-width mt-3">
     <input matInput data-cy="search-case-input" type="text" placeholder="Suchen..." (keyup)="updateFilter($event)" />
   </mat-form-field>
 
@@ -34,7 +40,7 @@
       [draggable]="true" [canAutoResize]="true">
     </ngx-datatable-column>
 
-    <ngx-datatable-column prop="type" name="Typ" width="90" [resizeable]="true" [sortable]="true" [draggable]="true"
+    <ngx-datatable-column prop="typeName" name="Typ" width="90" [resizeable]="true" [sortable]="true" [draggable]="true"
       [canAutoResize]="true">
     </ngx-datatable-column>
 

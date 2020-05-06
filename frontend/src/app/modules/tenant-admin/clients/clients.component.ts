@@ -73,7 +73,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
     return {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
-      type: this.getTypeName(c.caseType),
+      type: c.caseType,
+      typeName: this.getTypeName(c.caseType),
       dateOfBirth: c.dateOfBirth ? c.dateOfBirth.toCustomLocaleDateString() : '-',
       email: c.email,
       phone: c.phone || '-',
@@ -134,6 +135,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     console.log(event);
-    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.caseId]);
+    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId]);
   }
 }

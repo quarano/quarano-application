@@ -25,12 +25,12 @@ const routes: Routes = [
         resolve: { cases: ReportCasesResolver }
       },
       {
-        path: 'client/:id',
+        path: 'client/:type/:id',
         component: ClientComponent,
         resolve: { case: ReportCaseResolver, actions: ReportCaseActionsResolver }
       },
       {
-        path: 'client',
+        path: 'client/:type',
         component: ClientComponent,
       },
       {

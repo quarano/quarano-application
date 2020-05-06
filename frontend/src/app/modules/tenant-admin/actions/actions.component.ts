@@ -9,7 +9,8 @@ import { MatOption } from '@angular/material/core';
 export class ActionRowViewModel {
   lastName: string;
   firstName: string;
-  caseType: string;
+  typeName: string;
+  type: ClientType;
   dateOfBirth: string;
   email: string;
   phone: string;
@@ -59,7 +60,8 @@ export class ActionsComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      caseType: this.getTypeName(action.caseType),
+      typeName: this.getTypeName(action.caseType),
+      type: action.caseType,
       dateOfBirth: action.dateOfBirth ? action.dateOfBirth.toCustomLocaleDateString() : '-',
       email: action.email,
       phone: action.phone || '-',
@@ -104,7 +106,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   onSelect(event) {
     this.router.navigate(
-      ['/tenant-admin/client', event?.selected[0]?.caseId],
+      ['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId],
       {
         queryParams: { tab: 1 }
       });
