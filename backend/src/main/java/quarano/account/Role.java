@@ -18,10 +18,10 @@ package quarano.account;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -38,18 +38,15 @@ import javax.persistence.Table;
 public class Role {
 
 	@Id //
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //
 	@Column(name = "role_id") //
-	private int id;
+	private UUID id;
 
 	@Column(name = "role_name") //
 	private String name;
 
 	public Role(RoleType name) {
-		this.name = name.getCode();
-	}
 
-	public Role(RoleType name, int id) {
+		this.id = UUID.randomUUID();
 		this.name = name.getCode();
 	}
 
@@ -61,7 +58,7 @@ public class Role {
 	public static Role of(RoleType type) {
 		return new Role(type);
 	}
-	
+
 	public RoleType getRoleType() {
 		return RoleType.valueOf(this.name);
 	}

@@ -37,6 +37,7 @@ class RoleDataInitializer implements DataInitializer {
 			}
 
 			log.info("Adding missing role " + type);
+
 			roleRepository.save(new Role(type));
 		}
 	}

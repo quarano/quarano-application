@@ -28,14 +28,14 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE roles (
-	role_id serial NOT NULL,
+	role_id uuid NOT NULL,
 	role_name varchar(255) NULL,
 	CONSTRAINT roles_pkey PRIMARY KEY (role_id)
 );
 
 CREATE TABLE accounts_roles (
 	account_account_id uuid NOT NULL,
-	roles_role_id integer NOT NULL,
+	roles_role_id uuid NOT NULL,
 	CONSTRAINT accounts_roles_account_fk FOREIGN KEY (roles_role_id) REFERENCES roles(role_id),
 	CONSTRAINT accounts_roles_role_fk FOREIGN KEY (account_account_id) REFERENCES accounts(account_id)
 );
