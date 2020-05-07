@@ -9,7 +9,7 @@
       <span class="type">{{typeName}}</span>
     </mat-card-title>
     <ng-template #newCase>
-      <mat-card-title><span>Neuen {{type === ClientType.Index ? 'Indexfall' : 'Kontaktfall'}} anlegen</span>
+      <mat-card-title><span>Neuen {{type.value === ClientType.Index ? 'Indexfall' : 'Kontaktfall'}} anlegen</span>
       </mat-card-title>
     </ng-template>
   </mat-card-header>
