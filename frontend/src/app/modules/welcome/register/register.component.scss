@@ -1,3 +1,5 @@
+@import "../../../../styles/variables";
+
 .data-protection-wrapper {
   display: flex;
   align-items: center;
@@ -8,3 +10,10 @@
     max-height: 95vh !important;
   }
 }
+
+#data-protection-btn {
+  margin: 0 !important;
+  color: $primary-color;
+}
+
+
