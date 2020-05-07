@@ -126,7 +126,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    console.log(event);
     this.router.navigate(['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId]);
   }
 }

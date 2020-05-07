@@ -98,7 +98,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       this.formGroup.clearValidators();
     }
     this.formGroup.updateValueAndValidity();
-    console.log(this.formGroup);
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {

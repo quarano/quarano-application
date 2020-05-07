@@ -21,7 +21,8 @@ import { ClientType } from '@models/report-case';
 })
 export class ClientComponent implements OnInit {
   caseId: string;
-  type: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(ClientType.Index);
+  type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
+  type$: Observable<ClientType> = this.type$$.asObservable();
   ClientType = ClientType;
 
   caseDetail$: Observable<CaseDetailDto>;
@@ -62,7 +63,7 @@ export class ClientComponent implements OnInit {
       this.caseId = this.route.snapshot.paramMap.get('id');
     }
     if (this.route.snapshot.paramMap.has('type')) {
-      this.type.next(this.route.snapshot.paramMap.get('type') as ClientType);
+      this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
 
     this.caseDetail$.pipe(
@@ -82,16 +83,16 @@ export class ClientComponent implements OnInit {
     return this.caseAction$.pipe(map(a => (a.anomalies.health.length + a.anomalies.process.length) > 0));
   }
 
-  get typeName(): string {
-    return this.clientService.getTypeName(this.type.value);
+  get typeName(): Observable<string> {
+    return this.type$.pipe(map(type => this.clientService.getTypeName(type)));
   }
 
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;
     if (!caseDetail.caseId) {
-      saveData$ = this.apiService.createCase(caseDetail, this.type.value);
+      saveData$ = this.apiService.createCase(caseDetail, this.type$$.value);
     } else {
-      saveData$ = this.apiService.updateCase(caseDetail, this.type.value);
+      saveData$ = this.apiService.updateCase(caseDetail, this.type$$.value);
     }
 
     saveData$.subscribe(() => {
@@ -131,5 +132,9 @@ export class ClientComponent implements OnInit {
       this.updatedDetail$$.next(data);
 
     });
+  }
+
+  changeToIndexType() {
+    this.type$$.next(ClientType.Index);
   }
 }
