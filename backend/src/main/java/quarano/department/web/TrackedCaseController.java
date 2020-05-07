@@ -41,15 +41,16 @@ import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -81,12 +82,20 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull SmartValidator validator;
 
+	private final EmbeddedWrappers wrappers = new EmbeddedWrappers(false);
+
 	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
 	RepresentationModel<?> getCases(@LoggedIn Department department) {
 
-		return CollectionModel.of(cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
+		var summaries = cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
 				.map(representations::toSummary) //
-				.toList());
+				.toList();
+
+		Object collection = summaries.isEmpty() //
+				? List.of(wrappers.emptyCollectionOf(TrackedCaseSummary.class)) //
+				: summaries;
+
+		return RepresentationModel.of(collection);
 	}
 
 	@PostMapping(path = "/api/hd/cases", params = "type=contact")
