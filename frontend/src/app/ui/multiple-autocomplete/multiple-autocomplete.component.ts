@@ -33,6 +33,8 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       this.selectedItemIds = data;
     });
 
+    this.selectedItemIds = this.control.value;
+
     this.filteredItems = this.inputControl.valueChanges.pipe(
       takeUntil(this.destroy$),
       startWith(null as string),
