@@ -19,6 +19,7 @@ import { ReportCaseResolver } from '@resolvers/report-case.resolver';
 import { EditComponent } from './client/edit/edit.component';
 import { CommentsComponent } from './client/comments/comments.component';
 import { MailComponent } from './client/mail/mail.component';
+import { CloseCaseDialogComponent } from './client/close-case-dialog/close-case-dialog.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MailComponent } from './client/mail/mail.component';
     ActionComponent,
     AnomalyComponent,
     CommentsComponent,
-    MailComponent
+    MailComponent,
+    CloseCaseDialogComponent
   ],
   imports: [
     CommonModule,

@@ -29,8 +29,8 @@
       <div class="spacer"></div>
       <button mat-button
               (click)="closeCase(caseDetail)"
-              [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">Fall
-        abschließen
+              [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">
+        Fall abschließen
       </button>
     </div>
     <mat-tab-group #tabs [selectedIndex]="tabIndex">
@@ -49,9 +49,9 @@
                 (caseAction$ | async).anomalies.process.length
               ).toString()
             "
-            matBadgeOverlap="false"
-            matBadgeSize="small"
-            matBadgeColor="warn"
+                matBadgeOverlap="false"
+                matBadgeSize="small"
+                matBadgeColor="warn"
           >Aktionen</span
           >
           <ng-template #has_no_open_anomalies

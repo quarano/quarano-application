@@ -1,16 +1,18 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CaseDetailDto } from '@models/case-detail';
-import { merge, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ApiService } from '@services/api.service';
-import { SnackbarService } from '@services/snackbar.service';
-import { CaseActionDto } from '@models/case-action';
-import { MatTabGroup } from '@angular/material/tabs';
-import { StartTracking } from '@models/start-tracking';
-import { HalResponse } from '@models/hal-response';
-import { CaseCommentDto } from '@models/case-comment';
-import { ClientType } from '@models/report-case';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CaseDetailDto} from '@models/case-detail';
+import {merge, Observable, Subject} from 'rxjs';
+import {filter, map, take} from 'rxjs/operators';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
+import {CaseActionDto} from '@models/case-action';
+import {MatTabGroup} from '@angular/material/tabs';
+import {StartTracking} from '@models/start-tracking';
+import {HalResponse} from '@models/hal-response';
+import {CaseCommentDto} from '@models/case-comment';
+import {ClientType} from '@models/report-case';
+import {MatDialog} from '@angular/material/dialog';
+import {CloseCaseDialogComponent, CloseCaseDialogResponse} from './close-case-dialog/close-case-dialog.component';
 
 
 @Component({
@@ -31,14 +33,15 @@ export class ClientComponent implements OnInit {
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
-  @ViewChild('tabs', { static: false })
+  @ViewChild('tabs', {static: false})
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
 
   constructor(
     private route: ActivatedRoute, private router: Router,
-    private apiService: ApiService, private snackbarService: SnackbarService) {
+    private apiService: ApiService, private snackbarService: SnackbarService,
+    private matDialog: MatDialog) {
 
   }
 
@@ -71,7 +74,7 @@ export class ClientComponent implements OnInit {
             this.trackingStart$$.next(sartTracking);
           });
       }
-      );
+    );
   }
 
   hasOpenAnomalies(): Observable<boolean> {
@@ -116,13 +119,25 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  closeCase(halResponse: HalResponse) {
-    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
-      switchMap(() => this.apiService.getCase(this.caseId))
-    ).subscribe((data) => {
-      this.snackbarService.success('Fall abgeschlossen.');
-      this.updatedDetail$$.next(data);
 
+  closeCase(halResponse: HalResponse) {
+
+    const closeCaseResponse$: Observable<CloseCaseDialogResponse> = this.matDialog
+      .open(CloseCaseDialogComponent, {width: '640px'}).afterClosed();
+
+    closeCaseResponse$.subscribe(response => {
+      if (response.comment) {
+        this.addComment(response.comment);
+      }
     });
+
+    // todo close case service call pipen
+    /*    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
+          switchMap(() => this.apiService.getCase(this.caseId))
+        ).subscribe((data) => {
+          this.snackbarService.success('Fall abgeschlossen.');
+          this.updatedDetail$$.next(data);
+
+        });*/
   }
 }
