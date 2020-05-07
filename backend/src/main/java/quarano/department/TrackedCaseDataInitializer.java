@@ -42,6 +42,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	private final TrackedPersonRepository trackedPeople;
 	private final DepartmentRepository departments;
 
+	public static final TrackedCaseIdentifier TRACKED_CASE_TANJA = TrackedCaseIdentifier
+			.of(UUID.fromString("5e2d917f-7cb4-4084-ab32-62b4b19b2a74"));
+	
 	public static final TrackedCaseIdentifier TRACKED_CASE_SANDRA = TrackedCaseIdentifier
 			.of(UUID.fromString("e55ce370-7dbe-11ea-bc55-0242ac134711"));
 

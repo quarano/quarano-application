@@ -26,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
+import quarano.department.CaseType;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import javax.validation.groups.Default;
@@ -46,6 +49,7 @@ import javax.validation.groups.Default;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
@@ -54,6 +58,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -61,6 +66,7 @@ import com.jayway.jsonpath.ReadContext;
 
 /**
  * @author Oliver Drotbohm
+ * @author Patrick Otto
  */
 @WithQuaranoUser("agent1")
 @QuaranoWebIntegrationTest
@@ -75,13 +81,14 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
 	private final LinkDiscoverer discoverer;
+	private final ModelMapper modelMapper;
 
 	@Test
-	void successfullyCreatesNewTrackedCase() throws Exception {
+	void successfullyCreatesNewTrackedIndexCase() throws Exception {
 
 		var payload = createMinimalIndexPayload();
 
-		var response = issueIndexCaseCreation(payload).getContentAsString();
+		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
 		var document = JsonPath.parse(response);
 
 		assertMinimalFieldsSet(document, payload);
@@ -95,7 +102,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setEmail("foo@bar.com") //
 				.setDateOfBirth(LocalDate.now().minusYears(25));
 
-		var response = issueIndexCaseCreation(payload).getContentAsString();
+		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
 		var document = JsonPath.parse(response);
 
 		assertMinimalFieldsSet(document, payload);
@@ -106,11 +113,10 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test
-	@SuppressWarnings("null")
-	void updatesCaseWithMinimalPayload() throws Exception {
+	void successfullyUpdatesIndexCaseWithMinimalPayload() throws Exception {
 
 		var payload = createMinimalIndexPayload();
-		var response = issueIndexCaseCreation(payload);
+		var response = issueCaseCreation(payload, CaseType.INDEX);
 
 		String location = response.getHeader(HttpHeaders.LOCATION);
 
@@ -125,6 +131,91 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertMinimalFieldsSet(document, payload);
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
+	
+	@Test
+	void successfullyTransformContactCaseToIndexCase() throws Exception {
+
+		// get contact case Tanja and turn it into dto
+		var contactCaseTanja = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
+		TrackedCaseDto caseTanjaAsDto =  new TrackedCaseDto();
+		modelMapper.map(contactCaseTanja, caseTanjaAsDto);
+		
+		// set necessary fields to be a valid index case
+		caseTanjaAsDto.setInfected(true);
+		caseTanjaAsDto.setTestDate(LocalDate.now());
+		caseTanjaAsDto.setPhone("4456465465");
+		caseTanjaAsDto.setQuarantineStartDate(LocalDate.now());
+		caseTanjaAsDto.setQuarantineEndDate(LocalDate.now().plusDays(14));
+		
+		// start the transofrmation
+		var response = issueToIndexCaseTransformation(caseTanjaAsDto);
+		
+		// check response
+		var document = JsonPath.parse(response.getContentAsString());
+		assertMinimalFieldsSet(document, caseTanjaAsDto);
+		assertThat(document.read("$.infected", boolean.class)).isTrue();
+		
+		// check if case has been stored correctly
+		var contactCaseTanjaAfterTransformation = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
+		assertThat(contactCaseTanjaAfterTransformation.getType() == CaseType.INDEX);
+	}
+	
+	@Test
+	void rejectTransformContactCaseWhenInfoMissing() throws Exception {
+
+		// get contact case Tanja and turn it into dto
+		var contactCaseTanja = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
+		TrackedCaseDto caseTanjaAsDto =  new TrackedCaseDto();
+		modelMapper.map(contactCaseTanja, caseTanjaAsDto);
+		
+		// test date is missing
+		caseTanjaAsDto.setInfected(true);
+		caseTanjaAsDto.setPhone("4456465465");
+		caseTanjaAsDto.setQuarantineStartDate(LocalDate.now());
+		caseTanjaAsDto.setQuarantineEndDate(LocalDate.now().plusDays(14));
+		
+		// start the transoformation
+		var response = expectBadRequestOnTransformationCall(caseTanjaAsDto, contactCaseTanja.getId());
+		
+		// response should contain  error message for field testDate
+		var document = JsonPath.parse(response.getContentAsString());
+		assertThat(document.read("$.testDate", String.class)).isNotNull();
+	}
+	
+	@Test
+	void rejectCreationOfContactCaseWithPositiveTestResult() throws Exception {
+
+		var payload = createMinimalContactPayload();
+		payload.setTestDate(LocalDate.now().minusDays(8));
+		payload.setInfected(true);
+		
+		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
+		
+		var document = JsonPath.parse(response);
+		assertThat(document.read("$.testDate", String.class)).isNotNull();
+
+	}
+	
+	@Test
+	void rejectUpdateOfContactCaseWithPositiveTestResult() throws Exception {
+
+		var payload = createMinimalContactPayload();
+		
+		var response = issueCaseCreation(payload, CaseType.CONTACT);
+		
+		var document = JsonPath.parse(response.getContentAsString());
+		var caseId = document.read("$.caseId", String.class);
+		
+		payload.setTestDate(LocalDate.now().minusDays(8));
+		payload.setInfected(true);
+
+		response = expectBadRequestOnUpdate(payload, CaseType.CONTACT, TrackedCaseIdentifier.of(UUID.fromString(caseId)));
+
+		document = JsonPath.parse(response.getContentAsString());
+		assertThat(document.read("$.testDate", String.class)).isNotNull();
+
+	}	
+
 
 	@TestFactory
 	Stream<DynamicTest> rejectsIndexCaseCreationWithoutRequiredFields() throws Exception {
@@ -233,15 +324,66 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test
+	// Only firstname, and lastname is mandatory for contact cases
+	void successfullyCreateContactCaseWithMinimalInput() throws Exception {
+		
+		var payload = createMinimalContactPayload();
+
+		var response = issueCaseCreation(payload, CaseType.CONTACT);
+				
+		assertThat(JsonPath.parse(response).read("$.firstName", String.class).equals(payload.getFirstName()));
+		assertThat(JsonPath.parse(response).read("$.lastName", String.class).equals(payload.getLastName()));
+		assertThat(cases.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
+	}
+	
+	@Test
+	// Only firstname, and lastname is mandatory for contact cases
+	void successfullyUpdateContactCaseWithMinimalInput() throws Exception {
+		
+		var payload = createMinimalContactPayload();
+		var response = issueCaseCreation(payload, CaseType.CONTACT);
+
+		var document = JsonPath.parse(response.getContentAsString());
+		var caseId = TrackedCaseIdentifier.of(UUID.fromString(document.read("$.caseId", String.class)));
+
+		response = issueCaseUpdate(payload.setEmail("myemail@email.de"), caseId, CaseType.CONTACT);
+
+		document = JsonPath.parse(response.getContentAsString());
+
+		assertMinimalFieldsSet(document, payload);
+		assertThat(document.read("$.email", String.class)).equals("myemail@email.de");
+	}
+	
+
+	@Test
+	void emptyEmailDoesNotTriggerValidation() throws Exception {
+
+		var contactCase = createMinimalContactPayload();
+		contactCase.setEmail("");
+
+		mvc.perform(post("/api/hd/cases") //
+				.content(jackson.writeValueAsString(contactCase)) //
+				.contentType(MediaType.APPLICATION_JSON).param("type", "contact")) //
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void updatingContactMedicalCaseDoesNotRequireQuarantineData() throws Exception {
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_MEDICAL );
+
+	}
+	
+	
+	@Test
 	void updatingContactCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
+		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT );
 
-		mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId()) //
-				.content(jackson.writeValueAsString(createMinimalContactPayload())) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk());
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
@@ -257,9 +399,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		return new TrackedCaseDto() //
 				.setFirstName("Michael") //
-				.setLastName("Mustermann") //
-				.setEmail("") // empty email to verify it gets bound to null and does not trigger validation
-				.setPhone("0123456789");
+				.setLastName("Mustermann");
 	}
 
 	private TrackedCaseDto createMinimalIndexPayload() {
@@ -272,15 +412,27 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()));
 	}
 
-	private MockHttpServletResponse issueIndexCaseCreation(TrackedCaseDto payload) throws Exception {
+	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload, CaseType type) throws Exception {
 
 		return mvc.perform(post("/api/hd/cases") //
+				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
 				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isCreated()) //
 				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
 				.andReturn().getResponse();
 	}
+	
+	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload,  TrackedCaseIdentifier caseId, CaseType type) throws Exception {
+
+		return mvc.perform(put("/api/hd/cases/{id}", caseId) //
+				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+				.andReturn().getResponse();
+	}	
 
 	private static void assertMinimalFieldsSet(DocumentContext document, TrackedCaseDto payload) {
 
@@ -293,4 +445,37 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
+	
+	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload)
+			throws Exception, JsonProcessingException {
+		var response = mvc.perform(put("/api/hd/cases") //
+				.param("toIndex", "true")
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse();
+		return response;
+	}	
+
+	private MockHttpServletResponse expectBadRequestOnTransformationCall(TrackedCaseDto payload, TrackedCaseIdentifier caseId)
+			throws Exception, JsonProcessingException {
+		var response = mvc.perform(put("/api/hd/cases/{id}", caseId) //
+				.param("toIndex", "true")
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse();
+		return response;
+	}		
+	
+	private MockHttpServletResponse expectBadRequestOnUpdate(TrackedCaseDto payload, CaseType type, TrackedCaseIdentifier caseId)
+			throws Exception, JsonProcessingException {
+		var response = mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
+				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse();
+		return response;
+	}			
 }
