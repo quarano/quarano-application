@@ -2,7 +2,7 @@ import { ClientService } from './../../../services/client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CaseDetailDto } from '@models/case-detail';
-import { merge, Observable, Subject } from 'rxjs';
+import { merge, Observable, Subject, BehaviorSubject } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ApiService } from '@services/api.service';
 import { SnackbarService } from '@services/snackbar.service';
@@ -21,7 +21,7 @@ import { ClientType } from '@models/report-case';
 })
 export class ClientComponent implements OnInit {
   caseId: string;
-  type: ClientType;
+  type: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(ClientType.Index);
   ClientType = ClientType;
 
   caseDetail$: Observable<CaseDetailDto>;
@@ -62,7 +62,7 @@ export class ClientComponent implements OnInit {
       this.caseId = this.route.snapshot.paramMap.get('id');
     }
     if (this.route.snapshot.paramMap.has('type')) {
-      this.type = this.route.snapshot.paramMap.get('type') as ClientType;
+      this.type.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
 
     this.caseDetail$.pipe(
@@ -83,15 +83,15 @@ export class ClientComponent implements OnInit {
   }
 
   get typeName(): string {
-    return this.clientService.getTypeName(this.type);
+    return this.clientService.getTypeName(this.type.value);
   }
 
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;
     if (!caseDetail.caseId) {
-      saveData$ = this.apiService.createCase(caseDetail, this.type);
+      saveData$ = this.apiService.createCase(caseDetail, this.type.value);
     } else {
-      saveData$ = this.apiService.updateCase(caseDetail, this.type);
+      saveData$ = this.apiService.updateCase(caseDetail, this.type.value);
     }
 
     saveData$.subscribe(() => {
