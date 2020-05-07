@@ -61,6 +61,11 @@ mat-card-title {
       padding: 4px 10px;
       margin-left: 15px;
     }
+    &.type {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: bold;
+    }
   }
 }
 

@@ -1,3 +1,4 @@
+import { ClientService } from './../../../services/client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { ActionListItemDto } from '@models/action';
@@ -35,7 +36,8 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private clientService: ClientService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -60,7 +62,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      typeName: this.getTypeName(action.caseType),
+      typeName: this.clientService.getTypeName(action.caseType),
       type: action.caseType,
       dateOfBirth: action.dateOfBirth ? action.dateOfBirth.toCustomLocaleDateString() : '-',
       email: action.email,
@@ -70,17 +72,6 @@ export class ActionsComponent implements OnInit, OnDestroy {
       alerts: action.alerts || [],
       caseId: action.caseId
     };
-  }
-
-  private getTypeName(clientType: ClientType): string {
-    switch (clientType) {
-      case ClientType.Contact:
-        return 'Kontakt';
-      case ClientType.Index:
-        return 'Index';
-      default:
-        return '-';
-    }
   }
 
   getAvailableAlerts(): string[] {

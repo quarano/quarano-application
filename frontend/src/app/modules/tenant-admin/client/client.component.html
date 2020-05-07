@@ -6,6 +6,7 @@
         Falldetails {{ caseDetail.firstName }} {{ caseDetail.lastName }}
         <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
+      <span class="type">{{typeName}}</span>
     </mat-card-title>
     <ng-template #newCase>
       <mat-card-title><span>Neuen {{type === ClientType.Index ? 'Indexfall' : 'Kontaktfall'}} anlegen</span>
@@ -14,22 +15,17 @@
   </mat-card-header>
   <mat-card-content>
     <div class="button-area" *ngIf="caseDetail$ | async as caseDetail">
-      <button (click)="startTracking(caseDetail)"
-              color="primary"
-              [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
-              mat-button>
+      <button (click)="startTracking(caseDetail)" color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')" mat-button>
         Nachverfolgung
         <span *ngIf="trackingStart$$ | async">erneut </span>starten
       </button>
-      <button color="primary"
-              [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
-              mat-button>
+      <button color="primary" [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')" mat-button>
         Analog nachverfolgen
       </button>
       <div class="spacer"></div>
-      <button mat-button
-              (click)="closeCase(caseDetail)"
-              [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">Fall
+      <button mat-button (click)="closeCase(caseDetail)"
+        [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">Fall
         abschließen
       </button>
     </div>
@@ -48,15 +44,8 @@
                 (caseAction$ | async).anomalies.health.length +
                 (caseAction$ | async).anomalies.process.length
               ).toString()
-            "
-            matBadgeOverlap="false"
-            matBadgeSize="small"
-            matBadgeColor="warn"
-          >Aktionen</span
-          >
-          <ng-template #has_no_open_anomalies
-          ><span>Aktionen</span></ng-template
-          >
+            " matBadgeOverlap="false" matBadgeSize="small" matBadgeColor="warn">Aktionen</span>
+          <ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
         </ng-template>
         <app-client-action [caseAction]="caseAction$ | async"></app-client-action>
       </mat-tab>

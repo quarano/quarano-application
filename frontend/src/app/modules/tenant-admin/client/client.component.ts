@@ -1,3 +1,4 @@
+import { ClientService } from './../../../services/client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CaseDetailDto } from '@models/case-detail';
@@ -37,8 +38,11 @@ export class ClientComponent implements OnInit {
   tabIndex = 0;
 
   constructor(
-    private route: ActivatedRoute, private router: Router,
-    private apiService: ApiService, private snackbarService: SnackbarService) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private clientService: ClientService) {
 
   }
 
@@ -78,6 +82,9 @@ export class ClientComponent implements OnInit {
     return this.caseAction$.pipe(map(a => (a.anomalies.health.length + a.anomalies.process.length) > 0));
   }
 
+  get typeName(): string {
+    return this.clientService.getTypeName(this.type);
+  }
 
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;
