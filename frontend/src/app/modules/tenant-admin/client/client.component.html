@@ -7,7 +7,8 @@
         <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
       <span class="type">{{typeName | async}}<button (click)="onChangeTypeKeyPressed()"
-          *ngIf="(type$ | async) === ClientType.Contact" mat-icon-button matTooltip="Zum Indexfall machen">
+          *ngIf="(type$ | async) === ClientType.Contact" mat-icon-button matTooltip="Zum Indexfall machen"
+          matTooltipPosition="after">
           <mat-icon>swap_horiz</mat-icon>
         </button>
       </span>
