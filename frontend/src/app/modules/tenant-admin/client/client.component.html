@@ -6,8 +6,8 @@
         Falldetails {{ caseDetail.firstName }} {{ caseDetail.lastName }}
         <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
-      <span class="type">{{typeName | async}}<button (click)="changeToIndexType()"
-          *ngIf="(type$ | async) === ClientType.Contact" mat-icon-button matTooltip="In Indexfall umwandeln">
+      <span class="type">{{typeName | async}}<button (click)="onChangeTypeKeyPressed()"
+          *ngIf="(type$ | async) === ClientType.Contact" mat-icon-button matTooltip="Zum Indexfall machen">
           <mat-icon>swap_horiz</mat-icon>
         </button>
       </span>
@@ -39,7 +39,7 @@
           Pflichteingaben sind mit * markiert
         </p>
         <app-client-edit [caseDetail]="caseDetail$ | async" (submittedValues)="saveCaseData($event)"
-          [type]="type$ | async">
+          [type]="type$ | async" (changedToIndex)="changeToIndexType()">
         </app-client-edit>
       </mat-tab>
       <mat-tab *ngIf="caseAction$ | async">

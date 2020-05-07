@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { ClientService } from './../../../services/client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -12,6 +13,7 @@ import { StartTracking } from '@models/start-tracking';
 import { HalResponse } from '@models/hal-response';
 import { CaseCommentDto } from '@models/case-comment';
 import { ClientType } from '@models/report-case';
+import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -43,7 +45,8 @@ export class ClientComponent implements OnInit {
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private clientService: ClientService) {
+    private clientService: ClientService,
+    private dialog: MatDialog) {
 
   }
 
@@ -136,5 +139,21 @@ export class ClientComponent implements OnInit {
 
   changeToIndexType() {
     this.type$$.next(ClientType.Index);
+  }
+
+  onChangeTypeKeyPressed(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Zum Indexfall machen?',
+        text:
+          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diesen Kontaktfall als Indexfall weiter bearbeiten wollen?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.changeToIndexType();
+      }
+    });
   }
 }

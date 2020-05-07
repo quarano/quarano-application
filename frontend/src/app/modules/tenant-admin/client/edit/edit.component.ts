@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
 import { VALIDATION_PATTERNS } from '@utils/validation';
@@ -6,6 +7,7 @@ import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { ClientType } from '@models/report-case';
+import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
@@ -28,13 +30,15 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   caseDetail: CaseDetailDto;
   @Input()
   type: ClientType;
+  @Output()
+  changedToIndex = new EventEmitter<boolean>();
 
   formGroup: FormGroup;
 
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     this.createFormGroup();
   }
 
@@ -89,6 +93,29 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       infected: new FormControl(this.type === ClientType.Index ? true : false, []),
     });
     this.setValidators();
+    this.formGroup.controls.testDate.valueChanges.subscribe(value => {
+      if (value && this.type === ClientType.Contact) {
+        this.onTestDateAdded();
+      }
+    });
+  }
+
+  onTestDateAdded() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Zum Indexfall machen?',
+        text:
+          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie den Kontaktfall ab sofort als Indexfall'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.changedToIndex.emit(true);
+      } else {
+        this.formGroup.controls.testDate.setValue(null);
+      }
+    });
   }
 
   setValidators() {
