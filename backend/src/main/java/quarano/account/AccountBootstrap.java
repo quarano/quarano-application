@@ -15,6 +15,7 @@
  */
 package quarano.account;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Password.UnencryptedPassword;
@@ -37,6 +38,7 @@ public class AccountBootstrap implements ApplicationRunner {
 	private final DepartmentRepository departments;
 	private final AccountService accounts;
 	private final DepartmentProperties configuration;
+	private final @NonNull RoleRepository roleRepository;
 
 	/*
 	 * (non-Javadoc)
@@ -57,6 +59,24 @@ public class AccountBootstrap implements ApplicationRunner {
 		var department = departments.save(configuration.getDefaultDepartment());
 		var defaults = configuration.getDefaultAccount();
 
+
+		// create initial roles
+		for (RoleType type : RoleType.values()) {
+
+
+			
+			var role = roleRepository.findByName(type.getCode());
+
+			if (role != null) {
+				continue;
+			}
+			log.info("Creating initial role " + type.getCode());
+			
+			roleRepository.save(new Role(type));
+		}
+
+		
+
 		log.info("Creating default account (root, root).");
 
 		accounts.createStaffAccount("root", UnencryptedPassword.of("root"), //
@@ -64,5 +84,6 @@ public class AccountBootstrap implements ApplicationRunner {
 				defaults.getLastname(), //
 				EmailAddress.of(defaults.getEmailAddress()), //
 				department.getId(), RoleType.ROLE_HD_ADMIN);
+		
 	}
 }
