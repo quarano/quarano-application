@@ -32,4 +32,11 @@ class EmailAddressUnitTests {
 		assertThat(EmailAddress.ofNullable(null)).isNull();
 		assertThat(EmailAddress.ofNullable("")).isNull();
 	}
+
+	@Test
+	void acceptsSourceWithCapitalLetters() {
+
+		assertThatCode(() -> EmailAddress.of("Foo@Bar.de")) //
+				.doesNotThrowAnyException();
+	}
 }
