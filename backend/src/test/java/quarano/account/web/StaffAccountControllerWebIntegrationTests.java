@@ -26,8 +26,6 @@ import quarano.WithQuaranoUser;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.DepartmentRepository;
-import quarano.account.Department.DepartmentIdentifier;
-import quarano.account.DepartmentDataInitializer;
 import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
 import quarano.department.TrackedCaseRepository;
@@ -43,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 /**
  * @author Patrick Otto
@@ -106,7 +105,6 @@ class StaffAccountControllerWebIntegrationTests {
 	}		
 	
 	@Test
-	@Disabled
 	@WithQuaranoUser("admin")
 	void createAccountSuccessfully() throws Exception {	
 		
@@ -116,7 +114,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var result = mvc.perform(post("/api/hd/accounts") //
 				.content(jackson.writeValueAsString(source)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+				.andExpect(status().isCreated()) //
 				.andReturn().getResponse().getContentAsString();
 
 		// assert user is stored
@@ -131,7 +129,7 @@ class StaffAccountControllerWebIntegrationTests {
 		assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).size() == 2 );
 		assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).contains("ROLE_HD_CASE_AGENT") );
 		assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).contains("ROLE_HD_ADMIN") );
-		assertThat(JsonPath.parse(result).read("$.password", String.class) == null );
+		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> JsonPath.parse(result).read("$.password", String.class));
 		
 		
 	}
@@ -149,7 +147,7 @@ class StaffAccountControllerWebIntegrationTests {
 		source.setLastName("Vogt");
 		source.setPassword("aSecretPassword");
 		source.setPasswordConfirm("aSecretPassword");
-		source.setEmail("myEmail@Email.de");
+		source.setEmail("myemail@email.de");
 		source.setRoles(rolesToAdd);
 		return source;
 	}

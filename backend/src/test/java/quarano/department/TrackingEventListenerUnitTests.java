@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -65,6 +64,7 @@ class TrackingEventListenerUnitTests {
 				.submitEnrollmentDetails();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"));
+		contactPerson.setOwnerId(person.getId());
 		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 		
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
@@ -127,14 +127,12 @@ class TrackingEventListenerUnitTests {
 		var encounter2 = person.reportContactWith(encounter1.getContact(), LocalDate.now().minusDays(1));
 		var event2 = EncounterReported.subsequentEncounter(encounter2, person.getId());
 		assertThatCode(() -> listener.on(event2)).doesNotThrowAnyException();
-		ArgumentCaptor<TrackedCase> argumentCaptor1 = ArgumentCaptor.forClass(TrackedCase.class);
-		verify(cases, times(1)).save(argumentCaptor1.capture());
-
+		// check that number of save calls has not increased
+		verify(cases, times(1)).save(argumentCaptor.capture());
 
 	}
 	
 	@Test
-	@Disabled
 	void createNoContactCaseAutomaticallyForDiaryEntry() {
 
 		// Sandra is an Index case
@@ -170,11 +168,11 @@ class TrackingEventListenerUnitTests {
 		
 		var newEntryOfSandraWithContactFromEncounter = DiaryEntry.of(Slot.morningOf(LocalDate.now().minusDays(1)), sandra) //
 				.setBodyTemperature(BodyTemperature.of(36.5F));
-		entry1bOfSandraWithTwoContacts.setContacts(List.of(contact2FromEncounters));
+		newEntryOfSandraWithContactFromEncounter.setContacts(List.of(contact2FromEncounters));
 		
 		var newEntryOfSandraWithNewContact = DiaryEntry.of(Slot.morningOf(LocalDate.now()), sandra) //
 				.setBodyTemperature(BodyTemperature.of(36.5F));
-		entry1bOfSandraWithTwoContacts.setContacts(List.of(contact1dFromDiary));
+		newEntryOfSandraWithNewContact.setContacts(List.of(contact1dFromDiary));
 		
 		Streamable<DiaryEntry> entriesOfSandra = new  Streamable<DiaryEntry>() {
 			@Override
@@ -203,25 +201,25 @@ class TrackingEventListenerUnitTests {
 		var eventFirstEncounterWithExistingDiaryContact = EncounterReported.firstEncounter(encounterWithDiaryPerson, sandra.getId());
 		assertThatCode(() -> listener.on(eventFirstEncounterWithExistingDiaryContact)).doesNotThrowAnyException();
 		ArgumentCaptor<TrackedCase> argumentCaptor2 = ArgumentCaptor.forClass(TrackedCase.class);
-		verify(cases, times(0)).save(argumentCaptor2.capture());
+		verify(cases, times(1)).save(argumentCaptor2.capture());
 		
 		// a diary entry with no contact can never create contact-cases => should NOT create a contact case
 		var eventDiaryEntryWithNoContact = DiaryEntryAdded.of(entry2OfSandraWithNoContact);
-		assertThatCode(() -> listener.createContactCaseFor(eventDiaryEntryWithNoContact)).doesNotThrowAnyException();
+		assertThatCode(() -> listener.on(eventDiaryEntryWithNoContact)).doesNotThrowAnyException();
 		ArgumentCaptor<TrackedCase> argumentCaptor3 = ArgumentCaptor.forClass(TrackedCase.class);
-		verify(cases, times(0)).save(argumentCaptor3.capture());
+		verify(cases, times(1)).save(argumentCaptor3.capture());
 		
 		// a diary entry with a contact which was already listed as encounter => should NOT create a contact case
 		var eventDiaryEntryWithExistingContactFromEncounter = DiaryEntryAdded.of(newEntryOfSandraWithContactFromEncounter);
-		assertThatCode(() -> listener.createContactCaseFor(eventDiaryEntryWithExistingContactFromEncounter)).doesNotThrowAnyException();
+		assertThatCode(() -> listener.on(eventDiaryEntryWithExistingContactFromEncounter)).doesNotThrowAnyException();
 		ArgumentCaptor<TrackedCase> argumentCaptor4 = ArgumentCaptor.forClass(TrackedCase.class);
-		verify(cases, times(0)).save(argumentCaptor4.capture());
+		verify(cases, times(1)).save(argumentCaptor4.capture());
 		
 	// a diary entry with a contact which was already listed as encounter => should create an contact-case
 		var eventDiaryEntryWithNewContact = DiaryEntryAdded.of(newEntryOfSandraWithNewContact);
-		assertThatCode(() -> listener.createContactCaseFor(eventDiaryEntryWithNewContact)).doesNotThrowAnyException();
+		assertThatCode(() -> listener.on(eventDiaryEntryWithNewContact)).doesNotThrowAnyException();
 		ArgumentCaptor<TrackedCase> argumentCaptor5 = ArgumentCaptor.forClass(TrackedCase.class);
-		verify(cases, times(1)).save(argumentCaptor5.capture());
+		verify(cases, times(2)).save(argumentCaptor5.capture());
 
 
 	}	

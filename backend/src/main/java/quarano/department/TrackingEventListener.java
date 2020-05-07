@@ -52,7 +52,7 @@ public class TrackingEventListener {
 	void on(EncounterReported event) {
 
 		verifyEnrollmentCompleted(event);
-		checkContactCaseCreationFor(event);
+		handleContactCaseCreationBasedOnEncounter(event);
 	}
 
 	/**
@@ -62,13 +62,29 @@ public class TrackingEventListener {
 	 * @param event
 	 */
 	@EventListener
-	void createContactCaseFor(DiaryEntryAdded event) {
+	void on(DiaryEntryAdded event) {
 
+		handleContactCaseCreationBasedOnDiaryEntry(event);
+	}
+	
+
+	private void verifyEnrollmentCompleted(EncounterReported event) {
+
+		var trackedCase = findTrackedCaseFor(event.getPersonIdentifier());
+		var enrollment = trackedCase.getEnrollment();
+
+		if (!enrollment.isCompletedQuestionnaire()) {
+			throw new EnrollmentException("Cannot add contacts prior to completing the enrollment questionnaire!");
+		}
+	}
+	
+
+	private void handleContactCaseCreationBasedOnDiaryEntry(DiaryEntryAdded event) {
 		try {
 			List<ContactPerson> contactPersons = event.getEntry().getContacts();
 
 			for (ContactPerson person : contactPersons) {
-				if (isFirstContactTo(person, event.getEntry() , null )) {
+				if (isFirstContactWith(person, event.getEntry() , null )) {
 					createContactCase(event.getEntry().getTrackedPersonId(), person);
 				}
 			}
@@ -77,7 +93,6 @@ public class TrackingEventListener {
 			// just log the error, do not stop usual saving process of the diary entry
 			log.error("Error during automatical contact-case creation check for diary entry " + event.getEntry().getId(), e);
 		}
-
 	}
 
 	/**
@@ -87,7 +102,7 @@ public class TrackingEventListener {
 	 * @param person
 	 * @return
 	 */
-	private boolean isFirstContactTo(ContactPerson newContactPerson, DiaryEntry entry, Encounter encounter) {
+	private boolean isFirstContactWith(ContactPerson newContactPerson, DiaryEntry entry, Encounter encounter) {
 
 		var trackedPersonId = newContactPerson.getOwnerId();
 
@@ -96,7 +111,7 @@ public class TrackingEventListener {
 
 		List<DiaryEntry> entriesAsList = entries.collect(Collectors.toList());
 		
-		// ignore current diary entry if this came from a diary, because it will always contain current contact
+		// ignore current diary entry if this contact came from a diary, because it will always contain current contact
 		if(entry != null) {
 			entriesAsList.remove(entry);
 		}
@@ -108,7 +123,7 @@ public class TrackingEventListener {
 		var contactOwner = trackedPeople.findById(trackedPersonId);
 
 		
-		// ignore current encounter if there is one
+		// ignore current encounter if this contact came from an encounter
 		if(encounter == null) {
 			allContactPersonOfTrackedPerson.addAll( //
 					contactOwner.get().getEncounters()
@@ -127,15 +142,6 @@ public class TrackingEventListener {
 		return !allContactPersonOfTrackedPerson.contains(newContactPerson);
 	}
 
-	private void verifyEnrollmentCompleted(EncounterReported event) {
-
-		var trackedCase = findTrackedCaseFor(event.getPersonIdentifier());
-		var enrollment = trackedCase.getEnrollment();
-
-		if (!enrollment.isCompletedQuestionnaire()) {
-			throw new EnrollmentException("Cannot add contacts prior to completing the enrollment questionnaire!");
-		}
-	}
 
 	/**
 	 * Listens for first encounters with contacts and creates new cases from these contacts if they came from an Index
@@ -143,13 +149,13 @@ public class TrackingEventListener {
 	 *
 	 * @param event
 	 */
-	private void checkContactCaseCreationFor(EncounterReported event) {
+	private void handleContactCaseCreationBasedOnEncounter(EncounterReported event) {
 
 		ContactPerson contactPerson = event.getEncounter().getContact();
 
 		try {
 
-			if (event.isFirstEncounterWithTargetPerson() && this.isFirstContactTo(contactPerson, null,  event.getEncounter() )) {
+			if ( this.isFirstContactWith(contactPerson, null, event.getEncounter()) && event.isFirstEncounterWithTargetPerson()) {
 
 				createContactCase(event.getPersonIdentifier(), contactPerson);
 			}
