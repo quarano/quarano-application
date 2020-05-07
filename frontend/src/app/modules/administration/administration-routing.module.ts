@@ -8,7 +8,8 @@ const routes: Routes = [
     path: '',
     canActivate: [IsAuthenticatedGuard, IsAdminGuard],
     canActivateChild: [IsAuthenticatedGuard, IsAdminGuard],
-    redirectTo: 'accounts'
+    redirectTo: 'accounts',
+    pathMatch: 'full'
   },
   {
     path: 'accounts', loadChildren: () =>

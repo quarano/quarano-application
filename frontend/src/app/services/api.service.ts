@@ -143,7 +143,7 @@ export class ApiService {
 
   getCases(): Observable<Array<ReportCaseDto>> {
     return this.httpClient.get<any>(`${this.baseUrl}/api/hd/cases`)
-      .pipe(share(), map(result => result._embedded.cases.map(item => this.mapReportCase(item))));
+      .pipe(share(), map(result => result._embedded?.cases?.map(item => this.mapReportCase(item)) || []));
   }
 
   getDiary(): Observable<DiaryDto> {

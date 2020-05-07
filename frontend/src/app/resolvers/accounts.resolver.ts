@@ -10,6 +10,6 @@ export class AccountsResolver implements Resolve<AccountDto[]> {
   constructor(private apiService: ApiService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<AccountDto[]> {
-    return this.apiService.getHealthDepartmentUsers().pipe(map(users => users.accounts));
+    return this.apiService.getHealthDepartmentUsers().pipe(map(users => users?.accounts || []));
   }
 }
