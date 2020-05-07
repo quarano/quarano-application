@@ -55,6 +55,7 @@ applications:
     - quarano-test
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"  
+    SPRING_PROFILES_ACTIVE: develop	
     
 ###############   security-test system #########################
 - name: quarano-frontend-sec
@@ -72,7 +73,8 @@ applications:
   services:
     - quarano-security
   env:
-    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"    
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"   
+	SPRING_PROFILES_ACTIVE: develop	
     
 
 ###############   cypress-test system #########################
@@ -91,5 +93,6 @@ applications:
   services:
     - quarano-autotest
   env:
-    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"   
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }" 
+	SPRING_PROFILES_ACTIVE: develop	
 
