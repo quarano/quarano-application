@@ -1,13 +1,14 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter, HostListener } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
 import { VALIDATION_PATTERNS } from '@utils/validation';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { ClientType } from '@models/report-case';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import { DeactivatableComponent } from '@guards/prevent-unsaved-changes.guard';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
@@ -21,10 +22,11 @@ const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit, OnChanges, OnDestroy {
+export class EditComponent implements OnInit, OnChanges, OnDestroy, DeactivatableComponent {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
+  get isIndexCase() { return this.type === ClientType.Index; }
 
   @Input()
   caseDetail: CaseDetailDto;
@@ -39,18 +41,28 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
   constructor(private dialog: MatDialog) {
-    this.createFormGroup();
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return this.formGroup.pristine;
   }
 
   ngOnInit(): void {
+    this.createFormGroup();
+
     this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges.subscribe((value) => {
       this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
     }));
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.hasOwnProperty('caseDetail')) {
       this.updateFormGroup(this.caseDetail);
+    }
+    if ('type' in changes && this.formGroup) {
+      this.setValidators();
     }
   }
 
@@ -63,10 +75,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
 
-      testDate: new FormControl(this.type === ClientType.Index ? this.today : null),
+      testDate: new FormControl(this.isIndexCase ? this.today : null),
 
-      quarantineStartDate: new FormControl(this.type === ClientType.Index ? new Date() : null, []),
-      quarantineEndDate: new FormControl(this.type === ClientType.Index ? moment().add(2, 'weeks').toDate() : null, []),
+      quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
+      quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl(''),
       houseNumber: new FormControl(''),
@@ -89,8 +101,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       dateOfBirth: new FormControl(null, []),
 
       comment: new FormControl('', []),
-
-      infected: new FormControl(this.type === ClientType.Index ? true : false, []),
+      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase })
     });
     this.setValidators();
     this.formGroup.controls.infected.valueChanges.subscribe(value => {
@@ -119,8 +130,9 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setValidators() {
-    if (this.type === ClientType.Index) {
+    if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
+      this.formGroup.controls.infected.disable();
     } else {
       this.formGroup.clearValidators();
     }
@@ -128,7 +140,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
-    if (caseDetailDto) {
+    if (caseDetailDto && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];

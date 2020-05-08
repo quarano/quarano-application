@@ -23,7 +23,7 @@
     <div class="form-flex">
       <mat-form-field class="half-width" data-cy="input-testdate">
         <mat-label>Abstrichdatum (Test)</mat-label>
-        <input matInput [required]="type === ClientType.Index" [max]="today" [matDatepicker]="testDatePicker"
+        <input matInput [required]="isIndexCase" [max]="today" [matDatepicker]="testDatePicker"
           formControlName="testDate" />
         <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #testDatePicker></mat-datepicker>
@@ -40,7 +40,7 @@
     </div>
     <mat-form-field class="half-width" data-cy="input-quarantinestart">
       <mat-label>Beginn häusliche Isolation</mat-label>
-      <input matInput [required]="type === ClientType.Index" [max]="today" [matDatepicker]="quarantineStartPicker"
+      <input matInput [required]="isIndexCase" [max]="today" [matDatepicker]="quarantineStartPicker"
         formControlName="quarantineStartDate" />
       <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
       <mat-datepicker #quarantineStartPicker></mat-datepicker>
@@ -49,7 +49,7 @@
 
     <mat-form-field class="half-width" data-cy="input-quarantineend">
       <mat-label>Ende häusliche Isolation</mat-label>
-      <input matInput [required]="type === ClientType.Index" [matDatepicker]="quarantineEndDatePicker"
+      <input matInput [required]="isIndexCase" [matDatepicker]="quarantineEndDatePicker"
         formControlName="quarantineEndDate" />
       <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
@@ -57,7 +57,7 @@
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">
-    <legend>Kontaktmöglichkeiten {{ type === ClientType.Index ? '*' : ''}}</legend>
+    <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : ''}}</legend>
     <mat-form-field class="half-width" data-cy="input-phone">
       <input matInput maxlength="17" minlength="5" placeholder="Telefonnummer (Festnetz)" formControlName="phone"
         type="phone" />
