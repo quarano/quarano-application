@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
@@ -38,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @Transactional
+@ExtendWith(JpaAutoFlushTestExecutionCallback.class)
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)

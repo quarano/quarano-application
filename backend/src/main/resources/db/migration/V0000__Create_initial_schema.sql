@@ -179,7 +179,7 @@ CREATE TABLE encounters (
 	encounter_id uuid NOT NULL,
 	encounter_date date NULL,
 	contact_person_id uuid NULL,
-	tracked_person_id uuid NOT NULL,
+	tracked_person_id uuid NULL,
 	CONSTRAINT encounters_pkey PRIMARY KEY (encounter_id),
 	CONSTRAINT encounters_contact_person_fk FOREIGN KEY (contact_person_id) REFERENCES contact_people(contact_person_id),
 	CONSTRAINT encounters_tracked_person_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)
