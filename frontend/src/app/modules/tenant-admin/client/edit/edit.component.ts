@@ -93,7 +93,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       infected: new FormControl(this.type === ClientType.Index ? true : false, []),
     });
     this.setValidators();
-    this.formGroup.controls.testDate.valueChanges.subscribe(value => {
+    this.formGroup.controls.infected.valueChanges.subscribe(value => {
       if (value && this.type === ClientType.Contact) {
         this.onTestDateAdded();
       }
