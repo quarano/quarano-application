@@ -1,5 +1,5 @@
 import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
 import {merge, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take} from 'rxjs/operators';
@@ -13,6 +13,7 @@ import {CaseCommentDto} from '@models/case-comment';
 import {ClientType} from '@models/report-case';
 import {MatDialog} from '@angular/material/dialog';
 import {CloseCaseDialogComponent, CloseCaseDialogResponse} from './close-case-dialog/close-case-dialog.component';
+import {SubSink} from 'subsink';
 
 
 @Component({
@@ -20,7 +21,7 @@ import {CloseCaseDialogComponent, CloseCaseDialogResponse} from './close-case-di
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.scss']
 })
-export class ClientComponent implements OnInit {
+export class ClientComponent implements OnInit, OnDestroy {
   caseId: string;
   type: ClientType;
   ClientType = ClientType;
@@ -37,6 +38,8 @@ export class ClientComponent implements OnInit {
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
+
+  private subs = new SubSink();
 
   constructor(
     private route: ActivatedRoute, private router: Router,
@@ -64,11 +67,11 @@ export class ClientComponent implements OnInit {
       this.type = this.route.snapshot.paramMap.get('type') as ClientType;
     }
 
-    this.caseDetail$.pipe(
+    this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
       filter((data) => data?._links?.hasOwnProperty('renew') && data?._links?.hasOwnProperty('start-tracking')),
       take(1)).subscribe((data) => {
-        this.apiService
+        this.subs.sink = this.apiService
           .getApiCall<StartTracking>(data, 'start-tracking')
           .subscribe((sartTracking) => {
             this.trackingStart$$.next(sartTracking);
@@ -90,14 +93,14 @@ export class ClientComponent implements OnInit {
       saveData$ = this.apiService.updateCase(caseDetail, this.type);
     }
 
-    saveData$.subscribe(() => {
+    this.subs.sink = saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       this.router.navigate(['/tenant-admin/clients']);
     });
   }
 
   startTracking(caseDetail: CaseDetailDto) {
-    this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
         this.tabIndex = 3;
@@ -105,7 +108,7 @@ export class ClientComponent implements OnInit {
   }
 
   renewTracking(tracking: HalResponse) {
-    this.apiService.putApiCall<StartTracking>(tracking, 'renew')
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(tracking, 'renew')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
         this.tabIndex = 3;
@@ -113,14 +116,14 @@ export class ClientComponent implements OnInit {
   }
 
   addComment(commentText: string) {
-    this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
+    this.subs.sink = this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
       this.snackbarService.success('Kommentar erfolgreich eingetragen.');
       this.updatedDetail$$.next(data);
     });
   }
 
   checkForClose(halResponse: HalResponse) {
-    this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
+    this.subs.sink = this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
       map((response: CloseCaseDialogResponse) => {
         if (response.confirmation) {
           this.closeCase(halResponse);
@@ -136,11 +139,15 @@ export class ClientComponent implements OnInit {
   }
 
   closeCase(halResponse: HalResponse) {
-    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
+    this.subs.sink = this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
       switchMap(() => this.apiService.getCase(this.caseId))
     ).subscribe((data) => {
       this.snackbarService.success('Fall abgeschlossen.');
       this.updatedDetail$$.next(data);
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
