@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
@@ -84,19 +85,19 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final ModelMapper modelMapper;
 
 	@Test
-	void successfullyCreatesNewTrackedIndexCase() throws Exception {
+	void createsNewTrackedIndexCase() throws Exception {
 
 		var payload = createMinimalIndexPayload();
 
 		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
 		var document = JsonPath.parse(response);
 
-		assertMinimalFieldsSet(document, payload);
+		assertMinimalIndexFieldsSet(document, payload);
 		assertThat(discoverer.findLinkWithRel(CONCLUDE, response)).isPresent();
 	}
 
 	@Test
-	void indicateStartTrackingIfRequiredDataIsSet() throws Exception {
+	void indicatesStartTrackingIfRequiredDataIsSet() throws Exception {
 
 		var payload = createMinimalIndexPayload() //
 				.setEmail("foo@bar.com") //
@@ -105,7 +106,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
 		var document = JsonPath.parse(response);
 
-		assertMinimalFieldsSet(document, payload);
+		assertMinimalIndexFieldsSet(document, payload);
 
 		Stream.of(START_TRACKING, CONCLUDE).forEach(it -> {
 			assertThat(discoverer.findLinkWithRel(it, response)).isPresent();
@@ -128,94 +129,71 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response.getContentAsString());
 
-		assertMinimalFieldsSet(document, payload);
+		assertMinimalIndexFieldsSet(document, payload);
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
-	
-	@Test
-	void successfullyTransformContactCaseToIndexCase() throws Exception {
+
+	@Test // CORE-121
+	void transformContactCaseToIndexCase() throws Exception {
 
 		// get contact case Tanja and turn it into dto
 		var contactCaseTanja = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
-		TrackedCaseDto caseTanjaAsDto =  new TrackedCaseDto();
-		modelMapper.map(contactCaseTanja, caseTanjaAsDto);
-		
+		var caseTanjaAsDto = representations.toInputRepresentation(contactCaseTanja);
+
 		// set necessary fields to be a valid index case
 		caseTanjaAsDto.setInfected(true);
 		caseTanjaAsDto.setTestDate(LocalDate.now());
 		caseTanjaAsDto.setPhone("4456465465");
 		caseTanjaAsDto.setQuarantineStartDate(LocalDate.now());
 		caseTanjaAsDto.setQuarantineEndDate(LocalDate.now().plusDays(14));
-		
-		// start the transofrmation
-		var response = issueToIndexCaseTransformation(caseTanjaAsDto);
-		
+
+		// start the transformation
+		var response = issueToIndexCaseTransformation(caseTanjaAsDto, contactCaseTanja.getId());
+
 		// check response
 		var document = JsonPath.parse(response.getContentAsString());
-		assertMinimalFieldsSet(document, caseTanjaAsDto);
+		assertMinimalIndexFieldsSet(document, caseTanjaAsDto);
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
-		
+
 		// check if case has been stored correctly
-		var contactCaseTanjaAfterTransformation = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
-		assertThat(contactCaseTanjaAfterTransformation.getType() == CaseType.INDEX);
+		var contactCaseTanjaAfterTransformation = cases.findById(contactCaseTanja.getId()).orElseThrow();
+		assertThat(contactCaseTanjaAfterTransformation.isIndexCase()).isTrue();
 	}
-	
-	@Test
+
+	@Test // CORE-121
 	void rejectTransformContactCaseWhenInfoMissing() throws Exception {
 
 		// get contact case Tanja and turn it into dto
 		var contactCaseTanja = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).get();
-		TrackedCaseDto caseTanjaAsDto =  new TrackedCaseDto();
+		TrackedCaseDto caseTanjaAsDto = new TrackedCaseDto();
 		modelMapper.map(contactCaseTanja, caseTanjaAsDto);
-		
+
 		// test date is missing
 		caseTanjaAsDto.setInfected(true);
 		caseTanjaAsDto.setPhone("4456465465");
 		caseTanjaAsDto.setQuarantineStartDate(LocalDate.now());
 		caseTanjaAsDto.setQuarantineEndDate(LocalDate.now().plusDays(14));
-		
-		// start the transoformation
+
+		// start the transformation
 		var response = expectBadRequestOnTransformationCall(caseTanjaAsDto, contactCaseTanja.getId());
-		
-		// response should contain  error message for field testDate
+
+		// response should contain error message for field testDate
 		var document = JsonPath.parse(response.getContentAsString());
+
 		assertThat(document.read("$.testDate", String.class)).isNotNull();
 	}
-	
+
 	@Test
 	void rejectCreationOfContactCaseWithPositiveTestResult() throws Exception {
 
-		var payload = createMinimalContactPayload();
-		payload.setTestDate(LocalDate.now().minusDays(8));
-		payload.setInfected(true);
-		
-		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
-		
-		var document = JsonPath.parse(response);
-		assertThat(document.read("$.testDate", String.class)).isNotNull();
+		var payload = createMinimalContactPayload() //
+				.setTestDate(LocalDate.now().minusDays(8)) //
+				.setInfected(true);
 
+		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases?type=contact", payload);
+
+		assertThat(response.read("$.testDate", String.class)).isNotNull();
 	}
-	
-	@Test
-	void rejectUpdateOfContactCaseWithPositiveTestResult() throws Exception {
-
-		var payload = createMinimalContactPayload();
-		
-		var response = issueCaseCreation(payload, CaseType.CONTACT);
-		
-		var document = JsonPath.parse(response.getContentAsString());
-		var caseId = document.read("$.caseId", String.class);
-		
-		payload.setTestDate(LocalDate.now().minusDays(8));
-		payload.setInfected(true);
-
-		response = expectBadRequestOnUpdate(payload, CaseType.CONTACT, TrackedCaseIdentifier.of(UUID.fromString(caseId)));
-
-		document = JsonPath.parse(response.getContentAsString());
-		assertThat(document.read("$.testDate", String.class)).isNotNull();
-
-	}	
-
 
 	@TestFactory
 	Stream<DynamicTest> rejectsIndexCaseCreationWithoutRequiredFields() throws Exception {
@@ -323,23 +301,24 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.comments[0].author", String.class)).isNotBlank();
 	}
 
-	@Test
+	@Test // CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
-	void successfullyCreateContactCaseWithMinimalInput() throws Exception {
-		
+	void createsContactCaseWithMinimalInput() throws Exception {
+
 		var payload = createMinimalContactPayload();
 
-		var response = issueCaseCreation(payload, CaseType.CONTACT);
-				
+		var response = issueCaseCreation(payload, CaseType.CONTACT).getContentAsString();
+
 		assertThat(JsonPath.parse(response).read("$.firstName", String.class).equals(payload.getFirstName()));
 		assertThat(JsonPath.parse(response).read("$.lastName", String.class).equals(payload.getLastName()));
-		assertThat(cases.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
+		assertThat(cases
+				.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
 	}
-	
-	@Test
+
+	@Test // CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
-	void successfullyUpdateContactCaseWithMinimalInput() throws Exception {
-		
+	void updatesContactCaseWithMinimalInput() throws Exception {
+
 		var payload = createMinimalContactPayload();
 		var response = issueCaseCreation(payload, CaseType.CONTACT);
 
@@ -350,12 +329,11 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		document = JsonPath.parse(response.getContentAsString());
 
-		assertMinimalFieldsSet(document, payload);
-		assertThat(document.read("$.email", String.class)).equals("myemail@email.de");
+		assertMinimalContactFieldsSet(document, payload);
+		assertThat(document.read("$.email", String.class)).isEqualTo("myemail@email.de");
 	}
-	
 
-	@Test
+	@Test // CORE-121
 	void emptyEmailDoesNotTriggerValidation() throws Exception {
 
 		var contactCase = createMinimalContactPayload();
@@ -364,26 +342,46 @@ class TrackedCaseControllerWebIntegrationTests {
 		mvc.perform(post("/api/hd/cases") //
 				.content(jackson.writeValueAsString(contactCase)) //
 				.contentType(MediaType.APPLICATION_JSON).param("type", "contact")) //
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 	}
 
-	@Test
+	@Test // CORE-121
 	void updatingContactMedicalCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_MEDICAL );
+		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_MEDICAL);
 
 	}
-	
-	
-	@Test
+
+	@Test // CORE-121
 	void updatingContactCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT );
+		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT);
 
+	}
+
+	@Test // CORE-121
+	void updatesTrackedPersonDetails() throws Exception {
+
+		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
+
+		var payload = representations.toInputRepresentation(trackedCase) //
+				.setFirstName("Max") //
+				.setLastName("Mustermann");
+
+		var response = mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId()) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
@@ -407,6 +405,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var today = LocalDate.now();
 
 		return createMinimalContactPayload() //
+				.setPhone("0123456789") //
 				.setTestDate(today) //
 				.setQuarantineStartDate(today) //
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()));
@@ -415,67 +414,71 @@ class TrackedCaseControllerWebIntegrationTests {
 	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload, CaseType type) throws Exception {
 
 		return mvc.perform(post("/api/hd/cases") //
-				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
+				.param("type", type == CaseType.INDEX ? "index" : "contact") //
 				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isCreated()) //
 				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
 				.andReturn().getResponse();
 	}
-	
-	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload,  TrackedCaseIdentifier caseId, CaseType type) throws Exception {
+
+	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, TrackedCaseIdentifier caseId, CaseType type)
+			throws Exception {
 
 		return mvc.perform(put("/api/hd/cases/{id}", caseId) //
-				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
+				.param("type", type == CaseType.INDEX ? "index" : "contact") //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andDo(print()) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse();
+	}
+
+	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload, TrackedCaseIdentifier id)
+			throws Exception, JsonProcessingException {
+
+		return mvc.perform(put("/api/hd/cases/{id}", id) //
 				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isOk()) //
-				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
 				.andReturn().getResponse();
-	}	
+	}
 
-	private static void assertMinimalFieldsSet(DocumentContext document, TrackedCaseDto payload) {
+	private MockHttpServletResponse expectBadRequestOnTransformationCall(TrackedCaseDto payload,
+			TrackedCaseIdentifier caseId) throws Exception, JsonProcessingException {
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
-		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
+		return mvc.perform(put("/api/hd/cases/{id}", caseId) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse();
+	}
+
+	private MockHttpServletResponse expectBadRequestOnUpdate(TrackedCaseDto payload, CaseType type,
+			TrackedCaseIdentifier caseId) throws Exception, JsonProcessingException {
+
+		return mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse();
+	}
+
+	private static void assertMinimalIndexFieldsSet(DocumentContext document, TrackedCaseDto payload) {
+
+		assertMinimalContactFieldsSet(document, payload);
 		assertThat(document.read("$.quarantineStartDate", String.class)) //
+				.isNotNull() //
 				.isEqualTo(payload.getQuarantineStartDate().toString());
 		assertThat(document.read("$.quarantineEndDate", String.class)) //
 				.isEqualTo(payload.getQuarantineEndDate().toString());
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());
 	}
-	
-	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload)
-			throws Exception, JsonProcessingException {
-		var response = mvc.perform(put("/api/hd/cases") //
-				.param("toIndex", "true")
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse();
-		return response;
-	}	
 
-	private MockHttpServletResponse expectBadRequestOnTransformationCall(TrackedCaseDto payload, TrackedCaseIdentifier caseId)
-			throws Exception, JsonProcessingException {
-		var response = mvc.perform(put("/api/hd/cases/{id}", caseId) //
-				.param("toIndex", "true")
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
-				.andReturn().getResponse();
-		return response;
-	}		
-	
-	private MockHttpServletResponse expectBadRequestOnUpdate(TrackedCaseDto payload, CaseType type, TrackedCaseIdentifier caseId)
-			throws Exception, JsonProcessingException {
-		var response = mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
-				.param("type", (type == CaseType.INDEX) ? "index" : "contact")
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
-				.andReturn().getResponse();
-		return response;
-	}			
+	private static void assertMinimalContactFieldsSet(DocumentContext document, TrackedCaseDto payload) {
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
+	}
 }
