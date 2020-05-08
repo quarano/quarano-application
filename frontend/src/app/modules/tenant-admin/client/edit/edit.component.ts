@@ -141,17 +141,12 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setValidators() {
-    console.log('vorher');
-    console.log(this.formGroup);
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
       this.formGroup.controls.infected.disable();
-      console.log('nachher index');
-      console.log(this.formGroup);
+      this.formGroup.controls.infected.setValue(true);
     } else {
       this.formGroup.clearValidators();
-      console.log('nachher contact');
-      console.log(this.formGroup);
     }
     this.formGroup.updateValueAndValidity();
   }

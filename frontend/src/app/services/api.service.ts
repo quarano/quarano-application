@@ -112,8 +112,8 @@ export class ApiService {
     return this.httpClient.post<any>(`${this.baseUrl}/api/hd/cases?type=${type}`, caseDetail);
   }
 
-  updateCase(caseDetail: CaseDetailDto, type: ClientType): Observable<any> {
-    return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}?type=${type}`, caseDetail);
+  updateCase(caseDetail: CaseDetailDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.baseUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
   }
 
   addComment(caseId: string, comment: string): Observable<any> {
