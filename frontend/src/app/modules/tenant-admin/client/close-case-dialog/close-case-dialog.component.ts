@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 
 export interface CloseCaseDialogResponse {
   comment: any;
+  confirmation: boolean;
 }
 
 @Component({
@@ -28,12 +29,17 @@ export class CloseCaseDialogComponent {
   }
 
   public close() {
-    this.matDialogRef.close();
+    const response: CloseCaseDialogResponse = {
+      comment: this.commentGroup.get('comment').value,
+      confirmation: false
+    };
+    this.matDialogRef.close(response);
   }
 
   public confirm() {
     const response: CloseCaseDialogResponse = {
-      comment: this.commentGroup.get('comment').value
+      comment: this.commentGroup.get('comment').value,
+      confirmation: true
     };
     this.matDialogRef.close(response);
   }

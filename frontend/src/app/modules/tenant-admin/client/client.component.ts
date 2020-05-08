@@ -2,7 +2,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
 import {merge, Observable, Subject} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
+import {filter, map, switchMap, take} from 'rxjs/operators';
 import {ApiService} from '@services/api.service';
 import {SnackbarService} from '@services/snackbar.service';
 import {CaseActionDto} from '@models/case-action';
@@ -119,25 +119,28 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  checkForClose(halResponse: HalResponse) {
+    this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
+      map((response: CloseCaseDialogResponse) => {
+        if (response.confirmation) {
+          this.closeCase(halResponse);
+        }
+        return response;
+      }),
+      map((response: CloseCaseDialogResponse) => {
+        if (response.comment) {
+          this.addComment(response.comment);
+        }
+      })
+    ).subscribe();
+  }
 
   closeCase(halResponse: HalResponse) {
-
-    const closeCaseResponse$: Observable<CloseCaseDialogResponse> = this.matDialog
-      .open(CloseCaseDialogComponent, {width: '640px'}).afterClosed();
-
-    closeCaseResponse$.subscribe(response => {
-      if (response.comment) {
-        this.addComment(response.comment);
-      }
+    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
+      switchMap(() => this.apiService.getCase(this.caseId))
+    ).subscribe((data) => {
+      this.snackbarService.success('Fall abgeschlossen.');
+      this.updatedDetail$$.next(data);
     });
-
-    // todo close case service call pipen
-    /*    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
-          switchMap(() => this.apiService.getCase(this.caseId))
-        ).subscribe((data) => {
-          this.snackbarService.success('Fall abgeschlossen.');
-          this.updatedDetail$$.next(data);
-
-        });*/
   }
 }

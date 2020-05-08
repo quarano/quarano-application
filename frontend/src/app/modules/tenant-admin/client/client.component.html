@@ -28,7 +28,7 @@
       </button>
       <div class="spacer"></div>
       <button mat-button
-              (click)="closeCase(caseDetail)"
+              (click)="checkForClose(caseDetail)"
               [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">
         Fall abschließen
       </button>
