@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 export interface CloseCaseDialogResponse {
   comment: any;
@@ -15,7 +15,7 @@ export interface CloseCaseDialogResponse {
 export class CloseCaseDialogComponent {
 
   commentGroup = new FormGroup({
-    comment: new FormControl()
+    comment: new FormControl('', [Validators.required])
   });
 
   constructor(
@@ -30,7 +30,7 @@ export class CloseCaseDialogComponent {
 
   public close() {
     const response: CloseCaseDialogResponse = {
-      comment: this.commentGroup.get('comment').value,
+      comment: undefined,
       confirmation: false
     };
     this.matDialogRef.close(response);

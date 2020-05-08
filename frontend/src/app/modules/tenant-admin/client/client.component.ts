@@ -128,7 +128,7 @@ export class ClientComponent implements OnInit {
         return response;
       }),
       map((response: CloseCaseDialogResponse) => {
-        if (response.comment) {
+        if (response.comment && response.confirmation) {
           this.addComment(response.comment);
         }
       })

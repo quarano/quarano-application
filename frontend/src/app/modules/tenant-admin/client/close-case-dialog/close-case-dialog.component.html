@@ -11,13 +11,16 @@
       <legend>Zusätzliche Informationen zum Fallabschluss:</legend>
       <mat-form-field class="full-width">
         <textarea matInput formControlName="comment" type="text"></textarea>
+        <mat-error *ngIf="commentGroup.get('comment').hasError('required')">
+          Bitte geben Sie ein Kommentar ein um den Fall abzuschließen
+        </mat-error>
       </mat-form-field>
     </fieldset>
   </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="confirm()">
+  <button [disabled]="!commentGroup.get('comment').value" mat-raised-button color="primary" (click)="confirm()">
     <mat-icon>check</mat-icon>
     OK
   </button>
