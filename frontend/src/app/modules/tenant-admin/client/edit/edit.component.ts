@@ -1,5 +1,17 @@
+import { SnackbarService } from '@services/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  EventEmitter,
+  HostListener,
+  ViewChild
+} from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators, NgForm } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
 import { VALIDATION_PATTERNS } from '@utils/validation';
@@ -22,7 +34,7 @@ const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit, OnChanges, OnDestroy, DeactivatableComponent {
+export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
@@ -41,12 +53,9 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(private dialog: MatDialog) {
-  }
-
-  @HostListener('window:beforeunload')
-  canDeactivate(): Observable<boolean> | boolean {
-    return this.formGroup.pristine;
+  constructor(
+    private dialog: MatDialog,
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -162,6 +171,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
   }
 
   private triggerErrorMessages() {
+    this.snackbarService.confirm('Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken');
     this.formGroup.markAllAsTouched();
     this.editFormElement.ngSubmit.emit();
   }
