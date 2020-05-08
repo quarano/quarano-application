@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter, HostListener } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter, HostListener, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn, Validators, NgForm } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
 import { VALIDATION_PATTERNS } from '@utils/validation';
 import { Subject, Observable } from 'rxjs';
@@ -36,6 +36,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
   changedToIndex = new EventEmitter<boolean>();
 
   formGroup: FormGroup;
+  @ViewChild('editForm') editFormElement: NgForm;
 
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
@@ -63,6 +64,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
     }
     if ('type' in changes && this.formGroup) {
       this.setValidators();
+      this.triggerErrorMessages();
     }
   }
 
@@ -130,11 +132,17 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
   }
 
   setValidators() {
+    console.log('vorher');
+    console.log(this.formGroup);
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
       this.formGroup.controls.infected.disable();
+      console.log('nachher index');
+      console.log(this.formGroup);
     } else {
       this.formGroup.clearValidators();
+      console.log('nachher contact');
+      console.log(this.formGroup);
     }
     this.formGroup.updateValueAndValidity();
   }
@@ -153,19 +161,26 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy, Deactivatabl
     }
   }
 
+  private triggerErrorMessages() {
+    this.formGroup.markAllAsTouched();
+    this.editFormElement.ngSubmit.emit();
+  }
+
   submitForm() {
-    const submitData: any = { ...this.formGroup.value };
+    if (this.formGroup.valid) {
+      const submitData: any = { ...this.formGroup.value };
 
-    Object.keys(submitData).forEach((key) => {
-      if (moment.isMoment(submitData[key])) {
-        submitData[key] = submitData[key].toDate();
+      Object.keys(submitData).forEach((key) => {
+        if (moment.isMoment(submitData[key])) {
+          submitData[key] = submitData[key].toDate();
+        }
+      });
+
+      if (this.caseDetail?.caseId) {
+        submitData.caseId = this.caseDetail.caseId;
       }
-    });
 
-    if (this.caseDetail?.caseId) {
-      submitData.caseId = this.caseDetail.caseId;
+      this.submittedValues.next(submitData);
     }
-
-    this.submittedValues.next(submitData);
   }
 }
