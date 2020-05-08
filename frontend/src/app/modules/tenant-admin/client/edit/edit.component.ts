@@ -1,31 +1,29 @@
-import { SnackbarService } from '@services/snackbar.service';
-import { MatDialog } from '@angular/material/dialog';
+import {SnackbarService} from '@services/snackbar.service';
+import {MatDialog} from '@angular/material/dialog';
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
-  EventEmitter,
-  HostListener,
   ViewChild
 } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators, NgForm } from '@angular/forms';
-import { CaseDetailDto } from '@models/case-detail';
-import { VALIDATION_PATTERNS } from '@utils/validation';
-import { Subject, Observable } from 'rxjs';
+import {FormControl, FormGroup, NgForm, ValidatorFn, Validators} from '@angular/forms';
+import {CaseDetailDto} from '@models/case-detail';
+import {VALIDATION_PATTERNS} from '@utils/validation';
+import {Subject} from 'rxjs';
 import * as moment from 'moment';
-import { SubSink } from 'subsink';
-import { ClientType } from '@models/report-case';
-import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
-import { DeactivatableComponent } from '@guards/prevent-unsaved-changes.guard';
+import {SubSink} from 'subsink';
+import {ClientType} from '@models/report-case';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
   const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone || mobilePhone ? null : { phoneMissing: true };
+  return phone || mobilePhone ? null : {phoneMissing: true};
 };
 
 
@@ -38,7 +36,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
-  get isIndexCase() { return this.type === ClientType.Index; }
+
+  get isIndexCase() {
+    return this.type === ClientType.Index;
+  }
 
   @Input()
   caseDetail: CaseDetailDto;
@@ -60,6 +61,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.createFormGroup();
+
+    this.updateFormGroup(this.caseDetail);
 
     this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges.subscribe((value) => {
       this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
@@ -112,14 +115,14 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       dateOfBirth: new FormControl(null, []),
 
       comment: new FormControl('', []),
-      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase })
+      infected: new FormControl({value: this.isIndexCase, disabled: this.isIndexCase})
     });
     this.setValidators();
-    this.formGroup.controls.infected.valueChanges.subscribe(value => {
+    this.subs.add(this.formGroup.get('infected').valueChanges.subscribe(value => {
       if (value && this.type === ClientType.Contact) {
         this.onTestDateAdded();
       }
-    });
+    }));
   }
 
   onTestDateAdded() {
@@ -135,7 +138,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         this.changedToIndex.emit(true);
       } else {
-        this.formGroup.controls.testDate.setValue(null);
+        this.formGroup.get('testDate').setValue(null);
       }
     });
   }
@@ -143,8 +146,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   setValidators() {
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
-      this.formGroup.controls.infected.disable();
-      this.formGroup.controls.infected.setValue(true);
+      this.formGroup.get('infected').disable();
+      this.formGroup.get('infected').setValue(true);
     } else {
       this.formGroup.clearValidators();
     }
@@ -173,7 +176,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   submitForm() {
     if (this.formGroup.valid) {
-      const submitData: any = { ...this.formGroup.value };
+      const submitData: any = {...this.formGroup.value};
 
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
