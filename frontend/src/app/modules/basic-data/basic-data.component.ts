@@ -212,7 +212,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     }
   }
 
-  openContactDialog() {
+  openContactDialog(dateString: string) {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
@@ -223,6 +223,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
       if (createdContact) {
         this.contactPersons.push(createdContact);
+        this.thirdFormGroup.controls[dateString].patchValue([...this.thirdFormGroup.controls[dateString].value, createdContact.id]);
       }
     }));
   }
