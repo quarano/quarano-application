@@ -150,9 +150,6 @@ public class TrackingMappingConfiguration {
 
 		}).addMappings(it -> {
 
-			it.skip(TrackedPerson::setFirstName);
-			it.skip(TrackedPerson::setLastName);
-
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilePhone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
 			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);

@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
@@ -36,6 +38,19 @@ public class ErrorsDto {
 	private final Errors errors;
 	private final MessageSourceAccessor messages;
 
+	public boolean hasErrors() {
+		return errors.hasErrors();
+	}
+
+	public ErrorsDto doWith(Consumer<Errors> errors) {
+		errors.accept(this.errors);
+		return this;
+	}
+
+	public ErrorsDto rejectField(boolean condition, String field, String errorCode) {
+		return condition ? rejectField(field, errorCode) : this;
+	}
+
 	public ErrorsDto rejectField(String field, String errorCode) {
 		errors.rejectValue(field, errorCode);
 		return this;
@@ -48,6 +63,10 @@ public class ErrorsDto {
 
 	public HttpEntity<?> toBadRequest() {
 		return ResponseEntity.badRequest().body(this);
+	}
+
+	public HttpEntity<?> toBadRequestOrElse(Supplier<HttpEntity<?>> response) {
+		return errors.hasErrors() ? ResponseEntity.badRequest().body(this) : response.get();
 	}
 
 	@JsonAnyGetter

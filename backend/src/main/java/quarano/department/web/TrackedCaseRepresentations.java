@@ -27,12 +27,12 @@ import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
+import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
-import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
@@ -55,6 +55,7 @@ import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -97,22 +98,30 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(report, InitialReportDto.class);
 	}
 
-	TrackedCase from(TrackedCase existing, TrackedCaseDto source) {
+	TrackedCase from(TrackedCaseDto source, TrackedCase existing, ErrorsDto errors) {
+
+		validateForUpdate(source, existing, errors);
+
+		if (errors.hasErrors()) {
+			return existing;
+		}
 
 		var personSource = mapper.map(source, TrackedPersonDto.class);
-		var person = mapper.map(personSource, existing.getTrackedPerson());
+		mapper.map(personSource, existing.getTrackedPerson());
 
-		return mapper.map(source, existing)
-				.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate())) //
-				.markEdited();
+		var result = mapper.map(source, existing);
+
+		return mapper.map(source, result).markEdited();
 	}
 
-	TrackedCase from(TrackedCaseDto source, Department department) {
+	TrackedCase from(TrackedCaseDto source, Department department, CaseType type, ErrorsDto errors) {
+
+		validateForCreation(source, type, errors);
 
 		var personDto = mapper.map(source, TrackedPersonDto.class);
 		var person = mapper.map(personDto, TrackedPerson.class);
 
-		return mapper.map(source, new TrackedCase(person, CaseType.INDEX, department));
+		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
 	InitialReport from(InitialReportDto source) {
@@ -127,15 +136,49 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return new Comment(payload.getComment(), account.getFullName());
 	}
 
-	Errors validateAfterEnrollment(TrackedCaseDto source, Errors errors) {
+	private ErrorsDto validateForUpdate(TrackedCaseDto payload, TrackedCase existing, ErrorsDto errors) {
+
+		if (existing.isEnrollmentCompleted()) {
+			errors = validateAfterEnrollment(payload, errors);
+		}
+
+		return validate(payload, existing.getType(), errors);
+	}
+
+	private ErrorsDto validateForCreation(TrackedCaseDto payload, CaseType type, ErrorsDto errors) {
+
+		if (type.equals(CaseType.CONTACT)) {
+			errors.rejectField(payload.isInfected(), "infected", "ContactCase.infected");
+			errors.rejectField(payload.getTestDate() != null, "testDate", "ContactCase.infected");
+		}
+
+		return validate(payload, type, errors);
+	}
+
+	private ErrorsDto validate(TrackedCaseDto payload, CaseType type, ErrorsDto errors) {
+
+		if (payload.getTestDate() == null && payload.isInfected()) {
+			errors.rejectField("testDate", "ContactCase.infected");
+		}
+
+		var validationGroup = type.equals(CaseType.INDEX) || payload.getTestDate() != null //
+				? ValidationGroups.Index.class //
+				: Default.class;
+
+		return errors //
+				.doWith(it -> validator.validate(payload, it, validationGroup)) //
+				.doWith(it -> payload.validate(it, type));
+	}
+
+	private ErrorsDto validateAfterEnrollment(TrackedCaseDto source, ErrorsDto errors) {
 
 		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
-		validator.validate(dto, errors);
 
-		return errors;
+		return errors.doWith(it -> validator.validate(dto, it));
 	}
 
 	@Data
+	@Getter(onMethod = @__(@Nullable))
 	@NoArgsConstructor
 	static class TrackedCaseDto {
 
@@ -153,10 +196,13 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 		private @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Past LocalDate dateOfBirth;
+		private @Getter boolean infected;
 
-		private boolean infected;
+		Errors validate(Errors errors, CaseType type) {
 
-		Errors validate(Errors errors) {
+			if (type.equals(CaseType.CONTACT)) {
+				return errors;
+			}
 
 			if (!StringUtils.hasText(phone) && !StringUtils.hasText(mobilePhone)) {
 				errors.rejectValue("phone", "PhoneOrMobile");
@@ -170,13 +216,19 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	@Relation(collectionRelation = "cases")
 	static class TrackedCaseDetails extends TrackedCaseStatusAware<TrackedCaseDetails> {
 
+		private final TrackedCase trackedCase;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages) {
 
 			super(trackedCase, messages);
 
+			this.trackedCase = trackedCase;
 			this.dto = dto;
+		}
+
+		public String getCaseId() {
+			return trackedCase.getId().toString();
 		}
 
 		public List<CommentRepresentation> getComments() {

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
+		<version>2.2.7.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
@@ -177,6 +177,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -247,8 +248,8 @@
 					</attributes>
 				</configuration>
 			</plugin>
-			
-			<plugin> 
+
+			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
@@ -257,7 +258,7 @@
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
-						<configuration> 
+						<configuration>
 							<outputDirectory>
 								${project.build.outputDirectory}/static/docs
 							</outputDirectory>

@@ -110,7 +110,7 @@ CREATE TABLE tracked_cases (
 	completed_contact_retro bool NOT NULL,
 	completed_personal_data bool NOT NULL,
 	completed_questionnaire bool NOT NULL,
-	infected bool NOT NULL,
+	infected bool NULL,
 	quarantine_from date NULL,
 	quarantine_to date NULL,
 	test_date date NULL,
