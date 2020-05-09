@@ -12,7 +12,7 @@ import {HalResponse} from '@models/hal-response';
 import {CaseCommentDto} from '@models/case-comment';
 import {ClientType} from '@models/report-case';
 import {MatDialog} from '@angular/material/dialog';
-import {CloseCaseDialogComponent, CloseCaseDialogResponse} from './close-case-dialog/close-case-dialog.component';
+import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
 import {SubSink} from 'subsink';
 
 
@@ -124,15 +124,15 @@ export class ClientComponent implements OnInit, OnDestroy {
 
   checkForClose(halResponse: HalResponse) {
     this.subs.sink = this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
-      map((response: CloseCaseDialogResponse) => {
-        if (response.confirmation) {
-          this.closeCase(halResponse);
+      map((comment: string) => {
+        if (comment) {
+          this.addComment(comment);
         }
-        return response;
+        return comment;
       }),
-      map((response: CloseCaseDialogResponse) => {
-        if (response.comment && response.confirmation) {
-          this.addComment(response.comment);
+      map((comment: string) => {
+        if (comment) {
+          this.closeCase(halResponse);
         }
       })
     ).subscribe();
