@@ -247,8 +247,8 @@
 					</attributes>
 				</configuration>
 			</plugin>
-			
-			<plugin> 
+
+			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
@@ -257,7 +257,7 @@
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
-						<configuration> 
+						<configuration>
 							<outputDirectory>
 								${project.build.outputDirectory}/static/docs
 							</outputDirectory>
