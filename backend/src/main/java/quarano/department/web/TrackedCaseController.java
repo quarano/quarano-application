@@ -28,9 +28,7 @@ import quarano.tracking.web.TrackingController;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
-
 import javax.validation.Valid;
-
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;

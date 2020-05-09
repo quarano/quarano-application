@@ -7,7 +7,6 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.util.Streamable;
 

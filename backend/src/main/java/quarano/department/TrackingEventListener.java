@@ -1,13 +1,8 @@
 package quarano.department;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.DiaryEntry.DiaryEntryAdded;
@@ -17,6 +12,14 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
@@ -85,8 +88,7 @@ public class TrackingEventListener {
 	 * enrolement or by
 	 * adding it later or via diary-entry
 	 */
-	private boolean isFirstContactWith(ContactPerson newContactPerson, DiaryEntry entry,
-			Encounter encounter) {
+	private boolean isFirstContactWith(ContactPerson newContactPerson, @Nullable DiaryEntry entry, @Nullable Encounter encounter) {
 
 		var trackedPersonId = newContactPerson.getOwnerId();
 
