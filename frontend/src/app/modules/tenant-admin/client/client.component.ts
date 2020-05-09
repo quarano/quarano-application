@@ -95,7 +95,7 @@ export class ClientComponent implements OnInit {
     if (!caseDetail.caseId) {
       saveData$ = this.apiService.createCase(caseDetail, this.type$$.value);
     } else {
-      saveData$ = this.apiService.updateCase(caseDetail, this.type$$.value);
+      saveData$ = this.apiService.updateCase(caseDetail);
     }
 
     saveData$.subscribe(() => {

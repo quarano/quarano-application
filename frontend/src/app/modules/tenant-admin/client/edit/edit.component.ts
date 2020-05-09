@@ -1,18 +1,29 @@
-import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { CaseDetailDto } from '@models/case-detail';
-import { VALIDATION_PATTERNS } from '@utils/validation';
-import { Subject } from 'rxjs';
+import {SnackbarService} from '@services/snackbar.service';
+import {MatDialog} from '@angular/material/dialog';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {FormControl, FormGroup, NgForm, ValidatorFn, Validators} from '@angular/forms';
+import {CaseDetailDto} from '@models/case-detail';
+import {VALIDATION_PATTERNS} from '@utils/validation';
+import {Subject} from 'rxjs';
 import * as moment from 'moment';
-import { SubSink } from 'subsink';
-import { ClientType } from '@models/report-case';
-import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {SubSink} from 'subsink';
+import {ClientType} from '@models/report-case';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
   const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone || mobilePhone ? null : { phoneMissing: true };
+  return phone || mobilePhone ? null : {phoneMissing: true};
 };
 
 
@@ -26,6 +37,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
 
+  get isIndexCase() {
+    return this.type === ClientType.Index;
+  }
+
   @Input()
   caseDetail: CaseDetailDto;
   @Input()
@@ -34,23 +49,34 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   changedToIndex = new EventEmitter<boolean>();
 
   formGroup: FormGroup;
+  @ViewChild('editForm') editFormElement: NgForm;
 
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(private dialog: MatDialog) {
-    this.createFormGroup();
+  constructor(
+    private dialog: MatDialog,
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
+    this.createFormGroup();
+
+    this.updateFormGroup(this.caseDetail);
+
     this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges.subscribe((value) => {
       this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
     }));
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.hasOwnProperty('caseDetail')) {
       this.updateFormGroup(this.caseDetail);
+    }
+    if ('type' in changes && this.formGroup) {
+      this.setValidators();
+      this.triggerErrorMessages();
     }
   }
 
@@ -63,10 +89,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
 
-      testDate: new FormControl(this.type === ClientType.Index ? this.today : null),
+      testDate: new FormControl(this.isIndexCase ? this.today : null),
 
-      quarantineStartDate: new FormControl(this.type === ClientType.Index ? new Date() : null, []),
-      quarantineEndDate: new FormControl(this.type === ClientType.Index ? moment().add(2, 'weeks').toDate() : null, []),
+      quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
+      quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl(''),
       houseNumber: new FormControl(''),
@@ -89,15 +115,14 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       dateOfBirth: new FormControl(null, []),
 
       comment: new FormControl('', []),
-
-      infected: new FormControl(this.type === ClientType.Index ? true : false, []),
+      infected: new FormControl({value: this.isIndexCase, disabled: this.isIndexCase})
     });
     this.setValidators();
-    this.formGroup.controls.testDate.valueChanges.subscribe(value => {
+    this.subs.add(this.formGroup.get('infected').valueChanges.subscribe(value => {
       if (value && this.type === ClientType.Contact) {
         this.onTestDateAdded();
       }
-    });
+    }));
   }
 
   onTestDateAdded() {
@@ -113,14 +138,16 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         this.changedToIndex.emit(true);
       } else {
-        this.formGroup.controls.testDate.setValue(null);
+        this.formGroup.get('testDate').setValue(null);
       }
     });
   }
 
   setValidators() {
-    if (this.type === ClientType.Index) {
+    if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
+      this.formGroup.get('infected').disable();
+      this.formGroup.get('infected').setValue(true);
     } else {
       this.formGroup.clearValidators();
     }
@@ -128,7 +155,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
-    if (caseDetailDto) {
+    if (caseDetailDto && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];
@@ -141,19 +168,27 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  private triggerErrorMessages() {
+    this.snackbarService.confirm('Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken');
+    this.formGroup.markAllAsTouched();
+    this.editFormElement.ngSubmit.emit();
+  }
+
   submitForm() {
-    const submitData: any = { ...this.formGroup.value };
+    if (this.formGroup.valid) {
+      const submitData: any = {...this.formGroup.value};
 
-    Object.keys(submitData).forEach((key) => {
-      if (moment.isMoment(submitData[key])) {
-        submitData[key] = submitData[key].toDate();
+      Object.keys(submitData).forEach((key) => {
+        if (moment.isMoment(submitData[key])) {
+          submitData[key] = submitData[key].toDate();
+        }
+      });
+
+      if (this.caseDetail?.caseId) {
+        submitData.caseId = this.caseDetail.caseId;
       }
-    });
 
-    if (this.caseDetail?.caseId) {
-      submitData.caseId = this.caseDetail.caseId;
+      this.submittedValues.next(submitData);
     }
-
-    this.submittedValues.next(submitData);
   }
 }
