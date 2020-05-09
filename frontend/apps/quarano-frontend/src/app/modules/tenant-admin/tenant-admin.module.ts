@@ -20,6 +20,7 @@ import {ReportCasesResolver} from '../../resolvers/report-cases.resolver';
 import {ReportCaseActionsResolver} from '../../resolvers/report-case-actions.resolver';
 import {ReportCaseResolver} from '../../resolvers/report-case.resolver';
 import {ActionsResolver} from '../../resolvers/actions.resolver';
+import {IndexContactsComponent} from './client/index-contacts/index-contacts.component';
 
 
 @NgModule({
@@ -35,7 +36,9 @@ import {ActionsResolver} from '../../resolvers/actions.resolver';
     AnomalyComponent,
     CommentsComponent,
     MailComponent,
-    CloseCaseDialogComponent
+    CloseCaseDialogComponent,
+    MailComponent,
+    IndexContactsComponent
   ],
   imports: [
     CommonModule,

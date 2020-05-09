@@ -16,6 +16,7 @@ import {ApiService} from '../../../services/api.service';
 import {SnackbarService} from '../../../services/snackbar.service';
 import {HalResponse} from '../../../models/hal-response';
 import {ConfirmationDialogComponent} from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import {ContactDto} from '../../../../../../../src/app/models/contact';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class ClientComponent implements OnInit, OnDestroy {
 
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
+  caseIndexContacts$: Observable<ContactDto[]>;
 
   caseComments$: Observable<CaseCommentDto[]>;
 
@@ -59,6 +61,9 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details?.comments));
+    this.caseIndexContacts$ = this.caseDetail$.pipe(
+      map(details => details?.indexContacts)
+    );
 
     if (this.route.snapshot.queryParamMap.has('tab')) {
       this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
@@ -79,7 +84,8 @@ export class ClientComponent implements OnInit, OnDestroy {
           .subscribe((startTracking) => {
             this.trackingStart$$.next(startTracking);
           });
-      });
+      }
+    );
   }
 
   hasOpenAnomalies(): Observable<boolean> {

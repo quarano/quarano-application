@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -85,7 +86,7 @@ public class TrackingEventListener {
 	 * @param person
 	 * @return
 	 */
-	private boolean isFirstContactWith(ContactPerson newContactPerson, DiaryEntry entry, Encounter encounter) {
+	private boolean isFirstContactWith(ContactPerson newContactPerson, @Nullable DiaryEntry entry, @Nullable Encounter encounter) {
 
 		var trackedPersonId = newContactPerson.getOwnerId();
 
