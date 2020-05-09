@@ -33,7 +33,7 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private @Alphabetic String lastName, firstName;
+	private @Pattern(regexp = Strings.NAMES) String lastName, firstName;
 	private @Pattern(regexp =  Strings.CITY) String city;
 	private @Pattern(regexp =  Strings.STREET) String street;
 	private @AlphaNumeric String houseNumber;

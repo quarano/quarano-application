@@ -139,8 +139,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	@NoArgsConstructor
 	static class TrackedCaseDto {
 
-		private @NotEmpty @Alphabetic String lastName;
-		private @NotEmpty @Alphabetic String firstName;
+		private @Pattern(regexp = Strings.NAMES) @NotEmpty  String lastName;
+		private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate testDate;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineStartDate;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineEndDate;
