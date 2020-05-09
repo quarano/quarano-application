@@ -116,6 +116,16 @@
         ></qro-client-comments>
       </mat-tab>
       <mat-tab
+        *ngIf="(caseIndexContacts$ | async) as caseIndexContacts"
+      >
+        <ng-template mat-tab-label>
+          Angaben Indexfall
+        </ng-template>
+        <qro-client-index-contacts
+          [contacts]="caseIndexContacts"
+          ></qro-client-index-contacts>
+      </mat-tab>
+      <mat-tab
         *ngIf="trackingStart$$ | async as tracking"
         label="E-Mail Vorlage"
       >

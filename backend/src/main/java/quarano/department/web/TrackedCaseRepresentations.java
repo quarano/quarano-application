@@ -1,28 +1,5 @@
 package quarano.department.web;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.account.Account;
-import quarano.account.Department;
-import quarano.core.PhoneNumber;
-import quarano.core.validation.Email;
-import quarano.core.validation.Strings;
-import quarano.core.validation.Textual;
-import quarano.core.web.ErrorsDto;
-import quarano.core.web.MapperWrapper;
-import quarano.department.CaseType;
-import quarano.department.Comment;
-import quarano.department.Questionnaire;
-import quarano.department.Questionnaire.SymptomInformation;
-import quarano.department.TrackedCase;
-import quarano.reference.SymptomRepository;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
-import quarano.tracking.web.TrackedPersonDto;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -51,6 +28,32 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.account.Account;
+import quarano.account.Department;
+import quarano.core.PhoneNumber;
+import quarano.core.validation.Email;
+import quarano.core.validation.Strings;
+import quarano.core.validation.Textual;
+import quarano.core.web.ErrorsDto;
+import quarano.core.web.MapperWrapper;
+import quarano.department.CaseType;
+import quarano.department.Comment;
+import quarano.department.ContactChaser;
+import quarano.department.Questionnaire;
+import quarano.department.Questionnaire.SymptomInformation;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.reference.SymptomRepository;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.ZipCode;
+import quarano.tracking.web.TrackedPersonDto;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -62,6 +65,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	private final SmartValidator validator;
 	private final MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
+	private final ContactChaser contactChaser;
 
 	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
 
@@ -75,7 +79,11 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		var dto = toInputRepresentation(trackedCase);
 
-		return new TrackedCaseDetails(trackedCase, dto, messages);
+		List<Contact> contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase)
+				.map(contacts -> contacts.map(Contact::new).collect(Collectors.toList()))
+				.orElse(null);
+
+		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
 	}
 
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
@@ -191,6 +199,18 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return errors.doWith(it -> validator.validate(dto, it));
 	}
 
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Validated({ Default.class, ValidationGroups.Index.class })
+	static @interface ValidatedIndexCase {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	@Validated
+	static @interface ValidatedContactCase {
+	}
+
 	@Data
 	@Getter(onMethod = @__(@Nullable))
 	@NoArgsConstructor
@@ -234,14 +254,17 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private final TrackedCase trackedCase;
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
+		private final @Getter List<Contact> indexContacts;
 
-		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages) {
+		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
+				@Nullable List<Contact> indexContacts) {
 
 			super(trackedCase, messages);
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
+			this.indexContacts = indexContacts;
 		}
 
 		public String getCaseId() {
@@ -279,21 +302,40 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		}
 	}
 
+	@Getter
+	static class Contact {
+		private final TrackedCaseIdentifier caseId;
+		private final String firstName;
+		private final String lastName;
+		private final LocalDate dateOfBirth;
+		private final LocalDate contactAt;
+		private final Boolean isHealthStaff;
+		private final Boolean isSenior;
+		private final Boolean hasPreExistingConditions;
+		private final String identificationHint;
+
+
+		private Contact(ContactChaser.Contact chasedContact) {
+			this.caseId = chasedContact.getCaseId();
+
+			var person = chasedContact.getPerson();
+			this.firstName = person.getFirstName();
+			this.lastName = person.getLastName();
+			this.dateOfBirth = person.getDateOfBirth();
+
+			this.contactAt = chasedContact.getContactAt();
+
+			ContactPerson contactPerson = chasedContact.getContactPerson();
+			this.isHealthStaff = contactPerson.getIsHealthStaff();
+			this.isSenior = contactPerson.getIsSenior();
+			this.hasPreExistingConditions = contactPerson.getHasPreExistingConditions();
+			this.identificationHint = contactPerson.getIdentificationHint();
+		}
+	}
+
 	@Data
 	static class CommentInput {
 		@Textual String comment;
-	}
-
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.PARAMETER)
-	@Validated({ Default.class, ValidationGroups.Index.class })
-	static @interface ValidatedIndexCase {
-	}
-
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.PARAMETER)
-	@Validated
-	static @interface ValidatedContactCase {
 	}
 
 	static class ValidationGroups {

@@ -1,24 +1,24 @@
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
-import { CloseCaseDialogComponent } from './close-case-dialog/close-case-dialog.component';
-import { cloneDeep } from 'lodash';
-import { SubSink } from 'subsink';
-import { CaseActionDto } from '../../../models/case-action';
-import { CaseCommentDto } from '../../../models/case-comment';
-import { CaseDetailDto } from '../../../models/case-detail';
-import { StartTracking } from '../../../models/start-tracking';
-import { MatTabGroup } from '@angular/material/tabs';
-import { ApiService } from '../../../services/api.service';
-import { SnackbarService } from '../../../services/snackbar.service';
-import { HalResponse } from '../../../models/hal-response';
-import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
-import { ClientType } from '@quarano-frontend/health-department/domain';
+import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
+import {filter, map, switchMap, take} from 'rxjs/operators';
+import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
+import {cloneDeep} from 'lodash';
+import {SubSink} from 'subsink';
+import {CaseActionDto} from '../../../models/case-action';
+import {CaseCommentDto} from '../../../models/case-comment';
+import {CaseDetailDto} from '../../../models/case-detail';
+import {StartTracking} from '../../../models/start-tracking';
+import {MatTabGroup} from '@angular/material/tabs';
+import {ApiService} from '../../../services/api.service';
+import {SnackbarService} from '../../../services/snackbar.service';
+import {HalResponse} from '../../../models/hal-response';
+import {ConfirmationDialogComponent} from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import {ClientType} from '@quarano-frontend/health-department/domain';
 import {SymptomDto} from '../../../models/symptom';
 import {QuestionnaireDto} from '../../../models/first-query';
-
+import {ContactDto} from '../../../models/contact';
 
 @Component({
   selector: 'qro-clients',
@@ -35,6 +35,8 @@ export class ClientComponent implements OnInit, OnDestroy {
 
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
+  caseIndexContacts$: Observable<ContactDto[]>;
+
   caseComments$: Observable<CaseCommentDto[]>;
 
   symptoms$: Observable<SymptomDto[]>;
@@ -67,6 +69,9 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details?.comments));
+    this.caseIndexContacts$ = this.caseDetail$.pipe(
+      map(details => details?.indexContacts)
+    );
 
     if (this.route.snapshot.queryParamMap.has('tab')) {
       this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
@@ -87,7 +92,8 @@ export class ClientComponent implements OnInit, OnDestroy {
           .subscribe((startTracking) => {
             this.trackingStart$$.next(startTracking);
           });
-      });
+      }
+    );
 
     this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
@@ -106,7 +112,6 @@ export class ClientComponent implements OnInit, OnDestroy {
           );
         });
     });
-
   }
 
   hasOpenAnomalies(): Observable<boolean> {

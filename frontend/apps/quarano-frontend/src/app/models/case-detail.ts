@@ -1,5 +1,6 @@
-import { HalResponse } from './hal-response';
-import { CaseCommentDto } from './case-comment';
+import {HalResponse} from './hal-response';
+import {CaseCommentDto} from './case-comment';
+import {ContactDto} from './contact';
 
 export interface CaseDetailDto extends HalResponse {
   caseId?: string;
@@ -21,4 +22,6 @@ export interface CaseDetailDto extends HalResponse {
   infected: boolean;
   caseTypeLabel: string;
   extReferenceNumber: string;
+
+  indexContacts?: ContactDto[];
 }
