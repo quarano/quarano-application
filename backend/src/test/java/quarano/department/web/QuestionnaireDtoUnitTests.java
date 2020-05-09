@@ -11,15 +11,21 @@ import org.springframework.validation.MapBindingResult;
 /**
  * @author Oliver Drotbohm
  */
-class InitialReportDtoUnitTests {
+class QuestionnaireDtoUnitTests {
 
 	@Test
 	void rejectsEmptyDayOfFirstSymptomsIfSymptomatic() {
 
-		var dto = new InitialReportDto().setHasSymptoms(true);
+		var dto = new QuestionnaireDto()
+				.setHasSymptoms(true) //
+				.setBelongToMedicalStaff(true)
+				.setHasPreExistingConditions(true);
 
 		Errors errors = dto.validate(new MapBindingResult(new HashMap<>(), "name"));
 
 		assertThat(errors.hasFieldErrors("dayOfFirstSymptoms")).isTrue();
+		assertThat(errors.hasFieldErrors("belongToMedicalStaffDescription")).isTrue();
+		assertThat(errors.hasFieldErrors("hasPreExistingConditionsDescription")).isTrue();
 	}
+
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
 import quarano.core.DataInitializer;
+import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -110,17 +111,12 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setTestResult(TestResult.infected(start.minusDays(3))) //
 				.setQuarantine(Quarantine.of(start, end)) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new InitialReport() //
-						.setBelongToLaboratoryStaff(true) //
-						.setBelongToMedicalStaff(true) //
-						.setBelongToNursingStaff(true) //
-						.setDirectContactWithLiquidsOfC19pat(false) //
-						.setFamilyMember(true) //
-						.setFlightCrewMemberWithC19Pat(false) //
-						.setFlightPassengerCloseRowC19Pat(true) //
-						.setMin15MinutesContactWithC19Pat(true) //
-						.setNursingActionOnC19Pat(false) //
-						.withoutSymptoms()) //
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
+						"Arbeite als Pfleger im Klinikum Mannheim") //
+								.withoutSymptoms() //
+								.withContactToVulnerablePeople("Arbeite in der Pflege")
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Gustav
@@ -131,17 +127,11 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setTestResult(TestResult.infected(startG.minusDays(1))) //
 				.setQuarantine(Quarantine.of(startG, endG)) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new InitialReport() //
-						.setBelongToLaboratoryStaff(true) //
-						.setBelongToMedicalStaff(true) //
-						.setBelongToNursingStaff(true) //
-						.setDirectContactWithLiquidsOfC19pat(false) //
-						.setFamilyMember(true) //
-						.setFlightCrewMemberWithC19Pat(false) //
-						.setFlightPassengerCloseRowC19Pat(true) //
-						.setMin15MinutesContactWithC19Pat(true) //
-						.setNursingActionOnC19Pat(false) //
-						.withoutSymptoms()) //
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
+						"Chirurg im Klinikum Ludwigshafen") //
+								.withContactToVulnerablePeople("Arbeite in der Pflege")
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Nadine
@@ -152,17 +142,11 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setTestResult(TestResult.infected(startN.minusDays(1))) //
 				.setQuarantine(Quarantine.of(startN, endN)) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new InitialReport() //
-						.setBelongToLaboratoryStaff(true) //
-						.setBelongToMedicalStaff(true) //
-						.setBelongToNursingStaff(true) //
-						.setDirectContactWithLiquidsOfC19pat(false) //
-						.setFamilyMember(true) //
-						.setFlightCrewMemberWithC19Pat(false) //
-						.setFlightPassengerCloseRowC19Pat(true) //
-						.setMin15MinutesContactWithC19Pat(true) //
-						.setNursingActionOnC19Pat(false) //
-						.withoutSymptoms()) //
+				.submitQuestionnaire(
+						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Chirurg im Klinikum Ludwigshafen") //
+								.withContactToVulnerablePeople("Alterheim Totenruh")
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Siggi
@@ -171,17 +155,8 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3))) //
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2))) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new InitialReport() //
-						.setBelongToLaboratoryStaff(true) //
-						.setBelongToMedicalStaff(true) //
-						.setBelongToNursingStaff(true) //
-						.setDirectContactWithLiquidsOfC19pat(false) //
-						.setFamilyMember(true) //
-						.setFlightCrewMemberWithC19Pat(false) //
-						.setFlightPassengerCloseRowC19Pat(true) //
-						.setMin15MinutesContactWithC19Pat(true) //
-						.setNursingActionOnC19Pat(false) //
-						.withoutSymptoms()) //
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt") //
+						.withoutContactToVulnerablePeople()) //
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		cases.save(new TrackedCase(harry, CaseType.INDEX, department1) //

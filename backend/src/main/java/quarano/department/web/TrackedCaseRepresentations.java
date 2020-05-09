@@ -15,8 +15,11 @@ import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
-import quarano.department.InitialReport;
+import quarano.department.Questionnaire;
+import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
+import quarano.reference.Symptom;
+import quarano.reference.SymptomRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
@@ -79,8 +82,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
 
-	InitialReportDto toRepresentation(InitialReport report) {
-		return mapper.map(report, InitialReportDto.class);
+	QuestionnaireDto toRepresentation(Questionnaire report) {
+		return mapper.map(report, QuestionnaireDto.class);
 	}
 
 	TrackedCase from(TrackedCaseDto source, TrackedCase existing, ErrorsDto errors) {
@@ -109,12 +112,35 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
-	InitialReport from(InitialReportDto source) {
-		return mapper.map(source, InitialReport.class);
+	
+	private Questionnaire createReportFrom(QuestionnaireDto source, SymptomRepository symptomRepo) {
+		
+		SymptomInformation symptomsInfo;
+		
+		if(source.getHasSymptoms()) {
+			
+			List<Symptom> symptoms = source.getSymptoms().stream().map(it -> symptomRepo.findById(it).get()).collect(Collectors.toList());
+			symptomsInfo  = SymptomInformation.withSymptomsSince(source.getDayOfFirstSymptoms(), symptoms);
+		
+		}
+		else {
+			
+			symptomsInfo = SymptomInformation.withoutSymptoms();
+					
+		}
+		
+		return new Questionnaire(symptomsInfo, source.getHasPreExistingConditionsDescription(), source.getBelongToMedicalStaffDescription() );
 	}
 
-	InitialReport from(InitialReportDto source, InitialReport existing) {
-		return source.applyTo(mapper.map(source, existing));
+	Questionnaire from(QuestionnaireDto source, SymptomRepository symptoms) {
+		
+		var report = createReportFrom(source, symptoms);
+		return source.applyTo(mapper.map(source, report), symptoms);
+		
+	}
+
+	Questionnaire from(QuestionnaireDto source, Questionnaire existing, SymptomRepository symptoms) {
+		return source.applyTo(mapper.map(source, existing), symptoms);
 	}
 
 	Comment from(CommentInput payload, Account account) {

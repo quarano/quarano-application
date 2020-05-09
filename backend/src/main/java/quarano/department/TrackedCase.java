@@ -53,8 +53,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE) //
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
-	@JoinColumn(name = "initial_report_id") //
-	private InitialReport initialReport;
+	@JoinColumn(name = "questionnaire_id") //
+	private Questionnaire questionnaire;
 
 	@Setter(AccessLevel.NONE) //
 	private Enrollment enrollment = new Enrollment();
@@ -157,8 +157,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 				|| trackedPerson.getDateOfBirth() == null);
 	}
 
-	public InitialReport getOrCreateInitialReport() {
-		return initialReport == null ? new InitialReport() : initialReport;
+	public Questionnaire getQuestionnaire() {
+		return questionnaire == null ? null : questionnaire;
 	}
 
 	public TrackedCase submitEnrollmentDetails() {
@@ -179,16 +179,12 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	public TrackedCase submitQuestionnaire(InitialReport report) {
+	public TrackedCase submitQuestionnaire(Questionnaire questionnaire) {
 
-		this.initialReport = report;
-		log.debug("Submitting initial report {}.", report);
+		this.questionnaire = questionnaire;
+		log.debug("Submitting questionnaire {}.", questionnaire);
 
-		if (report.isComplete()) {
-			enrollment.markQuestionaireSubmitted();
-		} else {
-			log.debug("Questionnaire incomplete! Enrollment step not completed.");
-		}
+		enrollment.markQuestionaireSubmitted();
 
 		return this;
 	}

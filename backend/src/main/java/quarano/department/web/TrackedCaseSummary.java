@@ -85,9 +85,9 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 
 	public Boolean isMedicalStaff() {
 
-		var initialReport = trackedCase.getInitialReport();
+		var questionnaire = trackedCase.getQuestionnaire();
 
-		return initialReport == null ? null : initialReport.getBelongToMedicalStaff();
+		return questionnaire == null ? null : questionnaire.isMedicalStaff();
 	}
 
 	@Nullable

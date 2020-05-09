@@ -84,21 +84,20 @@ CREATE TABLE diary_entries (
 	CONSTRAINT diary_entries_tracked_person_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)
 );
 
-CREATE TABLE initial_reports (
-	initial_report_id uuid NOT NULL,
-	belong_to_laboratory_staff bool NULL,
-	belong_to_medical_staff bool NULL,
-	belong_to_nursing_staff bool NULL,
-	day_of_first_symptoms date NULL,
-	direct_contact_with_liquids_ofc19pat bool NULL,
-	family_member bool NULL,
-	flight_crew_member_withc19pat bool NULL,
-	flight_passenger_close_rowc19pat bool NULL,
+CREATE TABLE questionnaires (
+	questionnaire_id uuid NOT NULL,
 	has_symptoms bool NULL,
-	min15minutes_contact_withc19pat bool NULL,
-	nursing_action_onc19pat bool NULL,
-	other_contact_type varchar(255) NULL,
-	CONSTRAINT initial_reports_pkey PRIMARY KEY (initial_report_id)
+	day_of_first_symptoms date NULL,
+    	family_doctor varchar(255) NULL,
+    	guessed_origin_of_infection varchar(255) NULL,
+    	has_pre_existing_conditions bool NULL,
+    	has_pre_existing_conditions_description varchar(255) NULL,
+    	belong_to_medical_staff bool NULL,
+    	belong_to_medical_staff_description varchar(255) NULL,
+    	has_contact_to_vulnerable_people bool NULL,
+    	has_contact_to_vulnerable_people_description varchar(255) NULL,
+
+	CONSTRAINT questionnaires_pkey PRIMARY KEY (questionnaire_id)
 );
 
 CREATE TABLE tracked_cases (
@@ -116,12 +115,12 @@ CREATE TABLE tracked_cases (
 	test_date date NULL,
 	case_type varchar(50) NULL,
 	department_id uuid NULL,
-	initial_report_id uuid NULL,
+	questionnaire_id uuid NULL,
 	tracked_person_id uuid NULL,
 	status varchar(50) NOT NULL,
 	CONSTRAINT tracked_cases_pkey PRIMARY KEY (tracked_case_id),
 	CONSTRAINT tracked_cases_department_fk FOREIGN KEY (department_id) REFERENCES departments(department_id),
-	CONSTRAINT tracked_cases_initial_report_fk FOREIGN KEY (initial_report_id) REFERENCES initial_reports(initial_report_id),
+	CONSTRAINT tracked_cases_questionnaires_fk FOREIGN KEY (questionnaire_id) REFERENCES questionnaires(questionnaire_id),
 	CONSTRAINT tracked_cases_tracked_person_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)
 );
 
@@ -173,6 +172,13 @@ CREATE TABLE diary_entries_symptoms (
 	symptoms_symptom_id uuid NOT NULL,
 	CONSTRAINT diary_entries_symptoms_diary_entries_fk FOREIGN KEY (diary_entry_diary_entry_id) REFERENCES diary_entries(diary_entry_id),
 	CONSTRAINT diary_entries_symptoms_symptons_fk FOREIGN KEY (symptoms_symptom_id) REFERENCES symptoms(symptom_id)
+);
+
+CREATE TABLE questionnaires_symptoms (
+	questionnaire_questionnaire_id uuid NOT NULL,
+	symptoms_symptom_id uuid NOT NULL,
+	CONSTRAINT questionnaires_symptoms_questionnaires_fk FOREIGN KEY (questionnaire_questionnaire_id) REFERENCES questionnaires(questionnaire_id),
+	CONSTRAINT questionnaires_symptoms_symptons_fk FOREIGN KEY (symptoms_symptom_id) REFERENCES symptoms(symptom_id)
 );
 
 CREATE TABLE encounters (

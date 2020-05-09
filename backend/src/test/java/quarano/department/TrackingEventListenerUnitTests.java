@@ -61,7 +61,7 @@ class TrackingEventListenerUnitTests {
 		});
 
 		trackedCase.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
+				.submitQuestionnaire(new MinimalQuestionnaire());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
 	}
@@ -282,7 +282,7 @@ class TrackingEventListenerUnitTests {
 	private TrackedCase createIndexCaseFor(TrackedPerson person) {
 		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
+				.submitQuestionnaire(new MinimalQuestionnaire());
 		return trackedCase;
 	}
 }

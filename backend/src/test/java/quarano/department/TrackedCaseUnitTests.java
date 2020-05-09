@@ -35,7 +35,7 @@ class TrackedCaseUnitTests {
 
 		return new TrackedCase(person, CaseType.INDEX, department) //
 				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new CompletedInitialReport());
+				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
 
 	@Test
@@ -98,7 +98,7 @@ class TrackedCaseUnitTests {
 		var trackedCase = new TrackedCase(person, CaseType.INDEX, department);
 
 		assertThatExceptionOfType(EnrollmentException.class) //
-				.isThrownBy(() -> trackedCase.submitQuestionnaire(new CompletedInitialReport()));
+				.isThrownBy(() -> trackedCase.submitQuestionnaire(new MinimalQuestionnaire()));
 	}
 
 	@Test
