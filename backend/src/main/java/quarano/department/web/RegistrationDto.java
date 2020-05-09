@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import quarano.core.EmailAddress;
-import quarano.core.validation.Strings;
+import quarano.core.validation.Email;
+import quarano.core.validation.UserName;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,7 +14,6 @@ import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
 
 import org.springframework.validation.Errors;
 
@@ -24,11 +23,11 @@ import org.springframework.validation.Errors;
 @AllArgsConstructor
 public class RegistrationDto {
 
-	private @Pattern(regexp = Strings.USERNAME) @NotBlank String username;
+	private @UserName @NotBlank String username;
 	private @NotBlank String password, passwordConfirm;  // password rules are tested in entity
 	private @NotNull @Past LocalDate dateOfBirth;
 	private @NotNull UUID clientCode;
-	private @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
+	private @Email @NotBlank String email;
 	private UUID clientId;
 	private String departmentId;
 

@@ -14,6 +14,7 @@ import quarano.account.AccountService;
 import quarano.account.RoleRepository;
 import quarano.core.EmailAddress;
 import quarano.core.validation.Strings;
+import quarano.core.validation.UserName;
 import quarano.core.web.MapperWrapper;
 
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ class StaffAccountRepresentations {
 
 		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
 		private @Setter @Getter @NotBlank String password, passwordConfirm; // password rules are checked in Entity
-		private @Setter @Getter @Pattern(regexp = Strings.USERNAME) @NotBlank String username;
+		private @Setter @Getter @UserName @NotBlank String username;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
@@ -128,7 +129,7 @@ class StaffAccountRepresentations {
 
 
 		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
-		private @Setter @Getter @Pattern(regexp = Strings.USERNAME) @NotBlank String username;
+		private @Setter @Getter @UserName @NotBlank String username;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 

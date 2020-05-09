@@ -165,11 +165,12 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
-		var alphabetic = messages.getMessage("Alphabetic");
 		var alphaNumeric = messages.getMessage("AlphaNumeric");
+		var firstName = messages.getMessage("Pattern.firstName");
+		var lastName = messages.getMessage("Pattern.lastName");
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo(alphabetic);
-		assertThat(document.read("$.lastName", String.class)).isEqualTo(alphabetic);
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
 		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);

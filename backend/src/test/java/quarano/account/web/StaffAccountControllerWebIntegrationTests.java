@@ -25,10 +25,9 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.account.Account;
 import quarano.account.AccountService;
-import quarano.account.DepartmentRepository;
 import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
-import quarano.department.TrackedCaseRepository;
+import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,9 +51,9 @@ import com.jayway.jsonpath.PathNotFoundException;
 class StaffAccountControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
-	private final TrackedCaseRepository cases;
 	private final AccountService accounts;
-	private final DepartmentRepository departments;
+	private final MessageSourceAccessor messages;
+
 	
 	private final ObjectMapper jackson;
 
@@ -131,9 +131,76 @@ class StaffAccountControllerWebIntegrationTests {
 		assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).contains("ROLE_HD_ADMIN") );
 		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> JsonPath.parse(result).read("$.password", String.class));
 		
-		
 	}
 
+	@Test
+	@WithQuaranoUser("admin")
+	@Disabled
+	void rejectsInvalidCharactersForStringFieldsOnCreate() throws Exception {
+
+		var source = createTestUserInput(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN);
+
+		// set invalid data
+		source.setUsername("Demo ! A/Ccount");
+		source.setEmail("myT@estmaIl@test.com"); //
+		source.setFirstName("Hans123");
+		source.setFirstName("Huber123");
+
+		// send request
+		var responseBody = mvc.perform(post("/api/hd/accounts") //
+				.content(jackson.writeValueAsString(source)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(responseBody);
+
+		var usernameMessage = messages.getMessage("UserName");
+		var emailMessage = messages.getMessage("Email");
+		var firstName = messages.getMessage("Pattern.firstName");
+		var lastName = messages.getMessage("Pattern.lastName");
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
+		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
+		assertThat(document.read("$.email", String.class)).isEqualTo(emailMessage);
+	}	
+	
+	@Test
+	@WithQuaranoUser("admin")
+	@Disabled
+	void rejectsInvalidCharactersForStringFieldsOnUpdate() throws Exception {
+		
+		// get reference accounts
+		var agent1 = accounts.findByUsername("agent1");
+		
+		StaffAccountUpdateInputDto  dto = StaffAccountUpdateInputDto.of();
+		
+		dto.setUsername("Demo ! A/Ccount");
+		dto.setEmail("myT@estmaIl@test.com"); //
+		dto.setFirstName("Hans123");
+		dto.setFirstName("Huber123");
+		
+		var response = mvc.perform(put("/api/hd/accounts/" + agent1.get().getId())
+				.content(jackson.writeValueAsString(dto)) //
+				.contentType(MediaType.APPLICATION_JSON)) //) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		var usernameMessage = messages.getMessage("UserName");
+		var emailMessage = messages.getMessage("Email");
+		var firstName = messages.getMessage("Pattern.firstName");
+		var lastName = messages.getMessage("Pattern.lastName");
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
+		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
+		assertThat(document.read("$.email", String.class)).isEqualTo(emailMessage);
+	}	
+	
+	
 	private StaffAccountCreateInputDto createTestUserInput(RoleType... roles) {
 		List<String> rolesToAdd = new ArrayList<>();
 		

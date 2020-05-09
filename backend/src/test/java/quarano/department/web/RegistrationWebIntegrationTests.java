@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +41,7 @@ class RegistrationWebIntegrationTests {
 	private final TrackedCaseRepository cases;
 	private final ActivationCodeService codes;
 	private final HalLinkDiscoverer links;
+	private final MessageSourceAccessor messages;
 
 	@Test
 	public void registerNewAccountForClientSuccess() throws Exception {
@@ -191,6 +193,39 @@ class RegistrationWebIntegrationTests {
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
 	}
+	
+	@Test
+	void rejectsInvalidCharactersForStringFields() throws Exception {
+
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var password = "myPassword";
+
+		var registrationDto = RegistrationDto.builder() //
+				.username("Demo ! A/Ccount") //
+				.password(password) //
+				.passwordConfirm(password) //
+				.dateOfBirth(person.getDateOfBirth()) //
+				.email("myT@estmaIl@test.com") //
+				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+				.build();
+
+		// when
+		var responseBody = mvc.perform(post("/api/registration") //
+				.header("Origin", "*") //
+				.contentType(MediaType.APPLICATION_JSON) //
+				.content(mapper.writeValueAsString(registrationDto))) //
+				.andExpect(status().isBadRequest()) //
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(responseBody);
+
+		var usernameMessage = messages.getMessage("UserName");
+		var emailMessage = messages.getMessage("Email");
+
+		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
+		assertThat(document.read("$.email", String.class)).isEqualTo(emailMessage);
+	}	
 
 	@Test
 	@Disabled

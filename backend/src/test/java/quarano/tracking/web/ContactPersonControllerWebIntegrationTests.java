@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +39,7 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * @author Oliver Drotbohm
  * @author Felix Schultze
+ * @author Patrick Otto
  */
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
@@ -46,6 +48,7 @@ class ContactPersonControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
+	private final MessageSourceAccessor messages;
 
 	
 	@Test
@@ -93,12 +96,15 @@ class ContactPersonControllerWebIntegrationTests {
 	}
 
 	@Test
-	void rejectsFirstAndLastNameContainingNumbers() throws Exception {
+	void rejectsInvalidCharactersForStringFields() throws Exception {
 
 		var payload = new ContactPersonDto();
-		payload.setFirstName("Test121231 ");
-		payload.setLastName("TestN121231 ");
-		payload.setMobilePhone("0123910");
+		payload.setFirstName("Test121231 ")
+		.setLastName("TestN121231 ")
+		.setPhone("012356789A") //
+		.setCity("city 123") //
+		.setStreet("\\") //
+		.setHouseNumber("-");
 
 		String response = mvc.perform(post("/api/contacts") //
 				.content(mapper.writeValueAsString(payload)) //
@@ -108,8 +114,15 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.firstName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
-		assertThat(document.read("$.lastName", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		var alphaNumeric = messages.getMessage("AlphaNumeric");
+		var firstName = messages.getMessage("Pattern.firstName");
+		var lastName = messages.getMessage("Pattern.lastName");
+
+		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
+		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
+		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
+		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);		
 	}
 	
 
