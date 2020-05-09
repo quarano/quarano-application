@@ -33,7 +33,7 @@
                     die Daten. Bei Fragen sprechen Sie uns gerne an.</em></p>
         </section>
         <mat-card-actions>
-            <button mat-raised-button color="primary" type="button"
+            <button mat-raised-button color="primary" type="button" data-cy="cta-button-index"
                 [routerLink]="['/welcome/register/', clientcode]">WEITER</button>
         </mat-card-actions>
     </mat-card-content>
@@ -73,7 +73,7 @@
                     die Daten. Bei Fragen sprechen Sie uns gerne an.</em></p>
         </section>
         <mat-card-actions>
-            <button mat-raised-button color="primary" type="button" [routerLink]="['/welcome/register/', clientcode]">
+            <button mat-raised-button color="primary" type="button" [routerLink]="['/welcome/register/', clientcode]" data-cy="cta-button-contact">
                 WEITER
             </button>
         </mat-card-actions>
