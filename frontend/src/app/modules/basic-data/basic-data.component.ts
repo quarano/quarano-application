@@ -8,24 +8,24 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SubSink} from 'subsink';
 import {ContactPersonDto} from '@models/contact-person';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import '@utils/date-extensions';
 import {MatDialog} from '@angular/material/dialog';
 import {ContactPersonDialogComponent} from '../app-forms/contact-person-dialog/contact-person-dialog.component';
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {Moment} from 'moment';
 import {VALIDATION_PATTERNS} from '@utils/validation';
-import {debounceTime} from 'rxjs/operators';
 import {MatHorizontalStepper} from '@angular/material/stepper';
 import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
 import {BehaviorSubject} from 'rxjs';
+import {SymptomDto} from '@models/symptom';
 
 @Component({
   selector: 'app-basic-data',
   templateUrl: './basic-data.component.html',
   styleUrls: ['./basic-data.component.scss']
 })
-export class BasicDataComponent implements OnInit, OnDestroy {
+export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
@@ -38,6 +38,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
   firstQuery: QuestionnaireDto;
+  symptoms: SymptomDto[];
 
   // ########## STEP III ##########
   thirdFormGroup: FormGroup;
@@ -52,7 +53,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
-    private router: Router) {
+    private router: Router,
+    private changeDetect: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -61,6 +63,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       this.firstQuery = data.firstQuery;
       this.client = data.clientData;
       this.encounters = data.encounters;
+      this.symptoms = data.symptoms.filter((symptom) => symptom.characteristic);
+
       this.buildForms();
     }));
 
@@ -78,6 +82,10 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  ngAfterViewChecked(): void {
+    this.changeDetect.detectChanges();
   }
 
   buildForms() {
@@ -110,23 +118,22 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       city: new FormControl(this.client.city, [Validators.required]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
     });
+  }
 
-    this.firstFormGroup.statusChanges
-      .pipe(debounceTime(1000))
-      .subscribe((status) => {
-        if (status === 'VALID' && !this.firstFormGroup.pristine) {
-          const value = this.firstFormGroup.value;
-          value.dateOfBirth = this.dateOfBirth;
-          this.enrollmentService.updatePersonalDetails(value)
-            .subscribe(result => {
-              this.enrollmentStatus$$.next(result);
-              if (result.completedPersonalData) {
-                this.client = value;
-                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
-              }
-            });
-        }
-      });
+  checkAndSendFirstForm() {
+    if (this.firstFormGroup.valid) {
+      const value = this.firstFormGroup.value;
+      value.dateOfBirth = this.dateOfBirth;
+      this.enrollmentService.updatePersonalDetails(value)
+        .subscribe(result => {
+          this.enrollmentStatus$$.next(result);
+          if (result.completedPersonalData) {
+            this.client = value;
+            this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+            this.stepper.next();
+          }
+        });
+    }
   }
 
   get dateOfBirth() {
@@ -154,56 +161,40 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   buildSecondForm() {
+
+    const symptoms = this.firstQuery?.symptoms || [];
+
     this.secondFormGroup = new FormGroup({
-      min15MinutesContactWithC19Pat: new FormControl(this.firstQuery.min15MinutesContactWithC19Pat, [Validators.required]),
-      nursingActionOnC19Pat: new FormControl(this.firstQuery.nursingActionOnC19Pat, [Validators.required]),
-      directContactWithLiquidsOfC19pat: new FormControl(this.firstQuery.directContactWithLiquidsOfC19pat, [Validators.required]),
-      flightPassengerCloseRowC19Pat: new FormControl(this.firstQuery.flightPassengerCloseRowC19Pat, [Validators.required]),
-      flightCrewMemberWithC19Pat: new FormControl(this.firstQuery.flightCrewMemberWithC19Pat, [Validators.required]),
-      belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
-      belongToNursingStaff: new FormControl(this.firstQuery.belongToNursingStaff, [Validators.required]),
-      belongToLaboratoryStaff: new FormControl(this.firstQuery.belongToLaboratoryStaff, [Validators.required]),
-      familyMember: new FormControl(this.firstQuery.familyMember, [Validators.required]),
+      hasSymptoms: new FormControl(this.firstQuery.hasSymptoms, [Validators.required]),
       dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
-      otherContactType: new FormControl(this.firstQuery.otherContactType),
-      hasSymptoms: new FormControl(this.firstQuery.hasSymptoms, [Validators.required])
-    });
-
-    this.secondFormGroup.controls.hasSymptoms.valueChanges.subscribe((value: boolean) => {
-      const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
-      if (!value) {
-        control.setValue(null);
-        control.clearValidators();
-      } else {
-        control.setValidators([Validators.required]);
-      }
-      control.updateValueAndValidity();
-      console.log(this.secondFormGroup);
-    });
-
-    this.secondFormGroup.valueChanges
-      .pipe(debounceTime(1000)).subscribe(_ => {
-      if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
-        const value = this.secondFormGroup.value as QuestionnaireDto;
-        value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-        this.enrollmentService.updateQuestionnaire(value)
-          .subscribe(result => {
-            this.enrollmentStatus$$.next(result);
-            if (result.completedQuestionnaire) {
-              this.firstQuery = value;
-              this.firstQuery.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-            }
-          });
-      }
+      symptoms: new FormControl(symptoms),
+      familyDoctor: new FormControl(this.firstQuery.familyDoctor, [Validators.required]),
+      guessedOriginOfInfection: new FormControl(this.firstQuery.guessedOriginOfInfection, [Validators.required]),
+      hasPreExistingConditions: new FormControl(this.firstQuery.hasPreExistingConditions, [Validators.required]),
+      hasPreExistingConditionsDescription: new FormControl(this.firstQuery.hasPreExistingConditionsDescription),
+      belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
+      belongToMedicalStaffDescription: new FormControl(this.firstQuery.belongToMedicalStaffDescription),
+      hasContactToVulnerablePeople: new FormControl(this.firstQuery.hasContactToVulnerablePeople, [Validators.required]),
+      hasContactToVulnerablePeopleDescription: new FormControl(this.firstQuery.hasContactToVulnerablePeopleDescription)
     });
   }
 
-  firstSymptomsValidator(g: FormGroup) {
-    if (g.controls.hasSymptoms.value === true) {
-      return g.controls.dayOfFirstSymptoms.value ? null : {required: true};
+  checkAndSendQuestionaire() {
+    if (this.secondFormGroup.valid) {
+      const questionaireData: QuestionnaireDto = {...this.secondFormGroup.value};
+
+      if (this.secondFormGroup.get('symptoms').value) {
+        questionaireData.symptoms = this.secondFormGroup.get('symptoms').value.map((data) => data.id);
+      }
+
+      this.subs.add(this.enrollmentService.updateQuestionnaire(this.secondFormGroup.value)
+        .subscribe(() => {
+          this.firstQuery = this.secondFormGroup.value;
+          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+
+          this.stepper.next();
+        }));
     }
-    return null;
   }
 
   // ########## STEP III ##########
@@ -212,7 +203,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.thirdFormGroup = new FormGroup({});
     let day = new Date(this.today);
     this.datesForRetrospectiveContacts = [];
-    const firstSymptomsDay = this.firstQuery.dayOfFirstSymptoms || new Date(this.today);
+
+    const firstSymptomsDay = new Date(Date.parse(this.firstQuery.dayOfFirstSymptoms) || this.today);
     const firstDay = firstSymptomsDay.addDays(-2);
     while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
       this.datesForRetrospectiveContacts.push(day);

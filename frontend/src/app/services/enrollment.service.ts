@@ -20,15 +20,7 @@ export class EnrollmentService {
     private httpClient: HttpClient) { }
 
   getQuestionnaire(): Observable<QuestionnaireDto> {
-    return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`)
-      .pipe(
-        share(),
-        map(result => {
-          if (result.dayOfFirstSymptoms) {
-            result.dayOfFirstSymptoms = new Date(result.dayOfFirstSymptoms);
-          }
-          return result;
-        }));
+    return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`).pipe(share());
   }
 
   updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<EnrollmentStatusDto> {
@@ -37,15 +29,7 @@ export class EnrollmentService {
   }
 
   getPersonalDetails(): Observable<ClientDto> {
-    return this.httpClient.get<ClientDto>(`${this.baseUrl}/enrollment/details`)
-      .pipe(
-        share(),
-        map(result => {
-          if (result.dateOfBirth) {
-            result.dateOfBirth = new Date(result.dateOfBirth);
-          }
-          return result;
-        }));
+    return this.httpClient.get<ClientDto>(`${this.baseUrl}/enrollment/details`).pipe(share());
   }
 
   updatePersonalDetails(client: ClientDto): Observable<EnrollmentStatusDto> {
@@ -54,9 +38,7 @@ export class EnrollmentService {
   }
 
   getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`)
-      .pipe(
-        share());
+    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share());
   }
 
   getEncounters(): Observable<EncounterEntry[]> {

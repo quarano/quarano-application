@@ -5,6 +5,7 @@ import { BasicDataComponent } from './basic-data.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContactPersonsResolver } from '@resolvers/contact-persons.resolver';
+import {SymptomsResolver} from '@resolvers/symptoms.resolver';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
     component: BasicDataComponent,
     resolve:
     {
+      symptoms: SymptomsResolver,
       contactPersons: ContactPersonsResolver,
       firstQuery: MyFirstQueryResolver,
       clientData: MyClientDataResolver,

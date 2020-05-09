@@ -1,14 +1,13 @@
 export interface QuestionnaireDto {
-  min15MinutesContactWithC19Pat: boolean;
-  nursingActionOnC19Pat: boolean;
-  directContactWithLiquidsOfC19pat: boolean;
-  flightPassengerCloseRowC19Pat: boolean;
-  flightCrewMemberWithC19Pat: boolean;
-  belongToMedicalStaff: boolean;
-  belongToNursingStaff: boolean;
-  belongToLaboratoryStaff: boolean;
-  familyMember: boolean;
-  otherContactType: string;
   hasSymptoms: boolean;
-  dayOfFirstSymptoms: Date;
+  dayOfFirstSymptoms?: string;
+  symptoms?: string[];
+  familyDoctor: string;
+  guessedOriginOfInfection: string;
+  hasPreExistingConditions: boolean;
+  hasPreExistingConditionsDescription?: string;
+  belongToMedicalStaff: boolean;
+  belongToMedicalStaffDescription?: string;
+  hasContactToVulnerablePeople: boolean;
+  hasContactToVulnerablePeopleDescription?: string;
 }

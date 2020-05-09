@@ -1,5 +1,5 @@
 import { EncountersResolver } from '@resolvers/encounters.resolver';
-import { AppFormsModule } from './../app-forms/app-forms.module';
+import { AppFormsModule } from '../app-forms/app-forms.module';
 import { MyClientDataResolver } from '@resolvers/my-client-data.resolver';
 import { MyFirstQueryResolver } from '@resolvers/my-first-query.resolver';
 import { ContactPersonsResolver } from '@resolvers/contact-persons.resolver';
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { BasicDataComponent } from './basic-data.component';
 import { BasicDataRoutingModule } from './basic-data-routing.module';
 import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-dialog.module';
+import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { ConfirmationDialogModule } from '@ui/confirmation-dialog/confirmation-d
     AppFormsModule,
     ConfirmationDialogModule
   ],
-  declarations: [BasicDataComponent],
+  declarations: [BasicDataComponent, InitialQuestionaireFormComponent],
   providers:
     [
       ContactPersonsResolver,
