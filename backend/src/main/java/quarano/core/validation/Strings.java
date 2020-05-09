@@ -21,6 +21,7 @@ package quarano.core.validation;
 public class Strings {
 
 	static final String LETTERS = "[\\p{L}\\s]*";
+	static final String NUMBERS = "[0-9]*";
 	static final String LETTERS_AND_NUMBERS = "[\\p{L}\\s\\d]*";
 	static final String TEXTUAL = "[\\p{L}\\s\\d\\.\\,\\?\\!\\(\\)\\-\\n\\r]*";
 
@@ -29,7 +30,7 @@ public class Strings {
 	private static final String DASHES = "\\-";
 	private static final String PARENTHESIS = "\\(\\)";
 	private static final String SLASHES = "\\/";
-
+	
 	public static final String CITY = "[" + LETTERS_AND_SPACES + DOTS + DASHES + PARENTHESIS + SLASHES + "]*";
-	public static final String STREET = "[" + LETTERS_AND_SPACES + DOTS + DASHES + "]*";
+	public static final String STREET = "[" + LETTERS_AND_SPACES + DOTS + DASHES + NUMBERS + "]*";
 }
