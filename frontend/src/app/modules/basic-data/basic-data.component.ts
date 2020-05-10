@@ -188,9 +188,10 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
 
       this.subs.add(this.enrollmentService.updateQuestionnaire(this.secondFormGroup.value)
-        .subscribe(() => {
-          this.firstQuery = this.secondFormGroup.value;
-          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+          .subscribe(() => {
+              this.firstQuery = this.secondFormGroup.value;
+              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+
 
           this.stepper.next();
         }));
