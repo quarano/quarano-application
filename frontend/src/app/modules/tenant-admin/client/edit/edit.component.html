@@ -3,11 +3,13 @@
     <legend>Basisdaten</legend>
     <mat-form-field class="half-width" data-cy="input-firstname">
       <input required matInput placeholder="Vorname" formControlName="firstName" type="text" />
-      <mat-error>Bitte geben Sie einen Vornamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('firstName').hasError('required')">Bitte geben Sie einen Vornamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('firstName').hasError('pattern')">Bitte geben Sie einen gültigen Vornamen ein</mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-lastname">
       <input matInput required placeholder="Nachname" formControlName="lastName" type="text" />
-      <mat-error>Bitte geben Sie einen Nachnamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('lastName').hasError('required')">Bitte geben Sie einen Nachnamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('lastName').hasError('pattern')">Bitte geben Sie einen gültigen Nachnamen ein</mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-dayofbirth">
       <mat-label>Geburtsdatum</mat-label>
@@ -80,11 +82,11 @@
 
     <mat-form-field style="width: 70%;">
       <input matInput placeholder="Straße" formControlName="street" type="text" />
-      <mat-error>Bitte geben Sie eine Straße ein</mat-error>
+      <mat-error>Bitte geben Sie eine gültige Straße ein</mat-error>
     </mat-form-field>
     <mat-form-field style="width: 30%;">
       <input matInput placeholder="Hausnummer" maxlength="6" formControlName="houseNumber" type="text" />
-      <mat-error>Bitte geben Sie eine Hausnummer ein</mat-error>
+      <mat-error>Bitte geben Sie eine gültige Hausnummer ein</mat-error>
     </mat-form-field>
     <mat-form-field style="width: 30%;" data-cy="input-zipcode">
       <input matInput placeholder="Postleitzahl" minlength="5" maxlength="5" formControlName="zipCode" type="text" />

@@ -86,20 +86,20 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   createFormGroup() {
     this.formGroup = new FormGroup({
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
+      firstName: new FormControl('', [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
+      lastName: new FormControl('', [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
 
       testDate: new FormControl(this.isIndexCase ? this.today : null),
 
       quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
       quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
-      street: new FormControl(''),
-      houseNumber: new FormControl(''),
+      street: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.street)]),
+      houseNumber: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
       city: new FormControl(''),
       zipCode: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(5),
-        Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
+        Validators.pattern(VALIDATION_PATTERNS.zip)]),
 
       mobilePhone: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(17),

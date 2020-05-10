@@ -1,13 +1,14 @@
-import { DataProtectionComponent } from './../../../components/data-protection/data-protection.component';
-import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PasswordValidator } from '@validators/password-validator';
-import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, tap } from 'rxjs/operators';
-import { ApiService } from '@services/api.service';
-import { Register } from '@models/register';
-import { SnackbarService } from '@services/snackbar.service';
+import {DataProtectionComponent} from '../../../components/data-protection/data-protection.component';
+import {MatDialog} from '@angular/material/dialog';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {PasswordValidator} from '@validators/password-validator';
+import {ActivatedRoute, Router} from '@angular/router';
+import {finalize, tap} from 'rxjs/operators';
+import {ApiService} from '@services/api.service';
+import {Register} from '@models/register';
+import {SnackbarService} from '@services/snackbar.service';
+import {VALIDATION_PATTERNS} from '@utils/validation';
 
 @Component({
   selector: 'app-register',
@@ -27,7 +28,8 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30),
-      () => this.usernameIsValid ? null : { usernameInvalid: true }
+      Validators.pattern(VALIDATION_PATTERNS.username),
+      () => this.usernameIsValid ? null : {usernameInvalid: true}
     ]),
     password: new FormControl(null, [
       PasswordValidator.secure
@@ -37,7 +39,7 @@ export class RegisterComponent implements OnInit {
     ]),
     email: new FormControl(null, [
       Validators.required,
-      Validators.email
+      Validators.pattern(VALIDATION_PATTERNS.email)
     ]),
     dateOfBirth: new FormControl(null, [
       Validators.required
@@ -107,6 +109,6 @@ export class RegisterComponent implements OnInit {
   }
 
   openDataProtection() {
-    this.dialog.open(DataProtectionComponent, { maxHeight: '95vh' });
+    this.dialog.open(DataProtectionComponent, {maxHeight: '95vh'});
   }
 }

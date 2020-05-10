@@ -92,7 +92,6 @@ describe('new case', () => {
   });
 
   describe('field tests', () => {
-
     const dateChecks = (selector: string) => {
       it('should be a date string', () => {
         cy.get(selector).should('exist');
@@ -130,6 +129,12 @@ describe('new case', () => {
 
           cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte geben Sie einen Vornamen ein');
         });
+        it('should be invalid', () => {
+          cy.get('[data-cy="input-firstname"] input[matInput]').clear().type('Testfirstn5ame');
+          cy.get('[data-cy="input-firstname"] input[matInput]').blur();
+
+          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte geben Sie einen gültigen Vornamen ein');
+        });
       });
 
       describe('lastName', () => {
@@ -139,6 +144,12 @@ describe('new case', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').blur();
 
           cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte geben Sie einen Nachnamen ein');
+        });
+        it('should be invalid', () => {
+          cy.get('[data-cy="input-lastname"] input[matInput]').clear().type('Testlast09name');
+          cy.get('[data-cy="input-lastname"] input[matInput]').blur();
+
+          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte geben Sie einen gültigen Nachnamen ein');
         });
       });
 
