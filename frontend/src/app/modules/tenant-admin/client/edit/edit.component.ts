@@ -1,5 +1,5 @@
-import {SnackbarService} from '@services/snackbar.service';
-import {MatDialog} from '@angular/material/dialog';
+import { SnackbarService } from '@services/snackbar.service';
+import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
   EventEmitter,
@@ -11,19 +11,19 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {FormControl, FormGroup, NgForm, ValidatorFn, Validators} from '@angular/forms';
-import {CaseDetailDto} from '@models/case-detail';
-import {VALIDATION_PATTERNS} from '@utils/validation';
-import {Subject} from 'rxjs';
+import { FormControl, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
+import { CaseDetailDto } from '@models/case-detail';
+import { VALIDATION_PATTERNS } from '@utils/validation';
+import { Subject } from 'rxjs';
 import * as moment from 'moment';
-import {SubSink} from 'subsink';
-import {ClientType} from '@models/report-case';
-import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
+import { SubSink } from 'subsink';
+import { ClientType } from '@models/report-case';
+import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
   const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone || mobilePhone ? null : {phoneMissing: true};
+  return phone || mobilePhone ? null : { phoneMissing: true };
 };
 
 
@@ -115,7 +115,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       dateOfBirth: new FormControl(null, []),
 
       comment: new FormControl('', []),
-      infected: new FormControl({value: this.isIndexCase, disabled: this.isIndexCase})
+      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase })
     });
     this.setValidators();
     this.subs.add(this.formGroup.get('infected').valueChanges.subscribe(value => {
@@ -170,13 +170,19 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   private triggerErrorMessages() {
     this.snackbarService.confirm('Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken');
+    this.formGroup.markAsDirty();
     this.formGroup.markAllAsTouched();
+    Object.keys(this.formGroup.controls).forEach(key => {
+      this.formGroup.controls[key].markAsDirty();
+      this.formGroup.controls[key].updateValueAndValidity();
+    });
+    this.formGroup.updateValueAndValidity();
     this.editFormElement.ngSubmit.emit();
   }
 
   submitForm() {
     if (this.formGroup.valid) {
-      const submitData: any = {...this.formGroup.value};
+      const submitData: any = { ...this.formGroup.value };
 
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
