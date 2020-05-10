@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.springframework.context.MessageSourceResolvable;
 
@@ -36,7 +38,7 @@ import org.springframework.context.MessageSourceResolvable;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Description implements MessageSourceResolvable {
-
+	@Enumerated(EnumType.STRING)
 	private final @Getter DescriptionCode code;
 	private final String arguments;
 

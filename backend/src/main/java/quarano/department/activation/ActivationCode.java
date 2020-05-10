@@ -17,6 +17,8 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
@@ -29,6 +31,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 
 	private @Getter LocalDateTime expirationTime;
 	private @Getter TrackedPersonIdentifier trackedPersonId;
+	@Enumerated(EnumType.STRING)
 	private @Getter ActivationCodeStatus status;
 	private @Getter int activationTries;
 	private @Getter DepartmentIdentifier departmentId;
@@ -120,6 +123,8 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	}
 
 	public enum ActivationCodeStatus {
-		WAITING_FOR_ACTIVATION, REDEEMED, CANCELED
+		WAITING_FOR_ACTIVATION, //
+		REDEEMED, //
+		CANCELED //
 	}
 }

@@ -30,6 +30,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
@@ -45,7 +47,9 @@ import org.jddd.core.types.Identifier;
 public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItemIdentifier> {
 
 	private TrackedPersonIdentifier personIdentifier;
-	private @Column(name = "item_type") ItemType type;
+	@Column(name = "item_type") //
+	@Enumerated(value = EnumType.STRING) //
+	private ItemType type;
 	private Description description;
 	private boolean resolved;
 

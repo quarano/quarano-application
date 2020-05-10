@@ -29,6 +29,8 @@ import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.springframework.util.Assert;
 
@@ -49,7 +51,7 @@ import org.springframework.util.Assert;
 public class Slot implements Comparable<Slot> {
 
 	private final @Column(name = "date_of_slot") LocalDate date;
-	private final TimeOfDay timeOfDay;
+	@Enumerated(EnumType.STRING) private final TimeOfDay timeOfDay;
 
 	/**
 	 * Creates a new {@link Slot} for the morning of the given date.
