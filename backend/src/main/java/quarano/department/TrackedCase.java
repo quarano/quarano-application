@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
@@ -60,6 +61,7 @@ import org.springframework.util.Assert;
 @Data
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true, of = {})
+@Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
 	@OneToOne(cascade = { CascadeType.ALL }) //
@@ -199,9 +201,12 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase submitQuestionnaire(InitialReport report) {
 
 		this.initialReport = report;
+		log.debug("Submitting initial report {}.", report);
 
 		if (report.isComplete()) {
 			enrollment.markQuestionaireSubmitted();
+		} else {
+			log.debug("Questionnaire incomplete! Enrollment step not completed.");
 		}
 
 		return this;

@@ -43,7 +43,7 @@ public class InitialReportDto {
 	Errors validate(Errors errors) {
 
 		if (Boolean.TRUE.equals(hasSymptoms) && dayOfFirstSymptoms == null) {
-			errors.rejectValue("dayOfFirstSymptoms", "NotNull.IntialReportDto.dayOfFirstSymptoms");
+			errors.rejectValue("dayOfFirstSymptoms", "NotNull.dayOfFirstSymptoms");
 		}
 
 		return errors;

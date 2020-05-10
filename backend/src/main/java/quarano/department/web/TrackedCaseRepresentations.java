@@ -128,7 +128,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(source, InitialReport.class);
 	}
 
-	InitialReport from(InitialReport existing, InitialReportDto source) {
+	InitialReport from(InitialReportDto source, InitialReport existing) {
 		return source.applyTo(mapper.map(source, existing));
 	}
 

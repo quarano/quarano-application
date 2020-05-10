@@ -272,7 +272,7 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		InitialReport from = representations.from(trackedCase.getOrCreateInitialReport(), dto);
+		InitialReport from = representations.from(dto, trackedCase.getOrCreateInitialReport());
 		trackedCase.submitQuestionnaire(from);
 
 		cases.save(trackedCase);
