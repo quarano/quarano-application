@@ -43,6 +43,7 @@ p.hint {
 
 mat-card-title {
   display: flex;
+  flex-direction: row !important;
   justify-content: space-between;
   margin: 0;
   font-size: 24px;
