@@ -1,3 +1,4 @@
+import { EnrollmentStatusDto } from './../../models/enrollment-status';
 import { EncounterEntry } from '@models/encounter';
 import { EnrollmentService } from '@services/enrollment.service';
 import { ClientDto } from '@models/client';
@@ -14,9 +15,10 @@ import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { VALIDATION_PATTERNS } from '@utils/validation';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-basic-data',
@@ -27,6 +29,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   @ViewChild('stepper') stepper: MatHorizontalStepper;
+  enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -61,6 +64,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.enrollmentService.getEnrollmentStatus()
+      .pipe(tap(status => { this.enrollmentStatus$$.next(status); }))
       .subscribe(status => {
         if (status.completedPersonalData) {
           this.stepper.next();
@@ -113,9 +117,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
           const value = this.firstFormGroup.value;
           value.dateOfBirth = this.dateOfBirth;
           this.enrollmentService.updatePersonalDetails(value)
-            .subscribe(_ => {
-              this.client = value;
-              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+            .subscribe(result => {
+              this.enrollmentStatus$$.next(result);
+              if (result.completedPersonalData) {
+                this.client = value;
+                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+              }
             });
         }
       });
@@ -180,9 +187,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
           const value = this.secondFormGroup.value;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
           this.enrollmentService.updateQuestionnaire(value)
-            .subscribe(_ => {
-              this.firstQuery = value;
-              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+            .subscribe(result => {
+              this.enrollmentStatus$$.next(result);
+              if (result.completedQuestionnaire) {
+                this.firstQuery = value;
+                this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+              }
             });
         }
       });
@@ -283,9 +293,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   private completeEnrollment(withoutEncounters: boolean) {
     this.enrollmentService.completeEnrollment(withoutEncounters)
-      .subscribe(_ => {
-        this.snackbarService.success('Die Registrierung wurde abgeschlossen');
-        this.router.navigate(['/diary']);
+      .subscribe(result => {
+        this.enrollmentStatus$$.next(result);
+        if (result.completedContactRetro) {
+          this.snackbarService.success('Die Registrierung wurde abgeschlossen');
+          this.router.navigate(['/diary']);
+        }
       });
   }
 }
