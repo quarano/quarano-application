@@ -1,7 +1,7 @@
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
-import {merge, Observable, Subject} from 'rxjs';
+import {merge, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take} from 'rxjs/operators';
 import {ApiService} from '@services/api.service';
 import {SnackbarService} from '@services/snackbar.service';
@@ -124,17 +124,13 @@ export class ClientComponent implements OnInit, OnDestroy {
 
   checkForClose(halResponse: HalResponse) {
     this.subs.sink = this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
-      map((comment: string) => {
+      switchMap((comment: string) => {
         if (comment) {
-          this.addComment(comment);
+          return this.apiService.addComment(this.caseId, comment);
         }
-        return comment;
+        return of();
       }),
-      map((comment: string) => {
-        if (comment) {
-          this.closeCase(halResponse);
-        }
-      })
+      map(() => this.closeCase(halResponse))
     ).subscribe();
   }
 
