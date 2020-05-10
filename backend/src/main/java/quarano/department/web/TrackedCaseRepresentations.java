@@ -65,6 +65,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	private final SmartValidator validator;
 	private final MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
+	private final ContactChaser contactChaser;
 
 	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
 
@@ -74,7 +75,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(personDto, caseDto);
 	}
 
-	TrackedCaseDetails toRepresentation(TrackedCase trackedCase, ContactChaser contactChaser) {
+	TrackedCaseDetails toRepresentation(TrackedCase trackedCase) {
 
 		var dto = toInputRepresentation(trackedCase);
 

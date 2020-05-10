@@ -11,7 +11,6 @@ import quarano.account.DepartmentRepository;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 import quarano.department.CaseType;
-import quarano.department.ContactChaser;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.Questionnaire;
 import quarano.department.TrackedCase;
@@ -29,9 +28,7 @@ import quarano.tracking.web.TrackingController;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
-
 import javax.validation.Valid;
-
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
@@ -66,7 +63,6 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull SmartValidator validator;
-	private final @NonNull ContactChaser contactChaser;
 
 	private final EmbeddedWrappers wrappers = new EmbeddedWrappers(false);
 
@@ -116,7 +112,7 @@ class TrackedCaseController {
 
 			return ResponseEntity //
 					.created(URI.create(fromMethodCall(location).toUriString())) //
-					.body(representations.toRepresentation(cases.save(trackedCase), contactChaser));
+					.body(representations.toRepresentation(cases.save(trackedCase)));
 		});
 	}
 
@@ -130,7 +126,7 @@ class TrackedCaseController {
 
 		return ResponseEntity.of(cases.findById(identifier) //
 				.filter(it -> it.belongsTo(department)) //
-				.map(trackedCase -> representations.toRepresentation(trackedCase, contactChaser)));
+				.map(representations::toRepresentation));
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}/questionnaire")
@@ -159,7 +155,7 @@ class TrackedCaseController {
 
 		var result = representations.from(payload, existing, foo);
 
-		return foo.toBadRequestOrElse(() -> ResponseEntity.ok(representations.toRepresentation(cases.save(result), contactChaser)));
+		return foo.toBadRequestOrElse(() -> ResponseEntity.ok(representations.toRepresentation(cases.save(result))));
 	}
 
 	@DeleteMapping("/api/hd/cases/{identifier}")
@@ -190,7 +186,7 @@ class TrackedCaseController {
 
 		trackedCase.addComment(representations.from(payload, account));
 
-		return ResponseEntity.ok(representations.toRepresentation(cases.save(trackedCase), contactChaser));
+		return ResponseEntity.ok(representations.toRepresentation(cases.save(trackedCase)));
 	}
 
 	@GetMapping("/api/enrollments")
