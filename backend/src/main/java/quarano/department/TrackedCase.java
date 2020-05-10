@@ -238,6 +238,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.enrollment.markEnrollmentCompleted();
 		this.status = Status.TRACKING;
 
+		this.registerEvent(CaseStatusUpdated.of(this));
+
 		return this;
 	}
 
@@ -245,6 +247,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.enrollment.reopenEnrollment();
 		this.status = Status.REGISTERED;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
 
 		return this;
 	}
@@ -278,6 +282,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.IN_REGISTRATION;
 
+		this.registerEvent(CaseStatusUpdated.of(this));
+
 		return this;
 	}
 
@@ -286,6 +292,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
 
 		this.status = Status.REGISTERED;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
 
 		return this;
 	}
@@ -317,6 +325,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Value(staticConstructor = "of")
 	public static class CaseUpdated implements DomainEvent {
+		TrackedCase trackedCase;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class CaseStatusUpdated implements DomainEvent {
 		TrackedCase trackedCase;
 	}
 
