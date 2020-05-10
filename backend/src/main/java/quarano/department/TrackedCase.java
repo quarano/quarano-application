@@ -22,15 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -65,7 +57,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE) //
 	private Enrollment enrollment = new Enrollment();
-	private @Column(name = "case_type") @Getter @Setter CaseType type = CaseType.INDEX;
+	@Column(name = "case_type") //
+	@Enumerated(EnumType.STRING) //
+	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
 
 	@OneToMany(cascade = { CascadeType.ALL }) //
@@ -76,6 +70,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private @Getter List<Comment> comments = new ArrayList<>();
 
 	@Column(nullable = false) //
+	@Enumerated(EnumType.STRING) //
 	private @Getter Status status;
 
 	@SuppressWarnings("unused")

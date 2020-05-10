@@ -21,6 +21,8 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
@@ -43,6 +45,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Setter(AccessLevel.NONE) PhoneNumber mobilePhoneNumber;
 	private @Setter(AccessLevel.NONE) PhoneNumber phoneNumber;
 	private Address address;
+	@Enumerated(EnumType.STRING)
 	private TypeOfContract typeOfContract;
 	private String remark;
 	private @Setter(AccessLevel.NONE) String identificationHint;
