@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { PasswordValidator } from '@validators/password-validator';
 import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { ArrayValidator } from '@validators/array-validator';
+import {VALIDATION_PATTERNS} from '@utils/validation';
 
 @Component({
   selector: 'app-account-edit',
@@ -69,7 +70,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
         ]),
         email: new FormControl(this.account.email, [
           Validators.required,
-          Validators.email]),
+          Validators.pattern(VALIDATION_PATTERNS.email)]),
         roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)])
       }, {
       validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]

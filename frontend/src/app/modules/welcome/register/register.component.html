@@ -20,7 +20,7 @@
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-email">
         <mat-label>E-Mailadresse</mat-label>
         <input matInput formControlName="email" placeholder="E-Mailadresse" id="email" />
-        <mat-error *ngIf="registrationForm.controls.email.hasError('email')">
+        <mat-error>
           Sie müssen eine richtige E-Mailadresse angeben.
         </mat-error>
       </mat-form-field>

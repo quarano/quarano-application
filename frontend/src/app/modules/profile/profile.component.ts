@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.formGroup = this.formBuilder.group({
       firstName: new FormControl(this.client.firstName, [Validators.required]),
       lastName: new FormControl(this.client.lastName, [Validators.required]),
-      email: new FormControl(this.client.email, [Validators.required, Validators.email]),
+      email: new FormControl(this.client.email, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.email)]),
       phone: new FormControl(this.client.phone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
       mobilePhone: new FormControl(this.client.mobilePhone,
