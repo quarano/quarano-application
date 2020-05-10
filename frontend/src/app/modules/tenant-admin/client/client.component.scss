@@ -41,6 +41,13 @@ p.hint {
   height: 18px;
 }
 
+::ng-deep {
+  mat-tab-header {
+    margin-bottom: 1rem !important;
+  }
+}
+
+
 mat-card-title {
   display: flex;
   flex-direction: row !important;

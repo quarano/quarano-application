@@ -75,8 +75,8 @@ export class ClientComponent implements OnInit {
       take(1)).subscribe((data) => {
         this.apiService
           .getApiCall<StartTracking>(data, 'start-tracking')
-          .subscribe((sartTracking) => {
-            this.trackingStart$$.next(sartTracking);
+          .subscribe((startTracking) => {
+            this.trackingStart$$.next(startTracking);
           });
       }
       );
