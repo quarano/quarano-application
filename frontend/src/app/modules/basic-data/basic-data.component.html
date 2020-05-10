@@ -180,8 +180,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step #thirdStep [stepControl]="thirdFormGroup"
-    [hasError]="!(enrollmentStatus$$.value)?.completedContactRetro || thirdFormGroup.invalid">
+  <mat-step #thirdStep [stepControl]="thirdFormGroup">
     <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
       <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
