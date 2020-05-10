@@ -29,9 +29,10 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.control.valueChanges.pipe(
       takeUntil(this.destroy$)
-    ).subscribe((data) => {
+    ).subscribe((data: string[]) => {
       this.selectedItemIds = data;
       this.control.markAsDirty();
+      data.forEach(value => this.added.emit(value));
     });
 
     this.selectedItemIds = this.control.value;

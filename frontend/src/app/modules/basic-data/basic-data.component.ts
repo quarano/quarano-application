@@ -260,10 +260,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   hasRetrospectiveContacts(): boolean {
     let result = false;
     Object.keys(this.thirdFormGroup.controls).forEach(key => {
-      if (key !== 'noRetrospectiveContactsConfirmed') {
-        if (this.thirdFormGroup.controls[key].value.length > 0) {
-          result = true;
-        }
+      if (this.thirdFormGroup.controls[key].value.length > 0) {
+        result = true;
       }
     });
     return result;
