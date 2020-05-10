@@ -71,15 +71,22 @@ export class ClientComponent implements OnInit {
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
-      filter((data) => data?._links?.hasOwnProperty('renew') && data?._links?.hasOwnProperty('start-tracking')),
+      filter((data) => data?._links?.hasOwnProperty('renew') || data?._links?.hasOwnProperty('start-tracking')),
       take(1)).subscribe((data) => {
-        this.apiService
-          .getApiCall<StartTracking>(data, 'start-tracking')
-          .subscribe((startTracking) => {
-            this.trackingStart$$.next(startTracking);
-          });
-      }
-      );
+        if (data?._links?.hasOwnProperty('start-tracking')) {
+          this.apiService
+            .getApiCall<StartTracking>(data, 'start-tracking')
+            .subscribe((startTracking) => {
+              this.trackingStart$$.next(startTracking);
+            });
+        } else {
+          this.apiService
+            .getApiCall<StartTracking>(data, 'renew')
+            .subscribe((startTracking) => {
+              this.trackingStart$$.next(startTracking);
+            });
+        }
+      });
   }
 
   hasOpenAnomalies(): Observable<boolean> {
