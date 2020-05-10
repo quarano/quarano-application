@@ -2,7 +2,8 @@
   <ng-template matStepperIcon="edit">
     <mat-icon>check</mat-icon>
   </ng-template>
-  <mat-step [stepControl]="firstFormGroup" #firstStep [hasError]="!(enrollmentStatus$$ | async).completedPersonalData">
+  <mat-step [stepControl]="firstFormGroup" #firstStep
+    [hasError]="!(enrollmentStatus$$.value)?.completedPersonalData || firstFormGroup.invalid">
     <ng-template matStepLabel>Persönliche Daten</ng-template>
     <p>Pflichtfelder sind mit * markiert</p>
     <form [formGroup]="firstFormGroup">
@@ -16,7 +17,7 @@
     </form>
   </mat-step>
   <mat-step #secondStep [stepControl]="secondFormGroup"
-    [hasError]="!(enrollmentStatus$$ | async).completedQuestionnaire">
+    [hasError]="!(enrollmentStatus$$.value)?.completedQuestionnaire ||secondFormGroup.invalid">
     <ng-template matStepLabel>Initialer Fragebogen</ng-template>
     <p>Pflichtfelder sind mit * markiert</p>
     <form [formGroup]="secondFormGroup" id="second-form">
@@ -36,7 +37,7 @@
       <div class="bool-question" *ngIf="secondFormGroup.controls.hasSymptoms.value">
         <mat-form-field class="full-width mb-3">
           <mat-label>Tag, an dem die ersten Symptome auftraten</mat-label>
-          <input matInput required [max]="today" [matDatepicker]="picker" formControlName="dayOfFirstSymptoms" />
+          <input required matInput [max]="today" [matDatepicker]="picker" formControlName="dayOfFirstSymptoms" />
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
@@ -179,7 +180,8 @@
       </div>
     </form>
   </mat-step>
-  <mat-step #thirdStep [stepControl]="thirdFormGroup" [hasError]="!(enrollmentStatus$$ | async).completedContactRetro">
+  <mat-step #thirdStep [stepControl]="thirdFormGroup"
+    [hasError]="!(enrollmentStatus$$.value)?.completedContactRetro || thirdFormGroup.invalid">
     <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
       <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>

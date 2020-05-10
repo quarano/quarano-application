@@ -1,4 +1,4 @@
-import { EnrollmentStatusDto } from './../../models/enrollment-status';
+import { EnrollmentStatusDto } from '@models/enrollment-status';
 import { EncounterEntry } from '@models/encounter';
 import { EnrollmentService } from '@services/enrollment.service';
 import { ClientDto } from '@models/client';
@@ -28,8 +28,8 @@ import { BehaviorSubject } from 'rxjs';
 export class BasicDataComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-  @ViewChild('stepper') stepper: MatHorizontalStepper;
   enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
+  @ViewChild('stepper') stepper: MatHorizontalStepper;
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -64,8 +64,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.enrollmentService.getEnrollmentStatus()
-      .pipe(tap(status => { this.enrollmentStatus$$.next(status); }))
       .subscribe(status => {
+        this.enrollmentStatus$$.next(status);
         if (status.completedPersonalData) {
           this.stepper.next();
         }
@@ -170,20 +170,14 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
     this.secondFormGroup.controls.hasSymptoms.valueChanges.subscribe((value: boolean) => {
       const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
-
       if (!value) {
-        control.clearValidators();
-        this.secondFormGroup.updateValueAndValidity();
         control.setValue(null);
-      } else {
-        control.setValidators(Validators.required);
-        this.secondFormGroup.updateValueAndValidity();
       }
     });
 
     this.secondFormGroup.statusChanges
-      .pipe(debounceTime(1000)).subscribe((status) => {
-        if (status === 'VALID' && !this.secondFormGroup.pristine) {
+      .pipe(debounceTime(1000)).subscribe(_ => {
+        if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
           const value = this.secondFormGroup.value;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
           this.enrollmentService.updateQuestionnaire(value)
