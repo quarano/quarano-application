@@ -49,7 +49,7 @@
         </mat-error>
         <mat-error *ngIf="registrationForm.controls.password.hasError('nonWordChar')">
           Das Passwort muss mindestens eines der folgenden Sonderzeichen
-          beinhalten: @ # $ % ^ & * ( ) , . ? : | <>
+          beinhalten: @ # $ % ^ & * ( ) , . ? : | &lt; >
         </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
           Das Passwort darf nicht den Benutzernamen beinhalten.

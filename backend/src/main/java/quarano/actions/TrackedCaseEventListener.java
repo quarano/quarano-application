@@ -19,6 +19,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.CaseCreated;
+import quarano.department.TrackedCase.CaseStatusUpdated;
 import quarano.department.TrackedCase.CaseUpdated;
 
 import org.springframework.context.event.EventListener;
@@ -41,6 +42,11 @@ public class TrackedCaseEventListener {
 
 	@EventListener
 	public void on(CaseUpdated event) {
+		handleCreatedOrUpdatedCase(event.getTrackedCase());
+	}
+
+	@EventListener
+	public void on(CaseStatusUpdated event) {
 		handleCreatedOrUpdatedCase(event.getTrackedCase());
 	}
 

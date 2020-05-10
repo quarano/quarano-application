@@ -1,24 +1,24 @@
-import { EnrollmentStatusDto } from '@models/enrollment-status';
-import { EncounterEntry } from '@models/encounter';
-import { EnrollmentService } from '@services/enrollment.service';
-import { ClientDto } from '@models/client';
-import { SnackbarService } from '@services/snackbar.service';
-import { QuestionnaireDto } from '@models/first-query';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SubSink } from 'subsink';
-import { ContactPersonDto } from '@models/contact-person';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {EnrollmentStatusDto} from '@models/enrollment-status';
+import {EncounterEntry} from '@models/encounter';
+import {EnrollmentService} from '@services/enrollment.service';
+import {ClientDto} from '@models/client';
+import {SnackbarService} from '@services/snackbar.service';
+import {QuestionnaireDto} from '@models/first-query';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SubSink} from 'subsink';
+import {ContactPersonDto} from '@models/contact-person';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import '@utils/date-extensions';
-import { MatDialog } from '@angular/material/dialog';
-import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { Moment } from 'moment';
-import { VALIDATION_PATTERNS } from '@utils/validation';
-import { debounceTime, tap } from 'rxjs/operators';
-import { MatHorizontalStepper } from '@angular/material/stepper';
-import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
-import { BehaviorSubject } from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
+import {ContactPersonDialogComponent} from '../app-forms/contact-person-dialog/contact-person-dialog.component';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
+import {Moment} from 'moment';
+import {VALIDATION_PATTERNS} from '@utils/validation';
+import {debounceTime} from 'rxjs/operators';
+import {MatHorizontalStepper} from '@angular/material/stepper';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-basic-data',
@@ -52,7 +52,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
-    private router: Router) { }
+    private router: Router) {
+  }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -172,30 +173,35 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
       if (!value) {
         control.setValue(null);
+        control.clearValidators();
+      } else {
+        control.setValidators([Validators.required]);
       }
+      control.updateValueAndValidity();
+      console.log(this.secondFormGroup);
     });
 
-    this.secondFormGroup.statusChanges
+    this.secondFormGroup.valueChanges
       .pipe(debounceTime(1000)).subscribe(_ => {
-        if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
-          const value = this.secondFormGroup.value as QuestionnaireDto;
-          value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-          this.enrollmentService.updateQuestionnaire(value)
-            .subscribe(result => {
-              this.enrollmentStatus$$.next(result);
-              if (result.completedQuestionnaire) {
-                this.firstQuery = value;
-                this.firstQuery.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-                this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-              }
-            });
-        }
-      });
+      if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
+        const value = this.secondFormGroup.value as QuestionnaireDto;
+        value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
+        this.enrollmentService.updateQuestionnaire(value)
+          .subscribe(result => {
+            this.enrollmentStatus$$.next(result);
+            if (result.completedQuestionnaire) {
+              this.firstQuery = value;
+              this.firstQuery.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
+              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+            }
+          });
+      }
+    });
   }
 
   firstSymptomsValidator(g: FormGroup) {
     if (g.controls.hasSymptoms.value === true) {
-      return g.controls.dayOfFirstSymptoms.value ? null : { required: true };
+      return g.controls.dayOfFirstSymptoms.value ? null : {required: true};
     }
     return null;
   }
@@ -221,7 +227,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
+        contactPerson: {id: null, lastName: null, firstName: null, phone: null, email: null},
       }
     });
 
@@ -234,7 +240,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date: date.getDateWithoutTime(), contact: id })
+    this.enrollmentService.createEncounter({date: date.getDateWithoutTime(), contact: id})
       .subscribe(encounter => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
@@ -255,10 +261,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   hasRetrospectiveContacts(): boolean {
     let result = false;
     Object.keys(this.thirdFormGroup.controls).forEach(key => {
-      if (key !== 'noRetrospectiveContactsConfirmed') {
-        if (this.thirdFormGroup.controls[key].value.length > 0) {
-          result = true;
-        }
+      if (this.thirdFormGroup.controls[key].value.length > 0) {
+        result = true;
       }
     });
     return result;

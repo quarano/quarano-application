@@ -8,7 +8,7 @@ describe('new case', () => {
 
     cy.loginAgent();
 
-    cy.visit('http://localhost:4200/tenant-admin/client');
+    cy.visit('http://localhost:4200/tenant-admin/client/index');
   });
 
   describe('field validations: required', () => {
@@ -314,6 +314,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-email"] input[matInput]').blur();
 
           cy.get('[data-cy="input-email"] mat-error').should('exist');
+
           cy.get('[data-cy="input-email"] input[matInput]').clear().type('testde');
           cy.get('[data-cy="input-email"] input[matInput]').blur();
 
