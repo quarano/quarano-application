@@ -57,7 +57,7 @@ public class Enrollment {
 			throw new EnrollmentException("Cannot submit questionaire before personal details were submitted!");
 		}
 
-		log.debug("Marking questionnaire submitted.");
+		log.debug("Marking questionnaire completed.");
 
 		this.completedQuestionnaire = true;
 
