@@ -1,21 +1,20 @@
-import { DeleteLink } from '@models/general';
-import { Link } from '@models/general';
-import { UserDto } from '@models/user';
-import { environment } from '@environment/environment';
-import { SymptomDto } from '@models/symptom';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, share } from 'rxjs/operators';
-import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '@models/diary-entry';
-import { ContactPersonDto, ContactPersonModifyDto } from '@models/contact-person';
-import { Register } from '@models/register';
-import { ReportCaseDto, ClientType } from '@models/report-case';
-import { ActionListItemDto } from '@models/action';
-import { CaseDetailDto } from '@models/case-detail';
-import { CaseActionDto } from '@models/case-action';
-import { HalResponse } from '@models/hal-response';
-import { AccountDto, AccountListDto } from '@models/account';
+import {DeleteLink, Link} from '@models/general';
+import {UserDto} from '@models/user';
+import {environment} from '@environment/environment';
+import {SymptomDto} from '@models/symptom';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {map, share} from 'rxjs/operators';
+import {DiaryDto, DiaryEntryDto, DiaryEntryModifyDto} from '@models/diary-entry';
+import {ContactPersonDto, ContactPersonModifyDto} from '@models/contact-person';
+import {Register} from '@models/register';
+import {ClientType, ReportCaseDto} from '@models/report-case';
+import {ActionListItemDto} from '@models/action';
+import {CaseDetailDto} from '@models/case-detail';
+import {CaseActionDto} from '@models/case-action';
+import {HalResponse} from '@models/hal-response';
+import {AccountDto, AccountListDto} from '@models/account';
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +67,7 @@ export class ApiService {
   }
 
   registerClient(registerClient: Register): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, { responseType: 'text' });
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, {responseType: 'text'});
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
@@ -80,7 +79,7 @@ export class ApiService {
   }
 
   login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
+    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, {username, password});
   }
 
   getMe(): Observable<UserDto> {
@@ -105,7 +104,7 @@ export class ApiService {
   }
 
   resolveAnomalies(link: Link, comment: string) {
-    return this.httpClient.put(link.href, { comment });
+    return this.httpClient.put(link.href, {comment});
   }
 
   createCase(caseDetail: CaseDetailDto, type: ClientType): Observable<any> {
@@ -117,26 +116,38 @@ export class ApiService {
   }
 
   addComment(caseId: string, comment: string): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/hd/cases/${caseId}/comments`, { comment });
+    return this.httpClient.post(`${this.baseUrl}/api/hd/cases/${caseId}/comments`, {comment});
   }
 
   getApiCall<T>(halResponse: HalResponse, key): Observable<T> {
     if (halResponse._links?.hasOwnProperty(key)) {
-      return this.httpClient.get<T>(halResponse._links[key].href);
+      let url = halResponse._links[key].href;
+      if (Array.isArray(halResponse._links[key])) {
+        url = halResponse._links[key][0].href;
+      }
+      return this.httpClient.get<T>(url);
     }
     return of();
   }
 
   putApiCall<T>(halResponse: HalResponse, key: string, body: any = {}): Observable<T> {
     if (halResponse._links?.hasOwnProperty(key)) {
-      return this.httpClient.put<T>(halResponse._links[key].href, body);
+      let url = halResponse._links[key].href;
+      if (Array.isArray(halResponse._links[key])) {
+        url = halResponse._links[key][0].href;
+      }
+      return this.httpClient.put<T>(url, body);
     }
     return of();
   }
 
   deleteApiCall<T>(halResponse: HalResponse, key: string): Observable<T> {
     if (halResponse._links?.hasOwnProperty(key)) {
-      return this.httpClient.delete<T>(halResponse._links[key].href);
+      let url = halResponse._links[key].href;
+      if (Array.isArray(halResponse._links[key])) {
+        url = halResponse._links[key][0].href;
+      }
+      return this.httpClient.delete<T>(url);
     }
     return of();
   }

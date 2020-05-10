@@ -1,20 +1,20 @@
-import { MatDialog } from '@angular/material/dialog';
-import { ClientService } from './../../../services/client.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CaseDetailDto } from '@models/case-detail';
-import { merge, Observable, Subject, BehaviorSubject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ApiService } from '@services/api.service';
-import { SnackbarService } from '@services/snackbar.service';
-import { CaseActionDto } from '@models/case-action';
-import { MatTabGroup } from '@angular/material/tabs';
-import { StartTracking } from '@models/start-tracking';
-import { HalResponse } from '@models/hal-response';
-import { CaseCommentDto } from '@models/case-comment';
-import { ClientType } from '@models/report-case';
-import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
-
+import {MatDialog} from '@angular/material/dialog';
+import {ClientService} from '@services/client.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CaseDetailDto} from '@models/case-detail';
+import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
+import {filter, map, switchMap, take} from 'rxjs/operators';
+import {ApiService} from '@services/api.service';
+import {SnackbarService} from '@services/snackbar.service';
+import {CaseActionDto} from '@models/case-action';
+import {MatTabGroup} from '@angular/material/tabs';
+import {StartTracking} from '@models/start-tracking';
+import {HalResponse} from '@models/hal-response';
+import {CaseCommentDto} from '@models/case-comment';
+import {ClientType} from '@models/report-case';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-clients',
@@ -35,7 +35,7 @@ export class ClientComponent implements OnInit {
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
 
-  @ViewChild('tabs', { static: false })
+  @ViewChild('tabs', {static: false})
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
@@ -71,22 +71,14 @@ export class ClientComponent implements OnInit {
 
     this.caseDetail$.pipe(
       filter((data) => data !== null),
-      filter((data) => data?._links?.hasOwnProperty('renew') || data?._links?.hasOwnProperty('start-tracking')),
+      filter((data) => data?._links?.hasOwnProperty('renew')),
       take(1)).subscribe((data) => {
-        if (data?._links?.hasOwnProperty('start-tracking')) {
-          this.apiService
-            .getApiCall<StartTracking>(data, 'start-tracking')
-            .subscribe((startTracking) => {
-              this.trackingStart$$.next(startTracking);
-            });
-        } else {
-          this.apiService
-            .getApiCall<StartTracking>(data, 'renew')
-            .subscribe((startTracking) => {
-              this.trackingStart$$.next(startTracking);
-            });
-        }
-      });
+      this.apiService
+        .getApiCall<StartTracking>(data, 'renew')
+        .subscribe((startTracking) => {
+          this.trackingStart$$.next(startTracking);
+        });
+    });
   }
 
   hasOpenAnomalies(): Observable<boolean> {
@@ -115,6 +107,8 @@ export class ClientComponent implements OnInit {
     this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
+        this.updatedDetail$$.next({...cloneDeep(caseDetail), _links: data._links});
+
         this.tabIndex = 3;
       });
   }
