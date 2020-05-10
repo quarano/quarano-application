@@ -110,7 +110,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
       ]),
 
-      email: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.email)]),
+      email: new FormControl('', [Validators.email]),
 
       dateOfBirth: new FormControl(null, []),
 

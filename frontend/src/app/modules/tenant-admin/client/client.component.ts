@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { ClientService } from './../../../services/client.service';
+import { ClientService } from '@services/client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CaseDetailDto } from '@models/case-detail';
