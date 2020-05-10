@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -52,7 +53,9 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 		log.debug("Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
 
-		Function<String, Account> accountSource = username -> accounts.findByUsername(username).orElseThrow();
+		Function<String, Account> accountSource = username -> accounts.findByUsername(username) //
+				.orElseThrow(
+						() -> new UsernameNotFoundException(String.format("Couldn't find account for username %s!", username)));
 
 		httpSecurity.oauth2ResourceServer() //
 				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter(accountSource));
@@ -61,7 +64,7 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
-			it.mvcMatchers("/api/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");			
+			it.mvcMatchers("/api/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
 			it.mvcMatchers("/api/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN)); //
 			it.mvcMatchers("/api/login").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
