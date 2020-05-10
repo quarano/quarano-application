@@ -37,7 +37,7 @@
       <div class="bool-question" *ngIf="secondFormGroup.controls.hasSymptoms.value">
         <mat-form-field class="full-width mb-3">
           <mat-label>Tag, an dem die ersten Symptome auftraten</mat-label>
-          <input required matInput [max]="today" [matDatepicker]="picker" formControlName="dayOfFirstSymptoms" />
+          <input matInput [max]="today" [matDatepicker]="picker" formControlName="dayOfFirstSymptoms" />
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>

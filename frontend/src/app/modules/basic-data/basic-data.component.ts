@@ -172,10 +172,15 @@ export class BasicDataComponent implements OnInit, OnDestroy {
       const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
       if (!value) {
         control.setValue(null);
+        control.clearValidators();
+      } else {
+        control.setValidators([Validators.required]);
       }
+      control.updateValueAndValidity();
+      console.log(this.secondFormGroup);
     });
 
-    this.secondFormGroup.statusChanges
+    this.secondFormGroup.valueChanges
       .pipe(debounceTime(1000)).subscribe(_ => {
         if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
           const value = this.secondFormGroup.value as QuestionnaireDto;
