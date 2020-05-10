@@ -124,12 +124,8 @@ export class ClientComponent implements OnInit, OnDestroy {
 
   checkForClose(halResponse: HalResponse) {
     this.subs.sink = this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
-      switchMap((comment: string) => {
-        if (comment) {
-          return this.apiService.addComment(this.caseId, comment);
-        }
-        return of();
-      }),
+      filter((comment) => comment),
+      switchMap((comment: string) => this.apiService.addComment(this.caseId, comment)),
       map(() => this.closeCase(halResponse))
     ).subscribe();
   }
