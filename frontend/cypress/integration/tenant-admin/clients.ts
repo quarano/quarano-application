@@ -25,11 +25,11 @@ describe('tenant case overview', () => {
     it('should get a list of cases and display in table', () => {
       cy.wait('@allcases').its('status').should('eq', 200);
 
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 13);
+      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 19);
     });
 
     it('should filter cases', () => {
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 13);
+      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 19);
       cy.get('[data-cy="search-case-input"]').type('hanser');
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 1);
 
