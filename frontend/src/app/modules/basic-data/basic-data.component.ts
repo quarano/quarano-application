@@ -178,13 +178,14 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     this.secondFormGroup.statusChanges
       .pipe(debounceTime(1000)).subscribe(_ => {
         if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
-          const value = this.secondFormGroup.value;
+          const value = this.secondFormGroup.value as QuestionnaireDto;
           value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
           this.enrollmentService.updateQuestionnaire(value)
             .subscribe(result => {
               this.enrollmentStatus$$.next(result);
               if (result.completedQuestionnaire) {
                 this.firstQuery = value;
+                this.firstQuery.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
                 this.snackbarService.success('Fragebogen erfolgreich gespeichert');
               }
             });
