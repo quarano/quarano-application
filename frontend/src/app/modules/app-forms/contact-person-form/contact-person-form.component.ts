@@ -44,17 +44,17 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   buildForm() {
     this.formGroup = this.formBuilder.group(
       {
-        firstName: new FormControl(this.contactPerson.firstName),
-        lastName: new FormControl(this.contactPerson.lastName),
+        firstName: new FormControl(this.contactPerson.firstName, [Validators.pattern(VALIDATION_PATTERNS.name)]),
+        lastName: new FormControl(this.contactPerson.lastName, [Validators.pattern(VALIDATION_PATTERNS.name)]),
         email: new FormControl(this.contactPerson.email, [Validators.pattern(VALIDATION_PATTERNS.email)]),
         phone: new FormControl(this.contactPerson.phone,
           [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
         mobilePhone: new FormControl(this.contactPerson.mobilePhone,
           [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
-        street: new FormControl(this.contactPerson.street),
+        street: new FormControl(this.contactPerson.street, [Validators.pattern(VALIDATION_PATTERNS.street)]),
         houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.maxLength(6)]),
         zipCode: new FormControl(this.contactPerson.zipCode,
-          [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.integerUnsigned)]),
+          [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.zip)]),
         city: new FormControl(this.contactPerson.city),
         identificationHint: new FormControl(this.contactPerson.identificationHint),
         isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),

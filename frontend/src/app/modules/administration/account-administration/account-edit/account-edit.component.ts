@@ -54,10 +54,10 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       {
         firstName: new FormControl(
           this.account.firstName,
-          [Validators.required]),
+          [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
         lastName: new FormControl(
           this.account.lastName,
-          [Validators.required]),
+          [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
         password: new FormControl({ value: null, disabled: !this.isNew }, [
           PasswordValidator.secure
         ]),

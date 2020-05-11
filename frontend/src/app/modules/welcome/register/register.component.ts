@@ -28,6 +28,7 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30),
+      Validators.pattern(VALIDATION_PATTERNS.username),
       () => this.usernameIsValid ? null : {usernameInvalid: true}
     ]),
     password: new FormControl(null, [
