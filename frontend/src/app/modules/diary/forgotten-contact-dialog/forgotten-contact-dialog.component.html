@@ -1,5 +1,4 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmitted()">
-  <mat-card class="form__card--small">
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
       <mat-card-title>Kontakt nachtragen</mat-card-title>
@@ -28,6 +27,28 @@
         [nameProperties]="['firstName', 'lastName']"
       >
       </app-multiple-autocomplete>
+
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+        "
+      >
+        <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+        <button
+          mat-button
+          color="primary"
+          type="button"
+          (click)="openContactDialog()"
+          class="p-2 mr-0"
+          style="line-height: normal;"
+        >
+          Hier fehlenden Kontakt anlegen
+        </button>
+      </div>
+
     </mat-card-content>
     <mat-card-actions
       ><button
@@ -47,5 +68,4 @@
         Abbrechen
       </button></mat-card-actions
     >
-  </mat-card>
 </form>

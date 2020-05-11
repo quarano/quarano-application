@@ -41,12 +41,18 @@ p.hint {
   height: 18px;
 }
 
+::ng-deep {
+  mat-tab-header {
+    margin-bottom: 1rem !important;
+  }
+}
+
 mat-card-title {
   display: flex;
+  flex-direction: row !important;
   justify-content: space-between;
   margin: 0;
   font-size: 24px;
-  /* padding-top: 6px; */
   height: 40px;
 
   & > span {
@@ -60,6 +66,15 @@ mat-card-title {
       display: inline-block;
       padding: 4px 10px;
       margin-left: 15px;
+    }
+    &.type {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: bold;
+      background-color: #f4f4f4;
+      padding: 0 10px;
+      color: gray;
+      letter-spacing: 1px;
     }
   }
 }

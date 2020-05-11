@@ -8,6 +8,7 @@ import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ZipCode;
@@ -32,9 +33,9 @@ class ContactPersonDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
 	private ContactPersonIdentifier id;
 
-	private @Alphabetic String lastName, firstName;
-	private @Alphabetic String city;
-	private @AlphaNumeric String street;
+	private @Pattern(regexp = Strings.NAMES) String lastName, firstName;
+	private @Pattern(regexp =  Strings.CITY) String city;
+	private @Pattern(regexp =  Strings.STREET) String street;
 	private @AlphaNumeric String houseNumber;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;

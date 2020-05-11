@@ -1,13 +1,14 @@
-import { ArrayValidator } from './../../../validators/array-validator';
-import { SubSink } from 'subsink';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { EncounterEntry } from '@models/encounter';
-import { SnackbarService } from '@services/snackbar.service';
-import { EnrollmentService } from '@services/enrollment.service';
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ContactPersonDto } from '@models/contact-person';
-import { Moment } from 'moment';
+import {ArrayValidator} from '@validators/array-validator';
+import {SubSink} from 'subsink';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {EncounterEntry} from '@models/encounter';
+import {SnackbarService} from '@services/snackbar.service';
+import {EnrollmentService} from '@services/enrollment.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ContactPersonDto} from '@models/contact-person';
+import {Moment} from 'moment';
+import {ContactPersonDialogComponent} from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 
 @Component({
   selector: 'app-forgotten-contact-dialog',
@@ -23,12 +24,13 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   constructor(
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA)
-    public data: {
-      contactPersons: ContactPersonDto[];
-    }) { }
+    public data: { contactPersons: ContactPersonDto[]; }
+  ) {
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -46,7 +48,6 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   }
 
 
-
   cancel() {
     this.matDialogRef.close();
   }
@@ -61,4 +62,23 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
         }));
     }
   }
+
+
+  openContactDialog() {
+    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
+      height: '90vh',
+      maxWidth: '100vw',
+      data: {
+        contactPerson: {id: null, lastName: null, firstName: null, phone: null, email: null},
+      }
+    });
+
+    this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+      if (createdContact) {
+        this.data.contactPersons.push(createdContact);
+        this.formGroup.get('contactIds').patchValue([...this.formGroup.get('contactIds').value, createdContact.id]);
+      }
+    }));
+  }
+
 }

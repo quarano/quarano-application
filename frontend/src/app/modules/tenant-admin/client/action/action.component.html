@@ -1,98 +1,53 @@
-<h1 class="mt-3">Auffälligkeiten</h1>
 <mat-accordion [multi]="true">
-  <mat-expansion-panel
-    *ngIf="caseAction.anomalies.health.length > 0"
-    [expanded]="true"
-  >
+  <mat-expansion-panel *ngIf="caseAction.anomalies.health.length > 0" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies.health.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
+        <span [matBadge]="caseAction.anomalies.health.length" matBadgeOverlap="false" matBadgeSize="small"
+          matBadgeColor="warn">
           Gesundheit
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.health"
-    ></app-client-action-anomaly
-  ></mat-expansion-panel>
+    <app-client-action-anomaly [actions]="caseAction.anomalies.health"></app-client-action-anomaly>
+  </mat-expansion-panel>
 
-  <mat-expansion-panel
-    *ngIf="caseAction.anomalies.process.length > 0"
-    [expanded]="true"
-  >
+  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies.process.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
+        <span [matBadge]="caseAction.anomalies.process.length" matBadgeOverlap="false" matBadgeSize="small"
+          matBadgeColor="warn">
           Prozess
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.process"
-    ></app-client-action-anomaly>
+    <app-client-action-anomaly [actions]="caseAction.anomalies.process"></app-client-action-anomaly>
   </mat-expansion-panel>
 
   <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies?.resolved?.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="primary"
-        >
+        <span [matBadge]="caseAction.anomalies?.resolved?.length" matBadgeOverlap="false" matBadgeSize="small"
+          matBadgeColor="primary">
           Abgeschlossen
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <app-client-action-anomaly
-      [actions]="caseAction.anomalies.resolved"
-    ></app-client-action-anomaly> </mat-expansion-panel
-></mat-accordion>
+    <app-client-action-anomaly [actions]="caseAction.anomalies.resolved"></app-client-action-anomaly>
+  </mat-expansion-panel>
+</mat-accordion>
 
-<form
-  [formGroup]="formGroup"
-  (ngSubmit)="submitForm()"
-  class="mt-5"
-  *ngIf="hasOpenAnomalies()"
->
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-5" *ngIf="hasOpenAnomalies()">
   <fieldset>
     <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
     <mat-form-field class="full-width">
       <mat-label>Bemerkung</mat-label>
-      <textarea
-        [mat-autosize]="true"
-        [matAutosizeMinRows]="5"
-        matInput
-        formControlName="comment"
-        placeholder="Bemerkung"
-      ></textarea>
+      <textarea [mat-autosize]="true" [matAutosizeMinRows]="5" matInput formControlName="comment"
+        placeholder="Bemerkung"></textarea>
     </mat-form-field>
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="formGroup.invalid"
-    >
+    <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">
       <mat-icon>check</mat-icon> Abschließen
     </button>
-    <button
-      class="ml-3"
-      type="button"
-      mat-raised-button
-      color="secondary"
-      [routerLink]="['/tenant-admin/actions']"
-    >
+    <button class="ml-3" type="button" mat-raised-button color="secondary" [routerLink]="['/tenant-admin/actions']">
       Abbrechen
     </button>
   </fieldset>

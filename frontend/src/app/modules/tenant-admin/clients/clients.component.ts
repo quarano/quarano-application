@@ -1,3 +1,4 @@
+import { ClientService } from './../../../services/client.service';
 import { ClientType } from '@models/report-case';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -44,7 +45,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
-    private route: ActivatedRoute, private router: Router) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private clientService: ClientService) {
   }
 
   ngOnInit(): void {
@@ -74,7 +77,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
-      typeName: this.getTypeName(c.caseType),
+      typeName: this.clientService.getTypeName(c.caseType),
       dateOfBirth: c.dateOfBirth ? c.dateOfBirth.toCustomLocaleDateString() : '-',
       email: c.email,
       phone: c.phone || '-',
@@ -83,17 +86,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
       zipCode: c.zipCode || '-',
       caseId: c.caseId
     };
-  }
-
-  private getTypeName(clientType: ClientType): string {
-    switch (clientType) {
-      case ClientType.Contact:
-        return 'Kontakt';
-      case ClientType.Index:
-        return 'Index';
-      default:
-        return '-';
-    }
   }
 
   getQuarantineEndString(quarantineEnd: Date): string {
@@ -134,7 +126,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    console.log(event);
     this.router.navigate(['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId]);
   }
 }

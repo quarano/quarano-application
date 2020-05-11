@@ -25,6 +25,7 @@ import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
+import quarano.department.CaseType;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.InitialReport;
 import quarano.department.TrackedCase;
@@ -35,7 +36,6 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
-import quarano.department.web.TrackedCaseRepresentations.ValidationGroups;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
-import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.MediaTypes;
@@ -101,7 +100,10 @@ class TrackedCaseController {
 	@PostMapping(path = "/api/hd/cases", params = "type=contact")
 	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto payload, Errors errors,
 			@LoggedIn Department department) {
-		return postCase(payload, errors, department);
+
+		// Disallowed: contact case + infected == true
+
+		return createTrackedCase(payload, CaseType.CONTACT, department, errors);
 	}
 
 	@PostMapping(path = "/api/hd/cases", params = "type=index")
@@ -113,17 +115,22 @@ class TrackedCaseController {
 	@PostMapping("/api/hd/cases")
 	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
 			@LoggedIn Department department) {
+		return createTrackedCase(payload, CaseType.INDEX, department, errors);
+	}
 
-		if (payload.validate(errors).hasErrors()) {
-			return ErrorsDto.of(errors, accessor).toBadRequest();
-		}
+	HttpEntity<?> createTrackedCase(TrackedCaseDto payload, CaseType type, Department department, Errors errors) {
 
-		var trackedCase = cases.save(representations.from(payload, department));
-		var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
+		var foo = ErrorsDto.of(errors, accessor);
+		var trackedCase = representations.from(payload, department, type, foo);
 
-		return ResponseEntity //
-				.created(URI.create(fromMethodCall(location).toUriString())) //
-				.body(representations.toRepresentation(trackedCase));
+		return foo.toBadRequestOrElse(() -> {
+
+			var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
+
+			return ResponseEntity //
+					.created(URI.create(fromMethodCall(location).toUriString())) //
+					.body(representations.toRepresentation(cases.save(trackedCase)));
+		});
 	}
 
 	@GetMapping(path = "/api/hd/cases/form")
@@ -139,8 +146,11 @@ class TrackedCaseController {
 				.map(representations::toRepresentation));
 	}
 
+	// PUT Mapping for transformation into index case
+
 	@PutMapping("/api/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, @RequestBody TrackedCaseDto payload, //
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, //
+			@RequestBody TrackedCaseDto payload, //
 			Errors errors) {
 
 		var existing = cases.findById(identifier).orElse(null);
@@ -149,24 +159,11 @@ class TrackedCaseController {
 			return ResponseEntity.notFound().build();
 		}
 
-		if (existing.isEnrollmentCompleted()) {
-			errors = representations.validateAfterEnrollment(payload, errors);
-		}
+		var foo = ErrorsDto.of(errors, accessor);
 
-		var validationGroup = existing.isIndexCase() //
-				? ValidationGroups.Index.class //
-				: Default.class;
+		var result = representations.from(payload, existing, foo);
 
-		validator.validate(payload, errors, validationGroup);
-
-		if (errors.hasErrors()) {
-			return ErrorsDto.of(errors, accessor).toBadRequest();
-		}
-
-		return ResponseEntity.of(cases.findById(identifier) //
-				.map(it -> representations.from(it, payload)) //
-				.map(cases::save) //
-				.map(representations::toRepresentation));
+		return foo.toBadRequestOrElse(() -> ResponseEntity.ok(representations.toRepresentation(cases.save(result))));
 	}
 
 	@DeleteMapping("/api/hd/cases/{identifier}")
@@ -275,7 +272,7 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		InitialReport from = representations.from(trackedCase.getOrCreateInitialReport(), dto);
+		InitialReport from = representations.from(dto, trackedCase.getOrCreateInitialReport());
 		trackedCase.submitQuestionnaire(from);
 
 		cases.save(trackedCase);

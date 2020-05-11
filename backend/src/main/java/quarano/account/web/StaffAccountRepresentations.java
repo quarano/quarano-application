@@ -13,6 +13,8 @@ import quarano.account.Account.AccountIdentifier;
 import quarano.account.AccountService;
 import quarano.account.RoleRepository;
 import quarano.core.EmailAddress;
+import quarano.core.validation.Strings;
+import quarano.core.validation.UserName;
 import quarano.core.web.MapperWrapper;
 
 import java.util.ArrayList;
@@ -104,7 +106,9 @@ class StaffAccountRepresentations {
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountCreateInputDto {
 
-		private @Setter @Getter @NotBlank String firstName, lastName, password, username, passwordConfirm;
+		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
+		private @Setter @Getter @NotBlank String password, passwordConfirm; // password rules are checked in Entity
+		private @Setter @Getter @UserName @NotBlank String username;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
@@ -123,7 +127,9 @@ class StaffAccountRepresentations {
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountUpdateInputDto{
 
-		private @Setter @Getter @NotBlank String firstName, lastName, username;
+
+		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
+		private @Setter @Getter @UserName @NotBlank String username;
 		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 

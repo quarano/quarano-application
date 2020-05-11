@@ -1,7 +1,9 @@
+import {MatDialog} from '@angular/material/dialog';
+import {ClientService} from '@services/client.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
-import {merge, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take} from 'rxjs/operators';
 import {ApiService} from '@services/api.service';
 import {SnackbarService} from '@services/snackbar.service';
@@ -11,8 +13,9 @@ import {StartTracking} from '@models/start-tracking';
 import {HalResponse} from '@models/hal-response';
 import {CaseCommentDto} from '@models/case-comment';
 import {ClientType} from '@models/report-case';
-import {MatDialog} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
 import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
+import {cloneDeep} from 'lodash';
 import {SubSink} from 'subsink';
 
 
@@ -23,7 +26,8 @@ import {SubSink} from 'subsink';
 })
 export class ClientComponent implements OnInit, OnDestroy {
   caseId: string;
-  type: ClientType;
+  type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
+  type$: Observable<ClientType> = this.type$$.asObservable();
   ClientType = ClientType;
 
   caseDetail$: Observable<CaseDetailDto>;
@@ -42,9 +46,12 @@ export class ClientComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
 
   constructor(
-    private route: ActivatedRoute, private router: Router,
-    private apiService: ApiService, private snackbarService: SnackbarService,
-    private matDialog: MatDialog) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private clientService: ClientService,
+    private dialog: MatDialog) {
 
   }
 
@@ -64,33 +71,35 @@ export class ClientComponent implements OnInit, OnDestroy {
       this.caseId = this.route.snapshot.paramMap.get('id');
     }
     if (this.route.snapshot.paramMap.has('type')) {
-      this.type = this.route.snapshot.paramMap.get('type') as ClientType;
+      this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
 
     this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
-      filter((data) => data?._links?.hasOwnProperty('renew') && data?._links?.hasOwnProperty('start-tracking')),
+      filter((data) => data?._links?.hasOwnProperty('renew')),
       take(1)).subscribe((data) => {
-        this.subs.sink = this.apiService
-          .getApiCall<StartTracking>(data, 'start-tracking')
-          .subscribe((sartTracking) => {
-            this.trackingStart$$.next(sartTracking);
-          });
-      }
-    );
+      this.subs.sink = this.apiService
+        .getApiCall<StartTracking>(data, 'renew')
+        .subscribe((startTracking) => {
+          this.trackingStart$$.next(startTracking);
+        });
+    });
   }
 
   hasOpenAnomalies(): Observable<boolean> {
     return this.caseAction$.pipe(map(a => (a.anomalies.health.length + a.anomalies.process.length) > 0));
   }
 
+  get typeName(): Observable<string> {
+    return this.type$.pipe(map(type => this.clientService.getTypeName(type)));
+  }
 
   saveCaseData(caseDetail: CaseDetailDto) {
     let saveData$: Observable<any>;
     if (!caseDetail.caseId) {
-      saveData$ = this.apiService.createCase(caseDetail, this.type);
+      saveData$ = this.apiService.createCase(caseDetail, this.type$$.value);
     } else {
-      saveData$ = this.apiService.updateCase(caseDetail, this.type);
+      saveData$ = this.apiService.updateCase(caseDetail);
     }
 
     this.subs.sink = saveData$.subscribe(() => {
@@ -103,6 +112,8 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
+        this.updatedDetail$$.next({...cloneDeep(caseDetail), _links: data._links});
+
         this.tabIndex = 3;
       });
   }
@@ -123,7 +134,7 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   checkForClose(halResponse: HalResponse) {
-    this.subs.sink = this.matDialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
+    this.subs.sink = this.dialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
       filter((comment) => comment),
       switchMap((comment: string) => this.apiService.addComment(this.caseId, comment)),
       map(() => this.closeCase(halResponse))
@@ -136,6 +147,27 @@ export class ClientComponent implements OnInit, OnDestroy {
     ).subscribe((data) => {
       this.snackbarService.success('Fall abgeschlossen.');
       this.updatedDetail$$.next(data);
+
+    });
+  }
+
+  changeToIndexType() {
+    this.type$$.next(ClientType.Index);
+  }
+
+  onChangeTypeKeyPressed(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Zum Indexfall machen?',
+        text:
+          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diesen Kontaktfall als Indexfall weiter bearbeiten wollen?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.changeToIndexType();
+      }
     });
   }
 

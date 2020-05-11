@@ -1,8 +1,8 @@
 import { IIdentifiable } from '@models/general';
 import { FormControl } from '@angular/forms';
-import {Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -29,9 +29,13 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.control.valueChanges.pipe(
       takeUntil(this.destroy$)
-    ).subscribe((data) => {
+    ).subscribe((data: string[]) => {
       this.selectedItemIds = data;
+      this.control.markAsDirty();
+      data.forEach(value => this.added.emit(value));
     });
+
+    this.selectedItemIds = this.control.value;
 
     this.filteredItems = this.inputControl.valueChanges.pipe(
       takeUntil(this.destroy$),

@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -32,6 +33,7 @@ import org.jddd.core.types.Identifier;
 /**
  * @author Oliver Drotbohm
  */
+@Slf4j
 @Data
 @Setter(AccessLevel.NONE)
 @Embeddable
@@ -54,6 +56,8 @@ public class Enrollment {
 		if (!completedPersonalData) {
 			throw new EnrollmentException("Cannot submit questionaire before personal details were submitted!");
 		}
+
+		log.debug("Marking questionnaire submitted.");
 
 		this.completedQuestionnaire = true;
 

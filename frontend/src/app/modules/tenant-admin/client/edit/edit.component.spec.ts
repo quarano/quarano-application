@@ -1,6 +1,9 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditComponent } from './edit.component';
+import { MatDialog } from '@angular/material/dialog';
+import { SnackbarService } from '@services/snackbar.service';
 
 describe('EditComponent', () => {
   let component: EditComponent;
@@ -8,9 +11,13 @@ describe('EditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditComponent ]
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [EditComponent],
+      providers: [
+        { provide: MatDialog, useValue: {} },
+        { provide: SnackbarService, useValue: jasmine.createSpyObj(['confirm']) }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

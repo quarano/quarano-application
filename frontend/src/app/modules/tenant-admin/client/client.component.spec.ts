@@ -13,14 +13,15 @@ describe('ClientComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [ ClientComponent ],
+      declarations: [ClientComponent],
       providers: [
-        {provide: MatDialog, useValue: jasmine.createSpyObj([''])},
-        {provide: ApiService, useValue: jasmine.createSpyObj([''])},
-        {provide: SnackbarService, useValue: jasmine.createSpyObj([''])},
+        { provide: MatDialog, useValue: jasmine.createSpyObj([''])},
+        {provide: ApiService, useValue: jasmine.createSpyObj(['']) },
+        { provide: SnackbarService, useValue: jasmine.createSpyObj(['']) },
+        { provide: MatDialog, useValue: {} },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

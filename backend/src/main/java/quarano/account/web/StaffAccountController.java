@@ -21,8 +21,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
@@ -31,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,11 +50,14 @@ class StaffAccountController {
 	
 
 	@PostMapping("/api/hd/accounts")
-	public HttpEntity<?> addStaffAccount(@Valid @RequestBody StaffAccountCreateInputDto payload, @LoggedIn Department department, Errors errors) {
+	public HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, @LoggedIn Department department, Errors errors) {
 
-		if (payload.validate(errors, accounts).hasErrors()) {
-			return ErrorsDto.of(errors, messages).toBadRequest();
-		}		
+		// start validation manually because of required reference to account object from database
+		payload.validate(errors, accounts);
+		
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
+		}
 		
 		var storedAccount = accounts.createStaffAccount(payload.getUsername(),  //
 				UnencryptedPassword.of(payload.getPassword()), //
@@ -76,7 +78,7 @@ class StaffAccountController {
 	
 
 	@PutMapping("/api/hd/accounts/{accountId}")
-	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, @Valid @RequestBody StaffAccountUpdateInputDto payload, @LoggedIn Department department, Errors errors) {
+	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, @Validated @RequestBody StaffAccountUpdateInputDto payload, @LoggedIn Department department, Errors errors) {
 
 		var existing = accounts.findById(accountId).orElse(null);
 
@@ -84,9 +86,12 @@ class StaffAccountController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		if (payload.validate(errors, existing, accounts).hasErrors()) {
-			return ErrorsDto.of(errors, messages).toBadRequest();
-		}		
+		// start validation manually because of required reference to account object from database
+		payload.validate(errors, existing, accounts);
+		
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
+		}
 		
 		return ResponseEntity.of(accounts.findById(accountId) //
 				.map(it -> representations.from(it, payload)) //

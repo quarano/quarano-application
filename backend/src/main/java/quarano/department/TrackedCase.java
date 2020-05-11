@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
@@ -32,7 +33,6 @@ import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -61,6 +61,7 @@ import org.springframework.util.Assert;
 @Data
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true, of = {})
+@Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
 	@OneToOne(cascade = { CascadeType.ALL }) //
@@ -69,6 +70,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@ManyToOne @JoinColumn(name = "department_id", nullable = false) //
 	private Department department;
+
+	private @Getter TestResult testResult;
 
 	@Setter(AccessLevel.NONE) //
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
@@ -79,7 +82,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private Enrollment enrollment = new Enrollment();
 	private @Column(name = "case_type") @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
-	private @Getter @Setter LocalDate testDate;
 
 	@OneToMany(cascade = { CascadeType.ALL }) //
 	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
@@ -87,8 +89,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@OneToMany(cascade = { CascadeType.ALL }) //
 	@JoinColumn(name = "tracked_case_id") //
 	private @Getter List<Comment> comments = new ArrayList<>();
-
-	private @Getter @Setter boolean infected;
 
 	@Column(nullable = false) //
 	private @Getter Status status;
@@ -114,7 +114,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
-		this.infected = false;
 		this.status = Status.OPEN;
 
 		this.registerEvent(CaseCreated.of(this));
@@ -202,10 +201,21 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase submitQuestionnaire(InitialReport report) {
 
 		this.initialReport = report;
+		log.debug("Submitting initial report {}.", report);
 
 		if (report.isComplete()) {
 			enrollment.markQuestionaireSubmitted();
+		} else {
+			log.debug("Questionnaire incomplete! Enrollment step not completed.");
 		}
+
+		return this;
+	}
+
+	public TrackedCase report(TestResult testResult) {
+
+		this.testResult = testResult;
+		this.type = CaseType.INDEX;
 
 		return this;
 	}
@@ -228,6 +238,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.enrollment.markEnrollmentCompleted();
 		this.status = Status.TRACKING;
 
+		this.registerEvent(CaseStatusUpdated.of(this));
+
 		return this;
 	}
 
@@ -235,6 +247,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.enrollment.reopenEnrollment();
 		this.status = Status.REGISTERED;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
 
 		return this;
 	}
@@ -255,6 +269,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return getEnrollment().isComplete();
 	}
 
+	public boolean hasTestResult() {
+		return testResult != null;
+	}
+
 	/**
 	 * @return
 	 */
@@ -264,6 +282,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.IN_REGISTRATION;
 
+		this.registerEvent(CaseStatusUpdated.of(this));
+
 		return this;
 	}
 
@@ -272,6 +292,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
 
 		this.status = Status.REGISTERED;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
 
 		return this;
 	}
@@ -303,6 +325,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Value(staticConstructor = "of")
 	public static class CaseUpdated implements DomainEvent {
+		TrackedCase trackedCase;
+	}
+
+	@Value(staticConstructor = "of")
+	public static class CaseStatusUpdated implements DomainEvent {
 		TrackedCase trackedCase;
 	}
 

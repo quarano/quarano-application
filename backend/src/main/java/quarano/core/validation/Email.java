@@ -13,36 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano;
+package quarano.core.validation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+
+import quarano.core.EmailAddress;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
-import org.springframework.transaction.annotation.Transactional;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
+import javax.validation.constraints.Pattern;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
-@ActiveProfiles("integrationtest")
-@SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
-@TestConstructor(autowireMode = AutowireMode.ALL)
-@Transactional
-@ExtendWith(JpaAutoFlushTestExecutionCallback.class)
+@ReportAsSingleViolation
+@Pattern(regexp = EmailAddress.PATTERN)
+@Constraint(validatedBy = {})
 @Documented
+@Target(FIELD)
 @Retention(RUNTIME)
-@Target(TYPE)
-public @interface QuaranoIntegrationTest {
+public @interface Email {
+	String ERROR_MSG = "{Email}";
+
+	String message() default ERROR_MSG;
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
 
 }

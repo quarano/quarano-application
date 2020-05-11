@@ -110,7 +110,7 @@ CREATE TABLE tracked_cases (
 	completed_contact_retro bool NOT NULL,
 	completed_personal_data bool NOT NULL,
 	completed_questionnaire bool NOT NULL,
-	infected bool NOT NULL,
+	infected bool NULL,
 	quarantine_from date NULL,
 	quarantine_to date NULL,
 	test_date date NULL,
@@ -179,7 +179,7 @@ CREATE TABLE encounters (
 	encounter_id uuid NOT NULL,
 	encounter_date date NULL,
 	contact_person_id uuid NULL,
-	tracked_person_id uuid NOT NULL,
+	tracked_person_id uuid NULL,
 	CONSTRAINT encounters_pkey PRIMARY KEY (encounter_id),
 	CONSTRAINT encounters_contact_person_fk FOREIGN KEY (contact_person_id) REFERENCES contact_people(contact_person_id),
 	CONSTRAINT encounters_tracked_person_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)

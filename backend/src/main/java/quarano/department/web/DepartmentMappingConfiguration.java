@@ -15,6 +15,7 @@
  */
 package quarano.department.web;
 
+import quarano.department.TestResult;
 import quarano.department.TrackedCase;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.Quarantine;
@@ -41,8 +42,16 @@ public class DepartmentMappingConfiguration {
 			var quarantine = source.getQuarantine();
 
 			if (quarantine != null) {
-				target.setQuarantineStartDate(quarantine.getFrom());
-				target.setQuarantineEndDate(quarantine.getTo());
+				target.setQuarantineStartDate(quarantine.getFrom()) //
+						.setQuarantineEndDate(quarantine.getTo());
+			}
+
+			if (source.hasTestResult()) {
+
+				var result = source.getTestResult();
+
+				target.setInfected(result.isInfected()) //
+						.setTestDate(result.getTestDate());
 			}
 
 			return target;
@@ -58,6 +67,18 @@ public class DepartmentMappingConfiguration {
 			var target = it.getDestination();
 
 			return target.setQuarantine(Quarantine.of(source.getQuarantineStartDate(), source.getQuarantineEndDate()));
+
+		}).setPostConverter(it -> {
+
+			var source = it.getSource();
+			var target = it.getDestination();
+			var testDate = source.getTestDate();
+
+			if (source.getTestDate() != null) {
+				target.report(source.isInfected() ? TestResult.infected(testDate) : TestResult.notInfected(testDate));
+			}
+
+			return target;
 		});
 	}
 }

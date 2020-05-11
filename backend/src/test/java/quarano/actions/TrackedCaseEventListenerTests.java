@@ -7,6 +7,7 @@ import quarano.account.Department;
 import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.CaseCreated;
+import quarano.department.TrackedCase.CaseStatusUpdated;
 import quarano.department.TrackedCase.CaseUpdated;
 import quarano.tracking.TrackedPerson;
 
@@ -40,6 +41,15 @@ class TrackedCaseEventListenerTests {
 	void testTrackedCaseUpdated() {
 		TrackedCase trackedCase = trackedCase(CaseType.INDEX);
 		listener.on(CaseUpdated.of(trackedCase));
+
+		verify(initialCallHandler, times(1)).handleInitialCallOpen(trackedCase);
+		verify(missingDetailsHandler, times(1)).handleTrackedCaseMissingDetails(trackedCase);
+	}
+
+	@Test
+	void testTrackedCaseStatusUpdated() {
+		TrackedCase trackedCase = trackedCase(CaseType.INDEX);
+		listener.on(CaseStatusUpdated.of(trackedCase));
 
 		verify(initialCallHandler, times(1)).handleInitialCallOpen(trackedCase);
 		verify(missingDetailsHandler, times(1)).handleTrackedCaseMissingDetails(trackedCase);

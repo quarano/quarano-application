@@ -31,8 +31,9 @@ export class EnrollmentService {
         }));
   }
 
-  updateQuestionnaire(questionnaire: QuestionnaireDto) {
-    return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire);
+  updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<EnrollmentStatusDto> {
+    return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire)
+      .pipe(switchMap(_ => this.getEnrollmentStatus()));
   }
 
   getPersonalDetails(): Observable<ClientDto> {

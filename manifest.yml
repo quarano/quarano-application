@@ -74,7 +74,7 @@ applications:
     - quarano-security
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"   
-	SPRING_PROFILES_ACTIVE: develop	
+    SPRING_PROFILES_ACTIVE: develop	
     
 
 ###############   cypress-test system #########################
@@ -94,5 +94,5 @@ applications:
     - quarano-autotest
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }" 
-	SPRING_PROFILES_ACTIVE: develop	
+    SPRING_PROFILES_ACTIVE: develop	
 

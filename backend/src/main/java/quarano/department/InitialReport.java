@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import quarano.core.QuaranoEntity;
 import quarano.department.InitialReport.InitialReportIdentifier;
 
@@ -45,6 +46,7 @@ import org.springframework.util.ReflectionUtils;
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
+@Slf4j
 public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdentifier> {
 
 	private Boolean min15MinutesContactWithC19Pat, //
@@ -93,6 +95,9 @@ public class InitialReport extends QuaranoEntity<TrackedCase, InitialReportIdent
 			}
 
 			if (ReflectionUtils.getField(it, this) == null) {
+
+				log.warn("Report field {} is null. Report not complete!", it);
+
 				return false;
 			}
 		}

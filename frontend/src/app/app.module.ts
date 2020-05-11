@@ -1,3 +1,5 @@
+import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
+import { AdministrationModule } from './modules/administration/administration.module';
 import { IsAdminDirective } from './directives/is-admin.directive';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
@@ -63,7 +65,9 @@ const SUB_MODULES = [
   WelcomeModule,
   ContactPersonsModule,
   BasicDataModule,
-  ProfileModule
+  ProfileModule,
+  AdministrationModule,
+  TenantAdminModule
 ];
 
 @NgModule({

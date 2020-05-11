@@ -33,7 +33,7 @@ public class RegistrationManagement {
 		var personId = trackedCase.getTrackedPerson().getId();
 
 		return activationCodes.createActivationCode(personId, departmentId) //
-				.andThen(() -> trackedCase.markInRegistration());
+				.andThen(() -> cases.save(trackedCase.markInRegistration()));
 	}
 
 	public Optional<ActivationCode> getPendingActivationCode(TrackedPersonIdentifier id) {

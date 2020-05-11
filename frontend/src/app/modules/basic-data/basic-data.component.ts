@@ -1,22 +1,24 @@
-import { EncounterEntry } from '@models/encounter';
-import { EnrollmentService } from '@services/enrollment.service';
-import { ClientDto } from '@models/client';
-import { SnackbarService } from '@services/snackbar.service';
-import { QuestionnaireDto } from '@models/first-query';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SubSink } from 'subsink';
-import { ContactPersonDto } from '@models/contact-person';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {EnrollmentStatusDto} from '@models/enrollment-status';
+import {EncounterEntry} from '@models/encounter';
+import {EnrollmentService} from '@services/enrollment.service';
+import {ClientDto} from '@models/client';
+import {SnackbarService} from '@services/snackbar.service';
+import {QuestionnaireDto} from '@models/first-query';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SubSink} from 'subsink';
+import {ContactPersonDto} from '@models/contact-person';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import '@utils/date-extensions';
-import { MatDialog } from '@angular/material/dialog';
-import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { Moment } from 'moment';
-import { VALIDATION_PATTERNS } from '@utils/validation';
-import { debounceTime } from 'rxjs/operators';
-import { MatHorizontalStepper } from '@angular/material/stepper';
-import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ContactPersonDialogComponent} from '../app-forms/contact-person-dialog/contact-person-dialog.component';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
+import {Moment} from 'moment';
+import {VALIDATION_PATTERNS} from '@utils/validation';
+import {debounceTime} from 'rxjs/operators';
+import {MatHorizontalStepper} from '@angular/material/stepper';
+import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-basic-data',
@@ -26,6 +28,7 @@ import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmatio
 export class BasicDataComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
   @ViewChild('stepper') stepper: MatHorizontalStepper;
 
   // ########## STEP I ##########
@@ -49,7 +52,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
-    private router: Router) { }
+    private router: Router) {
+  }
 
   ngOnInit() {
     this.subs.add(this.route.data.subscribe(data => {
@@ -62,6 +66,7 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.enrollmentService.getEnrollmentStatus()
       .subscribe(status => {
+        this.enrollmentStatus$$.next(status);
         if (status.completedPersonalData) {
           this.stepper.next();
         }
@@ -113,9 +118,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
           const value = this.firstFormGroup.value;
           value.dateOfBirth = this.dateOfBirth;
           this.enrollmentService.updatePersonalDetails(value)
-            .subscribe(_ => {
-              this.client = value;
-              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+            .subscribe(result => {
+              this.enrollmentStatus$$.next(result);
+              if (result.completedPersonalData) {
+                this.client = value;
+                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+              }
             });
         }
       });
@@ -163,34 +171,37 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
     this.secondFormGroup.controls.hasSymptoms.valueChanges.subscribe((value: boolean) => {
       const control = this.secondFormGroup.controls.dayOfFirstSymptoms;
-
       if (!value) {
-        control.clearValidators();
-        this.secondFormGroup.updateValueAndValidity();
         control.setValue(null);
+        control.clearValidators();
       } else {
-        control.setValidators(Validators.required);
-        this.secondFormGroup.updateValueAndValidity();
+        control.setValidators([Validators.required]);
       }
+      control.updateValueAndValidity();
+      console.log(this.secondFormGroup);
     });
 
-    this.secondFormGroup.statusChanges
-      .pipe(debounceTime(1000)).subscribe((status) => {
-        if (status === 'VALID' && !this.secondFormGroup.pristine) {
-          const value = this.secondFormGroup.value;
-          value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
-          this.enrollmentService.updateQuestionnaire(value)
-            .subscribe(_ => {
+    this.secondFormGroup.valueChanges
+      .pipe(debounceTime(1000)).subscribe(_ => {
+      if (this.secondFormGroup.status === 'VALID' && !this.secondFormGroup.pristine) {
+        const value = this.secondFormGroup.value as QuestionnaireDto;
+        value.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
+        this.enrollmentService.updateQuestionnaire(value)
+          .subscribe(result => {
+            this.enrollmentStatus$$.next(result);
+            if (result.completedQuestionnaire) {
               this.firstQuery = value;
+              this.firstQuery.dayOfFirstSymptoms = this.dayOfFirstSymptoms;
               this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-            });
-        }
-      });
+            }
+          });
+      }
+    });
   }
 
   firstSymptomsValidator(g: FormGroup) {
     if (g.controls.hasSymptoms.value === true) {
-      return g.controls.dayOfFirstSymptoms.value ? null : { required: true };
+      return g.controls.dayOfFirstSymptoms.value ? null : {required: true};
     }
     return null;
   }
@@ -212,23 +223,24 @@ export class BasicDataComponent implements OnInit, OnDestroy {
     }
   }
 
-  openContactDialog() {
+  openContactDialog(dateString: string) {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
+        contactPerson: {id: null, lastName: null, firstName: null, phone: null, email: null},
       }
     });
 
     this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
       if (createdContact) {
         this.contactPersons.push(createdContact);
+        this.thirdFormGroup.controls[dateString].patchValue([...this.thirdFormGroup.controls[dateString].value, createdContact.id]);
       }
     }));
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date: date.getDateWithoutTime(), contact: id })
+    this.enrollmentService.createEncounter({date: date.getDateWithoutTime(), contact: id})
       .subscribe(encounter => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
@@ -249,10 +261,8 @@ export class BasicDataComponent implements OnInit, OnDestroy {
   hasRetrospectiveContacts(): boolean {
     let result = false;
     Object.keys(this.thirdFormGroup.controls).forEach(key => {
-      if (key !== 'noRetrospectiveContactsConfirmed') {
-        if (this.thirdFormGroup.controls[key].value.length > 0) {
-          result = true;
-        }
+      if (this.thirdFormGroup.controls[key].value.length > 0) {
+        result = true;
       }
     });
     return result;
@@ -282,9 +292,12 @@ export class BasicDataComponent implements OnInit, OnDestroy {
 
   private completeEnrollment(withoutEncounters: boolean) {
     this.enrollmentService.completeEnrollment(withoutEncounters)
-      .subscribe(_ => {
-        this.snackbarService.success('Die Registrierung wurde abgeschlossen');
-        this.router.navigate(['/diary']);
+      .subscribe(result => {
+        this.enrollmentStatus$$.next(result);
+        if (result.completedContactRetro) {
+          this.snackbarService.success('Die Registrierung wurde abgeschlossen');
+          this.router.navigate(['/diary']);
+        }
       });
   }
 }
