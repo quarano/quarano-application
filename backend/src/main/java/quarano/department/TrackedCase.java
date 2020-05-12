@@ -265,6 +265,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return status.equals(Status.CONCLUDED);
 	}
 
+	public boolean isOpen() {
+		return !isConcluded();
+	}
+
 	public boolean isEnrollmentCompleted() {
 		return getEnrollment().isComplete();
 	}

@@ -1,13 +1,18 @@
 package quarano.security.web;
 
 import io.vavr.control.Try;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
 import quarano.security.JwtTokenGenerator;
+import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Map;
 
@@ -27,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 class AuthenticationController {
 
 	private final @NonNull AccountService accounts;
+	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull JwtTokenGenerator generator;
 
 	@PostMapping({ "/login", "/api/login" })
@@ -37,7 +44,15 @@ class AuthenticationController {
 		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername())) //
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!")) //
-				.map(generator::generateTokenFor).map(it -> Map.of("token", it)) //
+				.filter(it -> {
+
+					return people.findByAccount(it) //
+							.flatMap(cases::findByTrackedPerson) //
+							.filter(TrackedCase::isOpen) //
+							.isPresent();
+
+				}, () -> new AccessDeniedException("Case already closed!")).map(generator::generateTokenFor) //
+				.map(it -> Map.of("token", it)) //
 				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK)) //
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
@@ -54,6 +69,7 @@ class AuthenticationController {
 	}
 
 	@Data
+	@AllArgsConstructor(access = AccessLevel.PACKAGE)
 	static class AuthenticationRequest {
 
 		private String username;
