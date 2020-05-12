@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import quarano.core.validation.Email;
 import quarano.core.validation.UserName;
 
 import java.time.LocalDate;
@@ -27,7 +26,6 @@ public class RegistrationDto {
 	private @NotBlank String password, passwordConfirm;  // password rules are tested in entity
 	private @NotNull @Past LocalDate dateOfBirth;
 	private @NotNull UUID clientCode;
-	private @Email @NotBlank String email;
 	private UUID clientId;
 	private String departmentId;
 

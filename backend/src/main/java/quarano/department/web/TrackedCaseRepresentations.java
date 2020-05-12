@@ -21,10 +21,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Department;
-import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
-import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.core.web.ErrorsDto;
@@ -43,6 +42,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -161,12 +161,15 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			errors.rejectField("testDate", "ContactCase.infected");
 		}
 
-		var validationGroup = type.equals(CaseType.INDEX) || payload.getTestDate() != null //
-				? ValidationGroups.Index.class //
-				: Default.class;
+		var validationGroups = new ArrayList<>();
+		validationGroups.add(Default.class);
+
+		if (type.equals(CaseType.INDEX) || payload.getTestDate() != null) {
+			validationGroups.add(ValidationGroups.Index.class);
+		}
 
 		return errors //
-				.doWith(it -> validator.validate(payload, it, validationGroup)) //
+				.doWith(it -> validator.validate(payload, it, validationGroups.toArray())) //
 				.doWith(it -> payload.validate(it, type));
 	}
 
@@ -194,7 +197,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 		private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 		private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
-		private @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Email String email;
 		private @Past LocalDate dateOfBirth;
 		private @Getter boolean infected;
 

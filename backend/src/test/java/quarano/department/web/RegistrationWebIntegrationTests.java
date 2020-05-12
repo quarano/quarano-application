@@ -57,7 +57,6 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.email("mytestmail@test.com") //
 				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
 				.build();
 
@@ -88,7 +87,6 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.email("mytestmail@test.com") //
 				.clientCode(UUID.randomUUID()) //
 				.build();
 
@@ -119,7 +117,6 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.email("mytestmail@test.com") //
 				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
 				.build();
 
@@ -205,7 +202,6 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.email("myT@estmaIl@test.com") //
 				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
 				.build();
 
@@ -224,8 +220,7 @@ class RegistrationWebIntegrationTests {
 		var emailMessage = messages.getMessage("Email");
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
-		assertThat(document.read("$.email", String.class)).isEqualTo(emailMessage);
-	}	
+	}
 
 	@Test
 	@Disabled

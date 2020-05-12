@@ -26,7 +26,6 @@ public class RegistrationDetails {
 	private String lastname;
 	private LocalDate dateOfBirth;
 	private UUID activationCodeLiteral;
-	private String email;
 	private TrackedPersonIdentifier trackedPersonId;
 	private DepartmentIdentifier departmentId;
 

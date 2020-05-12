@@ -4,10 +4,9 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.Data;
 import lombok.Getter;
-import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.AlphaNumeric;
-import quarano.core.validation.Alphabetic;
+import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
@@ -40,7 +39,7 @@ class ContactPersonDto {
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
-	private @Pattern(regexp = EmailAddress.PATTERN) String email;
+	private @Email String email;
 	private @Textual String remark;
 	private @Textual String identificationHint;
 	private Boolean isHealthStaff;

@@ -12,7 +12,7 @@ import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.AccountService;
 import quarano.account.RoleRepository;
-import quarano.core.EmailAddress;
+import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.UserName;
 import quarano.core.web.MapperWrapper;
@@ -80,7 +80,7 @@ class StaffAccountRepresentations {
 	static class StaffAccountSummaryDto extends RepresentationModel<StaffAccountSummaryDto> {
 
 		private @Setter @Getter @NotBlank String firstName, lastName, username;
-		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Setter @Getter @NotBlank @Email String email;
 		@JsonIgnore private @Setter @Getter String departmentId;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 		@Setter @Getter private String accountId;
@@ -109,7 +109,7 @@ class StaffAccountRepresentations {
 		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
 		private @Setter @Getter @NotBlank String password, passwordConfirm; // password rules are checked in Entity
 		private @Setter @Getter @UserName @NotBlank String username;
-		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Setter @Getter @NotBlank @Email String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, AccountService accounts) {
@@ -130,7 +130,7 @@ class StaffAccountRepresentations {
 
 		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
 		private @Setter @Getter @UserName @NotBlank String username;
-		private @Setter @Getter @NotBlank @Pattern(regexp = EmailAddress.PATTERN) String email;
+		private @Setter @Getter @NotBlank @Email String email;
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, Account existing, AccountService accounts) {
