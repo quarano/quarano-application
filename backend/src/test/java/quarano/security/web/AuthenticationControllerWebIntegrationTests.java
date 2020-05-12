@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @RequiredArgsConstructor
 @QuaranoWebIntegrationTest
-class AuthenticationControllerIntegrationTests {
+class AuthenticationControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final TrackedCaseRepository cases;
@@ -52,5 +52,28 @@ class AuthenticationControllerIntegrationTests {
 				.content(jackson.writeValueAsString(new AuthenticationRequest("secUser1", "secur1tyTest!"))) //
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	void logsInTrackedUserWithOpenCase() throws Exception {
+		assertSuccessfulLogin("secUser1", "secur1tyTest!");
+	}
+
+	@Test
+	void logsInStaffMember() throws Exception {
+		assertSuccessfulLogin("agent1", "agent1");
+	}
+
+	@Test
+	void logsInAdmin() throws Exception {
+		assertSuccessfulLogin("admin", "admin");
+	}
+
+	private void assertSuccessfulLogin(String username, String password) throws Exception {
+
+		mvc.perform(post("/api/login") //
+				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password))) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk());
 	}
 }

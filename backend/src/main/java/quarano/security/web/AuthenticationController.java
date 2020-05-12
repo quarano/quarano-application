@@ -46,7 +46,7 @@ class AuthenticationController {
 						() -> new AccessDeniedException("Authentication failed!")) //
 				.filter(it -> {
 
-					return people.findByAccount(it) //
+					return !it.isTrackedPerson() || people.findByAccount(it) //
 							.flatMap(cases::findByTrackedPerson) //
 							.filter(TrackedCase::isOpen) //
 							.isPresent();
