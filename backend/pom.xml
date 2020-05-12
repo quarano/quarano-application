@@ -19,7 +19,7 @@
 		<docker.image.prefix>quarano-backend</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
-		<jddd.version>0.0.1-SNAPSHOT</jddd.version>
+		<jddd.version>0.1.0</jddd.version>
 		<moduliths.version>1.0.0.RC4</moduliths.version>
 		<spring-hateoas.version>1.1.0.RELEASE</spring-hateoas.version>
 	</properties>
