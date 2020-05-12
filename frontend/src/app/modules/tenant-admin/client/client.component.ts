@@ -1,7 +1,7 @@
 import {MatDialog} from '@angular/material/dialog';
 import {ClientService} from '@services/client.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CaseDetailDto} from '@models/case-detail';
 import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take} from 'rxjs/operators';
@@ -14,14 +14,17 @@ import {HalResponse} from '@models/hal-response';
 import {CaseCommentDto} from '@models/case-comment';
 import {ClientType} from '@models/report-case';
 import {ConfirmationDialogComponent} from '@ui/confirmation-dialog/confirmation-dialog.component';
+import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
 import {cloneDeep} from 'lodash';
+import {SubSink} from 'subsink';
+
 
 @Component({
   selector: 'app-clients',
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.scss']
 })
-export class ClientComponent implements OnInit {
+export class ClientComponent implements OnInit, OnDestroy {
   caseId: string;
   type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
   type$: Observable<ClientType> = this.type$$.asObservable();
@@ -39,6 +42,8 @@ export class ClientComponent implements OnInit {
   tabGroup: MatTabGroup;
 
   tabIndex = 0;
+
+  private subs = new SubSink();
 
   constructor(
     private route: ActivatedRoute,
@@ -69,11 +74,11 @@ export class ClientComponent implements OnInit {
       this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
 
-    this.caseDetail$.pipe(
+    this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
       filter((data) => data?._links?.hasOwnProperty('renew')),
       take(1)).subscribe((data) => {
-      this.apiService
+      this.subs.sink = this.apiService
         .getApiCall<StartTracking>(data, 'renew')
         .subscribe((startTracking) => {
           this.trackingStart$$.next(startTracking);
@@ -97,14 +102,14 @@ export class ClientComponent implements OnInit {
       saveData$ = this.apiService.updateCase(caseDetail);
     }
 
-    saveData$.subscribe(() => {
+    this.subs.sink = saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       this.router.navigate(['/tenant-admin/clients']);
     });
   }
 
   startTracking(caseDetail: CaseDetailDto) {
-    this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
         this.updatedDetail$$.next({...cloneDeep(caseDetail), _links: data._links});
@@ -114,7 +119,7 @@ export class ClientComponent implements OnInit {
   }
 
   renewTracking(tracking: HalResponse) {
-    this.apiService.putApiCall<StartTracking>(tracking, 'renew')
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(tracking, 'renew')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
         this.tabIndex = 3;
@@ -122,14 +127,22 @@ export class ClientComponent implements OnInit {
   }
 
   addComment(commentText: string) {
-    this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
+    this.subs.sink = this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
       this.snackbarService.success('Kommentar erfolgreich eingetragen.');
       this.updatedDetail$$.next(data);
     });
   }
 
+  checkForClose(halResponse: HalResponse) {
+    this.subs.sink = this.dialog.open(CloseCaseDialogComponent, {width: '640px'}).afterClosed().pipe(
+      filter((comment) => comment),
+      switchMap((comment: string) => this.apiService.addComment(this.caseId, comment)),
+      map(() => this.closeCase(halResponse))
+    ).subscribe();
+  }
+
   closeCase(halResponse: HalResponse) {
-    this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
+    this.subs.sink = this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
       switchMap(() => this.apiService.getCase(this.caseId))
     ).subscribe((data) => {
       this.snackbarService.success('Fall abgeschlossen.');
@@ -156,5 +169,9 @@ export class ClientComponent implements OnInit {
         this.changeToIndexType();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

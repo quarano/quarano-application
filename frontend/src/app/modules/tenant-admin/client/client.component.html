@@ -35,9 +35,9 @@
         Analog nachverfolgen
       </button>
       <div class="spacer"></div>
-      <button mat-button (click)="closeCase(caseDetail)"
-              [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">Fall
-        abschließen
+      <button mat-button (click)="checkForClose(caseDetail)"
+              [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'">
+        Fall abschließen
       </button>
     </div>
     <mat-tab-group #tabs [selectedIndex]="tabIndex">
@@ -56,7 +56,11 @@
                 (caseAction$ | async).anomalies.health.length +
                 (caseAction$ | async).anomalies.process.length
               ).toString()
-            " matBadgeOverlap="false" matBadgeSize="small" matBadgeColor="warn">Aktionen</span>
+            "
+                matBadgeOverlap="false"
+                matBadgeSize="small"
+                matBadgeColor="warn"
+          >Aktionen</span>
           <ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
         </ng-template>
         <app-client-action [caseAction]="caseAction$ | async"></app-client-action>
