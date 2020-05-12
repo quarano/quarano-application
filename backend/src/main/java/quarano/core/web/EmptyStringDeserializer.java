@@ -20,12 +20,11 @@ class EmptyStringDeserializer extends JsonDeserializer<String> {
 	 */
 	@Nullable
 	@Override
+	@SuppressWarnings("null")
 	public String deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 
-		if (jp.getCurrentToken() == JsonToken.VALUE_STRING && !StringUtils.hasText(jp.getText())) {
-			return null;
-		}
-
-		return StringDeserializer.instance.deserialize(jp, ctxt);
+		return jp.getCurrentToken() == JsonToken.VALUE_STRING && !StringUtils.hasText(jp.getText()) //
+				? null //
+				: StringDeserializer.instance.deserialize(jp, ctxt).trim();
 	}
 }
