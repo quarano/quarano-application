@@ -20,7 +20,7 @@
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
 		<jddd.version>0.0.1-SNAPSHOT</jddd.version>
-		<moduliths.version>1.0.0.BUILD-SNAPSHOT</moduliths.version>
+		<moduliths.version>1.0.0.RC4</moduliths.version>
 		<spring-hateoas.version>1.1.0.RELEASE</spring-hateoas.version>
 	</properties>
 
@@ -280,7 +280,7 @@
 	</build>
 
 	<repositories>
-	<!-- For Moduliths & jDDD -->
+		<!-- For Moduliths & jDDD -->
 		<repository>
 			<id>spring-libs-snapshot</id>
 			<url>https://repo.spring.io/libs-snapshot</url>
