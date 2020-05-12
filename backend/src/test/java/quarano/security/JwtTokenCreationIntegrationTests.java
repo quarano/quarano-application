@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.*;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.account.AccountService;
-import quarano.security.JwtProperties;
 
 import org.junit.jupiter.api.Test;
 
