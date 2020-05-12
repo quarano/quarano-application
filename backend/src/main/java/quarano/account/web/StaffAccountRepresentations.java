@@ -57,16 +57,14 @@ class StaffAccountRepresentations {
 
 		return dto;
 	}
-	
-	
+
 	Account from(Account existing, @Valid StaffAccountUpdateInputDto payload) {
 
 		var mappedAccount = mapper.map(payload, existing);
-		
+
 		return mappedAccount;
 	}
-	
-	
+
 	Account from(Account existing, @Valid StaffAccountCreateInputDto payload) {
 
 		var mappedAccount = mapper.map(payload, existing);
@@ -96,9 +94,13 @@ class StaffAccountRepresentations {
 			var staffAccountController = on(StaffAccountController.class);
 
 			return super.getLinks().and(Links.of( //
-					Link.of(fromMethodCall(staffAccountController.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null)).toUriString(),
+					Link.of(fromMethodCall(
+							staffAccountController.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null))
+									.toUriString(),
 							IanaLinkRelations.SELF),
-					Link.of(fromMethodCall(staffAccountController.deleteStaffAccounts(AccountIdentifier.of(UUID.fromString(accountId)), null)).toUriString(),
+					Link.of(fromMethodCall(
+							staffAccountController.deleteStaffAccounts(AccountIdentifier.of(UUID.fromString(accountId)), null))
+									.toUriString(),
 							StaffAccountLinkRelations.DELETE)));
 		}
 	}
@@ -117,16 +119,15 @@ class StaffAccountRepresentations {
 			if (!Objects.nullSafeEquals(password, passwordConfirm)) {
 				errors.rejectValue("passwordConfirm", "NonMatching.password");
 			}
-			
-			validateUsername(errors, this.username, accounts);			
+
+			validateUsername(errors, this.username, accounts);
 
 			return errors;
 		}
 	}
-	
-	@RequiredArgsConstructor(staticName = "of")
-	static class StaffAccountUpdateInputDto{
 
+	@RequiredArgsConstructor(staticName = "of")
+	static class StaffAccountUpdateInputDto {
 
 		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
 		private @Setter @Getter @UserName @NotBlank String username;
@@ -134,23 +135,22 @@ class StaffAccountRepresentations {
 		private @Setter @Getter List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, Account existing, AccountService accounts) {
-			
+
 			// validate username only if it has changed
-			if(!existing.getUsername().equals(this.username)) {
-				validateUsername(errors, this.username, accounts);	
+			if (!existing.getUsername().equals(this.username)) {
+				validateUsername(errors, this.username, accounts);
 			}
 
 			return errors;
 		}
-	}	
+	}
 
-	
 	static void validateUsername(Errors errors, String username, AccountService accounts) {
-		if(!accounts.isUsernameAvailable(username)) {
+		if (!accounts.isUsernameAvailable(username)) {
 			errors.rejectValue("username", "UserNameNotAvailable");
 		}
-		
-		if(!accounts.isValidUsername(username)) {
+
+		if (!accounts.isValidUsername(username)) {
 			errors.rejectValue("username", "InvalidUserName");
 		}
 	}

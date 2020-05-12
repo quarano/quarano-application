@@ -23,7 +23,7 @@ import org.springframework.validation.Errors;
 public class RegistrationDto {
 
 	private @UserName @NotBlank String username;
-	private @NotBlank String password, passwordConfirm;  // password rules are tested in entity
+	private @NotBlank String password, passwordConfirm; // password rules are tested in entity
 	private @NotNull @Past LocalDate dateOfBirth;
 	private @NotNull UUID clientCode;
 	private UUID clientId;

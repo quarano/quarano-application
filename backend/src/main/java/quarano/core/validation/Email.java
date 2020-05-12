@@ -41,6 +41,7 @@ import javax.validation.constraints.Pattern.Flag;
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface Email {
+
 	String ERROR_MSG = "{Email}";
 
 	String message() default ERROR_MSG;
@@ -48,5 +49,4 @@ public @interface Email {
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
-
 }

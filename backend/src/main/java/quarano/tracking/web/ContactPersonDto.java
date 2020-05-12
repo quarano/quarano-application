@@ -33,8 +33,8 @@ class ContactPersonDto {
 	private ContactPersonIdentifier id;
 
 	private @Pattern(regexp = Strings.NAMES) String lastName, firstName;
-	private @Pattern(regexp =  Strings.CITY) String city;
-	private @Pattern(regexp =  Strings.STREET) String street;
+	private @Pattern(regexp = Strings.CITY) String city;
+	private @Pattern(regexp = Strings.STREET) String street;
 	private @AlphaNumeric String houseNumber;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
