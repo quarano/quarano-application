@@ -116,7 +116,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	}
 
 	public boolean isTrackedPerson() {
-		return this.roles.contains(new Role(RoleType.ROLE_USER));
+		return hasAnyRole(RoleType.ROLE_USER);
 	}
 
 	/**
@@ -124,9 +124,16 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	 *
 	 * @return
 	 */
-	public boolean hasAdminRole() {
-		return this.roles.contains(Role.of(RoleType.ROLE_HD_ADMIN))
-				|| this.roles.contains(Role.of(RoleType.ROLE_QUARANO_ADMIN));
+	public boolean isAdmin() {
+		return hasAnyRole(RoleType.ROLE_HD_ADMIN, RoleType.ROLE_QUARANO_ADMIN);
+	}
+
+	private boolean hasAnyRole(RoleType... roles) {
+
+		var candidates = List.of(roles);
+
+		return this.roles.stream() //
+				.map(Role::getRoleType).anyMatch(candidates::contains);
 	}
 
 	@Embeddable
