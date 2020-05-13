@@ -170,10 +170,13 @@ public class Slot implements Comparable<Slot> {
 
 	@Override
 	public int compareTo(Slot slot) {
+
 		var dateComparison = this.date.compareTo(slot.date);
+
 		if (dateComparison != 0) {
 			return dateComparison;
 		}
+
 		return this.timeOfDay == slot.timeOfDay ? 0 : this.timeOfDay == TimeOfDay.MORNING ? -1 : 1;
 	}
 
