@@ -93,6 +93,7 @@ public class ActionItemController {
 
 				}) //
 				.stream() //
+				.filter(CaseActionSummary::hasUnresolvedItems)
 				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());
 	}
 }

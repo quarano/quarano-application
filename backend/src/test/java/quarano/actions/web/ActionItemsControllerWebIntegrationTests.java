@@ -1,20 +1,21 @@
 package quarano.actions.web;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.actions.DescriptionCode;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
@@ -28,20 +29,6 @@ class ActionItemsControllerWebIntegrationTests {
 	private final MockMvc mvc;
 	private final TrackedCaseRepository cases;
 	private final ObjectMapper jackson;
-
-	@Test
-	@WithQuaranoUser("agent3")
-	void rendersAnomalies() throws Exception {
-
-		var response = mvc.perform(get("/api/hd/actions")) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse().getContentAsString();
-
-		var document = JsonPath.parse(response);
-
-		assertThat(document.read("$[0].processSummary", JSONArray.class)).isNotEmpty();
-		assertThat(document.read("$[0].healthSummary", JSONArray.class)).isNotEmpty();
-	}
 
 	@Test
 	@WithQuaranoUser("agent3")
@@ -82,5 +69,42 @@ class ActionItemsControllerWebIntegrationTests {
 		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isNotEmpty();
 		assertThat(document.read("$.anomalies.process", JSONArray.class)).isEmpty();
 		assertThat(document.read("$.anomalies.health", JSONArray.class)).isEmpty();
+	}
+
+	@Test
+	@WithQuaranoUser("agent3")
+	void obtainsUnresolvedActions() throws Exception {
+		// resolv actions
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
+			.orElseThrow();
+
+		ActionsReviewed reviewed = new ActionsReviewed();
+		reviewed.setComment("Comment!");
+
+		mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
+				.content(jackson.writeValueAsString(reviewed)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var response = mvc.perform(get("/api/hd/actions")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$", JSONArray.class)).hasSize(2);
+		assertThat(document.read("$[0].healthSummary", JSONArray.class)).isEqualTo(
+				List.of()
+		);
+		assertThat(document.read("$[0].processSummary", JSONArray.class)).isEqualTo(
+				List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name())
+		);
+		assertThat(document.read("$[1].healthSummary", JSONArray.class)).isEqualTo(
+				List.of()
+		);
+		assertThat(document.read("$[1].processSummary", JSONArray.class)).isEqualTo(
+				List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name())
+		);
 	}
 }
