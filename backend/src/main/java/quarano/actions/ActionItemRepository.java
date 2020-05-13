@@ -32,8 +32,18 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 		return findByTrackedPerson(trackedCase.getTrackedPerson().getId());
 	}
 
+
+	default ActionItems findUnresolvedByCase(TrackedCase trackedCase) {
+		return findUnresolvedByTrackedPerson(trackedCase.getTrackedPerson().getId());
+	}
+
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
 	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	@Query("select i from ActionItem i " +
+			"where i.resolved = false " +
+			"and i.personIdentifier = :identifier")
+	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
 	ActionItems findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);

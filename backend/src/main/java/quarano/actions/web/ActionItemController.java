@@ -100,15 +100,14 @@ public class ActionItemController {
 	Stream<?> getActions(@LoggedIn Department department) {
 
 		return cases.findByDepartmentId(department.getId()) //
-				.map(it -> {
+				.map(trackedCase -> {
 
-					var summary = trackedCaseRepresentations.toSummary(it);
+					var summary = trackedCaseRepresentations.toSummary(trackedCase);
 
-					return new CaseActionSummary(it, items.findByCase(it), summary);
+					return new CaseActionSummary(trackedCase, items.findUnresolvedByCase(trackedCase), summary);
 
 				}) //
 				.stream() //
-				.filter(it -> it.hasUnresolvedItems()) //
 				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());
 	}
 }
