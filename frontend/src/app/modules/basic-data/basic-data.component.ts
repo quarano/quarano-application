@@ -95,6 +95,14 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onTabChanged(event: StepperSelectionEvent) {
+    if (event.previouslySelectedIndex === 0 && event.selectedIndex === 1) {
+      this.checkAndSendFirstForm();
+    }
+
+    if (event.previouslySelectedIndex === 1 && event.selectedIndex === 2) {
+      this.checkAndSendQuestionaire();
+    }
+
     if (event.selectedIndex === 2) {
       this.buildThirdForm();
     }
@@ -188,10 +196,9 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
 
       this.subs.add(this.enrollmentService.updateQuestionnaire(this.secondFormGroup.value)
-          .subscribe(() => {
-              this.firstQuery = this.secondFormGroup.value;
-              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-
+        .subscribe(() => {
+          this.firstQuery = this.secondFormGroup.value;
+          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
 
           this.stepper.next();
         }));
