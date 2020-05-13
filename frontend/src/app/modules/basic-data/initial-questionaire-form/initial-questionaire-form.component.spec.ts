@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InitialQuestionaireFormComponent } from './initial-questionaire-form.component';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 describe('InitialQuestionaireFormComponent', () => {
   let component: InitialQuestionaireFormComponent;
@@ -16,6 +17,20 @@ describe('InitialQuestionaireFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(InitialQuestionaireFormComponent);
     component = fixture.componentInstance;
+
+    component.formGroup = new FormGroup({
+      hasSymptoms: new FormControl(null, [Validators.required]),
+      dayOfFirstSymptoms: new FormControl(''),
+      symptoms: new FormControl([]),
+      familyDoctor: new FormControl('', []),
+      guessedOriginOfInfection: new FormControl('', []),
+      hasPreExistingConditions: new FormControl(null, [Validators.required]),
+      hasPreExistingConditionsDescription: new FormControl(null),
+      belongToMedicalStaff: new FormControl(null, [Validators.required]),
+      belongToMedicalStaffDescription: new FormControl(null),
+      hasContactToVulnerablePeople: new FormControl(null, [Validators.required]),
+      hasContactToVulnerablePeopleDescription: new FormControl('')
+    });
     fixture.detectChanges();
   });
 
