@@ -61,7 +61,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.slot = this.activatedRoute.snapshot.paramMap.get('slot');
     this.subs.add(this.route.data.subscribe(data => {
       this.diaryEntry = data.diaryEntry;
-      this.setSymptoms(data.symptoms);
+      this.setSymptoms(data.symptoms.filter((symptom) => symptom.id !== 'db723876-e051-4ccf-9c52-794190694666'));
       this.contactPersons = data.contactPersons;
     }));
     this.buildForm();
