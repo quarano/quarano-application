@@ -5,7 +5,6 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import lombok.Data;
 import lombok.Getter;
 import quarano.core.PhoneNumber;
-import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
@@ -14,12 +13,9 @@ import quarano.tracking.ZipCode;
 
 import java.util.Collections;
 import java.util.Map;
-
 import javax.validation.constraints.Pattern;
-
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +31,7 @@ class ContactPersonDto {
 	private @Pattern(regexp = Strings.NAMES) String lastName, firstName;
 	private @Pattern(regexp = Strings.CITY) String city;
 	private @Pattern(regexp = Strings.STREET) String street;
-	private @AlphaNumeric String houseNumber;
+	private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
 	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;

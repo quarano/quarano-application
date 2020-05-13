@@ -89,7 +89,7 @@ class ContactPersonControllerWebIntegrationTests {
 		.setPhone("012356789A") //
 		.setCity("city 123") //
 		.setStreet("\\") //
-		.setHouseNumber("-");
+		.setHouseNumber("\\");
 
 		String response = mvc.perform(post("/api/contacts") //
 				.content(mapper.writeValueAsString(payload)) //
@@ -99,7 +99,7 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		var alphaNumeric = messages.getMessage("AlphaNumeric");
+		var houseNumber = messages.getMessage("Pattern.houseNumber");
 		var firstName = messages.getMessage("Pattern.firstName");
 		var lastName = messages.getMessage("Pattern.lastName");
 
@@ -107,7 +107,7 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
 		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
-		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(alphaNumeric);		
+		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 	
 

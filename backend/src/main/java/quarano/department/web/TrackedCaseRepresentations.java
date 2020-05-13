@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.core.PhoneNumber;
-import quarano.core.validation.AlphaNumeric;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
@@ -204,7 +203,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineEndDate;
 
 		private @Pattern(regexp = Strings.STREET) String street;
-		private @AlphaNumeric String houseNumber;
+		private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
 		private @Pattern(regexp = Strings.CITY) String city;
 		private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 		private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
