@@ -15,8 +15,9 @@
  */
 package quarano.actions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static quarano.tracking.TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1;
+import static org.assertj.core.api.Assertions.*;
+import static quarano.actions.ActionItemRepositoryIntegrationTests.MatchesItemCondition.*;
+import static quarano.tracking.TrackedPersonDataInitializer.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
@@ -29,10 +30,9 @@ import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDateTime;
-import javax.persistence.EntityManager;
-import org.assertj.core.api.HamcrestCondition;
+
+import org.assertj.core.api.Condition;
 import org.assertj.core.data.Index;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -45,7 +45,6 @@ class ActionItemRepositoryIntegrationTests {
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
 	private final DiaryEntryRepository entries;
-	private final EntityManager em;
 
 	@Test
 	void persistsDescriptionArguments() {
@@ -61,48 +60,40 @@ class ActionItemRepositoryIntegrationTests {
 
 		item = repository.save(item);
 
-		em.flush();
-		em.clear();
-
 		assertThat(repository.findById(item.getId())).hasValueSatisfying(it -> {
 			assertThat(it.getDescription().getArguments()).isNotEmpty();
 		});
 	}
 
-	@Test
+	@Test // CORE-162
 	void testFindUnresolvedByPerson() {
+
 		var person = VALID_TRACKED_PERSON4_ID_DEP1;
-		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
-				.resolve(repository::save);
-		em.flush();
-		em.clear();
+		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE).resolve(repository::save);
 
-		ActionItems allItems = repository.findByTrackedPerson(person);
-		assertThat(allItems.stream()) //
-				.has(new HamcrestCondition<>(ActionItemMatcher.matchesItem(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false)), Index.atIndex(0)) //
-				.has(new HamcrestCondition<>(ActionItemMatcher.matchesItem(DescriptionCode.INCREASED_TEMPERATURE, true)), Index.atIndex(1));
+		assertThat(repository.findByTrackedPerson(person).stream()) //
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0)) //
+				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(1));
 
-		ActionItems unresolvedItems = repository.findUnresolvedByTrackedPerson(person);
-		assertThat(unresolvedItems.stream()).hasSize(1) //
-				.has(new HamcrestCondition<>(ActionItemMatcher.matchesItem(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false)), Index.atIndex(0));
+		assertThat(repository.findUnresolvedByTrackedPerson(person).stream()) //
+				.hasSize(1) //
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0));
 	}
 
-	@RequiredArgsConstructor(staticName = "matchesItem")
-	private static class ActionItemMatcher extends TypeSafeMatcher<ActionItem> {
+	@RequiredArgsConstructor(staticName = "itemMatching")
+	static class MatchesItemCondition extends Condition<ActionItem> {
+
 		private final DescriptionCode descriptionCode;
 		private final boolean resolved;
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.assertj.core.api.Condition#matches(java.lang.Object)
+		 */
 		@Override
-		protected boolean matchesSafely(ActionItem item) {
-			return item.getDescription().getCode().equals(descriptionCode)
-					&& item.isResolved() == resolved
-					;
-		}
-
-		@Override
-		public void describeTo(org.hamcrest.Description description) {
-			description.appendText("descriptionCode: ").appendValue(descriptionCode)
-					.appendText(" resolved: ").appendValue(resolved);
+		public boolean matches(ActionItem item) {
+			return item.getDescription().getCode().equals(descriptionCode) //
+					&& item.isResolved() == resolved;
 		}
 	}
 }

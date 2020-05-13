@@ -25,13 +25,13 @@ import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
 public interface ActionItemRepository extends QuaranoRepository<ActionItem, ActionItemIdentifier> {
 
 	default ActionItems findByCase(TrackedCase trackedCase) {
 		return findByTrackedPerson(trackedCase.getTrackedPerson().getId());
 	}
-
 
 	default ActionItems findUnresolvedByCase(TrackedCase trackedCase) {
 		return findUnresolvedByTrackedPerson(trackedCase.getTrackedPerson().getId());
@@ -40,9 +40,9 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
 	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select i from ActionItem i " +
-			"where i.resolved = false " +
-			"and i.personIdentifier = :identifier")
+	@Query("select i from ActionItem i" //
+			+ " where i.resolved = false" //
+			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
