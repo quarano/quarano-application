@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -51,9 +52,17 @@ class AuthenticationController {
 							.filter(TrackedCase::isOpen) //
 							.isPresent();
 
-				}, () -> new AccessDeniedException("Case already closed!")).map(generator::generateTokenFor) //
-				.map(it -> Map.of("token", it)) //
-				.<HttpEntity<?>> map(it -> new ResponseEntity<>(it, HttpStatus.OK)) //
+				}, () -> new AccessDeniedException("Case already closed!")) //
+				.map(generator::generateTokenFor) //
+				.<HttpEntity<?>> map(it -> {
+
+					var headers = new HttpHeaders();
+					headers.set(QuaranoWebSecurityConfigurerAdapter.TOKEN_HEADER, it);
+
+					return ResponseEntity.status(HttpStatus.OK) //
+							.headers(headers) //
+							.body(Map.of("token", it));
+				}) //
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
 	}

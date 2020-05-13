@@ -27,6 +27,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -49,18 +50,20 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 @ConstructorBinding
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "quarano.jwt")
-class JwtProperties implements JwtTokenGenerator {
+class JwtProperties implements JwtTokenGenerator, JwtConfiguration {
 
 	static final String ROLE_CLAIM = "aut";
 	static final String PERSON_CLAIM = "pid";
 
 	private final String secret;
 	private final Duration expiration;
+	private final List<String> allowedOrigins;
 
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.auth.jwt.JwtTokenGenerator#generateTokenFor(quarano.auth.Account)
 	 */
+	@Override
 	public String generateTokenFor(Account account) {
 
 		return Jwts.builder() //
@@ -72,7 +75,12 @@ class JwtProperties implements JwtTokenGenerator {
 				.compact();
 	}
 
-	JwtDecoder getJwtDecoder() {
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.security.JwtConfiguration#getJwtDecoder()
+	 */
+	@Override
+	public JwtDecoder getJwtDecoder() {
 
 		var decoded = TextCodec.BASE64.decode(secret);
 		var key = new SecretKeySpec(decoded, SignatureAlgorithm.HS512.getJcaName());
@@ -82,8 +90,23 @@ class JwtProperties implements JwtTokenGenerator {
 				.build();
 	}
 
-	Converter<Jwt, ? extends AbstractAuthenticationToken> getJwtConverter(Function<String, Account> accountSource) {
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.security.JwtConfiguration#getJwtConverter(java.util.function.Function)
+	 */
+	@Override
+	public Converter<Jwt, ? extends AbstractAuthenticationToken> getJwtConverter(
+			Function<String, Account> accountSource) {
 		return jwt -> new JwtAuthenticatedProfile(createToken(jwt.getTokenValue()), accountSource);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.security.JwtConfiguration#getAllowedOrigins()
+	 */
+	@Override
+	public List<String> getAllowedOrigins() {
+		return allowedOrigins != null ? allowedOrigins : List.of("*");
 	}
 
 	JwtToken createToken(String source) {

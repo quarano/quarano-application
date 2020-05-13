@@ -1,16 +1,19 @@
-package quarano.security;
+package quarano.security.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.RoleType;
+import quarano.security.JwtConfiguration;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,7 +34,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-	private final JwtProperties configuration;
+	static final String TOKEN_HEADER = "X-Auth-Token";
+
+	private final JwtConfiguration configuration;
 	private final AccountService accounts;
 
 	private static final String[] SWAGGER_UI_WHITELIST = {
@@ -83,11 +88,12 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*")); // Problem!
+		configuration.setAllowedOrigins(this.configuration.getAllowedOrigins());
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token", "Origin"));
-		configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(
+				List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.ORIGIN, TOKEN_HEADER));
+		configuration.setExposedHeaders(List.of(TOKEN_HEADER));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
