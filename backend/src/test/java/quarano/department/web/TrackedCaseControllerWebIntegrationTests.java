@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
@@ -415,7 +414,6 @@ class TrackedCaseControllerWebIntegrationTests {
 				.param("type", type == CaseType.INDEX ? "index" : "contact") //
 				.content(jackson.writeValueAsString(payload)) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse();
 	}
