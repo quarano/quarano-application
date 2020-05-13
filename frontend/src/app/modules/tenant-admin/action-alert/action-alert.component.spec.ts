@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ActionAlertComponent } from './action-alert.component';
+import {alertConfigurations} from './AlertConfiguration';
 
 describe('ActionAlertComponent', () => {
   let component: ActionAlertComponent;
@@ -19,6 +20,7 @@ describe('ActionAlertComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ActionAlertComponent);
     component = fixture.componentInstance;
+    component.alert = alertConfigurations()[0];
     fixture.detectChanges();
   });
 
