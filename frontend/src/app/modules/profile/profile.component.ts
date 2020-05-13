@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       mobilePhone: new FormControl(this.client.mobilePhone,
         [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
       street: new FormControl(this.client.street, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.street)]),
-      houseNumber: new FormControl(this.client.houseNumber, [Validators.maxLength(6)]),
+      houseNumber: new FormControl(this.client.houseNumber, [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl(this.client.zipCode,
         [Validators.required, Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required]),

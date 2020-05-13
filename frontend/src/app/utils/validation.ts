@@ -9,7 +9,8 @@ export const VALIDATION_PATTERNS = {
 
   zip: '[0-9]{5}',
   street: '[\\p{L}\\s\\.\\-[0-9]]*',
-
+  houseNumber: '[\\p{L}\\s\\.\\-[0-9]*\\/]{0,15}',
+  
   name: '[\\p{L}\\s\\-]*',
   username: '[\\p{L}0-9\\-\\_]*',
 

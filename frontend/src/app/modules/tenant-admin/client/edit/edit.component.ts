@@ -95,7 +95,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.street)]),
-      houseNumber: new FormControl(''),
+      houseNumber: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
       city: new FormControl(''),
       zipCode: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(5),

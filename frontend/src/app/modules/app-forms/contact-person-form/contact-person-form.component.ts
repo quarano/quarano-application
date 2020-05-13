@@ -52,7 +52,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         mobilePhone: new FormControl(this.contactPerson.mobilePhone,
           [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
         street: new FormControl(this.contactPerson.street, [Validators.pattern(VALIDATION_PATTERNS.street)]),
-        houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.maxLength(6)]),
+        houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
         zipCode: new FormControl(this.contactPerson.zipCode,
           [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.zip)]),
         city: new FormControl(this.contactPerson.city),
