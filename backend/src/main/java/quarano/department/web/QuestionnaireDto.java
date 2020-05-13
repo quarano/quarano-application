@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.validation.Errors;
 
@@ -22,7 +22,7 @@ import org.springframework.validation.Errors;
 public class QuestionnaireDto {
 
 	private @NotNull @Setter Boolean hasSymptoms;
-	private @Past LocalDate dayOfFirstSymptoms;
+	private @PastOrPresent LocalDate dayOfFirstSymptoms;
 	private List<UUID> symptoms;
 
 	private @Textual String familyDoctor;

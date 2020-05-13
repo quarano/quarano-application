@@ -99,6 +99,19 @@ class EnrollmentWebIntegrationTests {
 		assertThat(symptoms).containsExactlyElementsOf(
 				List.of("e5cea3b0-c8f4-4e03-a24e-89213f3f6637", "571a03cd-173c-4499-995c-d6a003e8c032"));
 	}
+	
+	
+	@Test // CORE-115
+	@WithQuaranoUser("DemoAccount")
+	public void completeQuestionaireWithSymptomsOfToday() throws Exception {
+
+		var source = createValidDetailsInput();
+		submitDetailsSuccessfully(source);
+
+		var questionnaireSource = createValidQuestionnaireInput();
+		questionnaireSource.setDayOfFirstSymptoms(LocalDate.now());
+		submitQuestionnaireSuccessfully(questionnaireSource);
+	}
 
 	@Test // CORE-115
 	@WithQuaranoUser("DemoAccount")
@@ -179,6 +192,8 @@ class EnrollmentWebIntegrationTests {
 
 		return questionnaire;
 	}
+	
+
 
 	private String performRequestToGetEnrollementState() throws UnsupportedEncodingException, Exception {
 		String result = mvc.perform(get("/api/enrollment")) //
