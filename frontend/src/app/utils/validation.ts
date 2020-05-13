@@ -1,18 +1,21 @@
+const characterSet = 'a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒß';
+
+
 export const VALIDATION_PATTERNS = {
   integerUnsigned: '^[0-9]+$',
 
-  alphanumeric: '[\\p{L}\\s\\d]*',
-  alphabetic: '[\\p{L}\\s]*',
-  textual: '[\\p{L}\\s\\d\\.\\,\\?\\!\\(\\)\\-\\n\\r]*',
+  alphanumeric: `[${characterSet}\\s\\d]*`,
+  alphabetic: `[${characterSet}\\s]*`,
+  textual: `[${characterSet}\\s\\d\\.\\,\\?\\!\\(\\)\\-\\n\\r]*`,
 
   uuid: '\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b',
 
   zip: '[0-9]{5}',
-  street: '[\\p{L}\\s\\.\\-[0-9]]*',
-  houseNumber: '[\\p{L}\\s\\.\\-[0-9]*\\/]{0,15}',
-  
-  name: '[\\p{L}\\s\\-]*',
-  username: '[\\p{L}0-9\\-\\_]*',
+  street: `[${characterSet}0-9\\s\\.\\-]*`,
+  houseNumber: `[${characterSet}0-9\\s\\.\\-*\\/]{0,15}`,
+
+  name: `([${characterSet}\\s\\-]*)`,
+  username: `([${characterSet}0-9\\-\\_]*)`,
 
   phoneNumber: '^[\\+\\(\\)\\s\\-0-9]*?$',
   // tslint:disable-next-line:max-line-length quotemark

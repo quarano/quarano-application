@@ -16,7 +16,7 @@ describe('registration form', () => {
     it('completed form', () => {
       cy.get('[data-cy="input-client-code"] input[matInput]').type('qwertzu12345');
       cy.get('[data-cy="input-email"] input[matInput]').type('test@mustermann.de');
-      cy.get('[data-cy="input-username"] input[matInput]').type('my_awesome_username');
+      cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
       cy.get('[data-cy="input-password"] input[matInput]').type('thisIsMyPassword1!');
       cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword1!');
       cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('24.05.1965');
@@ -88,7 +88,7 @@ describe('registration form', () => {
 
       describe('username', () => {
         it('valid value', () => {
-          cy.get('[data-cy="input-username"] input[matInput]').type('my_awesome_username').blur().then($input => {
+          cy.get('[data-cy="input-username"] input[matInput]').type('my_username').blur().then($input => {
             $input.hasClass('ng-valid');
             cy.get('[data-cy="input-username"] mat-error')
               .should('not.exist');
