@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 
@@ -35,6 +36,8 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor(staticName = "of")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Slot implements Comparable<Slot> {
+
+	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
 
 	private final @Column(name = "date_of_slot") LocalDate date;
 	private final @Enumerated(EnumType.STRING) TimeOfDay timeOfDay;
@@ -86,7 +89,7 @@ public class Slot implements Comparable<Slot> {
 	 * @return
 	 */
 	public static Slot now() {
-		return Slot.of(LocalDateTime.now());
+		return Slot.of(LocalDateTime.now(ZONE_BERLIN));
 	}
 
 	/**
@@ -147,7 +150,7 @@ public class Slot implements Comparable<Slot> {
 
 		Assert.notNull(amount, "Temporal amount must not be null!");
 
-		return LocalDateTime.now().minus(amount).isAfter(getOfficialEnd());
+		return LocalDateTime.now(ZONE_BERLIN).minus(amount).isAfter(getOfficialEnd());
 	}
 
 	public boolean contains(LocalDateTime date) {
@@ -245,7 +248,7 @@ public class Slot implements Comparable<Slot> {
 		}
 
 		public static TimeOfDay now() {
-			return of(LocalTime.now());
+			return of(LocalTime.now(ZONE_BERLIN));
 		}
 
 		static TimeOfDay of(LocalDateTime reference) {
