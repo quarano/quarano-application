@@ -11,14 +11,14 @@
       </button>
       <span>{{ column.name }}</span>
       <mat-select multiple matTooltip="Filtern" (selectionChange)="onAlertFilterChanged($event.value)">
-        <mat-option *ngFor="let alert of getAvailableAlerts()" [value]="alert">
-          <app-action-alert [alert]="alert"></app-action-alert>
+        <mat-option *ngFor="let alertConfig of alertConfigs" [value]="alertConfig.alert">
+          <app-action-alert [alert]="alertConfig"></app-action-alert>
         </mat-option>
       </mat-select>
     </ng-template>
     <ng-template let-value="value" ngx-datatable-cell-template>
       <div class="action-alert-container">
-        <app-action-alert *ngFor="let alert of value" [alert]="alert"></app-action-alert>
+        <app-action-alert *ngFor="let alert of value" [alert]="alertConfigurationFor(alert)"></app-action-alert>
       </div>
     </ng-template>
   </ngx-datatable-column>

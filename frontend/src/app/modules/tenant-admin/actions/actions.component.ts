@@ -1,11 +1,12 @@
-import { ClientService } from './../../../services/client.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SubSink } from 'subsink';
-import { ActionListItemDto } from '@models/action';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ClientType } from '@models/report-case';
-import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/core';
+import {ClientService} from './../../../services/client.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SubSink} from 'subsink';
+import {ActionListItemDto, Alert} from '@models/action';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ClientType} from '@models/report-case';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/core';
+import {AlertConfiguration, alertConfigurations} from '../action-alert/AlertConfiguration';
 
 export class ActionRowViewModel {
   lastName: string;
@@ -32,6 +33,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
   loading = false;
   rows: ActionRowViewModel[] = [];
   filteredRows: ActionRowViewModel[] = [];
+  alertConfigs: AlertConfiguration[] = [];
   @ViewChild(MatSelect) filterSelect: MatSelect;
 
   constructor(
@@ -41,12 +43,28 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
+
     this.subs.add(this.route.data.subscribe(
       data => {
         this.actions = data.actions;
         this.rows = this.actions.map(action => this.getRowData(action));
         this.filteredRows = [...this.rows];
         this.loading = false;
+
+        this.alertConfigs = this.actions.reduce((acc, next) => {
+          next.alerts.forEach(alert => {
+            if (!acc.includes(alert)) {
+              acc.push(alert);
+            }
+          });
+
+          return acc;
+        }, [])
+          .map(alert => {
+            return alertConfigurations().find(c => c.alert === alert);
+          })
+          .sort((a, b) => a.order - b.order)
+          ;
       },
       () => this.loading = false));
   }
@@ -74,18 +92,6 @@ export class ActionsComponent implements OnInit, OnDestroy {
     };
   }
 
-  getAvailableAlerts(): string[] {
-    return this.actions.reduce((acc, next) => {
-      next.alerts.forEach(alert => {
-        if (!acc.includes(alert)) {
-          acc.push(alert);
-        }
-      });
-
-      return acc;
-    }, []);
-  }
-
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
@@ -111,5 +117,9 @@ export class ActionsComponent implements OnInit, OnDestroy {
   resetFilter() {
     this.filterSelect.value = null;
     this.onAlertFilterChanged([]);
+  }
+
+  alertConfigurationFor(alert: Alert) {
+    return alertConfigurations().find(c => c.alert === alert);
   }
 }
