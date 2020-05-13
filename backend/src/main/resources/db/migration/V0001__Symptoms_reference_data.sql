@@ -52,6 +52,7 @@ INSERT INTO public.symptoms VALUES ('78f3bc3e-1521-40cb-bfdb-c10513a784c2', fals
 INSERT INTO public.symptoms VALUES ('50a9a64f-0e11-4259-a903-794bc66ff210', false, 'Erektile Dysfunktion');
 INSERT INTO public.symptoms VALUES ('a4d4957e-64cf-4b1d-854c-97b28475c6fa', false, 'Exophthalmus');
 INSERT INTO public.symptoms VALUES ('609e8ecc-4aae-46b8-a130-3608f1ea1982', false, 'Fersenschmerzen');
+INSERT INTO public.symptoms VALUES ('db723876-e051-4ccf-9c52-794190694666', true, 'Fieber');
 INSERT INTO public.symptoms VALUES ('27e24977-15c2-492d-abc7-263ec62c7848', false, 'Fingernägel-Kauen');
 INSERT INTO public.symptoms VALUES ('9fe9ba97-5825-4460-9f14-c09451cee5f5', false, 'Fremdkörpergefühl im Auge');
 INSERT INTO public.symptoms VALUES ('cbcfbb5a-9a71-4d71-b3a2-817618627d2b', false, 'Galaktorrhoe');
