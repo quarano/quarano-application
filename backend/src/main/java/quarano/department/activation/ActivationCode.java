@@ -23,6 +23,12 @@ import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 
+/**
+ * @author Patrick Otto
+ * @author Oliver Drotbohm
+ * @author Michael J. Simons
+ * @author Felix Schultze
+ */
 @Entity
 @Table(name = "activation_codes")
 @EqualsAndHashCode(callSuper = true, of = {})
@@ -31,8 +37,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 
 	private @Getter LocalDateTime expirationTime;
 	private @Getter TrackedPersonIdentifier trackedPersonId;
-	@Enumerated(EnumType.STRING)
-	private @Getter ActivationCodeStatus status;
+	private @Getter @Enumerated(EnumType.STRING) ActivationCodeStatus status;
 	private @Getter int activationTries;
 	private @Getter DepartmentIdentifier departmentId;
 

@@ -24,6 +24,7 @@ import org.jddd.core.types.Identifier;
 /**
  * @author Oliver Drotbohm
  * @author Michael J. Simons
+ * @author Felis Schultze
  */
 @Entity
 @Table(name = "action_items")
@@ -32,9 +33,7 @@ import org.jddd.core.types.Identifier;
 public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItemIdentifier> {
 
 	private TrackedPersonIdentifier personIdentifier;
-	@Column(name = "item_type") //
-	@Enumerated(value = EnumType.STRING) //
-	private ItemType type;
+	private @Column(name = "item_type") @Enumerated(value = EnumType.STRING) ItemType type;
 	private Description description;
 	private boolean resolved;
 

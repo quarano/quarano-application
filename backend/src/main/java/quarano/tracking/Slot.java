@@ -27,6 +27,7 @@ import org.springframework.util.Assert;
  *
  * @author Oliver Drotbohm
  * @author Michael J. Simons
+ * @author Felix Schultze
  */
 @Embeddable
 @Getter
@@ -36,7 +37,7 @@ import org.springframework.util.Assert;
 public class Slot implements Comparable<Slot> {
 
 	private final @Column(name = "date_of_slot") LocalDate date;
-	@Enumerated(EnumType.STRING) private final TimeOfDay timeOfDay;
+	private final @Enumerated(EnumType.STRING) TimeOfDay timeOfDay;
 
 	/**
 	 * Creates a new {@link Slot} for the morning of the given date.
@@ -170,8 +171,7 @@ public class Slot implements Comparable<Slot> {
 		if (dateComparison != 0) {
 			return dateComparison;
 		}
-		return this.timeOfDay == slot.timeOfDay ? 0
-				: this.timeOfDay == TimeOfDay.MORNING ? -1 : 1;
+		return this.timeOfDay == slot.timeOfDay ? 0 : this.timeOfDay == TimeOfDay.MORNING ? -1 : 1;
 	}
 
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)

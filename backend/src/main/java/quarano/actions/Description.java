@@ -18,13 +18,14 @@ import org.springframework.context.MessageSourceResolvable;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
 @Embeddable
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Description implements MessageSourceResolvable {
-	@Enumerated(EnumType.STRING)
-	private final @Getter DescriptionCode code;
+
+	private final @Enumerated(EnumType.STRING) @Getter DescriptionCode code;
 	private final String arguments;
 
 	public static Description of(DescriptionCode code, Object... arguments) {

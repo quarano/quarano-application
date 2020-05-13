@@ -32,6 +32,7 @@ import org.springframework.util.Assert;
 /**
  * @author Oliver Drotbohm
  * @author Michael J. Simons
+ * @author Felix Schultze
  */
 @Entity
 @Table(name = "tracked_cases")

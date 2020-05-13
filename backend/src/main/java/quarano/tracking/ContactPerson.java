@@ -30,6 +30,8 @@ import org.jddd.event.types.DomainEvent;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
+ * @author Felix Schultze
  */
 @Entity
 @Table(name = "contact_people")
@@ -45,8 +47,8 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Setter(AccessLevel.NONE) PhoneNumber mobilePhoneNumber;
 	private @Setter(AccessLevel.NONE) PhoneNumber phoneNumber;
 	private Address address;
-	@Enumerated(EnumType.STRING)
-	private TypeOfContract typeOfContract;
+
+	private @Enumerated(EnumType.STRING) TypeOfContract typeOfContract;
 	private String remark;
 	private @Setter(AccessLevel.NONE) String identificationHint;
 
