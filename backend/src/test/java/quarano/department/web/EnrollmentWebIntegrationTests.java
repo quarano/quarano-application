@@ -19,6 +19,7 @@ import quarano.tracking.web.TrackedPersonDto;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -57,13 +58,16 @@ class EnrollmentWebIntegrationTests {
 		assertThat(JsonPath.parse(result).read("$.completedPersonalData", boolean.class)).isTrue();
 	}
 
-	@Test
+	@Test // CORE-115
 	@WithQuaranoUser("DemoAccount")
 	public void completeQuestionaireSubmissionMarksStepComplete() throws Exception {
 
 		String result = performRequestToGetEnrollementState();
-		assertThat(JsonPath.parse(result).read("$.completedPersonalData", boolean.class)).isFalse();
-		assertThat(JsonPath.parse(result).read("$.completedQuestionnaire", boolean.class)).isFalse();
+
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isFalse();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
 
 		var source = createValidDetailsInput();
 		submitDetailsSuccessfully(source);
@@ -73,26 +77,30 @@ class EnrollmentWebIntegrationTests {
 
 		// The first enrollment step is completed
 		result = performRequestToGetEnrollementState();
+		document = JsonPath.parse(result);
 
-		assertThat(JsonPath.parse(result).read("$.completedPersonalData", boolean.class)).isTrue();
-		assertThat(JsonPath.parse(result).read("$.completedQuestionnaire", boolean.class)).isTrue();
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isTrue();
 
 		// check if questionnaire data has been stored
 		result = performRequestToGetQuestionnaire();
+		document = JsonPath.parse(result);
 
-		assertThat(JsonPath.parse(result).read("$.belongToMedicalStaff", Boolean.class)).isTrue();
-		assertThat(JsonPath.parse(result).read("$.belongToMedicalStaffDescription", String.class)
+		assertThat(document.read("$.belongToMedicalStaff", Boolean.class)).isTrue();
+		assertThat(document.read("$.belongToMedicalStaffDescription", String.class)
 				.equals(questionnaireSource.getBelongToMedicalStaffDescription()));
-		assertThat(JsonPath.parse(result).read("$.hasSymptoms", Boolean.class)).isTrue();
-		assertThat(JsonPath.parse(result).read("$.dayOfFirstSymptoms", String.class)
+		assertThat(document.read("$.hasSymptoms", Boolean.class)).isTrue();
+		assertThat(document.read("$.dayOfFirstSymptoms", String.class)
 				.equals(questionnaireSource.getDayOfFirstSymptoms().toString()));
-		assertThat(JsonPath.parse(result).read("$.hasPreExistingConditions", Boolean.class)).isFalse();
-		var symptoms = JsonPath.parse(result).read("$.symptoms", JSONArray.class);
+		assertThat(document.read("$.hasPreExistingConditions", Boolean.class)).isFalse();
+
+		var symptoms = document.read("$.symptoms", JSONArray.class);
+
 		assertThat(symptoms).containsExactlyElementsOf(
-				Arrays.asList("e5cea3b0-c8f4-4e03-a24e-89213f3f6637", "571a03cd-173c-4499-995c-d6a003e8c032"));
+				List.of("e5cea3b0-c8f4-4e03-a24e-89213f3f6637", "571a03cd-173c-4499-995c-d6a003e8c032"));
 	}
 
-	@Test
+	@Test // CORE-115
 	@WithQuaranoUser("DemoAccount")
 	public void incompleteQuestionnaireIsRefused() throws Exception {
 
@@ -115,21 +123,24 @@ class EnrollmentWebIntegrationTests {
 
 		// The first enrollment step is completed
 		result = performRequestToGetEnrollementState();
+		document = JsonPath.parse(result);
 
-		assertThat(JsonPath.parse(result).read("$.completedPersonalData", boolean.class)).isTrue();
-		assertThat(JsonPath.parse(result).read("$.completedQuestionnaire", boolean.class)).isFalse();
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
 
 		// check if questionnaire data is still empty, because it should not have been saved
 		result = performRequestToGetQuestionnaire();
 
 		expectResponseCarriesEmptyQuestionnaire(result);
 
-		assertThat(JsonPath.parse(result).read("$.belongToMedicalStaff", Boolean.class)).isNull();
-		assertThat(JsonPath.parse(result).read("$.hasPreExistingConditions", Boolean.class)).isNull();
-		assertThat(JsonPath.parse(result).read("$.hasSymptoms", Boolean.class)).isNull();
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.belongToMedicalStaff", Boolean.class)).isNull();
+		assertThat(document.read("$.hasPreExistingConditions", Boolean.class)).isNull();
+		assertThat(document.read("$.hasSymptoms", Boolean.class)).isNull();
 
 	}
-	
+
 	@Test
 	@WithQuaranoUser("DemoAccount")
 	public void getInitialEmptyQuestionnaireSuccessfully() throws Exception {

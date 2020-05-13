@@ -17,11 +17,13 @@ package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
 
+import quarano.QuaranoUnitTest;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.reference.Symptom;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,10 +32,10 @@ import org.mockito.Mock;
  * @author Oliver Drotbohm
  * @author Patrick Otto
  */
+@QuaranoUnitTest
 class QuestionnaireUnitTests {
 
-	@Mock
-	Symptom symptom;
+	@Mock Symptom symptom;
 
 	@Test
 	void doesNotCarryDateAndSymptomListOfFirstSymptomIfWithoutSymptom() {
@@ -49,18 +51,17 @@ class QuestionnaireUnitTests {
 	void exposesHasSymptomsIfDayOfFirstSymptomsIsSet() {
 
 		var report = minimalQuestionnaireWithSymptoms();
-		
+
 		assertThat(report.hasSymptoms()).isTrue();
 		assertThat(report.getDayOfFirstSymptoms()).isNotNull();
 		assertThat(report.getSymptoms()).hasSize(2);
 	}
-	
-	
+
 	@Test
 	void exposesIsMedicalStaffIfCreatedWithDescription() {
 
-		var questionnaire = new Questionnaire(SymptomInformation.withoutSymptoms(), null,  "Medical Staff");
-		
+		var questionnaire = new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Medical Staff");
+
 		assertThat(questionnaire.isMedicalStaff()).isTrue();
 		assertThat(questionnaire.belongsToMedicalStaff()).isTrue();
 		assertThat(questionnaire.hasSymptoms()).isFalse();
@@ -68,15 +69,15 @@ class QuestionnaireUnitTests {
 		assertThat(questionnaire.getDayOfFirstSymptoms()).isNull();
 		assertThat(questionnaire.getSymptoms()).isNull();
 	}
-	
+
 	@Test
 	void exposesHasPreExistingConditionsIfCreatedWithDescription() {
 
-		var questionnaire = new Questionnaire(SymptomInformation.withoutSymptoms(), "my Preexisting condition",  null);
-		
+		var questionnaire = new Questionnaire(SymptomInformation.withoutSymptoms(), "my Preexisting condition", null);
+
 		assertThat(questionnaire.hasPreExistingConditions()).isTrue();
 		assertThat(questionnaire.getHasPreExistingConditionsDescription()).isEqualTo("my Preexisting condition");
-		
+
 		assertThat(questionnaire.isMedicalStaff()).isFalse();
 		assertThat(questionnaire.getBelongToMedicalStaffDescription()).isNull();
 		assertThat(questionnaire.belongsToMedicalStaff()).isFalse();
@@ -84,22 +85,27 @@ class QuestionnaireUnitTests {
 		assertThat(questionnaire.getDayOfFirstSymptoms()).isNull();
 		assertThat(questionnaire.getSymptoms()).isNull();
 	}
-	
+
 	@Test
+	@SuppressWarnings("null")
 	void exceptionIsRaisedIfCreatedWithoutCompleteSymptomsData() {
 
-		assertThatCode(() -> new Questionnaire(SymptomInformation.withSymptomsSince(null, Arrays.asList(symptom, symptom)), null,  null)).isInstanceOf(IllegalArgumentException.class);
-		assertThatCode(() -> new Questionnaire(SymptomInformation.withSymptomsSince(LocalDate.now(), null), null,  null)).isInstanceOf(IllegalArgumentException.class);
+		assertThatIllegalArgumentException().isThrownBy(
+				() -> new Questionnaire(SymptomInformation.withSymptomsSince(null, List.of(symptom, symptom)), null, null));
 
+		assertThatIllegalArgumentException()
+				.isThrownBy(() -> new Questionnaire(SymptomInformation.withSymptomsSince(LocalDate.now(), null), null, null));
 	}
 
-	private Questionnaire allMinimalInfoFalse() {
-		return new MinimalQuestionnaire();
-	}
-	
 	private Questionnaire minimalQuestionnaireWithSymptoms() {
+
 		var now = LocalDate.now();
 		var listOfSymptom = Arrays.asList(symptom, symptom);
+
 		return new Questionnaire(SymptomInformation.withSymptomsSince(now, listOfSymptom), null, null);
+	}
+
+	private static Questionnaire allMinimalInfoFalse() {
+		return new MinimalQuestionnaire();
 	}
 }

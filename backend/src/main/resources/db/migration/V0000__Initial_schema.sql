@@ -88,15 +88,14 @@ CREATE TABLE questionnaires (
 	questionnaire_id uuid NOT NULL,
 	has_symptoms bool NULL,
 	day_of_first_symptoms date NULL,
-    	family_doctor varchar(255) NULL,
-    	guessed_origin_of_infection varchar(255) NULL,
-    	has_pre_existing_conditions bool NULL,
-    	has_pre_existing_conditions_description varchar(255) NULL,
-    	belong_to_medical_staff bool NULL,
-    	belong_to_medical_staff_description varchar(255) NULL,
-    	has_contact_to_vulnerable_people bool NULL,
-    	has_contact_to_vulnerable_people_description varchar(255) NULL,
-
+	family_doctor varchar(255) NULL,
+	guessed_origin_of_infection varchar(255) NULL,
+	has_pre_existing_conditions bool NULL,
+	has_pre_existing_conditions_description varchar(255) NULL,
+	belong_to_medical_staff bool NULL,
+	belong_to_medical_staff_description varchar(255) NULL,
+	has_contact_to_vulnerable_people bool NULL,
+	has_contact_to_vulnerable_people_description varchar(255) NULL,
 	CONSTRAINT questionnaires_pkey PRIMARY KEY (questionnaire_id)
 );
 

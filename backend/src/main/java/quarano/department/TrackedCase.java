@@ -54,7 +54,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Setter(AccessLevel.NONE) //
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
 	@JoinColumn(name = "questionnaire_id") //
-	private Questionnaire questionnaire;
+	private @Getter Questionnaire questionnaire;
 
 	@Setter(AccessLevel.NONE) //
 	private Enrollment enrollment = new Enrollment();
@@ -155,10 +155,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return !isConcluded() && (trackedPerson.getPhoneNumber() == null && trackedPerson.getMobilePhoneNumber() == null
 				|| trackedPerson.getEmailAddress() == null //
 				|| trackedPerson.getDateOfBirth() == null);
-	}
-
-	public Questionnaire getQuestionnaire() {
-		return questionnaire == null ? null : questionnaire;
 	}
 
 	public TrackedCase submitEnrollmentDetails() {

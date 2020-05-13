@@ -3,6 +3,7 @@ package quarano.department.web;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Department;
@@ -18,7 +19,6 @@ import quarano.department.Comment;
 import quarano.department.Questionnaire;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
-import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
@@ -62,6 +62,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	private final MapperWrapper mapper;
 	private final SmartValidator validator;
 	private final MessageSourceAccessor messages;
+	private final @NonNull SymptomRepository symptoms;
 
 	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
 
@@ -112,34 +113,34 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
-	
-	private Questionnaire createReportFrom(QuestionnaireDto source, SymptomRepository symptomRepo) {
-		
+	private Questionnaire createQuestionnaireFrom(QuestionnaireDto source) {
+
 		SymptomInformation symptomsInfo;
-		
-		if(source.getHasSymptoms()) {
-			
-			List<Symptom> symptoms = source.getSymptoms().stream().map(it -> symptomRepo.findById(it).get()).collect(Collectors.toList());
-			symptomsInfo  = SymptomInformation.withSymptomsSince(source.getDayOfFirstSymptoms(), symptoms);
-		
-		}
-		else {
-			
+
+		if (source.getHasSymptoms()) {
+
+			var result = source.getSymptoms().stream() //
+					.map(it -> symptoms.findById(it).get()) //
+					.collect(Collectors.toList());
+
+			symptomsInfo = SymptomInformation.withSymptomsSince(source.getDayOfFirstSymptoms(), result);
+
+		} else {
 			symptomsInfo = SymptomInformation.withoutSymptoms();
-					
 		}
-		
-		return new Questionnaire(symptomsInfo, source.getHasPreExistingConditionsDescription(), source.getBelongToMedicalStaffDescription() );
+
+		return new Questionnaire(symptomsInfo, source.getHasPreExistingConditionsDescription(),
+				source.getBelongToMedicalStaffDescription());
 	}
 
-	Questionnaire from(QuestionnaireDto source, SymptomRepository symptoms) {
-		
-		var report = createReportFrom(source, symptoms);
+	Questionnaire from(QuestionnaireDto source) {
+
+		var report = createQuestionnaireFrom(source);
 		return source.applyTo(mapper.map(source, report), symptoms);
-		
+
 	}
 
-	Questionnaire from(QuestionnaireDto source, Questionnaire existing, SymptomRepository symptoms) {
+	Questionnaire from(QuestionnaireDto source, Questionnaire existing) {
 		return source.applyTo(mapper.map(source, existing), symptoms);
 	}
 

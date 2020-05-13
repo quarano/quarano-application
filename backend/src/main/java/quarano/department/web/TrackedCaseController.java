@@ -21,7 +21,6 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
-import quarano.reference.SymptomRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -62,12 +61,10 @@ class TrackedCaseController {
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull DepartmentRepository departments;
-	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull SmartValidator validator;
-
 
 	private final EmbeddedWrappers wrappers = new EmbeddedWrappers(false);
 
@@ -242,7 +239,7 @@ class TrackedCaseController {
 
 		var trackedCase = cases.findByTrackedPerson(person) //
 				.orElseThrow(() -> new IllegalStateException("No case found for tracked person " + person.getId() + "!"));
-		
+
 		if (!trackedCase.getEnrollment().isCompletedPersonalData()) {
 
 			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED) //
@@ -260,11 +257,10 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		Questionnaire report =  (trackedCase.getQuestionnaire() == null) 
-				? representations.from(dto, symptoms) 
-				: representations.from(dto, trackedCase.getQuestionnaire(), symptoms);
-		
-		
+		Questionnaire report = trackedCase.getQuestionnaire() == null //
+				? representations.from(dto)
+				: representations.from(dto, trackedCase.getQuestionnaire());
+
 		trackedCase.submitQuestionnaire(report);
 
 		cases.save(trackedCase);
@@ -303,6 +299,7 @@ class TrackedCaseController {
 				.build();
 	}
 
+	@SuppressWarnings("null")
 	private static String getEnrollmentLink() {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}

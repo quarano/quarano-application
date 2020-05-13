@@ -1,18 +1,3 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.department;
 
 import lombok.AccessLevel;
@@ -20,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import quarano.core.QuaranoEntity;
 import quarano.department.Questionnaire.QuestionnaireIdentifier;
 import quarano.reference.Symptom;
@@ -37,9 +20,10 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.jddd.core.types.Identifier;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -51,13 +35,13 @@ import org.jddd.core.types.Identifier;
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 @Setter(AccessLevel.PACKAGE)
-@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdentifier> {
 
 	private @Setter(value = AccessLevel.NONE) boolean hasSymptoms;
 	private LocalDate dayOfFirstSymptoms;
 	private @ManyToMany List<Symptom> symptoms;
-	
+
 	private String familyDoctor;
 	private String guessedOriginOfInfection;
 
@@ -66,33 +50,27 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 
 	private @Setter(value = AccessLevel.NONE) boolean belongToMedicalStaff;
 	private String belongToMedicalStaffDescription;
-	
+
 	private @Setter(value = AccessLevel.NONE) Boolean hasContactToVulnerablePeople;
 	private String hasContactToVulnerablePeopleDescription;
 
-	private Questionnaire() {
-		 // noArgs Constructor
-	}
+	public Questionnaire(SymptomInformation symptomInformation, //
+			@Nullable String hasPreExistingConditionsDescription, //
+			@Nullable String belongToMedicalStaffDescription) {
 
-
-	public Questionnaire(SymptomInformation symptomInformation, String hasPreExistingConditionsDescription, String belongToMedicalStaffDescription) {
-		
+		this.id = QuestionnaireIdentifier.of(UUID.randomUUID());
 		this.dayOfFirstSymptoms = symptomInformation.dayOfFirstSymptoms;
 		this.hasSymptoms = symptomInformation.hasSymptoms;
 		this.symptoms = symptomInformation.symptoms;
-		
-		if(null != hasPreExistingConditionsDescription) {
+
+		if (null != hasPreExistingConditionsDescription) {
 			this.withPreExistingConditions(hasPreExistingConditionsDescription);
 		}
-		
-		if(null != belongToMedicalStaffDescription) {
+
+		if (null != belongToMedicalStaffDescription) {
 			this.withBelongToMedicalStaff(belongToMedicalStaffDescription);
-		}		
-		
-		this.id = QuestionnaireIdentifier.of(UUID.randomUUID());
+		}
 	}
-	
-	
 
 	public Questionnaire withoutSymptoms() {
 
@@ -159,50 +137,42 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 
 		return this;
 	}
-	
+
 	public boolean isMedicalStaff() {
 		return belongToMedicalStaff;
 	}
-	
+
 	public boolean hasSymptoms() {
 		return hasSymptoms;
 	}
-	
+
 	public boolean hasPreExistingConditions() {
 		return hasPreExistingConditions;
 	}
-	
+
 	public boolean belongsToMedicalStaff() {
 		return belongToMedicalStaff;
 	}
-	
-	@AllArgsConstructor (access = AccessLevel.PRIVATE)
-	public static class SymptomInformation{
-		
+
+	@AllArgsConstructor(access = AccessLevel.PRIVATE)
+	public static class SymptomInformation {
+
 		private boolean hasSymptoms;
-		private LocalDate dayOfFirstSymptoms;
-		private List<Symptom> symptoms;
-		
-		
-		public static SymptomInformation withSymptomsSince(LocalDate daysOfFirstSymptoms, List<Symptom> symptoms){
-			
-			if(symptoms == null) {
-				throw new IllegalArgumentException("Symptoms must be specified");
-			}
-			
-			if(daysOfFirstSymptoms == null) {
-				throw new IllegalArgumentException("Symptoms must be specified");
-			}
-			
+		private @Nullable LocalDate dayOfFirstSymptoms;
+		private @Nullable List<Symptom> symptoms;
+
+		public static SymptomInformation withSymptomsSince(LocalDate daysOfFirstSymptoms, List<Symptom> symptoms) {
+
+			Assert.notNull(symptoms, "Symptoms must not be null!");
+			Assert.notNull(daysOfFirstSymptoms, "Day of first symptoms must not be null!");
+
 			return new SymptomInformation(true, daysOfFirstSymptoms, symptoms);
 		}
-		
-		public static SymptomInformation withoutSymptoms(){
+
+		public static SymptomInformation withoutSymptoms() {
 			return new SymptomInformation(false, null, null);
 		}
-		
 	}
-
 
 	@Embeddable
 	@EqualsAndHashCode
