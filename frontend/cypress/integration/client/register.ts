@@ -44,7 +44,7 @@ describe('registration form', () => {
               $input.hasClass('mat-form-field-invalid');
               cy.get('[data-cy="input-email"] mat-error')
                 .should('exist')
-                .and('contain.text', 'Sie müssen eine richtige E-Mailadresse angeben.');
+                .and('contain.text', 'Sie müssen eine richtige E-Mail-Adresse angeben.');
             });
           });
 
@@ -53,7 +53,7 @@ describe('registration form', () => {
               $input.hasClass('mat-form-field-invalid');
               cy.get('[data-cy="input-email"] mat-error')
                 .should('exist')
-                .and('contain.text', 'Sie müssen eine richtige E-Mailadresse angeben.');
+                .and('contain.text', 'Sie müssen eine richtige E-Mail-Adresse angeben.');
             });
           });
         });
