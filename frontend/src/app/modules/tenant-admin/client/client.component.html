@@ -9,7 +9,7 @@
         }}</span>
       </span>
       <span class="type"
-        >{{ caseDetail.caseTypeLabel | async }}
+        >{{ caseDetail.caseTypeLabel }}
         <button
           (click)="onChangeTypeKeyPressed()"
           *ngIf="(type$ | async) === ClientType.Contact"
