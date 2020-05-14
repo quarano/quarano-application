@@ -1,13 +1,12 @@
-import { EncounterEntry } from '@models/encounter';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '@environment/environment';
-import { Observable, forkJoin } from 'rxjs';
-import { QuestionnaireDto } from '@models/first-query';
-import { ClientDto } from '@models/client';
-import { share, map, switchMap } from 'rxjs/operators';
-import { EnrollmentStatusDto } from '@models/enrollment-status';
-import { EncounterDto, EncounterCreateDto } from '@models/encounter';
+import {EncounterCreateDto, EncounterDto, EncounterEntry} from '@models/encounter';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {environment} from '@environment/environment';
+import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
+import {QuestionnaireDto} from '@models/first-query';
+import {ClientDto} from '@models/client';
+import {map, share, switchMap, tap} from 'rxjs/operators';
+import {EnrollmentStatusDto} from '@models/enrollment-status';
 import '@utils/date-extensions';
 
 @Injectable({
@@ -15,30 +14,38 @@ import '@utils/date-extensions';
 })
 export class EnrollmentService {
   private baseUrl = `${environment.api.baseUrl}/api`;
+  private enrollmentSubject$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
   constructor(
-    private httpClient: HttpClient) { }
+    private httpClient: HttpClient) {
+  }
 
   getQuestionnaire(): Observable<QuestionnaireDto> {
     return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`).pipe(share());
   }
 
-  updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<EnrollmentStatusDto> {
+  updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<any> {
     return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire)
-      .pipe(switchMap(_ => this.getEnrollmentStatus()));
+      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
   }
 
   getPersonalDetails(): Observable<ClientDto> {
     return this.httpClient.get<ClientDto>(`${this.baseUrl}/enrollment/details`).pipe(share());
   }
 
-  updatePersonalDetails(client: ClientDto): Observable<EnrollmentStatusDto> {
+  updatePersonalDetails(client: ClientDto): Observable<any> {
     return this.httpClient.put(`${this.baseUrl}/enrollment/details`, client)
-      .pipe(switchMap(_ => this.getEnrollmentStatus()));
+      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
+  }
+
+  loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
+    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share()).pipe(
+      tap((data) => this.enrollmentSubject$.next(data))
+    );
   }
 
   getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share());
+    return this.enrollmentSubject$;
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
@@ -47,7 +54,7 @@ export class EnrollmentService {
   }
 
   private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
-    return { encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0] };
+    return {encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0]};
   }
 
   createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
@@ -60,7 +67,7 @@ export class EnrollmentService {
   createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
     const dateString = date.getDateWithoutTime();
     return forkJoin(
-      contactIds.map(id => this.createEncounter({ contact: id, date: dateString }))
+      contactIds.map(id => this.createEncounter({contact: id, date: dateString}))
     );
   }
 
@@ -68,10 +75,10 @@ export class EnrollmentService {
     return this.httpClient.delete(encounter._links.self.href);
   }
 
-  completeEnrollment(withoutEncounters: boolean): Observable<EnrollmentStatusDto> {
+  completeEnrollment(withoutEncounters: boolean): Observable<any> {
     return this.httpClient
       .post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {})
-      .pipe(switchMap(_ => this.getEnrollmentStatus()));
+      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
   }
 
   reopenEnrollment(): Observable<EnrollmentStatusDto> {

@@ -68,7 +68,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.buildForms();
     }));
 
-    this.subs.add(this.enrollmentService.getEnrollmentStatus()
+    this.subs.add(this.enrollmentService.loadEnrollmentStatus()
       .subscribe(status => {
         this.enrollmentStatus$$.next(status);
         if (status.completedPersonalData) {
