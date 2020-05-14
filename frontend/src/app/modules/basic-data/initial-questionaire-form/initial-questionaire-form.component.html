@@ -1,10 +1,18 @@
 <div class="questionaire-form-container" [formGroup]="formGroup">
-
   <div class="bool-question">
     <mat-label>Haben Sie bei sich bereits Symptome festgestellt?*</mat-label>
-    <mat-radio-group required aria-labelledby="hasSymptomsLabel" class="example-radio-group" formControlName="hasSymptoms">
-      <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+    <mat-radio-group
+      required
+      aria-labelledby="hasSymptomsLabel"
+      class="example-radio-group"
+      formControlName="hasSymptoms"
+    >
+      <mat-radio-button class="example-radio-button" [value]="true"
+        >Ja</mat-radio-button
+      >
+      <mat-radio-button class="example-radio-button" [value]="false"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">
@@ -27,7 +35,8 @@
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">
     <mat-label>Welche Symptome haben Sie bei sich festgestellt?*</mat-label>
-    <app-multiple-autocomplete class="full-width"
+    <app-multiple-autocomplete
+      class="full-width"
       [control]="this.formGroup.controls.symptoms"
       [selectableItems]="symptoms"
       [nameProperties]="['name']"
@@ -37,29 +46,44 @@
   <div class="question">
     <mat-label>Bitte geben Sie Ihren behandelnden Hausarzt an.</mat-label>
     <mat-form-field class="full-width">
-      <input matInput formControlName="familyDoctor"/>
+      <input matInput formControlName="familyDoctor" />
     </mat-form-field>
   </div>
   <div class="question">
-    <mat-label>Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung:</mat-label>
+    <mat-label
+      >Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung:</mat-label
+    >
     <mat-form-field class="full-width">
-      <input matInput formControlName="guessedOriginOfInfection"/>
+      <input matInput formControlName="guessedOriginOfInfection" />
     </mat-form-field>
   </div>
   <div class="bool-question">
-    <mat-label>
-      Haben Sie eine oder mehrere relevante Vorerkrankungen?
-      <mat-icon class="ml-1" style="cursor: pointer;" [matTooltip]="tooltip">info</mat-icon>*
+    <mat-label style="display: flex;">
+      Haben Sie eine oder mehrere relevante Vorerkrankungen?*
+      <mat-icon class="ml-1" style="cursor: pointer;" [matTooltip]="tooltip"
+        >info</mat-icon
+      >
     </mat-label>
     <mat-radio-group required formControlName="hasPreExistingConditions">
-      <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="true"
+        >Ja</mat-radio-button
+      >
+      <mat-radio-button class="example-radio-button" [value]="false"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
-  <div class="question sub-question" *ngIf="formGroup.get('hasPreExistingConditions').value">
+  <div
+    class="question sub-question"
+    *ngIf="formGroup.get('hasPreExistingConditions').value"
+  >
     <mat-label>Welche Vorerkrankungen haben Sie?*</mat-label>
     <mat-form-field class="full-width">
-      <input matInput required formControlName="hasPreExistingConditionsDescription"/>
+      <input
+        matInput
+        required
+        formControlName="hasPreExistingConditionsDescription"
+      />
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -67,14 +91,25 @@
       Arbeiten Sie im medizinischen Umfeld oder in der Pflege?*
     </mat-label>
     <mat-radio-group required formControlName="belongToMedicalStaff">
-      <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="true"
+        >Ja</mat-radio-button
+      >
+      <mat-radio-button class="example-radio-button" [value]="false"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
-  <div class="question sub-question" *ngIf="formGroup.get('belongToMedicalStaff').value">
+  <div
+    class="question sub-question"
+    *ngIf="formGroup.get('belongToMedicalStaff').value"
+  >
     <mat-label>Wo arbeiten Sie?*</mat-label>
     <mat-form-field class="full-width">
-      <input matInput required formControlName="belongToMedicalStaffDescription"/>
+      <input
+        matInput
+        required
+        formControlName="belongToMedicalStaffDescription"
+      />
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -82,14 +117,25 @@
       Haben Sie Kontakt zu Risikopersonen?*
     </mat-label>
     <mat-radio-group required formControlName="hasContactToVulnerablePeople">
-      <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="true"
+        >Ja</mat-radio-button
+      >
+      <mat-radio-button class="example-radio-button" [value]="false"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
-  <div class="question sub-question" *ngIf="formGroup.get('hasContactToVulnerablePeople').value">
+  <div
+    class="question sub-question"
+    *ngIf="formGroup.get('hasContactToVulnerablePeople').value"
+  >
     <mat-label>Wie und zu wem haben Sie Kontakt?*</mat-label>
     <mat-form-field class="full-width">
-      <input matInput required formControlName="hasContactToVulnerablePeopleDescription"/>
+      <input
+        matInput
+        required
+        formControlName="hasContactToVulnerablePeopleDescription"
+      />
     </mat-form-field>
   </div>
 </div>
