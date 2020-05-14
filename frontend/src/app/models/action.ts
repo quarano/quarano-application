@@ -15,6 +15,7 @@ export interface ActionListItemDto {
   quarantineStart: Date;
   alerts: Alert[];
   status: string;
+  caseTypeLabel: string;
   _links: SelfLink;
 }
 

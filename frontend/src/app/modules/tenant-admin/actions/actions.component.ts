@@ -1,12 +1,11 @@
-import {ClientService} from './../../../services/client.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {SubSink} from 'subsink';
-import {ActionListItemDto, Alert} from '@models/action';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ClientType} from '@models/report-case';
-import {MatSelect} from '@angular/material/select';
-import {MatOption} from '@angular/material/core';
-import {AlertConfiguration, alertConfigurations} from '../action-alert/AlertConfiguration';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SubSink } from 'subsink';
+import { ActionListItemDto, Alert } from '@models/action';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ClientType } from '@models/report-case';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { AlertConfiguration, alertConfigurations } from '../action-alert/AlertConfiguration';
 
 export class ActionRowViewModel {
   lastName: string;
@@ -38,8 +37,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private clientService: ClientService) { }
+    private router: Router) { }
 
   ngOnInit() {
     this.loading = true;
@@ -80,7 +78,7 @@ export class ActionsComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      typeName: this.clientService.getTypeName(action.caseType),
+      typeName: action.caseTypeLabel,
       type: action.caseType,
       dateOfBirth: action.dateOfBirth ? action.dateOfBirth.toCustomLocaleDateString() : '-',
       email: action.email,

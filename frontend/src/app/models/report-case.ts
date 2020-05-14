@@ -11,7 +11,8 @@ export interface ReportCaseDto {
   quarantineEnd: Date;
   quarantineStart: Date;
   status: string;
-  caseId;
+  caseId: string;
+  caseTypeLabel: string;
 }
 
 export enum ClientType {

@@ -1,5 +1,3 @@
-import { ClientService } from './../../../services/client.service';
-import { ClientType } from '@models/report-case';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -46,8 +44,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private clientService: ClientService) {
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -77,7 +74,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
-      typeName: this.clientService.getTypeName(c.caseType),
+      typeName: c.caseTypeLabel,
       dateOfBirth: c.dateOfBirth ? c.dateOfBirth.toCustomLocaleDateString() : '-',
       email: c.email,
       phone: c.phone || '-',
