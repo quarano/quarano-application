@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { SnackbarService } from '@services/snackbar.service';
 import { UserService } from '@services/user.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {Router} from '@angular/router';
-import {of} from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,6 +15,7 @@ describe('LoginComponent', () => {
     const userService = jasmine.createSpyObj(['login', 'isHealthDepartmentUser']);
     userService.isLoggedIn$ = of();
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: UserService, useValue: userService },
         { provide: SnackbarService, useValue: jasmine.createSpyObj(['success']) },
