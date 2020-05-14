@@ -103,7 +103,8 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		contactOfSiggi.assignOwner(siggi);
 		contactsOfSiggi.add(contactOfSiggi);
 
-		var contactOfSiggi2 = new ContactPerson("Dorothea", "Drogler", ContactWays.ofEmailAddress("doro@testtest.de"));
+		var contactOfSiggi2 = new ContactPerson("Dorothea", "Drogler", ContactWays.ofEmailAddress("doro@testtest.de")) //
+				.setIsHealthStaff(true);
 		contactOfSiggi2.assignOwner(siggi);
 		contactsOfSiggi.add(contactOfSiggi2);
 

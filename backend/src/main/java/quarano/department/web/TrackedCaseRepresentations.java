@@ -231,6 +231,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	static class TrackedCaseDetails extends TrackedCaseStatusAware<TrackedCaseDetails> {
 
 		private final TrackedCase trackedCase;
+		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages) {
@@ -239,10 +240,15 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
+			this.summary = new TrackedCaseSummary(trackedCase, messages);
 		}
 
 		public String getCaseId() {
 			return trackedCase.getId().toString();
+		}
+
+		public String getCaseTypeLabel() {
+			return summary.getCaseTypeLabel();
 		}
 
 		public List<CommentRepresentation> getComments() {

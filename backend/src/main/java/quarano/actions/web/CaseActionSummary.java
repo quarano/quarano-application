@@ -63,6 +63,10 @@ class CaseActionSummary {
 		return summary.getCaseType();
 	}
 
+	public String getCaseTypeLabel() {
+		return summary.getCaseTypeLabel();
+	}
+
 	public String getPrimaryPhoneNumber() {
 		return summary.getPrimaryPhoneNumber();
 	}
