@@ -128,14 +128,17 @@
           type="password"
           #password_confirm_input
           (blur)="trimValue(password_confirm_input)"
-               [errorStateMatcher]="confirmValidParentMatcher"
+          [errorStateMatcher]="confirmValidParentMatcher"
         />
-      </mat-form-field>
-     <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
+        <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>
-        </mat-form-field>
-      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">
+      </mat-form-field>
+      <mat-form-field
+        class="form__input--full-width"
+        appearance="outline"
+        data-cy="input-dateofbirth"
+      >
         <mat-label>Geburtsdatum</mat-label>
         <input
           matInput

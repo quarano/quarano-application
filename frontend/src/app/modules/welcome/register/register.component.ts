@@ -1,4 +1,4 @@
-import { TrimmedPatternValidator } from './../../../validators/trimmed-pattern.validator';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
 import { DataProtectionComponent } from '../../../components/data-protection/data-protection.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -11,6 +11,7 @@ import { Register } from '@models/register';
 import { SnackbarService } from '@services/snackbar.service';
 import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { MatInput } from '@angular/material/input';
+import { ConfirmValidPasswordMatcher } from '@validators/ConfirmValidPasswordMatcher';
 
 @Component({
   selector: 'app-register',
