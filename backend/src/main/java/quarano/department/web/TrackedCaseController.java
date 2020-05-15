@@ -131,6 +131,15 @@ class TrackedCaseController {
 				.map(representations::toRepresentation));
 	}
 
+	@GetMapping("/api/hd/cases/{identifier}/questionnaire")
+	HttpEntity<?> getQuestionnaire(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
+
+		return ResponseEntity.of(cases.findById(identifier) //
+				.filter(it -> it.belongsTo(department)) //
+				.map(TrackedCase::getQuestionnaire) //
+				.map(representations::toRepresentation));
+	}
+
 	// PUT Mapping for transformation into index case
 
 	@PutMapping("/api/hd/cases/{identifier}")

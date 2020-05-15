@@ -369,6 +369,27 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
 	}
 
+	@Test // CORE-115
+	void exposesQuestionnaireForCaseAlreadyTracking() throws Exception {
+
+		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
+
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId())) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.QUESTIONNAIRE, response);
+		assertThat(link).isNotNull();
+
+		response = mvc.perform(get(link.getHref())) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.belongToMedicalStaffDescription", String.class)).isNotNull();
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri) //

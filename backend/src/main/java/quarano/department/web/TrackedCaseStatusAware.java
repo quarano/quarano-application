@@ -52,6 +52,13 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 			links = links.and(Link.of(uri.get(), TrackedCaseLinkRelations.START_TRACKING));
 		}
 
+		if (trackedCase.getQuestionnaire() != null) {
+
+			var href = fromMethodCall(controller.getQuestionnaire(trackedCase.getId(), null)).toUriString();
+
+			links = links.and(Link.of(href, TrackedCaseLinkRelations.QUESTIONNAIRE));
+		}
+
 		return links;
 	}
 
