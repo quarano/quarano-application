@@ -1,0 +1,78 @@
+= Quarano Backend
+
+The Quarano backend is a Spring Boot based application exposing a REST API to track cases of COVID-19 infections and allow affected patients to track a diary of symptoms during the time their health is monitored by the health authorities.
+
+== tl;dr -- Quickstart
+
+Run the backend application.
+
+[source, bash]
+----
+$ git clone https://github.com/coronareportteam/coronareport quarano <1>
+$ cd quarano/backend <2>
+$ mvn spring-boot:run -Pinmemory <3>
+----
+<1> Clone the repository.
+<2> Switch to the `backend` folder.
+<3> Run the application against an in-memory database.
+
+Use the API (using https://httpie.org/[HTTPie]). First, login with a demo administrator account.
+
+[source, bash]
+----
+$ http POST :8080/api/login username="admin" password="admin"
+
+HTTP/1.1 200
+…
+X-Auth-Token: …
+----
+
+Use the value returned in the `X-Auth-Token` for subsequent requests to authenticate.
+
+[source, bash]
+----
+$ http GET :8080/api/hd/cases "Authorization:Bearer $token"
+
+HTTP/1.1 200
+
+…
+----
+
+== Developing Quarano Backend
+
+The Quarano backend is a standard Maven project and just be imported in any IDE (VSCode, IntelliJ IDEA, Eclipse, STS).
+Make sure you have the Lombok plugin installed so that your code can compile correctly.
+For convenience, make sure that you have the `inmemory` Maven profile activated, so that running the application from your IDE doesn't need to reach out to a database.
+
+== Tech stack
+
+The application is based on the following open source projects:
+
+* Spring Boot 2.3
+* Spring MVC
+* Spring Data
+* Spring Security
+* https://projectlombok.org[Project Lombok]
+* http://modelmapper.org[Modelmapper]
+* https://github.com/odrotbohm/moduliths[Moduliths]
+* https://github.com/odrotbohm/jddd[jDDD]
+
+== Available Spring / Maven profiles
+
+The following Spring profiles are used for the application:
+
+* `integrationtest` -- Uses an H2 database instead of expecting a local Postgres instance being around.
+* `develop` -- Wipes the database on application start.
+* `prod` -- Disables the creation of demo data in the system.
+
+For convenience we expose the following Maven profiles:
+
+* `inmemory` -- Includes H2 as database driver and ctivates the `integrationtest` profile.
+
+
+== Demo deployments
+
+There's a demo deployment available at https://quarano-backend-dev.cfapps.io including some demo data.
+No guarantees about the availability and state of data.
+
+If you prefer to use a UI (what? 😳🤔😭) you can use https://quarano-frontend-dev.cfapps.io.
