@@ -56,6 +56,15 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>Kontaktmöglichkeiten</legend>
+    <mat-error
+      *ngIf="
+        formGroup.getError('phoneMissing') &&
+        (formGroup.controls.phone.touched ||
+          formGroup.controls.mobilePhone.touched)
+      "
+    >
+      Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
+    >
     <mat-form-field class="full-width">
       <input
         matInput

@@ -1,4 +1,5 @@
-import { TrimmedPatternValidator } from './../../validators/trimmed-pattern.validator';
+import { PhoneOrMobilePhoneValidator } from '@validators/phone-validator';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
 import { EnrollmentStatusDto } from '@models/enrollment-status';
 import { EncounterEntry } from '@models/encounter';
 import { EnrollmentService } from '@services/enrollment.service';
@@ -20,7 +21,6 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 import { BehaviorSubject } from 'rxjs';
 import { SymptomDto } from '@models/symptom';
-import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-basic-data',
@@ -127,7 +127,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         [Validators.required, Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.match(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    });
+    }, { validators: [PhoneOrMobilePhoneValidator] });
   }
 
   checkAndSendFirstForm() {

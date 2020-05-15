@@ -1,3 +1,4 @@
+import { PhoneOrMobilePhoneValidator } from './../../validators/phone-validator';
 import { TrimmedPatternValidator } from './../../validators/trimmed-pattern.validator';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@services/snackbar.service';
@@ -53,7 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         [Validators.required, Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.match(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    });
+    }, { validators: [PhoneOrMobilePhoneValidator] });
   }
 
   get dateOfBirth() {

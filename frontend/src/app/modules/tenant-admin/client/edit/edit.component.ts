@@ -1,4 +1,4 @@
-import { TrimmedPatternValidator } from './../../../../validators/trimmed-pattern.validator';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
 import { SnackbarService } from '@services/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -12,7 +12,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { FormControl, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
 import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { Subject } from 'rxjs';
@@ -21,13 +21,7 @@ import { SubSink } from 'subsink';
 import { ClientType } from '@models/report-case';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
 import { MatInput } from '@angular/material/input';
-
-const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
-  const phone = fg.get('phone')?.value;
-  const mobilePhone = fg.get('mobilePhone')?.value;
-  return phone || mobilePhone ? null : { phoneMissing: true };
-};
-
+import { PhoneOrMobilePhoneValidator } from '@validators/phone-validator';
 
 @Component({
   selector: 'app-client-edit',
