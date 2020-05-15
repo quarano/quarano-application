@@ -16,7 +16,10 @@ mat-form-field {
 
 .header-image {
   background-image: url("../../../../assets/images/diary.png");
-  background-size: cover;
+  background-size: 32px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
 }
 
 ::ng-deep {

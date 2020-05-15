@@ -1,15 +1,3 @@
-<mat-card class="form__card--small form__card--animated mb-3 text-center" style="color: red;">
-  <span style="margin-left: 1rem;">
-    Im Falle eines medizinischen Notfalls wählen Sie bitte umgehend den Notruf
-  </span>
-</mat-card>
-
-<mat-card class="form__card--small form__card--animated mb-3 text-center" id="info-card">
-  <div class="marquee">
-    <p class="info-text">
-      Dieser Prototyp dient lediglich zu Demonstrationszwecken und ist NICHT an
-      ein Gesundheitsamt angebunden! Bitte KEINE ECHTEN, KRITISCHEN DATEN ohne
-      Aufforderung durch die zuständigen Behörden eingeben!
-    </p>
-  </div>
-</mat-card>
+<div class="tile-wrapper">
+  <app-tile *ngFor="let tile of tilesToShow" [viewModel]="tile"></app-tile>
+</div>

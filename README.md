@@ -80,3 +80,4 @@ further information at [github](https://github.com/typicode/json-server)
 ### CSS framework
 
 We use [Angular Material](https://v7.material.angular.io)
+[Corona Icons](https://icon-icons.com/de/pack/Coronavirus/2364)

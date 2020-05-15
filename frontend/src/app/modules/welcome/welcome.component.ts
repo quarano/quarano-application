@@ -1,7 +1,6 @@
+import { ITileViewModel } from '@ui/tile/tile.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-welcome',
@@ -9,47 +8,58 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  tilesToShow: ITileViewModel[] = [];
 
-  public identCode = 'A47-9GE-BB1';
-  public enteredCode = '';
-  public existingCode$$ = new BehaviorSubject<boolean>(null);
-  public checkingCode = false;
+  clientTiles: ITileViewModel[] = [
+    {
+      title: 'Tagebuch',
+      subtitle: 'Symptom-Tracking',
+      content: 'Pflegen Sie zwei Mal täglich in Ihrem Tagebuch die eventuell auftretenden Symptome und Ihre Körpertemperatur.',
+      linkText: 'Zum Tagebuch',
+      routerLink: ['/diary'],
+      headerImageUrl: '/assets/images/diary.png',
+      backgroundImageUrl: '/assets/images/diary_tile_background.jpg'
+    },
+    {
+      title: 'Kontaktpersonen',
+      subtitle: 'Kontaktnachverfolgung',
+      content: 'Hinterlegen Sie hier die Kontaktdaten von Personen, mit denen Sie während Ihrer Corona-Infektion engeren Kontakt hatten.',
+      linkText: 'Zu den Kontaktpersonen',
+      routerLink: ['/contact-persons'],
+      headerImageUrl: '/assets/images/contact-person.png',
+      backgroundImageUrl: '/assets/images/contact_tile_background.jpg'
+    }
+  ];
 
-  constructor(
-    private router: Router) {
+  healthDepartmentTiles: ITileViewModel[] = [
+    {
+      title: 'Fallübersicht',
+      subtitle: 'Liste aller offenen Index- und Kontaktfälle',
+      content: 'Sehen und bearbeiten Sie hier alle offenen Index- und Kontaktfälle in Ihrem Gesundheitsamt. ' +
+        'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion. Exportieren Sie die Liste in eine csv Datei.',
+      linkText: 'Zur Fallübersicht',
+      routerLink: ['/tenant-admin/clients'],
+      headerImageUrl: '/assets/images/user.png',
+      backgroundImageUrl: '/assets/images/clients_tile_background.jpg'
+    },
+    {
+      title: 'Aktionsübersicht',
+      subtitle: 'Aktionsnachverfolgung',
+      content: 'Hier finden Sie eine Übersicht von Auffälligkeiten bei den nachverfolgten Index- und Kontaktfällen, ' +
+        'die Ihre Aufmerksamkeit erfordern.',
+      linkText: 'Zu den Aktionen',
+      routerLink: ['/tenant-admin/actions'],
+      headerImageUrl: '/assets/images/diary.png',
+      backgroundImageUrl: '/assets/images/actions_tile_background.jpg'
+    }
+  ];
+
+  constructor(private userService: UserService) {
+
   }
 
   ngOnInit(): void {
-    this.existingCode$$.asObservable().pipe(
-      filter(value => value === false)
-    ).subscribe(() => this.router.navigate(['/welcome/create-user']));
-  }
-
-  public setExistingCodeState(state: boolean) {
-    this.existingCode$$.next(state);
-  }
-
-  public reset() {
-    this.existingCode$$.next(null);
-  }
-
-  public authenticateCode() {
-    this.checkingCode = true;
-    /*this.userService.setUserCode(this.enteredCode)
-      .subscribe(
-        (client: Client) => {
-          this.checkingCode = false;
-          this.progressBarService.progressBarState = false;
-          this.snackbarService.success('Der Code wurde erfolgreich geladen.');
-          this.router.navigate(['/diary']);
-        },
-        error => {
-          this.checkingCode = false;
-          this.progressBarService.progressBarState = false;
-          this.snackbarService.error('Der Code ist nicht vergeben.');
-          this.router.navigate(['/welcome/create-user']);
-        }
-      );*/
+    this.tilesToShow = this.userService.isHealthDepartmentUser ? this.healthDepartmentTiles : this.clientTiles;
   }
 
 }

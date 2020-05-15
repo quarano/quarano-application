@@ -9,8 +9,11 @@
 }
 
 .header-image {
-  background-image: url("../../../../assets/images/contact_icon.png");
-  background-size: cover;
+  background-image: url("../../../../assets/images/contact-person.png");
+  background-size: 32px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
 }
 
 .example-radio-group {
