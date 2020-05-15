@@ -78,11 +78,11 @@ export class EnrollmentService {
   completeEnrollment(withoutEncounters: boolean): Observable<any> {
     return this.httpClient
       .post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {})
-      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
+      .pipe(switchMap(() => this.loadEnrollmentStatus()));
   }
 
   reopenEnrollment(): Observable<EnrollmentStatusDto> {
     return this.httpClient.delete(`${this.baseUrl}/enrollment/completion`)
-      .pipe(switchMap(_ => this.getEnrollmentStatus()));
+      .pipe(switchMap(() => this.getEnrollmentStatus()));
   }
 }

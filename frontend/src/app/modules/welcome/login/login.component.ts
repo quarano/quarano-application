@@ -38,12 +38,13 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
       .subscribe(
         _ => {
-          this.enrollmentService.loadEnrollmentStatus();
           this.snackbarService.success('Willkommen bei quarano');
           if (this.userService.isHealthDepartmentUser) {
             this.router.navigate(['/tenant-admin']);
           } else {
-            this.router.navigate(['/diary']);
+            this.enrollmentService.loadEnrollmentStatus().subscribe(() => {
+              this.router.navigate(['/diary']);
+            });
           }
         },
         () => {
