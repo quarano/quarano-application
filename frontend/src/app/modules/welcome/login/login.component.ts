@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SnackbarService} from '@services/snackbar.service';
-import {UserService} from '@services/user.service';
-import {Router} from '@angular/router';
-import {filter, take} from 'rxjs/operators';
-import {EnrollmentService} from '@services/enrollment.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SnackbarService } from '@services/snackbar.service';
+import { UserService } from '@services/user.service';
+import { Router } from '@angular/router';
+import { filter, take } from 'rxjs/operators';
+import { EnrollmentService } from '@services/enrollment.service';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-login',
@@ -53,4 +54,7 @@ export class LoginComponent implements OnInit {
       );
   }
 
+  trimValue(input: MatInput) {
+    input.value = input.value.trim();
+  }
 }

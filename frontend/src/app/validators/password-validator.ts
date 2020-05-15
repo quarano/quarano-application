@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 export class PasswordValidator {
 
   public static secure(control: FormControl): ValidationErrors {
-    const password: string = control.value;
+    const password: string = control.value?.trim();
     const errors: ValidationErrors = {};
 
     if (!password) {
@@ -30,21 +30,21 @@ export class PasswordValidator {
   }
 
   public static mustMatch(control: AbstractControl): { passwordConfirmWrong: boolean } {
-    if (!control.get('password').value || !control.get('passwordConfirm').value) {
+    if (!control.get('password').value?.trim() || !control.get('passwordConfirm').value?.trim()) {
       return null;
     }
 
-    if (control.get('password').value !== control.get('passwordConfirm').value) {
+    if (control.get('password').value?.trim() !== control.get('passwordConfirm').value?.trim()) {
       return { passwordConfirmWrong: true };
     }
   }
 
   public static mustNotIncludeUsername(control: AbstractControl): { passwordIncludesUsername: boolean } {
-    if (!control.get('password').value || !control.get('username').value) {
+    if (!control.get('password').value?.trim() || !control.get('username').value?.trim()) {
       return null;
     }
 
-    if (control.get('password').value.includes(control.get('username').value)) {
+    if (control.get('password').value.includes(control.get('username').value?.trim())) {
       return { passwordIncludesUsername: true };
     }
   }

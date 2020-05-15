@@ -8,9 +8,15 @@
         placeholder="Vorname"
         formControlName="firstName"
         type="text"
+        #first_name_input
+        (blur)="trimValue(first_name_input)"
       />
-      <mat-error *ngIf="formGroup.get('firstName').hasError('required')">Bitte geben Sie einen Vornamen ein</mat-error>
-      <mat-error *ngIf="formGroup.get('firstName').hasError('pattern')">Bitte geben Sie einen gültigen Vornamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('firstName').hasError('required')"
+        >Bitte geben Sie einen Vornamen ein</mat-error
+      >
+      <mat-error *ngIf="formGroup.get('firstName').hasError('pattern')"
+        >Bitte geben Sie einen gültigen Vornamen ein</mat-error
+      >
     </mat-form-field>
     <mat-form-field class="half-width">
       <input
@@ -19,9 +25,15 @@
         placeholder="Nachname"
         formControlName="lastName"
         type="text"
+        #last_name_input
+        (blur)="trimValue(last_name_input)"
       />
-      <mat-error *ngIf="formGroup.get('lastName').hasError('required')">Bitte geben Sie einen Nachnamen ein</mat-error>
-      <mat-error *ngIf="formGroup.get('lastName').hasError('pattern')">Bitte geben Sie einen gültigen Nachnamen ein</mat-error>
+      <mat-error *ngIf="formGroup.get('lastName').hasError('required')"
+        >Bitte geben Sie einen Nachnamen ein</mat-error
+      >
+      <mat-error *ngIf="formGroup.get('lastName').hasError('pattern')"
+        >Bitte geben Sie einen gültigen Nachnamen ein</mat-error
+      >
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>Geburtsdatum</mat-label>
@@ -31,6 +43,8 @@
         [max]="today"
         [matDatepicker]="dateOfBirthPicker"
         formControlName="dateOfBirth"
+        #date_of_birth_input
+        (blur)="trimValue(date_of_birth_input)"
       />
       <mat-datepicker-toggle
         matSuffix
@@ -49,6 +63,8 @@
         placeholder="E-Mail"
         formControlName="email"
         type="email"
+        #email_input
+        (blur)="trimValue(email_input)"
       />
       <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
     </mat-form-field>
@@ -60,6 +76,8 @@
         placeholder="Telefonnummer (Festnetz)"
         formControlName="phone"
         type="phone"
+        #phone_input
+        (blur)="trimValue(phone_input)"
       />
       <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
     </mat-form-field>
@@ -71,6 +89,8 @@
         placeholder="Telefonnummer (mobil)"
         formControlName="mobilePhone"
         type="phone"
+        #mobile_phone_input
+        (blur)="trimValue(mobile_phone_input)"
       />
       <mat-error
         >Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error
@@ -79,7 +99,6 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>Adresse</legend>
-
     <mat-form-field style="width: 70%;">
       <input
         matInput
@@ -87,6 +106,8 @@
         placeholder="Straße"
         formControlName="street"
         type="text"
+        #street_input
+        (blur)="trimValue(street_input)"
       />
       <mat-error>Bitte geben Sie eine gültige Straße ein</mat-error>
     </mat-form-field>
@@ -97,6 +118,8 @@
         maxlength="6"
         formControlName="houseNumber"
         type="text"
+        #house_number_input
+        (blur)="trimValue(house_number_input)"
       />
       <mat-error>Bitte geben Sie eine gültige Hausnummer ein</mat-error>
     </mat-form-field>
@@ -109,6 +132,8 @@
         maxlength="5"
         formControlName="zipCode"
         type="text"
+        #zip_code_input
+        (blur)="trimValue(zip_code_input)"
       />
       <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
     </mat-form-field>
@@ -119,6 +144,8 @@
         placeholder="Ort"
         formControlName="city"
         type="text"
+        #city_input
+        (blur)="trimValue(city_input)"
       />
       <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
     </mat-form-field>

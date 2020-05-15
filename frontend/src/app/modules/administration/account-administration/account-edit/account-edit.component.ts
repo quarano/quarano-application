@@ -1,3 +1,4 @@
+import { MatInput } from '@angular/material/input';
 import { roles, IRole } from '@models/role';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -10,7 +11,8 @@ import { Observable } from 'rxjs';
 import { PasswordValidator } from '@validators/password-validator';
 import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { ArrayValidator } from '@validators/array-validator';
-import {VALIDATION_PATTERNS} from '@utils/validation';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
 
 @Component({
   selector: 'app-account-edit',
@@ -54,10 +56,10 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       {
         firstName: new FormControl(
           this.account.firstName,
-          [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
+          [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
         lastName: new FormControl(
           this.account.lastName,
-          [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
+          [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
         password: new FormControl({ value: null, disabled: !this.isNew }, [
           PasswordValidator.secure
         ]),
@@ -70,7 +72,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
         ]),
         email: new FormControl(this.account.email, [
           Validators.required,
-          Validators.pattern(VALIDATION_PATTERNS.email)]),
+          TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)]),
         roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)])
       }, {
       validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]
@@ -142,5 +144,9 @@ export class AccountEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['/administration/accounts']);
         }
       );
+  }
+
+  trimValue(input: MatInput) {
+    input.value = input.value?.trim();
   }
 }

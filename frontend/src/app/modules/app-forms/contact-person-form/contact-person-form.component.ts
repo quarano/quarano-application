@@ -1,11 +1,13 @@
+import { TrimmedPatternValidator } from './../../../validators/trimmed-pattern.validator';
 import { ContactPersonModifyDto } from '@models/contact-person';
-import { VALIDATION_PATTERNS } from '@utils/validation';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { ContactPersonDto } from '@models/contact-person';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { ApiService } from '@services/api.service';
 import { SnackbarService } from '@services/snackbar.service';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-contact-person-form',
@@ -44,17 +46,17 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   buildForm() {
     this.formGroup = this.formBuilder.group(
       {
-        firstName: new FormControl(this.contactPerson.firstName, [Validators.pattern(VALIDATION_PATTERNS.name)]),
-        lastName: new FormControl(this.contactPerson.lastName, [Validators.pattern(VALIDATION_PATTERNS.name)]),
-        email: new FormControl(this.contactPerson.email, [Validators.pattern(VALIDATION_PATTERNS.email)]),
+        firstName: new FormControl(this.contactPerson.firstName, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+        lastName: new FormControl(this.contactPerson.lastName, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+        email: new FormControl(this.contactPerson.email, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)]),
         phone: new FormControl(this.contactPerson.phone,
-          [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+          [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)]),
         mobilePhone: new FormControl(this.contactPerson.mobilePhone,
-          [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
-        street: new FormControl(this.contactPerson.street, [Validators.pattern(VALIDATION_PATTERNS.street)]),
-        houseNumber: new FormControl(this.contactPerson.houseNumber, [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
+          [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)]),
+        street: new FormControl(this.contactPerson.street, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.street)]),
+        houseNumber: new FormControl(this.contactPerson.houseNumber, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.houseNumber)]),
         zipCode: new FormControl(this.contactPerson.zipCode,
-          [Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.zip)]),
+          [Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.match(VALIDATION_PATTERNS.zip)]),
         city: new FormControl(this.contactPerson.city),
         identificationHint: new FormControl(this.contactPerson.identificationHint),
         isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),
@@ -67,6 +69,10 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     if (this.contactPerson.identificationHint) {
       this.showIdentificationHintField = true;
     }
+  }
+
+  trimValue(input: MatInput) {
+    input.value = input.value?.trim();
   }
 
   private isWayToContactSet(): boolean {

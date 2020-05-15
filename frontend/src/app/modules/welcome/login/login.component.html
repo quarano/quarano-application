@@ -5,10 +5,20 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>Sie haben noch kein Benutzerkonto? <a [routerLink]="['/welcome/register']">Registrieren Sie sich</a> mit dem Code, den Sie von Ihrer zuständigen Behörde erhalten haben.</p>
+    <p>
+      Sie haben noch kein Benutzerkonto?
+      <a [routerLink]="['/welcome/register']">Registrieren Sie sich</a> mit dem
+      Code, den Sie von Ihrer zuständigen Behörde erhalten haben.
+    </p>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button mat-raised-button id="registerBtn" [routerLink]="['/welcome/register']">Registrieren</a>
+    <a
+      mat-button
+      mat-raised-button
+      id="registerBtn"
+      [routerLink]="['/welcome/register']"
+      >Registrieren</a
+    >
   </mat-card-actions>
 </mat-card>
 <mat-card class="form__card--small form__card--animated">
@@ -22,15 +32,39 @@
       <p>Wenn Sie bereits ein Benutzerkonto haben, können Sie sich anmelden:</p>
       <mat-form-field appearance="outline" class="form__input--full-width">
         <mat-label>Benutzername</mat-label>
-        <input matInput formControlName="username" id="username" placeholder="Benutzername">
+        <input
+          matInput
+          formControlName="username"
+          id="username"
+          placeholder="Benutzername"
+          #username_input
+          (blur)="trimValue(username_input)"
+        />
       </mat-form-field>
       <mat-form-field appearance="outline" class="form__input--full-width">
         <mat-label>Passwort</mat-label>
-        <input matInput formControlName="password" id="password" type="password" placeholder="Passwort">
+        <input
+          matInput
+          formControlName="password"
+          id="password"
+          type="password"
+          placeholder="Passwort"
+          #password_input
+          (blur)="trimValue(password_input)"
+        />
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button mat-raised-button color="primary" type="submit" id="submitBtn" [disabled]="loginFormGroup.invalid">Login</button>
+      <button
+        mat-button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        id="submitBtn"
+        [disabled]="loginFormGroup.invalid"
+      >
+        Login
+      </button>
     </mat-card-actions>
   </form>
 </mat-card>

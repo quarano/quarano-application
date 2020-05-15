@@ -1,10 +1,12 @@
+import { TrimmedPatternValidator } from './../../validators/trimmed-pattern.validator';
+import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@services/snackbar.service';
 import { EnrollmentService } from '@services/enrollment.service';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { VALIDATION_PATTERNS } from '@utils/validation';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { ClientDto } from '@models/client';
 import { Moment } from 'moment';
 
@@ -38,17 +40,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.formGroup = this.formBuilder.group({
-      firstName: new FormControl(this.client.firstName, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
-      lastName: new FormControl(this.client.lastName, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
-      email: new FormControl(this.client.email, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.email)]),
+      firstName: new FormControl(this.client.firstName, [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+      lastName: new FormControl(this.client.lastName, [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+      email: new FormControl(this.client.email, [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)]),
       phone: new FormControl(this.client.phone,
-        [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
+        [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)]),
       mobilePhone: new FormControl(this.client.mobilePhone,
-        [Validators.minLength(5), Validators.maxLength(17), Validators.pattern(VALIDATION_PATTERNS.phoneNumber)]),
-      street: new FormControl(this.client.street, [Validators.required, Validators.pattern(VALIDATION_PATTERNS.street)]),
-      houseNumber: new FormControl(this.client.houseNumber, [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
+        [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)]),
+      street: new FormControl(this.client.street, [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.street)]),
+      houseNumber: new FormControl(this.client.houseNumber, [TrimmedPatternValidator.match(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl(this.client.zipCode,
-        [Validators.required, Validators.minLength(5), Validators.maxLength(5), Validators.pattern(VALIDATION_PATTERNS.zip)]),
+        [Validators.required, Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.match(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
     });
@@ -82,5 +84,4 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       }));
   }
-
 }

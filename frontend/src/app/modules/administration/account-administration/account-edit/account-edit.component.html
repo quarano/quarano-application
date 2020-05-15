@@ -1,7 +1,13 @@
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <mat-card-title>
-      <h1>{{ isNew ? 'Mitarbeiter-Account anlegen' : 'Account-Daten für Mitarbeiter bearbeiten'}}</h1>
+      <h1>
+        {{
+          isNew
+            ? "Mitarbeiter-Account anlegen"
+            : "Account-Daten für Mitarbeiter bearbeiten"
+        }}
+      </h1>
     </mat-card-title>
     <mat-card-subtitle>
       Pflichtfelder sind mit * markiert
@@ -9,33 +15,71 @@
   </mat-card-header>
   <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
     <mat-card-content>
-
       <mat-form-field class="half-width">
-        <input required matInput placeholder="Vorname" formControlName="firstName" type="text" />
+        <input
+          required
+          matInput
+          placeholder="Vorname"
+          formControlName="firstName"
+          type="text"
+          #first_name_input
+          (blur)="trimValue(first_name_input)"
+        />
         <mat-error>Bitte geben Sie einen gültigen Vornamen ein</mat-error>
       </mat-form-field>
-
       <mat-form-field class="half-width">
-        <input matInput required placeholder="Nachname" formControlName="lastName" type="text" />
+        <input
+          matInput
+          required
+          placeholder="Nachname"
+          formControlName="lastName"
+          type="text"
+          #last_name_input
+          (blur)="trimValue(last_name_input)"
+        />
         <mat-error>Bitte geben Sie einen gültigen Nachnamen ein</mat-error>
       </mat-form-field>
-
       <mat-form-field class="full-width">
-        <input matInput required placeholder="E-Mail" formControlName="email" type="email" />
+        <input
+          matInput
+          required
+          placeholder="E-Mail"
+          formControlName="email"
+          type="email"
+          #email_input
+          (blur)="trimValue(email_input)"
+        />
         <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
       </mat-form-field>
-
       <mat-form-field class="form__input--full-width">
         <mat-label>Username</mat-label>
-        <input required matInput formControlName="username" placeholder="E-Mail Adresse" id="username" />
-        <mat-error *ngIf="formGroup.controls.username.hasError('usernameInvalid')">
+        <input
+          required
+          matInput
+          formControlName="username"
+          placeholder="E-Mail Adresse"
+          id="username"
+          #username_input
+          (blur)="trimValue(username_input)"
+        />
+        <mat-error
+          *ngIf="formGroup.controls.username.hasError('usernameInvalid')"
+        >
           Der angegebene Benutzername kann nicht verwendet werden.
         </mat-error>
       </mat-form-field>
-
       <mat-form-field class="form__input--full-width" *ngIf="isNew">
         <mat-label>Passwort</mat-label>
-        <input required matInput formControlName="password" placeholder="Passwort" id="password" type="password" />
+        <input
+          required
+          matInput
+          formControlName="password"
+          placeholder="Passwort"
+          id="password"
+          type="password"
+          #password_input
+          (blur)="trimValue(password_input)"
+        />
         <mat-error *ngIf="formGroup.controls.password.hasError('minLength')">
           Das Passwort muss mindestens 7 Zeichen lang sein.
         </mat-error>
@@ -56,14 +100,24 @@
           Das Passwort darf nicht den Benutzernamen beinhalten.
         </mat-error>
       </mat-form-field>
-
       <mat-form-field class="form__input--full-width" *ngIf="isNew">
         <mat-label>Passwort bestätigen</mat-label>
-        <input required matInput formControlName="passwordConfirm" placeholder="Passwort bestätigen"
-          id="password-confirm" type="password" />
+        <input
+          required
+          matInput
+          formControlName="passwordConfirm"
+          placeholder="Passwort bestätigen"
+          id="password-confirm"
+          type="password"
+          #password_confirm_input
+          (blur)="trimValue(password_confirm_input)"
+        />
       </mat-form-field>
 
-      <div class="mat-form-field-subscript-wrapper ng-tns-c78-3" *ngIf="formGroup.hasError('passwordConfirmWrong')">
+      <div
+        class="mat-form-field-subscript-wrapper ng-tns-c78-3"
+        *ngIf="formGroup.hasError('passwordConfirmWrong')"
+      >
         <mat-error>
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>
@@ -72,7 +126,9 @@
       <mat-form-field class="form__input--full-width">
         <mat-label>Rollen</mat-label>
         <mat-select formControlName="roles" multiple required>
-          <mat-option *ngFor="let role of roles" [value]="role.name">{{role.displayName}}</mat-option>
+          <mat-option *ngFor="let role of roles" [value]="role.name">{{
+            role.displayName
+          }}</mat-option>
         </mat-select>
         <mat-error *ngIf="formGroup.controls.roles.hasError('minLengthArray')">
           Bitte wählen Sie mindestens eine Rolle
@@ -81,11 +137,21 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button mat-raised-button color="primary" type="submit"
-        [disabled]="formGroup.invalid || formGroup.pristine">
+      <button
+        mat-button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+      >
         Speichern
       </button>
-      <button type="button" mat-raised-button color="secondary" [routerLink]="['/administration/accounts']">
+      <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        [routerLink]="['/administration/accounts']"
+      >
         Abbrechen
       </button>
     </mat-card-actions>

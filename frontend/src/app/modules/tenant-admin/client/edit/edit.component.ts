@@ -1,3 +1,4 @@
+import { TrimmedPatternValidator } from './../../../../validators/trimmed-pattern.validator';
 import { SnackbarService } from '@services/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -13,12 +14,13 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
 import { CaseDetailDto } from '@models/case-detail';
-import { VALIDATION_PATTERNS } from '@utils/validation';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { ClientType } from '@models/report-case';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import { MatInput } from '@angular/material/input';
 
 const PhoneOrMobilePhoneValidator: ValidatorFn = (fg: FormGroup) => {
   const phone = fg.get('phone')?.value;
@@ -86,31 +88,31 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   createFormGroup() {
     this.formGroup = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
-      lastName: new FormControl('', [Validators.required, Validators.pattern(VALIDATION_PATTERNS.name)]),
+      firstName: new FormControl('', [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+      lastName: new FormControl('', [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
 
       testDate: new FormControl(this.isIndexCase ? this.today : null),
 
       quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
       quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
-      street: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.street)]),
-      houseNumber: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.houseNumber)]),
+      street: new FormControl('', [TrimmedPatternValidator.match(VALIDATION_PATTERNS.street)]),
+      houseNumber: new FormControl('', [TrimmedPatternValidator.match(VALIDATION_PATTERNS.houseNumber)]),
       city: new FormControl(''),
       zipCode: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(5),
-        Validators.pattern(VALIDATION_PATTERNS.zip)]),
+        TrimmedPatternValidator.match(VALIDATION_PATTERNS.zip)]),
 
       mobilePhone: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(17),
-        Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
+        TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)
       ]),
       phone: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(17),
-        Validators.pattern(VALIDATION_PATTERNS.phoneNumber)
+        TrimmedPatternValidator.match(VALIDATION_PATTERNS.phoneNumber)
       ]),
 
-      email: new FormControl('', [Validators.pattern(VALIDATION_PATTERNS.email)]),
+      email: new FormControl('', [TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
 
@@ -152,6 +154,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       this.formGroup.clearValidators();
     }
     this.formGroup.updateValueAndValidity();
+  }
+
+  trimValue(input: MatInput) {
+    input.value = input.value?.trim();
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
