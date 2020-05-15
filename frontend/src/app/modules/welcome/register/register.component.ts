@@ -9,6 +9,7 @@ import {ApiService} from '@services/api.service';
 import {Register} from '@models/register';
 import {SnackbarService} from '@services/snackbar.service';
 import {VALIDATION_PATTERNS} from '@utils/validation';
+import {ConfirmValidPasswordMatcher} from '@validators/ConfirmValidPasswordMatcher';
 
 @Component({
   selector: 'app-register',
@@ -18,6 +19,7 @@ import {VALIDATION_PATTERNS} from '@utils/validation';
 export class RegisterComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
+  public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private usernameIsValid = false;
 
   public registrationForm = new FormGroup({

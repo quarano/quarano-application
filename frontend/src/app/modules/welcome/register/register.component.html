@@ -57,15 +57,12 @@
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password-confirm">
         <mat-label>Passwort bestätigen</mat-label>
-        <input matInput formControlName="passwordConfirm" placeholder="Passwort bestätigen" id="password-confirm"
-          type="password" />
-      </mat-form-field>
-      <div class="mat-form-field-subscript-wrapper ng-tns-c78-3"
-        *ngIf="registrationForm.hasError('passwordConfirmWrong')">
-        <mat-error>
+        <input matInput formControlName="passwordConfirm" [errorStateMatcher]="confirmValidParentMatcher"
+               placeholder="Passwort bestätigen" id="password-confirm" type="password" />
+        <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>
-      </div>
+      </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">
         <mat-label>Geburtsdatum</mat-label>
         <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" [max]="today" />
