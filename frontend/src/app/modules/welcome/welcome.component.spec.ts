@@ -1,7 +1,9 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WelcomeComponent } from './welcome.component';
-import {RouterTestingModule} from '@angular/router/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SnackbarService } from '@services/snackbar.service';
 
 describe('WelcomeComponent', () => {
   let component: WelcomeComponent;
@@ -9,10 +11,11 @@ describe('WelcomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [ WelcomeComponent ]
+      imports: [RouterTestingModule, HttpClientModule],
+      declarations: [WelcomeComponent],
+      providers: [{ provide: SnackbarService, useValue: jasmine.createSpyObj(['warning', 'success']) },]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
