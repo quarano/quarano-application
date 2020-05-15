@@ -1,7 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormGroup, Validators} from '@angular/forms';
-import {SubSink} from 'subsink';
-import {SymptomDto} from '@models/symptom';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
+import { ArrayValidator } from '@validators/array-validator';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { SubSink } from 'subsink';
+import { SymptomDto } from '@models/symptom';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 
 @Component({
   selector: 'app-initial-questionaire-form',
@@ -28,18 +31,36 @@ export class InitialQuestionaireFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toggleAdditionalFieldValitations('hasSymptoms', 'dayOfFirstSymptoms', null);
-    this.toggleAdditionalFieldValitations('hasSymptoms', 'symptoms', []);
-
-    this.toggleAdditionalFieldValitations('belongToMedicalStaff', 'belongToMedicalStaffDescription', null);
-
-    this.toggleAdditionalFieldValitations('hasPreExistingConditions', 'hasPreExistingConditionsDescription', null);
-    this.toggleAdditionalFieldValitations('hasContactToVulnerablePeople', 'hasContactToVulnerablePeopleDescription', null);
+    this.toggleAdditionalFieldValitations(
+      'hasSymptoms',
+      'dayOfFirstSymptoms',
+      null,
+      [Validators.required]);
+    this.toggleAdditionalFieldValitations(
+      'hasSymptoms',
+      'symptoms',
+      [],
+      [ArrayValidator.minLengthArray(1)]);
+    this.toggleAdditionalFieldValitations(
+      'belongToMedicalStaff',
+      'belongToMedicalStaffDescription',
+      null,
+      [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]);
+    this.toggleAdditionalFieldValitations(
+      'hasPreExistingConditions',
+      'hasPreExistingConditionsDescription',
+      null,
+      [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]);
+    this.toggleAdditionalFieldValitations(
+      'hasContactToVulnerablePeople',
+      'hasContactToVulnerablePeopleDescription',
+      null,
+      [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]);
   }
 
-  toggleAdditionalFieldValitations(trigger: string, field: string, emptyValue: any) {
+  toggleAdditionalFieldValitations(trigger: string, field: string, emptyValue: any, validators: ValidatorFn[]) {
     this.subs.add(this.formGroup.get(trigger).valueChanges.subscribe((data) => {
-      this.formGroup.get(field).setValidators((data) ? Validators.required : null);
+      this.formGroup.get(field).setValidators((data) ? validators : null);
       this.formGroup.get(field).updateValueAndValidity();
       if (!data) {
         this.formGroup.get(field).setValue(emptyValue);

@@ -19,7 +19,7 @@
       <mat-error *ngIf="formGroup.get('firstName').hasError('required')"
         >Bitte geben Sie einen Vornamen ein</mat-error
       >
-      <mat-error *ngIf="formGroup.get('firstName').hasError('pattern')"
+      <mat-error *ngIf="formGroup.get('firstName').hasError('trimmedPattern')"
         >Bitte geben Sie einen gültigen Vornamen ein</mat-error
       >
     </mat-form-field>
@@ -36,7 +36,7 @@
       <mat-error *ngIf="formGroup.get('lastName').hasError('required')"
         >Bitte geben Sie einen Nachnamen ein</mat-error
       >
-      <mat-error *ngIf="formGroup.get('lastName').hasError('pattern')"
+      <mat-error *ngIf="formGroup.get('lastName').hasError('trimmedPattern')"
         >Bitte geben Sie einen gültigen Nachnamen ein</mat-error
       >
     </mat-form-field>

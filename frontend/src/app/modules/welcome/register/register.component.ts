@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       Validators.minLength(1),
       Validators.maxLength(30),
-      TrimmedPatternValidator.match(VALIDATION_PATTERNS.username),
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.username),
       () => this.usernameIsValid ? null : { usernameInvalid: true }
     ]),
     password: new FormControl(null, [
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
     ]),
     email: new FormControl(null, [
       Validators.required,
-      TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)
     ]),
     dateOfBirth: new FormControl(null, [
       Validators.required

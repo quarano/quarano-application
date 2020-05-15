@@ -40,13 +40,24 @@
       [control]="this.formGroup.controls.symptoms"
       [selectableItems]="symptoms"
       [nameProperties]="['name']"
-      name="nonCharacteristicSymptoms"
+      name="characteristicSymptoms"
     ></app-multiple-autocomplete>
+    <mat-error *ngIf="formGroup.controls.symptoms.hasError('minLengthArray')">
+      Bitte wählen Sie mindestens ein Symptom
+    </mat-error>
   </div>
   <div class="question">
     <mat-label>Bitte geben Sie Ihren behandelnden Hausarzt an.</mat-label>
     <mat-form-field class="full-width">
       <input matInput formControlName="familyDoctor" />
+      <mat-error
+        *ngIf="formGroup.controls.familyDoctor.hasError('trimmedPattern')"
+      >
+        Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
+        enthalten</mat-error
+      ><mat-error *ngIf="formGroup.controls.familyDoctor.hasError('required')"
+        >Bitte geben Sie Ihren behandelnden Hausarzt an</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="question">
@@ -55,6 +66,16 @@
     >
     <mat-form-field class="full-width">
       <input matInput formControlName="guessedOriginOfInfection" />
+      <mat-error
+        *ngIf="
+          formGroup.controls.guessedOriginOfInfection.hasError('trimmedPattern')
+        "
+        >Dieses Feld darf nur Buchstaben, Satzzeichen und Zeilenumbrüche
+        enthalten</mat-error
+      ><mat-error
+        *ngIf="formGroup.controls.guessedOriginOfInfection.hasError('required')"
+        >Bitte geben Sie den (vermuteten) Ort der Ansteckung an</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -84,6 +105,22 @@
         required
         formControlName="hasPreExistingConditionsDescription"
       />
+      <mat-error
+        *ngIf="
+          formGroup.controls.hasPreExistingConditionsDescription.hasError(
+            'trimmedPattern'
+          )
+        "
+        >Dieses Feld darf nur Buchstaben, Satzzeichen und Zeilenumbrüche
+        enthalten</mat-error
+      ><mat-error
+        *ngIf="
+          formGroup.controls.hasPreExistingConditionsDescription.hasError(
+            'required'
+          )
+        "
+        >Bitte geben Sie Ihre Vorerkrankungen an</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -109,7 +146,22 @@
         matInput
         required
         formControlName="belongToMedicalStaffDescription"
-      />
+      /><mat-error
+        *ngIf="
+          formGroup.controls.belongToMedicalStaffDescription.hasError(
+            'trimmedPattern'
+          )
+        "
+        >Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
+        enthalten</mat-error
+      ><mat-error
+        *ngIf="
+          formGroup.controls.belongToMedicalStaffDescription.hasError(
+            'required'
+          )
+        "
+        >Bitte geben Sie an, wo Sie arbeiten</mat-error
+      >
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -135,7 +187,22 @@
         matInput
         required
         formControlName="hasContactToVulnerablePeopleDescription"
-      />
+      /><mat-error
+        *ngIf="
+          formGroup.controls.hasContactToVulnerablePeopleDescription.hasError(
+            'trimmedPattern'
+          )
+        "
+        >Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
+        enthalten</mat-error
+      ><mat-error
+        *ngIf="
+          formGroup.controls.hasContactToVulnerablePeopleDescription.hasError(
+            'required'
+          )
+        "
+        >Bitte geben Sie an, wie und zu wem Sie Kontakt haben</mat-error
+      >
     </mat-form-field>
   </div>
 </div>

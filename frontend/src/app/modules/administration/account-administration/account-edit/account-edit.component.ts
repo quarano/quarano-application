@@ -56,10 +56,10 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       {
         firstName: new FormControl(
           this.account.firstName,
-          [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+          [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
         lastName: new FormControl(
           this.account.lastName,
-          [Validators.required, TrimmedPatternValidator.match(VALIDATION_PATTERNS.name)]),
+          [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
         password: new FormControl({ value: null, disabled: !this.isNew }, [
           PasswordValidator.secure
         ]),
@@ -72,7 +72,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
         ]),
         email: new FormControl(this.account.email, [
           Validators.required,
-          TrimmedPatternValidator.match(VALIDATION_PATTERNS.email)]),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
         roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)])
       }, {
       validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername]
