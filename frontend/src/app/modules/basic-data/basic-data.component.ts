@@ -129,7 +129,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       zipCode: new FormControl(this.client.zipCode,
         [Validators.required, Validators.minLength(5),
         Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
-      city: new FormControl(this.client.city, [Validators.required]),
+      city: new FormControl(this.client.city, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
     }, { validators: [PhoneOrMobilePhoneValidator] });
   }

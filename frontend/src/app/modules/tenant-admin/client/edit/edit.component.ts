@@ -92,7 +92,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
       street: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
-      city: new FormControl(''),
+      city: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       zipCode: new FormControl('', [
         Validators.minLength(5), Validators.maxLength(5),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
@@ -109,8 +109,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-
-      comment: new FormControl('', []),
       infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase })
     });
     this.setValidators();

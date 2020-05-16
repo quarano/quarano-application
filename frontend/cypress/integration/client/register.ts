@@ -14,7 +14,7 @@ describe('registration form', () => {
 
   describe('submit button is enabled', () => {
     it('completed form', () => {
-      cy.get('[data-cy="input-client-code"] input[matInput]').type('qwertzu12345');
+      cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
       cy.get('[data-cy="input-email"] input[matInput]').type('test@mustermann.de');
       cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
       cy.get('[data-cy="input-password"] input[matInput]').type('thisIsMyPassword1!');
@@ -44,7 +44,7 @@ describe('registration form', () => {
               $input.hasClass('mat-form-field-invalid');
               cy.get('[data-cy="input-email"] mat-error')
                 .should('exist')
-                .and('contain.text', 'Sie müssen eine richtige E-Mail-Adresse angeben.');
+                .and('contain.text', 'Bitte geben Sie eine gültige E-Mail-Adresse an');
             });
           });
 
@@ -53,7 +53,7 @@ describe('registration form', () => {
               $input.hasClass('mat-form-field-invalid');
               cy.get('[data-cy="input-email"] mat-error')
                 .should('exist')
-                .and('contain.text', 'Sie müssen eine richtige E-Mail-Adresse angeben.');
+                .and('contain.text', 'Bitte geben Sie eine gültige E-Mail-Adresse an');
             });
           });
         });
@@ -158,7 +158,7 @@ describe('registration form', () => {
 
           cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword12!').blur().then($input => {
             $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-password-confirm"]').nextUntil('.mat-form-field-subscript-wrapper mat-error')
+            cy.get('[data-cy="input-password-confirm"] mat-error')
               .should('exist')
               .and('contain.text', 'Das Passwort und die Bestätigung müssen übereinstimmen.');
           });

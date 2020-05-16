@@ -18,7 +18,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     NgxDatatableModule,
     ConfirmationDialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [AccountAdministrationComponent, AccountEditComponent],
   providers: [AccountsResolver, AccountResolver]

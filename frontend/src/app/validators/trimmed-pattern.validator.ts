@@ -1,24 +1,28 @@
+import { ValidationPattern } from './validation-patterns';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 import { AbstractControl, Validators, ValidationErrors } from '@angular/forms';
 
 export class TrimmedPatternValidator {
 
-  public static trimmedPattern(pattern: string | RegExp) {
-    if (!pattern) { return Validators.nullValidator; }
+  public static trimmedPattern(pattern: VALIDATION_PATTERNS) {
+    const validationPattern = ValidationPattern.validationPatterns.get(pattern);
+
+    if (!validationPattern) { return Validators.nullValidator; }
     let regex: RegExp;
     let regexStr: string;
-    if (typeof pattern === 'string') {
+    if (typeof validationPattern.pattern === 'string') {
       regexStr = '';
 
-      if (pattern.charAt(0) !== '^') { regexStr += '^'; }
+      if (validationPattern.pattern.charAt(0) !== '^') { regexStr += '^'; }
 
-      regexStr += pattern;
+      regexStr += validationPattern.pattern;
 
-      if (pattern.charAt(pattern.length - 1) !== '$') { regexStr += '$'; }
+      if (validationPattern.pattern.charAt(validationPattern.pattern.length - 1) !== '$') { regexStr += '$'; }
 
       regex = new RegExp(regexStr);
     } else {
       regexStr = pattern.toString();
-      regex = pattern;
+      regex = validationPattern.pattern;
     }
     return (control: AbstractControl): ValidationErrors | null => {
       const trimmedValue = control.value?.trim();
@@ -27,7 +31,7 @@ export class TrimmedPatternValidator {
       }
       const value: string = trimmedValue;
       return regex.test(value) ? null :
-        { trimmedPattern: { requiredPattern: regexStr, actualValue: value } };
+        { trimmedPattern: { requiredPattern: regexStr, actualValue: value, errorMessage: validationPattern.errorMessage } };
     };
   }
 }

@@ -1,3 +1,4 @@
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@services/snackbar.service';
 import { ApiService } from '@services/api.service';
@@ -6,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CaseActionDto } from '@models/case-action';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@ui/confirmation-dialog/confirmation-dialog.component';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 
 @Component({
   selector: 'app-client-action',
@@ -25,7 +27,7 @@ export class ActionComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      comment: new FormControl()
+      comment: new FormControl(null, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
     });
   }
 

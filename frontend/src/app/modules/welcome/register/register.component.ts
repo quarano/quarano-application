@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
 
   public registrationForm = new FormGroup({
     clientCode: new FormControl(null, [
-      Validators.required,
+      Validators.required
     ]),
     username: new FormControl(null, [
       Validators.required,
@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
       () => this.usernameIsValid ? null : { usernameInvalid: true }
     ]),
     password: new FormControl(null, [
-      PasswordValidator.secure
+      Validators.required, PasswordValidator.secure
     ]),
     passwordConfirm: new FormControl(null, [
       Validators.required

@@ -29,6 +29,19 @@
         >
           Der angegebene Code ist ungültig.
         </mat-error>
+        <mat-error
+          *ngIf="registrationForm.controls.clientCode.hasError('required')"
+          >Bitte geben Sie einen Anmeldecode ein</mat-error
+        >
+        <mat-error
+          *ngIf="
+            registrationForm.controls.clientCode.hasError('trimmedPattern')
+          "
+          >{{
+            registrationForm.controls.clientCode.getError("trimmedPattern")
+              .errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field
         class="form__input--full-width"
@@ -44,9 +57,16 @@
           #email_input
           (blur)="trimValue(email_input)"
         />
-        <mat-error>
-          Sie müssen eine richtige E-Mail-Adresse angeben.
-        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.email.hasError('required')"
+          >Bitte geben Sie eine E-Mail-Adresse ein</mat-error
+        >
+        <mat-error
+          *ngIf="registrationForm.controls.email.hasError('trimmedPattern')"
+          >{{
+            registrationForm.controls.email.getError("trimmedPattern")
+              .errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field
         class="form__input--full-width"
@@ -68,6 +88,25 @@
         >
           Der angegebene Benutzername kann nicht verwendet werden.
         </mat-error>
+        <mat-error
+          *ngIf="registrationForm.controls.username.hasError('required')"
+          >Bitte geben Sie einen Benutzernamen ein</mat-error
+        >
+        <mat-error
+          *ngIf="registrationForm.controls.username.hasError('minlength')"
+          >Der Benutzername muss mindestens 1 Zeichen lang sein</mat-error
+        >
+        <mat-error
+          *ngIf="registrationForm.controls.username.hasError('maxlength')"
+          >Der Benutzername darf maximal 30 Zeichen lang sein</mat-error
+        >
+        <mat-error
+          *ngIf="registrationForm.controls.username.hasError('trimmedPattern')"
+          >{{
+            registrationForm.controls.username.getError("trimmedPattern")
+              .errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field
         class="form__input--full-width"
@@ -85,12 +124,16 @@
           (blur)="trimValue(password_input)"
         />
         <mat-error
-          *ngIf="registrationForm.controls.password.hasError('minLength')"
+          *ngIf="registrationForm.controls.password.hasError('required')"
+          >Bitte geben Sie ein Passwort ein</mat-error
+        >
+        <mat-error
+          *ngIf="registrationForm.controls.password.hasError('minlength')"
         >
           Das Passwort muss mindestens 7 Zeichen lang sein.
         </mat-error>
         <mat-error
-          *ngIf="registrationForm.controls.password.hasError('maxLength')"
+          *ngIf="registrationForm.controls.password.hasError('maxlength')"
         >
           Das Passwort darf höchstens 30 Zeichen lang sein.
         </mat-error>
@@ -130,6 +173,10 @@
           (blur)="trimValue(password_confirm_input)"
           [errorStateMatcher]="confirmValidParentMatcher"
         />
+        <mat-error
+          *ngIf="registrationForm.controls.passwordConfirm.hasError('required')"
+          >Bitte bestätigen Sie das Passwort</mat-error
+        >
         <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>

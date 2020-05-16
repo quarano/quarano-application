@@ -11,10 +11,10 @@ export class PasswordValidator {
     }
 
     if (password.length <= 7) {
-      errors.minLength = true;
+      errors.minlength = true;
     }
     if (password.length > 500) {
-      errors.maxLength = true;
+      errors.maxlength = true;
     }
     if (!password.match(/(?=.*[A-Z])/)) {
       errors.uppercase = true;

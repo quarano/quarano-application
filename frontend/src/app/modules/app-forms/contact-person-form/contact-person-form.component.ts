@@ -58,12 +58,13 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
           [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
         zipCode: new FormControl(this.contactPerson.zipCode,
           [Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
-        city: new FormControl(this.contactPerson.city),
-        identificationHint: new FormControl(this.contactPerson.identificationHint),
+        city: new FormControl(this.contactPerson.city, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
+        identificationHint: new FormControl(this.contactPerson.identificationHint,
+          [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
         isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),
         isSenior: new FormControl(this.contactPerson.isSenior),
         hasPreExistingConditions: new FormControl(this.contactPerson.hasPreExistingConditions),
-        remark: new FormControl(this.contactPerson.remark)
+        remark: new FormControl(this.contactPerson.remark, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
       }
     );
     this.formGroup.valueChanges.subscribe(_ => this.dirty.emit(true));

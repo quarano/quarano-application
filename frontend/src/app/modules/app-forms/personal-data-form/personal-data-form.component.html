@@ -14,8 +14,11 @@
       <mat-error *ngIf="formGroup.get('firstName').hasError('required')"
         >Bitte geben Sie einen Vornamen ein</mat-error
       >
-      <mat-error *ngIf="formGroup.get('firstName').hasError('trimmedPattern')"
-        >Bitte geben Sie einen gültigen Vornamen ein</mat-error
+      <mat-error
+        *ngIf="formGroup.get('firstName').hasError('trimmedPattern')"
+        >{{
+          formGroup.controls.firstName.getError("trimmedPattern").errorMessage
+        }}</mat-error
       >
     </mat-form-field>
     <mat-form-field class="half-width">
@@ -31,9 +34,9 @@
       <mat-error *ngIf="formGroup.get('lastName').hasError('required')"
         >Bitte geben Sie einen Nachnamen ein</mat-error
       >
-      <mat-error *ngIf="formGroup.get('lastName').hasError('trimmedPattern')"
-        >Bitte geben Sie einen gültigen Nachnamen ein</mat-error
-      >
+      <mat-error *ngIf="formGroup.get('lastName').hasError('trimmedPattern')">{{
+        formGroup.controls.lastName.getError("trimmedPattern").errorMessage
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>Geburtsdatum</mat-label>
@@ -75,7 +78,9 @@
         #email_input
         (blur)="trimValue(email_input)"
       />
-      <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+      <mat-error *ngIf="formGroup.controls.email.hasError('trimmedPattern')">{{
+        formGroup.controls.email.getError("trimmedPattern").errorMessage
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
       <input
@@ -88,7 +93,14 @@
         #phone_input
         (blur)="trimValue(phone_input)"
       />
-      <mat-error>Bitte geben Sie eine gültige Telefonnummer ein</mat-error>
+      <mat-error *ngIf="formGroup.controls.phone.hasError('minlength')"
+        >Die Telefonnummer muss mindestens 5 Zeichen haben</mat-error
+      ><mat-error *ngIf="formGroup.controls.phone.hasError('maxlength')"
+        >Die Telefonnummer darf maximal 17 Zeichen haben</mat-error
+      >
+      <mat-error *ngIf="formGroup.controls.phone.hasError('trimmedPattern')">{{
+        formGroup.controls.phone.getError("trimmedPattern").errorMessage
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
       <input
@@ -101,8 +113,16 @@
         #mobile_phone_input
         (blur)="trimValue(mobile_phone_input)"
       />
+      <mat-error *ngIf="formGroup.controls.mobilePhone.hasError('minlength')"
+        >Die Telefonnummer muss mindestens 5 Zeichen haben</mat-error
+      ><mat-error *ngIf="formGroup.controls.mobilePhone.hasError('maxlength')"
+        >Die Telefonnummer darf maximal 17 Zeichen haben</mat-error
+      >
       <mat-error
-        >Bitte geben Sie eine gültige mobile Telefonnummer ein</mat-error
+        *ngIf="formGroup.controls.mobilePhone.hasError('trimmedPattern')"
+        >{{
+          formGroup.controls.mobilePhone.getError("trimmedPattern").errorMessage
+        }}</mat-error
       >
     </mat-form-field>
   </fieldset>
@@ -118,7 +138,12 @@
         #street_input
         (blur)="trimValue(street_input)"
       />
-      <mat-error>Bitte geben Sie eine gültige Straße ein</mat-error>
+      <mat-error *ngIf="formGroup.controls.street.hasError('required')"
+        >Bitte geben Sie eine Straße ein</mat-error
+      >
+      <mat-error *ngIf="formGroup.controls.street.hasError('trimmedPattern')">{{
+        formGroup.controls.street.getError("trimmedPattern").errorMessage
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field style="width: 30%;">
       <input
@@ -130,7 +155,12 @@
         #house_number_input
         (blur)="trimValue(house_number_input)"
       />
-      <mat-error>Bitte geben Sie eine gültige Hausnummer ein</mat-error>
+      <mat-error
+        *ngIf="formGroup.controls.houseNumber.hasError('trimmedPattern')"
+        >{{
+          formGroup.controls.houseNumber.getError("trimmedPattern").errorMessage
+        }}</mat-error
+      >
     </mat-form-field>
     <mat-form-field style="width: 30%;">
       <input
@@ -144,7 +174,15 @@
         #zip_code_input
         (blur)="trimValue(zip_code_input)"
       />
-      <mat-error>Bitte geben Sie eine gültige Postleitzahl ein</mat-error>
+      <mat-error *ngIf="formGroup.controls.zipCode.hasError('required')"
+        >Bitte geben Sie eine Postleitzahl ein</mat-error
+      >
+      <mat-error
+        *ngIf="formGroup.controls.zipCode.hasError('trimmedPattern')"
+        >{{
+          formGroup.controls.zipCode.getError("trimmedPattern").errorMessage
+        }}</mat-error
+      >
     </mat-form-field>
     <mat-form-field style="width: 70%;">
       <input
@@ -156,7 +194,12 @@
         #city_input
         (blur)="trimValue(city_input)"
       />
-      <mat-error>Bitte geben Sie einen gültigen Ort ein</mat-error>
+      <mat-error *ngIf="formGroup.controls.city.hasError('required')"
+        >Bitte geben Sie eine Stadt ein</mat-error
+      >
+      <mat-error *ngIf="formGroup.controls.city.hasError('trimmedPattern')">{{
+        formGroup.controls.city.getError("trimmedPattern").errorMessage
+      }}</mat-error>
     </mat-form-field>
   </fieldset>
 </div>

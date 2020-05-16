@@ -2,10 +2,9 @@
   <button mat-dialog-close mat-icon-button>
     <mat-icon>close</mat-icon>
   </button>
-  <h1 mat-dialog-title> Diesen Fall abschließen </h1>
+  <h1 mat-dialog-title>Diesen Fall abschließen</h1>
 </div>
 <mat-dialog-content>
-
   <form [formGroup]="commentGroup">
     <fieldset class="mb-3">
       <legend>Zusätzliche Informationen zum Fallabschluss:</legend>
@@ -14,13 +13,24 @@
         <mat-error *ngIf="commentGroup.get('comment').hasError('required')">
           Bitte geben Sie ein Kommentar ein um den Fall abzuschließen
         </mat-error>
+        <mat-error
+          *ngIf="commentGroup.controls.comment.hasError('trimmedPattern')"
+          >{{
+            commentGroup.controls.comment.getError("trimmedPattern")
+              .errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
     </fieldset>
   </form>
-
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button [disabled]="!commentGroup.get('comment').value" mat-raised-button color="primary" (click)="confirm()">
+  <button
+    [disabled]="!commentGroup.get('comment').value"
+    mat-raised-button
+    color="primary"
+    (click)="confirm()"
+  >
     <mat-icon>check</mat-icon>
     OK
   </button>

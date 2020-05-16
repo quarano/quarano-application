@@ -133,7 +133,8 @@ describe('new case', () => {
           cy.get('[data-cy="input-firstname"] input[matInput]').clear().type('Testfirstn5ame');
           cy.get('[data-cy="input-firstname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte geben Sie einen gültigen Vornamen ein');
+          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text',
+            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt');
         });
       });
 
@@ -149,7 +150,8 @@ describe('new case', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').clear().type('Testlast09name');
           cy.get('[data-cy="input-lastname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte geben Sie einen gültigen Nachnamen ein');
+          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text',
+            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt');
         });
       });
 
@@ -242,19 +244,22 @@ describe('new case', () => {
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige Telefonnummer ein');
+          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
+            'Die Telefonnummer muss mindestens 5 Zeichen haben');
         });
 
         it('should be invalid with invalid symbols', () => {
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621 i');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige Telefonnummer ein');
+          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
 
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621 $');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige Telefonnummer ein');
+          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
         });
 
         it('should be shortened long phone number to 17 symbols', () => {
@@ -278,19 +283,21 @@ describe('new case', () => {
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige mobile Telefonnummer ein');
+          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Die Telefonnummer muss mindestens 5 Zeichen lang sein');
         });
 
         it('should be invalid with invalid symbols', () => {
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 i');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige mobile Telefonnummer ein');
+          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
 
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 $');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Bitte geben Sie eine gültige mobile Telefonnummer ein');
+          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
         });
 
         it('should be shortened long phone number to 17 symbols', () => {

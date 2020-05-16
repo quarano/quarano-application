@@ -1,6 +1,8 @@
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 
 @Component({
   selector: 'app-close-case-dialog',
@@ -10,7 +12,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class CloseCaseDialogComponent {
 
   commentGroup = new FormGroup({
-    comment: new FormControl('', [Validators.required])
+    comment: new FormControl('', [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
   });
 
   constructor(

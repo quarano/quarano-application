@@ -1,7 +1,9 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {CaseCommentDto} from '@models/case-comment';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import { TrimmedPatternValidator } from '@validators/trimmed-pattern.validator';
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { CaseCommentDto } from '@models/case-comment';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { VALIDATION_PATTERNS } from '@validators/validation-patterns';
 
 @Component({
   selector: 'app-client-comments',
@@ -17,7 +19,7 @@ export class CommentsComponent implements OnInit {
   newComment: Subject<string> = new Subject<string>();
 
   formGroup: FormGroup = new FormGroup({
-    comment: new FormControl(null, [Validators.required])
+    comment: new FormControl(null, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
   });
 
   constructor() {

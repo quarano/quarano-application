@@ -25,7 +25,15 @@
           #first_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error>Bitte geben Sie einen gültigen Vornamen ein</mat-error>
+        <mat-error *ngIf="formGroup.controls.firstName.hasError('required')"
+          >Bitte geben Sie einen Vornamen ein</mat-error
+        >
+        <mat-error
+          *ngIf="formGroup.controls.firstName.hasError('trimmedPattern')"
+          >{{
+            formGroup.controls.firstName.getError("trimmedPattern").errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field class="half-width">
         <input
@@ -37,7 +45,15 @@
           #last_name_input
           (blur)="trimValue(last_name_input)"
         />
-        <mat-error>Bitte geben Sie einen gültigen Nachnamen ein</mat-error>
+        <mat-error *ngIf="formGroup.controls.lastName.hasError('required')"
+          >Bitte geben Sie einen Nachnamen ein</mat-error
+        >
+        <mat-error
+          *ngIf="formGroup.controls.lastName.hasError('trimmedPattern')"
+          >{{
+            formGroup.controls.lastName.getError("trimmedPattern").errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -49,7 +65,15 @@
           #email_input
           (blur)="trimValue(email_input)"
         />
-        <mat-error>Bitte geben Sie eine valide E-Mail-Adresse ein</mat-error>
+        <mat-error *ngIf="formGroup.controls.email.hasError('required')"
+          >Bitte geben Sie eine E-Mail-Adresse ein</mat-error
+        >
+        <mat-error
+          *ngIf="formGroup.controls.email.hasError('trimmedPattern')"
+          >{{
+            formGroup.controls.email.getError("trimmedPattern").errorMessage
+          }}</mat-error
+        >
       </mat-form-field>
       <mat-form-field class="form__input--full-width">
         <mat-label>Username</mat-label>
@@ -80,10 +104,10 @@
           #password_input
           (blur)="trimValue(password_input)"
         />
-        <mat-error *ngIf="formGroup.controls.password.hasError('minLength')">
+        <mat-error *ngIf="formGroup.controls.password.hasError('minlength')">
           Das Passwort muss mindestens 7 Zeichen lang sein.
         </mat-error>
-        <mat-error *ngIf="formGroup.controls.password.hasError('maxLength')">
+        <mat-error *ngIf="formGroup.controls.password.hasError('maxlength')">
           Das Passwort darf höchstens 30 Zeichen lang sein.
         </mat-error>
         <mat-error *ngIf="formGroup.controls.password.hasError('uppercase')">

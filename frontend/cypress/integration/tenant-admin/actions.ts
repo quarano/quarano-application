@@ -22,7 +22,7 @@ describe('tenant actions overview', () => {
   describe('case list', () => {
     it('should get a list of cases and display in table', () => {
       cy.wait('@allactions').its('status').should('eq', 200);
-      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').should('have.length', 15);
+      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').should('have.length', 14);
     });
 
     it('should open selected case', () => {

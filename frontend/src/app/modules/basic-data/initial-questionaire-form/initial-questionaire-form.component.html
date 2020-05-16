@@ -53,8 +53,10 @@
       <mat-error
         *ngIf="formGroup.controls.familyDoctor.hasError('trimmedPattern')"
       >
-        Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
-        enthalten</mat-error
+        {{
+          formGroup.controls.familyDoctor.getError("trimmedPattern")
+            .errorMessage
+        }}</mat-error
       ><mat-error *ngIf="formGroup.controls.familyDoctor.hasError('required')"
         >Bitte geben Sie Ihren behandelnden Hausarzt an</mat-error
       >
@@ -70,8 +72,10 @@
         *ngIf="
           formGroup.controls.guessedOriginOfInfection.hasError('trimmedPattern')
         "
-        >Dieses Feld darf nur Buchstaben, Satzzeichen und Zeilenumbrüche
-        enthalten</mat-error
+        >{{
+          formGroup.controls.guessedOriginOfInfection.getError("trimmedPattern")
+            .errorMessage
+        }}</mat-error
       ><mat-error
         *ngIf="formGroup.controls.guessedOriginOfInfection.hasError('required')"
         >Bitte geben Sie den (vermuteten) Ort der Ansteckung an</mat-error
@@ -111,8 +115,11 @@
             'trimmedPattern'
           )
         "
-        >Dieses Feld darf nur Buchstaben, Satzzeichen und Zeilenumbrüche
-        enthalten</mat-error
+        >{{
+          formGroup.controls.hasPreExistingConditionsDescription.getError(
+            "trimmedPattern"
+          ).errorMessage
+        }}</mat-error
       ><mat-error
         *ngIf="
           formGroup.controls.hasPreExistingConditionsDescription.hasError(
@@ -152,8 +159,11 @@
             'trimmedPattern'
           )
         "
-        >Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
-        enthalten</mat-error
+        >{{
+          formGroup.controls.belongToMedicalStaffDescription.getError(
+            "trimmedPattern"
+          ).errorMessage
+        }}</mat-error
       ><mat-error
         *ngIf="
           formGroup.controls.belongToMedicalStaffDescription.hasError(
@@ -193,8 +203,11 @@
             'trimmedPattern'
           )
         "
-        >Dieses Feld darf nur Buchstaben, Zahlen, Satzzeichen und Zeilenumbrüche
-        enthalten</mat-error
+        >{{
+          formGroup.controls.hasContactToVulnerablePeopleDescription.getError(
+            "trimmedPattern"
+          ).errorMessage
+        }}</mat-error
       ><mat-error
         *ngIf="
           formGroup.controls.hasContactToVulnerablePeopleDescription.hasError(

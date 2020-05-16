@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     AdministrationRoutingModule,
-    AccountAdministrationModule
+    AccountAdministrationModule,
   ],
   providers: [IsAdminGuard]
 })
