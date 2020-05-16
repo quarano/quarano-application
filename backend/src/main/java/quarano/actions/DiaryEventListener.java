@@ -18,7 +18,7 @@ public class DiaryEventListener {
 	private final ActionItemRepository items;
 
 	@EventListener
-	void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
+	public void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -30,7 +30,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
+	public void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -50,7 +50,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
+	public void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -66,7 +66,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	void on(DiaryEntryMissing diaryEntryMissing) {
+	public void on(DiaryEntryMissing diaryEntryMissing) {
 
 		log.debug("Caught diaryEntryMissing Event {}. Save it as DiaryEntryMissingActionItem", diaryEntryMissing);
 

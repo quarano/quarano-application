@@ -286,7 +286,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		}
 	}
 
-	public static enum Status {
+	public enum Status {
 
 		OPEN,
 

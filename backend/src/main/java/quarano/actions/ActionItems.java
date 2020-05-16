@@ -62,6 +62,12 @@ public class ActionItems implements Streamable<ActionItem> {
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
+	public boolean isEmpty() {
+
+		return items.stream() //
+				.findAny().isEmpty();
+	}
+
 	public boolean hasUnresolvedItemsForManualResolution() {
 
 		return items.stream() //
