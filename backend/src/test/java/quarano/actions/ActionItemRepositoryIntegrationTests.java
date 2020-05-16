@@ -54,7 +54,7 @@ class ActionItemRepositoryIntegrationTests {
 	void testFindUnresolvedByPerson() {
 
 		var person = VALID_TRACKED_PERSON4_ID_DEP1;
-		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE).resolve(repository::save);
+		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE).resolveAutomatically(repository::save);
 
 		assertThat(repository.findByTrackedPerson(person).stream()) //
 				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0)) //

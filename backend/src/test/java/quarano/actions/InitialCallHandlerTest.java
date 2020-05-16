@@ -71,7 +71,7 @@ class InitialCallHandlerTest {
 
 		assertThatCode(() -> initialCallHandler.handleInitialCallOpen(spyCase)).doesNotThrowAnyException();
 
-		verify(actionItems, times(1)).resolve(any());
+		verify(actionItems, times(1)).resolveAutomatically(any());
 	}
 
 	private Stream<Arguments> trackedCases() {

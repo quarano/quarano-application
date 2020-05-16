@@ -62,9 +62,25 @@ public class ActionItems implements Streamable<ActionItem> {
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
-	public ActionItems resolve(Consumer<ActionItem> callback) {
+	public boolean hasUnresolvedItemsForManuallyReslovation() {
+
+		return items.stream() //
+				.filter(item -> item.getDescription().getCode().isMaunalResloving()) //
+				.anyMatch(ActionItem::isUnresolved);
+	}
+
+	public ActionItems resolveManually(Consumer<ActionItem> callback) {
+		return this.resolve(false, callback);
+	}
+
+	public ActionItems resolveAutomatically(Consumer<ActionItem> callback) {
+		return this.resolve(true, callback);
+	}
+
+	private ActionItems resolve(boolean systemResolving, Consumer<ActionItem> callback) {
 
 		getUnresolvedItems() //
+				.filter(item -> systemResolving || item.getDescription().getCode().isMaunalResloving())
 				.map(ActionItem::resolve) //
 				.forEach(callback);
 

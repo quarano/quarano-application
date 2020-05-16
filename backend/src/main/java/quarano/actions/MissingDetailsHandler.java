@@ -22,7 +22,7 @@ class MissingDetailsHandler {
 			}
 		} else {
 			items.findByDescriptionCode(person.getId(), descriptionCode) //
-					.resolve(items::save);
+					.resolveAutomatically(items::save);
 		}
 	}
 }

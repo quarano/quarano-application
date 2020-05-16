@@ -84,14 +84,12 @@
         }}</mat-error
       >
     </mat-form-field>
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="formGroup.invalid"
-    >
-      <mat-icon>check</mat-icon> Abschließen
-    </button>
+    <span [matTooltip]="buttonTooltip">
+      <button type="submit" mat-raised-button color="primary"
+              [disabled]="isButtonDisabled()"
+      >  <mat-icon>check</mat-icon> Abschließen
+      </button>
+    </span>
     <button
       class="ml-3"
       type="button"
