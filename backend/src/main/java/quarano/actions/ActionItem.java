@@ -83,7 +83,7 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 
 		MEDICAL_INCIDENT,
 
-		PROCESS_INCIDENT;
+		PROCESS_INCIDENT,
 	}
 
 	@Embeddable

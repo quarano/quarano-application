@@ -15,6 +15,8 @@ public enum DescriptionCode {
 
 	DIARY_ENTRY_MISSING(true),
 
+	QUARANTINE_ENDING(true),
+
 	MISSING_DETAILS_INDEX(false),
 
 	MISSING_DETAILS_CONTACT(false),
@@ -26,7 +28,7 @@ public enum DescriptionCode {
 	private final @Getter float multiplier;
 	private final @Getter boolean manuallyResolvable;
 
-	private DescriptionCode(boolean manuallyResolvable) {
+	DescriptionCode(boolean manuallyResolvable) {
 		this(1f, manuallyResolvable);
 	}
 }

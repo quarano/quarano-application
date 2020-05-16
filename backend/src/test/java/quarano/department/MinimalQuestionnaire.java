@@ -8,7 +8,7 @@ class MinimalQuestionnaire extends Questionnaire {
 		super(symptomInformation, hasPreExistingConditionsDescription, belongToMedicalStaffDescription);
 	}
 
-	MinimalQuestionnaire() {
+	public MinimalQuestionnaire() {
 		super(SymptomInformation.withoutSymptoms(), null, null);
 	}
 }

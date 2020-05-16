@@ -1,4 +1,4 @@
-package quarano.tracking;
+package quarano.tracking.schedules;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import quarano.tracking.DiaryEntryMissing;
+import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryProperties;
+import quarano.tracking.Slot;
 
 /**
  * This class collects the persons with missing diary entries and publishes Events of them combining the slots with
