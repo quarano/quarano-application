@@ -4,7 +4,7 @@
     <ul>
       <li *ngFor="let item of anomaly.items" class="item">
         <mat-icon class="mr-2" color="warn">notification_important</mat-icon
-        ><span class="mr-3">{{ getItemTime(item.date) }}</span>
+        ><span class="mr-3">{{ item.date | date: "HH:mm" }}</span>
         {{ item.description }}
       </li>
     </ul>

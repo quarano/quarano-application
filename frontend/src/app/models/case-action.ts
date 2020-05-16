@@ -24,7 +24,7 @@ export interface ActionDto {
 
 export interface AnomalyDto {
   type: Alert;
-  date: string;
+  date: Date;
   description: string;
   weight: number;
   _links: EntryLink;
