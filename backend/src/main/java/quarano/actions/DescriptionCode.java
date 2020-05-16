@@ -9,22 +9,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor()
 public enum DescriptionCode {
 
-	INCREASED_TEMPERATURE,
+	INCREASED_TEMPERATURE(true),
 
-	FIRST_CHARACTERISTIC_SYMPTOM(2.0f),
+	FIRST_CHARACTERISTIC_SYMPTOM(2.0f, true),
 
-	DIARY_ENTRY_MISSING,
+	DIARY_ENTRY_MISSING(true),
 
-	MISSING_DETAILS_INDEX,
-	MISSING_DETAILS_CONTACT,
+	MISSING_DETAILS_INDEX(false),
+	MISSING_DETAILS_CONTACT(false),
 
-	INITIAL_CALL_OPEN_INDEX,
-	INITIAL_CALL_OPEN_CONTACT;
-
+	INITIAL_CALL_OPEN_INDEX(true),
+	INITIAL_CALL_OPEN_CONTACT(true);
 
 	private final @Getter float multiplier;
+	private final @Getter boolean maunalResloving;
 
-	private DescriptionCode() {
-		this(1f);
+	private DescriptionCode(boolean maunalResloving) {
+		this(1f, maunalResloving);
 	}
 }

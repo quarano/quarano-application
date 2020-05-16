@@ -37,6 +37,6 @@ public class ActionItemsManagement {
 		}
 
 		items.findByCase(trackedCase) //
-				.resolve(items::save);
+				.resolveManually(items::save);
 	}
 }

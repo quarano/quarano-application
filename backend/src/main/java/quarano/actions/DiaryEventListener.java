@@ -26,7 +26,7 @@ public class DiaryEventListener {
 
 		// resolve missing entry item
 		items.findDiaryEntryMissingActionItemsFor(person, slot) //
-				.resolve(items::save);
+				.resolveAutomatically(items::save);
 	}
 
 	@EventListener
@@ -45,7 +45,7 @@ public class DiaryEventListener {
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
 		} else {
 			items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE) //
-					.resolve(items::save);
+					.resolveAutomatically(items::save);
 		}
 	}
 

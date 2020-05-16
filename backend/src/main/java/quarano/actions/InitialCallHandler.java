@@ -14,7 +14,8 @@ public class InitialCallHandler {
 
 	void handleInitialCallOpen(TrackedCase trackedCase) {
 		var person = trackedCase.getTrackedPerson();
-		var descriptionCode = trackedCase.isIndexCase() ? DescriptionCode.INITIAL_CALL_OPEN_INDEX : DescriptionCode.INITIAL_CALL_OPEN_CONTACT;
+		var descriptionCode = trackedCase.isIndexCase() ? DescriptionCode.INITIAL_CALL_OPEN_INDEX
+				: DescriptionCode.INITIAL_CALL_OPEN_CONTACT;
 
 		if (trackedCase.isInitialCallNeeded()) {
 			if (items.findByDescriptionCode(person.getId(), descriptionCode).isEmpty()) {
@@ -22,7 +23,8 @@ public class InitialCallHandler {
 						new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
 			}
 		} else {
-			items.findByDescriptionCode(person.getId(), descriptionCode).resolve(items::save);
+			items.findByDescriptionCode(person.getId(), descriptionCode) //
+					.resolveAutomatically(items::save);
 		}
 	}
 }
