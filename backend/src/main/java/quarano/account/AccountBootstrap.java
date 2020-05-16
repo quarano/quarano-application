@@ -48,8 +48,6 @@ public class AccountBootstrap implements ApplicationRunner {
 		// create initial roles
 		for (RoleType type : RoleType.values()) {
 
-
-			
 			var role = roleRepository.findByName(type.getCode());
 
 			if (role != null) {

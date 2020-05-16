@@ -3,6 +3,7 @@ package quarano.account.web;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import io.jsonwebtoken.lang.Objects;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,9 @@ import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.AccountService;
+import quarano.account.Role;
 import quarano.account.RoleRepository;
+import quarano.account.RoleType;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.UserName;
@@ -31,6 +34,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -59,8 +63,15 @@ class StaffAccountRepresentations {
 	}
 
 	Account from(Account existing, @Valid StaffAccountUpdateInputDto payload) {
-
 		var mappedAccount = mapper.map(payload, existing);
+
+		List<Role> mappedRoles = mappedAccount.getRoles();
+		mappedRoles.clear();
+		payload.getRoles().stream()
+				.map(RoleType::valueOf)
+				.map(this.roles::findByRoleType)
+				.filter(java.util.Objects::nonNull)
+				.forEach(mappedRoles::add);
 
 		return mappedAccount;
 	}
@@ -105,14 +116,16 @@ class StaffAccountRepresentations {
 		}
 	}
 
+	@Data
+	@Getter(onMethod = @__(@Nullable))
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountCreateInputDto {
 
-		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
-		private @Setter @Getter @NotBlank String password, passwordConfirm; // password rules are checked in Entity
-		private @Setter @Getter @UserName @NotBlank String username;
-		private @Setter @Getter @NotBlank @Email String email;
-		private @Setter @Getter List<String> roles = new ArrayList<>();
+		private @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
+		private @NotBlank String password, passwordConfirm; // password rules are checked in Entity
+		private @UserName @NotBlank String username;
+		private @NotBlank @Email String email;
+		private List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, AccountService accounts) {
 

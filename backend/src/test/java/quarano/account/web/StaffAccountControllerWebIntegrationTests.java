@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.MediaType;
@@ -120,7 +119,6 @@ class StaffAccountControllerWebIntegrationTests {
 
 	@Test
 	@WithQuaranoUser("admin")
-	@Disabled
 	void rejectsInvalidCharactersForStringFieldsOnCreate() throws Exception {
 
 		var source = createTestUserInput(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN);
@@ -129,7 +127,7 @@ class StaffAccountControllerWebIntegrationTests {
 		source.setUsername("Demo ! A/Ccount");
 		source.setEmail("myT@estmaIl@test.com"); //
 		source.setFirstName("Hans123");
-		source.setFirstName("Huber123");
+		source.setLastName("Huber123");
 
 		// send request
 		var responseBody = mvc.perform(post("/api/hd/accounts") //
@@ -153,7 +151,6 @@ class StaffAccountControllerWebIntegrationTests {
 	
 	@Test
 	@WithQuaranoUser("admin")
-	@Disabled
 	void rejectsInvalidCharactersForStringFieldsOnUpdate() throws Exception {
 		
 		// get reference accounts
@@ -164,7 +161,7 @@ class StaffAccountControllerWebIntegrationTests {
 		dto.setUsername("Demo ! A/Ccount");
 		dto.setEmail("myT@estmaIl@test.com"); //
 		dto.setFirstName("Hans123");
-		dto.setFirstName("Huber123");
+		dto.setLastName("Huber123");
 		
 		var response = mvc.perform(put("/api/hd/accounts/" + agent1.get().getId())
 				.content(jackson.writeValueAsString(dto)) //

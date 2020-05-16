@@ -15,7 +15,6 @@ import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDt
 import quarano.core.EmailAddress;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
-import quarano.core.web.MapperWrapper;
 
 import java.net.URI;
 import java.util.Optional;
@@ -42,62 +41,61 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class StaffAccountController {
 
-	private final @NonNull MapperWrapper mapper;
 	private final @NonNull AccountService accounts;
 	private final @NonNull StaffAccountRepresentations representations;
-	private final MessageSourceAccessor messages;	
-	private final @NonNull MessageSourceAccessor accessor;	
-	
+	private final @NonNull MessageSourceAccessor accessor;
 
 	@PostMapping("/api/hd/accounts")
-	public HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, @LoggedIn Department department, Errors errors) {
+	public HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, //
+			Errors errors, //
+			@LoggedIn Department department) {
 
 		// start validation manually because of required reference to account object from database
 		payload.validate(errors, accounts);
-		
+
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
-		
-		var storedAccount = accounts.createStaffAccount(payload.getUsername(),  //
+
+		var storedAccount = accounts.createStaffAccount(payload.getUsername(), //
 				UnencryptedPassword.of(payload.getPassword()), //
-				payload.getFirstName(), // 
-				payload.getLastName(),  //
+				payload.getFirstName(), //
+				payload.getLastName(), //
 				EmailAddress.of(payload.getEmail()), //
 				department.getId(), //
 				payload.getRoles().stream() //
-					.map(it -> RoleType.valueOf(it)) //
-					.collect(Collectors.toList()));		
-		
+						.map(it -> RoleType.valueOf(it)) //
+						.collect(Collectors.toList()));
+
 		var location = on(StaffAccountController.class).getStaffAccount(storedAccount.getId(), storedAccount);
 
 		return ResponseEntity //
 				.created(URI.create(fromMethodCall(location).toUriString())) //
-				.body(representations.toSummary(storedAccount));		
+				.body(representations.toSummary(storedAccount));
 	}
-	
 
 	@PutMapping("/api/hd/accounts/{accountId}")
-	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, @Validated @RequestBody StaffAccountUpdateInputDto payload, @LoggedIn Department department, Errors errors) {
+	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, //
+			@Validated @RequestBody StaffAccountUpdateInputDto payload, //
+			Errors errors, //
+			@LoggedIn Department department) {
 
 		var existing = accounts.findById(accountId).orElse(null);
 
 		if (existing == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		// start validation manually because of required reference to account object from database
 		payload.validate(errors, existing, accounts);
-		
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
-		}
-		
-		return ResponseEntity.of(accounts.findById(accountId) //
+
+		var errorsDto = ErrorsDto.of(errors, accessor);
+
+		return errorsDto.toBadRequestOrElse(() -> ResponseEntity.of(accounts.findById(accountId) //
 				.map(it -> representations.from(it, payload)) //
 				.map(accounts::saveStaffAccount) //
-				.map(representations::toSummary));
-	}		
+				.map(representations::toSummary)));
+	}
 
 	@GetMapping(path = "/api/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
 	public RepresentationModel<?> getStaffAccounts(@LoggedIn Account admin) {
@@ -109,7 +107,7 @@ class StaffAccountController {
 				.collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
 	}
 
-	@GetMapping(path = "/api/hd/accounts/{accountId}" , produces = MediaTypes.HAL_JSON_VALUE)
+	@GetMapping(path = "/api/hd/accounts/{accountId}", produces = MediaTypes.HAL_JSON_VALUE)
 	public ResponseEntity<?> getStaffAccount(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
 
 		var adminDepartmentId = admin.getDepartmentId();
@@ -121,18 +119,19 @@ class StaffAccountController {
 
 	@DeleteMapping("/api/hd/accounts/{accountId}")
 	public HttpEntity<?> deleteStaffAccounts(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
-
-		Optional<Account> account = accounts.findById(accountId);
 		
-		if(account.isPresent())
-		{
-			accounts.deleteAccount(accountId);
-			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build();
-		}
-		else {
+		return accounts.findById(accountId) //
+		.map(it -> {
+			
+			accounts.deleteAccount(it.getId());
+			
+			return ResponseEntity.ok() //
+					.contentType(MediaType.APPLICATION_JSON) //
+					.build();
+			
+		}).orElseGet(() -> {
+			
 			return ResponseEntity.badRequest().build();
-		}
-
+		});
 	}
-	
 }
