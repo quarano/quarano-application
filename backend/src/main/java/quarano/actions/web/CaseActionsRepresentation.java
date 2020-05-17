@@ -44,7 +44,7 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 		var uriString = fromMethodCall(on(ActionItemController.class) //
 				.resolveActions(trackedCase.getId(), null, null, null)).toUriString();
 
-		return items.hasUnresolvedItemsForManuallyReslovation() //
+		return items.hasUnresolvedItemsForManualResolution() //
 				? result.add(Link.of(uriString, RESOLVE_REL)) //
 				: result;
 	}

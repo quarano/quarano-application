@@ -16,15 +16,17 @@ public enum DescriptionCode {
 	DIARY_ENTRY_MISSING(true),
 
 	MISSING_DETAILS_INDEX(false),
+
 	MISSING_DETAILS_CONTACT(false),
 
 	INITIAL_CALL_OPEN_INDEX(true),
+
 	INITIAL_CALL_OPEN_CONTACT(true);
 
 	private final @Getter float multiplier;
-	private final @Getter boolean maunalResloving;
+	private final @Getter boolean manuallyResolvable;
 
-	private DescriptionCode(boolean maunalResloving) {
-		this(1f, maunalResloving);
+	private DescriptionCode(boolean manuallyResolvable) {
+		this(1f, manuallyResolvable);
 	}
 }

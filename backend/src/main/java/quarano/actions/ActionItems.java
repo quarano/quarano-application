@@ -62,10 +62,10 @@ public class ActionItems implements Streamable<ActionItem> {
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
-	public boolean hasUnresolvedItemsForManuallyReslovation() {
+	public boolean hasUnresolvedItemsForManualResolution() {
 
 		return items.stream() //
-				.filter(item -> item.getDescription().getCode().isMaunalResloving()) //
+				.filter(item -> item.getDescription().getCode().isManuallyResolvable()) //
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
@@ -77,16 +77,6 @@ public class ActionItems implements Streamable<ActionItem> {
 		return this.resolve(true, callback);
 	}
 
-	private ActionItems resolve(boolean systemResolving, Consumer<ActionItem> callback) {
-
-		getUnresolvedItems() //
-				.filter(item -> systemResolving || item.getDescription().getCode().isMaunalResloving())
-				.map(ActionItem::resolve) //
-				.forEach(callback);
-
-		return this;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
@@ -94,5 +84,16 @@ public class ActionItems implements Streamable<ActionItem> {
 	@Override
 	public Iterator<ActionItem> iterator() {
 		return items.iterator();
+
+	}
+
+	private ActionItems resolve(boolean systemResolving, Consumer<ActionItem> callback) {
+
+		getUnresolvedItems() //
+				.filter(item -> systemResolving || item.getDescription().getCode().isManuallyResolvable())
+				.map(ActionItem::resolve) //
+				.forEach(callback);
+
+		return this;
 	}
 }
