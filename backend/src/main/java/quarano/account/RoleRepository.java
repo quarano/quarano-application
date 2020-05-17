@@ -9,7 +9,7 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
 	Role findByName(String roleName);
 
 	@Nullable
-	default Role findByRoleType(RoleType roleType) {
+	default Role findByType(RoleType roleType) {
 		return this.findByName(roleType.getCode());
 	}
 }

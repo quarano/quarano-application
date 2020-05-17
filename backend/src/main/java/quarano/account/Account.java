@@ -38,13 +38,14 @@ import org.jddd.core.types.Identifier;
 @Table(name = "accounts")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @Getter
+@Setter(AccessLevel.PACKAGE)
 public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
-	private @Setter EncryptedPassword password;
-	private @Setter String username, firstname, lastname;
-	private @Setter EmailAddress email;
+	private EncryptedPassword password;
+	private String username, firstname, lastname;
+	private EmailAddress email;
 
-	private DepartmentIdentifier departmentId;
+	private @Setter(AccessLevel.NONE) DepartmentIdentifier departmentId;
 
 	@ManyToMany(fetch = FetchType.EAGER) //
 	private List<Role> roles = new ArrayList<>();

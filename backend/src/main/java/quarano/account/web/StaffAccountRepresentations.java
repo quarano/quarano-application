@@ -8,13 +8,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.AccountService;
-import quarano.account.Role;
 import quarano.account.RoleRepository;
-import quarano.account.RoleType;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.UserName;
@@ -23,9 +20,7 @@ import quarano.core.web.MapperWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -42,6 +37,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author Patrick Otto
+ * @author Felix Schultze
+ * @author Oliver Drotbohm
  */
 @Component
 @RequiredArgsConstructor
@@ -51,48 +48,24 @@ class StaffAccountRepresentations {
 	private final @NonNull RoleRepository roles;
 
 	StaffAccountSummaryDto toSummary(Account account) {
-
-		var dto = new StaffAccountSummaryDto();
-		dto = mapper.map(account, dto);
-		dto.accountId = account.getId().toString();
-		dto.setRoles(account.getRoles().stream() //
-				.map(x -> x.getRoleType().getCode()) //
-				.collect(Collectors.toList()));
-
-		return dto;
+		return mapper.map(account, new StaffAccountSummaryDto().setAccountId(account.getId().toString()));
 	}
 
-	Account from(Account existing, @Valid StaffAccountUpdateInputDto payload) {
-		var mappedAccount = mapper.map(payload, existing);
-
-		List<Role> mappedRoles = mappedAccount.getRoles();
-		mappedRoles.clear();
-		payload.getRoles().stream()
-				.map(RoleType::valueOf)
-				.map(this.roles::findByRoleType)
-				.filter(java.util.Objects::nonNull)
-				.forEach(mappedRoles::add);
-
-		return mappedAccount;
-	}
-
-	Account from(Account existing, @Valid StaffAccountCreateInputDto payload) {
-
-		var mappedAccount = mapper.map(payload, existing);
-
-		return mappedAccount;
+	Account from(StaffAccountUpdateInputDto payload, Account existing) {
+		return mapper.map(payload, existing);
 	}
 
 	@Relation(collectionRelation = "accounts")
-	@Accessors(chain = true)
+	@Getter
+	@Setter
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountSummaryDto extends RepresentationModel<StaffAccountSummaryDto> {
 
-		private @Setter @Getter @NotBlank String firstName, lastName, username;
-		private @Setter @Getter @NotBlank @Email String email;
-		@JsonIgnore private @Setter @Getter String departmentId;
-		private @Setter @Getter List<String> roles = new ArrayList<>();
-		@Setter @Getter private String accountId;
+		private @NotBlank String firstName, lastName, username;
+		private @NotBlank @Email String email;
+		private @JsonIgnore String departmentId;
+		private String accountId;
+		private List<String> roles = new ArrayList<>();
 
 		/*
 		 * (non-Javadoc)
@@ -139,13 +112,15 @@ class StaffAccountRepresentations {
 		}
 	}
 
+	@Getter
+	@Setter
 	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountUpdateInputDto {
 
-		private @Setter @Getter @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
-		private @Setter @Getter @UserName @NotBlank String username;
-		private @Setter @Getter @NotBlank @Email String email;
-		private @Setter @Getter List<String> roles = new ArrayList<>();
+		private @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
+		private @UserName @NotBlank String username;
+		private @NotBlank @Email String email;
+		private List<String> roles = new ArrayList<>();
 
 		Errors validate(Errors errors, Account existing, AccountService accounts) {
 

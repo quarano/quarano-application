@@ -17,7 +17,6 @@ import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.context.support.MessageSourceAccessor;
@@ -46,7 +45,7 @@ class StaffAccountController {
 	private final @NonNull MessageSourceAccessor accessor;
 
 	@PostMapping("/api/hd/accounts")
-	public HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, //
+	HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, //
 			Errors errors, //
 			@LoggedIn Department department) {
 
@@ -75,7 +74,7 @@ class StaffAccountController {
 	}
 
 	@PutMapping("/api/hd/accounts/{accountId}")
-	public HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, //
+	HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, //
 			@Validated @RequestBody StaffAccountUpdateInputDto payload, //
 			Errors errors, //
 			@LoggedIn Department department) {
@@ -92,13 +91,13 @@ class StaffAccountController {
 		var errorsDto = ErrorsDto.of(errors, accessor);
 
 		return errorsDto.toBadRequestOrElse(() -> ResponseEntity.of(accounts.findById(accountId) //
-				.map(it -> representations.from(it, payload)) //
+				.map(it -> representations.from(payload, it)) //
 				.map(accounts::saveStaffAccount) //
 				.map(representations::toSummary)));
 	}
 
 	@GetMapping(path = "/api/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
-	public RepresentationModel<?> getStaffAccounts(@LoggedIn Account admin) {
+	RepresentationModel<?> getStaffAccounts(@LoggedIn Account admin) {
 
 		var departmentAccounts = accounts.findStaffAccountsFor(admin.getDepartmentId());
 
@@ -108,7 +107,7 @@ class StaffAccountController {
 	}
 
 	@GetMapping(path = "/api/hd/accounts/{accountId}", produces = MediaTypes.HAL_JSON_VALUE)
-	public ResponseEntity<?> getStaffAccount(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
+	ResponseEntity<?> getStaffAccount(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
 
 		var adminDepartmentId = admin.getDepartmentId();
 
@@ -118,20 +117,20 @@ class StaffAccountController {
 	}
 
 	@DeleteMapping("/api/hd/accounts/{accountId}")
-	public HttpEntity<?> deleteStaffAccounts(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
-		
+	HttpEntity<?> deleteStaffAccounts(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
+
 		return accounts.findById(accountId) //
-		.map(it -> {
-			
-			accounts.deleteAccount(it.getId());
-			
-			return ResponseEntity.ok() //
-					.contentType(MediaType.APPLICATION_JSON) //
-					.build();
-			
-		}).orElseGet(() -> {
-			
-			return ResponseEntity.badRequest().build();
-		});
+				.map(it -> {
+
+					accounts.deleteAccount(it.getId());
+
+					return ResponseEntity.ok() //
+							.contentType(MediaType.APPLICATION_JSON) //
+							.build();
+
+				}).orElseGet(() -> {
+
+					return ResponseEntity.badRequest().build();
+				});
 	}
 }
