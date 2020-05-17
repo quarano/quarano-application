@@ -141,6 +141,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return type.equals(CaseType.CONTACT_MEDICAL);
 	}
 
+	public boolean isVulnerableContactCase() {
+		return type.equals(CaseType.CONTACT_VULNERABLE);
+	}
+
 	public boolean isInQuarantine() {
 		return quarantine != null;
 	}

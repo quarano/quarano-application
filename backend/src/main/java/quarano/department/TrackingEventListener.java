@@ -160,7 +160,15 @@ public class TrackingEventListener {
 		if (caseOfContactInitializer.isIndexCase()) {
 
 			var person = new TrackedPerson(contactPerson);
-			var caseType = contactPerson.getIsHealthStaff() == Boolean.TRUE ? CaseType.CONTACT_MEDICAL : CaseType.CONTACT;
+			var caseType = CaseType.CONTACT;
+
+			// CORE-185 medical staff overwrites the others
+			if (contactPerson.getIsHealthStaff() == Boolean.TRUE) {
+				caseType = CaseType.CONTACT_MEDICAL;
+			} else if (contactPerson.getIsSenior() == Boolean.TRUE
+					|| contactPerson.getHasPreExistingConditions() == Boolean.TRUE) {
+				caseType = CaseType.CONTACT_VULNERABLE;
+			}
 
 			cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
 
