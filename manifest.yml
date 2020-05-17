@@ -55,7 +55,7 @@ applications:
     - quarano-test
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"  
-    SPRING_PROFILES_ACTIVE: develop	
+
     
 ###############   security-test system #########################
 - name: quarano-frontend-sec
