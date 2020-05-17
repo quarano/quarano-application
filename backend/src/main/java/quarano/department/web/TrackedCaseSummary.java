@@ -114,6 +114,7 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 		switch (trackedCase.getType()) {
 			case CONTACT:
 			case CONTACT_MEDICAL:
+			case CONTACT_VULNERABLE:
 				return CaseType.CONTACT;
 			default:
 				return CaseType.INDEX;

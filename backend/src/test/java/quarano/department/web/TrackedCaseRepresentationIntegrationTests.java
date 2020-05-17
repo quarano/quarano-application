@@ -57,6 +57,9 @@ class TrackedCaseRepresentationIntegrationTests {
 		assertThat(representations.toSummary(contactCase.setType(CaseType.CONTACT_MEDICAL)).getCaseTypeLabel())
 				.isEqualTo(messages.getMessage(EnumMessageSourceResolvable.of(CaseType.CONTACT_MEDICAL)));
 
+		assertThat(representations.toSummary(contactCase.setType(CaseType.CONTACT_VULNERABLE)).getCaseTypeLabel())
+				.isEqualTo(messages.getMessage(EnumMessageSourceResolvable.of(CaseType.CONTACT_VULNERABLE)));
+
 		assertThat(representations.toSummary(contactCase.setType(CaseType.INDEX)).getCaseTypeLabel())
 				.isEqualTo(messages.getMessage(EnumMessageSourceResolvable.of(CaseType.INDEX)));
 	}

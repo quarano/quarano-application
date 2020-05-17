@@ -209,13 +209,15 @@ class TrackingEventListenerUnitTests {
 
 	}	
 
-
 	@Test
 	void createContactCaseWithTypeContactMedical() {
 
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
-		encounter.getContact().setIsHealthStaff(Boolean.TRUE);
+		ContactPerson contact = encounter.getContact();
+		contact.setIsHealthStaff(Boolean.TRUE);
+		contact.setIsSenior(Boolean.TRUE);
+		contact.setHasPreExistingConditions(Boolean.TRUE);
 		var trackedCase = createIndexCaseFor(person);
 
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
@@ -234,6 +236,63 @@ class TrackingEventListenerUnitTests {
 		assertIdentityOfMichaela(capturedArgument);
 		assertThat(capturedArgument.isMedicalContactCase()).isTrue();
 		
+	}
+
+	@Test
+	void createContactCaseWithTypeContactVulnerableAsSenior() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var encounter = createFirstEncounterWithMichaelaFor(person);
+		ContactPerson contact = encounter.getContact();
+		contact.setIsHealthStaff(null);
+		contact.setIsSenior(Boolean.TRUE);
+		var trackedCase = createIndexCaseFor(person);
+
+		var event = EncounterReported.firstEncounter(encounter, person.getId());
+
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(diaryEntries.findByTrackedPersonId(person.getId())).thenReturn(diary);
+		when(people.findById(person.getId())).thenReturn(Optional.of(person));
+
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		TrackedCase capturedArgument = argumentCaptor.getValue();
+
+		assertIdentityOfMichaela(capturedArgument);
+		assertThat(capturedArgument.isVulnerableContactCase()).isTrue();
+
+	}
+
+	@Test
+	void createContactCaseWithTypeContactVulnerableWithExistingPreConditions() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var encounter = createFirstEncounterWithMichaelaFor(person);
+		ContactPerson contact = encounter.getContact();
+		contact.setIsHealthStaff(null);
+		contact.setIsSenior(null);
+		contact.setHasPreExistingConditions(Boolean.TRUE);
+		var trackedCase = createIndexCaseFor(person);
+
+		var event = EncounterReported.firstEncounter(encounter, person.getId());
+
+		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(diaryEntries.findByTrackedPersonId(person.getId())).thenReturn(diary);
+		when(people.findById(person.getId())).thenReturn(Optional.of(person));
+
+		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
+
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+
+		TrackedCase capturedArgument = argumentCaptor.getValue();
+
+		assertIdentityOfMichaela(capturedArgument);
+		assertThat(capturedArgument.isVulnerableContactCase()).isTrue();
+
 	}
 	
 	@Test

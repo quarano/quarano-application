@@ -331,6 +331,15 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	@Test // CORE-121
+	void updatingContactVulnerableCaseDoesNotRequireQuarantineData() throws Exception {
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_VULNERABLE);
+
+	}
+
+	@Test // CORE-121
 	void updatingContactMedicalCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
