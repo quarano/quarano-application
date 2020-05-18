@@ -43,7 +43,7 @@ public class TrackingEventListener {
 	/**
 	 * If a DiaryEntry is added it might contain new contacts to new ContactPerson, which need to be turned into
 	 * contact-cases
-	 * 
+	 *
 	 * @param event
 	 */
 	@EventListener
@@ -51,7 +51,6 @@ public class TrackingEventListener {
 
 		handleContactCaseCreationBasedOnDiaryEntry(event);
 	}
-	
 
 	private void verifyEnrollmentCompleted(EncounterReported event) {
 
@@ -62,14 +61,13 @@ public class TrackingEventListener {
 			throw new EnrollmentException("Cannot add contacts prior to completing the enrollment questionnaire!");
 		}
 	}
-	
 
 	private void handleContactCaseCreationBasedOnDiaryEntry(DiaryEntryAdded event) {
 		try {
 			List<ContactPerson> contactPersons = event.getEntry().getContacts();
 
 			for (ContactPerson person : contactPersons) {
-				if (isFirstContactWith(person, event.getEntry() , null )) {
+				if (isFirstContactWith(person, event.getEntry(), null)) {
 					createContactCase(event.getEntry().getTrackedPersonId(), person);
 				}
 			}
@@ -83,7 +81,7 @@ public class TrackingEventListener {
 	/**
 	 * Checks if there has been a contact to target person before, either as encounter given during enrolement or by
 	 * adding it later or via diary-entry
-	 * 
+	 *
 	 * @param person
 	 * @return
 	 */
@@ -95,38 +93,32 @@ public class TrackingEventListener {
 		Stream<DiaryEntry> entries = diaryEntries.findByTrackedPersonId(trackedPersonId).stream();
 
 		List<DiaryEntry> entriesAsList = entries.collect(Collectors.toList());
-		
+
 		// ignore current diary entry if this contact came from a diary, because it will always contain current contact
-		if(entry != null) {
+		if (entry != null) {
 			entriesAsList.remove(entry);
 		}
-		
-		List<ContactPerson> allContactPersonOfTrackedPerson = entriesAsList.stream().flatMap(it -> it.getContacts().stream())
-				.collect(Collectors.toList());
+
+		List<ContactPerson> allContactPersonOfTrackedPerson = entriesAsList.stream()
+				.flatMap(it -> it.getContacts().stream()).collect(Collectors.toList());
 
 		// get all contact person of encounters
 		var contactOwner = trackedPeople.findById(trackedPersonId);
 
-		
 		// ignore current encounter if this contact came from an encounter
-		if(encounter == null) {
+		if (encounter == null) {
 			allContactPersonOfTrackedPerson.addAll( //
-					contactOwner.get().getEncounters()
+					contactOwner.get().getEncounters().map(Encounter::getContact) //
+							.toList());
+		} else {
+			allContactPersonOfTrackedPerson.addAll( //
+					contactOwner.get().getEncounters().filter(it -> !it.getId().equals(encounter.getId())) //
 							.map(Encounter::getContact) //
 							.toList());
 		}
-		else {
-			allContactPersonOfTrackedPerson.addAll( //
-					contactOwner.get().getEncounters()
-							.filter(it -> !it.getId().equals(encounter.getId())) //
-							.map(Encounter::getContact) //
-							.toList());
-		}
-
 
 		return !allContactPersonOfTrackedPerson.contains(newContactPerson);
 	}
-
 
 	/**
 	 * Listens for first encounters with contacts and creates new cases from these contacts if they came from an Index
@@ -140,7 +132,8 @@ public class TrackingEventListener {
 
 		try {
 
-			if ( this.isFirstContactWith(contactPerson, null, event.getEncounter()) && event.isFirstEncounterWithTargetPerson()) {
+			if (this.isFirstContactWith(contactPerson, null, event.getEncounter())
+					&& event.isFirstEncounterWithTargetPerson()) {
 
 				createContactCase(event.getPersonIdentifier(), contactPerson);
 			}
@@ -157,23 +150,23 @@ public class TrackingEventListener {
 
 		// Only contacts of index-cases shall be converted to new cases automatically
 
-		if (caseOfContactInitializer.isIndexCase()) {
-
-			var person = new TrackedPerson(contactPerson);
-			var caseType = CaseType.CONTACT;
-
-			// CORE-185 medical staff overwrites the others
-			if (contactPerson.getIsHealthStaff() == Boolean.TRUE) {
-				caseType = CaseType.CONTACT_MEDICAL;
-			} else if (contactPerson.getIsSenior() == Boolean.TRUE
-					|| contactPerson.getHasPreExistingConditions() == Boolean.TRUE) {
-				caseType = CaseType.CONTACT_VULNERABLE;
-			}
-
-			cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
-
-			log.info("Created automatic contact-case from contact " + contactPerson.getId());
+		if (!caseOfContactInitializer.isIndexCase()) {
+			return;
 		}
+
+		var person = new TrackedPerson(contactPerson);
+		var caseType = CaseType.CONTACT;
+
+		// CORE-185 medical staff overwrites the others
+		if (contactPerson.getIsHealthStaff() == Boolean.TRUE) {
+			caseType = CaseType.CONTACT_MEDICAL;
+		} else if (contactPerson.isVulnerable()) {
+			caseType = CaseType.CONTACT_VULNERABLE;
+		}
+
+		cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
+
+		log.info("Created automatic contact case from contact " + contactPerson.getId());
 	}
 
 	private TrackedCase findTrackedCaseFor(TrackedPersonIdentifier identifier) {

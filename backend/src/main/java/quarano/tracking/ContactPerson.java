@@ -85,6 +85,10 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		return this.ownerId.equals(person.getId());
 	}
 
+	public boolean isVulnerable() {
+		return getIsSenior() == Boolean.TRUE || getHasPreExistingConditions() == Boolean.TRUE;
+	}
+
 	public ContactPerson contactWays(ContactWays contactWays) {
 
 		this.emailAddress = contactWays.getEmailAddress();

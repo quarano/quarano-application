@@ -330,7 +330,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isCreated());
 	}
 
-	@Test // CORE-121
+	@Test // CORE-185
 	void updatingContactVulnerableCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
