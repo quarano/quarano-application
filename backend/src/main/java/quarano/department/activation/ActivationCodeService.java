@@ -28,7 +28,7 @@ public class ActivationCodeService {
 		}
 
 		codes.map(ActivationCode::cancel) //
-				.map(it -> it.map(activationCodes::save));
+				.forEach(it -> it.andThen(activationCodes::save));
 
 		return Try.ofSupplier(() -> activationCodes
 				.save(new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier)));

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
@@ -30,6 +31,7 @@ import org.jddd.core.types.Identifier;
  * @author Felix Schultze
  */
 @Entity
+@ToString
 @Table(name = "activation_codes")
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -97,7 +99,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	public Try<ActivationCode> cancel() {
 
 		return Try.success(this) //
-				.filter(ActivationCode::isRedeemed, ActivationCodeException::usedOrCanceled)
+				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled)
 				.onSuccess(it -> it.status = ActivationCodeStatus.CANCELED);
 	}
 
