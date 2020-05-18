@@ -1,32 +1,29 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
   "projects": {
-    "coronareportfrontend": {
+    "quarano-frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
+        "@nrwl/angular:component": {
           "style": "scss"
         }
       },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
+      "root": "apps/quarano-frontend",
+      "sourceRoot": "apps/quarano-frontend/src",
+      "prefix": "qro",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/coronareportfrontend",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/apps/quarano-frontend",
+            "index": "apps/quarano-frontend/src/index.html",
+            "main": "apps/quarano-frontend/src/main.ts",
+            "polyfills": "apps/quarano-frontend/src/polyfills.ts",
+            "tsConfig": "apps/quarano-frontend/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/Staticfile"
+              "apps/quarano-frontend/src/favicon.ico",
+              "apps/quarano-frontend/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
@@ -34,7 +31,7 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "src/styles/styles.scss"
+              "./apps/quarano-frontend/src/styles/styles.scss"
             ],
             "scripts": []
           },
@@ -42,123 +39,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "stage": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.stage.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "es5": {
-              "tsConfig": "./tsconfig-es5.app.json"
-            },
-            "test": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.test.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "sec": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.sec.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "autotest": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.autotest.ts"
+                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
+                  "with": "apps/quarano-frontend/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -187,100 +69,80 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "coronareportfrontend:build"
+            "browserTarget": "quarano-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "coronareportfrontend:build:production"
-            },
-            "es5": {
-              "browserTarget": "coronareportfrontend:build:es5"
+              "browserTarget": "quarano-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "coronareportfrontend:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
-              "./node_modules/@swimlane/ngx-datatable/index.scss",
-              "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
-              "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "src/styles/styles.scss"
-            ],
-            "scripts": []
+            "browserTarget": "quarano-frontend:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "cypress/tsconfig.json"
+              "apps/quarano-frontend/tsconfig.app.json",
+              "apps/quarano-frontend/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/quarano-frontend/**"]
           }
         },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/quarano-frontend/jest.config.js",
+            "tsConfig": "apps/quarano-frontend/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/quarano-frontend/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "quarano-frontend-e2e": {
+      "root": "apps/quarano-frontend-e2e",
+      "sourceRoot": "apps/quarano-frontend-e2e/src",
+      "projectType": "application",
+      "architect": {
         "e2e": {
-          "builder": "@briebug/cypress-schematic:cypress",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
-            "devServerTarget": "coronareportfrontend:serve",
-            "watch": true,
-            "headless": false
+            "cypressConfig": "apps/quarano-frontend-e2e/cypress.json",
+            "tsConfig": "apps/quarano-frontend-e2e/tsconfig.e2e.json",
+            "devServerTarget": "quarano-frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "coronareportfrontend:serve:production"
+              "devServerTarget": "quarano-frontend:serve:production"
             }
           }
         },
-        "cypress-run": {
-          "builder": "@briebug/cypress-schematic:cypress",
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "devServerTarget": "coronareportfrontend:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "coronareportfrontend:serve:production"
-            }
-          }
-        },
-        "cypress-open": {
-          "builder": "@briebug/cypress-schematic:cypress",
-          "options": {
-            "devServerTarget": "coronareportfrontend:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "coronareportfrontend:serve:production"
-            }
+            "tsConfig": ["apps/quarano-frontend-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/quarano-frontend-e2e/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "coronareportfrontend",
   "cli": {
-    "analytics": "4b024b36-b97a-4c80-869c-947d72551044"
-  }
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "quarano-frontend"
 }

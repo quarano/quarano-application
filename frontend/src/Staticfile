@@ -1,5 +1,0 @@
-# This Staticfile is used for our CloudFoundry deployment
-# here we can configure the embedded nginx
-## pushstate configure the url state, needed for NG
-pushstate: enabled
-force_https: true
