@@ -1,6 +1,5 @@
-import { IIdentifiable, DeleteLink } from './general';
-import { ClientDto } from './client';
-import { HealthDepartmentDto } from './healthDepartment';
+import {ClientDto} from './client';
+import {HealthDepartmentDto} from './healthDepartment';
 
 export interface UserDto {
   client?: ClientDto;

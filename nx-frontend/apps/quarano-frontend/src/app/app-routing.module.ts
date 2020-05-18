@@ -6,10 +6,10 @@ import { BasicDataGuard } from './guards/basic-data.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { IsAuthenticatedGuard } from '@guards/is-authenticated.guard';
-import { EnrollmentCompletedGuard } from '@guards/enrollment-completed.guard';
-import { IsHealthDepartmentUserGuard } from '@guards/is-health-department-user.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import {EnrollmentCompletedGuard} from './guards/enrollment-completed.guard';
+import {IsAuthenticatedGuard} from './guards/is-authenticated.guard';
+import {IsHealthDepartmentUserGuard} from './guards/is-health-department-user.guard';
 
 const routes: Routes = [
   {

@@ -1,8 +1,8 @@
-import { ApiService } from '@services/api.service';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { CaseActionDto } from '@models/case-action';
+import {CaseActionDto} from '../models/case-action';
+import {ApiService} from '../services/api.service';
 
 @Injectable()
 export class ReportCaseActionsResolver implements Resolve<CaseActionDto> {

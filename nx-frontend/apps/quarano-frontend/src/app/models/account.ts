@@ -1,4 +1,4 @@
-import { Link } from '@models/general';
+import {Link} from './general';
 
 export interface AccountDto {
   accountId: string;

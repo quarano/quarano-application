@@ -1,5 +1,5 @@
-import { UserService } from '@services/user.service';
 import { Directive, OnInit, Input, ViewContainerRef, TemplateRef } from '@angular/core';
+import {UserService} from '../services/user.service';
 
 @Directive({
   selector: '[qroIsAdmin]'

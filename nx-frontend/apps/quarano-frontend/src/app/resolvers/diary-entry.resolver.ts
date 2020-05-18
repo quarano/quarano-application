@@ -1,8 +1,8 @@
-import { ApiService } from '@services/api.service';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { DiaryEntryDto } from '@models/diary-entry';
+import {DiaryEntryDto} from '../models/diary-entry';
+import {ApiService} from '../services/api.service';
 
 @Injectable()
 export class DiaryEntryResolver implements Resolve<DiaryEntryDto> {

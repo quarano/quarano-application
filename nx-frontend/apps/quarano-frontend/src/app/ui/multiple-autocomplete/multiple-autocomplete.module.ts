@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from '@angular/forms';
-import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
 import { MultipleAutocompleteComponent } from './multiple-autocomplete.component';
 
 @NgModule({

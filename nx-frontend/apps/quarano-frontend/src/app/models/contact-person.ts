@@ -1,4 +1,4 @@
-import { IIdentifiable, Link, SelfLink } from './general';
+import {IIdentifiable, SelfLink} from './general';
 
 export interface ContactPersonDto extends IIdentifiable {
   firstName: string;

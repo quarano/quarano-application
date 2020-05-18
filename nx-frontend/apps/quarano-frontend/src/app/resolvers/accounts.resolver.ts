@@ -1,9 +1,9 @@
-import { ApiService } from '@services/api.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { AccountDto } from '@models/account';
 import { map } from 'rxjs/operators';
+import {ApiService} from '../services/api.service';
+import {AccountDto} from '../models/account';
 
 @Injectable()
 export class AccountsResolver implements Resolve<AccountDto[]> {

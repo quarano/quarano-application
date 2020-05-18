@@ -1,7 +1,7 @@
-import { ProgressBarService } from '@services/progress-bar.service';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { tap, catchError, finalize } from 'rxjs/operators';
+import {ProgressBarService} from '../services/progress-bar.service';
 
 @Injectable()
 export class ProgressBarInterceptor implements HttpInterceptor {
@@ -13,7 +13,7 @@ export class ProgressBarInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler) {
 
     return next.handle(request).pipe(
-      tap(res => {
+      tap(() => {
         this.progressBarService.progressBarState = true;
       }),
       finalize(() => {

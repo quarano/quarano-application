@@ -1,9 +1,9 @@
-import {ApiService} from '@services/api.service';
 import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {CaseDetailDto} from '@models/case-detail';
 import {map} from 'rxjs/operators';
+import {ApiService} from '../services/api.service';
+import {CaseDetailDto} from '../models/case-detail';
 
 @Injectable()
 export class ReportCaseResolver implements Resolve<CaseDetailDto> {

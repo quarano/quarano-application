@@ -1,8 +1,8 @@
 import { AccountAdministrationModule } from './account-administration/account-administration.module';
-import { IsAdminGuard } from '@guards/is-admin.guard';
 import { AdministrationRoutingModule } from './administration-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {IsAdminGuard} from '../../guards/is-admin.guard';
 
 @NgModule({
   imports: [

@@ -2,7 +2,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TileComponent } from './tile.component';
-import { AngularMaterialModule } from 'app/modules/angular-material/angular-material.module';
+import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
 
 @NgModule({
   imports: [
