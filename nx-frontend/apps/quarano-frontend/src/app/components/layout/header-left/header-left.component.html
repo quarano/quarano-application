@@ -1,0 +1,17 @@
+<div class="container">
+  <img id="logo" src="../../../assets/images/quarano_SW_RGB.png" [routerLink]="['/']" height="50px" class="clickable" />
+
+  <nav class="ml-3" *ngIf="isLoggedIn$ | async">
+    <ng-container *qroIsHealthDepartmentUser><a routerLink="/tenant-admin/clients" routerLinkActive="active"
+        id="tenant-admin-login-link" data-cy="case-overview">Fallübersicht</a><a routerLink="/tenant-admin/actions"
+        routerLinkActive="active" data-cy="action-overview">Aktionsübersicht</a></ng-container>
+
+    <ng-container *qroIsAdmin>
+      <a routerLink="/administration/accounts" routerLinkActive="active">Account-Verwaltung</a>
+    </ng-container>
+
+    <ng-container *qroIsEnrolledClient><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
+      <a routerLink="/contact-persons" routerLinkActive="active">Kontaktpersonen</a>
+    </ng-container>
+  </nav>
+</div>

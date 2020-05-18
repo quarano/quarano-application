@@ -1,0 +1,40 @@
+$paddings: (
+  "0": 0,
+  "1": 0.25rem,
+  "2": 0.5rem,
+  "3": 1rem,
+  "4": 1.5rem,
+  "5": 3rem
+);
+
+@each $i, $padding in $paddings {
+  .p-#{$i} {
+    padding: $padding !important;
+  }
+
+  .px-#{$i} {
+    padding-right: $padding !important;
+    padding-left: $padding !important;
+  }
+
+  .py-#{$i} {
+    padding-top: $padding !important;
+    padding-bottom: $padding !important;
+  }
+
+  .pt-#{$i} {
+    padding-top: $padding !important;
+  }
+
+  .pr-#{$i} {
+    padding-right: $padding !important;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: $padding !important;
+  }
+
+  .pl-#{$i} {
+    padding-left: $padding !important;
+  }
+}

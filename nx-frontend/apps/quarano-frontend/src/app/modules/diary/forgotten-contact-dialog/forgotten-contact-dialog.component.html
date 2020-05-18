@@ -1,0 +1,71 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmitted()">
+    <mat-card-header>
+      <div mat-card-avatar class="header-image"></div>
+      <mat-card-title>Kontakt nachtragen</mat-card-title>
+      <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="full-width mb-3">
+        <mat-label>Tag des Kontakts</mat-label>
+        <input
+          matInput
+          required
+          [max]="today"
+          [matDatepicker]="picker"
+          formControlName="day"
+          name="dayControl"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      </mat-form-field>
+
+      <qro-multiple-autocomplete
+        [control]="formGroup.controls.contactIds"
+        [selectableItems]="data.contactPersons"
+        placeholder="Wählen Sie die Kontaktpersonen *"
+        [nameProperties]="['firstName', 'lastName']"
+      >
+      </qro-multiple-autocomplete>
+
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+        "
+      >
+        <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+        <button
+          mat-button
+          color="primary"
+          type="button"
+          (click)="openContactDialog()"
+          class="p-2 mr-0"
+          style="line-height: normal;"
+        >
+          Hier fehlenden Kontakt anlegen
+        </button>
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions
+      ><button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+      >
+        Speichern
+      </button>
+      <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        (click)="cancel()"
+      >
+        Abbrechen
+      </button></mat-card-actions
+    >
+</form>

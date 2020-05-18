@@ -1,0 +1,61 @@
+@import "../../../../styles/variables";
+
+.clickable:hover,
+.clickable:active,
+.clickable:focus {
+  cursor: pointer;
+}
+
+#logo {
+  opacity: 0.8;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  height: 100%;
+}
+
+h2 {
+  margin-bottom: 0;
+  letter-spacing: 0.2rem;
+}
+
+nav {
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: large;
+  margin-right: 5px;
+
+  &:hover,
+  &.active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media all and (max-width: $break-sm) {
+  .container,
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a {
+    margin-top: 5px;
+
+    &:last-child {
+      margin-bottom: 5px;
+    }
+  }
+}

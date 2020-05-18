@@ -1,0 +1,31 @@
+<div class="entry-container">
+  <span class="mr-3 label">{{
+    slot === "morning" ? "Morgens" : "Abends"
+  }}</span>
+  <button
+    *ngIf="canCreate"
+    matTooltip="Eintrag nachtragen"
+    matTooltipPosition="after"
+    mat-mini-fab
+    color="basic"
+    [routerLink]="['new', date, slot]"
+    aria-label="Eintrag fehlt noch -
+ bitte nachtragen!"
+  >
+    <mat-icon>warning</mat-icon>
+  </button>
+  <span *ngIf="canCreate; else cannot_create" class="ml-3 text-muted"
+    >Eintrag fehlt noch - bitte nachtragen!</span
+  >
+  <ng-template #cannot_create
+    ><button
+      mat-mini-fab
+      disabled
+      class="info-button"
+      matTooltip="Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends Ihren Gesundheitszustand sowie Ihre Kontakte zu erfassen."
+      matTooltipPosition="after"
+    >
+      <span class="info-icon">i</span></button
+    ><span class="text-muted ml-3">Kein Eintrag vorhanden</span></ng-template
+  >
+</div>

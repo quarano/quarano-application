@@ -1,0 +1,37 @@
+@import "variables";
+@import "margin";
+@import "padding";
+@import "fonts";
+@import "forms";
+@import "alignment";
+@import "colors";
+
+@include mat-core();
+
+@include angular-material-theme($app-theme);
+
+html,
+body {
+  height: 100%;
+  background-color: #fafafa;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: Poppins, Arial, Helvetica, sans-serif;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.display-none {
+  display: none;
+}

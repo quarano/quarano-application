@@ -1,0 +1,47 @@
+@import "../../../../styles/variables";
+
+mat-form-field {
+  width: 100%;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px;
+}
+
+.header-image {
+  background-image: url("../../../../assets/images/diary.png");
+  background-size: 32px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+}
+
+::ng-deep {
+  .mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    border-radius: 50% 50% 0 !important;
+  }
+
+  .mat-slider-thumb {
+    transform: scale(0) !important;
+  }
+
+  .mat-slider-thumb-label-text {
+    opacity: 1 !important;
+  }
+
+  .mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb,
+  .mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb-label {
+    background-color: rgba(0, 0, 0, 0.26);
+  }
+
+  .form__card--small .mat-button {
+    margin-right: 0 !important;
+  }
+}

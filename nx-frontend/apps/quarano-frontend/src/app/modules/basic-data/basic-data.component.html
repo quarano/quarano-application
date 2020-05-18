@@ -1,0 +1,110 @@
+<mat-horizontal-stepper [linear]="true" #stepper style="position: relative;" (selectionChange)="onTabChanged($event)">
+  <ng-template matStepperIcon="edit">
+    <mat-icon>check</mat-icon>
+  </ng-template>
+  <mat-step [stepControl]="firstFormGroup" #firstStep
+    [hasError]="firstFormGroup.invalid">
+    <ng-template matStepLabel>Persönliche Daten</ng-template>
+    <p>Pflichtfelder sind mit * markiert</p>
+    <form [formGroup]="firstFormGroup">
+      <qro-personal-data-form [formGroup]="firstFormGroup"></qro-personal-data-form>
+      <div class="mt-3">
+        <button mat-raised-button color="primary" [disabled]="firstStep.hasError"
+                (click)="checkAndSendFirstForm()">
+          <mat-icon>arrow_forward</mat-icon>
+          Weiter
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step #secondStep [stepControl]="secondFormGroup" [hasError]="secondFormGroup.invalid">
+    <ng-template matStepLabel>Initialer Fragebogen</ng-template>
+    <p>Pflichtfelder sind mit * markiert</p>
+    <form [formGroup]="secondFormGroup" id="second-form">
+      <qro-initial-questionaire-form [symptoms]="symptoms" [formGroup]="secondFormGroup"></qro-initial-questionaire-form>
+      <div class="mt-3">
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>Zurück
+        </button>
+        <button
+          class="ml-3"
+          mat-raised-button
+          color="primary"
+          [disabled]="secondStep.hasError"
+          (click)="checkAndSendQuestionaire()"
+        >
+          <mat-icon>arrow_forward</mat-icon>Weiter
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step #thirdStep [stepControl]="thirdFormGroup">
+    <ng-template matStepLabel>Kontaktpersonen</ng-template>
+    <div class="info-text">
+      <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
+      <p>
+        Kontaktpersonen sind Personen mit einem unten definierten Kontakt zu
+        einem bestätigten Fall von COVID-19 ab dem 2. Tag vor Auftreten der
+        ersten Symptome des Falles. Das Ende der infektiösen Periode ist
+        momentan nicht sicher anzugeben.
+      </p>
+    </div>
+    <div class="info-text">
+      <h2>
+        Kontaktpersonen der Kategorie I mit engem Kontakt ("höheres"
+        Infektionsrisiko)
+      </h2>
+      <ul>
+        <li>
+          Personen mit kumulativ mindestens 15-minütigem Gesichts-
+          ("face-to-face") Kontakt, z.B. im Rahmen eines Gesprächs. Dazu gehören
+          z.B. Personen aus Lebensgemeinschaften im selben Haushalt.
+        </li>
+        <li>
+          Personen mit direktem Kontakt zu Sekreten oder Körperflüssigkeiten,
+          insbesondere zu respiratorischen Sekreten eines bestätigten
+          COVID-19-Falls, wie z.B. Küssen, Kontakt zu Erbrochenem, Mund-zu-Mund
+          Beatmung, Anhusten, Anniesen, etc.
+        </li>
+        <li>Personen, die aerosolbildenden Maßnahmen ausgesetzt sind</li>
+        <li>
+          Medizinisches Personal mit Kontakt zum bestätigten COVID-19-Fall im
+          Rahmen von Pflege oder medizinischer Untersuchung (≤ 2m), ohne
+          verwendete Schutzausrüstung.
+        </li>
+      </ul>
+    </div>
+    <form [formGroup]="thirdFormGroup">
+      <fieldset *ngFor="let date of datesForRetrospectiveContacts">
+        <legend>Kontaktpersonen vom {{ date | date: "dd.MM.y" }}</legend>
+
+        <qro-multiple-autocomplete
+          [control]="this.thirdFormGroup.controls[date.toLocaleDateString('de')]
+          "[selectableItems]="contactPersons"
+          [placeholder]="'Kontakte mit anderen Menschen am ' + date.toLocaleDateString('de')"
+          [nameProperties]="['firstName', 'lastName']"
+          (added)="onContactAdded(date, $event)"
+          (removed)="onContactRemoved(date, $event)"></qro-multiple-autocomplete>
+        <div style="
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+          ">
+          <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+          <button mat-button color="primary" type="button" (click)="openContactDialog(date.toLocaleDateString('de'))" class="p-2 mr-0" style="line-height: normal;">
+            Hier fehlenden Kontakt anlegen
+          </button>
+        </div>
+      </fieldset>
+      <div class="mt-3">
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>Zurück
+        </button>
+        <button mat-raised-button color="primary" class="ml-3" (click)="onComplete()" [disabled]="thirdStep.hasError">
+          <mat-icon>check</mat-icon>Erfassung abschließen
+        </button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>

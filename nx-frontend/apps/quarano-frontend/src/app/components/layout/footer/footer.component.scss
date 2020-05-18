@@ -1,0 +1,73 @@
+@import "../../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.link-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  @media screen and (max-width: $break-sm) {
+    margin: 1rem 0;
+  }
+}
+
+img {
+  height: 50px;
+  margin-left: 1rem;
+}
+
+h3 {
+  margin-bottom: 0;
+  letter-spacing: 0.1rem;
+}
+
+anchor-wrapper a {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+
+  & ~ a {
+    margin-left: 20px;
+
+    @media (max-width: $break-sm) {
+      margin-left: 5px;
+    }
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media all and (max-width: $break-sm) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .anchor-wrapper {
+    margin: 5px 0;
+  }
+
+  img {
+    margin-left: 0;
+  }
+}

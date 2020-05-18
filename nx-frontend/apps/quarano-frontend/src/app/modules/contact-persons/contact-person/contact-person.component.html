@@ -1,0 +1,7 @@
+<qro-contact-person-form
+  [contactPerson]="contactPerson"
+  (contactCreated)="navigateBack()"
+  (contactModified)="navigateBack()"
+  (cancelled)="navigateBack()"
+  (dirty)="setDirtyFlag($event)"
+></qro-contact-person-form>

@@ -1,0 +1,100 @@
+$margins: (
+  "0": 0,
+  "1": 0.25rem,
+  "2": 0.5rem,
+  "3": 1rem,
+  "4": 1.5rem,
+  "5": 3rem
+);
+
+@each $i, $margin in $margins {
+  .mt-#{$i} {
+    margin-top: $margin !important;
+  }
+
+  .mr-#{$i} {
+    margin-right: $margin !important;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: $margin !important;
+  }
+
+  .ml-#{$i} {
+    margin-left: $margin !important;
+  }
+
+  .mx-#{$i} {
+    margin-right: $margin !important;
+    margin-left: $margin !important;
+  }
+
+  .my-#{$i} {
+    margin-top: $margin !important;
+    margin-bottom: $margin !important;
+  }
+
+  @if ($margin > 0) {
+    $negmargin: -$margin;
+
+    .m-n#{$i} {
+      margin: $negmargin !important;
+    }
+
+    .mx-n#{$i} {
+      margin-right: $negmargin !important;
+      margin-left: $negmargin !important;
+    }
+
+    .my-n#{$i} {
+      margin-top: $negmargin !important;
+      margin-bottom: $negmargin !important;
+    }
+
+    .mt-n#{$i} {
+      margin-top: $negmargin !important;
+    }
+
+    .mr-n#{$i} {
+      margin-right: $negmargin !important;
+    }
+
+    .mb-n#{$i} {
+      margin-bottom: $negmargin !important;
+    }
+
+    .ml-n#{$i} {
+      margin-left: $negmargin !important;
+    }
+  }
+}
+
+.mt-auto {
+  margin-top: auto !important;
+}
+
+.mr-auto {
+  margin-right: auto !important;
+}
+
+.mb-auto {
+  margin-bottom: auto !important;
+}
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.m-auto {
+  margin: auto !important;
+}
+
+.mx-auto {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.my-auto {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
