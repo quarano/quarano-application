@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
-import {SymptomDto} from '../../../models/symptom';
-import {ArrayValidator} from '../../../validators/array-validator';
-import {TrimmedPatternValidator} from '../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../validators/validation-patterns';
+import { SymptomDto } from '../../../models/symptom';
+import { ArrayValidator } from '../../../validators/array-validator';
+import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-initial-questionaire-form',
@@ -27,10 +27,13 @@ export class InitialQuestionaireFormComponent implements OnInit {
     'Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem ' +
     'Immunsystem (inkl. HIV/AIDS)';
 
+  symptomTooltip: string;
+
   constructor() {
   }
 
   ngOnInit(): void {
+    this.symptomTooltip = `Als Covid-19 charakterische Symptome zählen: ${this.symptoms?.map(s => s.name).join(', ')}`;
     this.toggleAdditionalFieldValitations(
       'hasSymptoms',
       'dayOfFirstSymptoms',

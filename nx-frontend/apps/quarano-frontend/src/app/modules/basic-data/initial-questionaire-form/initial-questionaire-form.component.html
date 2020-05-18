@@ -1,6 +1,14 @@
 <div class="questionaire-form-container" [formGroup]="formGroup">
   <div class="bool-question">
-    <mat-label>Haben Sie bei sich bereits Symptome festgestellt?*</mat-label>
+    <mat-label style="display: flex;"
+      >Haben Sie bereits Covid-19 charakteristische Symptome festgestellt?*
+      <mat-icon
+        class="ml-1"
+        style="cursor: pointer;"
+        [matTooltip]="symptomTooltip"
+        >info</mat-icon
+      ></mat-label
+    >
     <mat-radio-group
       required
       aria-labelledby="hasSymptomsLabel"
@@ -54,7 +62,7 @@
         *ngIf="formGroup.controls.familyDoctor.hasError('trimmedPattern')"
       >
         {{
-          formGroup.controls.familyDoctor.getError("trimmedPattern")
+          formGroup.controls.familyDoctor.getError('trimmedPattern')
             .errorMessage
         }}</mat-error
       ><mat-error *ngIf="formGroup.controls.familyDoctor.hasError('required')"
@@ -73,7 +81,7 @@
           formGroup.controls.guessedOriginOfInfection.hasError('trimmedPattern')
         "
         >{{
-          formGroup.controls.guessedOriginOfInfection.getError("trimmedPattern")
+          formGroup.controls.guessedOriginOfInfection.getError('trimmedPattern')
             .errorMessage
         }}</mat-error
       ><mat-error
@@ -117,7 +125,7 @@
         "
         >{{
           formGroup.controls.hasPreExistingConditionsDescription.getError(
-            "trimmedPattern"
+            'trimmedPattern'
           ).errorMessage
         }}</mat-error
       ><mat-error
@@ -161,7 +169,7 @@
         "
         >{{
           formGroup.controls.belongToMedicalStaffDescription.getError(
-            "trimmedPattern"
+            'trimmedPattern'
           ).errorMessage
         }}</mat-error
       ><mat-error
@@ -205,7 +213,7 @@
         "
         >{{
           formGroup.controls.hasContactToVulnerablePeopleDescription.getError(
-            "trimmedPattern"
+            'trimmedPattern'
           ).errorMessage
         }}</mat-error
       ><mat-error
