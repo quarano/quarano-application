@@ -15,7 +15,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@quarano-frontend/auth/change-password": [
+        "libs/auth/change-password/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

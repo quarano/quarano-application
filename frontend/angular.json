@@ -242,6 +242,38 @@
           }
         }
       }
+    },
+    "auth-change-password": {
+      "projectType": "library",
+      "root": "libs/auth/change-password",
+      "sourceRoot": "libs/auth/change-password/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/auth/change-password/tsconfig.lib.json",
+              "libs/auth/change-password/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/auth/change-password/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/auth/change-password/jest.config.js",
+            "tsConfig": "libs/auth/change-password/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/auth/change-password/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

@@ -1,5 +1,5 @@
 {
-  "npmScope": "frontend",
+  "npmScope": "quarano-frontend",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": {
@@ -20,11 +20,14 @@
   },
   "projects": {
     "quarano-frontend": {
-      "tags": []
+      "tags": ["type:app"]
     },
     "quarano-frontend-e2e": {
-      "tags": [],
+      "tags": ["*"],
       "implicitDependencies": ["quarano-frontend"]
+    },
+    "auth-change-password": {
+      "tags": ["scope:auth", "type:feature"]
     }
   }
 }

@@ -1,3 +1,4 @@
+import { AuthChangePasswordModule } from '@quarano-frontend/auth/change-password';
 import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { AdministrationModule } from './modules/administration/administration.module';
 import { IsAdminDirective } from './directives/is-admin.directive';
@@ -30,11 +31,11 @@ import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor'
 import { BasicDataModule } from './modules/basic-data/basic-data.module';
 import { DateInterceptor } from './interceptors/date-interceptor';
 import { HdContactComponent } from './components/hd-contact/hd-contact.component';
-import {IsHealthDepartmentUserDirective} from './directives/is-health-department-user.directive';
-import {IsEnrolledClientDirective} from './directives/is-enrolled-client.directive';
-import {AsideHostDirective} from './directives/aside-host.directive';
-import {HasRoleDirective} from './directives/has-role.directive';
-import {SnackbarService} from './services/snackbar.service';
+import { IsHealthDepartmentUserDirective } from './directives/is-health-department-user.directive';
+import { IsEnrolledClientDirective } from './directives/is-enrolled-client.directive';
+import { AsideHostDirective } from './directives/aside-host.directive';
+import { HasRoleDirective } from './directives/has-role.directive';
+import { SnackbarService } from './services/snackbar.service';
 
 registerLocaleData(localeDe, 'de');
 
@@ -67,7 +68,8 @@ const SUB_MODULES = [
   BasicDataModule,
   ProfileModule,
   AdministrationModule,
-  TenantAdminModule
+  TenantAdminModule,
+  AuthChangePasswordModule
 ];
 
 @NgModule({
