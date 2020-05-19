@@ -1,15 +1,14 @@
-
-import { ActivatedRoute, Router } from '@angular/router';
-import { SubSink } from 'subsink';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SubSink} from 'subsink';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import '../../utils/date-extensions';
-import { MatDialog } from '@angular/material/dialog';
-import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { Moment } from 'moment';
-import { MatHorizontalStepper } from '@angular/material/stepper';
-import { BehaviorSubject } from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
+import {ContactPersonDialogComponent} from '../app-forms/contact-person-dialog/contact-person-dialog.component';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
+import {Moment} from 'moment';
+import {MatHorizontalStepper} from '@angular/material/stepper';
+import {BehaviorSubject} from 'rxjs';
 import {EnrollmentStatusDto} from '../../models/enrollment-status';
 import {ClientDto} from '../../models/client';
 import {QuestionnaireDto} from '../../models/first-query';
@@ -31,8 +30,17 @@ import {ConfirmationDialogComponent} from '../../ui/confirmation-dialog/confirma
 export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-  enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
-  @ViewChild('stepper') stepper: MatHorizontalStepper;
+
+  enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>({
+    completedContactRetro: null,
+    completedPersonalData: null,
+    completedQuestionnaire: null,
+    complete: null
+  });
+
+  @ViewChild('stepper')
+  stepper: MatHorizontalStepper;
+
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -97,12 +105,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.buildThirdForm();
   }
 
-  onTabChanged(event: StepperSelectionEvent) {
-    if (event.previouslySelectedIndex === 0 && event.selectedIndex === 1) {
+  onTabChanged(event: StepperSelectionEvent, status: EnrollmentStatusDto) {
+    if (event.previouslySelectedIndex === 0 && event.selectedIndex === 1 && status.completedPersonalData === false) {
+
       this.checkAndSendFirstForm();
     }
 
-    if (event.previouslySelectedIndex === 1 && event.selectedIndex === 2) {
+    if (event.previouslySelectedIndex === 1 && event.selectedIndex === 2 && !status.completedContactRetro === false) {
       this.checkAndSendQuestionaire();
     }
 
@@ -129,10 +138,10 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       houseNumber: new FormControl(this.client.houseNumber, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl(this.client.zipCode,
         [Validators.required, Validators.minLength(5),
-        Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
+          Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    }, { validators: [PhoneOrMobilePhoneValidator] });
+    }, {validators: [PhoneOrMobilePhoneValidator]});
   }
 
   checkAndSendFirstForm() {
@@ -197,7 +206,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   checkAndSendQuestionaire() {
     if (this.secondFormGroup.valid) {
-      const questionaireData: QuestionnaireDto = { ...this.secondFormGroup.value };
+      const questionaireData: QuestionnaireDto = {...this.secondFormGroup.value};
 
       if (this.secondFormGroup.get('symptoms').value) {
         questionaireData.symptoms = this.secondFormGroup.get('symptoms').value.map((data) => data.id);
@@ -235,7 +244,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
+        contactPerson: {id: null, lastName: null, firstName: null, phone: null, email: null},
       }
     });
 
@@ -248,7 +257,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date: date.getDateWithoutTime(), contact: id })
+    this.enrollmentService.createEncounter({date: date.getDateWithoutTime(), contact: id})
       .subscribe(encounter => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');

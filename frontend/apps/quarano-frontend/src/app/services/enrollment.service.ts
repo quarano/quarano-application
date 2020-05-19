@@ -40,7 +40,8 @@ export class EnrollmentService {
 
   loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
     return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share()).pipe(
-      tap((data) => this.enrollmentSubject$.next(data))
+      tap((data) => this.enrollmentSubject$.next(data)),
+      switchMap(() => this.enrollmentSubject$)
     );
   }
 

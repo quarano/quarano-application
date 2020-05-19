@@ -1,4 +1,6 @@
-<mat-horizontal-stepper [linear]="true" #stepper style="position: relative;" (selectionChange)="onTabChanged($event)">
+<mat-horizontal-stepper *ngIf="enrollmentStatus$$ | async as enrollmentStatus"
+                        [linear]="true" #stepper style="position: relative;"
+                        (selectionChange)="onTabChanged($event, enrollmentStatus)">
   <ng-template matStepperIcon="edit">
     <mat-icon>check</mat-icon>
   </ng-template>
