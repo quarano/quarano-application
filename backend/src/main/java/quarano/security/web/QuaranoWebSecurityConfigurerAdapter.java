@@ -75,7 +75,7 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 			it.mvcMatchers("/api/registration").permitAll();
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
-			it.mvcMatchers("/api/user/me").authenticated(); //
+			it.mvcMatchers("/api/user/**").authenticated(); //
 			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')"); //
 		});
 

@@ -94,6 +94,26 @@ class UserControllerWebIntegrationTests {
 	}
 
 	@Test // CORE-206
+	void changesPasswordOfAdmin() throws Exception {
+
+		var username = "agent1";
+		var password = "agent1";
+
+		var token = login(username, password);
+		var newPassword = "newPassword";
+		var payload = new UserController.NewPassword(password, newPassword, newPassword);
+
+		mvc.perform(put("/api/user/me/password") //
+				.contentType(MediaType.APPLICATION_JSON) //
+				.content(mapper.writeValueAsString(payload)) //
+				.header("Authorization", "Bearer " + token)) //
+				.andExpect(status().isOk());
+
+		expectLoginRejectedFor(username, password);
+		assertThat(login(username, newPassword)).isNotNull();
+	}
+
+	@Test // CORE-206
 	void rejectsPasswordChangeIfCurrentPasswordDoesntMatch() throws Exception {
 
 		var newPassword = "newPassword";
