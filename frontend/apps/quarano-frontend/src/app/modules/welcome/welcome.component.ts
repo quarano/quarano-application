@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ITileViewModel} from '../../ui/tile/tile.component';
-import {UserService} from '../../services/user.service';
+import { ITileViewModel } from '../../ui/tile/tile.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'qro-welcome',
@@ -23,7 +23,7 @@ export class WelcomeComponent implements OnInit {
     {
       title: 'Kontaktpersonen',
       subtitle: 'Kontaktnachverfolgung',
-      content: 'Hinterlegen Sie hier die Kontaktdaten von Personen, mit denen Sie während Ihrer Corona-Infektion engeren Kontakt hatten.',
+      content: 'Verwalten Sie Ihre persönlichen Kontaktpersonen, damit Sie diese einfach und schnell in den Tagebucheinträgen referenzieren können, ohne sie neu eingeben zu müssen.',
       linkText: 'Zu den Kontaktpersonen',
       routerLink: ['/contact-persons'],
       headerImageUrl: '/assets/images/contact-person.png',
