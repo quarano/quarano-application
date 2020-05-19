@@ -51,19 +51,20 @@ public class AccountService {
 		return account;
 	}
 
-	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname, EmailAddress email,
-			DepartmentIdentifier departmentId, List<RoleType> roleTypes) {
+	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname,
+			EmailAddress email, DepartmentIdentifier departmentId, List<RoleType> roleTypes) {
 
 		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
-		
+
 		var roleList = roleTypes.stream().map(it -> roles.findByName(it.toString())).collect(Collectors.toList());
-		var account = accounts.save(new Account(username, encryptedPassword, firstname, lastname, email, departmentId, roleList));
+		var account = accounts
+				.save(new Account(username, encryptedPassword, firstname, lastname, email, departmentId, roleList));
 
 		log.info("Created staff account for " + username);
 
 		return account;
 	}
-	
+
 	public Account saveStaffAccount(Account account) {
 
 		var storedAccount = accounts.save(account);
@@ -71,16 +72,16 @@ public class AccountService {
 		log.info("Updated staff account for " + storedAccount.getUsername());
 
 		return storedAccount;
-	}	
-	
-	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname, EmailAddress email,
-			DepartmentIdentifier departmentId, RoleType roleType) {
+	}
+
+	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname,
+			EmailAddress email, DepartmentIdentifier departmentId, RoleType roleType) {
 
 		List<RoleType> roles = new ArrayList<>();
 		roles.add(roleType);
-		return createStaffAccount(username, password, firstname, lastname, email,  departmentId, roles);
-		
-	}	
+		return createStaffAccount(username, password, firstname, lastname, email, departmentId, roles);
+
+	}
 
 	public boolean isValidUsername(String candidate) {
 
@@ -110,12 +111,13 @@ public class AccountService {
 
 	public List<Account> findStaffAccountsFor(DepartmentIdentifier departmentId) {
 		return accounts.findAccountsFor(departmentId) //
-				.filter(it -> hasDepartmentRoles(it)) // 
+				.filter(it -> hasDepartmentRoles(it)) //
 				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Check if the account has at least one role that is a department-role
+	 *
 	 * @param account
 	 * @return
 	 */
@@ -133,7 +135,7 @@ public class AccountService {
 	public void deleteAccount(AccountIdentifier accountIdToDelete) {
 
 		accounts.deleteById(accountIdToDelete);
-		
+
 		log.info("Account with accountId " + accountIdToDelete + " has been deleted.");
 	}
 
