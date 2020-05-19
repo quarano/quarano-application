@@ -1,3 +1,4 @@
+import { API_URL } from '@quarano-frontend/shared/util';
 import { AuthChangePasswordModule } from '@quarano-frontend/auth/change-password';
 import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { AdministrationModule } from './modules/administration/administration.module';
@@ -36,6 +37,7 @@ import { IsEnrolledClientDirective } from './directives/is-enrolled-client.direc
 import { AsideHostDirective } from './directives/aside-host.directive';
 import { HasRoleDirective } from './directives/has-role.directive';
 import { SnackbarService } from './services/snackbar.service';
+import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
 
@@ -103,7 +105,8 @@ const SUB_MODULES = [
       multi: true
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'de-de' }
+    { provide: LOCALE_ID, useValue: 'de-de' },
+    { provide: API_URL, useValue: environment.api.baseUrl }
   ],
   bootstrap: [
     AppComponent

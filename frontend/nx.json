@@ -28,6 +28,12 @@
     },
     "auth-change-password": {
       "tags": ["scope:auth", "type:feature"]
+    },
+    "auth-domain": {
+      "tags": ["scope:auth", "type:domain"]
+    },
+    "shared-util": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

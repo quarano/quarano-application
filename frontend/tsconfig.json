@@ -18,7 +18,9 @@
     "paths": {
       "@quarano-frontend/auth/change-password": [
         "libs/auth/change-password/src/index.ts"
-      ]
+      ],
+      "@quarano-frontend/auth/domain": ["libs/auth/domain/src/index.ts"],
+      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
