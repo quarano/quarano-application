@@ -78,7 +78,7 @@ public class UserController {
 	@Value
 	static class NewPassword {
 
-		private final @NotBlank String current, password, repeated;
+		private final @NotBlank String current, password, passwordConfirm;
 
 		ErrorsDto validate(ErrorsDto errors, EncryptedPassword existing, AccountService accounts) {
 
@@ -86,9 +86,9 @@ public class UserController {
 				errors.rejectField("current", "Invalid");
 			}
 
-			if (!password.equals(repeated)) {
+			if (!password.equals(passwordConfirm)) {
 				errors.rejectField("password", "NonMatching.password");
-				errors.rejectField("repeated", "NonMatching.password");
+				errors.rejectField("passwordConfirm", "NonMatching.password");
 			}
 
 			return errors;

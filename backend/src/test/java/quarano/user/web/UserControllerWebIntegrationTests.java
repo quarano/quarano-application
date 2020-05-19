@@ -121,7 +121,7 @@ class UserControllerWebIntegrationTests {
 		var document = JsonPath.parse(result);
 
 		assertThat(document.read("$.password", String.class)).isNotNull();
-		assertThat(document.read("$.repeated", String.class)).isNotNull();
+		assertThat(document.read("$.passwordConfirm", String.class)).isNotNull();
 	}
 
 	private String login(String username, String password) throws Exception {
