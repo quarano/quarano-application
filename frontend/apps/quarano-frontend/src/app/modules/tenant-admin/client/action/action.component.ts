@@ -2,12 +2,12 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import {CaseActionDto} from '../../../../models/case-action';
-import {ApiService} from '../../../../services/api.service';
-import {SnackbarService} from '../../../../services/snackbar.service';
-import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../../validators/validation-patterns';
-import {ConfirmationDialogComponent} from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { CaseActionDto } from '../../../../models/case-action';
+import { ApiService } from '../../../../services/api.service';
+import { SnackbarService } from '../../../../services/snackbar.service';
+import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
+import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'qro-client-action',
@@ -53,9 +53,11 @@ export class ActionComponent implements OnInit {
 
 
   private resolveAnomalies() {
-    this.apiService.resolveAnomalies(this.caseAction._links.resolve, this.formGroup.controls.comment.value)
+    this.apiService.resolveAnomalies(
+      this.caseAction._links.resolve,
+      this.formGroup.controls.comment.value?.trim() || 'Auffälligkeiten geprüft und als erledigt markiert')
       .subscribe(_ => {
-        this.snackbarService.success('Die aktuellen Auffälligkeiten wurden als bearbeitet gekennzeichnet');
+        this.snackbarService.success('Die aktuellen Auffälligkeiten wurden als erledigt gekennzeichnet');
         this.router.navigate(['/tenant-admin/actions']);
       });
   }
