@@ -45,9 +45,8 @@ public class AccountService {
 	public Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname,
 			String lastname, DepartmentIdentifier departmentId) {
 
-		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
 		var role = roles.findByName(RoleType.ROLE_USER.toString());
-		var account = accounts.save(new Account(username, encryptedPassword, firstname, lastname, departmentId, role));
+		var account = accounts.save(new Account(username, encrypt(password), firstname, lastname, departmentId, role));
 
 		return account;
 	}
@@ -138,5 +137,18 @@ public class AccountService {
 		log.info("Account with accountId " + accountIdToDelete + " has been deleted.");
 	}
 
+	/**
+	 * Changes the password of the given {@link Account} to the given {@link UnencryptedPassword} password.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @param account must not be {@literal null}.
+	 * @return the account with the new password applied.
+	 */
+	public Account changePassword(UnencryptedPassword password, Account account) {
+		return accounts.save(account.setPassword(encrypt(password)));
+	}
 
+	private EncryptedPassword encrypt(UnencryptedPassword password) {
+		return EncryptedPassword.of(passwordEncoder.encode(password.asString()));
+	}
 }

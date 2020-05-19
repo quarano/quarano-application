@@ -2,8 +2,13 @@ package quarano.user.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import quarano.account.Account;
+import quarano.account.AccountService;
 import quarano.account.DepartmentRepository;
+import quarano.account.Password.EncryptedPassword;
+import quarano.account.Password.UnencryptedPassword;
+import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
 import quarano.department.TrackedCaseRepository;
@@ -11,8 +16,16 @@ import quarano.department.web.EnrollmentDto;
 import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.web.TrackedPersonDto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +37,9 @@ public class UserController {
 	private final @NonNull TrackedPersonRepository trackedPersonRepository;
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull AccountService accounts;
 	private final @NonNull MapperWrapper mapper;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/me")
 	ResponseEntity<?> getMe(@LoggedIn Account account) {
@@ -45,5 +60,38 @@ public class UserController {
 				.ifPresent(userDto::setEnrollment);
 
 		return ResponseEntity.ok(userDto);
+	}
+
+	@PutMapping("/me/password")
+	HttpEntity<?> putPassword(@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account account) {
+
+		return payload //
+				.validate(ErrorsDto.of(errors, messages), account.getPassword(), accounts) //
+				.toBadRequestOrElse(() -> {
+
+					accounts.changePassword(UnencryptedPassword.of(payload.password), account);
+
+					return ResponseEntity.ok().build();
+				});
+	}
+
+	@Value
+	static class NewPassword {
+
+		private final @NotBlank String current, password, repeated;
+
+		ErrorsDto validate(ErrorsDto errors, EncryptedPassword existing, AccountService accounts) {
+
+			if (!accounts.matches(UnencryptedPassword.of(current), existing)) {
+				errors.rejectField("current", "Invalid");
+			}
+
+			if (!password.equals(repeated)) {
+				errors.rejectField("password", "NonMatching.password");
+				errors.rejectField("repeated", "NonMatching.password");
+			}
+
+			return errors;
+		}
 	}
 }

@@ -1,12 +1,14 @@
 package quarano.core.web;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 /**
  * @author Oliver Drotbohm
  */
+@Slf4j
 @RequiredArgsConstructor(staticName = "of")
 public class ErrorsDto {
 
@@ -60,7 +63,12 @@ public class ErrorsDto {
 		Map<String, String> fields = new HashMap<>();
 
 		errors.getFieldErrors().forEach(it -> {
-			fields.put(it.getField(), messages.getMessage(it));
+
+			try {
+				fields.put(it.getField(), messages.getMessage(it));
+			} catch (NoSuchMessageException o_O) {
+				log.warn(o_O.getMessage());
+			}
 		});
 
 		return fields;
