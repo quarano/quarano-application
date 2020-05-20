@@ -38,7 +38,6 @@
       <button
         (click)="startTracking(caseDetail)"
         color="primary"
-        *ngIf="!caseDetail._links?.hasOwnProperty('renew')"
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
       >
