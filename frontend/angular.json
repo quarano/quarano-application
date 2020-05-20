@@ -23,7 +23,8 @@
             "aot": true,
             "assets": [
               "apps/quarano-frontend/src/favicon.ico",
-              "apps/quarano-frontend/src/assets"
+              "apps/quarano-frontend/src/assets",
+              "apps/quarano-frontend/src/Staticfile"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
