@@ -24,3 +24,10 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn -B package --file backend/pom.xml
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
