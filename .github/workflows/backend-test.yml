@@ -24,6 +24,9 @@ jobs:
       with:
         java-version: 11
 
+    - name: Setup Graphviz
+      uses: ts-graphviz/setup-graphviz@v1
+
     - name: Build with Maven
       run: mvn -B package --file backend/pom.xml
 
