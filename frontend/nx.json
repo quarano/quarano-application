@@ -73,6 +73,9 @@
     },
     "health-department-index-cases-domain": {
       "tags": []
+    },
+    "shared-ui-tile": {
+      "tags": []
     }
   }
 }

@@ -1,14 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
-export interface ITileViewModel {
-  headerImageUrl: string;
-  backgroundImageUrl: string;
-  title: string;
-  subtitle: string;
-  content: string;
-  linkText: string;
-  routerLink: string[];
-}
+import { ITileViewModel } from './tile-view-model';
 
 @Component({
   selector: 'qro-tile',

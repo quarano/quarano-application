@@ -59,7 +59,8 @@
       ],
       "@quarano-frontend/health-department/index-cases/domain": [
         "libs/health-department/index-cases/domain/src/index.ts"
-      ]
+      ],
+      "@quarano-frontend/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

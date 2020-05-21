@@ -791,6 +791,38 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-tile": {
+      "projectType": "library",
+      "root": "libs/shared/ui-tile",
+      "sourceRoot": "libs/shared/ui-tile/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-tile/tsconfig.lib.json",
+              "libs/shared/ui-tile/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-tile/jest.config.js",
+            "tsConfig": "libs/shared/ui-tile/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-tile/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

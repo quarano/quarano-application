@@ -1,3 +1,4 @@
+import { SharedUiTileModule } from '@quarano-frontend/shared/ui-tile';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { WelcomeComponent } from './welcome.component';
@@ -7,7 +8,6 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { LandingComponent } from './landing/landing.component';
-import { TileModule } from '../../ui/tile/tile.module';
 import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 
 export const DATE_FORMAT = {
@@ -37,7 +37,7 @@ export const DATE_FORMAT = {
     FormsModule,
     ClipboardModule,
     ReactiveFormsModule,
-    TileModule
+    SharedUiTileModule
   ],
   providers: [
     DatePipe
