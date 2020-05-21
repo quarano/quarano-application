@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'quarano-frontend-contact-cases',
+  selector: 'qro-contact-cases',
   templateUrl: './contact-cases.component.html',
   styleUrls: ['./contact-cases.component.scss']
 })

@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 
 @Component({
-  selector: 'quarano-frontend-case-list',
+  selector: 'qro-contact-cases-case-list',
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.scss']
 })

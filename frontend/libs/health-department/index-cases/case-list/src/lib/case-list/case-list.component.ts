@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DateFunctions } from '@quarano-frontend/shared/util';
 
 @Component({
-  selector: 'quarano-frontend-case-list',
+  selector: 'qro-index-cases-case-list',
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.scss']
 })
