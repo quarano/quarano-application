@@ -26,7 +26,7 @@
         ><span
           >Neuen
           {{
-            (type$ | async) === ClientType.Index ? "Indexfall" : "Kontaktfall"
+            (type$ | async) === ClientType.Index ? 'Indexfall' : 'Kontaktfall'
           }}
           anlegen</span
         >
@@ -53,6 +53,7 @@
       <div class="spacer"></div>
       <button
         mat-button
+        color="primary"
         (click)="checkForClose(caseDetail)"
         [disabled]="
           !caseDetail._links?.hasOwnProperty('conclude') ||
