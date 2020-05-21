@@ -547,41 +547,6 @@
         }
       }
     },
-    "health-department-action-alert": {
-      "projectType": "library",
-      "root": "libs/health-department/action-alert",
-      "sourceRoot": "libs/health-department/action-alert/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/health-department/action-alert/tsconfig.lib.json",
-              "libs/health-department/action-alert/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/action-alert/**"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/health-department/action-alert/jest.config.js",
-            "tsConfig": "libs/health-department/action-alert/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/action-alert/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "health-department-ui-action-alert": {
       "projectType": "library",
       "root": "libs/health-department/ui-action-alert",

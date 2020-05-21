@@ -1,12 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { IndexCaseService } from './index-case.service';
+import { API_URL } from '@quarano-frontend/shared/util';
 
 describe('Service: IndexCase', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [IndexCaseService]
+      imports: [HttpClientTestingModule],
+      providers: [IndexCaseService, { provide: API_URL, useValue: '' }]
     });
   });
 

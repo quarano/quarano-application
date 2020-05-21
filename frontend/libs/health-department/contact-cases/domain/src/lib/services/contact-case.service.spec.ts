@@ -1,3 +1,5 @@
+import { API_URL } from '@quarano-frontend/shared/util';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
@@ -6,7 +8,8 @@ import { ContactCaseService } from './contact-case.service';
 describe('Service: ContactCase', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ContactCaseService]
+      imports: [HttpClientTestingModule],
+      providers: [ContactCaseService, { provide: API_URL, useValue: '' }]
     });
   });
 

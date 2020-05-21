@@ -1,6 +1,8 @@
+import { RouterTestingModule } from '@angular/router/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContactCasesComponent } from './contact-cases.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContactCasesComponent', () => {
   let component: ContactCasesComponent;
@@ -8,9 +10,10 @@ describe('ContactCasesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactCasesComponent ]
+      imports: [RouterTestingModule],
+      declarations: [ContactCasesComponent], schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

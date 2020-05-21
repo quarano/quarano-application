@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ActionAlertComponent } from './action-alert.component';
-import { alertConfigurations } from './AlertConfiguration';
+import { getAlertConfigurations } from 'libs/health-department/domain/src/lib/models/alert-configuration';
 
 describe('ActionAlertComponent', () => {
   let component: ActionAlertComponent;
@@ -20,7 +20,7 @@ describe('ActionAlertComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ActionAlertComponent);
     component = fixture.componentInstance;
-    component.alert = alertConfigurations()[0];
+    component.alert = getAlertConfigurations()[0];
     fixture.detectChanges();
   });
 

@@ -53,9 +53,6 @@
     "health-department-domain": {
       "tags": []
     },
-    "health-department-action-alert": {
-      "tags": []
-    },
     "health-department-ui-action-alert": {
       "tags": []
     },

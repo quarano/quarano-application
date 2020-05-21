@@ -39,9 +39,6 @@
       "@quarano-frontend/health-department/domain": [
         "libs/health-department/domain/src/index.ts"
       ],
-      "@quarano-frontend/health-department/action-alert": [
-        "libs/health-department/action-alert/src/index.ts"
-      ],
       "@quarano-frontend/health-department/ui-action-alert": [
         "libs/health-department/ui-action-alert/src/index.ts"
       ],
