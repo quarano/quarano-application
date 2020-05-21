@@ -15,15 +15,14 @@ import { MatOption } from '@angular/material/core';
 export class ActionRowViewModel {
   lastName: string;
   firstName: string;
-  typeName: string;
   type: ClientType;
   dateOfBirth: string;
   email: string;
-  phone: string;
   quarantineStart: string;
   status: string;
   alerts: string[];
   caseId: string;
+  createdAt: string;
 }
 
 @Component({
@@ -83,15 +82,14 @@ export class ActionListComponent implements OnInit, OnDestroy {
     return {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
-      typeName: action.caseTypeLabel,
       type: action.caseType,
       dateOfBirth: action.dateOfBirth ? DateFunctions.toCustomLocaleDateString(action.dateOfBirth) : '-',
       email: action.email,
-      phone: action.phone || '-',
       quarantineStart: action.quarantineStart ? DateFunctions.toCustomLocaleDateString(action.quarantineStart) : '-',
       status: action.status,
       alerts: action.alerts || [],
-      caseId: action.caseId
+      caseId: action.caseId,
+      createdAt: DateFunctions.toCustomLocaleDateString(new Date()) // ToDo: Anpassen, sobald createdAt mitgeliefert wird vom Backend
     };
   }
 

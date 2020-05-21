@@ -20,7 +20,7 @@
     prop="alerts"
     name="Auffälligkeiten"
     [sortable]="false"
-    width="250"
+    width="300"
   >
     <ng-template let-column="column" ngx-datatable-header-template>
       <button
@@ -60,7 +60,7 @@
     prop="lastName"
     name="Nachname"
     [sortable]="false"
-    width="90"
+    width="110"
   >
   </ngx-datatable-column>
 
@@ -68,7 +68,7 @@
     prop="firstName"
     name="Vorname"
     [sortable]="false"
-    width="90"
+    width="110"
   >
   </ngx-datatable-column>
 
@@ -81,10 +81,10 @@
   </ngx-datatable-column>
 
   <ngx-datatable-column
-    prop="typeName"
-    name="Typ"
+    prop="createdAt"
+    name="Angelegt am"
     [sortable]="false"
-    width="80"
+    width="110"
   >
   </ngx-datatable-column>
 
@@ -101,14 +101,6 @@
     name="Quarantäne seit"
     [sortable]="false"
     width="130"
-  >
-  </ngx-datatable-column>
-
-  <ngx-datatable-column
-    prop="phone"
-    name="Telefon"
-    [sortable]="false"
-    width="120"
   >
   </ngx-datatable-column>
 
