@@ -75,7 +75,6 @@ export class CaseListComponent implements OnInit, OnDestroy {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
-      typeName: c.caseTypeLabel,
       dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
       email: c.email,
       phone: c.phone || '-',
