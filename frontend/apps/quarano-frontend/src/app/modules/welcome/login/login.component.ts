@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           }
         },
         (error) => {
-          if (error === 'Case already closed!'){
+          if (error.error === 'Case already closed!'){
             this.snackbarService.message('Ihr Fall ist bereits geschlossen');
           }
           else {
