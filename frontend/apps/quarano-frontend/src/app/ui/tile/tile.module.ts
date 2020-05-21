@@ -2,13 +2,13 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TileComponent } from './tile.component';
-import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    AngularMaterialModule
+    SharedUiMaterialModule
   ],
   declarations: [TileComponent],
   exports: [TileComponent]

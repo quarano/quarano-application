@@ -1,13 +1,13 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
 import { MultipleAutocompleteComponent } from './multiple-autocomplete.component';
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 
 @NgModule({
   imports: [
     CommonModule,
-    AngularMaterialModule,
+    SharedUiMaterialModule,
     ReactiveFormsModule
   ],
   declarations: [MultipleAutocompleteComponent],

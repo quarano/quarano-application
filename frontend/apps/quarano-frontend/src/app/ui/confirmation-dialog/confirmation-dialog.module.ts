@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AngularMaterialModule } from '../../modules/angular-material/angular-material.module';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 
 @NgModule({
   imports: [
     CommonModule,
-    AngularMaterialModule
+    SharedUiMaterialModule
   ],
   declarations: [ConfirmationDialogComponent],
   exports: [ConfirmationDialogComponent],

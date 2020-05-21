@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-header>
+    <nav mat-tab-nav-bar>
+      <a
+        mat-tab-link
+        [routerLink]="['case-list']"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [active]="rla.isActive"
+      >
+        Fallübersicht
+      </a>
+      <a
+        mat-tab-link
+        [routerLink]="['action-list']"
+        routerLinkActive
+        #rlb="routerLinkActive"
+        [active]="rlb.isActive"
+      >
+        Aktionsübersicht
+      </a>
+    </nav>
+  </mat-card-header>
+  <mat-card-content>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

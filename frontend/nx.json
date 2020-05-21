@@ -34,6 +34,30 @@
     },
     "shared-util": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "health-department": {
+      "tags": []
+    },
+    "health-department-index-cases": {
+      "tags": []
+    },
+    "health-department-contact-cases": {
+      "tags": []
+    },
+    "health-department-index-cases-action-list": {
+      "tags": []
+    },
+    "health-department-index-cases-case-list": {
+      "tags": []
+    },
+    "health-department-contact-cases-case-list": {
+      "tags": []
+    },
+    "health-department-contact-cases-action-list": {
+      "tags": []
+    },
+    "shared-ui-material": {
+      "tags": []
     }
   }
 }

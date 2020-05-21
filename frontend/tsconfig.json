@@ -20,7 +20,31 @@
         "libs/auth/change-password/src/index.ts"
       ],
       "@quarano-frontend/auth/domain": ["libs/auth/domain/src/index.ts"],
-      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"]
+      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"],
+      "@quarano-frontend/health-department": [
+        "libs/health-department/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases": [
+        "libs/health-department/index-cases/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases": [
+        "libs/health-department/contact-cases/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/action-list": [
+        "libs/health-department/index-cases/action-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/case-list": [
+        "libs/health-department/index-cases/case-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/case-list": [
+        "libs/health-department/contact-cases/case-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/action-list": [
+        "libs/health-department/contact-cases/action-list/src/index.ts"
+      ],
+      "@quarano-frontend/shared/ui-material": [
+        "libs/shared/ui-material/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

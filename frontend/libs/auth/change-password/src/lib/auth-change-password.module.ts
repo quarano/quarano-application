@@ -1,4 +1,4 @@
-import { AngularMaterialModule } from './../../../../../apps/quarano-frontend/src/app/modules/angular-material/angular-material.module';
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     CommonModule,
-    AngularMaterialModule,
+    SharedUiMaterialModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild([{

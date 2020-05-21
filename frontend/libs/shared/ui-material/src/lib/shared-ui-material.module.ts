@@ -73,4 +73,4 @@ const materialModules = [
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
   ]
 })
-export class AngularMaterialModule { }
+export class SharedUiMaterialModule { }
