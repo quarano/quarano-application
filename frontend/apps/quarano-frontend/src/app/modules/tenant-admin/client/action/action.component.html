@@ -80,7 +80,7 @@
       <mat-error
         *ngIf="formGroup.controls.comment.hasError('trimmedPattern')"
         >{{
-          formGroup.controls.comment.getError("trimmedPattern").errorMessage
+          formGroup.controls.comment.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
@@ -97,7 +97,7 @@
       type="button"
       mat-raised-button
       color="secondary"
-      [routerLink]="['/tenant-admin/actions']"
+      [routerLink]="[returnLink]"
     >
       Abbrechen
     </button>

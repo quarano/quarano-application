@@ -38,7 +38,7 @@ export class WelcomeComponent implements OnInit {
       content: 'Sehen und bearbeiten Sie hier alle offenen Index- und Kontaktfälle in Ihrem Gesundheitsamt. ' +
         'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion. Exportieren Sie die Liste in eine csv Datei.',
       linkText: 'Zur Fallübersicht',
-      routerLink: ['/tenant-admin/clients'],
+      routerLink: ['/health-department/index-cases/clients'],
       headerImageUrl: '/assets/images/user.png',
       backgroundImageUrl: '/assets/images/clients_tile_background.jpg'
     },
@@ -48,7 +48,7 @@ export class WelcomeComponent implements OnInit {
       content: 'Hier finden Sie eine Übersicht von Auffälligkeiten bei den nachverfolgten Index- und Kontaktfällen, ' +
         'die Ihre Aufmerksamkeit erfordern.',
       linkText: 'Zu den Aktionen',
-      routerLink: ['/tenant-admin/actions'],
+      routerLink: ['/health-department/index-cases/actions'],
       headerImageUrl: '/assets/images/diary.png',
       backgroundImageUrl: '/assets/images/actions_tile_background.jpg'
     }

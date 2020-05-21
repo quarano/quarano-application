@@ -47,7 +47,7 @@ describe('login', () => {
       cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
 
       cy.wait(5);
-      cy.url().should('include', '/tenant-admin/clients');
+      cy.url().should('include', '/health-department/index-cases/case-list');
     });
 
     it('should fail to login', () => {
@@ -56,7 +56,7 @@ describe('login', () => {
       cy.wait('@login').its('status').should('eq', 401);
       cy.get('simple-snack-bar').children('span').should('contain', 'Benutzername oder Passwort falsch');
 
-      cy.url().should('not.include', '/tenant-admin/clients');
+      cy.url().should('not.include', '/health-department/index-cases/case-list');
     });
   });
 });

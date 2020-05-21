@@ -22,7 +22,7 @@
       <mat-error
         *ngIf="formGroup.get('firstName').hasError('trimmedPattern')"
         >{{
-          formGroup.controls.firstName.getError("trimmedPattern").errorMessage
+          formGroup.controls.firstName.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
@@ -40,7 +40,7 @@
         >Bitte geben Sie einen Nachnamen ein</mat-error
       >
       <mat-error *ngIf="formGroup.get('lastName').hasError('trimmedPattern')">{{
-        formGroup.controls.lastName.getError("trimmedPattern").errorMessage
+        formGroup.controls.lastName.getError('trimmedPattern').errorMessage
       }}</mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-dayofbirth">
@@ -134,7 +134,7 @@
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">
-    <legend>Kontaktmöglichkeiten {{ isIndexCase ? "*" : "" }}</legend>
+    <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>
     <mat-error
       *ngIf="
         formGroup.getError('phoneMissing') &&
@@ -161,7 +161,7 @@
         >DieTelefonnummer darf maximal 17 Zeichen haben</mat-error
       >
       <mat-error *ngIf="formGroup.controls.phone.hasError('trimmedPattern')">{{
-        formGroup.controls.phone.getError("trimmedPattern").errorMessage
+        formGroup.controls.phone.getError('trimmedPattern').errorMessage
       }}</mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-mobile">
@@ -183,7 +183,7 @@
       <mat-error
         *ngIf="formGroup.controls.mobilePhone.hasError('trimmedPattern')"
         >{{
-          formGroup.controls.mobilePhone.getError("trimmedPattern").errorMessage
+          formGroup.controls.mobilePhone.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
@@ -197,7 +197,7 @@
         (blur)="trimValue(email_input)"
       />
       <mat-error *ngIf="formGroup.controls.email.hasError('trimmedPattern')">{{
-        formGroup.controls.email.getError("trimmedPattern").errorMessage
+        formGroup.controls.email.getError('trimmedPattern').errorMessage
       }}</mat-error>
     </mat-form-field>
   </fieldset>
@@ -213,7 +213,7 @@
         (blur)="trimValue(first_name_input)"
       />
       <mat-error *ngIf="formGroup.controls.street.hasError('trimmedPattern')">{{
-        formGroup.controls.street.getError("trimmedPattern").errorMessage
+        formGroup.controls.street.getError('trimmedPattern').errorMessage
       }}</mat-error>
     </mat-form-field>
     <mat-form-field style="width: 30%;">
@@ -229,7 +229,7 @@
       <mat-error
         *ngIf="formGroup.controls.houseNumber.hasError('trimmedPattern')"
         >{{
-          formGroup.controls.houseNumber.getError("trimmedPattern").errorMessage
+          formGroup.controls.houseNumber.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
@@ -247,7 +247,7 @@
       <mat-error
         *ngIf="formGroup.controls.zipCode.hasError('trimmedPattern')"
         >{{
-          formGroup.controls.zipCode.getError("trimmedPattern").errorMessage
+          formGroup.controls.zipCode.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
@@ -261,7 +261,7 @@
         (blur)="trimValue(city_input)"
       />
       <mat-error *ngIf="formGroup.controls.city.hasError('trimmedPattern')">{{
-        formGroup.controls.city.getError("trimmedPattern").errorMessage
+        formGroup.controls.city.getError('trimmedPattern').errorMessage
       }}</mat-error>
     </mat-form-field>
   </fieldset>
@@ -279,7 +279,7 @@
       type="button"
       mat-raised-button
       color="secondary"
-      [routerLink]="['/tenant-admin/clients']"
+      [routerLink]="[returnLink]"
     >
       Abbrechen
     </button>

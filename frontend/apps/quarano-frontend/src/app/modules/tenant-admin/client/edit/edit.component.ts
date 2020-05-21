@@ -195,4 +195,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       this.submittedValues.next(submitData);
     }
   }
+
+  get returnLink() {
+    return `/health-department/${this.type}-cases/case-list`;
+  }
 }

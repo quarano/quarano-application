@@ -26,7 +26,7 @@
         ><span
           >Neuen
           {{
-            (type$ | async) === ClientType.Index ? "Indexfall" : "Kontaktfall"
+            (type$ | async) === ClientType.Index ? 'Indexfall' : 'Kontaktfall'
           }}
           anlegen</span
         >
@@ -97,6 +97,7 @@
         </ng-template>
         <qro-client-action
           [caseAction]="caseAction$ | async"
+          [type]="type$ | async"
         ></qro-client-action>
       </mat-tab>
       <mat-tab

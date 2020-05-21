@@ -20,7 +20,7 @@ describe('tenant top navigation', () => {
 
     cy.get('[data-cy="action-overview"]').click();
     cy.get('[data-cy="action-overview"]').should('have.class', 'active');
-    cy.url().should('include', '/tenant-admin/actions');
+    cy.url().should('include', '/health-department/index-cases/actions');
 
   });
 

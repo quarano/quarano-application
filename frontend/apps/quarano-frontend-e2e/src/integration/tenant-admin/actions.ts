@@ -11,7 +11,7 @@ describe('tenant actions overview', () => {
 
   describe('preconditions', () => {
     it('should be on the correct url', () => {
-      cy.url().should('include', '/tenant-admin/actions');
+      cy.url().should('include', '/health-department/index-cases/actions');
     });
 
     it('should have correct page components', () => {

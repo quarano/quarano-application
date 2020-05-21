@@ -96,8 +96,12 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.subs.sink = saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-      this.router.navigate(['/tenant-admin/clients']);
+      this.router.navigate([this.returnLink]);
     });
+  }
+
+  get returnLink() {
+    return `/health-department/${this.type$$.value}-cases/case-list`;
   }
 
   startTracking(caseDetail: CaseDetailDto) {

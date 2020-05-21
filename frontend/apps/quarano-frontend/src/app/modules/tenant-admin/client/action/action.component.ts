@@ -8,6 +8,7 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
 import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ClientType } from '@quarano-frontend/health-department/domain';
 
 @Component({
   selector: 'qro-client-action',
@@ -16,6 +17,7 @@ import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/
 })
 export class ActionComponent implements OnInit {
   @Input() caseAction: CaseActionDto;
+  @Input() type: ClientType;
   formGroup: FormGroup;
 
   constructor(
@@ -51,18 +53,21 @@ export class ActionComponent implements OnInit {
     }
   }
 
-
   private resolveAnomalies() {
     this.apiService.resolveAnomalies(
       this.caseAction._links.resolve,
       this.formGroup.controls.comment.value?.trim() || 'Auffälligkeiten geprüft und als erledigt markiert')
       .subscribe(_ => {
         this.snackbarService.success('Die aktuellen Auffälligkeiten wurden als erledigt gekennzeichnet');
-        this.router.navigate(['/tenant-admin/actions']);
+        this.router.navigate([this.returnLink]);
       });
   }
 
   hasOpenAnomalies(): boolean {
     return (this.caseAction.anomalies.health.length + this.caseAction.anomalies.process.length) > 0;
+  }
+
+  get returnLink() {
+    return `/health-department/${this.type}-cases/action-list`;
   }
 }
