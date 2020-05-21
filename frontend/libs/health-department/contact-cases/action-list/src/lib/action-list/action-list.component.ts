@@ -16,6 +16,7 @@ export class ActionRowViewModel {
   lastName: string;
   firstName: string;
   type: ClientType;
+  typeName: string;
   dateOfBirth: string;
   email: string;
   quarantineStart: string;
@@ -83,6 +84,7 @@ export class ActionListComponent implements OnInit, OnDestroy {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
       type: action.caseType,
+      typeName: action.caseTypeLabel,
       dateOfBirth: action.dateOfBirth ? DateFunctions.toCustomLocaleDateString(action.dateOfBirth) : '-',
       email: action.email,
       quarantineStart: action.quarantineStart ? DateFunctions.toCustomLocaleDateString(action.quarantineStart) : '-',
