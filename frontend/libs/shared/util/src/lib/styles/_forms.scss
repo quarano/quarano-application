@@ -2,11 +2,14 @@
   width: 100%;
 }
 
-.form__card--small {
+.form__card--small,
+.personal-data-form {
   .mat-form-field-subscript-wrapper {
     position: inherit !important;
   }
+}
 
+.form__card--small {
   @extend .mx-auto;
   max-width: 700px;
 
