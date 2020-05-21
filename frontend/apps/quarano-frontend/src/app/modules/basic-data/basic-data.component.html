@@ -9,7 +9,7 @@
     <ng-template matStepLabel>Persönliche Daten</ng-template>
     <p>Pflichtfelder sind mit * markiert</p>
     <form [formGroup]="firstFormGroup">
-      <qro-personal-data-form [formGroup]="firstFormGroup"></qro-personal-data-form>
+      <qro-personal-data-form [formGroup]="firstFormGroup" class="personal-data-form"></qro-personal-data-form>
       <div class="mt-3">
         <button mat-raised-button color="primary" [disabled]="firstStep.hasError"
                 (click)="checkAndSendFirstForm()">
