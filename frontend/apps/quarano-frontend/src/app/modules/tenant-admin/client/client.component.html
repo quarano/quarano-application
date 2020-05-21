@@ -38,7 +38,6 @@
       <button
         (click)="startTracking(caseDetail)"
         color="primary"
-        *ngIf="!caseDetail._links?.hasOwnProperty('renew')"
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
       >
@@ -54,6 +53,7 @@
       <div class="spacer"></div>
       <button
         mat-button
+        color="primary"
         (click)="checkForClose(caseDetail)"
         [disabled]="
           !caseDetail._links?.hasOwnProperty('conclude') ||

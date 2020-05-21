@@ -48,8 +48,13 @@ export class LoginComponent implements OnInit {
             });
           }
         },
-        () => {
-          this.snackbarService.error('Benutzername oder Passwort falsch');
+        (error) => {
+          if (error.error === 'Case already closed!'){
+            this.snackbarService.message('Ihr Fall ist bereits geschlossen');
+          }
+          else {
+            this.snackbarService.error('Benutzername oder Passwort falsch');
+          }
         }
       );
   }
