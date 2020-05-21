@@ -9,6 +9,7 @@ import { IRole, roles } from '../../../models/role';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ArrayFunctions } from '@quarano-frontend/shared/util';
 
 @Component({
   selector: 'qro-account-administration',
@@ -59,7 +60,7 @@ export class AccountAdministrationComponent implements OnInit, OnDestroy {
           this.apiService.delete(user._links)
             .subscribe(_ => {
               this.snackbarService.success(`${user.firstName} ${user.lastName} wurde erfolgreich gelöscht.`);
-              this.accounts = this.accounts.remove(user);
+              this.accounts = ArrayFunctions.remove(this.accounts, user);
             });
         }
       });

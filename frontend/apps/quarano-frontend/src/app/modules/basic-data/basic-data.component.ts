@@ -20,6 +20,7 @@ import { TrimmedPatternValidator } from '../../validators/trimmed-pattern.valida
 import { VALIDATION_PATTERNS } from '../../validators/validation-patterns';
 import { PhoneOrMobilePhoneValidator } from '../../validators/phone-validator';
 import { ConfirmationDialogComponent } from '../../ui/confirmation-dialog/confirmation-dialog.component';
+import { DateFunctions } from '@quarano-frontend/shared/util';
 
 @Component({
   selector: 'qro-basic-data',
@@ -229,13 +230,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.datesForRetrospectiveContacts = [];
 
     const firstSymptomsDay = new Date(Date.parse(this.firstQuery.dayOfFirstSymptoms) || this.today);
-    const firstDay = firstSymptomsDay.addDays(-2);
-    while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
+    const firstDay = DateFunctions.addDays(firstSymptomsDay, -2);
+    while (DateFunctions.getDateWithoutTime(day) >= DateFunctions.getDateWithoutTime(firstDay)) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString('de'), new FormControl(this.encounters
-        .filter(e => e.date === day.getDateWithoutTime())
+        .filter(e => e.date === DateFunctions.getDateWithoutTime(day))
         .map(e => e.contactPersonId)));
-      day = day.addDays(-1);
+      day = DateFunctions.addDays(day, -1);
     }
   }
 
@@ -256,7 +257,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date: date.getDateWithoutTime(), contact: id })
+    this.enrollmentService.createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
       .subscribe(encounter => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
@@ -266,7 +267,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onContactRemoved(date: Date, id: string) {
     const encounterToRemove = this.encounters.find(e =>
       e.contactPersonId === id
-      && e.date === date.getDateWithoutTime());
+      && e.date === DateFunctions.getDateWithoutTime(date));
     this.enrollmentService.deleteEncounter(encounterToRemove.encounter)
       .subscribe(_ => {
         this.encounters = this.encounters.filter(e => e !== encounterToRemove);

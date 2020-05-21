@@ -1,3 +1,4 @@
+import { DateFunctions } from '@quarano-frontend/shared/util';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
@@ -117,11 +118,11 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   getTitle(): string {
     if (this.isNew) {
       return `Tagebuch-Eintrag anlegen für den ` +
-        `${new Date(this.date).toCustomLocaleDateString()} ` +
+        `${DateFunctions.toCustomLocaleDateString(new Date(this.date))} ` +
         `(${this.slot === 'morning' ? 'morgens' : 'abends'})`;
     } else {
       return `Tagebuch-Eintrag bearbeiten für den ` +
-        `${new Date(this.diaryEntry.slot.date).toCustomLocaleDateString()} ` +
+        `${DateFunctions.toCustomLocaleDateString(new Date(this.diaryEntry.slot.date))} ` +
         `(${this.diaryEntry.slot.timeOfDay === 'morning' ? 'morgens' : 'abends'})`;
     }
   }

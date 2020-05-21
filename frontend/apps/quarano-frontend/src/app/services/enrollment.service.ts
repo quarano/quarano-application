@@ -7,6 +7,7 @@ import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { QuestionnaireDto } from '../models/first-query';
 import { ClientDto } from '../models/client';
 import { EncounterCreateDto, EncounterDto, EncounterEntry } from '../models/encounter';
+import { DateFunctions } from '@quarano-frontend/shared/util';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class EnrollmentService {
   }
 
   createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
-    const dateString = date.getDateWithoutTime();
+    const dateString = DateFunctions.getDateWithoutTime(date);
     return forkJoin(
       contactIds.map(id => this.createEncounter({ contact: id, date: dateString }))
     );
