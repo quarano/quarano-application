@@ -1,3 +1,8 @@
+ALTER TABLE diary_entries_symptoms Drop constraint diary_entries_symptoms_symptons_fk;
+ALTER TABLE questionnaires_symptoms Drop constraint questionnaires_symptoms_symptons_fk;
+ALTER TABLE diary_entries_symptoms  ADD CONSTRAINT diary_entries_symptoms_symptons_fk FOREIGN KEY (symptoms_symptom_id) REFERENCES symptoms(symptom_id) ON DELETE CASCADE;
+ALTER TABLE questionnaires_symptoms  ADD CONSTRAINT questionnaires_symptoms_symptons_fk FOREIGN KEY (symptoms_symptom_id)  REFERENCES symptoms(symptom_id) ON DELETE CASCADE;
+
 INSERT INTO public.symptoms VALUES ('8687c622-d223-42fb-a93f-7a1c3677a4a6', true,  'Gefühl zu wenig / keine Luft zu bekommen');
 INSERT INTO public.symptoms VALUES ('288f414e-63b3-4a7d-8752-1548e6615da5', true,  'Schmerzen beim Atmen');
 INSERT INTO public.symptoms VALUES ('5397f942-95cb-4e7e-8146-8201cf5bf623', true, 'Allgemeine Schwäche');
