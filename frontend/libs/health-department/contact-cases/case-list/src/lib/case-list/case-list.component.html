@@ -1,1 +1,164 @@
-<p>case-list works!</p>
+<div style="max-width: 1110px;">
+  <div style="display: flex; justify-content: space-between;">
+    <div style="display: flex;">
+      <button
+        mat-raised-button
+        data-cy="new-case-button"
+        color="primary"
+        [routerLink]="['/tenant-admin/client', 'index']"
+      >
+        <mat-icon>add</mat-icon>Neuen Indexfall anlegen
+      </button>
+      <button
+        class="ml-3"
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/tenant-admin/client', 'contact']"
+      >
+        <mat-icon>add</mat-icon>Neuen Kontaktfall anlegen
+      </button>
+    </div>
+
+    <button data-cy="export-cases-button" mat-button>
+      <mat-icon>get_app</mat-icon>csv-Export speichern
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width mt-3">
+    <input
+      matInput
+      data-cy="search-case-input"
+      type="text"
+      placeholder="Suchen..."
+      (keyup)="updateFilter($event)"
+    />
+  </mat-form-field>
+
+  <ngx-datatable
+    #table
+    data-cy="case-data-table"
+    class="material fixed-header"
+    style="max-width: 1110px;"
+    [count]="cases.length"
+    [headerHeight]="50"
+    rowHeight="auto"
+    [rows]="rows"
+    [messages]="{
+      emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
+      selectedMessage: 'ausgewählt',
+      totalMessage: cases.length === 1 ? 'Fall' : 'Fälle'
+    }"
+    [loadingIndicator]="loading"
+    [footerHeight]="50"
+    [selectionType]="selectionType"
+    (select)="onSelect($event)"
+  >
+    <ngx-datatable-column
+      prop="status"
+      name="Status"
+      width="210"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="lastName"
+      name="Nachname"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+      width="120"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="firstName"
+      name="Vorname"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+      width="120"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="dateOfBirth"
+      name="Geburtsdatum"
+      width="120"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="typeName"
+      name="Typ"
+      width="110"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="quarantineEnd"
+      name="Quarantäne bis"
+      width="130"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="zipCode"
+      name="PLZ"
+      width="80"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="phone"
+      name="Telefon"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+      width="140"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="email"
+      name="E-Mail"
+      width="80"
+      [sortable]="false"
+    >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <button
+          *ngIf="value"
+          class="ngx-icon-button"
+          data-cy="mail-button"
+          mat-icon-button
+          [matTooltip]="'E-Mail an ' + value"
+          matTooltipPosition="right"
+          (click)="sendMail($event, value)"
+        >
+          <mat-icon>mail_outline</mat-icon>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>

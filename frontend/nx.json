@@ -35,15 +35,6 @@
     "shared-util": {
       "tags": ["scope:shared", "type:util"]
     },
-    "health-department": {
-      "tags": []
-    },
-    "health-department-index-cases": {
-      "tags": []
-    },
-    "health-department-contact-cases": {
-      "tags": []
-    },
     "health-department-index-cases-action-list": {
       "tags": []
     },
@@ -57,6 +48,30 @@
       "tags": []
     },
     "shared-ui-material": {
+      "tags": []
+    },
+    "health-department-domain": {
+      "tags": []
+    },
+    "health-department-action-alert": {
+      "tags": []
+    },
+    "health-department-ui-action-alert": {
+      "tags": []
+    },
+    "health-department-shell": {
+      "tags": []
+    },
+    "health-department-contact-cases-shell": {
+      "tags": []
+    },
+    "health-department-index-cases-shell": {
+      "tags": []
+    },
+    "health-department-contact-cases-domain": {
+      "tags": []
+    },
+    "health-department-index-cases-domain": {
       "tags": []
     }
   }

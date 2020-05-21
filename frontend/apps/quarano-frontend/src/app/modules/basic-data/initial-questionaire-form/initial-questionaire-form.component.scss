@@ -1,10 +1,4 @@
-@import "../../../../styles/variables";
-
-.questionaire-form-container {
-  /*& > *:nth-child(even) {
-    background-color: #f4f4f4;
-  }*/
-}
+@import '../../../../../../../libs/shared/util/src/lib/styles/variables';
 
 .question {
   display: flex;
@@ -17,7 +11,6 @@
     background-color: #f4f4f4;
   }
 }
-
 
 .bool-question {
   display: flex;

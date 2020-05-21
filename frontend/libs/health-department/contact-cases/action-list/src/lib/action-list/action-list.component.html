@@ -1,1 +1,134 @@
-<p>action-list works!</p>
+<ngx-datatable
+  class="material fixed-header"
+  data-cy="action-data-table"
+  style="max-width: 1110px;"
+  [count]="actions.length"
+  [headerHeight]="50"
+  rowHeight="auto"
+  [rows]="filteredRows"
+  [messages]="{
+    emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
+    selectedMessage: 'ausgewählt',
+    totalMessage: actions.length === 1 ? 'Fall' : 'Fälle'
+  }"
+  [loadingIndicator]="loading"
+  [footerHeight]="50"
+  selectionType="single"
+  (select)="onSelect($event)"
+>
+  <ngx-datatable-column
+    prop="alerts"
+    name="Auffälligkeiten"
+    [sortable]="false"
+    width="250"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>
+      <button
+        mat-icon-button
+        id="filter-button"
+        *ngIf="isFiltered"
+        (click)="resetFilter()"
+        matTooltip="Filter löschen"
+      >
+        <mat-icon>filter_list</mat-icon>
+      </button>
+      <span>{{ column.name }}</span>
+      <mat-select
+        multiple
+        matTooltip="Filtern"
+        (selectionChange)="onAlertFilterChanged($event.value)"
+      >
+        <mat-option
+          *ngFor="let alertConfig of alertConfigs"
+          [value]="alertConfig.alert"
+        >
+          <qro-action-alert [alert]="alertConfig"></qro-action-alert>
+        </mat-option>
+      </mat-select>
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <div class="action-alert-container">
+        <qro-action-alert
+          *ngFor="let alert of value"
+          [alert]="alertConfigurationFor(alert)"
+        ></qro-action-alert>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="lastName"
+    name="Nachname"
+    [sortable]="false"
+    width="90"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="firstName"
+    name="Vorname"
+    [sortable]="false"
+    width="90"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="dateOfBirth"
+    name="Geburtsdatum"
+    [sortable]="false"
+    width="110"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="typeName"
+    name="Typ"
+    [sortable]="false"
+    width="80"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="170"
+    [sortable]="false"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="quarantineStart"
+    name="Quarantäne seit"
+    [sortable]="false"
+    width="130"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="phone"
+    name="Telefon"
+    [sortable]="false"
+    width="120"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="email"
+    name="E-Mail"
+    [sortable]="false"
+    width="70"
+  >
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <a
+        *ngIf="value"
+        mat-icon-button
+        (click)="sendMail($event, value)"
+        [matTooltip]="'E-Mail an ' + value"
+        matTooltipPosition="right"
+        class="ngx-icon-button"
+      >
+        <mat-icon>mail_outline</mat-icon>
+      </a>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

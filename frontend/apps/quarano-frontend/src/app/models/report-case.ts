@@ -1,3 +1,5 @@
+import { ClientType } from '@quarano-frontend/health-department/domain';
+
 export interface ReportCaseDto {
   dateOfBirth: Date;
   firstName: string;
@@ -15,7 +17,4 @@ export interface ReportCaseDto {
   caseTypeLabel: string;
 }
 
-export enum ClientType {
-  Index = 'index',
-  Contact = 'contact'
-}
+

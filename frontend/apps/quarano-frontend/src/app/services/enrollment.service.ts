@@ -1,13 +1,12 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
-import {map, share, switchMap, tap} from 'rxjs/operators';
-import '../utils/date-extensions';
-import {environment} from '../../environments/environment';
-import {EnrollmentStatusDto} from '../models/enrollment-status';
-import {QuestionnaireDto} from '../models/first-query';
-import {ClientDto} from '../models/client';
-import {EncounterCreateDto, EncounterDto, EncounterEntry} from '../models/encounter';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { map, share, switchMap, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { EnrollmentStatusDto } from '../models/enrollment-status';
+import { QuestionnaireDto } from '../models/first-query';
+import { ClientDto } from '../models/client';
+import { EncounterCreateDto, EncounterDto, EncounterEntry } from '../models/encounter';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +54,7 @@ export class EnrollmentService {
   }
 
   private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
-    return {encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0]};
+    return { encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0] };
   }
 
   createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
@@ -68,7 +67,7 @@ export class EnrollmentService {
   createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
     const dateString = date.getDateWithoutTime();
     return forkJoin(
-      contactIds.map(id => this.createEncounter({contact: id, date: dateString}))
+      contactIds.map(id => this.createEncounter({ contact: id, date: dateString }))
     );
   }
 

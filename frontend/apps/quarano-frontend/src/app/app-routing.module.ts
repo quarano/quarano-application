@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'health-department', loadChildren: () =>
-      import('@quarano-frontend/health-department').then(m => m.HealthDepartmentModule),
+      import('@quarano-frontend/health-department/shell').then(m => m.HealthDepartmentShellModule),
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard]
   },
   {

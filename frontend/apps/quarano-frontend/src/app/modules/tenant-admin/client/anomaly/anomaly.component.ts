@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {ActionDto} from '../../../../models/case-action';
+import { ActionDto } from '../../../../models/case-action';
 
 @Component({
   selector: 'qro-client-action-anomaly',

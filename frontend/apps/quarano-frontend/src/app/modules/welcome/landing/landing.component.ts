@@ -1,6 +1,6 @@
+import { ClientType } from '@quarano-frontend/health-department/domain';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClientType } from '../../../models/report-case';
 
 @Component({
   selector: 'qro-landing',

@@ -21,15 +21,6 @@
       ],
       "@quarano-frontend/auth/domain": ["libs/auth/domain/src/index.ts"],
       "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"],
-      "@quarano-frontend/health-department": [
-        "libs/health-department/src/index.ts"
-      ],
-      "@quarano-frontend/health-department/index-cases": [
-        "libs/health-department/index-cases/src/index.ts"
-      ],
-      "@quarano-frontend/health-department/contact-cases": [
-        "libs/health-department/contact-cases/src/index.ts"
-      ],
       "@quarano-frontend/health-department/index-cases/action-list": [
         "libs/health-department/index-cases/action-list/src/index.ts"
       ],
@@ -44,6 +35,30 @@
       ],
       "@quarano-frontend/shared/ui-material": [
         "libs/shared/ui-material/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/domain": [
+        "libs/health-department/domain/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/action-alert": [
+        "libs/health-department/action-alert/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/ui-action-alert": [
+        "libs/health-department/ui-action-alert/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/shell": [
+        "libs/health-department/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/shell": [
+        "libs/health-department/contact-cases/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/shell": [
+        "libs/health-department/index-cases/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/domain": [
+        "libs/health-department/contact-cases/domain/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/domain": [
+        "libs/health-department/index-cases/domain/src/index.ts"
       ]
     }
   },

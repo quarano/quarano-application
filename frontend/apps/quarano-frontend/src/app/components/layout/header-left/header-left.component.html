@@ -9,17 +9,6 @@
 
   <nav class="ml-3" *ngIf="isLoggedIn$ | async">
     <ng-container *qroIsHealthDepartmentUser
-      ><a
-        routerLink="/tenant-admin/clients"
-        routerLinkActive="active"
-        id="tenant-admin-login-link"
-        data-cy="case-overview"
-        >Fallübersicht</a
-      ><a
-        routerLink="/tenant-admin/actions"
-        routerLinkActive="active"
-        data-cy="action-overview"
-        >Aktionsübersicht</a
       ><a routerLink="/health-department/index-cases" routerLinkActive="active"
         >Indexfälle</a
       ><a

@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
-import {AccountDto} from '../../../models/account';
-import {IRole, roles} from '../../../models/role';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {ConfirmationDialogComponent} from '../../../ui/confirmation-dialog/confirmation-dialog.component';
-import '../../../utils/array-extensions';
+import { AccountDto } from '../../../models/account';
+import { IRole, roles } from '../../../models/role';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'qro-account-administration',

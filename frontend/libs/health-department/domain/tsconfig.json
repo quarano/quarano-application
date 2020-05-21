@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "jest"]
+  },
+  "include": [
+    "**/*.ts",
+    "../contact-cases/domain/src/lib/resolvers/action-list.resolver copy.ts",
+    "../contact-cases/domain/src/lib/resolvers/case-list.resolver copy.ts"
+  ]
+}

@@ -6,12 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import {DeactivatableComponent} from '../../../guards/prevent-unsaved-changes.guard';
-import {DiaryEntryDto, DiaryEntryModifyDto} from '../../../models/diary-entry';
-import {SymptomDto} from '../../../models/symptom';
-import {ContactPersonDto} from '../../../models/contact-person';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
+import { DeactivatableComponent } from '../../../guards/prevent-unsaved-changes.guard';
+import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../models/diary-entry';
+import { SymptomDto } from '../../../models/symptom';
+import { ContactPersonDto } from '../../../models/contact-person';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'qro-diary-entry',
