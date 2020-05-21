@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('tenant case overview', () => {
+describe('health-department index cases case-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/api/hd/cases'/*, 'fixture:get-api-hd-cases.json'*/).as('allcases');
@@ -15,7 +15,6 @@ describe('tenant case overview', () => {
 
     it('should have correct page components', () => {
       cy.get('[data-cy="new-case-button"]').should('exist');
-      cy.get('[data-cy="export-cases-button"]').should('exist');
       cy.get('[data-cy="search-case-input"]').should('exist');
       cy.get('[data-cy="case-data-table"]').should('exist');
     });

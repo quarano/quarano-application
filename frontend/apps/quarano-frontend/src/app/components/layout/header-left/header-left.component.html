@@ -9,11 +9,15 @@
 
   <nav class="ml-3" *ngIf="isLoggedIn$ | async">
     <ng-container *qroIsHealthDepartmentUser
-      ><a routerLink="/health-department/index-cases" routerLinkActive="active"
+      ><a
+        data-cy="index-cases"
+        routerLink="/health-department/index-cases"
+        routerLinkActive="active"
         >Indexfälle</a
       ><a
         routerLink="/health-department/contact-cases"
         routerLinkActive="active"
+        data-cy="contact-cases"
         >Kontaktfälle</a
       ></ng-container
     >

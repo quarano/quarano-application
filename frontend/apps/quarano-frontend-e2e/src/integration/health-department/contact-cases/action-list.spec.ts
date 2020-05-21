@@ -1,17 +1,19 @@
 /// <reference types="cypress" />
 
-describe('tenant actions overview', () => {
+describe('health-department contact cases action-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/api/hd/actions'/*, 'fixture:get-api-hd-cases.json'*/).as('allactions');
 
     cy.loginAgent();
-    cy.get('[data-cy="action-overview"]').click();
+    cy.get('[data-cy="contact-cases"]').click();
+    cy.get('[data-cy="action-list"]').should('exist');
+    cy.get('[data-cy="action-list"]').click();
   });
 
   describe('preconditions', () => {
     it('should be on the correct url', () => {
-      cy.url().should('include', '/health-department/index-cases/actions');
+      cy.url().should('include', '/health-department/contact-cases/action-list');
     });
 
     it('should have correct page components', () => {

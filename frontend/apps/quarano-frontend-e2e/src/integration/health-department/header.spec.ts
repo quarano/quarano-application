@@ -1,4 +1,4 @@
-describe('tenant top navigation', () => {
+describe('health-department top navigation', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/api/user/me').as('me');
@@ -7,20 +7,20 @@ describe('tenant top navigation', () => {
   });
 
   it('should show a navigation', () => {
-    cy.get('[data-cy="case-overview"]').should('exist');
-    cy.get('[data-cy="action-overview"]').should('exist');
+    cy.get('[data-cy="index-cases"]').should('exist');
+    cy.get('[data-cy="contact-cases"]').should('exist');
   });
 
-  it('should have selected case-overview', () => {
-    cy.get('[data-cy="case-overview"]').should('have.class', 'active');
-    cy.get('[data-cy="action-overview"]').should('not.have.class', 'active');
+  it('should have selected index cases', () => {
+    cy.get('[data-cy="index-cases"]').should('have.class', 'active');
+    cy.get('[data-cy="contact-cases"]').should('not.have.class', 'active');
   });
 
-  it('should switch to actions on click', () => {
+  it('should switch to contact cases on click', () => {
 
-    cy.get('[data-cy="action-overview"]').click();
-    cy.get('[data-cy="action-overview"]').should('have.class', 'active');
-    cy.url().should('include', '/health-department/index-cases/actions');
+    cy.get('[data-cy="contact-cases"]').click();
+    cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
+    cy.url().should('include', '/health-department/contact-cases/case-list');
 
   });
 
@@ -44,6 +44,7 @@ describe('tenant top navigation', () => {
     cy.get('div.mat-menu-panel').should('exist');
 
     cy.get('[data-cy="profile-button"]').should('not.exist');
+    cy.get('[data-cy="change-password-button"]').should('exist');
     cy.get('[data-cy="logout-button"]').should('exist');
   });
 
@@ -52,4 +53,10 @@ describe('tenant top navigation', () => {
     cy.get('[data-cy="logout-button"]').click();
     cy.url().should('include', '/welcome/login');
   });
+
+  it('should navigate to change password component on button click', () => {
+    cy.get('[data-cy="profile-user-button"]').click();
+    cy.get('[data-cy="change-password-button"]').click();
+    cy.url().should('include', 'change-password');
+  })
 });
