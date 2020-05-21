@@ -16,7 +16,6 @@ export class ActionRowViewModel {
   lastName: string;
   firstName: string;
   typeName: string;
-  type: ClientType;
   dateOfBirth: string;
   email: string;
   phone: string;
@@ -84,7 +83,6 @@ export class ActionListComponent implements OnInit, OnDestroy {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
       typeName: action.caseTypeLabel,
-      type: action.caseType,
       dateOfBirth: action.dateOfBirth ? DateFunctions.toCustomLocaleDateString(action.dateOfBirth) : '-',
       email: action.email,
       phone: action.phone || '-',
