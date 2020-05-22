@@ -78,7 +78,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       typeName: c.caseTypeLabel,
       dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
       email: c.email,
-      createdAt: DateFunctions.toCustomLocaleDateString(new Date()), // ToDo: Anpassen, wenn CreatedAt verfügbar ist
+      createdAt: c.createdAt ? DateFunctions.toCustomLocaleDateString(c.createdAt) : '-',
       quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
       status: c.status,
       zipCode: c.zipCode || '-',
