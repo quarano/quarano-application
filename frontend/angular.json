@@ -32,7 +32,7 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "./apps/quarano-frontend/src/styles/styles.scss"
+              "./libs/shared/util/src/lib/styles/styles.scss"
             ],
             "scripts": []
           },
@@ -280,7 +280,7 @@
       "projectType": "library",
       "root": "libs/auth/domain",
       "sourceRoot": "libs/auth/domain/src",
-      "prefix": "quarano-frontend",
+      "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -312,7 +312,7 @@
       "projectType": "library",
       "root": "libs/shared/util",
       "sourceRoot": "libs/shared/util/src",
-      "prefix": "quarano-frontend",
+      "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -331,6 +331,455 @@
             "tsConfig": "libs/shared/util/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/shared/util/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-index-cases-action-list": {
+      "projectType": "library",
+      "root": "libs/health-department/index-cases/action-list",
+      "sourceRoot": "libs/health-department/index-cases/action-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/index-cases/action-list/tsconfig.lib.json",
+              "libs/health-department/index-cases/action-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/index-cases/action-list/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/index-cases/action-list/jest.config.js",
+            "tsConfig": "libs/health-department/index-cases/action-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/index-cases/action-list/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-index-cases-case-list": {
+      "projectType": "library",
+      "root": "libs/health-department/index-cases/case-list",
+      "sourceRoot": "libs/health-department/index-cases/case-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/index-cases/case-list/tsconfig.lib.json",
+              "libs/health-department/index-cases/case-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/index-cases/case-list/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/index-cases/case-list/jest.config.js",
+            "tsConfig": "libs/health-department/index-cases/case-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/index-cases/case-list/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-contact-cases-case-list": {
+      "projectType": "library",
+      "root": "libs/health-department/contact-cases/case-list",
+      "sourceRoot": "libs/health-department/contact-cases/case-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/contact-cases/case-list/tsconfig.lib.json",
+              "libs/health-department/contact-cases/case-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/contact-cases/case-list/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/contact-cases/case-list/jest.config.js",
+            "tsConfig": "libs/health-department/contact-cases/case-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/contact-cases/case-list/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-contact-cases-action-list": {
+      "projectType": "library",
+      "root": "libs/health-department/contact-cases/action-list",
+      "sourceRoot": "libs/health-department/contact-cases/action-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/contact-cases/action-list/tsconfig.lib.json",
+              "libs/health-department/contact-cases/action-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/contact-cases/action-list/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/contact-cases/action-list/jest.config.js",
+            "tsConfig": "libs/health-department/contact-cases/action-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/contact-cases/action-list/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-material": {
+      "projectType": "library",
+      "root": "libs/shared/ui-material",
+      "sourceRoot": "libs/shared/ui-material/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-material/tsconfig.lib.json",
+              "libs/shared/ui-material/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-material/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-material/jest.config.js",
+            "tsConfig": "libs/shared/ui-material/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-material/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-domain": {
+      "projectType": "library",
+      "root": "libs/health-department/domain",
+      "sourceRoot": "libs/health-department/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/domain/tsconfig.lib.json",
+              "libs/health-department/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/domain/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/domain/jest.config.js",
+            "tsConfig": "libs/health-department/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-ui-action-alert": {
+      "projectType": "library",
+      "root": "libs/health-department/ui-action-alert",
+      "sourceRoot": "libs/health-department/ui-action-alert/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/ui-action-alert/tsconfig.lib.json",
+              "libs/health-department/ui-action-alert/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/ui-action-alert/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/ui-action-alert/jest.config.js",
+            "tsConfig": "libs/health-department/ui-action-alert/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/ui-action-alert/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-shell": {
+      "projectType": "library",
+      "root": "libs/health-department/shell",
+      "sourceRoot": "libs/health-department/shell/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/shell/tsconfig.lib.json",
+              "libs/health-department/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/shell/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/shell/jest.config.js",
+            "tsConfig": "libs/health-department/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-contact-cases-shell": {
+      "projectType": "library",
+      "root": "libs/health-department/contact-cases/shell",
+      "sourceRoot": "libs/health-department/contact-cases/shell/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/contact-cases/shell/tsconfig.lib.json",
+              "libs/health-department/contact-cases/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/contact-cases/shell/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/contact-cases/shell/jest.config.js",
+            "tsConfig": "libs/health-department/contact-cases/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/contact-cases/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-index-cases-shell": {
+      "projectType": "library",
+      "root": "libs/health-department/index-cases/shell",
+      "sourceRoot": "libs/health-department/index-cases/shell/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/index-cases/shell/tsconfig.lib.json",
+              "libs/health-department/index-cases/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/index-cases/shell/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/index-cases/shell/jest.config.js",
+            "tsConfig": "libs/health-department/index-cases/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/index-cases/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-contact-cases-domain": {
+      "projectType": "library",
+      "root": "libs/health-department/contact-cases/domain",
+      "sourceRoot": "libs/health-department/contact-cases/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/contact-cases/domain/tsconfig.lib.json",
+              "libs/health-department/contact-cases/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/contact-cases/domain/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/contact-cases/domain/jest.config.js",
+            "tsConfig": "libs/health-department/contact-cases/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/contact-cases/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "health-department-index-cases-domain": {
+      "projectType": "library",
+      "root": "libs/health-department/index-cases/domain",
+      "sourceRoot": "libs/health-department/index-cases/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/index-cases/domain/tsconfig.lib.json",
+              "libs/health-department/index-cases/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/index-cases/domain/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/index-cases/domain/jest.config.js",
+            "tsConfig": "libs/health-department/index-cases/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/index-cases/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-tile": {
+      "projectType": "library",
+      "root": "libs/shared/ui-tile",
+      "sourceRoot": "libs/shared/ui-tile/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-tile/tsconfig.lib.json",
+              "libs/shared/ui-tile/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-tile/jest.config.js",
+            "tsConfig": "libs/shared/ui-tile/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-tile/src/test-setup.ts"
           }
         }
       },

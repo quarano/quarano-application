@@ -20,7 +20,44 @@
         "libs/auth/change-password/src/index.ts"
       ],
       "@quarano-frontend/auth/domain": ["libs/auth/domain/src/index.ts"],
-      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"]
+      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"],
+      "@quarano-frontend/health-department/index-cases/action-list": [
+        "libs/health-department/index-cases/action-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/case-list": [
+        "libs/health-department/index-cases/case-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/case-list": [
+        "libs/health-department/contact-cases/case-list/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/action-list": [
+        "libs/health-department/contact-cases/action-list/src/index.ts"
+      ],
+      "@quarano-frontend/shared/ui-material": [
+        "libs/shared/ui-material/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/domain": [
+        "libs/health-department/domain/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/ui-action-alert": [
+        "libs/health-department/ui-action-alert/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/shell": [
+        "libs/health-department/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/shell": [
+        "libs/health-department/contact-cases/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/shell": [
+        "libs/health-department/index-cases/shell/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/contact-cases/domain": [
+        "libs/health-department/contact-cases/domain/src/index.ts"
+      ],
+      "@quarano-frontend/health-department/index-cases/domain": [
+        "libs/health-department/index-cases/domain/src/index.ts"
+      ],
+      "@quarano-frontend/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

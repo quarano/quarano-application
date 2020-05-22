@@ -2,19 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, share } from 'rxjs/operators';
-import {environment} from '../../environments/environment';
-import {SymptomDto} from '../models/symptom';
-import {ContactPersonDto, ContactPersonModifyDto} from '../models/contact-person';
-import {DiaryDto, DiaryEntryDto, DiaryEntryModifyDto} from '../models/diary-entry';
-import {Register} from '../models/register';
-import {UserDto} from '../models/user';
-import {CaseDetailDto} from '../models/case-detail';
-import {CaseActionDto} from '../models/case-action';
-import {DeleteLink, Link} from '../models/general';
-import {ClientType, ReportCaseDto} from '../models/report-case';
-import {HalResponse} from '../models/hal-response';
-import {ActionListItemDto} from '../models/action';
-import {AccountDto, AccountListDto} from '../models/account';
+import { environment } from '../../environments/environment';
+import { SymptomDto } from '../models/symptom';
+import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
+import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
+import { Register } from '../models/register';
+import { UserDto } from '../models/user';
+import { CaseDetailDto } from '../models/case-detail';
+import { CaseActionDto } from '../models/case-action';
+import { DeleteLink, Link } from '../models/general';
+import { HalResponse } from '../models/hal-response';
+import { AccountDto, AccountListDto } from '../models/account';
+import { ClientType } from '@quarano-frontend/health-department/domain';
 
 
 @Injectable({
@@ -153,18 +152,8 @@ export class ApiService {
     return of();
   }
 
-  getCases(): Observable<Array<ReportCaseDto>> {
-    return this.httpClient.get<any>(`${this.baseUrl}/api/hd/cases`)
-      .pipe(share(), map(result => result._embedded?.cases?.map(item => this.mapReportCase(item)) || []));
-  }
-
   getDiary(): Observable<DiaryDto> {
     return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
-  }
-
-  getAllActions(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any[]>(`${this.baseUrl}/api/hd/actions`)
-      .pipe(share(), map(result => result.map(item => this.mapActionListItem(item))));
   }
 
   getHealthDepartmentUsers(): Observable<AccountListDto> {
@@ -187,44 +176,5 @@ export class ApiService {
 
   editHealthDepartmentUser(account: AccountDto) {
     return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.accountId}`, account);
-  }
-
-  private mapReportCase(item: any): ReportCaseDto {
-    return {
-      dateOfBirth: item.dateOfBirth ? new Date(item.dateOfBirth) : null,
-      status: item.status,
-      email: item.email,
-      phone: item.primaryPhoneNumber,
-      firstName: item.firstName,
-      lastName: item.lastName,
-      medicalStaff: item.medicalStaff,
-      enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
-      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
-      caseType: item.caseType,
-      zipCode: item.zipCode,
-      caseId: item.caseId,
-      caseTypeLabel: item.caseTypeLabel
-    };
-  }
-
-  private mapActionListItem(item: any): ActionListItemDto {
-    return {
-      dateOfBirth: item.dateOfBirth ? new Date(item.dateOfBirth) : null,
-      caseId: item.caseId,
-      caseType: item.caseType,
-      name: item.name,
-      priority: item.priority,
-      firstName: item.firstName,
-      lastName: item.lastName,
-      phone: item.primaryPhoneNumber,
-      email: item.email,
-      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
-      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
-      _links: item._links,
-      alerts: item.healthSummary.concat(item.processSummary),
-      status: item.status,
-      caseTypeLabel: item.caseTypeLabel
-    };
   }
 }

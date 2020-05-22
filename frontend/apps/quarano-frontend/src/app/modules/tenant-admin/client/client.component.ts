@@ -3,19 +3,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ClientType } from '../../../models/report-case';
 import { CloseCaseDialogComponent } from './close-case-dialog/close-case-dialog.component';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
-import {CaseActionDto} from '../../../models/case-action';
-import {CaseCommentDto} from '../../../models/case-comment';
-import {CaseDetailDto} from '../../../models/case-detail';
-import {StartTracking} from '../../../models/start-tracking';
-import {MatTabGroup} from '@angular/material/tabs';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {HalResponse} from '../../../models/hal-response';
-import {ConfirmationDialogComponent} from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { CaseActionDto } from '../../../models/case-action';
+import { CaseCommentDto } from '../../../models/case-comment';
+import { CaseDetailDto } from '../../../models/case-detail';
+import { StartTracking } from '../../../models/start-tracking';
+import { MatTabGroup } from '@angular/material/tabs';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { HalResponse } from '../../../models/hal-response';
+import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ClientType } from '@quarano-frontend/health-department/domain';
 
 
 @Component({
@@ -96,8 +96,12 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.subs.sink = saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-      this.router.navigate(['/tenant-admin/clients']);
+      this.router.navigate([this.returnLink]);
     });
+  }
+
+  get returnLink() {
+    return `/health-department/${this.type$$.value}-cases/case-list`;
   }
 
   startTracking(caseDetail: CaseDetailDto) {

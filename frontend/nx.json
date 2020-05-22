@@ -20,7 +20,7 @@
   },
   "projects": {
     "quarano-frontend": {
-      "tags": ["type:app"]
+      "tags": ["scope:app", "type:app"]
     },
     "quarano-frontend-e2e": {
       "tags": ["*"],
@@ -34,6 +34,45 @@
     },
     "shared-util": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "health-department-index-cases-action-list": {
+      "tags": ["scope:health-department-index-cases", "type:feature"]
+    },
+    "health-department-index-cases-case-list": {
+      "tags": ["scope:health-department-index-cases", "type:feature"]
+    },
+    "health-department-contact-cases-case-list": {
+      "tags": ["scope:health-department-contact-cases", "type:feature"]
+    },
+    "health-department-contact-cases-action-list": {
+      "tags": ["scope:health-department-contact-cases", "type:feature"]
+    },
+    "shared-ui-material": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "health-department-domain": {
+      "tags": ["scope:health-department", "type:domain"]
+    },
+    "health-department-ui-action-alert": {
+      "tags": ["scope:health-department", "type:ui"]
+    },
+    "health-department-shell": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-contact-cases-shell": {
+      "tags": ["scope:health-department-contact-cases", "type:feature"]
+    },
+    "health-department-index-cases-shell": {
+      "tags": ["scope:health-department-index-cases", "type:feature"]
+    },
+    "health-department-contact-cases-domain": {
+      "tags": ["scope:health-department-contact-cases", "type:domain"]
+    },
+    "health-department-index-cases-domain": {
+      "tags": ["scope:health-department-index-cases", "type:domain"]
+    },
+    "shared-ui-tile": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

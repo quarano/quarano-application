@@ -1,26 +1,26 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {SubSink} from 'subsink';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import '../../utils/date-extensions';
-import {MatDialog} from '@angular/material/dialog';
-import {ContactPersonDialogComponent} from '../app-forms/contact-person-dialog/contact-person-dialog.component';
-import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {Moment} from 'moment';
-import {MatHorizontalStepper} from '@angular/material/stepper';
-import {BehaviorSubject} from 'rxjs';
-import {EnrollmentStatusDto} from '../../models/enrollment-status';
-import {ClientDto} from '../../models/client';
-import {QuestionnaireDto} from '../../models/first-query';
-import {SymptomDto} from '../../models/symptom';
-import {ContactPersonDto} from '../../models/contact-person';
-import {EncounterEntry} from '../../models/encounter';
-import {SnackbarService} from '../../services/snackbar.service';
-import {EnrollmentService} from '../../services/enrollment.service';
-import {TrimmedPatternValidator} from '../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../validators/validation-patterns';
-import {PhoneOrMobilePhoneValidator} from '../../validators/phone-validator';
-import {ConfirmationDialogComponent} from '../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SubSink } from 'subsink';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { Moment } from 'moment';
+import { MatHorizontalStepper } from '@angular/material/stepper';
+import { BehaviorSubject } from 'rxjs';
+import { EnrollmentStatusDto } from '../../models/enrollment-status';
+import { ClientDto } from '../../models/client';
+import { QuestionnaireDto } from '../../models/first-query';
+import { SymptomDto } from '../../models/symptom';
+import { ContactPersonDto } from '../../models/contact-person';
+import { EncounterEntry } from '../../models/encounter';
+import { SnackbarService } from '../../services/snackbar.service';
+import { EnrollmentService } from '../../services/enrollment.service';
+import { TrimmedPatternValidator } from '../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../validators/validation-patterns';
+import { PhoneOrMobilePhoneValidator } from '../../validators/phone-validator';
+import { ConfirmationDialogComponent } from '../../ui/confirmation-dialog/confirmation-dialog.component';
+import { DateFunctions } from '@quarano-frontend/shared/util';
 
 @Component({
   selector: 'qro-basic-data',
@@ -138,10 +138,10 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       houseNumber: new FormControl(this.client.houseNumber, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl(this.client.zipCode,
         [Validators.required, Validators.minLength(5),
-          Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
+        Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    }, {validators: [PhoneOrMobilePhoneValidator]});
+    }, { validators: [PhoneOrMobilePhoneValidator] });
   }
 
   checkAndSendFirstForm() {
@@ -206,7 +206,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   checkAndSendQuestionaire() {
     if (this.secondFormGroup.valid) {
-      const questionaireData: QuestionnaireDto = {...this.secondFormGroup.value};
+      const questionaireData: QuestionnaireDto = { ...this.secondFormGroup.value };
 
       if (this.secondFormGroup.get('symptoms').value) {
         questionaireData.symptoms = this.secondFormGroup.get('symptoms').value.map((data) => data.id);
@@ -230,13 +230,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.datesForRetrospectiveContacts = [];
 
     const firstSymptomsDay = new Date(Date.parse(this.firstQuery.dayOfFirstSymptoms) || this.today);
-    const firstDay = firstSymptomsDay.addDays(-2);
-    while (day.getDateWithoutTime() >= firstDay.getDateWithoutTime()) {
+    const firstDay = DateFunctions.addDays(firstSymptomsDay, -2);
+    while (DateFunctions.getDateWithoutTime(day) >= DateFunctions.getDateWithoutTime(firstDay)) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(day.toLocaleDateString('de'), new FormControl(this.encounters
-        .filter(e => e.date === day.getDateWithoutTime())
+        .filter(e => e.date === DateFunctions.getDateWithoutTime(day))
         .map(e => e.contactPersonId)));
-      day = day.addDays(-1);
+      day = DateFunctions.addDays(day, -1);
     }
   }
 
@@ -244,7 +244,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       data: {
-        contactPerson: {id: null, lastName: null, firstName: null, phone: null, email: null},
+        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
       }
     });
 
@@ -257,7 +257,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({date: date.getDateWithoutTime(), contact: id})
+    this.enrollmentService.createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
       .subscribe(encounter => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
@@ -267,7 +267,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onContactRemoved(date: Date, id: string) {
     const encounterToRemove = this.encounters.find(e =>
       e.contactPersonId === id
-      && e.date === date.getDateWithoutTime());
+      && e.date === DateFunctions.getDateWithoutTime(date));
     this.enrollmentService.deleteEncounter(encounterToRemove.encounter)
       .subscribe(_ => {
         this.encounters = this.encounters.filter(e => e !== encounterToRemove);

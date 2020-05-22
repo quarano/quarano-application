@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import '../../../../../../../libs/shared/util/src/lib/styles/variables';
 
 mat-form-field {
   width: 100%;
@@ -15,7 +15,7 @@ mat-form-field {
 }
 
 .header-image {
-  background-image: url("../../../../assets/images/diary.png");
+  background-image: url('../../../../assets/images/diary.png');
   background-size: 32px;
   background-repeat: no-repeat;
   background-position-x: center;

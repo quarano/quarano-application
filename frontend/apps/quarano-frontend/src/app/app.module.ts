@@ -1,3 +1,4 @@
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 import { API_URL } from '@quarano-frontend/shared/util';
 import { AuthChangePasswordModule } from '@quarano-frontend/auth/change-password';
 import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
@@ -10,7 +11,6 @@ import { AsideComponent } from './components/aside/aside.component';
 import { ProfileModule } from './modules/profile/profile.module';
 import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -83,7 +83,7 @@ const SUB_MODULES = [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AngularMaterialModule,
+    SharedUiMaterialModule,
     FormsModule,
     HttpClientModule,
     ...SUB_MODULES

@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import {EnrollmentService} from '../../../services/enrollment.service';
-import {UserService} from '../../../services/user.service';
-import {SnackbarService} from '../../../services/snackbar.service';
+import { EnrollmentService } from '../../../services/enrollment.service';
+import { UserService } from '../../../services/user.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'qro-login',
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         _ => {
           this.snackbarService.success('Willkommen bei quarano');
           if (this.userService.isHealthDepartmentUser) {
-            this.router.navigate(['/tenant-admin']);
+            this.router.navigate(['/health-department/index-cases/case-list']);
           } else {
             this.enrollmentService.loadEnrollmentStatus().subscribe(() => {
               this.router.navigate(['/diary']);

@@ -1,4 +1,4 @@
-import { ClientType } from './report-case';
+import { ClientType } from '@quarano-frontend/health-department/domain';
 
 export interface ClientDto {
   clientCode?: string;

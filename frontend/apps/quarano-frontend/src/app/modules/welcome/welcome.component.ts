@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ITileViewModel } from '../../ui/tile/tile.component';
 import { UserService } from '../../services/user.service';
+import { ITileViewModel } from '@quarano-frontend/shared/ui-tile';
 
 @Component({
   selector: 'qro-welcome',
@@ -33,24 +33,24 @@ export class WelcomeComponent implements OnInit {
 
   healthDepartmentTiles: ITileViewModel[] = [
     {
-      title: 'Fallübersicht',
-      subtitle: 'Liste aller offenen Index- und Kontaktfälle',
-      content: 'Sehen und bearbeiten Sie hier alle offenen Index- und Kontaktfälle in Ihrem Gesundheitsamt. ' +
-        'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion. Exportieren Sie die Liste in eine csv Datei.',
-      linkText: 'Zur Fallübersicht',
-      routerLink: ['/tenant-admin/clients'],
-      headerImageUrl: '/assets/images/user.png',
+      title: 'Indexfälle',
+      subtitle: 'Verwaltung von Indexfällen',
+      content: 'Sehen und bearbeiten Sie hier alle offenen Indexfälle in Ihrem Gesundheitsamt. ' +
+        'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.',
+      linkText: 'Zu den Indexfällen',
+      routerLink: ['/health-department/index-cases'],
+      headerImageUrl: '/assets/images/diary.png',
       backgroundImageUrl: '/assets/images/clients_tile_background.jpg'
     },
     {
-      title: 'Aktionsübersicht',
-      subtitle: 'Aktionsnachverfolgung',
-      content: 'Hier finden Sie eine Übersicht von Auffälligkeiten bei den nachverfolgten Index- und Kontaktfällen, ' +
-        'die Ihre Aufmerksamkeit erfordern.',
-      linkText: 'Zu den Aktionen',
-      routerLink: ['/tenant-admin/actions'],
-      headerImageUrl: '/assets/images/diary.png',
-      backgroundImageUrl: '/assets/images/actions_tile_background.jpg'
+      title: 'Kontaktfälle',
+      subtitle: 'Verwaltung von Kontaktfällen',
+      content: 'Sehen und bearbeiten Sie hier alle offenen Kontaktfälle in Ihrem Gesundheitsamt. ' +
+        'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.',
+      linkText: 'Zu den Kontaktfällen',
+      routerLink: ['/health-department/contact-cases'],
+      headerImageUrl: '/assets/images/contact-person.png',
+      backgroundImageUrl: '/assets/images/contact_tile_background.jpg'
     }
   ];
 

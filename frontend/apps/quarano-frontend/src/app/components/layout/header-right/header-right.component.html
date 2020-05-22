@@ -27,7 +27,11 @@
     >
       <mat-icon>person</mat-icon> Benutzerprofil
     </button>
-    <button mat-menu-item [routerLink]="['/change-password']">
+    <button
+      data-cy="change-password-button"
+      mat-menu-item
+      [routerLink]="['/change-password']"
+    >
       <mat-icon>vpn_key</mat-icon> Passwort ändern
     </button>
     <button

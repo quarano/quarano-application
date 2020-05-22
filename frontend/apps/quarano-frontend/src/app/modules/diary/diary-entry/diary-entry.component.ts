@@ -1,3 +1,4 @@
+import { DateFunctions } from '@quarano-frontend/shared/util';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
@@ -6,12 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import {DeactivatableComponent} from '../../../guards/prevent-unsaved-changes.guard';
-import {DiaryEntryDto, DiaryEntryModifyDto} from '../../../models/diary-entry';
-import {SymptomDto} from '../../../models/symptom';
-import {ContactPersonDto} from '../../../models/contact-person';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
+import { DeactivatableComponent } from '../../../guards/prevent-unsaved-changes.guard';
+import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../models/diary-entry';
+import { SymptomDto } from '../../../models/symptom';
+import { ContactPersonDto } from '../../../models/contact-person';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -117,11 +118,11 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   getTitle(): string {
     if (this.isNew) {
       return `Tagebuch-Eintrag anlegen für den ` +
-        `${new Date(this.date).toCustomLocaleDateString()} ` +
+        `${DateFunctions.toCustomLocaleDateString(new Date(this.date))} ` +
         `(${this.slot === 'morning' ? 'morgens' : 'abends'})`;
     } else {
       return `Tagebuch-Eintrag bearbeiten für den ` +
-        `${new Date(this.diaryEntry.slot.date).toCustomLocaleDateString()} ` +
+        `${DateFunctions.toCustomLocaleDateString(new Date(this.diaryEntry.slot.date))} ` +
         `(${this.diaryEntry.slot.timeOfDay === 'morning' ? 'morgens' : 'abends'})`;
     }
   }

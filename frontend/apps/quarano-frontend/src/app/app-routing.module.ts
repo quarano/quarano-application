@@ -32,6 +32,11 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard]
   },
   {
+    path: 'health-department', loadChildren: () =>
+      import('@quarano-frontend/health-department/shell').then(m => m.HealthDepartmentShellModule),
+    canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard]
+  },
+  {
     path: 'tenant-admin', loadChildren: () =>
       import('./modules/tenant-admin/tenant-admin.module').then(m => m.TenantAdminModule),
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard]

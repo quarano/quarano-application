@@ -4,13 +4,13 @@ import { ContactPersonComponent } from './contact-person/contact-person.componen
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactRoutingModule } from './contact-persons-routing.module';
-import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactPersonsComponent } from './contact-persons.component';
-import {AlertModule} from '../../ui/alert/alert.module';
-import {ConfirmationDialogModule} from '../../ui/confirmation-dialog/confirmation-dialog.module';
-import {ContactPersonsResolver} from '../../resolvers/contact-persons.resolver';
-import {ContactPersonResolver} from '../../resolvers/contact-person.resolver';
+import { AlertModule } from '../../ui/alert/alert.module';
+import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
+import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
+import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 
 const COMPONENTS = [
   ContactPersonsComponent,
@@ -21,7 +21,7 @@ const COMPONENTS = [
   imports: [
     CommonModule,
     ContactRoutingModule,
-    AngularMaterialModule,
+    SharedUiMaterialModule,
     ReactiveFormsModule,
     RouterModule,
     AlertModule,

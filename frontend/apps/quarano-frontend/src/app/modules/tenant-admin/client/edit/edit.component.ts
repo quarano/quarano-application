@@ -14,14 +14,14 @@ import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
-import { ClientType } from '../../../../models/report-case';
 import { MatInput } from '@angular/material/input';
-import {CaseDetailDto} from '../../../../models/case-detail';
-import {SnackbarService} from '../../../../services/snackbar.service';
-import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../../validators/validation-patterns';
-import {ConfirmationDialogComponent} from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
-import {PhoneOrMobilePhoneValidator} from '../../../../validators/phone-validator';
+import { CaseDetailDto } from '../../../../models/case-detail';
+import { SnackbarService } from '../../../../services/snackbar.service';
+import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
+import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { PhoneOrMobilePhoneValidator } from '../../../../validators/phone-validator';
+import { ClientType } from '@quarano-frontend/health-department/domain';
 
 @Component({
   selector: 'qro-client-edit',
@@ -194,5 +194,9 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
       this.submittedValues.next(submitData);
     }
+  }
+
+  get returnLink() {
+    return `/health-department/${this.type}-cases/case-list`;
   }
 }
