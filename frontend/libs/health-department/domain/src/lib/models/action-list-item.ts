@@ -17,5 +17,6 @@ export interface ActionListItemDto {
   alerts: Alert[];
   status: string;
   caseTypeLabel: string;
+  createdAt: Date;
   _links: SelfLink;
 }

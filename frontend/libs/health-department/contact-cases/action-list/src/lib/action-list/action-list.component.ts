@@ -91,7 +91,7 @@ export class ActionListComponent implements OnInit, OnDestroy {
       status: action.status,
       alerts: action.alerts || [],
       caseId: action.caseId,
-      createdAt: DateFunctions.toCustomLocaleDateString(new Date()) // ToDo: Anpassen, sobald createdAt mitgeliefert wird vom Backend
+      createdAt: action.createdAt ? DateFunctions.toCustomLocaleDateString(action.createdAt) : '-',
     };
   }
 

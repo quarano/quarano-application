@@ -100,6 +100,10 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 		return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getType()));
 	}
 
+	public String getCreatedAt() {
+		return trackedCase.getMetadata().getCreated().format(DateTimeFormatter.ISO_DATE);
+	}
+
 	@Nullable
 	public Map<String, Object> getQuarantine() {
 
