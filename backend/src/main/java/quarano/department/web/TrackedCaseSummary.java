@@ -45,6 +45,10 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 	public String getLastName() {
 		return trackedCase.getTrackedPerson().getLastName();
 	}
+	
+	public String getExtReferenceNumber() {
+		return trackedCase.getExtReferenceNumber();
+	}
 
 	public String getPrimaryPhoneNumber() {
 

@@ -62,6 +62,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Enumerated(EnumType.STRING) //
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
+	
+	private @Getter @Setter String extReferenceNumber;
 
 	@OneToMany(cascade = { CascadeType.ALL }) //
 	private @Getter List<ContactPerson> originContacts = new ArrayList<>();

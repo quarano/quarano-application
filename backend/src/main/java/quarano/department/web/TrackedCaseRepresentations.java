@@ -198,6 +198,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		private @Pattern(regexp = Strings.NAMES) @NotEmpty String lastName;
 		private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName;
+		private @Pattern(regexp = Strings.EXT_REFERENCE_NUMBER) String extReferenceNumber;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate testDate;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineStartDate;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineEndDate;

@@ -79,6 +79,18 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertMinimalIndexFieldsSet(document, payload);
 		assertThat(discoverer.findLinkWithRel(CONCLUDE, response)).isPresent();
 	}
+	
+	@Test
+	void createNewTrackedIndexCaseWithExtReference() throws Exception {
+
+		var payload = createMinimalIndexPayload();
+		payload.setExtReferenceNumber("AGD-45465");
+
+		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
+		var document = JsonPath.parse(response);
+		
+		assertThat(document.read("$.extReferenceNumber", String.class)).isEqualTo(payload.getExtReferenceNumber().toString());
+	}
 
 	@Test
 	void indicatesStartTrackingIfRequiredDataIsSet() throws Exception {
@@ -214,6 +226,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setPhone("0123456789") //
 				.setCity("city 123") //
 				.setStreet("\\") //
+				.setExtReferenceNumber("ADF !")
 				.setHouseNumber("\\");
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
@@ -221,12 +234,14 @@ class TrackedCaseControllerWebIntegrationTests {
 		var houseNumber = messages.getMessage("Pattern.houseNumber");
 		var firstName = messages.getMessage("Pattern.firstName");
 		var lastName = messages.getMessage("Pattern.lastName");
+		var extReference = messages.getMessage("Pattern.extReferenceNumber");
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
 		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
+		assertThat(document.read("$.extReferenceNumber", String.class)).isEqualTo(extReference);
 	}
 
 	@Test
