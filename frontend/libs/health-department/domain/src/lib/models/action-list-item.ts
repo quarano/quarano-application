@@ -18,5 +18,6 @@ export interface ActionListItemDto {
   status: string;
   caseTypeLabel: string;
   createdAt: Date;
+  extReferenceNumber: string;
   _links: SelfLink;
 }

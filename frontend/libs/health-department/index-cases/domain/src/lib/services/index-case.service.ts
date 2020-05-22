@@ -54,7 +54,8 @@ export class IndexCaseService {
       zipCode: item.zipCode,
       caseId: item.caseId,
       caseTypeLabel: item.caseTypeLabel,
-      createdAt: item.createdAt ? new Date(item.createdAt) : null
+      createdAt: item.createdAt ? new Date(item.createdAt) : null,
+      extReferenceNumber: item.extReferenceNumber
     };
   }
 
@@ -75,7 +76,8 @@ export class IndexCaseService {
       alerts: item.healthSummary.concat(item.processSummary),
       status: item.status,
       caseTypeLabel: item.caseTypeLabel,
-      createdAt: item.createdAt ? new Date(item.createdAt) : null
+      createdAt: item.createdAt ? new Date(item.createdAt) : null,
+      extReferenceNumber: item.extReferenceNumber
     };
   }
 }

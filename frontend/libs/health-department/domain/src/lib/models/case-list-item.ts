@@ -16,4 +16,5 @@ export interface CaseListItemDto {
   caseId: string;
   caseTypeLabel: string;
   createdAt: Date;
+  extReferenceNumber: string;
 }

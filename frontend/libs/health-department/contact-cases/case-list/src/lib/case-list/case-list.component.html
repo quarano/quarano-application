@@ -63,7 +63,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="130"
     ></ngx-datatable-column>
 
     <ngx-datatable-column
@@ -73,7 +73,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="130"
     >
     </ngx-datatable-column>
 
@@ -102,18 +102,7 @@
     <ngx-datatable-column
       prop="quarantineEnd"
       name="Quarantäne bis"
-      width="130"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-    >
-    </ngx-datatable-column>
-
-    <ngx-datatable-column
-      prop="zipCode"
-      name="PLZ"
-      width="90"
+      width="140"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -133,24 +122,14 @@
     </ngx-datatable-column>
 
     <ngx-datatable-column
-      prop="email"
-      name="E-Mail"
-      width="80"
-      [sortable]="false"
+      prop="extReferenceNumber"
+      name="Vorgangsnr."
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
+      width="140"
     >
-      <ng-template let-value="value" ngx-datatable-cell-template>
-        <button
-          *ngIf="value"
-          class="ngx-icon-button"
-          data-cy="mail-button"
-          mat-icon-button
-          [matTooltip]="'E-Mail an ' + value"
-          matTooltipPosition="right"
-          (click)="sendMail($event, value)"
-        >
-          <mat-icon>mail_outline</mat-icon>
-        </button>
-      </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>
 </div>

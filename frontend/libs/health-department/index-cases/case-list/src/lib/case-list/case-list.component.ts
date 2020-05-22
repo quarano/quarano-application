@@ -1,4 +1,4 @@
-import { CaseListItemDto } from '@quarano-frontend/health-department/domain';
+import { CaseListItemDto, ClientType } from '@quarano-frontend/health-department/domain';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
@@ -6,6 +6,19 @@ import { BehaviorSubject } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateFunctions } from '@quarano-frontend/shared/util';
+
+class CaseRowViewModel {
+  lastName: string;
+  firstName: string;
+  type: ClientType;
+  dateOfBirth: string;
+  email: string;
+  quarantineEnd: string;
+  caseId: string;
+  status: string;
+  zipCode: string;
+  extReferenceNumber: string;
+}
 
 @Component({
   selector: 'qro-index-cases-case-list',
@@ -17,7 +30,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   cases: CaseListItemDto[] = [];
   loading = false;
   selectionType = SelectionType.single;
-  rows = [];
+  rows: CaseRowViewModel[] = [];
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   get filter(): string {
@@ -70,18 +83,18 @@ export class CaseListComponent implements OnInit, OnDestroy {
     return endDate < this.dateTimeNow;
   }
 
-  getRowData(c: CaseListItemDto): any {
+  getRowData(c: CaseListItemDto): CaseRowViewModel {
     return {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
       dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
       email: c.email,
-      phone: c.phone || '-',
       quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
       status: c.status,
       zipCode: c.zipCode || '-',
-      caseId: c.caseId
+      caseId: c.caseId,
+      extReferenceNumber: c.extReferenceNumber || '-'
     };
   }
 
