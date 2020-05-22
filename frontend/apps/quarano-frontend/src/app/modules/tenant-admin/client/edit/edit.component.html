@@ -265,6 +265,32 @@
       }}</mat-error>
     </mat-form-field>
   </fieldset>
+  <fieldset class="mb-3">
+    <legend>Interne Informationen</legend>
+    <mat-form-field class="full-width" data-cy="input-ext-ref-number">
+      <input
+        matInput
+        placeholder="Vorgangsnr."
+        formControlName="extReferenceNumber"
+        type="text"
+        #ext_ref_number_input
+        (blur)="trimValue(first_name_input)"
+        maxlength="40"
+      />
+      <mat-error
+        *ngIf="formGroup.get('extReferenceNumber').hasError('maxlength')"
+      >
+        Die Vorangsnummer darf maximal 40 Zeichen lang sein
+      </mat-error>
+      <mat-error
+        *ngIf="formGroup.get('extReferenceNumber').hasError('trimmedPattern')"
+        >{{
+          formGroup.controls.extReferenceNumber.getError('trimmedPattern')
+            .errorMessage
+        }}</mat-error
+      >
+    </mat-form-field>
+  </fieldset>
   <div class="button-area">
     <button
       type="submit"
