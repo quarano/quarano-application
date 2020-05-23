@@ -15,4 +15,5 @@ export interface CaseListItemDto {
   status: string;
   caseId: string;
   caseTypeLabel: string;
+  createdAt: Date;
 }
