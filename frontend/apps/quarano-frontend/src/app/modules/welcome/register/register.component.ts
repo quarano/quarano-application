@@ -5,13 +5,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import {ConfirmValidPasswordMatcher} from '../../../validators/ConfirmValidPasswordMatcher';
-import {TrimmedPatternValidator} from '../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../validators/validation-patterns';
-import {PasswordValidator} from '../../../validators/password-validator';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {Register} from '../../../models/register';
+import { ConfirmValidPasswordMatcher } from '../../../validators/ConfirmValidPasswordMatcher';
+import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
+import { PasswordValidator } from '../../../validators/password-validator';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { RegisterDto } from '../../../models/register';
 
 @Component({
   selector: 'qro-register',
@@ -40,10 +40,6 @@ export class RegisterComponent implements OnInit {
     ]),
     passwordConfirm: new FormControl(null, [
       Validators.required
-    ]),
-    email: new FormControl(null, [
-      Validators.required,
-      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)
     ]),
     dateOfBirth: new FormControl(null, [
       Validators.required
@@ -100,7 +96,7 @@ export class RegisterComponent implements OnInit {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
-    const register: Register = Object.assign(this.registrationForm.value);
+    const register: RegisterDto = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
     this.apiService.registerClient(register)

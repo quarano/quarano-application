@@ -38,32 +38,7 @@
             registrationForm.controls.clientCode.hasError('trimmedPattern')
           "
           >{{
-            registrationForm.controls.clientCode.getError("trimmedPattern")
-              .errorMessage
-          }}</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field
-        class="form__input--full-width"
-        appearance="outline"
-        data-cy="input-email"
-      >
-        <mat-label>E-Mail-Adresse</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          placeholder="E-Mail-Adresse"
-          id="email"
-          #email_input
-          (blur)="trimValue(email_input)"
-        />
-        <mat-error *ngIf="registrationForm.controls.email.hasError('required')"
-          >Bitte geben Sie eine E-Mail-Adresse ein</mat-error
-        >
-        <mat-error
-          *ngIf="registrationForm.controls.email.hasError('trimmedPattern')"
-          >{{
-            registrationForm.controls.email.getError("trimmedPattern")
+            registrationForm.controls.clientCode.getError('trimmedPattern')
               .errorMessage
           }}</mat-error
         >
@@ -103,7 +78,7 @@
         <mat-error
           *ngIf="registrationForm.controls.username.hasError('trimmedPattern')"
           >{{
-            registrationForm.controls.username.getError("trimmedPattern")
+            registrationForm.controls.username.getError('trimmedPattern')
               .errorMessage
           }}</mat-error
         >
