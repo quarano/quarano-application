@@ -126,6 +126,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.subs.sink = this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
       this.snackbarService.success('Kommentar erfolgreich eingetragen.');
       this.updatedDetail$$.next(data);
+      this.tabIndex = 0;
     });
   }
 

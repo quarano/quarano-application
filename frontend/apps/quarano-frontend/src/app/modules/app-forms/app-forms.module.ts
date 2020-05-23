@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { PersonalDataFormComponent } from './personal-data-form/personal-data-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -13,7 +14,8 @@ import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
     FormsModule,
     ReactiveFormsModule,
     AlertModule,
-    SharedUiMaterialModule
+    SharedUiMaterialModule,
+    SharedUiButtonModule
   ],
   declarations: [ContactPersonFormComponent, PersonalDataFormComponent, ContactPersonDialogComponent],
   exports: [ContactPersonFormComponent, PersonalDataFormComponent, ContactPersonDialogComponent],

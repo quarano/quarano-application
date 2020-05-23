@@ -84,15 +84,11 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button
+      <qro-button
         *ngIf="!isReadonly"
-        type="submit"
-        mat-raised-button
-        color="primary"
         [disabled]="formGroup.invalid || formGroup.pristine"
-      >
-        Speichern
-      </button>
+        >Speichern
+      </qro-button>
       <button
         type="button"
         mat-raised-button

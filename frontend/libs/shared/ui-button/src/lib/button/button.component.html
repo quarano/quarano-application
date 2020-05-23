@@ -1,1 +1,10 @@
-<p>button works!</p>
+<button
+  mat-raised-button
+  [color]="color"
+  [class.spinner]="loading"
+  [disabled]="disabled || loading"
+  [type]="type"
+  (click)="save()"
+>
+  <ng-content></ng-content>
+</button>

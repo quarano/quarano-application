@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { AppFormsModule } from '../app-forms/app-forms.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -22,7 +23,8 @@ import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
     ReactiveFormsModule,
     MultipleAutocompleteModule,
     AppFormsModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
+    SharedUiButtonModule
   ],
   declarations: [BasicDataComponent, InitialQuestionaireFormComponent],
   providers:

@@ -1,16 +1,17 @@
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import {CaseCommentDto} from '../../../../models/case-comment';
-import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../../validators/validation-patterns';
+import { CaseCommentDto } from '../../../../models/case-comment';
+import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-client-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss']
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent {
 
   @Input()
   comments: CaseCommentDto[];
@@ -21,12 +22,6 @@ export class CommentsComponent implements OnInit {
   formGroup: FormGroup = new FormGroup({
     comment: new FormControl(null, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
   });
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
   submitComment() {
     if (this.formGroup.valid) {

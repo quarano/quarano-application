@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { AnomalyComponent } from './client/anomaly/anomaly.component';
 import { ActionComponent } from './client/action/action.component';
 import { NgModule } from '@angular/core';
@@ -34,7 +35,8 @@ import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
     TenantAdminRoutingModule,
     SharedUiMaterialModule,
     ReactiveFormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    SharedUiButtonModule
   ],
   providers: [ReportCaseResolver, ReportCaseActionsResolver]
 })

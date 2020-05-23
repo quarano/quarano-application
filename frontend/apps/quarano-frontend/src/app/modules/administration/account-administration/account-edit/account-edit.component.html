@@ -4,8 +4,8 @@
       <h1>
         {{
           isNew
-            ? "Mitarbeiter-Account anlegen"
-            : "Account-Daten für Mitarbeiter bearbeiten"
+            ? 'Mitarbeiter-Account anlegen'
+            : 'Account-Daten für Mitarbeiter bearbeiten'
         }}
       </h1>
     </mat-card-title>
@@ -31,7 +31,7 @@
         <mat-error
           *ngIf="formGroup.controls.firstName.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.firstName.getError("trimmedPattern").errorMessage
+            formGroup.controls.firstName.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
@@ -51,7 +51,7 @@
         <mat-error
           *ngIf="formGroup.controls.lastName.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.lastName.getError("trimmedPattern").errorMessage
+            formGroup.controls.lastName.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
@@ -71,7 +71,7 @@
         <mat-error
           *ngIf="formGroup.controls.email.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.email.getError("trimmedPattern").errorMessage
+            formGroup.controls.email.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
@@ -161,15 +161,9 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button
-        mat-button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-      >
+      <qro-button [disabled]="formGroup.invalid || formGroup.pristine">
         Speichern
-      </button>
+      </qro-button>
       <button
         type="button"
         mat-raised-button

@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" (ngSubmit)="submitComment()">
   <fieldset class="mb-3">
     <legend>Neuen Kommentar schreiben:</legend>
 
@@ -10,20 +10,15 @@
       <mat-error
         *ngIf="formGroup.controls.comment.hasError('trimmedPattern')"
         >{{
-          formGroup.controls.comment.getError("trimmedPattern").errorMessage
+          formGroup.controls.comment.getError('trimmedPattern').errorMessage
         }}</mat-error
       >
     </mat-form-field>
   </fieldset>
   <div class="button-area">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="submitComment()"
-      [disabled]="!formGroup.valid"
-    >
+    <qro-button [disabled]="formGroup.invalid">
       Kommentar absenden
-    </button>
+    </qro-button>
   </div>
 </form>
 <div
@@ -32,7 +27,7 @@
 >
   <div *ngFor="let comment of comments" class="comment">
     <div class="comment-headline">
-      <div class="date">{{ comment.date | date: "dd.MM.yyyy HH:mm" }}</div>
+      <div class="date">{{ comment.date | date: 'dd.MM.yyyy HH:mm' }}</div>
       <div class="author">{{ comment.author }}</div>
     </div>
     <div class="comment-body">
