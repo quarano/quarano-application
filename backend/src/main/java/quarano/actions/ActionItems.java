@@ -62,16 +62,10 @@ public class ActionItems implements Streamable<ActionItem> {
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
-	public boolean isEmpty() {
-
-		return items.stream() //
-				.findAny().isEmpty();
-	}
-
 	public boolean hasUnresolvedItemsForManualResolution() {
 
 		return items.stream() //
-				.filter(item -> item.getDescription().getCode().isManuallyResolvable()) //
+				.filter(item -> item.isManuallyResolvable()) //
 				.anyMatch(ActionItem::isUnresolved);
 	}
 
@@ -96,7 +90,7 @@ public class ActionItems implements Streamable<ActionItem> {
 	private ActionItems resolve(boolean systemResolving, Consumer<ActionItem> callback) {
 
 		getUnresolvedItems() //
-				.filter(item -> systemResolving || item.getDescription().getCode().isManuallyResolvable())
+				.filter(item -> systemResolving || item.isManuallyResolvable()) //
 				.map(ActionItem::resolve) //
 				.forEach(callback);
 

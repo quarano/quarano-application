@@ -32,7 +32,8 @@ public class TrackingEventListener {
 	private final @NonNull DiaryEntryRepository diaryEntries;
 
 	@EventListener
-	public void on(EncounterReported event) {
+	void on(EncounterReported event) {
+
 		verifyEnrollmentCompleted(event);
 		handleContactCaseCreationBasedOnEncounter(event);
 	}
@@ -45,7 +46,7 @@ public class TrackingEventListener {
 	 * @param event Event
 	 */
 	@EventListener
-	public void on(DiaryEntryAdded event) {
+	void on(DiaryEntryAdded event) {
 
 		handleContactCaseCreationBasedOnDiaryEntry(event);
 	}

@@ -3,6 +3,7 @@ package quarano.actions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -19,7 +20,12 @@ public class TrackedCaseActionItem extends ActionItem {
 
 	private final @Getter TrackedCaseIdentifier caseIdentifier;
 
-	TrackedCaseActionItem(TrackedPersonIdentifier person, TrackedCaseIdentifier caseIdentifier, ItemType itemType, DescriptionCode descriptionCode) {
+	TrackedCaseActionItem(TrackedCase trackedCase, ItemType type, DescriptionCode code) {
+		this(trackedCase.getTrackedPerson().getId(), trackedCase.getId(), type, code);
+	}
+
+	private TrackedCaseActionItem(TrackedPersonIdentifier person, TrackedCaseIdentifier caseIdentifier, ItemType itemType,
+			DescriptionCode descriptionCode) {
 
 		super(person, itemType, Description.of(descriptionCode));
 

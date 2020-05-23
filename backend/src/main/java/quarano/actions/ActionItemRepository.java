@@ -38,8 +38,12 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 			+ " and i.personIdentifier = :personIdentifier")
 	ActionItems findDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
 
-	@Query("select i from QuarantineEndingActionItem i" //
-			+ " where i.personIdentifier = :personIdentifier")
+	@Query("select i from TrackedCaseActionItem i" //
+			+ " where i.personIdentifier = :personIdentifier" //
+			+ "   and i.description.code = 'QUARANTINE_ENDING'")
 	ActionItems findQuarantineEndingActionItemsFor(TrackedPersonIdentifier personIdentifier);
 
+	default ActionItems findQuarantineEndingActionItemsFor(TrackedCase trackedCase) {
+		return findQuarantineEndingActionItemsFor(trackedCase.getTrackedPerson().getId());
+	}
 }

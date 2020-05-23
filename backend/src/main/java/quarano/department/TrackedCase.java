@@ -146,7 +146,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	public boolean isInQuarantine() {
-		return quarantine != null;
+		return quarantine != null && !quarantine.isOver();
 	}
 
 	public boolean isInitialCallNeeded() {
@@ -244,6 +244,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public boolean isOpen() {
 		return !isConcluded();
+	}
+
+	public boolean isTracking() {
+		return status.equals(Status.TRACKING);
 	}
 
 	public boolean isEnrollmentCompleted() {

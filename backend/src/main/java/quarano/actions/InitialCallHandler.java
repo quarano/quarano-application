@@ -13,18 +13,19 @@ public class InitialCallHandler {
 	private final @NonNull ActionItemRepository items;
 
 	void handleInitialCallOpen(TrackedCase trackedCase) {
-		var person = trackedCase.getTrackedPerson();
-		var descriptionCode = trackedCase.isIndexCase() ? DescriptionCode.INITIAL_CALL_OPEN_INDEX
+
+		var id = trackedCase.getTrackedPerson().getId();
+		var descriptionCode = trackedCase.isIndexCase() //
+				? DescriptionCode.INITIAL_CALL_OPEN_INDEX //
 				: DescriptionCode.INITIAL_CALL_OPEN_CONTACT;
 
-		if (trackedCase.isInitialCallNeeded()) {
-			if (items.findByDescriptionCode(person.getId(), descriptionCode).isEmpty()) {
-				items.save(
-						new TrackedCaseActionItem(person.getId(), trackedCase.getId(), ItemType.PROCESS_INCIDENT, descriptionCode));
-			}
-		} else {
-			items.findByDescriptionCode(person.getId(), descriptionCode) //
-					.resolveAutomatically(items::save);
+		if (!trackedCase.isInitialCallNeeded()) {
+			items.findByDescriptionCode(id, descriptionCode).resolveAutomatically(items::save);
+			return;
+		}
+
+		if (items.findByDescriptionCode(id, descriptionCode).isEmpty()) {
+			items.save(new TrackedCaseActionItem(trackedCase, ItemType.PROCESS_INCIDENT, descriptionCode));
 		}
 	}
 }

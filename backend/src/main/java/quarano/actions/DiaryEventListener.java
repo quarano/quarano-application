@@ -1,5 +1,6 @@
 package quarano.actions;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.actions.ActionItem.ItemType;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class DiaryEventListener {
+class DiaryEventListener {
 
-	private final AnomaliesProperties config;
-	private final ActionItemRepository items;
+	private final @NonNull AnomaliesProperties config;
+	private final @NonNull ActionItemRepository items;
 
 	@EventListener
-	public void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
+	void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -30,7 +31,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	public void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
+	void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -50,7 +51,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	public void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
+	void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 		var person = entry.getTrackedPersonId();
@@ -66,7 +67,7 @@ public class DiaryEventListener {
 	}
 
 	@EventListener
-	public void on(DiaryEntryMissing diaryEntryMissing) {
+	void on(DiaryEntryMissing diaryEntryMissing) {
 
 		log.debug("Caught diaryEntryMissing Event {}. Save it as DiaryEntryMissingActionItem", diaryEntryMissing);
 

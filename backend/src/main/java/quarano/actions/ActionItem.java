@@ -57,6 +57,10 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 		return this.getType().equals(ItemType.PROCESS_INCIDENT);
 	}
 
+	public boolean isManuallyResolvable() {
+		return getDescription().getCode().isManuallyResolvable();
+	}
+
 	public float getWeight() {
 		return getDescription().getCode().getMultiplier() * getTypeWeight();
 	}
@@ -83,7 +87,7 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 
 		MEDICAL_INCIDENT,
 
-		PROCESS_INCIDENT,
+		PROCESS_INCIDENT;
 	}
 
 	@Embeddable
