@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
-
+  loading = false;
   formGroup: FormGroup;
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
@@ -54,11 +54,12 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   submitForm() {
     if (this.formGroup.valid) {
+      this.loading = true;
       this.subs.add(this.authService.changePassword(this.formGroup.value)
         .subscribe(() => {
           this.snackbarService.success('Ihr Passwort wurde geändert');
           this.router.navigate(['/welcome']);
-        }));
+        }).add(() => this.loading = false));
     }
   }
 
