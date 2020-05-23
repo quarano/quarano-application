@@ -44,11 +44,5 @@ describe('health-department contact cases case-list', () => {
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).click();
       cy.url().should('include', '/tenant-admin/client/');
     });
-
-    it('should call mailto: selected case on click on mail icon', () => {
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).find('[data-cy="mail-button"]').click();
-
-      cy.get('@windowOpen').should('be.calledWithMatch', 'mailto');
-    });
   });
 });

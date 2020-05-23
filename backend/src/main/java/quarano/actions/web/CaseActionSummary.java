@@ -46,6 +46,10 @@ class CaseActionSummary {
 	public String getLastName() {
 		return summary.getLastName();
 	}
+	
+	public String getExtReferenceNumber() {
+		return trackedCase.getExtReferenceNumber();
+	}
 
 	public String getZipCode() {
 		return summary.getZipCode();

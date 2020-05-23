@@ -18,7 +18,8 @@ export enum VALIDATION_PATTERNS {
   username = 'username',
   phoneNumber = 'phoneNumber',
   email = 'email',
-  city = 'city'
+  city = 'city',
+  extReferenceNumber = 'extReferenceNumber'
 }
 
 export class ValidationPattern {
@@ -103,6 +104,11 @@ export class ValidationPattern {
       {
         pattern: `[${characterSet}\\s\\.\\-\\(\\)\\/]*`,
         errorMessage: 'Bitte geben Sie eine gültige Stadt an" Diese kann Buchstaben und folgende Zeichen enthalten: . - ( ) /'
+      });
+    this._patterns.set(VALIDATION_PATTERNS.extReferenceNumber,
+      {
+        pattern: `[${characterSet}0-9\\-\\_\\/]*`,
+        errorMessage: 'Die eingegebene Vorgangsnummer enthält nicht erlaubte Zeichen. Vorgangsnummern dürfen nur aus Zahlen, Buchstaben, Binde- und Unterstrichen bestehen'
       });
   }
 }

@@ -109,7 +109,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase })
+      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
+
+      extReferenceNumber: new FormControl('', [Validators.maxLength(40), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber)]),
+
     });
     this.setValidators();
     this.subs.add(this.formGroup.get('infected').valueChanges.subscribe(value => {

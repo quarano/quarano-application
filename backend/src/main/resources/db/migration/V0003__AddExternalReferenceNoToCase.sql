@@ -1,0 +1,1 @@
+ALTER TABLE tracked_cases ADD COLUMN ext_reference_number varchar(40) NULL;

@@ -21,6 +21,7 @@ public class Strings {
 	public static final String STREET = "[" + LETTERS_AND_SPACES + DOTS + DASHES + NUMBERS + "]*";
 	public static final String HOUSE_NUMBER = "[" + LETTERS_AND_SPACES + DOTS + DASHES + NUMBERS + SLASHES + "]{0,15}";
 	public static final String NAMES = "[" + LETTERS_AND_SPACES + DASHES + "]*";
+	public static final String EXT_REFERENCE_NUMBER = "[" + LETTERS + NUMBERS + DASHES + SLASHES + UNDERSCORE + "]*";
 	
 	public static final String USERNAME = "[" + LETTERS + NUMBERS + DASHES + UNDERSCORE + "]*";
 }
