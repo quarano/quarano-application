@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { SymptomDto } from '../models/symptom';
 import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
 import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
-import { Register } from '../models/register';
+import { RegisterDto } from '../models/register';
 import { UserDto } from '../models/user';
 import { CaseDetailDto } from '../models/case-detail';
 import { CaseActionDto } from '../models/case-action';
@@ -66,7 +66,7 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/diary/${diaryEntry.id}`, diaryEntry);
   }
 
-  registerClient(registerClient: Register): Observable<string> {
+  registerClient(registerClient: RegisterDto): Observable<string> {
     return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, { responseType: 'text' });
   }
 

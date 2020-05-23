@@ -11,7 +11,7 @@ import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 import { PasswordValidator } from '../../../validators/password-validator';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { Register } from '../../../models/register';
+import { RegisterDto } from '../../../models/register';
 
 @Component({
   selector: 'qro-register',
@@ -41,10 +41,6 @@ export class RegisterComponent implements OnInit {
     ]),
     passwordConfirm: new FormControl(null, [
       Validators.required
-    ]),
-    email: new FormControl(null, [
-      Validators.required,
-      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)
     ]),
     dateOfBirth: new FormControl(null, [
       Validators.required
