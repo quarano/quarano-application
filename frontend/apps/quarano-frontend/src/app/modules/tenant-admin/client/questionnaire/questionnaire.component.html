@@ -1,0 +1,35 @@
+<fieldset class="mb-3">
+  <legend>Symptome</legend>
+  <div *ngIf="questionnaire.hasSymptoms; else noSymptoms" class="">
+    <div class="item row">
+      <div class="label">Datum der ersten Symptome:</div>
+      <div class="value">{{questionnaire.dayOfFirstSymptoms}}</div>
+    </div>
+    <div class="item col">
+      <div class="label">Festgestellte Symptome:</div>
+      <div class="value">
+        <div *ngFor="let symptom of symptoms">
+          {{symptom.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noSymptoms>
+    <div class="no-symptoms">Keine Symptome</div>
+  </ng-template>
+</fieldset>
+
+
+
+
+hasSymptoms: boolean;
+dayOfFirstSymptoms?: string;
+symptoms?: string[];
+familyDoctor: string;
+guessedOriginOfInfection: string;
+hasPreExistingConditions: boolean;
+hasPreExistingConditionsDescription?: string;
+belongToMedicalStaff: boolean;
+belongToMedicalStaffDescription?: string;
+hasContactToVulnerablePeople: boolean;
+hasContactToVulnerablePeopleDescription?: string;
