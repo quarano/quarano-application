@@ -8,7 +8,7 @@ describe('registration form', () => {
 
   describe('submit button is disabled', () => {
     it('empty form', () => {
-      cy.get('[data-cy="registration-submit-button"]').should('be.disabled');
+      cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
     });
   });
 
@@ -21,7 +21,7 @@ describe('registration form', () => {
       cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword1!');
       cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('24.05.1965');
       cy.get('[data-cy="input-privacy-policy"]').click();
-      cy.get('[data-cy="registration-submit-button"]').should('be.enabled');
+      cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
     });
   });
 

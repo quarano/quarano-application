@@ -2,14 +2,14 @@ describe('login', () => {
   const login = (username: string, password: string) => {
     cy.server();
     cy.route('POST', '/login').as('login');
-    cy.get('#submitBtn').should('be.disabled');
+    cy.get('#submitBtn button').should('be.disabled');
     cy.get('#username').type(username);
 
-    cy.get('#submitBtn').should('be.disabled');
+    cy.get('#submitBtn button').should('be.disabled');
     cy.get('#password').type(password);
 
-    cy.get('#submitBtn').should('be.enabled');
-    cy.get('#submitBtn').click();
+    cy.get('#submitBtn button').should('be.enabled');
+    cy.get('#submitBtn button').click();
   };
 
   beforeEach(() => {

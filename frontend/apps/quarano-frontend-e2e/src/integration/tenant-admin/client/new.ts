@@ -18,7 +18,7 @@ describe('new case', () => {
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
         cy.get('[data-cy="input-phone"] input[matInput]').type('0621 239 120 1');
 
-        cy.get('[data-cy="client-submit-button"]').should('be.enabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       });
 
       it('valid form (with mobile)', () => {
@@ -26,34 +26,34 @@ describe('new case', () => {
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
         cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 239 120 1');
 
-        cy.get('[data-cy="client-submit-button"]').should('be.enabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       });
     });
 
     describe('disabled submit button', () => {
       it('empty form', () => {
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing firstname', () => {
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
 
         cy.get('[data-cy="input-phone"] input[matInput]').type('0621 239 120 1');
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing lastname', () => {
         cy.get('[data-cy="input-firstname"] input[matInput]').type('Testlastname');
 
         cy.get('[data-cy="input-phone"] input[matInput]').type('0621 239 120 1');
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing phone or mobile', () => {
         cy.get('[data-cy="input-firstname"] input[matInput]').type('Testlastname');
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
 
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing test date', () => {
@@ -64,7 +64,7 @@ describe('new case', () => {
         cy.get('[data-cy="input-testdate"]').should('exist');
         cy.get('[data-cy="input-testdate"] input[matInput]').clear();
 
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing quarantine start date', () => {
@@ -75,7 +75,7 @@ describe('new case', () => {
         cy.get('[data-cy="input-quarantinestart"]').should('exist');
         cy.get('[data-cy="input-quarantinestart"] input[matInput]').clear();
 
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
 
       it('missing quarantine end date', () => {
@@ -86,7 +86,7 @@ describe('new case', () => {
         cy.get('[data-cy="input-quarantineend"]').should('exist');
         cy.get('[data-cy="input-quarantineend"] input[matInput]').clear();
 
-        cy.get('[data-cy="client-submit-button"]').should('be.disabled');
+        cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       });
     });
   });
