@@ -15,7 +15,6 @@ describe('registration form', () => {
   describe('submit button is enabled', () => {
     it('completed form', () => {
       cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
-      cy.get('[data-cy="input-email"] input[matInput]').type('test@mustermann.de');
       cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
       cy.get('[data-cy="input-password"] input[matInput]').type('thisIsMyPassword1!');
       cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword1!');
@@ -27,7 +26,7 @@ describe('registration form', () => {
 
   describe('validation', () => {
     describe('empty fields', () => {
-      ['client-code', 'email', 'username', 'password', 'password-confirm', 'dateofbirth'].forEach((fieldName: string) => {
+      ['client-code', 'username', 'password', 'password-confirm', 'dateofbirth'].forEach((fieldName: string) => {
         it(`empty ${fieldName}`, () => {
           cy.get(`[data-cy="input-${fieldName}"] input[matInput]`).focus().blur().then($input =>
             $input.hasClass('mat-form-field-invalid')
@@ -37,55 +36,6 @@ describe('registration form', () => {
     });
 
     describe('input values are validated', () => {
-      describe('e-mail', () => {
-        describe('invalid value', () => {
-          it('value testname', () => {
-            cy.get('[data-cy="input-email"] input[matInput]').type('testname').blur().then($input => {
-              $input.hasClass('mat-form-field-invalid');
-              cy.get('[data-cy="input-email"] mat-error')
-                .should('exist')
-                .and('contain.text', 'Bitte geben Sie eine gültige E-Mail-Adresse an');
-            });
-          });
-
-          it('invalid value testname@domain', () => {
-            cy.get('[data-cy="input-email"] input[matInput]').type('testname@domain').blur().then($input => {
-              $input.hasClass('mat-form-field-invalid');
-              cy.get('[data-cy="input-email"] mat-error')
-                .should('exist')
-                .and('contain.text', 'Bitte geben Sie eine gültige E-Mail-Adresse an');
-            });
-          });
-        });
-
-        describe('valid value', () => {
-          it('valid testname@domain.de', () => {
-            cy.get('[data-cy="input-email"] input[matInput]').type('testname@domain.de').blur().then($input => {
-              $input.hasClass('ng-valid');
-              cy.get('[data-cy="input-email"] mat-error')
-                .should('not.exist');
-            });
-          });
-
-          it('valid testName@domain.de', () => {
-            cy.get('[data-cy="input-email"] input[matInput]').type('testName@domain.de').blur().then($input => {
-              $input.hasClass('ng-valid');
-              cy.get('[data-cy="input-email"] mat-error')
-                .should('not.exist');
-            });
-          });
-
-          it('valid 123testName@domain.de', () => {
-            cy.get('[data-cy="input-email"] input[matInput]').type('123testName@domain.de').blur().then($input => {
-              $input.hasClass('ng-valid');
-              cy.get('[data-cy="input-email"] mat-error')
-                .should('not.exist');
-            });
-          });
-        });
-
-      });
-
       describe('username', () => {
         it('valid value', () => {
           cy.get('[data-cy="input-username"] input[matInput]').type('my_username').blur().then($input => {
