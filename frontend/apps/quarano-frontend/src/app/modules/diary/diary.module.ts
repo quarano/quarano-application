@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { DiaryTodayListItemComponent } from './diary-today-list-item/diary-today-list-item.component';
 import { DiaryEntrySuccessComponent } from './diary-entry-success/diary-entry-success.component';
 import { DiaryEntryWarningComponent } from './diary-entry-warning/diary-entry-warning.component';
@@ -39,7 +40,8 @@ const COMPONENTS = [
     RouterModule,
     AlertModule,
     ConfirmationDialogModule,
-    MultipleAutocompleteModule
+    MultipleAutocompleteModule,
+    SharedUiButtonModule
   ],
   declarations: [...COMPONENTS],
   entryComponents: [ForgottenContactBannerComponent, ForgottenContactDialogComponent],

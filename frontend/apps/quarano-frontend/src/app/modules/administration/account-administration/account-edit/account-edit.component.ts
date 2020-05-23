@@ -6,13 +6,13 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
-import {AccountDto} from '../../../../models/account';
-import {ApiService} from '../../../../services/api.service';
-import {SnackbarService} from '../../../../services/snackbar.service';
-import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../../validators/validation-patterns';
-import {PasswordValidator} from '../../../../validators/password-validator';
-import {ArrayValidator} from '../../../../validators/array-validator';
+import { AccountDto } from '../../../../models/account';
+import { ApiService } from '../../../../services/api.service';
+import { SnackbarService } from '../../../../services/snackbar.service';
+import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
+import { PasswordValidator } from '../../../../validators/password-validator';
+import { ArrayValidator } from '../../../../validators/array-validator';
 
 @Component({
   selector: 'qro-account-edit',
@@ -25,6 +25,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   private usernameIsValid = false;
   roles: IRole[] = roles.filter(r => r.isHealthDepartmentUser);
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -114,6 +115,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
+    this.loading = true;
     Object.assign(this.account, this.formGroup.value);
 
     if (this.isNew) {
@@ -131,7 +133,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
           this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
         }
-      );
+      ).add(() => this.loading = false);
   }
 
   private editAccount() {
@@ -143,7 +145,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
           this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
         }
-      );
+      ).add(() => this.loading = false);
   }
 
   trimValue(input: MatInput) {

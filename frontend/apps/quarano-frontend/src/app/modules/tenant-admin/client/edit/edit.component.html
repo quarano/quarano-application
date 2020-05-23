@@ -292,15 +292,13 @@
     </mat-form-field>
   </fieldset>
   <div class="button-area">
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
+    <qro-button
       data-cy="client-submit-button"
       [disabled]="formGroup.invalid || formGroup.pristine"
+      [loading]="loading"
     >
       Speichern
-    </button>
+    </qro-button>
     <button
       type="button"
       mat-raised-button

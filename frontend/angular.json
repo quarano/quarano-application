@@ -788,6 +788,38 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-button": {
+      "projectType": "library",
+      "root": "libs/shared/ui-button",
+      "sourceRoot": "libs/shared/ui-button/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-button/tsconfig.lib.json",
+              "libs/shared/ui-button/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-button/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-button/jest.config.js",
+            "tsConfig": "libs/shared/ui-button/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-button/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

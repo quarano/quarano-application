@@ -73,6 +73,7 @@
           (submittedValues)="saveCaseData($event)"
           [type]="type$ | async"
           (changedToIndex)="changeToIndexType()"
+          [loading]="personalDataLoading"
         >
         </qro-client-edit>
       </mat-tab>
@@ -110,6 +111,7 @@
         </ng-template>
         <qro-client-comments
           [comments]="caseComments$ | async"
+          [loading]="commentLoading"
           (newComment)="addComment($event)"
         ></qro-client-comments>
       </mat-tab>

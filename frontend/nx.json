@@ -73,6 +73,9 @@
     },
     "shared-ui-tile": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-ui-button": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

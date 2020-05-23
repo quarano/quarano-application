@@ -202,16 +202,13 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        mat-button
-        mat-raised-button
-        color="primary"
-        type="submit"
+      <qro-button
         data-cy="registration-submit-button"
         [disabled]="registrationForm.invalid"
+        [loading]="loading"
       >
         Registrieren
-      </button>
+      </qro-button>
     </mat-card-actions>
   </form>
 </mat-card>

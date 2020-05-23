@@ -26,7 +26,7 @@ const COMPONENTS = [
     RouterModule,
     AlertModule,
     ConfirmationDialogModule,
-    AppFormsModule
+    AppFormsModule,
   ],
   declarations: [...COMPONENTS],
   providers: [ContactPersonsResolver, ContactPersonResolver],

@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { SharedUiTileModule } from '@quarano-frontend/shared/ui-tile';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -37,7 +38,8 @@ export const DATE_FORMAT = {
     FormsModule,
     ClipboardModule,
     ReactiveFormsModule,
-    SharedUiTileModule
+    SharedUiTileModule,
+    SharedUiButtonModule
   ],
   providers: [
     DatePipe

@@ -20,6 +20,7 @@ import { RegisterDto } from '../../../models/register';
 })
 export class RegisterComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  loading = false;
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private usernameIsValid = false;
@@ -96,6 +97,7 @@ export class RegisterComponent implements OnInit {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
+    this.loading = true;
     const register: RegisterDto = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
@@ -105,7 +107,7 @@ export class RegisterComponent implements OnInit {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
           this.router.navigate(['/welcome/login']);
         }
-      );
+      ).add(() => this.loading = false);
   }
 
   openDataProtection() {

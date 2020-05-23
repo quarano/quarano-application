@@ -3,7 +3,7 @@
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
       <mat-card-title>{{
-        isNew ? "Neue Kontaktperson anlegen" : "Kontaktperson bearbeiten"
+        isNew ? 'Neue Kontaktperson anlegen' : 'Kontaktperson bearbeiten'
       }}</mat-card-title>
       <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
     </mat-card-header>
@@ -20,7 +20,7 @@
         <mat-error
           *ngIf="formGroup.controls.firstName.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.firstName.getError("trimmedPattern").errorMessage
+            formGroup.controls.firstName.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
@@ -36,7 +36,7 @@
         <mat-error
           *ngIf="formGroup.controls.lastName.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.lastName.getError("trimmedPattern").errorMessage
+            formGroup.controls.lastName.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
@@ -61,7 +61,7 @@
           <mat-error
             *ngIf="formGroup.controls.phone.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.phone.getError("trimmedPattern").errorMessage
+              formGroup.controls.phone.getError('trimmedPattern').errorMessage
             }}</mat-error
           >
         </mat-form-field>
@@ -86,7 +86,7 @@
           <mat-error
             *ngIf="formGroup.controls.mobilePhone.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.mobilePhone.getError("trimmedPattern")
+              formGroup.controls.mobilePhone.getError('trimmedPattern')
                 .errorMessage
             }}</mat-error
           >
@@ -103,7 +103,7 @@
           <mat-error
             *ngIf="formGroup.controls.email.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.email.getError("trimmedPattern").errorMessage
+              formGroup.controls.email.getError('trimmedPattern').errorMessage
             }}</mat-error
           >
         </mat-form-field>
@@ -139,7 +139,7 @@
           <mat-error
             *ngIf="formGroup.controls.street.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.street.getError("trimmedPattern").errorMessage
+              formGroup.controls.street.getError('trimmedPattern').errorMessage
             }}</mat-error
           >
         </mat-form-field>
@@ -156,7 +156,7 @@
           <mat-error
             *ngIf="formGroup.controls.houseNumber.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.houseNumber.getError("trimmedPattern")
+              formGroup.controls.houseNumber.getError('trimmedPattern')
                 .errorMessage
             }}</mat-error
           >
@@ -175,7 +175,7 @@
           <mat-error
             *ngIf="formGroup.controls.zipCode.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.zipCode.getError("trimmedPattern").errorMessage
+              formGroup.controls.zipCode.getError('trimmedPattern').errorMessage
             }}</mat-error
           >
         </mat-form-field>
@@ -191,7 +191,7 @@
           <mat-error
             *ngIf="formGroup.controls.city.hasError('trimmedPattern')"
             >{{
-              formGroup.controls.city.getError("trimmedPattern").errorMessage
+              formGroup.controls.city.getError('trimmedPattern').errorMessage
             }}</mat-error
           >
         </mat-form-field>
@@ -293,20 +293,18 @@
         <mat-error
           *ngIf="formGroup.controls.remark.hasError('trimmedPattern')"
           >{{
-            formGroup.controls.remark.getError("trimmedPattern").errorMessage
+            formGroup.controls.remark.getError('trimmedPattern').errorMessage
           }}</mat-error
         >
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
+      <qro-button
         [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
       >
         Speichern
-      </button>
+      </qro-button>
       <button
         type="button"
         mat-raised-button

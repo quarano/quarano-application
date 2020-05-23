@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { NgModule } from '@angular/core';
@@ -19,6 +20,7 @@ import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
     ConfirmationDialogModule,
     FormsModule,
     ReactiveFormsModule,
+    SharedUiButtonModule
   ],
   declarations: [AccountAdministrationComponent, AccountEditComponent],
   providers: [AccountsResolver, AccountResolver]
