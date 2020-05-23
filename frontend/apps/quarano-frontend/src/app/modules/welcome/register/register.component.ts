@@ -5,13 +5,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import {ConfirmValidPasswordMatcher} from '../../../validators/ConfirmValidPasswordMatcher';
-import {TrimmedPatternValidator} from '../../../validators/trimmed-pattern.validator';
-import {VALIDATION_PATTERNS} from '../../../validators/validation-patterns';
-import {PasswordValidator} from '../../../validators/password-validator';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {Register} from '../../../models/register';
+import { ConfirmValidPasswordMatcher } from '../../../validators/ConfirmValidPasswordMatcher';
+import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
+import { PasswordValidator } from '../../../validators/password-validator';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { Register } from '../../../models/register';
 
 @Component({
   selector: 'qro-register',
@@ -20,6 +20,7 @@ import {Register} from '../../../models/register';
 })
 export class RegisterComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  loading = false;
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private usernameIsValid = false;
@@ -100,6 +101,7 @@ export class RegisterComponent implements OnInit {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
+    this.loading = true;
     const register: Register = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
@@ -109,7 +111,7 @@ export class RegisterComponent implements OnInit {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
           this.router.navigate(['/welcome/login']);
         }
-      );
+      ).add(() => this.loading = false);
   }
 
   openDataProtection() {

@@ -13,6 +13,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  loading = false;
 
   public loginFormGroup = new FormGroup({
     username: new FormControl(null, Validators.required),
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   public submitForm() {
+    this.loading = true;
     this.userService.login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
       .subscribe(
         _ => {
@@ -49,14 +51,14 @@ export class LoginComponent implements OnInit {
           }
         },
         (error) => {
-          if (error.error === 'Case already closed!'){
+          if (error.error === 'Case already closed!') {
             this.snackbarService.message('Ihr Fall ist bereits geschlossen');
           }
           else {
             this.snackbarService.error('Benutzername oder Passwort falsch');
           }
         }
-      );
+      ).add(() => this.loading = false);
   }
 
   trimValue(input: MatInput) {

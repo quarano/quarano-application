@@ -32,7 +32,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
-
   get isIndexCase() {
     return this.type === ClientType.Index;
   }
@@ -41,6 +40,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   caseDetail: CaseDetailDto;
   @Input()
   type: ClientType;
+  @Input() loading: boolean;
   @Output()
   changedToIndex = new EventEmitter<boolean>();
 

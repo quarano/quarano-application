@@ -24,6 +24,7 @@
         <qro-button
           [disabled]="firstStep.hasError"
           (buttonClicked)="checkAndSendFirstForm()"
+          [loading]="firstFormLoading"
           ><mat-icon>arrow_forward</mat-icon> Weiter</qro-button
         >
       </div>
@@ -49,6 +50,7 @@
           class="ml-3"
           [disabled]="secondStep.hasError"
           (buttonClicked)="checkAndSendQuestionaire()"
+          [loading]="secondFormLoading"
         >
           <mat-icon>arrow_forward</mat-icon>Weiter
         </qro-button>
@@ -136,6 +138,7 @@
           class="ml-3"
           (buttonClicked)="onComplete()"
           [disabled]="thirdStep.hasError"
+          [loading]="thirdFormLoading"
         >
           <mat-icon>check</mat-icon>Erfassung abschließen
         </qro-button>

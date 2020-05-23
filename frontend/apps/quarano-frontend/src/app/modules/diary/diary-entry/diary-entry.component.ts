@@ -29,6 +29,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   private subs = new SubSink();
   date: string;
   slot: string;
+  loading = false;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -99,6 +100,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   onSubmit() {
     if (this.formGroup.valid) {
+      this.loading = true;
       const diaryEntryModifyDto: DiaryEntryModifyDto
         = { id: null, bodyTemperature: null, symptoms: [], date: null, timeOfDay: null, contacts: [] };
       diaryEntryModifyDto.symptoms = this.characteristicSymptomsControl.value;
@@ -136,7 +138,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich angelegt');
         this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
-      }));
+      }).add(() => this.loading = false));
   }
 
   modifyEntry(diaryEntry: DiaryEntryModifyDto) {
@@ -148,7 +150,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich aktualisiert');
         this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
-      }));
+      }).add(() => this.loading = false));
   }
 
   onSlideToggleChanged(event: MatSlideToggleChange, symptomId: string) {

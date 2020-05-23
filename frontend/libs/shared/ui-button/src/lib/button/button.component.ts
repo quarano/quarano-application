@@ -7,15 +7,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() color = 'primary';
-  @Input() disabled: boolean;
+  @Input() disabled = false;
   @Input() type = 'submit';
+  @Input() loading = false;
+
   @Output() buttonClicked = new EventEmitter<any>();
 
-  loading = false;
-
-  save(): void {
-    this.loading = true;
-    this.buttonClicked.emit();
+  save(event: any): void {
+    this.buttonClicked.emit(event);
   }
 
 }

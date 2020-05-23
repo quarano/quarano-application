@@ -45,11 +45,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
   client: ClientDto;
+  firstFormLoading = false;
 
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
   firstQuery: QuestionnaireDto;
   symptoms: SymptomDto[];
+  secondFormLoading = false;
 
   // ########## STEP III ##########
   thirdFormGroup: FormGroup;
@@ -57,6 +59,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   contactPersons: ContactPersonDto[] = [];
   encounters: EncounterEntry[] = [];
   noRetrospectiveContactsConfirmed = false;
+  thirdFormLoading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -146,6 +149,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   checkAndSendFirstForm() {
     if (this.firstFormGroup.valid) {
+      this.firstFormLoading = true;
       const value = this.firstFormGroup.value;
       value.dateOfBirth = this.dateOfBirth;
       this.enrollmentService.updatePersonalDetails(value)
@@ -156,7 +160,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
             this.stepper.next();
           }
-        });
+          this.firstFormLoading = false;
+        }).add(() => this.firstFormLoading = false);
     }
   }
 
@@ -206,6 +211,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   checkAndSendQuestionaire() {
     if (this.secondFormGroup.valid) {
+      this.secondFormLoading = true;
       const questionaireData: QuestionnaireDto = { ...this.secondFormGroup.value };
 
       if (this.secondFormGroup.get('symptoms').value) {
@@ -218,7 +224,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.snackbarService.success('Fragebogen erfolgreich gespeichert');
 
           this.stepper.next();
-        }));
+        }).add(() => this.secondFormLoading = false));
     }
   }
 
@@ -286,6 +292,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onComplete() {
+    this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
@@ -301,7 +308,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           if (result) {
             this.completeEnrollment(true);
           }
-        });
+        }).add(() => this.thirdFormLoading = false);
     } else {
       this.completeEnrollment(false);
     }
@@ -315,6 +322,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.snackbarService.success('Die Registrierung wurde abgeschlossen');
           this.router.navigate(['/diary']);
         }
-      });
+      }).add(() => this.thirdFormLoading = false);
   }
 }

@@ -161,7 +161,10 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <qro-button [disabled]="formGroup.invalid || formGroup.pristine">
+      <qro-button
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+      >
         Speichern
       </qro-button>
       <button

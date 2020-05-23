@@ -59,7 +59,11 @@
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button id="submitBtn" [disabled]="loginFormGroup.invalid">
+      <qro-button
+        id="submitBtn"
+        [disabled]="loginFormGroup.invalid"
+        [loading]="loading"
+      >
         Login
       </qro-button>
     </mat-card-actions>

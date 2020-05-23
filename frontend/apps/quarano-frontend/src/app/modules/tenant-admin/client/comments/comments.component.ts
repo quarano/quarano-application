@@ -1,5 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { CaseCommentDto } from '../../../../models/case-comment';
@@ -15,6 +14,7 @@ export class CommentsComponent {
 
   @Input()
   comments: CaseCommentDto[];
+  @Input() loading: boolean;
 
   @Output()
   newComment: Subject<string> = new Subject<string>();
@@ -26,6 +26,7 @@ export class CommentsComponent {
   submitComment() {
     if (this.formGroup.valid) {
       this.newComment.next(this.formGroup.get('comment').value);
+      this.formGroup.reset();
     }
   }
 }

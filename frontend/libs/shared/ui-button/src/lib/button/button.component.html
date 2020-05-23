@@ -4,7 +4,7 @@
   [class.spinner]="loading"
   [disabled]="disabled || loading"
   [type]="type"
-  (click)="save()"
+  (click)="save($event)"
 >
   <ng-content></ng-content>
 </button>

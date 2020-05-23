@@ -87,6 +87,7 @@
       <qro-button
         *ngIf="!isReadonly"
         [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
         >Speichern
       </qro-button>
       <button

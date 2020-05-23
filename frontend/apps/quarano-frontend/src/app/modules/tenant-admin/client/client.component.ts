@@ -28,10 +28,11 @@ export class ClientComponent implements OnInit, OnDestroy {
   type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
   type$: Observable<ClientType> = this.type$$.asObservable();
   ClientType = ClientType;
+  commentLoading = false;
+  personalDataLoading = false;
 
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
-
   caseComments$: Observable<CaseCommentDto[]>;
 
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
@@ -87,6 +88,7 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   saveCaseData(caseDetail: CaseDetailDto) {
+    this.personalDataLoading = true;
     let saveData$: Observable<any>;
     if (!caseDetail.caseId) {
       saveData$ = this.apiService.createCase(caseDetail, this.type$$.value);
@@ -97,7 +99,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.subs.sink = saveData$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       this.router.navigate([this.returnLink]);
-    });
+    }).add(() => this.personalDataLoading = false);
   }
 
   get returnLink() {
@@ -123,11 +125,12 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   addComment(commentText: string) {
-    this.subs.sink = this.apiService.addComment(this.caseId, commentText).subscribe((data) => {
-      this.snackbarService.success('Kommentar erfolgreich eingetragen.');
-      this.updatedDetail$$.next(data);
-      this.tabIndex = 0;
-    });
+    this.commentLoading = true
+    this.subs.sink = this.apiService.addComment(this.caseId, commentText)
+      .subscribe((data) => {
+        this.snackbarService.success('Kommentar erfolgreich eingetragen.');
+        this.updatedDetail$$.next(data);
+      }).add(() => this.commentLoading = false);
   }
 
   checkForClose(halResponse: HalResponse) {

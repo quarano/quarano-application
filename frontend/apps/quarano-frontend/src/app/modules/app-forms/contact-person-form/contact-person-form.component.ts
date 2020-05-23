@@ -3,10 +3,10 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
-import {ContactPersonDto, ContactPersonModifyDto} from '../../../models/contact-person';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {VALIDATION_PATTERNS} from '../../../validators/validation-patterns';
+import { ContactPersonDto, ContactPersonModifyDto } from '../../../models/contact-person';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-contact-person-form',
@@ -22,6 +22,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   private subs = new SubSink();
   showIdentificationHintField = false;
+  loading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,7 +86,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.formGroup.valid) {
-
+      this.loading = true;
       if (this.isWayToContactSet()) {
         const contactPersonToModify = Object.assign(this.formGroup.value);
 
@@ -98,8 +99,10 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
       } else if (!this.showIdentificationHintField) {
         this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
         this.showIdentificationHintField = true;
+        this.loading = false;
       } else {
         this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
+        this.loading = false;
       }
     }
   }
@@ -112,7 +115,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         this.formGroup.markAsPristine();
         this.contactCreated.emit(createdContactPerson);
         this.dirty.emit(false);
-      }));
+      }).add(() => this.loading = false));
   }
 
   modifyContactPerson(contactPerson: ContactPersonModifyDto) {
@@ -123,7 +126,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         this.formGroup.markAsPristine();
         this.contactModified.emit();
         this.dirty.emit(false);
-      }));
+      }).add(() => this.loading = false));
   }
 
   cancel() {
