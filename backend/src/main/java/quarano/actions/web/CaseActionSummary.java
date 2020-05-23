@@ -59,6 +59,10 @@ class CaseActionSummary {
 		return summary.getEmail();
 	}
 
+	public String getCreatedAt() {
+		return summary.getCreatedAt();
+	}
+
 	public String getCaseType() {
 		return summary.getCaseType();
 	}
