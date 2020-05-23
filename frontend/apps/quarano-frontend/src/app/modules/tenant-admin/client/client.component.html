@@ -124,6 +124,11 @@
           (renewTrackingCode)="renewTracking(tracking)"
         ></qro-client-mail>
       </mat-tab>
+      <mat-tab
+        *ngIf="questionnaire$$ | async as questionnaire"
+        label="Fragebogen">
+      <qro-client-questionnaire [questionnaire]="questionnaire" [symptoms]="symptoms$ | async"></qro-client-questionnaire>
+      </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </mat-card>

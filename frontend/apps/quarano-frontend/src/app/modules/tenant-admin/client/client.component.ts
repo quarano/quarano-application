@@ -16,6 +16,8 @@ import { SnackbarService } from '../../../services/snackbar.service';
 import { HalResponse } from '../../../models/hal-response';
 import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
 import { ClientType } from '@quarano-frontend/health-department/domain';
+import {SymptomDto} from '../../../models/symptom';
+import {QuestionnaireDto} from '../../../models/first-query';
 
 
 @Component({
@@ -35,8 +37,13 @@ export class ClientComponent implements OnInit, OnDestroy {
   caseAction$: Observable<CaseActionDto>;
   caseComments$: Observable<CaseCommentDto[]>;
 
+  symptoms$: Observable<SymptomDto[]>;
+
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
+  questionnaire$$: Subject<QuestionnaireDto> = new Subject<QuestionnaireDto>();
+
+
 
   @ViewChild('tabs', { static: false })
   tabGroup: MatTabGroup;
@@ -81,6 +88,24 @@ export class ClientComponent implements OnInit, OnDestroy {
             this.trackingStart$$.next(startTracking);
           });
       });
+
+    this.subs.sink = this.caseDetail$.pipe(
+      filter((data) => data !== null),
+      filter((data) => data?._links?.hasOwnProperty('questionnaire')),
+      take(1)).subscribe((data) => {
+      this.subs.sink = this.apiService
+        .getApiCall<QuestionnaireDto>(data, 'questionnaire')
+        .subscribe((questionnaire) => {
+          this.questionnaire$$.next(questionnaire);
+          this.symptoms$ = this.route.data.pipe(
+            map((resolver) => resolver.symptoms),
+            map((symptoms: SymptomDto[] ) =>
+              symptoms.filter((symptom) => (symptom.id in questionnaire.symptoms))
+            )
+          );
+        });
+    });
+
   }
 
   hasOpenAnomalies(): Observable<boolean> {
