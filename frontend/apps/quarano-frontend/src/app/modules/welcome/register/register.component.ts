@@ -98,7 +98,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const register: Register = Object.assign(this.registrationForm.value);
+    const register: RegisterDto = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
     this.apiService.registerClient(register)
