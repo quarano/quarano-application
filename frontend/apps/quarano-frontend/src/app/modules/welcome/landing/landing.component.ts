@@ -1,6 +1,6 @@
-import { ClientType } from '@quarano-frontend/health-department/domain';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ClientType} from '@quarano-frontend/health-department/domain';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'qro-landing',
@@ -17,5 +17,12 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
     this.userType = this.route.snapshot.paramMap.get('usertype') as ClientType || this.userType;
     this.clientcode = this.route.snapshot.paramMap.get('clientcode');
+  }
+
+  showIndexNumber() {
+    return this.userType === ClientType.Index;
+  }
+  showContactNumber() {
+    return this.userType === ClientType.Contact;
   }
 }

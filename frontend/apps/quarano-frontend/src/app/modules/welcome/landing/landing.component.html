@@ -60,7 +60,8 @@
             <p>Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt
                 an oder den Ärztlicher Bereitschaftsdienst (Tel: 116 117).</p>
             <p>Bei sonstigen Rückfragen melden Sie sich bitte auf unserem</p>
-            <p>Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).</p>
+            <p *ngIf="showIndexNumber()">Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).</p>
+            <p *ngIf="showContactNumber()">Hotline-Telefon (0621-293-XXXX von 07:30 Uhr bis 19 Uhr).</p>
             <p>Ihr Gesundheitsamt Mannheim</p>
             <p class="footnote"><em>*nähere Informationen hierzu finden Sie auf den Seiten des Robert Koch
                     Instituts<br /><a
