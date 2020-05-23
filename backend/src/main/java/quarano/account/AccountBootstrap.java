@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Oliver Drotbohm
@@ -30,18 +31,30 @@ public class AccountBootstrap implements ApplicationRunner {
 	 * @see org.springframework.boot.ApplicationRunner#run(org.springframework.boot.ApplicationArguments)
 	 */
 	@Override
+	@Transactional
 	public void run(ApplicationArguments args) throws Exception {
 
+		Department defaultDepartment = configuration.getDefaultDepartment();
 		if (departments.count() > 0) {
 
-			log.info("Found departments in database. Skipping default account creation.");
+			log.info("Found departments in database. Updating their contact informations");
+
+			String departmentName = defaultDepartment.getName();
+			departments.findByName(departmentName)
+					.map(department -> {
+						// workaround for hibernate as orphanremoval is not working here
+						departments.deleteDepartmentContacts(department.getContacts());
+						return department;
+					})
+					.map(department -> department.addDepartmentContacts(defaultDepartment.getContacts()))
+					.ifPresent(departments::save);
 
 			return;
 		}
 
 		log.info("Creating default department.");
 
-		var department = departments.save(configuration.getDefaultDepartment());
+		var department = departments.save(defaultDepartment);
 		var defaults = configuration.getDefaultAccount();
 
 

@@ -5,12 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.account.Account;
 import quarano.account.AccountService;
+import quarano.account.DepartmentContact;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
+import quarano.department.CaseType;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.EnrollmentDto;
 import quarano.tracking.TrackedPersonRepository;
@@ -46,18 +49,27 @@ public class UserController {
 
 		var userDto = UserDto.of(account);
 
-		departments.findById(account.getDepartmentId()) //
-				.map(it -> mapper.map(it, DepartmentDto.class)) //
-				.ifPresent(userDto::setHealthDepartment);
-
 		var person = trackedPersonRepository.findByAccount(account); //
 
 		person.map(it -> mapper.map(it, TrackedPersonDto.class)) //
 				.ifPresent(userDto::setClient);
 
-		person.flatMap(cases::findByTrackedPerson) //
+		var trackedCase = person.flatMap(cases::findByTrackedPerson);
+		trackedCase//
 				.map(it -> new EnrollmentDto(it.getEnrollment())) //
 				.ifPresent(userDto::setEnrollment);
+
+		trackedCase.map(TrackedCase::getType) //
+				.flatMap(type -> { //
+					var contactType = CaseType.INDEX == type ? DepartmentContact.ContactType.INDEX
+							: DepartmentContact.ContactType.CONTACT; //
+					return departments.findById(account.getDepartmentId()) //
+							.flatMap(department -> //
+					department.getContact(contactType) //
+							.map(contact -> new DepartmentDto(department.getName(), contact.getEmailAddress().toString(),
+									contact.getPhoneNumber().toString())));
+				}) //
+				.ifPresent(userDto::setHealthDepartment);
 
 		return ResponseEntity.ok(userDto);
 	}
