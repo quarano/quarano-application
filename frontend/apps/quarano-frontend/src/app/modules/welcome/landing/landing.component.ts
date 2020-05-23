@@ -18,4 +18,11 @@ export class LandingComponent implements OnInit {
     this.userType = this.route.snapshot.paramMap.get('usertype') as ClientType || this.userType;
     this.clientcode = this.route.snapshot.paramMap.get('clientcode');
   }
+
+  showIndexNumber() {
+    return this.userType === ClientType.Index;
+  }
+  showContactNumber() {
+    return this.userType === ClientType.Contact;
+  }
 }
