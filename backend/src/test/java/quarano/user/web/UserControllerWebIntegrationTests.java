@@ -52,7 +52,7 @@ class UserControllerWebIntegrationTests {
 		assertThat(document.read("$.firstName", String.class)).isEqualTo("Markus");
 		assertThat(document.read("$.lastName", String.class)).isEqualTo("Hanser");
 		assertThat(document.read("$.healthDepartment.name", String.class)).isEqualTo("GA Mannheim");
-		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("email@gamannheim.de");
+		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("index-email@gesundheitsamt.de");
 		assertThat(document.read("$.healthDepartment.phone", String.class)).isEqualTo("0123456789");
 	}
 

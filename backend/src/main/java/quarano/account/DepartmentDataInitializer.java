@@ -23,12 +23,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class DepartmentDataInitializer implements DataInitializer {
 
-	private final @NonNull DepartmentRepository departments;
-
 	public final static DepartmentIdentifier DEPARTMENT_ID_DEP1 = DepartmentIdentifier
 			.of(UUID.fromString("aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2"));
 	public final static DepartmentIdentifier DEPARTMENT_ID_DEP2 = DepartmentIdentifier
 			.of(UUID.fromString("ca3f3e9a-414a-4117-a623-59b109b269f1"));
+	private final @NonNull DepartmentRepository departments;
 
 	/*
 	 * (non-Javadoc)
@@ -46,11 +45,28 @@ public class DepartmentDataInitializer implements DataInitializer {
 
 		departments.saveAll(List.of( //
 				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //
-						.setEmailAddress(EmailAddress.of("email@gamannheim.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123456789")), //
+						.addDepartmentContacts(List.of( //
+								DepartmentContact.of() //
+										.setType(DepartmentContact.ContactType.INDEX) //
+										.setEmailAddress(EmailAddress.of("index-email@gamannheim.de")) //
+										.setPhoneNumber(PhoneNumber.of("0123456789")), //
+								DepartmentContact.of() //
+										.setType(DepartmentContact.ContactType.CONTACT) //
+										.setEmailAddress(EmailAddress.of("contact-email@gamannheim.de")) //
+										.setPhoneNumber(PhoneNumber.of("00123456789")) //
+						) //
+					), //
 				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2) //
-						.setEmailAddress(EmailAddress.of("email@gadarmstadt.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123456789")) //
+						.addDepartmentContacts(List.of( //
+								DepartmentContact.of() //
+										.setType(DepartmentContact.ContactType.INDEX) //
+								.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de")) //
+								.setPhoneNumber(PhoneNumber.of("0123456789")), //
+								DepartmentContact.of() //
+										.setType(DepartmentContact.ContactType.CONTACT)
+										.setEmailAddress(EmailAddress.of("contact-email@gadarmstadt.de")) //
+										.setPhoneNumber(PhoneNumber.of("00123456789")) //
+						)) //
 		));
 	}
 }
