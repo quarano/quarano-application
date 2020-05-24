@@ -76,6 +76,9 @@
     },
     "shared-ui-button": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-util-error": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

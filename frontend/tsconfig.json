@@ -60,6 +60,9 @@
       "@quarano-frontend/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
       "@quarano-frontend/shared/ui-button": [
         "libs/shared/ui-button/src/index.ts"
+      ],
+      "@quarano-frontend/shared/util-error": [
+        "libs/shared/util-error/src/index.ts"
       ]
     }
   },
