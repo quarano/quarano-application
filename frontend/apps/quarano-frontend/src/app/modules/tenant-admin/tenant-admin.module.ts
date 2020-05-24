@@ -15,7 +15,8 @@ import { MailComponent } from './client/mail/mail.component';
 import { CloseCaseDialogComponent } from './client/close-case-dialog/close-case-dialog.component';
 import { ReportCaseActionsResolver } from '../../resolvers/report-case-actions.resolver';
 import { ReportCaseResolver } from '../../resolvers/report-case.resolver';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { QuestionnaireComponent } from './client/questionnaire/questionnaire.component';
+import {SharedUiMaterialModule} from '@quarano-frontend/shared/ui-material';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
     AnomalyComponent,
     CommentsComponent,
     MailComponent,
-    CloseCaseDialogComponent
+    CloseCaseDialogComponent,
+    QuestionnaireComponent
   ],
   imports: [
     CommonModule,
