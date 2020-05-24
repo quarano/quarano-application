@@ -8,7 +8,7 @@ import { EncounterEntry } from '../../../models/encounter';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ContactPersonDto } from '../../../models/contact-person';
-import { ArrayValidator } from '../../../validators/array-validator';
+import { ArrayValidator } from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',

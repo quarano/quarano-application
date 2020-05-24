@@ -1,11 +1,13 @@
-import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
+import {
+  ValidationErrorGenerator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator,
+  ArrayValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { SymptomDto } from '../../../models/symptom';
-import { ArrayValidator } from '../../../validators/array-validator';
-import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-initial-questionaire-form',

@@ -9,11 +9,13 @@ import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operator
 import { AccountDto } from '../../../../models/account';
 import { ApiService } from '../../../../services/api.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
-import { PasswordValidator } from '../../../../validators/password-validator';
-import { ArrayValidator } from '../../../../validators/array-validator';
-import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
+import {
+  ValidationErrorGenerator,
+  ArrayValidator,
+  PasswordValidator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator
+} from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
   selector: 'qro-account-edit',

@@ -1,4 +1,9 @@
-import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
+import {
+  ValidationErrorGenerator,
+  TrimmedPatternValidator,
+  VALIDATION_PATTERNS,
+  PhoneOrMobilePhoneValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
@@ -18,10 +23,7 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { CaseDetailDto } from '../../../../models/case-detail';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
-import { PhoneOrMobilePhoneValidator } from '../../../../validators/phone-validator';
 import { ClientType } from '@quarano-frontend/health-department/domain';
 
 @Component({

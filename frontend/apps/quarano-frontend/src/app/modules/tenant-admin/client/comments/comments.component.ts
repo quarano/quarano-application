@@ -1,10 +1,8 @@
-import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
+import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@quarano-frontend/shared/util-form-validation';
 import { Component, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { CaseCommentDto } from '../../../../models/case-comment';
-import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-client-comments',
