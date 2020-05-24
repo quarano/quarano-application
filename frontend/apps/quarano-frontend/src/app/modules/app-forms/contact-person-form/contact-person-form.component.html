@@ -18,11 +18,16 @@
           (blur)="trimValue(first_name_input)"
         />
         <mat-error
-          *ngIf="formGroup.controls.firstName.hasError('trimmedPattern')"
-          >{{
-            formGroup.controls.firstName.getError('trimmedPattern').errorMessage
-          }}</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              formGroup.controls.firstName
+            )
+          "
         >
+          {{
+            errorGenerator.getErrorMessage(formGroup.controls.firstName, error)
+          }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width">
         <input
@@ -34,11 +39,16 @@
           (blur)="trimValue(first_name_input)"
         />
         <mat-error
-          *ngIf="formGroup.controls.lastName.hasError('trimmedPattern')"
-          >{{
-            formGroup.controls.lastName.getError('trimmedPattern').errorMessage
-          }}</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              formGroup.controls.lastName
+            )
+          "
         >
+          {{
+            errorGenerator.getErrorMessage(formGroup.controls.lastName, error)
+          }}
+        </mat-error>
       </mat-form-field>
       <fieldset class="mb-3">
         <legend>Kontaktmöglichkeiten *</legend>
@@ -53,17 +63,15 @@
             #phone_input
             (blur)="trimValue(phone_input)"
           />
-          <mat-error *ngIf="formGroup.controls.phone.hasError('minlength')"
-            >Die Telefonnummer muss mindestens 5 Zeichen haben</mat-error
-          ><mat-error *ngIf="formGroup.controls.phone.hasError('maxlength')"
-            >Die Telefonnummer darf maximal 17 Zeichen haben</mat-error
-          >
           <mat-error
-            *ngIf="formGroup.controls.phone.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.phone.getError('trimmedPattern').errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(formGroup.controls.phone)
+            "
           >
+            {{
+              errorGenerator.getErrorMessage(formGroup.controls.phone, error)
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
@@ -77,19 +85,19 @@
             (blur)="trimValue(mobile_phone_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.mobilePhone.hasError('minlength')"
-            >Die Telefonnummer muss mindestens 5 Zeichen haben</mat-error
-          ><mat-error
-            *ngIf="formGroup.controls.mobilePhone.hasError('maxlength')"
-            >Die Telefonnummer darf maximal 17 Zeichen haben</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(
+                formGroup.controls.mobilePhone
+              )
+            "
           >
-          <mat-error
-            *ngIf="formGroup.controls.mobilePhone.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.mobilePhone.getError('trimmedPattern')
-                .errorMessage
-            }}</mat-error
-          >
+            {{
+              errorGenerator.getErrorMessage(
+                formGroup.controls.mobilePhone,
+                error
+              )
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
@@ -101,11 +109,14 @@
             (blur)="trimValue(email_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.email.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.email.getError('trimmedPattern').errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(formGroup.controls.email)
+            "
           >
+            {{
+              errorGenerator.getErrorMessage(formGroup.controls.email, error)
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field
           class="full-width"
@@ -123,6 +134,20 @@
             >Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen
             Hinweis zur Identifikation ein</mat-error
           >
+          <mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(
+                formGroup.controls.identificationHint
+              )
+            "
+          >
+            {{
+              errorGenerator.getErrorMessage(
+                formGroup.controls.identificationHint,
+                error
+              )
+            }}
+          </mat-error>
         </mat-form-field>
       </fieldset>
       <fieldset class="mb-3">
@@ -137,11 +162,16 @@
             (blur)="trimValue(street_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.street.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.street.getError('trimmedPattern').errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(
+                formGroup.controls.street
+              )
+            "
           >
+            {{
+              errorGenerator.getErrorMessage(formGroup.controls.street, error)
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
           <input
@@ -154,12 +184,19 @@
             (blur)="trimValue(house_number_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.houseNumber.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.houseNumber.getError('trimmedPattern')
-                .errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(
+                formGroup.controls.houseNumber
+              )
+            "
           >
+            {{
+              errorGenerator.getErrorMessage(
+                formGroup.controls.houseNumber,
+                error
+              )
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
           <input
@@ -173,11 +210,16 @@
             (blur)="trimValue(zip_code_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.zipCode.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.zipCode.getError('trimmedPattern').errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(
+                formGroup.controls.zipCode
+              )
+            "
           >
+            {{
+              errorGenerator.getErrorMessage(formGroup.controls.zipCode, error)
+            }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 70%;">
           <input
@@ -189,11 +231,12 @@
             (blur)="trimValue(city_input)"
           />
           <mat-error
-            *ngIf="formGroup.controls.city.hasError('trimmedPattern')"
-            >{{
-              formGroup.controls.city.getError('trimmedPattern').errorMessage
-            }}</mat-error
+            *ngFor="
+              let error of errorGenerator.getErrorKeys(formGroup.controls.city)
+            "
           >
+            {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
+          </mat-error>
         </mat-form-field>
       </fieldset>
       <fieldset class="mb-3">
@@ -291,11 +334,12 @@
           >
         </mat-hint>
         <mat-error
-          *ngIf="formGroup.controls.remark.hasError('trimmedPattern')"
-          >{{
-            formGroup.controls.remark.getError('trimmedPattern').errorMessage
-          }}</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(formGroup.controls.remark)
+          "
         >
+          {{ errorGenerator.getErrorMessage(formGroup.controls.remark, error) }}
+        </mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>

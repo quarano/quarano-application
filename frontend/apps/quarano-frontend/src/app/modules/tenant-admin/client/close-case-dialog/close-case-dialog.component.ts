@@ -1,8 +1,9 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {VALIDATION_PATTERNS} from '../../../../validators/validation-patterns';
-import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.validator';
+import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
+import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
 
 @Component({
   selector: 'qro-close-case-dialog',
@@ -10,7 +11,7 @@ import {TrimmedPatternValidator} from '../../../../validators/trimmed-pattern.va
   styleUrls: ['./close-case-dialog.component.scss']
 })
 export class CloseCaseDialogComponent {
-
+  errorGenerator = ValidationErrorGenerator;
   commentGroup = new FormGroup({
     comment: new FormControl('', [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
   });

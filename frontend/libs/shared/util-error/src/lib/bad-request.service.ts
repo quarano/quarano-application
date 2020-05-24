@@ -11,7 +11,6 @@ export class BadRequestService {
 
   public handleBadRequestError(error: any, form: FormGroup) {
     let handled = false;
-    console.log(error);
     if (error.hasOwnProperty('badRequestErrors')) {
       const requestErrors = error.badRequestErrors;
       Object.keys(form.controls).forEach(key => {

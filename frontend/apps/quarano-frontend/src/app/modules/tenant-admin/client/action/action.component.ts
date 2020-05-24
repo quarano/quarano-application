@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
@@ -19,6 +20,7 @@ export class ActionComponent implements OnInit {
   @Input() caseAction: CaseActionDto;
   @Input() type: ClientType;
   formGroup: FormGroup;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,

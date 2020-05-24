@@ -78,11 +78,12 @@
         placeholder="Bemerkung"
       ></textarea>
       <mat-error
-        *ngIf="formGroup.controls.comment.hasError('trimmedPattern')"
-        >{{
-          formGroup.controls.comment.getError('trimmedPattern').errorMessage
-        }}</mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(formGroup.controls.comment)
+        "
       >
+        {{ errorGenerator.getErrorMessage(formGroup.controls.comment, error) }}
+      </mat-error>
     </mat-form-field>
     <button
       type="submit"

@@ -79,6 +79,9 @@
     },
     "shared-util-error": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-form-validation": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

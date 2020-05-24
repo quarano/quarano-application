@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -23,6 +24,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   showIdentificationHintField = false;
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,

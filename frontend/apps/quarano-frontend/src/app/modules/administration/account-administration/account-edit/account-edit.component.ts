@@ -13,6 +13,7 @@ import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.
 import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 import { PasswordValidator } from '../../../../validators/password-validator';
 import { ArrayValidator } from '../../../../validators/array-validator';
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
   selector: 'qro-account-edit',
@@ -26,6 +27,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   private usernameIsValid = false;
   roles: IRole[] = roles.filter(r => r.isHealthDepartmentUser);
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private route: ActivatedRoute,

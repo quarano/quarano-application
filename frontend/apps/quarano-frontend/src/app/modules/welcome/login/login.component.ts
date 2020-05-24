@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +15,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
 })
 export class LoginComponent implements OnInit {
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   public loginFormGroup = new FormGroup({
     username: new FormControl(null, Validators.required),

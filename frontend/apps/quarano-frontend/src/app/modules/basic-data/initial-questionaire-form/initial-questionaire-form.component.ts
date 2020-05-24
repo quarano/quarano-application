@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
@@ -21,6 +22,7 @@ export class InitialQuestionaireFormComponent implements OnInit {
   symptoms: SymptomDto[];
 
   subs = new SubSink();
+  errorGenerator = ValidationErrorGenerator;
 
   tooltip = 'In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, ' +
     'Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, ' +

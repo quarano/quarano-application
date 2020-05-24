@@ -50,8 +50,12 @@
       [nameProperties]="['name']"
       name="characteristicSymptoms"
     ></qro-multiple-autocomplete>
-    <mat-error *ngIf="formGroup.controls.symptoms.hasError('minLengthArray')">
-      Bitte wählen Sie mindestens ein Symptom
+    <mat-error
+      *ngFor="
+        let error of errorGenerator.getErrorKeys(formGroup.controls.symptoms)
+      "
+    >
+      {{ errorGenerator.getErrorMessage(formGroup.controls.symptoms, error) }}
     </mat-error>
   </div>
   <div class="question">
@@ -59,15 +63,16 @@
     <mat-form-field class="full-width">
       <input matInput formControlName="familyDoctor" />
       <mat-error
-        *ngIf="formGroup.controls.familyDoctor.hasError('trimmedPattern')"
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.familyDoctor
+          )
+        "
       >
         {{
-          formGroup.controls.familyDoctor.getError('trimmedPattern')
-            .errorMessage
-        }}</mat-error
-      ><mat-error *ngIf="formGroup.controls.familyDoctor.hasError('required')"
-        >Bitte geben Sie Ihren behandelnden Hausarzt an</mat-error
-      >
+          errorGenerator.getErrorMessage(formGroup.controls.familyDoctor, error)
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="question">
@@ -77,17 +82,19 @@
     <mat-form-field class="full-width">
       <input matInput formControlName="guessedOriginOfInfection" />
       <mat-error
-        *ngIf="
-          formGroup.controls.guessedOriginOfInfection.hasError('trimmedPattern')
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.guessedOriginOfInfection
+          )
         "
-        >{{
-          formGroup.controls.guessedOriginOfInfection.getError('trimmedPattern')
-            .errorMessage
-        }}</mat-error
-      ><mat-error
-        *ngIf="formGroup.controls.guessedOriginOfInfection.hasError('required')"
-        >Bitte geben Sie den (vermuteten) Ort der Ansteckung an</mat-error
       >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.guessedOriginOfInfection,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -118,24 +125,19 @@
         formControlName="hasPreExistingConditionsDescription"
       />
       <mat-error
-        *ngIf="
-          formGroup.controls.hasPreExistingConditionsDescription.hasError(
-            'trimmedPattern'
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.hasPreExistingConditionsDescription
           )
         "
-        >{{
-          formGroup.controls.hasPreExistingConditionsDescription.getError(
-            'trimmedPattern'
-          ).errorMessage
-        }}</mat-error
-      ><mat-error
-        *ngIf="
-          formGroup.controls.hasPreExistingConditionsDescription.hasError(
-            'required'
-          )
-        "
-        >Bitte geben Sie Ihre Vorerkrankungen an</mat-error
       >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.hasPreExistingConditionDescription,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -162,24 +164,19 @@
         required
         formControlName="belongToMedicalStaffDescription"
       /><mat-error
-        *ngIf="
-          formGroup.controls.belongToMedicalStaffDescription.hasError(
-            'trimmedPattern'
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.belongToMedicalStaffDescription
           )
         "
-        >{{
-          formGroup.controls.belongToMedicalStaffDescription.getError(
-            'trimmedPattern'
-          ).errorMessage
-        }}</mat-error
-      ><mat-error
-        *ngIf="
-          formGroup.controls.belongToMedicalStaffDescription.hasError(
-            'required'
-          )
-        "
-        >Bitte geben Sie an, wo Sie arbeiten</mat-error
       >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.belongToMedicalStaffDescription,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="bool-question">
@@ -206,24 +203,19 @@
         required
         formControlName="hasContactToVulnerablePeopleDescription"
       /><mat-error
-        *ngIf="
-          formGroup.controls.hasContactToVulnerablePeopleDescription.hasError(
-            'trimmedPattern'
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.hasContactToVulnerablePeopleDescription
           )
         "
-        >{{
-          formGroup.controls.hasContactToVulnerablePeopleDescription.getError(
-            'trimmedPattern'
-          ).errorMessage
-        }}</mat-error
-      ><mat-error
-        *ngIf="
-          formGroup.controls.hasContactToVulnerablePeopleDescription.hasError(
-            'required'
-          )
-        "
-        >Bitte geben Sie an, wie und zu wem Sie Kontakt haben</mat-error
       >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.hasContactToVulnerablePeopleDescription,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
 </div>

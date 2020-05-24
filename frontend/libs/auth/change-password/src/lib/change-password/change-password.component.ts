@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { AuthService } from '@quarano-frontend/auth/domain';
 import { MatInput } from '@angular/material/input';
@@ -20,6 +21,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private userService: UserService,

@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
@@ -32,6 +33,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
+  errorGenerator = ValidationErrorGenerator;
   get isIndexCase() {
     return this.type === ClientType.Index;
   }

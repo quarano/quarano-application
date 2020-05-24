@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { FormGroup } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { MatInput } from '@angular/material/input';
@@ -10,6 +11,7 @@ import { MatInput } from '@angular/material/input';
 export class PersonalDataFormComponent {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   @Input() formGroup: FormGroup;
+  errorGenerator = ValidationErrorGenerator;
 
   trimValue(input: MatInput) {
     input.value = input.value.trim();

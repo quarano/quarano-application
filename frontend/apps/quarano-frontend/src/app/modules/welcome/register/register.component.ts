@@ -1,3 +1,4 @@
+import { ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 import { DataProtectionComponent } from '../../../components/data-protection/data-protection.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -21,6 +22,7 @@ import { RegisterDto } from '../../../models/register';
 export class RegisterComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private usernameIsValid = false;

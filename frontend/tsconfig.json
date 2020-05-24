@@ -63,6 +63,9 @@
       ],
       "@quarano-frontend/shared/util-error": [
         "libs/shared/util-error/src/index.ts"
+      ],
+      "@quarano-frontend/shared/util-form-validation": [
+        "libs/shared/util-form-validation/src/index.ts"
       ]
     }
   },
