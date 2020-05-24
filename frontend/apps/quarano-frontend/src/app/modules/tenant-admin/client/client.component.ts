@@ -100,7 +100,8 @@ export class ClientComponent implements OnInit, OnDestroy {
           this.symptoms$ = this.route.data.pipe(
             map((resolver) => resolver.symptoms),
             map((symptoms: SymptomDto[] ) =>
-              symptoms.filter((symptom) => (symptom.id in questionnaire.symptoms))
+              symptoms.filter((symptom) => questionnaire.symptoms
+                .findIndex((symptomId) => symptomId === symptom.id) !== -1)
             )
           );
         });
