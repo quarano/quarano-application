@@ -20,7 +20,7 @@ class QuarantineEndChecker {
 	private final @NonNull TrackedCaseRepository trackedCases;
 	private final @NonNull ActionItemRepository items;
 
-	@Scheduled(cron = "0 8 * * *")
+	@Scheduled(cron = "0 8 * * * *")
 	void checkEndingQuarantinesPeriodically() {
 
 		trackedCases.findAll().stream() //
