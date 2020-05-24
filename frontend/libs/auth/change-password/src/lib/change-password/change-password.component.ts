@@ -55,11 +55,19 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   submitForm() {
     if (this.formGroup.valid) {
       this.loading = true;
-      this.subs.add(this.authService.changePassword(this.formGroup.value)
-        .subscribe(() => {
-          this.snackbarService.success('Ihr Passwort wurde geändert');
-          this.router.navigate(['/welcome']);
-        }).add(() => this.loading = false));
+        this.subs.add(this.authService.changePassword(this.formGroup.value)
+            .subscribe(() => {
+                this.snackbarService.success('Ihr Passwort wurde geändert');
+                this.router.navigate(['/welcome']);
+            }, error => {
+                Object.keys(this.formGroup.controls).forEach(key => {
+                    if (error.hasOwnProperty(key)) {
+                        this.formGroup.get(key).setErrors({ error400: { errorMessage: error[key] } });
+                    }
+
+                });
+                console.log(this.formGroup);
+            }).add(() => this.loading = false));
     }
   }
 
