@@ -16,6 +16,19 @@ describe('QuestionnaireComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(QuestionnaireComponent);
     component = fixture.componentInstance;
+    component.questionnaire = {
+      hasSymptoms: false,
+      symptoms: [],
+      dayOfFirstSymptoms: '',
+      familyDoctor:'',
+      belongToMedicalStaff: false,
+      belongToMedicalStaffDescription: '',
+      guessedOriginOfInfection: '',
+      hasContactToVulnerablePeople: false,
+      hasContactToVulnerablePeopleDescription: '',
+      hasPreExistingConditions: false,
+      hasPreExistingConditionsDescription: ''
+    }
     fixture.detectChanges();
   });
 
