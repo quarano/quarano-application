@@ -10,7 +10,7 @@ export class PasswordValidator {
       return null;
     }
 
-    if (password.length <= 7) {
+    if (password.length < 7) {
       errors.minlength = { 'requiredLength': 7, 'actualLength': password.length };
     }
     if (password.length > 500) {
