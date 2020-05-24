@@ -52,10 +52,10 @@ describe('registration form', () => {
             $input.hasClass('mat-form-field-invalid');
             cy.get('[data-cy="input-password"] mat-error')
               .should('exist')
-              .and('contain.text', 'Das Passwort muss mindestens 7 Zeichen lang sein.')
-              .and('contain.text', 'Das Passwort muss mindestens einen Großbuchstaben beinhalten.')
-              .and('contain.text', 'Das Passwort muss mindestens eine Zahl beinhalten.')
-              .and('contain.text', 'Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >');
+              .and('contain.text', 'Dieses Feld erfordert eine Eingabe von mindestens 7 Zeichen')
+              .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten')
+              .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten')
+              .and('contain.text', 'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >');
           });
         });
 
@@ -66,9 +66,9 @@ describe('registration form', () => {
               .should('exist')
               // limitation does not seem to exist any more
               // .and('contain.text', 'Das Passwort darf höchstens 30 Zeichen lang sein.')
-              .and('contain.text', 'Das Passwort muss mindestens einen Großbuchstaben beinhalten.')
-              .and('contain.text', 'Das Passwort muss mindestens eine Zahl beinhalten.')
-              .and('contain.text', 'Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >');
+              .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten')
+              .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten')
+              .and('contain.text', 'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >');
           });
         });
 
@@ -77,7 +77,7 @@ describe('registration form', () => {
             $input.hasClass('mat-form-field-invalid');
             cy.get('[data-cy="input-password"] mat-error')
               .should('exist')
-              .and('contain.text', 'Das Passwort muss mindestens einen Großbuchstaben beinhalten.');
+              .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten');
           });
         });
 
@@ -86,7 +86,7 @@ describe('registration form', () => {
             $input.hasClass('mat-form-field-invalid');
             cy.get('[data-cy="input-password"] mat-error')
               .should('exist')
-              .and('contain.text', 'Das Passwort muss mindestens eine Zahl beinhalten.');
+              .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten');
           });
         });
 
@@ -95,7 +95,7 @@ describe('registration form', () => {
             $input.hasClass('mat-form-field-invalid');
             cy.get('[data-cy="input-password"] mat-error')
               .should('exist')
-              .and('contain.text', 'Das Passwort muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | < >');
+              .and('contain.text', 'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >');
           });
         });
 

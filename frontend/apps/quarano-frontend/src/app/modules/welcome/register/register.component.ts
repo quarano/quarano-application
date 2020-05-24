@@ -1,3 +1,10 @@
+import {
+  ValidationErrorGenerator,
+  ConfirmValidPasswordMatcher,
+  TrimmedPatternValidator,
+  VALIDATION_PATTERNS,
+  PasswordValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { DataProtectionComponent } from '../../../components/data-protection/data-protection.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -5,10 +12,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { ConfirmValidPasswordMatcher } from '../../../validators/ConfirmValidPasswordMatcher';
-import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
-import { PasswordValidator } from '../../../validators/password-validator';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { RegisterDto } from '../../../models/register';
@@ -21,6 +24,7 @@ import { RegisterDto } from '../../../models/register';
 export class RegisterComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private usernameIsValid = false;

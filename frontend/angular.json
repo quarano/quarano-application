@@ -820,6 +820,73 @@
           "style": "scss"
         }
       }
+    },
+    "shared-util-error": {
+      "projectType": "library",
+      "root": "libs/shared/util-error",
+      "sourceRoot": "libs/shared/util-error/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-error/tsconfig.lib.json",
+              "libs/shared/util-error/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-error/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-error/jest.config.js",
+            "tsConfig": "libs/shared/util-error/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-error/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-form-validation": {
+      "projectType": "library",
+      "root": "libs/shared/util-form-validation",
+      "sourceRoot": "libs/shared/util-form-validation/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-form-validation/tsconfig.lib.json",
+              "libs/shared/util-form-validation/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-form-validation/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-form-validation/jest.config.js",
+            "tsConfig": "libs/shared/util-form-validation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-form-validation/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

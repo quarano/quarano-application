@@ -4,15 +4,13 @@
 
     <mat-form-field class="full-width">
       <textarea matInput formControlName="comment" type="text"></textarea>
-      <mat-error *ngIf="formGroup.controls.comment.hasError('required')"
-        >Bitte geben Sie einen Kommentar ein</mat-error
-      >
       <mat-error
-        *ngIf="formGroup.controls.comment.hasError('trimmedPattern')"
-        >{{
-          formGroup.controls.comment.getError('trimmedPattern').errorMessage
-        }}</mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(formGroup.controls.comment)
+        "
       >
+        {{ errorGenerator.getErrorMessage(formGroup.controls.comment, error) }}
+      </mat-error>
     </mat-form-field>
   </fieldset>
   <div class="button-area">

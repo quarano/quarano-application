@@ -16,9 +16,11 @@ import { ContactPersonDto } from '../../models/contact-person';
 import { EncounterEntry } from '../../models/encounter';
 import { SnackbarService } from '../../services/snackbar.service';
 import { EnrollmentService } from '../../services/enrollment.service';
-import { TrimmedPatternValidator } from '../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../validators/validation-patterns';
-import { PhoneOrMobilePhoneValidator } from '../../validators/phone-validator';
+import {
+  TrimmedPatternValidator,
+  VALIDATION_PATTERNS,
+  PhoneOrMobilePhoneValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { ConfirmationDialogComponent } from '../../ui/confirmation-dialog/confirmation-dialog.component';
 import { DateFunctions } from '@quarano-frontend/shared/util';
 

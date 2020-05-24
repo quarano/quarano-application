@@ -1,3 +1,4 @@
+import { SharedUtilErrorModule } from '@quarano-frontend/shared/util-error';
 import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
 import { API_URL } from '@quarano-frontend/shared/util';
 import { AuthChangePasswordModule } from '@quarano-frontend/auth/change-password';
@@ -9,7 +10,6 @@ import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
 import { AsideComponent } from './components/aside/aside.component';
 import { ProfileModule } from './modules/profile/profile.module';
-import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
@@ -71,7 +71,8 @@ const SUB_MODULES = [
   ProfileModule,
   AdministrationModule,
   TenantAdminModule,
-  AuthChangePasswordModule
+  AuthChangePasswordModule,
+  SharedUtilErrorModule
 ];
 
 @NgModule({
@@ -93,7 +94,6 @@ const SUB_MODULES = [
   ],
   providers: [
     SnackbarService,
-    ErrorInterceptorProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressBarInterceptor,

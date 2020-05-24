@@ -1,10 +1,13 @@
+import {
+  ValidationErrorGenerator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator,
+  ArrayValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { SymptomDto } from '../../../models/symptom';
-import { ArrayValidator } from '../../../validators/array-validator';
-import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-initial-questionaire-form',
@@ -21,6 +24,7 @@ export class InitialQuestionaireFormComponent implements OnInit {
   symptoms: SymptomDto[];
 
   subs = new SubSink();
+  errorGenerator = ValidationErrorGenerator;
 
   tooltip = 'In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, ' +
     'Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, ' +

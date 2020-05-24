@@ -10,16 +10,17 @@
       <legend>Zusätzliche Informationen zum Fallabschluss:</legend>
       <mat-form-field class="full-width">
         <textarea matInput formControlName="comment" type="text"></textarea>
-        <mat-error *ngIf="commentGroup.get('comment').hasError('required')">
-          Bitte geben Sie ein Kommentar ein um den Fall abzuschließen
-        </mat-error>
         <mat-error
-          *ngIf="commentGroup.controls.comment.hasError('trimmedPattern')"
-          >{{
-            commentGroup.controls.comment.getError("trimmedPattern")
-              .errorMessage
-          }}</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              commentGroup.controls.comment
+            )
+          "
         >
+          {{
+            errorGenerator.getErrorMessage(commentGroup.controls.comment, error)
+          }}
+        </mat-error>
       </mat-form-field>
     </fieldset>
   </form>

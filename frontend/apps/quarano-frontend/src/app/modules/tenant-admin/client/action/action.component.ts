@@ -1,3 +1,8 @@
+import {
+  ValidationErrorGenerator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
@@ -5,8 +10,6 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { CaseActionDto } from '../../../../models/case-action';
 import { ApiService } from '../../../../services/api.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { TrimmedPatternValidator } from '../../../../validators/trimmed-pattern.validator';
-import { VALIDATION_PATTERNS } from '../../../../validators/validation-patterns';
 import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
 import { ClientType } from '@quarano-frontend/health-department/domain';
 
@@ -19,6 +22,7 @@ export class ActionComponent implements OnInit {
   @Input() caseAction: CaseActionDto;
   @Input() type: ClientType;
   formGroup: FormGroup;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,

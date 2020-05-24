@@ -127,7 +127,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-firstname"] input[matInput]').clear();
           cy.get('[data-cy="input-firstname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte geben Sie einen Vornamen ein');
+          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
         it('should be invalid', () => {
           cy.get('[data-cy="input-firstname"] input[matInput]').clear().type('Testfirstn5ame');
@@ -144,7 +144,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').clear();
           cy.get('[data-cy="input-lastname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte geben Sie einen Nachnamen ein');
+          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
         it('should be invalid', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').clear().type('Testlast09name');
@@ -245,7 +245,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
           cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
-            'Die Telefonnummer muss mindestens 5 Zeichen haben');
+            'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen');
         });
 
         it('should be invalid with invalid symbols', () => {
@@ -283,7 +283,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Die Telefonnummer muss mindestens 5 Zeichen lang sein');
+          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen');
         });
 
         it('should be invalid with invalid symbols', () => {

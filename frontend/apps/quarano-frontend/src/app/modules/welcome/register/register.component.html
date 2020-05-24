@@ -25,23 +25,19 @@
           (blur)="trimValue(client_code_input)"
         />
         <mat-error
-          *ngIf="registrationForm.controls.clientCode.hasError('codeInvalid')"
-        >
-          Der angegebene Code ist ungültig.
-        </mat-error>
-        <mat-error
-          *ngIf="registrationForm.controls.clientCode.hasError('required')"
-          >Bitte geben Sie einen Anmeldecode ein</mat-error
-        >
-        <mat-error
-          *ngIf="
-            registrationForm.controls.clientCode.hasError('trimmedPattern')
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              registrationForm.controls.clientCode
+            )
           "
-          >{{
-            registrationForm.controls.clientCode.getError('trimmedPattern')
-              .errorMessage
-          }}</mat-error
         >
+          {{
+            errorGenerator.getErrorMessage(
+              registrationForm.controls.clientCode,
+              error
+            )
+          }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field
         class="form__input--full-width"
@@ -59,29 +55,19 @@
           (blur)="trimValue(username_input)"
         />
         <mat-error
-          *ngIf="registrationForm.controls.username.hasError('usernameInvalid')"
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              registrationForm.controls.username
+            )
+          "
         >
-          Der angegebene Benutzername kann nicht verwendet werden.
+          {{
+            errorGenerator.getErrorMessage(
+              registrationForm.controls.username,
+              error
+            )
+          }}
         </mat-error>
-        <mat-error
-          *ngIf="registrationForm.controls.username.hasError('required')"
-          >Bitte geben Sie einen Benutzernamen ein</mat-error
-        >
-        <mat-error
-          *ngIf="registrationForm.controls.username.hasError('minlength')"
-          >Der Benutzername muss mindestens 1 Zeichen lang sein</mat-error
-        >
-        <mat-error
-          *ngIf="registrationForm.controls.username.hasError('maxlength')"
-          >Der Benutzername darf maximal 30 Zeichen lang sein</mat-error
-        >
-        <mat-error
-          *ngIf="registrationForm.controls.username.hasError('trimmedPattern')"
-          >{{
-            registrationForm.controls.username.getError('trimmedPattern')
-              .errorMessage
-          }}</mat-error
-        >
       </mat-form-field>
       <mat-form-field
         class="form__input--full-width"
@@ -99,32 +85,18 @@
           (blur)="trimValue(password_input)"
         />
         <mat-error
-          *ngIf="registrationForm.controls.password.hasError('required')"
-          >Bitte geben Sie ein Passwort ein</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              registrationForm.controls.password
+            )
+          "
         >
-        <mat-error
-          *ngIf="registrationForm.controls.password.hasError('minlength')"
-        >
-          Das Passwort muss mindestens 7 Zeichen lang sein.
-        </mat-error>
-        <mat-error
-          *ngIf="registrationForm.controls.password.hasError('maxlength')"
-        >
-          Das Passwort darf höchstens 30 Zeichen lang sein.
-        </mat-error>
-        <mat-error
-          *ngIf="registrationForm.controls.password.hasError('uppercase')"
-        >
-          Das Passwort muss mindestens einen Großbuchstaben beinhalten.
-        </mat-error>
-        <mat-error *ngIf="registrationForm.controls.password.hasError('digit')">
-          Das Passwort muss mindestens eine Zahl beinhalten.
-        </mat-error>
-        <mat-error
-          *ngIf="registrationForm.controls.password.hasError('nonWordChar')"
-        >
-          Das Passwort muss mindestens eines der folgenden Sonderzeichen
-          beinhalten: @ # $ % ^ & * ( ) , . ? : | &lt; >
+          {{
+            errorGenerator.getErrorMessage(
+              registrationForm.controls.password,
+              error
+            )
+          }}
         </mat-error>
         <mat-error
           *ngIf="registrationForm.hasError('passwordIncludesUsername')"
@@ -149,9 +121,19 @@
           [errorStateMatcher]="confirmValidParentMatcher"
         />
         <mat-error
-          *ngIf="registrationForm.controls.passwordConfirm.hasError('required')"
-          >Bitte bestätigen Sie das Passwort</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              registrationForm.controls.passwordConfirm
+            )
+          "
         >
+          {{
+            errorGenerator.getErrorMessage(
+              registrationForm.controls.passwordConfirm,
+              error
+            )
+          }}
+        </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
           Das Passwort und die Bestätigung müssen übereinstimmen.
         </mat-error>

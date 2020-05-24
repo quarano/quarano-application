@@ -1,14 +1,16 @@
-import {PhoneOrMobilePhoneValidator} from '../../validators/phone-validator';
-import {TrimmedPatternValidator} from '../../validators/trimmed-pattern.validator';
-import {SubSink} from 'subsink';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Moment} from 'moment';
-import {ClientDto} from '../../models/client';
-import {EnrollmentService} from '../../services/enrollment.service';
-import {SnackbarService} from '../../services/snackbar.service';
-import {VALIDATION_PATTERNS} from '../../validators/validation-patterns';
+import { SubSink } from 'subsink';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Moment } from 'moment';
+import { ClientDto } from '../../models/client';
+import { EnrollmentService } from '../../services/enrollment.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import {
+  VALIDATION_PATTERNS,
+  PhoneOrMobilePhoneValidator,
+  TrimmedPatternValidator
+} from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
   selector: 'qro-profile',
@@ -55,10 +57,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       houseNumber: new FormControl(this.client.houseNumber, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl(this.client.zipCode,
         [Validators.required, Validators.minLength(5),
-          Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
+        Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
       city: new FormControl(this.client.city, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    }, {validators: [PhoneOrMobilePhoneValidator]});
+    }, { validators: [PhoneOrMobilePhoneValidator] });
   }
 
   get dateOfBirth() {

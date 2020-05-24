@@ -1,11 +1,10 @@
-import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@quarano-frontend/shared/util-form-validation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonalDataFormComponent } from './personal-data-form.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {VALIDATION_PATTERNS} from '../../../validators/validation-patterns';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PersonalDataFormComponent', () => {
   let component: PersonalDataFormComponent;

@@ -1,4 +1,8 @@
-import { TrimmedPatternValidator } from '../../../validators/trimmed-pattern.validator';
+import {
+  ValidationErrorGenerator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator
+} from '@quarano-frontend/shared/util-form-validation';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
@@ -6,7 +10,6 @@ import { MatInput } from '@angular/material/input';
 import { ContactPersonDto, ContactPersonModifyDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { VALIDATION_PATTERNS } from '../../../validators/validation-patterns';
 
 @Component({
   selector: 'qro-contact-person-form',
@@ -23,6 +26,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   showIdentificationHintField = false;
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,

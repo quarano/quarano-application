@@ -1,8 +1,12 @@
+import {
+  ValidationErrorGenerator,
+  PasswordValidator,
+  ConfirmValidPasswordMatcher
+} from '@quarano-frontend/shared/util-form-validation';
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { AuthService } from '@quarano-frontend/auth/domain';
 import { MatInput } from '@angular/material/input';
-import { PasswordValidator } from './../../../../../../apps/quarano-frontend/src/app/validators/password-validator';
 import { UserService } from './../../../../../../apps/quarano-frontend/src/app/services/user.service';
-import { ConfirmValidPasswordMatcher } from './../../../../../../apps/quarano-frontend/src/app/validators/ConfirmValidPasswordMatcher';
 import { SubSink } from 'subsink';
 import { SnackbarService } from './../../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -19,12 +23,14 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private userService: UserService,
     private snackbarService: SnackbarService,
     private router: Router,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private badRequestService: BadRequestService) { }
 
   ngOnInit() {
     this.createForm();
@@ -59,6 +65,8 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.snackbarService.success('Ihr Passwort wurde geändert');
           this.router.navigate(['/welcome']);
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
         }).add(() => this.loading = false));
     }
   }

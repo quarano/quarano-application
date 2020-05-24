@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import {SnackbarService} from '../services/snackbar.service';
+import { SnackbarService } from '../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
 
 export enum HttpStatusCode {
   unauthorized = 401,
@@ -18,6 +18,10 @@ export enum HttpStatusCode {
   notFound = 404,
   badRequest = 400,
   internalServerError = 500,
+}
+
+export interface IBadRequestError {
+  badRequestErrors: any;
 }
 
 @Injectable()
@@ -63,7 +67,6 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           const serverError = error.error;
-          let modelStateErrors = null;
 
           if (
             error.status === HttpStatusCode.notFound.valueOf() ||
@@ -86,15 +89,10 @@ export class ErrorInterceptor implements HttpInterceptor {
             error.status === HttpStatusCode.badRequest.valueOf() &&
             (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
           ) {
-            // ToDo ggf. anpassen, wenn das Fehlerformat für 400 vom Backend vorliegt https://jira.quarano.de/browse/CORE-85
-            this.snackbarService.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt.');
-            const errorJson = JSON.parse(serverError);
-            if (errorJson && errorJson.message) {
-              console.log(errorJson.message);
-            }
+            return throwError({ badRequestErrors: serverError } as IBadRequestError);
           }
 
-          return throwError(modelStateErrors || serverError || 'Server Fehler');
+          return throwError(serverError || 'Server Fehler');
         }
         return throwError(error);
       }),
