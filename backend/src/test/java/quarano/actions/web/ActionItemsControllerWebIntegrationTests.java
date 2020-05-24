@@ -9,11 +9,13 @@ import net.minidev.json.JSONArray;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.actions.DescriptionCode;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.RepresentationModel;
@@ -154,5 +156,37 @@ class ActionItemsControllerWebIntegrationTests {
 		assertThat(document.read("$[1].healthSummary", JSONArray.class)).isEqualTo(List.of());
 		assertThat(document.read("$[1].processSummary", JSONArray.class))
 				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
+	}
+
+	@Test // CORE-224
+	@WithQuaranoUser("agent1")
+	void getActionsDoesNotReturnConcludedCases() throws Exception {
+
+		// get an active case with open actions 
+		var actionsResponse = mvc.perform(get("/api/hd/actions")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var actionsDocument = JsonPath.parse(actionsResponse);
+		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
+		
+		// conclude the case
+		TrackedCaseIdentifier caseIdentifier = TrackedCaseIdentifier.of(UUID.fromString(contactCaseId));
+		var trackedCase = cases.findById(caseIdentifier).get();
+		
+		trackedCase.conclude();
+		cases.save(trackedCase);
+		
+		// request list again
+		var actionsResponseAfterConclude = mvc.perform(get("/api/hd/actions")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+		
+		var cases = JsonPath.parse(actionsResponseAfterConclude).read("$..caseId", JSONArray.class);
+		
+		// check that case is not cntained anymore
+		assertThat(cases).doesNotContain(contactCaseId);
+
+
 	}
 }

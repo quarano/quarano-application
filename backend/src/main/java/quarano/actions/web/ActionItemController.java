@@ -89,7 +89,7 @@ public class ActionItemController {
 
 					var summary = trackedCaseRepresentations.toSummary(trackedCase);
 
-					return new CaseActionSummary(trackedCase, items.findUnresolvedByCase(trackedCase), summary);
+					return new CaseActionSummary(trackedCase, items.findUnresolvedByActiveCase(trackedCase), summary);
 
 				}) //
 				.stream() //
