@@ -8,6 +8,7 @@ import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
 import quarano.department.RegistrationDetails;
 import quarano.department.RegistrationException;
+import quarano.department.RegistrationException.Problem;
 import quarano.department.RegistrationManagement;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
@@ -55,7 +56,10 @@ public class RegistrationController {
 
 		return registration.createTrackedPersonAccount(details) //
 				.<HttpEntity<?>> map(__ -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build())
-				.recover(RegistrationException.class, it -> map(dto, it).toBadRequest()) //
+				.recover(RegistrationException.class, it -> dto //
+						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage()) //
+						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage()) //
+						.toBadRequest())				
 				.recover(ActivationCodeException.class, it -> dto //
 						.rejectField("clientCode", "Invalid", it.getMessage()) //
 						.toBadRequest())

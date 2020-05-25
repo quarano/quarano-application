@@ -24,11 +24,11 @@ public class RegistrationException extends RuntimeException {
 
 	public static RegistrationException forInvalidUsername(RegistrationDetails details) {
 		return new RegistrationException(Problem.INVALID_USERNAME,
-				"Invalid username " + details.getUsername() + "!");
+				"Invalid.accountRegistration.username");
 	}
 
 	public static RegistrationException forInvalidBirthDay(RegistrationDetails details) {
-		return new RegistrationException(Problem.INVALID_BIRTHDAY, "Invalid birth date!");
+		return new RegistrationException(Problem.INVALID_BIRTHDAY, "Invalid.accountRegistration.wrongBirthDate");
 	}
 
 	public enum Problem {

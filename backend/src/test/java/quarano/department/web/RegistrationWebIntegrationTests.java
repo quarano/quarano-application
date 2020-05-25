@@ -119,7 +119,9 @@ class RegistrationWebIntegrationTests {
 		var payload = expectFailedRegistration(registrationDto);
 		var document = JsonPath.parse(payload);
 
-		assertThat(document.read("$.username", String.class)).isNotNull();
+		var invalidUsernameMessage = messages.getMessage("Invalid.accountRegistration.username");
+
+		assertThat(document.read("$.username", String.class)).isEqualTo(invalidUsernameMessage);
 
 		checkLoginFails("DemoAccount", password);
 	}
@@ -206,6 +208,8 @@ class RegistrationWebIntegrationTests {
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
 	}
+	
+	
 
 	@Test
 	@Disabled
@@ -243,8 +247,10 @@ class RegistrationWebIntegrationTests {
 		// when
 		var responseBody = expectFailedRegistration(payload);
 		var document = JsonPath.parse(responseBody);
+		
+		var wrongDateMessage = messages.getMessage("Invalid.accountRegistration.wrongBirthDate");
 
-		assertThat(document.read("$.dateOfBirth", String.class)).isNotNull();
+		assertThat(document.read("$.dateOfBirth", String.class)).isEqualTo(wrongDateMessage);
 
 		checkLoginFails("DemoAccount", password);
 	}
