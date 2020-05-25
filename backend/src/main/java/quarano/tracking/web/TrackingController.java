@@ -12,7 +12,7 @@ import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
@@ -50,7 +50,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public class TrackingController {
 
 	private final @NonNull TrackedPersonRepository repository;
-	private final @NonNull DiaryEntryRepository entries;
+	private final @NonNull DiaryManagement diaryManagement;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
@@ -92,7 +92,7 @@ public class TrackingController {
 	@GetMapping("/api/encounters")
 	public Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
 
-		var diary = entries.findByTrackedPerson(person);
+		var diary = diaryManagement.findDiaryFor(person);
 
 		return person.getEncounters().stream() //
 				.map(it -> EncounterDto.of(it, diary, person));
@@ -105,7 +105,7 @@ public class TrackingController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
 
-		var diary = entries.findByTrackedPerson(person);
+		var diary = diaryManagement.findDiaryFor(person);
 
 		return contacts.findById(payload.getContactId()) //
 				.filter(it -> it.belongsTo(person)) //
@@ -132,7 +132,7 @@ public class TrackingController {
 	@GetMapping("/api/encounters/{identifier}")
 	HttpEntity<?> getEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
-		var diary = entries.findByTrackedPerson(person);
+		var diary = diaryManagement.findDiaryFor(person);
 
 		return ResponseEntity.of(person.getEncounters() //
 				.havingIdOf(identifier) //

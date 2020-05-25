@@ -12,7 +12,7 @@ import org.springframework.data.util.Streamable;
 /**
  * @author Oliver Drotbohm
  */
-public interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEntryIdentifier> {
+interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEntryIdentifier> {
 
 	default Diary findByTrackedPerson(TrackedPerson person) {
 		return findByTrackedPersonId(person.getId());

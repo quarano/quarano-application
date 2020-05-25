@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
-import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.Slot;
 import quarano.tracking.Slot.TimeOfDay;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -30,7 +30,7 @@ class DiaryMappingIntegrationTests {
 
 	private final DiaryRepresentations representations;
 	private final TrackedPersonRepository people;
-	private final DiaryEntryRepository entries;
+	private final DiaryManagement entries;
 	private final ObjectMapper mapper;
 	private final WebApplicationContext context;
 
@@ -38,7 +38,7 @@ class DiaryMappingIntegrationTests {
 	void doesNotExposeCreationOfCurrentEveningsEntryInTheMorning() throws Exception {
 
 		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var diary = entries.findByTrackedPerson(person);
+		var diary = entries.findDiaryFor(person);
 		var thisMorning = Slot.of(LocalDate.now(), TimeOfDay.MORNING);
 		var summary = representations.toSummary(diary, person.getAccountRegistrationDate(), thisMorning);
 

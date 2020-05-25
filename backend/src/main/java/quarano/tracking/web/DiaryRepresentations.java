@@ -46,7 +46,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Component
 @RequiredArgsConstructor
-public class DiaryRepresentations {
+class DiaryRepresentations {
 
 	private final MapperWrapper mapper;
 	private final DiaryProperties configuration;

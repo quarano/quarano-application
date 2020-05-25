@@ -5,9 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntryRepository;
-import quarano.tracking.Encounter;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
@@ -25,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class ContactChaser {
 
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull DiaryEntryRepository diaries;
+	private final @NonNull DiaryManagement diaries;
 
 	public Stream<Contact> findIndexContactsFor(TrackedCase contactCase) {
 
@@ -42,22 +40,11 @@ public class ContactChaser {
 	// having that index case, we need to find the contact date per encounters of index person
 	private Contact fromIndexCase(TrackedCase indexCase, ContactPerson contactPerson) {
 
-		LocalDate encounterDate = indexCase.getTrackedPerson().getEncounters().stream() //
-				.filter(it -> it.isEncounterWith(contactPerson)) //
-				.findFirst() //
-				.map(Encounter::getDate) //
+		var trackedPerson = indexCase.getTrackedPerson();
+		var encounters = trackedPerson.getEncounters();
+		var encounterDate = encounters.getDateOfFirstEncounterWith(contactPerson) //
+				.or(() -> diaries.findDiaryFor(trackedPerson).getDateOfFirstEncounterWith(contactPerson)) //
 				.orElse(null);
-
-		if (encounterDate == null) {
-			// there are no encounters created for diary entries. so we need to find the contact person in the diaries
-			encounterDate = diaries.findByTrackedPersonId(indexCase.getTrackedPerson().getId())
-					.stream()
-					.filter(diary -> diary.getContacts().contains(contactPerson))
-					.map(DiaryEntry::getSlotDate)
-					.sorted()
-					.findFirst()
-					.orElse(null);
-		}
 
 		return new Contact(indexCase, contactPerson, encounterDate);
 	}

@@ -9,7 +9,7 @@ import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.Slot;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -29,16 +29,14 @@ class ActionItemRepositoryIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
-	private final DiaryEntryRepository entries;
+	private final DiaryManagement entries;
 
 	@Test
 	void persistsDescriptionArguments() {
 
 		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var entry = DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
-				.setBodyTemperature(BodyTemperature.of(41.0f));
-
-		entries.save(entry);
+		var entry = entries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
+				.setBodyTemperature(BodyTemperature.of(41.0f)), person);
 
 		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.INCREASED_TEMPERATURE, BodyTemperature.of(36.0f), BodyTemperature.of(40.0f)));
@@ -54,7 +52,8 @@ class ActionItemRepositoryIntegrationTests {
 	void testFindUnresolvedByPerson() {
 
 		var person = VALID_TRACKED_PERSON4_ID_DEP1;
-		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE).resolveAutomatically(repository::save);
+		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
+				.resolveAutomatically(repository::save);
 
 		assertThat(repository.findByTrackedPerson(person).stream()) //
 				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0)) //

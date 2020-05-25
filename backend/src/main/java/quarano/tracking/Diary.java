@@ -31,7 +31,7 @@ public class Diary implements Streamable<DiaryEntry> {
 	public Optional<DiaryEntry> getEntryFor(Encounter encounter) {
 
 		return enties.stream() //
-				.filter(it -> it.contains(encounter)) //
+				.filter(it -> it.containsEncounterWith(encounter.getContact())) //
 				.findFirst();
 	}
 
@@ -60,6 +60,30 @@ public class Diary implements Streamable<DiaryEntry> {
 				});
 	}
 
+	public boolean containsCurrentEntry() {
+
+		return enties.stream() //
+				.anyMatch(it -> it.hasSlot(Slot.now()));
+	}
+
+	public Optional<LocalDate> getDateOfFirstEncounterWith(ContactPerson contact) {
+
+		return enties.stream() //
+				.filter(it -> it.containsEncounterWith(contact)) //
+				.map(DiaryEntry::getSlotDate) //
+				.sorted() //
+				.findFirst();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
+	@Override
+	public Iterator<DiaryEntry> iterator() {
+		return enties.iterator();
+	}
+
 	private static Optional<DiaryEntry> getSlotEntryFrom(Slot slot, @Nullable Collection<DiaryEntry> sources) {
 
 		if (sources == null) {
@@ -70,21 +94,6 @@ public class Diary implements Streamable<DiaryEntry> {
 				.stream() //
 				.filter(entry -> entry.hasSlot(slot)) //
 				.findFirst();
-	}
-
-	public boolean containsCurrentEntry() {
-
-		return enties.stream() //
-				.anyMatch(it -> it.hasSlot(Slot.now()));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Iterable#iterator()
-	 */
-	@Override
-	public Iterator<DiaryEntry> iterator() {
-		return enties.iterator();
 	}
 
 	@ToString

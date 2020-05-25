@@ -10,7 +10,7 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.Diary;
 import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.Encounter;
 import quarano.tracking.Encounters;
 import quarano.tracking.Slot;
@@ -27,13 +27,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.util.Streamable;
 
 @QuaranoUnitTest
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ContactChaserTest {
 
 	@Mock TrackedCaseRepository cases;
-	@Mock DiaryEntryRepository diaries;
+	@Mock DiaryManagement diaries;
 
 	@InjectMocks ContactChaser contactChaser;
 
@@ -96,8 +99,10 @@ class ContactChaserTest {
 		var contactCase = contactCase(CaseType.CONTACT, indexPersonId);
 
 		var indexCase = indexCase(indexPersonId);
+		var trackedPerson = indexCase.getTrackedPerson();
+
 		when(cases.findByTrackedPerson(indexPersonId)).thenReturn(Optional.of(indexCase));
-		when(diaries.findByTrackedPersonId(indexPersonId)).thenReturn(diary(indexPersonId, contactCase.getOriginContacts().get(0)));
+		when(diaries.findDiaryFor(trackedPerson)).thenReturn(diary(indexPersonId, contactCase.getOriginContacts().get(0)));
 
 		var contacts = contactChaser.findIndexContactsFor(contactCase);
 
@@ -105,12 +110,12 @@ class ContactChaserTest {
 
 			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
 			assertThat(contact.getContactAt()).isEqualTo(LocalDate.now());
-			assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
+			assertThat(contact.getPerson()).isEqualTo(trackedPerson);
 			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
 
 		}, Index.atIndex(0));
 
-		verify(diaries, times(1)).findByTrackedPersonId(indexPersonId);
+		verify(diaries, times(1)).findDiaryFor(trackedPerson);
 	}
 
 	@Test
@@ -129,7 +134,8 @@ class ContactChaserTest {
 	}
 
 	private static TrackedCase indexCase(TrackedPersonIdentifier identifier) {
-		TrackedPerson person = spy(new TrackedPerson("firstName", "lastName"));
+
+		var person = spy(new TrackedPerson("firstName", "lastName"));
 		when(person.getId()).thenReturn(identifier);
 
 		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
@@ -152,6 +158,8 @@ class ContactChaserTest {
 	}
 
 	private static Diary diary(TrackedPersonIdentifier trackedPersonIdentifier, ContactPerson contactPerson) {
-		return Diary.of(Streamable.of(DiaryEntry.of(Slot.of(LocalDate.now(), Slot.TimeOfDay.MORNING), trackedPersonIdentifier).setContacts(List.of(contactPerson))));
+		return Diary
+				.of(Streamable.of(DiaryEntry.of(Slot.of(LocalDate.now(), Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
+						.setContacts(List.of(contactPerson))));
 	}
 }

@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
-import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.Slot;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
@@ -28,7 +28,7 @@ import com.tngtech.archunit.thirdparty.com.google.common.net.HttpHeaders;
 class DiaryControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
-	private final DiaryEntryRepository entries;
+	private final DiaryManagement entries;
 	private final ObjectMapper jackson;
 
 	@Test
@@ -62,7 +62,7 @@ class DiaryControllerWebIntegrationTests {
 	@WithQuaranoUser("test3")
 	void updatesDiaryEntry() throws Exception {
 
-		var entry = entries.findByTrackedPersonId(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
+		var entry = entries.findDiaryFor(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
 				.iterator().next();
 		var slot = entry.getSlot();
 

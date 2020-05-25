@@ -54,8 +54,9 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	private @ManyToMany List<Symptom> symptoms = new ArrayList<>();
 	private String note;
 	private BodyTemperature bodyTemperature;
-	private @AttributeOverride(name = "trackedPersonId",
-			column = @Column(name = "tracked_person_id")) TrackedPersonIdentifier trackedPersonId;
+
+	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) //
+	private TrackedPersonIdentifier trackedPersonId;
 
 	DiaryEntry(Slot slot, TrackedPersonIdentifier id) {
 		this(DiaryEntryIdentifier.of(UUID.randomUUID()), id, LocalDateTime.now(), slot);
@@ -110,13 +111,8 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 				.collect(Collectors.toList());
 	}
 
-	boolean contains(Encounter encounter) {
-
-		// if (!encounter.happenedOn(getDate())) {
-		// return false;
-		// }
-
-		return contacts.contains(encounter.getContact());
+	boolean containsEncounterWith(ContactPerson contactPerson) {
+		return contacts.contains(contactPerson);
 	}
 
 	@Override
