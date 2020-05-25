@@ -82,7 +82,7 @@ class RegistrationWebIntegrationTests {
 		var password = "myPassword";
 		var username = "testusername";
 
-		var registrationDto = RegistrationDto.builder() //
+		var payload = RegistrationDto.builder() //
 				.username(username) //
 				.password(password) //
 				.passwordConfirm(password) //
@@ -91,12 +91,7 @@ class RegistrationWebIntegrationTests {
 				.build();
 
 		// when
-		var result = mvc.perform(post("/api/registration") //
-				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(registrationDto))) //
-				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
+		var result = expectFailedRegistration(payload);
 
 		var document = JsonPath.parse(result);
 
@@ -121,17 +116,8 @@ class RegistrationWebIntegrationTests {
 				.build();
 
 		// when
-		var responseBody = mvc.perform(post("/api/registration") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(registrationDto))) //
-				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
-
-		assertThat(responseBody).isNotBlank();
-
-		var document = JsonPath.parse(responseBody);
+		var payload = expectFailedRegistration(registrationDto);
+		var document = JsonPath.parse(payload);
 
 		assertThat(document.read("$.username", String.class)).isNotNull();
 
@@ -190,7 +176,7 @@ class RegistrationWebIntegrationTests {
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
 	}
-	
+
 	@Test
 	void rejectsInvalidCharactersForStringFields() throws Exception {
 
@@ -217,7 +203,6 @@ class RegistrationWebIntegrationTests {
 		var document = JsonPath.parse(responseBody);
 
 		var usernameMessage = messages.getMessage("UserName");
-		var emailMessage = messages.getMessage("Email");
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
 	}
@@ -309,7 +294,7 @@ class RegistrationWebIntegrationTests {
 				.andExpect(status().isUnauthorized());
 	}
 
-	public String createLoginRequestBody(String username, String password) throws Exception {
+	private String createLoginRequestBody(String username, String password) throws Exception {
 		return mapper.writeValueAsString(Map.of("username", username, "password", password));
 	}
 
