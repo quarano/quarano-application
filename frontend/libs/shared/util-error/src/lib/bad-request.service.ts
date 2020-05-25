@@ -22,7 +22,7 @@ export class BadRequestService {
       });
       if (!handled) {
         this.snackbar.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt');
-        console.log(error.BadRequestErrors);
+        console.log(requestErrors);
       }
     }
   }
