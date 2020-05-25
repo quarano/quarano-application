@@ -9,6 +9,7 @@ import quarano.core.web.LoggedIn;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.DiaryEntryRepository;
+import quarano.tracking.DiaryManagement;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 import quarano.tracking.web.DiaryRepresentations.DiarySummary;
@@ -36,6 +37,7 @@ public class DiaryController {
 	private final @NonNull DiaryEntryRepository entries;
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull DiaryRepresentations representations;
+	private final @NonNull DiaryManagement mgmt;
 
 	@GetMapping("/api/diary")
 	DiarySummary getDiary(@LoggedIn TrackedPerson person) {
@@ -59,7 +61,7 @@ public class DiaryController {
 		}
 
 		return representations.from(payload, person, errors) //
-				.mapLeft(entries::save) //
+				.mapLeft(it -> mgmt.updateDiaryEntry(it, person)) //
 				.fold(entry -> handle(entry, person), //
 						error -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
@@ -93,7 +95,7 @@ public class DiaryController {
 		}
 
 		return representations.from(payload, entry, errors) //
-				.peekLeft(it -> entries.save(it)) //
+				.mapLeft(it -> mgmt.updateDiaryEntry(it, person)) //
 				.mapLeft(representations::toRepresentation) //
 				.<HttpEntity<?>> fold(ResponseEntity.ok()::body, //
 						__ -> ErrorsDto.of(errors, messages).toBadRequest());
