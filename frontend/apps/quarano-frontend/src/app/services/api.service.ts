@@ -66,8 +66,8 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/diary/${diaryEntry.id}`, diaryEntry);
   }
 
-  registerClient(registerClient: RegisterDto): Observable<string> {
-    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient, { responseType: 'text' });
+  registerClient(registerClient: RegisterDto): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient);
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
