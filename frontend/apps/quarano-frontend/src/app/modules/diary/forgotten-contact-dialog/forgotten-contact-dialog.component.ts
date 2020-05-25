@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
@@ -28,6 +29,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
+    private badRequestService: BadRequestService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[]; }
   ) {
@@ -61,6 +63,8 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
         .subscribe(entries => {
           this.snackbarService.success(`${entries.length} retrospektive Kontakte erfolgreich gespeichert`);
           this.matDialogRef.close();
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
         }).add(() => this.loading = false));
     }
   }

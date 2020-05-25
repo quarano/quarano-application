@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -27,7 +28,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
-    private router: Router) {
+    private router: Router,
+    private badRequestService: BadRequestService) {
   }
 
   ngOnInit() {
@@ -89,6 +91,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
         this.formGroup.markAsPristine();
         this.router.navigate(['/']);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       }));
   }
 }

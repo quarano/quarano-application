@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { MatInput } from '@angular/material/input';
 import { roles, IRole } from '../../../../models/role';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -37,6 +38,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private snackbarService: SnackbarService,
     private router: Router,
+    private badRequestService: BadRequestService
   ) { }
 
   ngOnInit() {
@@ -136,6 +138,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
           this.snackbarService.success(`Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`);
           this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
         }
       ).add(() => this.loading = false);
   }
@@ -148,6 +152,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
             `${this.account.lastName} wurden erfolgreich aktualisiert`);
           this.formGroup.markAsPristine();
           this.router.navigate(['/administration/accounts']);
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
         }
       ).add(() => this.loading = false);
   }

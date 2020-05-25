@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
@@ -32,7 +33,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-
+    private badRequestService: BadRequestService
   ) { }
 
   ngOnInit() {
@@ -119,6 +120,8 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         this.formGroup.markAsPristine();
         this.contactCreated.emit(createdContactPerson);
         this.dirty.emit(false);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       }).add(() => this.loading = false));
   }
 
@@ -130,6 +133,8 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         this.formGroup.markAsPristine();
         this.contactModified.emit();
         this.dirty.emit(false);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       }).add(() => this.loading = false));
   }
 

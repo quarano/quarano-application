@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import {
   ValidationErrorGenerator,
   ConfirmValidPasswordMatcher,
@@ -59,7 +60,8 @@ export class RegisterComponent implements OnInit {
     private apiService: ApiService,
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private badRequestService: BadRequestService) {
   }
 
   ngOnInit(): void {
@@ -110,6 +112,8 @@ export class RegisterComponent implements OnInit {
         () => {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
           this.router.navigate(['/welcome/login']);
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.registrationForm);
         }
       ).add(() => this.loading = false);
   }

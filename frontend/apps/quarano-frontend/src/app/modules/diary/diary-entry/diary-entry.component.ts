@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { DateFunctions } from '@quarano-frontend/shared/util';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { SubSink } from 'subsink';
@@ -51,7 +52,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private snackbarService: SnackbarService,
     private router: Router,
     private dialog: MatDialog,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private badRequestService: BadRequestService) { }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -138,6 +140,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich angelegt');
         this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       }).add(() => this.loading = false));
   }
 
@@ -150,6 +154,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
         this.snackbarService.success('Tagebuch-Eintrag erfolgreich aktualisiert');
         this.formGroup.markAsPristine();
         this.router.navigate(['/diary']);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       }).add(() => this.loading = false));
   }
 

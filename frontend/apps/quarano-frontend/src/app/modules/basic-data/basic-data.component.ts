@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -70,7 +71,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
     private router: Router,
-    private changeDetect: ChangeDetectorRef) {
+    private changeDetect: ChangeDetectorRef,
+    private badRequestService: BadRequestService) {
   }
 
   ngOnInit() {
@@ -163,6 +165,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.stepper.next();
           }
           this.firstFormLoading = false;
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
         }).add(() => this.firstFormLoading = false);
     }
   }
@@ -226,6 +230,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.snackbarService.success('Fragebogen erfolgreich gespeichert');
 
           this.stepper.next();
+        }, error => {
+          this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
         }).add(() => this.secondFormLoading = false));
     }
   }

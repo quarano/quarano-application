@@ -10,6 +10,7 @@ export class BadRequestService {
   constructor(private snackbar: SnackbarService) { }
 
   public handleBadRequestError(error: any, form: FormGroup) {
+    debugger;
     let handled = false;
     if (error.hasOwnProperty('badRequestErrors')) {
       const requestErrors = error.badRequestErrors;
