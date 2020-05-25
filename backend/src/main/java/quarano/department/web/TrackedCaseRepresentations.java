@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -167,8 +168,12 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	private ErrorsDto validateForCreation(TrackedCaseDto payload, CaseType type, ErrorsDto errors) {
 
 		if (type.equals(CaseType.CONTACT)) {
-			errors.rejectField(payload.isInfected(), "infected", "ContactCase.infected");
-			errors.rejectField(payload.getTestDate() != null, "testDate", "ContactCase.infected");
+
+			var positiveTestResult = payload.getTestDate() != null && payload.isInfected();
+
+			Stream.of("infected", "testDate") //
+					.forEach(it -> errors.rejectField(positiveTestResult, it, "ContactCase.infected"));
+
 		}
 
 		return validate(payload, type, errors);
