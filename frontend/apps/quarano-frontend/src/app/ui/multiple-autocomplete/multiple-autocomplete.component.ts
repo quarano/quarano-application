@@ -33,6 +33,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     ).subscribe((data: string[]) => {
       this.selectedItemIds = data;
       this.control.markAsDirty();
+      this.input.nativeElement.blur();
       data.forEach(value => this.added.emit(value));
     });
 
