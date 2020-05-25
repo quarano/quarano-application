@@ -62,7 +62,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Enumerated(EnumType.STRING) //
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter @Setter Quarantine quarantine = null;
-	
+
 	private @Getter @Setter String extReferenceNumber;
 
 	@OneToMany(cascade = { CascadeType.ALL }) //
@@ -194,7 +194,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public TrackedCase report(TestResult testResult) {
 
 		this.testResult = testResult;
-		this.type = CaseType.INDEX;
+		this.type = testResult.isInfected() ? CaseType.INDEX : type;
 
 		return this;
 	}

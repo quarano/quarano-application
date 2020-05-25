@@ -28,6 +28,6 @@ public class TestResult {
 	}
 
 	public static TestResult notInfected(LocalDate date) {
-		return new TestResult(true, date);
+		return new TestResult(false, date);
 	}
 }

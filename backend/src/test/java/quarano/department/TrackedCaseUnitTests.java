@@ -15,6 +15,7 @@ import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -150,6 +151,18 @@ class TrackedCaseUnitTests {
 						.setEmailAddress(EmailAddress.of("test@test.de")) //
 						.setPhoneNumber(null) //
 						.setMobilePhoneNumber(null), false));
+	}
+
+	@Test // CORE-225
+	void turnsCaseIntoIndexCaseForPositiveReport() {
+
+		var person = TrackedPersonDataInitializer.createMarkus();
+		var department = new Department("Musterstadt", UUID.randomUUID());
+
+		var trackedCase = new TrackedCase(person, CaseType.CONTACT, department);
+
+		assertThat(trackedCase.report(TestResult.notInfected(LocalDate.now())).isIndexCase()).isFalse();
+		assertThat(trackedCase.report(TestResult.infected(LocalDate.now())).isIndexCase()).isTrue();
 	}
 
 	@ParameterizedTest
