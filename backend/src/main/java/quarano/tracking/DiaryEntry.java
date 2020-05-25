@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.core.QuaranoAggregate;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.CaseUpdated;
 import quarano.reference.Symptom;
 import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -133,6 +135,13 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 		return BY_DATE.compare(this, that);
 	}
 
+	public DiaryEntry markEdited() {
+
+		registerEvent(DiaryEntryUpdated.of(this));
+
+		return this;
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
@@ -155,6 +164,11 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 
 	@Value(staticConstructor = "of")
 	public static class DiaryEntryAdded implements DomainEvent {
+		DiaryEntry entry;
+	}
+	
+	@Value(staticConstructor = "of")
+	public static class DiaryEntryUpdated implements DomainEvent {
 		DiaryEntry entry;
 	}
 }

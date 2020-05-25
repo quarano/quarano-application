@@ -75,7 +75,7 @@ class DiaryRepresentations {
 	}
 
 	Either<DiaryEntry, Errors> from(DiaryEntryInput input, DiaryEntry existing, Errors errors) {
-		return mapper.map(input, existing, errors);
+		return mapper.map(input, existing, errors).peekLeft(DiaryEntry::markEdited);
 	}
 
 	@Data

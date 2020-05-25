@@ -1,14 +1,11 @@
 package quarano.department;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import quarano.QuaranoUnitTest;
-import quarano.account.Department;
-import quarano.core.EmailAddress;
-import quarano.tracking.*;
-import quarano.tracking.DiaryEntry.DiaryEntryAdded;
-import quarano.tracking.TrackedPerson.EncounterReported;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -21,6 +18,24 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.data.util.Streamable;
+
+import quarano.QuaranoUnitTest;
+import quarano.account.Department;
+import quarano.core.EmailAddress;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactWays;
+import quarano.tracking.Diary;
+import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
+import quarano.tracking.DiaryEntry.DiaryEntryUpdated;
+import quarano.tracking.DiaryManagement;
+import quarano.tracking.Encounter;
+import quarano.tracking.Slot;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.EncounterReported;
+import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 
 /**
  * @author Oliver Drotbohm
@@ -52,6 +67,7 @@ class TrackingEventListenerUnitTests {
 		contactPerson.setOwnerId(person.getId());
 		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(contactPerson)).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -75,6 +91,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(encounter.getContact())).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -100,6 +117,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter1, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(encounter1.getContact())).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -122,7 +140,7 @@ class TrackingEventListenerUnitTests {
 		var sandra = TrackedPersonDataInitializer.createSandra();
 		var trackedCase = createIndexCaseFor(sandra);
 		when(cases.findByTrackedPerson(sandra.getId())).thenReturn(Optional.of(trackedCase));
-
+		
 		ContactPerson contact1FromDiary = new ContactPerson("Hans", "Meier", ContactWays.ofIdentificationHint("test"));
 		contact1FromDiary.setOwnerId(sandra.getId());
 		ContactPerson contact1bFromDiary = new ContactPerson("Hans2", "Meier2", ContactWays.ofIdentificationHint("test"));
@@ -168,7 +186,9 @@ class TrackingEventListenerUnitTests {
 
 		when(diaryEntries.findDiaryFor(sandra.getId())).thenReturn(Diary.of(entriesOfSandra));
 		when(people.findById(sandra.getId())).thenReturn(Optional.of(sandra));
-
+		when(cases.findByOriginContacts(contact2FromEncounters)).thenReturn(Streamable.empty());
+		when(cases.findByOriginContacts(contact1dFromDiary)).thenReturn(Streamable.empty());
+		
 		Encounter encounter1InThePastWithNewContact = sandra.reportContactWith(contact2FromEncounters,
 				LocalDate.now().minusDays(3));
 
@@ -209,6 +229,76 @@ class TrackingEventListenerUnitTests {
 		verify(cases, times(2)).save(argumentCaptor5.capture());
 
 	}
+	
+	@Test // CORE-189
+	void createContactCasesAutomaticallyForDiaryEntryWithAddAndUpdate() {
+		// Sandra is an Index case
+		var sandra = TrackedPersonDataInitializer.createSandra();
+		var trackedCase = createIndexCaseFor(sandra);
+		
+		ContactPerson contact1FromDiary =
+				new ContactPerson("Hans", "Meier", ContactWays.ofIdentificationHint("test"));
+		contact1FromDiary.setOwnerId(sandra.getId());
+		ContactPerson contact1bFromDiary =
+				new ContactPerson("Hans2", "Meier2", ContactWays.ofIdentificationHint("test"));
+		contact1bFromDiary.setOwnerId(sandra.getId());
+		ContactPerson contact1cFromDiary =
+				new ContactPerson("Hans3", "Meier3", ContactWays.ofIdentificationHint("test"));
+		contact1cFromDiary.setOwnerId(sandra.getId());
+		ContactPerson contact1dFromDiary =
+				new ContactPerson("Hans4", "Meier4", ContactWays.ofIdentificationHint("test"));
+		contact1dFromDiary.setOwnerId(sandra.getId());
+		ContactPerson contact1eFromDiary =
+				new ContactPerson("Hans5", "Meier5", ContactWays.ofIdentificationHint("test"));
+		contact1eFromDiary.setOwnerId(sandra.getId());
+		
+		var entry1OfSandraWithOneContact =
+				DiaryEntry.of(Slot.eveningOf(LocalDate.now().minusDays(2)), sandra) //
+						.setBodyTemperature(BodyTemperature.of(37.5F));
+		entry1OfSandraWithOneContact.setContacts(List.of(contact1FromDiary));
+
+		var entry1bOfSandraWithTwoContacts =
+				DiaryEntry.of(Slot.eveningOf(LocalDate.now().minusDays(2)), sandra) //
+						.setBodyTemperature(BodyTemperature.of(37.5F));
+		entry1bOfSandraWithTwoContacts.setContacts(List.of(contact1bFromDiary, contact1cFromDiary));
+
+		Streamable<DiaryEntry> entriesOfSandra = new Streamable<DiaryEntry>() {
+			@Override
+			public Iterator<DiaryEntry> iterator() {
+				return List.of(entry1OfSandraWithOneContact, entry1bOfSandraWithTwoContacts).iterator();
+			}
+		};
+		
+		when(cases.findByTrackedPerson(sandra.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(contact1dFromDiary)).thenReturn(Streamable.empty());
+		when(diaryEntries.findDiaryFor(sandra.getId())).thenReturn(Diary.of(entriesOfSandra));
+		when(people.findById(sandra.getId())).thenReturn(Optional.of(sandra));
+		
+		var newEntryOfSandraWithNewContact = DiaryEntry.of(Slot.morningOf(LocalDate.now()), sandra) //
+				.setBodyTemperature(BodyTemperature.of(36.5F));
+		newEntryOfSandraWithNewContact.setContacts(List.of(contact1dFromDiary));
+		
+		// a diary entry with a contact which was already listed as encounter => should create an
+		// contact-case
+		var eventDiaryEntryWithNewContact = DiaryEntryAdded.of(newEntryOfSandraWithNewContact);
+		assertThatCode(() -> listener.on(eventDiaryEntryWithNewContact)).doesNotThrowAnyException();
+		ArgumentCaptor<TrackedCase> argumentCaptor = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(1)).save(argumentCaptor.capture());
+		
+		// the existing diary entry with a additional contact which was already listed as encounter => should create an
+		// contact-case
+		TrackedPerson person = new TrackedPerson(contact1dFromDiary);
+		TrackedCase caseOfContact1d = new TrackedCase(person, CaseType.CONTACT,	new Department("Mannheim", UUID.randomUUID()));
+		when(cases.findByOriginContacts(contact1dFromDiary)).thenReturn(Streamable.of(caseOfContact1d));
+		when(cases.findByOriginContacts(contact1eFromDiary)).thenReturn(Streamable.empty());
+		
+		newEntryOfSandraWithNewContact.setContacts(List.of(contact1dFromDiary, contact1eFromDiary));
+		
+		var eventDiaryEntryWithAdditionalContact = DiaryEntryUpdated.of(newEntryOfSandraWithNewContact);
+		assertThatCode(() -> listener.on(eventDiaryEntryWithAdditionalContact)).doesNotThrowAnyException();
+		ArgumentCaptor<TrackedCase> argumentCaptor2 = ArgumentCaptor.forClass(TrackedCase.class);
+		verify(cases, times(2)).save(argumentCaptor2.capture());
+	}
 
 	@Test
 	void createContactCaseWithTypeContactMedical() {
@@ -224,6 +314,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(contact)).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -252,6 +343,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(encounter.getContact())).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -281,6 +373,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(encounter.getContact())).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 
@@ -305,6 +398,7 @@ class TrackingEventListenerUnitTests {
 		var event = EncounterReported.firstEncounter(encounter, person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
+		when(cases.findByOriginContacts(encounter.getContact())).thenReturn(Streamable.empty());
 		when(diaryEntries.findDiaryFor(person.getId())).thenReturn(diary);
 		when(people.findById(person.getId())).thenReturn(Optional.of(person));
 

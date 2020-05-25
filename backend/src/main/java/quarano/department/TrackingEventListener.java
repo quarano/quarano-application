@@ -1,18 +1,5 @@
 package quarano.department;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntry.DiaryEntryAdded;
-import quarano.tracking.DiaryManagement;
-import quarano.tracking.Encounter;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPerson.EncounterReported;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.TrackedPersonRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +7,20 @@ import java.util.stream.Stream;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.DiaryEntry;
+import quarano.tracking.DiaryEntry.DiaryEntryAdded;
+import quarano.tracking.DiaryEntry.DiaryEntryUpdated;
+import quarano.tracking.DiaryManagement;
+import quarano.tracking.Encounter;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.EncounterReported;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
 
 /**
  * @author Oliver Drotbohm
@@ -49,8 +50,18 @@ public class TrackingEventListener {
 	 */
 	@EventListener
 	void on(DiaryEntryAdded event) {
-
-		handleContactCaseCreationBasedOnDiaryEntry(event);
+		handleContactCaseCreationBasedOnDiaryEntry(event.getEntry());
+	}
+	
+	/**
+	 * If a DiaryEntry is updated it might contain new contacts to new ContactPerson, which need to be
+	 * turned into contact-cases
+	 *
+	 * @param event Event
+	 */
+	@EventListener
+	void on(DiaryEntryUpdated event) {
+		handleContactCaseCreationBasedOnDiaryEntry(event.getEntry());
 	}
 
 	private void verifyEnrollmentCompleted(EncounterReported event) {
@@ -63,19 +74,19 @@ public class TrackingEventListener {
 		}
 	}
 
-	private void handleContactCaseCreationBasedOnDiaryEntry(DiaryEntryAdded event) {
+	private void handleContactCaseCreationBasedOnDiaryEntry(DiaryEntry entry) {
 		try {
-			List<ContactPerson> contactPersons = event.getEntry().getContacts();
+			List<ContactPerson> contactPersons = entry.getContacts();
 
 			for (ContactPerson person : contactPersons) {
-				if (isFirstContactWith(person, event.getEntry(), null)) {
-					createContactCase(event.getEntry().getTrackedPersonId(), person);
+				if (isFirstContactWith(person, entry, null)) {
+					createContactCase(entry.getTrackedPersonId(), person);
 				}
 			}
 		} catch (Exception e) {
 
 			// just log the error, do not stop usual saving process of the diary entry
-			log.error("Error during automatical contact-case creation check for diary entry " + event.getEntry().getId(), e);
+			log.error("Error during automatical contact-case creation check for diary entry " + entry.getId(), e);
 		}
 	}
 
@@ -85,7 +96,10 @@ public class TrackingEventListener {
 	 */
 	private boolean isFirstContactWith(ContactPerson newContactPerson, @Nullable DiaryEntry entry,
 			@Nullable Encounter encounter) {
-
+		if (!cases.findByOriginContacts(newContactPerson).isEmpty()) {
+			return false;
+		}
+		
 		var trackedPersonId = newContactPerson.getOwnerId();
 
 		// get all contact person of diary entries
