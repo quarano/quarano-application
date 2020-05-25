@@ -241,6 +241,29 @@ class RegistrationWebIntegrationTests {
 				.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
 	}
 
+	@Test // CORE-220
+	public void registerAccountWithInvalidBirthDateFails() throws Exception {
+
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var password = "myPassword";
+
+		var payload = RegistrationDto.builder() //
+				.username("DemoAccount4711") //
+				.password(password) //
+				.passwordConfirm(password) //
+				.dateOfBirth(person.getDateOfBirth().plusDays(1)) //
+				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+				.build();
+
+		// when
+		var responseBody = expectFailedRegistration(payload);
+		var document = JsonPath.parse(responseBody);
+
+		assertThat(document.read("$.dateOfBirth", String.class)).isNotNull();
+
+		checkLoginFails("DemoAccount", password);
+	}
+
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
 		String resultDtoStr = mvc.perform(get("/api/user/me") //
@@ -288,5 +311,15 @@ class RegistrationWebIntegrationTests {
 
 	public String createLoginRequestBody(String username, String password) throws Exception {
 		return mapper.writeValueAsString(Map.of("username", username, "password", password));
+	}
+
+	private String expectFailedRegistration(RegistrationDto payload) throws Exception {
+
+		return mvc.perform(post("/api/registration") //
+				.contentType(MediaType.APPLICATION_JSON) //
+				.content(mapper.writeValueAsString(payload))) //
+				.andExpect(status().isBadRequest()) //
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+				.andReturn().getResponse().getContentAsString();
 	}
 }
