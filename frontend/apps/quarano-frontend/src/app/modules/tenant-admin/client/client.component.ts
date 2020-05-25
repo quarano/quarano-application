@@ -1,7 +1,7 @@
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {BehaviorSubject, merge, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, merge, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take} from 'rxjs/operators';
 import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
 import {cloneDeep} from 'lodash';
@@ -69,9 +69,6 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details?.comments));
-    this.caseIndexContacts$ = this.caseDetail$.pipe(
-      map(details => details?.indexContacts)
-    );
 
     if (this.route.snapshot.queryParamMap.has('tab')) {
       this.tabIndex = Number(this.route.snapshot.queryParamMap.get('tab'));
@@ -82,6 +79,17 @@ export class ClientComponent implements OnInit, OnDestroy {
     if (this.route.snapshot.paramMap.has('type')) {
       this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
+
+    this.caseIndexContacts$ = combineLatest([this.caseDetail$.pipe(
+      map(details => details?.indexContacts)
+    ), this.type$]).pipe(
+      map(([indexContacts, clientType]) => {
+        if (clientType === ClientType.Contact) {
+          return indexContacts;
+        }
+        return undefined;
+      })
+    );
 
     this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
