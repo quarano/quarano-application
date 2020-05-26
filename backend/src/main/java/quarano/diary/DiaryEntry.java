@@ -1,4 +1,4 @@
-package quarano.tracking;
+package quarano.diary;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.core.QuaranoAggregate;
+import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
 import quarano.reference.Symptom;
-import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.Symptoms;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
@@ -19,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -102,13 +105,6 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 
 	public Symptoms getSymptoms() {
 		return Symptoms.of(symptoms);
-	}
-
-	List<Encounter> toEncounters() {
-
-		return contacts.stream() //
-				.map(it -> Encounter.with(it, reportedAt.toLocalDate())) //
-				.collect(Collectors.toList());
 	}
 
 	boolean containsEncounterWith(ContactPerson contactPerson) {

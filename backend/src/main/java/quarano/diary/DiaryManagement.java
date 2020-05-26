@@ -1,26 +1,37 @@
-package quarano.tracking;
+package quarano.diary;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
 
 import java.util.List;
 
 import org.springframework.data.util.Streamable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@Component
+@Service
 @RequiredArgsConstructor
 public class DiaryManagement {
 
 	private final @NonNull DiaryEntryRepository diaries;
 	private final @NonNull TrackedPersonRepository persons;
 
-	public DiaryEntry updateDiaryEntry(DiaryEntry entry, TrackedPerson person) {
+	/**
+	 * @param entry
+	 * @return
+	 */
+	@Transactional
+	public DiaryEntry updateDiaryEntry(DiaryEntry entry) {
 
-		entry.toEncounters().forEach(person::registerEncounter);
+		var person = persons.findById(entry.getTrackedPersonId()) //
+				.orElseThrow(() -> new IllegalStateException("No tracked person found for id " + entry.getTrackedPersonId()));
+
+		var date = entry.getDate();
+
+		entry.getContacts().forEach(it -> person.reportContactWith(it, date));
 
 		persons.save(person);
 

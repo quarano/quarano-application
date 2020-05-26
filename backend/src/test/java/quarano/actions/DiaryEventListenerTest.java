@@ -5,11 +5,11 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryEntryMissing;
+import quarano.diary.Slot;
 import quarano.reference.Symptom;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntryMissing;
-import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;

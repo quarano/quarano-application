@@ -7,10 +7,10 @@ import static quarano.tracking.TrackedPersonDataInitializer.*;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryManagement;
+import quarano.diary.Slot;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryManagement;
-import quarano.tracking.Slot;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -29,14 +29,14 @@ class ActionItemRepositoryIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
-	private final DiaryManagement entries;
+	private final DiaryManagement diaries;
 
 	@Test
 	void persistsDescriptionArguments() {
 
 		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var entry = entries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
-				.setBodyTemperature(BodyTemperature.of(41.0f)), person);
+		var entry = diaries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
+				.setBodyTemperature(BodyTemperature.of(41.0f)));
 
 		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.INCREASED_TEMPERATURE, BodyTemperature.of(36.0f), BodyTemperature.of(40.0f)));

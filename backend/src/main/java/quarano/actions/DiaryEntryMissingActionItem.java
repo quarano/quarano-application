@@ -3,7 +3,7 @@ package quarano.actions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import quarano.tracking.Slot;
+import quarano.diary.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.format.DateTimeFormatter;

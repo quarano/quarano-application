@@ -2,24 +2,18 @@ package quarano.tracking.web;
 
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.reference.Symptom;
-import quarano.reference.SymptomRepository;
+import quarano.core.web.MappingCustomizer;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.ContactWays;
-import quarano.tracking.DiaryEntry;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
-import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,7 +22,8 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-public class TrackingMappingConfiguration {
+@Order(10)
+public class TrackingMappingConfiguration implements MappingCustomizer {
 
 	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
 			= source -> EmailAddress.ofNullable(source.getSource());
@@ -48,8 +43,12 @@ public class TrackingMappingConfiguration {
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
 			= source -> source.getSource() == null ? null : source.getSource().getValue();
 
-	public TrackingMappingConfiguration(ModelMapper mapper, SymptomRepository symptoms,
-			ContactPersonRepository contacts) {
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.web.MappingCustomizer#customize(org.modelmapper.ModelMapper)
+	 */
+	@Override
+	public void customize(ModelMapper mapper) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 		mapper.getConfiguration().setCollectionsMergeEnabled(false);
@@ -144,13 +143,6 @@ public class TrackingMappingConfiguration {
 			it.<String> map(TrackedPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
-		});
-
-		// DiaryEntry
-
-		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).addMappings(it -> {
-			it.with(request -> new ArrayList<>()).<List<Symptom>> map(DiaryEntryInput::getSymptoms,
-					(target, v) -> target.setSymptoms(v));
 		});
 	}
 }

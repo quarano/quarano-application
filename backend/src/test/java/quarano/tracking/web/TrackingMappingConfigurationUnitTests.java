@@ -3,18 +3,15 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.reference.SymptomRepository;
 import quarano.tracking.Address;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 
 /**
@@ -25,12 +22,9 @@ class TrackingMappingConfigurationUnitTests {
 
 	ModelMapper mapper = new ModelMapper();
 
-	@Mock SymptomRepository symptoms;
-	@Mock ContactPersonRepository contacts;
-
 	@BeforeAll
 	void setUp() {
-		new TrackingMappingConfiguration(mapper, symptoms, contacts);
+		new TrackingMappingConfiguration().customize(mapper);
 	}
 
 	@Test

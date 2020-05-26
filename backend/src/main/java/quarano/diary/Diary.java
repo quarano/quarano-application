@@ -1,11 +1,13 @@
-package quarano.tracking;
+package quarano.diary;
 
 import static java.util.stream.Collectors.*;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
+import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.Encounter;
 
 import java.time.LocalDate;
 import java.util.Collection;

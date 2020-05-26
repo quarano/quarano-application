@@ -63,6 +63,12 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 		return this.date.equals(date);
 	}
 
+	public boolean isSameAs(Encounter that) {
+
+		return this.date.equals(that.date) //
+				&& this.contact.equals(that.contact);
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")

@@ -1,6 +1,8 @@
 package quarano;
 
+import lombok.extern.slf4j.Slf4j;
 import quarano.core.EmailTemplates;
+import quarano.core.web.MappingCustomizer;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * @author Oliver Drotbohm
  */
+@Slf4j
 @SpringBootApplication
 @EnableJpaAuditing(dateTimeProviderRef = "quaranoDateTimeProvider")
 @ConfigurationPropertiesScan
@@ -59,13 +62,20 @@ public class Quarano {
 	}
 
 	@Bean
-	public PasswordEncoder getPasswordEncoder() {
+	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
+	ModelMapper modelMapper(List<MappingCustomizer> customizers) {
+
+		var mapper = new ModelMapper();
+
+		customizers.stream() //
+				.peek(it -> log.debug("Applying {} for model mapping.", it.getClass().getName()))
+				.forEach(it -> it.customize(mapper));
+
+		return mapper;
 	}
 
 	@Bean
@@ -110,7 +120,7 @@ public class Quarano {
 	@Configuration
 	@EnableScheduling
 	@Profile("!integrationtest")
-	public static class SchedulingProperties {
+	static class SchedulingProperties {
 
 	}
 }

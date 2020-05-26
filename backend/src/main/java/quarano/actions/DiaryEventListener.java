@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.actions.ActionItem.ItemType;
-import quarano.tracking.DiaryEntry.DiaryEntryAdded;
-import quarano.tracking.DiaryEntryMissing;
+import quarano.diary.DiaryEntryMissing;
+import quarano.diary.DiaryEntry.DiaryEntryAdded;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

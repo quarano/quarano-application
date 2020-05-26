@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.diary.DiaryManagement;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.DiaryManagement;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;

@@ -1,11 +1,13 @@
 package quarano.department.web;
 
+import quarano.core.web.MappingCustomizer;
 import quarano.department.TestResult;
 import quarano.department.TrackedCase;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.Quarantine;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,9 +16,15 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-public class DepartmentMappingConfiguration {
+@Order(30)
+public class DepartmentMappingConfiguration implements MappingCustomizer {
 
-	public DepartmentMappingConfiguration(ModelMapper mapper) {
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.web.MappingCustomizer#customize(org.modelmapper.ModelMapper)
+	 */
+	@Override
+	public void customize(ModelMapper mapper) {
 
 		// TrackedCase
 

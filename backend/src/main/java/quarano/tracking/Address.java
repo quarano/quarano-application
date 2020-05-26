@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
@@ -41,7 +42,7 @@ public class Address {
 
 		private final String value;
 
-		public static HouseNumber of(String source) {
+		public static HouseNumber of(@Nullable String source) {
 			return source == null || source.isBlank() //
 					? HouseNumber.NONE //
 					: new HouseNumber(source);

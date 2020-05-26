@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("newContactPersonController")
 @RequestMapping("/api/contacts")
 @RequiredArgsConstructor
-class ContactPersonController {
+public class ContactPersonController {
 
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull TrackedPersonRepository people;
@@ -70,7 +70,7 @@ class ContactPersonController {
 	}
 
 	@GetMapping("/{identifier}")
-	HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
+	public HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
 
 		var dto = contacts.findById(identifier) //
 				.filter(it -> it.belongsTo(person)) //
