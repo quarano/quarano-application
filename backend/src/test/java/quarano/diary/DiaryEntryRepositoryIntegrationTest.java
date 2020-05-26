@@ -1,9 +1,11 @@
-package quarano.tracking;
+package quarano.diary;
 
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
+import quarano.diary.DiaryEntryRepository;
+import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package quarano.tracking;
+package quarano.diary;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

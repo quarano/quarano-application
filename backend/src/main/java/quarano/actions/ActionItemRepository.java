@@ -3,7 +3,7 @@ package quarano.actions;
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
 import quarano.department.TrackedCase;
-import quarano.tracking.Slot;
+import quarano.diary.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.data.jpa.repository.Query;

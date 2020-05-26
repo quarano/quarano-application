@@ -1,13 +1,9 @@
-package quarano.tracking.schedules;
+package quarano.diary;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.tracking.DiaryEntryMissing;
-import quarano.tracking.DiaryManagement;
-import quarano.tracking.DiaryProperties;
-import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.Collection;

@@ -1,8 +1,8 @@
-package quarano.tracking;
+package quarano.diary;
 
 import static org.assertj.core.api.Assertions.*;
 
-import quarano.tracking.Slot.TimeOfDay;
+import quarano.diary.Slot.TimeOfDay;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -24,6 +24,14 @@ public class Encounters implements Streamable<Encounter> {
 				.anyMatch(it -> it.getContact().equals(person));
 	}
 
+	public Optional<Encounter> getEncounter(ContactPerson person, LocalDate date) {
+
+		return encounters.stream() //
+				.filter(it -> it.happenedOn(date)) //
+				.filter(it -> it.isEncounterWith(person)) //
+				.findFirst();
+	}
+
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
 		return encounters.stream() //
 				.filter(it -> it.hasId(id)) //

@@ -6,14 +6,14 @@ import static org.mockito.Mockito.*;
 import quarano.QuaranoUnitTest;
 import quarano.account.Department;
 import quarano.core.PhoneNumber;
+import quarano.diary.Diary;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryManagement;
+import quarano.diary.Slot;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
-import quarano.tracking.Diary;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryManagement;
 import quarano.tracking.Encounter;
 import quarano.tracking.Encounters;
-import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 

@@ -1,13 +1,13 @@
 package quarano.department.web;
 
 import quarano.account.Password.UnencryptedPassword;
+import quarano.core.web.MappingCustomizer;
 import quarano.department.RegistrationDetails;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,11 +16,14 @@ import org.springframework.stereotype.Component;
  * @author Patrick Otto
  */
 @Component
-public class RegistrationMappingConfiguration {
+class RegistrationMappingConfiguration implements MappingCustomizer {
 
-	public RegistrationMappingConfiguration(ModelMapper mapper) {
-
-		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.web.MappingCustomizer#customize(org.modelmapper.ModelMapper)
+	 */
+	@Override
+	public void customize(ModelMapper mapper) {
 
 		mapper.addConverter(context -> context.getSource() == null ? null : UnencryptedPassword.of(context.getSource()),
 				String.class, UnencryptedPassword.class);

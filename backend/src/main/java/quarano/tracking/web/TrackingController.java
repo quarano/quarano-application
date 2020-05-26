@@ -12,7 +12,6 @@ import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.DiaryManagement;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
@@ -21,13 +20,13 @@ import quarano.tracking.ZipCode;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -49,8 +48,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 @RequiredArgsConstructor
 public class TrackingController {
 
-	private final @NonNull TrackedPersonRepository repository;
-	private final @NonNull DiaryManagement diaryManagement;
+	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
@@ -73,7 +71,7 @@ public class TrackingController {
 			return ResponseEntity.badRequest().build();
 		}
 
-		repository.save(mapper.map(dto, user));
+		people.save(mapper.map(dto, user));
 
 		return ResponseEntity.ok().build();
 	}
@@ -90,12 +88,12 @@ public class TrackingController {
 	}
 
 	@GetMapping("/api/encounters")
-	public Stream<?> getEncounters(@LoggedIn TrackedPerson person) {
+	public RepresentationModel<?> getEncounters(@LoggedIn TrackedPerson person) {
 
-		var diary = diaryManagement.findDiaryFor(person);
+		var encounters = person.getEncounters().map(it -> EncounterDto.of(it, person)) //
+				.toList();
 
-		return person.getEncounters().stream() //
-				.map(it -> EncounterDto.of(it, diary, person));
+		return RepresentationModel.of(encounters);
 	}
 
 	@PostMapping("/api/encounters")
@@ -105,13 +103,11 @@ public class TrackingController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
 
-		var diary = diaryManagement.findDiaryFor(person);
-
 		return contacts.findById(payload.getContactId()) //
 				.filter(it -> it.belongsTo(person)) //
 				.map(it -> person.reportContactWith(it, payload.date)) //
 				.map(it -> {
-					repository.save(person);
+					people.save(person);
 					return it;
 				}) //
 				.<HttpEntity<?>> map(it -> {
@@ -119,7 +115,7 @@ public class TrackingController {
 					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId(), person);
 					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
 
-					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, diary, person));
+					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
 
 				}).orElseGet(() -> {
 
@@ -132,11 +128,9 @@ public class TrackingController {
 	@GetMapping("/api/encounters/{identifier}")
 	HttpEntity<?> getEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
-		var diary = diaryManagement.findDiaryFor(person);
-
 		return ResponseEntity.of(person.getEncounters() //
 				.havingIdOf(identifier) //
-				.map(it -> EncounterDto.of(it, diary, person)));
+				.map(it -> EncounterDto.of(it, person)));
 	}
 
 	@DeleteMapping("/api/encounters/{identifier}")
@@ -144,7 +138,7 @@ public class TrackingController {
 
 		person.removeEncounter(identifier); //
 
-		repository.save(person);
+		people.save(person);
 
 		return ResponseEntity.ok().build();
 	}

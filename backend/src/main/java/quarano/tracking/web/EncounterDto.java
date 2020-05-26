@@ -4,27 +4,33 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import quarano.tracking.Diary;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author Oliver Drotbohm
  */
+@Relation(collectionRelation = "encounters", itemRelation = "encounter")
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class EncounterDto {
+public class EncounterDto extends RepresentationModel<EncounterDto> {
 
-	private Encounter encounter;
-	private Diary diary;
-	private TrackedPerson person;
+	private static final LinkRelation CONTACT_REL = LinkRelation.of("contact");
+
+	private @Getter(onMethod = @__(@JsonIgnore)) Encounter encounter;
+	private @Getter(onMethod = @__(@JsonIgnore)) TrackedPerson person;
 
 	public LocalDate getDate() {
 		return encounter.getDate();
@@ -38,23 +44,21 @@ public class EncounterDto {
 		return encounter.getContact().getLastName();
 	}
 
-	@JsonProperty("_links")
-	Map<String, Object> getLinks() {
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.hateoas.RepresentationModel#getLinks()
+	 */
+	@Override
+	@SuppressWarnings("null")
+	public Links getLinks() {
+
+		Links links = super.getLinks();
 
 		var contactId = encounter.getContact().getId();
 		var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
 		var encounterUri = on(TrackingController.class).getEncounter(encounter.getId(), person);
 
-		var links = new HashMap<String, Object>();
-
-		links.put("self", Map.of("href", fromMethodCall(encounterUri).toUriString()));
-		links.put("contact", Map.of("href", fromMethodCall(contactHandlerMethod).toUriString()));
-
-		diary.getEntryFor(encounter).ifPresent(it -> {
-			var handlerMethod = on(DiaryController.class).getDiaryEntry(it.getId(), person);
-			links.put("diaryEntry", Map.of("href", fromMethodCall(handlerMethod).toUriString()));
-		});
-
-		return links;
+		return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel()) //
+				.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL));
 	}
 }

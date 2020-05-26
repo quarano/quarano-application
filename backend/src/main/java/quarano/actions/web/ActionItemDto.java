@@ -5,9 +5,9 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem;
 import quarano.actions.ActionItem.ItemType;
+import quarano.diary.DiaryEntry;
+import quarano.diary.web.DiaryController;
 import quarano.actions.DiaryEntryActionItem;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.web.DiaryController;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

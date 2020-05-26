@@ -2,7 +2,7 @@ package quarano.actions;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import quarano.tracking.DiaryEntry;
+import quarano.diary.DiaryEntry;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import javax.persistence.Entity;

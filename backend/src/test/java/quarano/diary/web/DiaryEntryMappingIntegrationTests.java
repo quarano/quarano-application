@@ -1,4 +1,4 @@
-package quarano.tracking.web;
+package quarano.diary.web;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,11 +6,12 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
 import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMappingException;
+import quarano.diary.DiaryEntry;
+import quarano.diary.Slot;
+import quarano.diary.web.DiaryRepresentations;
+import quarano.diary.web.DiaryRepresentations.DiaryEntryInput;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
 
 import java.util.List;
 import java.util.UUID;

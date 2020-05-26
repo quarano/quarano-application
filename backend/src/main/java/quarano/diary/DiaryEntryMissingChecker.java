@@ -1,11 +1,7 @@
-package quarano.tracking.schedules;
+package quarano.diary;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import quarano.tracking.DiaryEntryMissing;
-import quarano.tracking.DiaryManagement;
-import quarano.tracking.DiaryProperties;
-import quarano.tracking.Slot;
 
 import java.util.ArrayList;
 

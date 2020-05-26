@@ -1,10 +1,16 @@
-package quarano.tracking;
+package quarano.diary;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.ContactWays;
+import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +27,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TrackedPersonDataReferencesInitializer implements DataInitializer {
+class DiaryDataInitializer implements DataInitializer {
 
 	private final TrackedPersonRepository trackedPeople;
-	private final DiaryEntryRepository entries;
+	private final DiaryManagement entries;
 	private final ContactPersonRepository contacts;
 	private final SymptomRepository symptoms;
 
@@ -70,7 +76,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry1.setSymptoms(symptomsE1);
 		entry1.setBodyTemperature(BodyTemperature.of(37.5f));
 
-		entries.save(entry1);
+		entries.updateDiaryEntry(entry1);
 
 		DiaryEntry entry2 = DiaryEntry.of(sameSlotYesterday.previous(), sandra) //
 				.setContacts(contactsOfPerson3.subList(0, 0)) //
@@ -83,7 +89,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE2.add(cough);
 		entry2.setSymptoms(symptomsE2);
 
-		entries.save(entry2);
+		entries.updateDiaryEntry(entry2);
 
 		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), sandra) //
 				.setContacts(contactsOfPerson3.subList(1, 1)) //
@@ -94,7 +100,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE3.add(cough);
 		entry3.setSymptoms(symptomsE3);
 
-		entries.save(entry3);
+		entries.updateDiaryEntry(entry3);
 
 		// ==================== SIGGI ==================
 		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
@@ -121,7 +127,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry1Siggi.setSymptoms(symptomsS1);
 		entry1Siggi.setBodyTemperature(BodyTemperature.of(38.5f));
 
-		entries.save(entry1Siggi);
+		entries.updateDiaryEntry(entry1Siggi);
 
 		DiaryEntry entry2Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous(), siggi) //
 				.setContacts(contactsOfSiggi.subList(0, 0)) //
@@ -133,7 +139,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsS2.add(cough);
 		entry2Siggi.setSymptoms(symptomsS2);
 
-		entries.save(entry2Siggi);
+		entries.updateDiaryEntry(entry2Siggi);
 
 		DiaryEntry entry3Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous().previous(), siggi) //
 				.setContacts(contactsOfSiggi.subList(1, 1)) //
@@ -144,7 +150,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE3.add(cough);
 		entry3Siggi.setSymptoms(symptomsS3);
 
-		entries.save(entry3Siggi);
+		entries.updateDiaryEntry(entry3Siggi);
 
 		// ==================== GUSTAV ==================
 		List<ContactPerson> contactsOfPerson4 = new ArrayList<>();
@@ -170,7 +176,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		entry1G.setSymptoms(symptomsE1G);
 		entry1G.setBodyTemperature(BodyTemperature.of(36.5f));
 
-		entries.save(entry1G);
+		entries.updateDiaryEntry(entry1G);
 
 		DiaryEntry entry2G = DiaryEntry.of(sameSlotYesterdayGustav.previous(), gustav) //
 				.setContacts(contactsOfPerson4.subList(0, 0)) //
@@ -182,7 +188,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE2G.add(cough);
 		entry2G.setSymptoms(symptomsE2G);
 
-		entries.save(entry2G);
+		entries.updateDiaryEntry(entry2G);
 
 		// ==================== NADINE ==================
 		List<ContactPerson> contactsOfPerson5 = new ArrayList<>();
@@ -211,7 +217,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE1G.add(cough);
 		entry1N.setSymptoms(symptomsE1N);
 
-		entries.save(entry1N);
+		entries.updateDiaryEntry(entry1N);
 
 		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), nadine) //
 				.setContacts(contactsOfPerson5.subList(0, 0)) //
@@ -223,7 +229,7 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE2N.add(cough);
 		entry2N.setSymptoms(symptomsE2N);
 
-		entries.save(entry2N);
+		entries.updateDiaryEntry(entry2N);
 
 		Slot samelastSlot = Slot.now().previous();
 
@@ -236,6 +242,6 @@ public class TrackedPersonDataReferencesInitializer implements DataInitializer {
 		symptomsE3N.add(cough);
 		entry3N.setSymptoms(symptomsE3N);
 
-		entries.save(entry3N);
+		entries.updateDiaryEntry(entry3N);
 	}
 }

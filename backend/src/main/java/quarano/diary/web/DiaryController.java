@@ -1,4 +1,4 @@
-package quarano.tracking.web;
+package quarano.diary.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
@@ -6,12 +6,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
-import quarano.tracking.DiaryManagement;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
+import quarano.diary.DiaryManagement;
+import quarano.diary.web.DiaryRepresentations.DiaryEntryInput;
+import quarano.diary.web.DiaryRepresentations.DiarySummary;
+import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.web.DiaryRepresentations.DiaryEntryInput;
-import quarano.tracking.web.DiaryRepresentations.DiarySummary;
+import quarano.tracking.TrackedPersonRepository;
 
 import javax.validation.Valid;
 
@@ -35,17 +37,15 @@ public class DiaryController {
 
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull DiaryRepresentations representations;
-	private final @NonNull DiaryManagement diaryManagement;
+	private final @NonNull DiaryManagement diaries;
+
+	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull ContactPersonRepository contacts;
 
 	@GetMapping("/api/diary")
 	DiarySummary getDiary(@LoggedIn TrackedPerson person) {
-		return getSlottedDiary(person);
-	}
 
-	@GetMapping("/api/slotted")
-	DiarySummary getSlottedDiary(@LoggedIn TrackedPerson person) {
-
-		var diary = diaryManagement.findDiaryFor(person);
+		var diary = diaries.findDiaryFor(person);
 
 		return representations.toSummary(diary, person.getAccountRegistrationDate());
 	}
@@ -59,7 +59,7 @@ public class DiaryController {
 		}
 
 		return representations.from(payload, person, errors) //
-				.mapLeft(it -> diaryManagement.updateDiaryEntry(it, person)) //
+				.mapLeft(it -> diaries.updateDiaryEntry(it)) //
 				.fold(entry -> handle(entry, person), //
 						error -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
@@ -68,7 +68,7 @@ public class DiaryController {
 	public ResponseEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
 			@LoggedIn TrackedPerson person) {
 
-		var dto = diaryManagement.findDiaryFor(person) //
+		var dto = diaries.findDiaryFor(person) //
 				.getEntryFor(identifier) //
 				.map(it -> representations.toRepresentation(it));
 
@@ -80,7 +80,7 @@ public class DiaryController {
 			@Valid @RequestBody DiaryEntryInput payload, Errors errors, //
 			@LoggedIn TrackedPerson person) {
 
-		var entry = diaryManagement.findDiaryFor(person) //
+		var entry = diaries.findDiaryFor(person) //
 				.getEntryFor(identifier) //
 				.orElse(null);
 
@@ -93,7 +93,7 @@ public class DiaryController {
 		}
 
 		return representations.from(payload, entry, errors) //
-				.mapLeft(it -> diaryManagement.updateDiaryEntry(it, person)) //
+				.mapLeft(it -> diaries.updateDiaryEntry(it)) //
 				.mapLeft(representations::toRepresentation) //
 				.<HttpEntity<?>> fold(ResponseEntity.ok()::body, //
 						__ -> ErrorsDto.of(errors, messages).toBadRequest());

@@ -99,13 +99,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return this.dateOfBirth.equals(date);
 	}
 
-	TrackedPerson registerEncounter(Encounter encounter) {
-
-		this.encounters.add(encounter);
-
-		return this;
-	}
-
 	public Optional<Account> getAccount() {
 		return Optional.ofNullable(account);
 	}
@@ -130,18 +123,37 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				.map(Encounter::getContact);
 	}
 
+	/**
+	 * Reports the contact with the given {@link ContactPerson} on the given {@link LocalDate}. If described contact has
+	 * already been recorded, nothing will happen. If not, a new {@link Encounter} will be registered. I.e. registering a
+	 * contact with the same person on the same day twice will only create a single {@link Encounter}.
+	 *
+	 * @param person must not be {@literal null}.
+	 * @param date must not be {@literal null}.
+	 * @return
+	 * @see Encounters
+	 * @see #getEncounters()
+	 */
 	public Encounter reportContactWith(ContactPerson person, LocalDate date) {
 
-		var encounter = Encounter.with(person, date);
-		var event = !getEncounters().hasBeenInTouchWith(person) //
-				? EncounterReported.firstEncounter(encounter, id) //
-				: EncounterReported.subsequentEncounter(encounter, id);
+		Assert.notNull(person, "ContactPerson must not be null!");
+		Assert.notNull(date, "Date must not be null!");
 
-		this.encounters.add(encounter);
+		var encounters = getEncounters();
 
-		registerEvent(event);
+		return encounters.getEncounter(person, date) //
+				.orElseGet(() -> {
 
-		return encounter;
+					var encounter = Encounter.with(person, date);
+
+					registerEvent(!encounters.hasBeenInTouchWith(person) //
+							? EncounterReported.firstEncounter(encounter, id) //
+							: EncounterReported.subsequentEncounter(encounter, id));
+
+					this.encounters.add(encounter);
+
+					return encounter;
+				});
 	}
 
 	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {

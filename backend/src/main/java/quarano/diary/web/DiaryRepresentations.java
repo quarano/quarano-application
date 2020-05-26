@@ -1,4 +1,4 @@
-package quarano.tracking.web;
+package quarano.diary.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
@@ -8,15 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.MapperWrapper;
+import quarano.diary.Diary;
+import quarano.diary.Diary.DiaryEntryDay;
+import quarano.diary.Slot.TimeOfDay;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryProperties;
+import quarano.diary.Slot;
 import quarano.reference.SymptomDto;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.Diary;
-import quarano.tracking.Diary.DiaryEntryDay;
-import quarano.tracking.DiaryEntry;
-import quarano.tracking.DiaryProperties;
-import quarano.tracking.Slot;
-import quarano.tracking.Slot.TimeOfDay;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.web.ContactPersonController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,6 +1,7 @@
-package quarano.tracking;
+package quarano.diary;
 
-import quarano.tracking.DiaryEntry.DiaryEntryIdentifier;
+import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;

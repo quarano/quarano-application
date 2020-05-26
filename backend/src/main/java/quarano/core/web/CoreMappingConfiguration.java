@@ -1,5 +1,7 @@
 package quarano.core.web;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +9,7 @@ import org.jddd.core.types.Identifier;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.data.mapping.PersistentProperty;
@@ -20,10 +23,18 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Component
-class CoreMappingConfiguration {
+@Order(0)
+@RequiredArgsConstructor
+class CoreMappingConfiguration implements MappingCustomizer {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	CoreMappingConfiguration(ModelMapper mapper, JpaMetamodelMappingContext context) {
+	private final JpaMetamodelMappingContext context;
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.core.web.MappingCustomizer#customize(org.modelmapper.ModelMapper)
+	 */
+	@Override
+	public void customize(ModelMapper mapper) {
 
 		new PersistentEntities(List.of(context)) //
 				.filter(it -> it.hasIdProperty()) //
