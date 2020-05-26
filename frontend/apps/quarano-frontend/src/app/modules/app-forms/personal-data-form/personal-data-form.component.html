@@ -55,7 +55,17 @@
         [for]="dateOfBirthPicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #dateOfBirthPicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.dateOfBirth
+          )
+        "
+      >
+        {{
+          errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error)
+        }}
+      </mat-error>
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">

@@ -59,7 +59,17 @@
         [for]="dateOfBirthPicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #dateOfBirthPicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.dateOfBirth
+          )
+        "
+      >
+        {{
+          errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error)
+        }}
+      </mat-error>
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">
@@ -81,7 +91,17 @@
           [for]="testDatePicker"
         ></mat-datepicker-toggle>
         <mat-datepicker #testDatePicker></mat-datepicker>
-        <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+        <mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              formGroup.controls.testDate
+            )
+          "
+        >
+          {{
+            errorGenerator.getErrorMessage(formGroup.controls.testDate, error)
+          }}
+        </mat-error>
       </mat-form-field>
       <div
         class="half-width form-field form-field-radio"
@@ -114,7 +134,20 @@
         [for]="quarantineStartPicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #quarantineStartPicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.quarantineStartDate
+          )
+        "
+      >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.quarantineStartDate,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="half-width" data-cy="input-quarantineend">
       <mat-label>Ende häusliche Isolation</mat-label>
@@ -131,7 +164,20 @@
         [for]="quarantineEndDatePicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.quarantineEndDate
+          )
+        "
+      >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.quarantineEndDate,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">

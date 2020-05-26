@@ -1,3 +1,4 @@
+import { BadRequestService } from '@quarano-frontend/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
@@ -29,7 +30,8 @@ export class ActionComponent implements OnInit {
     private dialog: MatDialog,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private router: Router) { }
+    private router: Router,
+    private badRequestService: BadRequestService) { }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -64,6 +66,8 @@ export class ActionComponent implements OnInit {
       .subscribe(_ => {
         this.snackbarService.success('Die aktuellen Auffälligkeiten wurden als erledigt gekennzeichnet');
         this.router.navigate([this.returnLink]);
+      }, error => {
+        this.badRequestService.handleBadRequestError(error, this.formGroup);
       });
   }
 

@@ -17,7 +17,13 @@
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(formGroup.controls.day)
+        "
+      >
+        {{ errorGenerator.getErrorMessage(formGroup.controls.day, error) }}
+      </mat-error>
     </mat-form-field>
 
     <qro-multiple-autocomplete

@@ -155,8 +155,19 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error
-          >Bitte geben Sie zur Verifizierung Ihr Geburtsdatum ein.</mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              registrationForm.controls.dateOfBirth
+            )
+          "
         >
+          {{
+            errorGenerator.getErrorMessage(
+              registrationForm.controls.dateOfBirth,
+              error
+            )
+          }}
+        </mat-error>
       </mat-form-field>
       <div class="data-protection-wrapper">
         <mat-checkbox

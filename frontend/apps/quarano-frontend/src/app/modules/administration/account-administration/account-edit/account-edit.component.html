@@ -142,6 +142,20 @@
         <mat-error *ngIf="formGroup.hasError('passwordConfirmWrong')"
           >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
         >
+        <mat-error
+          *ngFor="
+            let error of errorGenerator.getErrorKeys(
+              formGroup.controls.passwordConfirm
+            )
+          "
+        >
+          {{
+            errorGenerator.getErrorMessage(
+              formGroup.controls.passwordConfirm,
+              error
+            )
+          }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width">
         <mat-label>Rollen</mat-label>

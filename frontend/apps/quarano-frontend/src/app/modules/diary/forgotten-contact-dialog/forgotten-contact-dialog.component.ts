@@ -9,7 +9,7 @@ import { EncounterEntry } from '../../../models/encounter';
 import { EnrollmentService } from '../../../services/enrollment.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { ContactPersonDto } from '../../../models/contact-person';
-import { ArrayValidator } from '@quarano-frontend/shared/util-form-validation';
+import { ArrayValidator, ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',
@@ -22,6 +22,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   private subs = new SubSink();
   loading = false;
+  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
