@@ -187,7 +187,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   submitForm() {
     if (this.formGroup.valid) {
-      const submitData: any = { ...this.formGroup.value };
+      const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
 
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
