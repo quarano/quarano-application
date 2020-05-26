@@ -1,4 +1,6 @@
-import { FormControl, AbstractControl } from '@angular/forms';
+import { DateFunctions } from '@quarano-frontend/shared/util';
+import { AbstractControl } from '@angular/forms';
+
 export class ValidationErrorGenerator {
 
   public static getErrorKeys(control: AbstractControl): string[] {
@@ -15,6 +17,8 @@ export class ValidationErrorGenerator {
       case 'minlength': return `Dieses Feld erfordert eine Eingabe von mindestens ${control.getError('minlength').requiredLength} Zeichen`;
       case 'maxlength': return `Dieses Feld darf maximal ${control.getError('maxlength').requiredLength} Zeichen enthalten`;
       case 'minLengthArray': return 'Bitte wählen Sie mindestens ein Element';
+      case 'matDatepickerParse': return 'Bitte geben Sie ein gültiges Datum ein';
+      case 'matDatepickerMax': return `Das größte zulässige Datum ist der ${DateFunctions.toCustomLocaleDateString(control.getError('matDatepickerMax').max.toDate())}`;
       case 'uppercase': return 'Dieses Feld muss mindestens einen Großbuchstaben enthalten';
       case 'digit': return 'Dieses Feld muss mindestens eine Zahl enthalten';
       case 'nonWordChar': return 'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >';

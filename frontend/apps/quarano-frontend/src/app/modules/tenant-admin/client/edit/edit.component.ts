@@ -157,6 +157,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   trimValue(input: MatInput) {
     input.value = input.value?.trim();
+    console.log(this.formGroup)
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
