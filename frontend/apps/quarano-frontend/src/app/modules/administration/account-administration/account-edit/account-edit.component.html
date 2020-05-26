@@ -63,7 +63,7 @@
         <input
           matInput
           required
-          placeholder="E-Mail"
+          placeholder="E-Mail-Adresse"
           formControlName="email"
           type="email"
           #email_input
@@ -78,12 +78,12 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width">
-        <mat-label>E-Mail Adresse</mat-label>
+        <mat-label>Username</mat-label>
         <input
           required
           matInput
           formControlName="username"
-          placeholder="E-Mail Adresse"
+          placeholder="Username"
           id="username"
           #username_input
           (blur)="trimValue(username_input)"
