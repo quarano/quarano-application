@@ -98,7 +98,7 @@ describe('new case', () => {
         cy.get(selector + ' input[matInput]').clear().type('invalid');
         cy.get(selector + ' input[matInput]').blur();
 
-        cy.get(selector + ' mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+        cy.get(selector + ' mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
       });
 
       it('should be valid a correct date string', () => {
@@ -160,7 +160,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').type('invalid');
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-dayofbirth"] mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+          cy.get('[data-cy="input-dayofbirth"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
 
         it('should be a date string lower or equal today', () => {
@@ -169,7 +169,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').type(dateTomorrow);
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-dayofbirth"] mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+          cy.get('[data-cy="input-dayofbirth"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
 
         it('should be valid a correct date string', () => {
@@ -198,7 +198,7 @@ describe('new case', () => {
           cy.get('[data-cy="input-testdate"] input[matInput]').clear().type(dateTomorrow);
           cy.get('[data-cy="input-testdate"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-testdate"] mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+          cy.get('[data-cy="input-testdate"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
       });
 
@@ -212,7 +212,7 @@ describe('new case', () => {
           cy.get(selector + ' input[matInput]').clear().type(dateTomorrow);
           cy.get(selector + ' input[matInput]').blur();
 
-          cy.get(selector + ' mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+          cy.get(selector + ' mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
         });
 
         it('should set quarantine end date to startdate + 14 days', () => {

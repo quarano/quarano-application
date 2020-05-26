@@ -38,7 +38,20 @@
         [for]="firstSymptomsDatePicker"
       ></mat-datepicker-toggle>
       <mat-datepicker #firstSymptomsDatePicker></mat-datepicker>
-      <mat-error>Bitte geben Sie ein gültiges Datum ein</mat-error>
+      <mat-error
+        *ngFor="
+          let error of errorGenerator.getErrorKeys(
+            formGroup.controls.dayOfFirstSymptoms
+          )
+        "
+      >
+        {{
+          errorGenerator.getErrorMessage(
+            formGroup.controls.dayOfFirstSymptoms,
+            error
+          )
+        }}
+      </mat-error>
     </mat-form-field>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">

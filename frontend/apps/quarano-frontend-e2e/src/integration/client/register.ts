@@ -121,7 +121,7 @@ describe('registration form', () => {
             $input.hasClass('mat-form-field-invalid');
             cy.get('[data-cy="input-dateofbirth"] mat-error')
               .should('exist')
-              .and('contain.text', 'Bitte geben Sie zur Verifizierung Ihr Geburtsdatum ein.');
+              .and('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
           });
         });
 
