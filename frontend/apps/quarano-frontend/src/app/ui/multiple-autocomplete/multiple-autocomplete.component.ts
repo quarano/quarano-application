@@ -1,10 +1,11 @@
-import { FormControl } from '@angular/forms';
-import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import {filter, map, startWith, takeUntil} from 'rxjs/operators';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {filter, startWith, takeUntil} from 'rxjs/operators';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {IIdentifiable} from '../../models/general';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'qro-multiple-autocomplete',
@@ -18,15 +19,15 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() selectableItems: IIdentifiable[];
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
-  filteredItems: Observable<IIdentifiable[]>;
   selectedItemIds: string[];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
-
   destroy$: Subject<void> = new Subject<void>();
+  filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
 
   ngOnInit() {
+    this.filteredList$$.next(this.selectableItems);
     this.control.valueChanges.pipe(
       takeUntil(this.destroy$),
       filter((data) => !!data)
@@ -39,12 +40,15 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
     this.selectedItemIds = this.control.value;
 
-    this.filteredItems = this.inputControl.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      startWith(null as string),
-      map((searchTerm: number | string | null) => {
-        return typeof (searchTerm) === 'string' ? this._filter(searchTerm) : this.selectableItems.slice();
-      }));
+    this.inputControl.valueChanges
+      .pipe(takeUntil(this.destroy$),
+        startWith(null as string)
+      )
+      .subscribe(searchTearm => {
+        if (typeof searchTearm === 'string') {
+          this._filter(searchTearm);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -52,15 +56,23 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private _filter(searchTerm: string): IIdentifiable[] {
-    const arrayToReturn = this.selectableItems.filter(item => !this.selectedItemIds.includes(item.id));
+  get prefilteredList(): IIdentifiable[] {
+    let arrayToReturn: IIdentifiable[] = cloneDeep(this.selectableItems);
+    this.selectedItemIds.forEach(selectedItem => {
+      arrayToReturn = arrayToReturn.filter(item => item.id !== selectedItem);
+    })
+    return arrayToReturn;
+  }
 
-    if (!searchTerm) { return arrayToReturn; }
+  private _filter(searchTerm: string) {
+    let arrayToReturn = this.prefilteredList.filter(item => !this.selectedItemIds.includes(item.id));
+
+    if (!searchTerm) {
+      this.filteredList$$.next(this.prefilteredList);
+    }
     const filterValue = searchTerm.toLowerCase();
-
-    return arrayToReturn.filter(item => {
-      return this.getName(item).toLowerCase().indexOf(filterValue) === 0;
-    });
+    arrayToReturn = arrayToReturn.filter(item => this.getName(item).toLowerCase().indexOf(filterValue) === 0);
+    this.filteredList$$.next(arrayToReturn);
   }
 
   get disabled(): boolean {
@@ -74,6 +86,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.inputControl.setValue(null);
     this.setFormControlValue();
     this.added.emit(selectedValue);
+    this.filteredList$$.next(this.prefilteredList);
   }
 
   remove(id: string): void {
@@ -84,6 +97,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       this.setFormControlValue();
       this.removed.emit(id);
     }
+    this.filteredList$$.next(this.prefilteredList);
   }
 
   setFormControlValue() {
@@ -97,7 +111,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   getName(item: IIdentifiable) {
-    if (!item) { return ''; }
+    if (!item) {
+      return '';
+    }
     let name = '';
     this.nameProperties.forEach(prop => {
       name += item[prop] + ' ';
