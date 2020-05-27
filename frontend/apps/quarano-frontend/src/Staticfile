@@ -3,3 +3,4 @@
 ## pushstate configure the url state, needed for NG
 pushstate: enabled
 force_https: true
+Strict-Transport-Security: max-age=31536000; includeSubDomains
