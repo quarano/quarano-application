@@ -138,10 +138,8 @@
           type="password"
           #password_confirm_input
           (blur)="trimValue(password_confirm_input)"
+          [errorStateMatcher]="confirmValidParentMatcher"
         />
-        <mat-error *ngIf="formGroup.hasError('passwordConfirmWrong')"
-          >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
-        >
         <mat-error
           *ngFor="
             let error of errorGenerator.getErrorKeys(
@@ -156,10 +154,13 @@
             )
           }}
         </mat-error>
+        <mat-error *ngIf="formGroup.hasError('passwordConfirmWrong')"
+          >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
+        >
       </mat-form-field>
       <mat-form-field class="form__input--full-width">
-        <mat-label>Rollen</mat-label>
-        <mat-select formControlName="roles" multiple required>
+        <mat-label>Rollen *</mat-label>
+        <mat-select formControlName="roles" multiple>
           <mat-option *ngFor="let role of roles" [value]="role.name">{{
             role.displayName
           }}</mat-option>

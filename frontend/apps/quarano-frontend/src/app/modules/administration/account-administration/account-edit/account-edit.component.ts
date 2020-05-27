@@ -15,7 +15,8 @@ import {
   ArrayValidator,
   PasswordValidator,
   VALIDATION_PATTERNS,
-  TrimmedPatternValidator
+  TrimmedPatternValidator,
+  ConfirmValidPasswordMatcher
 } from '@quarano-frontend/shared/util-form-validation';
 
 @Component({
@@ -31,6 +32,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   roles: IRole[] = roles.filter(r => r.isHealthDepartmentUser);
   loading = false;
   errorGenerator = ValidationErrorGenerator;
+  public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
 
   constructor(
     private route: ActivatedRoute,
@@ -159,6 +161,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   }
 
   trimValue(input: MatInput) {
+    console.log(this.formGroup);
+    console.log(this.formGroup.hasError('passwordConfirmWrong'))
     input.value = input.value?.trim();
   }
 }
