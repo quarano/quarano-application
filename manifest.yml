@@ -18,7 +18,7 @@ applications:
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
     SPRING_PROFILES_ACTIVE: develop
-    
+
 ###############   demo system #########################
 - name: quarano-frontend
   memory: 128M
@@ -75,9 +75,9 @@ applications:
   services:
     - quarano-security
   env:
-    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"   
-    SPRING_PROFILES_ACTIVE: develop	
-    
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    SPRING_PROFILES_ACTIVE: develop
+
 
 ###############   cypress-test system #########################
 - name: quarano-frontend-autotest
@@ -95,6 +95,6 @@ applications:
   services:
     - quarano-autotest
   env:
-    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }" 
-    SPRING_PROFILES_ACTIVE: develop	
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    SPRING_PROFILES_ACTIVE: develop
 
