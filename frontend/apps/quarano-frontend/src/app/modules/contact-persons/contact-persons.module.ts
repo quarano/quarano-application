@@ -10,7 +10,7 @@ import { AlertModule } from '../../ui/alert/alert.module';
 import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
 import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
 import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 const COMPONENTS = [
   ContactPersonsComponent,

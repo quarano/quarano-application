@@ -8,7 +8,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { DiaryEntryDto } from '../../../models/diary-entry';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

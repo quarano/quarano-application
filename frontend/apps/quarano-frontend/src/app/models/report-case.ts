@@ -1,4 +1,4 @@
-import { ClientType } from '@quarano-frontend/health-department/domain';
+import { ClientType } from '@qro/health-department/domain';
 
 export interface ReportCaseDto {
   dateOfBirth: Date;

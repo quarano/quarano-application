@@ -1,5 +1,5 @@
-import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiButtonModule } from '@qro/shared/ui-button';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

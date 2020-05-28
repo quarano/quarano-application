@@ -2,7 +2,7 @@ import {
   ValidationErrorGenerator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

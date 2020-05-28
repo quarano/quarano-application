@@ -1,4 +1,4 @@
-import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@quarano-frontend/shared/util-form-validation';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-form-validation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 

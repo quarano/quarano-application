@@ -1,8 +1,8 @@
-import {EnrollmentCompletedGuard} from './enrollment-completed.guard';
-import {NavigationExtras, Router} from '@angular/router';
-import {UserService} from '../services/user.service';
-import {EnrollmentService} from '../services/enrollment.service';
-import {SnackbarService} from '../services/snackbar.service';
+import { EnrollmentCompletedGuard } from './enrollment-completed.guard';
+import { NavigationExtras, Router } from '@angular/router';
+import { UserService } from '../services/user.service';
+import { EnrollmentService } from '../services/enrollment.service';
+import { SnackbarService } from '@qro/shared/util';
 
 describe('IsAuthenticatedFullyClientGuard', () => {
   let userService: UserService;
@@ -12,10 +12,10 @@ describe('IsAuthenticatedFullyClientGuard', () => {
   let guard: EnrollmentCompletedGuard;
 
   beforeEach(() => {
-    userService = {isHealthDepartmentUser: () => true} as any;
-    enrollmentService = {getEnrollmentStatus: () => ({})} as any;
-    router = {navigate: () => {}} as any;
-    snackbarService = {message: () => true} as any;
+    userService = { isHealthDepartmentUser: () => true } as any;
+    enrollmentService = { getEnrollmentStatus: () => ({}) } as any;
+    router = { navigate: () => { } } as any;
+    snackbarService = { message: () => true } as any;
 
     guard = new EnrollmentCompletedGuard(enrollmentService, userService, router, snackbarService);
   });

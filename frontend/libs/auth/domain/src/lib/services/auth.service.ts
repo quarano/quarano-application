@@ -1,7 +1,8 @@
-import { API_URL } from '@quarano-frontend/shared/util';
+import { API_URL } from '@qro/shared/util';
 import { HttpClient } from '@angular/common/http';
 import { ChangePasswordDto } from './../models/change-password';
 import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,4 +15,7 @@ export class AuthService {
     return this.httpClient.put(`${this.apiUrl}/api/user/me/password`, dto);
   }
 
+  checkUsername(username: string): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/api/registration/checkusername/${username}`);
+  }
 }

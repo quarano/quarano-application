@@ -1,4 +1,4 @@
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 import { SubSink } from 'subsink';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {
@@ -7,7 +7,7 @@ import {
   AlertConfiguration,
   getAlertConfigurations,
   Alert
-} from '@quarano-frontend/health-department/domain';
+} from '@qro/health-department/domain';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';

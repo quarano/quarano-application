@@ -1,16 +1,16 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { ContactPersonDto, ContactPersonModifyDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 
 @Component({
   selector: 'qro-contact-person-form',

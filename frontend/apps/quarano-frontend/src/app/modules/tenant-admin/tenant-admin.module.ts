@@ -1,4 +1,4 @@
-import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
+import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { AnomalyComponent } from './client/anomaly/anomaly.component';
 import { ActionComponent } from './client/action/action.component';
 import { NgModule } from '@angular/core';
@@ -16,8 +16,8 @@ import { CloseCaseDialogComponent } from './client/close-case-dialog/close-case-
 import { ReportCaseActionsResolver } from '../../resolvers/report-case-actions.resolver';
 import { ReportCaseResolver } from '../../resolvers/report-case.resolver';
 import { QuestionnaireComponent } from './client/questionnaire/questionnaire.component';
-import {SharedUiMaterialModule} from '@quarano-frontend/shared/ui-material';
-import {IndexContactsComponent} from './client/index-contacts/index-contacts.component';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
+import { IndexContactsComponent } from './client/index-contacts/index-contacts.component';
 
 
 @NgModule({

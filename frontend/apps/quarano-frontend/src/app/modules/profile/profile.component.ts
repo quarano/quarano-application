@@ -1,4 +1,4 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -6,12 +6,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
 import { ClientDto } from '../../models/client';
 import { EnrollmentService } from '../../services/enrollment.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import {
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 
 @Component({
   selector: 'qro-profile',

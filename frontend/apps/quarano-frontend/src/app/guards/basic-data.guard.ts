@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {EnrollmentService} from '../services/enrollment.service';
-import {UserService} from '../services/user.service';
-import {SnackbarService} from '../services/snackbar.service';
+import { EnrollmentService } from '../services/enrollment.service';
+import { UserService } from '../services/user.service';
+import { SnackbarService } from '@qro/shared/util';
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {ApiService} from './api.service';
-import {distinctUntilChanged, map, tap} from 'rxjs/operators';
-import {SnackbarService} from './snackbar.service';
-import {TokenService} from './token.service';
-import {UserDto} from '../models/user';
-import {HealthDepartmentDto} from '../models/healthDepartment';
-import {roles} from '../models/role';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { SnackbarService } from '@qro/shared/util';
+import { TokenService } from './token.service';
+import { UserDto } from '../models/user';
+import { HealthDepartmentDto } from '../models/healthDepartment';
+import { roles } from '../models/role';
 
 
 @Injectable({

@@ -1,6 +1,6 @@
-import { IndexCaseCaseListResolver, HealthDepartmentIndexCasesDomainModule } from '@quarano-frontend/health-department/index-cases/domain';
+import { IndexCaseCaseListResolver, HealthDepartmentIndexCasesDomainModule } from '@qro/health-department/index-cases/domain';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

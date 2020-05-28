@@ -1,9 +1,8 @@
-import { SharedUtilErrorModule } from '@quarano-frontend/shared/util-error';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
-import { API_URL } from '@quarano-frontend/shared/util';
-import { AuthChangePasswordModule } from '@quarano-frontend/auth/change-password';
+import { SharedUtilErrorModule } from '@qro/shared/util-error';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
+import { API_URL } from '@qro/shared/util';
+import { AuthChangePasswordModule } from '@qro/auth/change-password';
 import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
-import { AdministrationModule } from './modules/administration/administration.module';
 import { IsAdminDirective } from './directives/is-admin.directive';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
@@ -36,7 +35,7 @@ import { IsHealthDepartmentUserDirective } from './directives/is-health-departme
 import { IsEnrolledClientDirective } from './directives/is-enrolled-client.directive';
 import { AsideHostDirective } from './directives/aside-host.directive';
 import { HasRoleDirective } from './directives/has-role.directive';
-import { SnackbarService } from './services/snackbar.service';
+import { SnackbarService } from '../../../../libs/shared/util/src/lib/snackbar.service';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
@@ -69,7 +68,6 @@ const SUB_MODULES = [
   ContactPersonsModule,
   BasicDataModule,
   ProfileModule,
-  AdministrationModule,
   TenantAdminModule,
   AuthChangePasswordModule,
   SharedUtilErrorModule

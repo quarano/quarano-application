@@ -1,4 +1,4 @@
-import { SnackbarService } from './../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';

@@ -1,4 +1,4 @@
-import { API_URL } from '@quarano-frontend/shared/util';
+import { API_URL } from '@qro/shared/util';
 import { HttpClientModule } from '@angular/common/http';
 /* tslint:disable:no-unused-variable */
 

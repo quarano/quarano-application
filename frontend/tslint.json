@@ -90,12 +90,24 @@
             ]
           },
           {
+            "sourceTag": "scope:administration",
+            "onlyDependOnLibsWithTags": ["scope:administration", "scope:shared"]
+          },
+          {
+            "sourceTag": "scope:administration-accounts",
+            "onlyDependOnLibsWithTags": [
+              "scope:administration-accounts",
+              "scope:administration",
+              "scope:shared"
+            ]
+          },
+          {
             "sourceTag": "scope:auth",
             "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
           },
           {
-            "sourceTag": "domain:shared",
-            "onlyDependOnLibsWithTags": ["domain:shared"]
+            "sourceTag": "scope:shared",
+            "onlyDependOnLibsWithTags": ["scope:shared"]
           },
           {
             "sourceTag": "type:app",

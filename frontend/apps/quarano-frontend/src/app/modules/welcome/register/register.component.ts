@@ -1,11 +1,12 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { AuthService } from '@qro/auth/api';
+import { BadRequestService } from '@qro/shared/util-error';
 import {
   ValidationErrorGenerator,
   ConfirmValidPasswordMatcher,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PasswordValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { DataProtectionComponent } from '../../../components/data-protection/data-protection.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -14,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { ApiService } from '../../../services/api.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { RegisterDto } from '../../../models/register';
 
 @Component({
@@ -61,7 +62,8 @@ export class RegisterComponent implements OnInit {
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private badRequestService: BadRequestService) {
+    private badRequestService: BadRequestService,
+    private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -79,7 +81,7 @@ export class RegisterComponent implements OnInit {
 
   public changeUsername() {
     const username = this.registrationForm.controls.username.value;
-    this.apiService.checkUsername(username)
+    this.authService.checkUsername(username)
       .pipe(
         tap(() => {
           this.registrationForm.get('username').disable();

@@ -1,5 +1,5 @@
-import {TokenService} from './token.service';
-import {SnackbarService} from './snackbar.service';
+import { TokenService } from './token.service';
+import { SnackbarService } from '@qro/shared/util';
 
 describe('TokenService', () => {
   let service: TokenService;

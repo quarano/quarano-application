@@ -7,7 +7,7 @@ import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { QuestionnaireDto } from '../models/first-query';
 import { ClientDto } from '../models/client';
 import { EncounterCreateDto, EncounterDto, EncounterEntry } from '../models/encounter';
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 
 @Injectable({
   providedIn: 'root'

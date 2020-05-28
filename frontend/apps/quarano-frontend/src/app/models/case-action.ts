@@ -1,5 +1,5 @@
 import { Link } from './general';
-import { Alert } from '@quarano-frontend/health-department/domain';
+import { Alert } from '@qro/health-department/domain';
 
 export interface CaseActionDto {
   caseId: string;

@@ -1,12 +1,12 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ForgottenContactDialogComponent} from './forgotten-contact-dialog.component';
-import {FormBuilder} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {EnrollmentService} from '../../../services/enrollment.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { ForgottenContactDialogComponent } from './forgotten-contact-dialog.component';
+import { FormBuilder } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EnrollmentService } from '../../../services/enrollment.service';
+import { SnackbarService } from '@qro/shared/util';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 describe('ForgottenContactDialogComponent', () => {
@@ -18,8 +18,8 @@ describe('ForgottenContactDialogComponent', () => {
       declarations: [ForgottenContactDialogComponent],
       providers: [
         FormBuilder,
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
         {
           provide: EnrollmentService, useValue: {
             createEncounters: () => {
@@ -32,7 +32,7 @@ describe('ForgottenContactDialogComponent', () => {
             }
           }
         },
-        {provide: MatDialog, useValue: {}},
+        { provide: MatDialog, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

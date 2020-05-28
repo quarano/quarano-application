@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {UserService} from '../services/user.service';
-import {EnrollmentService} from '../services/enrollment.service';
-import {SnackbarService} from '../services/snackbar.service';
+import { UserService } from '../services/user.service';
+import { EnrollmentService } from '../services/enrollment.service';
+import { SnackbarService } from '@qro/shared/util';
 
 @Injectable({
   providedIn: 'root'

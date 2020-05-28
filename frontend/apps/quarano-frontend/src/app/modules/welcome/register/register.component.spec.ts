@@ -1,12 +1,13 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { AuthService } from '@qro/auth/api';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {RegisterComponent} from './register.component';
-import {ActivatedRoute} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {RouterTestingModule} from '@angular/router/testing';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { RegisterComponent } from './register.component';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '@qro/shared/util';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -17,16 +18,19 @@ describe('RegisterComponent', () => {
       declarations: [RegisterComponent],
       imports: [RouterTestingModule],
       providers: [
-        {provide: ApiService, useValue: {registerClient: () => {}, checkUsername: () => {}}},
-        {provide: SnackbarService, useValue: {warning: () => {}, success: () => {}}},
-        {provide: ActivatedRoute, useValue: {
-          snapshot: {
-            paramMap: {
-              get: () => ''
+        { provide: ApiService, useValue: { registerClient: () => { }, checkUsername: () => { } } },
+        { provide: AuthService, useValue: {} },
+        { provide: SnackbarService, useValue: { warning: () => { }, success: () => { } } },
+        {
+          provide: ActivatedRoute, useValue: {
+            snapshot: {
+              paramMap: {
+                get: () => ''
+              }
             }
           }
-          }},
-        {provide: MatDialog, useValue: {}}
+        },
+        { provide: MatDialog, useValue: {} }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

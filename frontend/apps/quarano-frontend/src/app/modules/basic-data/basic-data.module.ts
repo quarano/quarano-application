@@ -1,4 +1,4 @@
-import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
+import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { AppFormsModule } from '../app-forms/app-forms.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -12,7 +12,7 @@ import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
 import { EncountersResolver } from '../../resolvers/encounters.resolver';
 import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
 import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 @NgModule({
   imports: [

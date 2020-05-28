@@ -4,7 +4,7 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile.component';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 @NgModule({
   imports: [

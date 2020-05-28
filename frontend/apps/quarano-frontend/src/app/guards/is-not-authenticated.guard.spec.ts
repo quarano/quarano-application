@@ -1,7 +1,7 @@
 import { IsNotAuthenticatedGuard } from './is-not-authenticated.guard';
 import { Router } from '@angular/router';
 import { TokenService } from '../services/token.service';
-import { SnackbarService } from '../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 
 describe('IsNotAuthenticatedGuard', () => {
   let tokenService: TokenService;

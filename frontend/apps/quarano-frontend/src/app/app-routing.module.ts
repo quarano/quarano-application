@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'health-department', loadChildren: () =>
-      import('@quarano-frontend/health-department/shell').then(m => m.HealthDepartmentShellModule),
+      import('@qro/health-department/shell').then(m => m.HealthDepartmentShellModule),
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard]
   },
   {
@@ -48,12 +48,12 @@ const routes: Routes = [
   },
   {
     path: 'administration', loadChildren: () =>
-      import('./modules/administration/administration.module').then(m => m.AdministrationModule),
+      import('@qro/administration/shell').then(m => m.AdministrationShellModule),
     canActivate: [IsAuthenticatedGuard, IsAdminGuard]
   },
   {
     path: 'change-password', loadChildren: () =>
-      import('@quarano-frontend/auth/change-password').then(m => m.AuthChangePasswordModule),
+      import('@qro/auth/change-password').then(m => m.AuthChangePasswordModule),
     canActivate: [IsAuthenticatedGuard]
   },
   {

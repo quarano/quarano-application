@@ -1,24 +1,24 @@
-import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {BehaviorSubject, combineLatest, merge, Observable, Subject} from 'rxjs';
-import {filter, map, switchMap, take} from 'rxjs/operators';
-import {CloseCaseDialogComponent} from './close-case-dialog/close-case-dialog.component';
-import {cloneDeep} from 'lodash';
-import {SubSink} from 'subsink';
-import {CaseActionDto} from '../../../models/case-action';
-import {CaseCommentDto} from '../../../models/case-comment';
-import {CaseDetailDto} from '../../../models/case-detail';
-import {StartTracking} from '../../../models/start-tracking';
-import {MatTabGroup} from '@angular/material/tabs';
-import {ApiService} from '../../../services/api.service';
-import {SnackbarService} from '../../../services/snackbar.service';
-import {HalResponse} from '../../../models/hal-response';
-import {ConfirmationDialogComponent} from '../../../ui/confirmation-dialog/confirmation-dialog.component';
-import {ClientType} from '@quarano-frontend/health-department/domain';
-import {SymptomDto} from '../../../models/symptom';
-import {QuestionnaireDto} from '../../../models/first-query';
-import {ContactDto} from '../../../models/contact';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
+import { CloseCaseDialogComponent } from './close-case-dialog/close-case-dialog.component';
+import { cloneDeep } from 'lodash';
+import { SubSink } from 'subsink';
+import { CaseActionDto } from '../../../models/case-action';
+import { CaseCommentDto } from '../../../models/case-comment';
+import { CaseDetailDto } from '../../../models/case-detail';
+import { StartTracking } from '../../../models/start-tracking';
+import { MatTabGroup } from '@angular/material/tabs';
+import { ApiService } from '../../../services/api.service';
+import { SnackbarService } from '@qro/shared/util';
+import { HalResponse } from '../../../models/hal-response';
+import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ClientType } from '@qro/health-department/domain';
+import { SymptomDto } from '../../../models/symptom';
+import { QuestionnaireDto } from '../../../models/first-query';
+import { ContactDto } from '../../../models/contact';
 
 @Component({
   selector: 'qro-clients',
@@ -101,25 +101,25 @@ export class ClientComponent implements OnInit, OnDestroy {
             this.trackingStart$$.next(startTracking);
           });
       }
-    );
+      );
 
     this.subs.sink = this.caseDetail$.pipe(
       filter((data) => data !== null),
       filter((data) => data?._links?.hasOwnProperty('questionnaire')),
       take(1)).subscribe((data) => {
-      this.subs.sink = this.apiService
-        .getApiCall<QuestionnaireDto>(data, 'questionnaire')
-        .subscribe((questionnaire) => {
-          this.questionnaire$$.next(questionnaire);
-          this.symptoms$ = this.route.data.pipe(
-            map((resolver) => resolver.symptoms),
-            map((symptoms: SymptomDto[] ) =>
-              symptoms.filter((symptom) => questionnaire.symptoms
-                .findIndex((symptomId) => symptomId === symptom.id) !== -1)
-            )
-          );
-        });
-    });
+        this.subs.sink = this.apiService
+          .getApiCall<QuestionnaireDto>(data, 'questionnaire')
+          .subscribe((questionnaire) => {
+            this.questionnaire$$.next(questionnaire);
+            this.symptoms$ = this.route.data.pipe(
+              map((resolver) => resolver.symptoms),
+              map((symptoms: SymptomDto[]) =>
+                symptoms.filter((symptom) => questionnaire.symptoms
+                  .findIndex((symptomId) => symptomId === symptom.id) !== -1)
+              )
+            );
+          });
+      });
   }
 
   hasOpenAnomalies(): Observable<boolean> {

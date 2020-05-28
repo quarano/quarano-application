@@ -16,57 +16,63 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@quarano-frontend/auth/change-password": [
-        "libs/auth/change-password/src/index.ts"
-      ],
-      "@quarano-frontend/auth/domain": ["libs/auth/domain/src/index.ts"],
-      "@quarano-frontend/shared/util": ["libs/shared/util/src/index.ts"],
-      "@quarano-frontend/health-department/index-cases/action-list": [
+      "@qro/auth/change-password": ["libs/auth/change-password/src/index.ts"],
+      "@qro/auth/domain": ["libs/auth/domain/src/index.ts"],
+      "@qro/shared/util": ["libs/shared/util/src/index.ts"],
+      "@qro/health-department/index-cases/action-list": [
         "libs/health-department/index-cases/action-list/src/index.ts"
       ],
-      "@quarano-frontend/health-department/index-cases/case-list": [
+      "@qro/health-department/index-cases/case-list": [
         "libs/health-department/index-cases/case-list/src/index.ts"
       ],
-      "@quarano-frontend/health-department/contact-cases/case-list": [
+      "@qro/health-department/contact-cases/case-list": [
         "libs/health-department/contact-cases/case-list/src/index.ts"
       ],
-      "@quarano-frontend/health-department/contact-cases/action-list": [
+      "@qro/health-department/contact-cases/action-list": [
         "libs/health-department/contact-cases/action-list/src/index.ts"
       ],
-      "@quarano-frontend/shared/ui-material": [
-        "libs/shared/ui-material/src/index.ts"
-      ],
-      "@quarano-frontend/health-department/domain": [
+      "@qro/shared/ui-material": ["libs/shared/ui-material/src/index.ts"],
+      "@qro/health-department/domain": [
         "libs/health-department/domain/src/index.ts"
       ],
-      "@quarano-frontend/health-department/ui-action-alert": [
+      "@qro/health-department/ui-action-alert": [
         "libs/health-department/ui-action-alert/src/index.ts"
       ],
-      "@quarano-frontend/health-department/shell": [
+      "@qro/health-department/shell": [
         "libs/health-department/shell/src/index.ts"
       ],
-      "@quarano-frontend/health-department/contact-cases/shell": [
+      "@qro/health-department/contact-cases/shell": [
         "libs/health-department/contact-cases/shell/src/index.ts"
       ],
-      "@quarano-frontend/health-department/index-cases/shell": [
+      "@qro/health-department/index-cases/shell": [
         "libs/health-department/index-cases/shell/src/index.ts"
       ],
-      "@quarano-frontend/health-department/contact-cases/domain": [
+      "@qro/health-department/contact-cases/domain": [
         "libs/health-department/contact-cases/domain/src/index.ts"
       ],
-      "@quarano-frontend/health-department/index-cases/domain": [
+      "@qro/health-department/index-cases/domain": [
         "libs/health-department/index-cases/domain/src/index.ts"
       ],
-      "@quarano-frontend/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
-      "@quarano-frontend/shared/ui-button": [
-        "libs/shared/ui-button/src/index.ts"
-      ],
-      "@quarano-frontend/shared/util-error": [
-        "libs/shared/util-error/src/index.ts"
-      ],
-      "@quarano-frontend/shared/util-form-validation": [
+      "@qro/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
+      "@qro/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
+      "@qro/shared/util-error": ["libs/shared/util-error/src/index.ts"],
+      "@qro/shared/util-form-validation": [
         "libs/shared/util-form-validation/src/index.ts"
-      ]
+      ],
+      "@qro/administration/shell": ["libs/administration/shell/src/index.ts"],
+      "@qro/administration/accounts/account-list": [
+        "libs/administration/accounts/account-list/src/index.ts"
+      ],
+      "@qro/administration/accounts/account-detail": [
+        "libs/administration/accounts/account-detail/src/index.ts"
+      ],
+      "@qro/administration/accounts/domain": [
+        "libs/administration/accounts/domain/src/index.ts"
+      ],
+      "@qro/administration/accounts/shell": [
+        "libs/administration/accounts/shell/src/index.ts"
+      ],
+      "@qro/auth/api": ["libs/auth/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

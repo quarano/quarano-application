@@ -12,8 +12,7 @@ import { CaseDetailDto } from '../models/case-detail';
 import { CaseActionDto } from '../models/case-action';
 import { DeleteLink, Link } from '../models/general';
 import { HalResponse } from '../models/hal-response';
-import { AccountDto, AccountListDto } from '../models/account';
-import { ClientType } from '@quarano-frontend/health-department/domain';
+import { ClientType } from '@qro/health-department/domain';
 
 
 @Injectable({
@@ -90,9 +89,7 @@ export class ApiService {
     return this.httpClient.get(`${this.baseUrl}/api/registration/checkcode/${code}`);
   }
 
-  checkUsername(username: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/registration/checkusername/${username}`);
-  }
+
 
   getCase(caseId: string): Observable<CaseDetailDto> {
     return this.httpClient.get<CaseDetailDto>(`${this.baseUrl}/api/hd/cases/${caseId}`);
@@ -156,25 +153,7 @@ export class ApiService {
     return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
   }
 
-  getHealthDepartmentUsers(): Observable<AccountListDto> {
-    return this.httpClient.get<any>(`${this.baseUrl}/api/hd/accounts`)
-      .pipe(share(), map(result => result._embedded));
-  }
-
-  getHealthDepartmentUser(id: string): Observable<AccountDto> {
-    return this.httpClient.get<AccountDto>(`${this.baseUrl}/api/hd/accounts/${id}`)
-      .pipe(share());
-  }
-
   delete(deleteLink: DeleteLink) {
     return this.httpClient.delete(deleteLink.delete.href);
-  }
-
-  createHealthDepartmentUser(account: AccountDto): Observable<AccountDto> {
-    return this.httpClient.post<AccountDto>(`${this.baseUrl}/api/hd/accounts`, account);
-  }
-
-  editHealthDepartmentUser(account: AccountDto) {
-    return this.httpClient.put<AccountDto>(`${this.baseUrl}/api/hd/accounts/${account.accountId}`, account);
   }
 }

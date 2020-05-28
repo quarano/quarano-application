@@ -1,4 +1,4 @@
-import { API_URL } from '@quarano-frontend/shared/util';
+import { API_URL } from '@qro/shared/util';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 

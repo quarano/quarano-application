@@ -2,13 +2,13 @@ import {
   ValidationErrorGenerator,
   PasswordValidator,
   ConfirmValidPasswordMatcher
-} from '@quarano-frontend/shared/util-form-validation';
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
-import { AuthService } from '@quarano-frontend/auth/domain';
+} from '@qro/shared/util-form-validation';
+import { BadRequestService } from '@qro/shared/util-error';
+import { AuthService } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { UserService } from './../../../../../../apps/quarano-frontend/src/app/services/user.service';
 import { SubSink } from 'subsink';
-import { SnackbarService } from './../../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';

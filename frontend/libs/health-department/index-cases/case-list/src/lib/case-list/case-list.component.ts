@@ -1,11 +1,11 @@
-import { CaseListItemDto, ClientType } from '@quarano-frontend/health-department/domain';
+import { CaseListItemDto, ClientType } from '@qro/health-department/domain';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 
 class CaseRowViewModel {
   lastName: string;

@@ -2,9 +2,9 @@ import { ContactPersonComponent } from './contact-person/contact-person.componen
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactPersonsComponent } from './contact-persons.component';
-import {ContactPersonsResolver} from '../../resolvers/contact-persons.resolver';
-import {ContactPersonResolver} from '../../resolvers/contact-person.resolver';
-import {PreventUnsavedChangesGuard} from '../../guards/prevent-unsaved-changes.guard';
+import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
+import { PreventUnsavedChangesGuard } from '@qro/shared/util';
 
 
 
