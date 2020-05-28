@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { QuestionnaireDto } from '../models/first-query';
 import { ClientDto } from '../models/client';
-import { EncounterCreateDto, EncounterDto, EncounterEntry } from '../models/encounter';
+import {EncounterCreateDto, EncounterDto, EncounterEntry, EncountersDto} from '../models/encounter';
 import { DateFunctions } from '@qro/shared/util';
 
 @Injectable({
@@ -50,8 +50,8 @@ export class EnrollmentService {
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
-    return this.httpClient.get<EncounterDto[]>(`${this.baseUrl}/encounters`)
-      .pipe(share(), map(encounters => encounters.map(e => this.mapEncounterToEncounterEntry(e))));
+    return this.httpClient.get<EncountersDto>(`${this.baseUrl}/encounters`)
+      .pipe(share(), map(encounters => encounters?._embedded?.encounters.map(e => this.mapEncounterToEncounterEntry(e)) || []));
   }
 
   private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
