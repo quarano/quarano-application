@@ -1,4 +1,10 @@
 import { Link } from './general';
+import {HalResponse} from './hal-response';
+
+
+export interface EncountersDto extends HalResponse{
+  _embedded?: { encounters: EncounterDto[] };
+}
 
 export interface EncounterDto {
   date: string;
