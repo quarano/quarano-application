@@ -9,6 +9,7 @@ import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.core.annotation.Order;
@@ -45,28 +46,27 @@ public class DepartmentDataInitializer implements DataInitializer {
 
 		departments.saveAll(List.of( //
 				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //
-						.addDepartmentContacts(List.of( //
-								DepartmentContact.of() //
+						.setContacts(Set.of( //
+								new DepartmentContact() //
 										.setType(DepartmentContact.ContactType.INDEX) //
 										.setEmailAddress(EmailAddress.of("index-email@gamannheim.de")) //
 										.setPhoneNumber(PhoneNumber.of("0123456789")), //
-								DepartmentContact.of() //
+								new DepartmentContact() //
 										.setType(DepartmentContact.ContactType.CONTACT) //
 										.setEmailAddress(EmailAddress.of("contact-email@gamannheim.de")) //
-										.setPhoneNumber(PhoneNumber.of("00123456789")) //
-						) //
-					), //
+										.setPhoneNumber(PhoneNumber.of("00123456789"))) //
+						), //
 				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2) //
-						.addDepartmentContacts(List.of( //
-								DepartmentContact.of() //
+						.setContacts(Set.of( //
+								new DepartmentContact() //
 										.setType(DepartmentContact.ContactType.INDEX) //
-								.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de")) //
-								.setPhoneNumber(PhoneNumber.of("0123456789")), //
-								DepartmentContact.of() //
-										.setType(DepartmentContact.ContactType.CONTACT)
+										.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de")) //
+										.setPhoneNumber(PhoneNumber.of("0123456789")), //
+								new DepartmentContact() //
+										.setType(DepartmentContact.ContactType.CONTACT) //
 										.setEmailAddress(EmailAddress.of("contact-email@gadarmstadt.de")) //
-										.setPhoneNumber(PhoneNumber.of("00123456789")) //
-						)) //
+										.setPhoneNumber(PhoneNumber.of("00123456789"))) //
+						) //
 		));
 	}
 }

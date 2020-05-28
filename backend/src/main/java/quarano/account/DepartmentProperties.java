@@ -2,6 +2,7 @@ package quarano.account;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import quarano.account.DepartmentContact.ContactType;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 
@@ -23,19 +24,19 @@ public class DepartmentProperties {
 	private final @Getter DefaultAdminAccount defaultAccount;
 
 	Department getDefaultDepartment() {
+
 		return new Department(defaultDepartment.name) //
-				.addDepartmentContacts(
-						defaultDepartment.contacts.stream()
-							.map(contact -> DepartmentContact.of()
-									.setType(DepartmentContact.ContactType.valueOf(contact.type)) //
-									.setEmailAddress(EmailAddress.of(contact.emailAddress)) //
-									.setPhoneNumber(PhoneNumber.of(contact.phoneNumber))
-							).collect(Collectors.toList())
-				);
+				.setContacts(defaultDepartment.contacts.stream() //
+						.map(contact -> new DepartmentContact() //
+								.setType(ContactType.valueOf(contact.type)) //
+								.setEmailAddress(EmailAddress.of(contact.emailAddress)) //
+								.setPhoneNumber(PhoneNumber.of(contact.phoneNumber))) //
+						.collect(Collectors.toUnmodifiableSet()));
 	}
 
 	@RequiredArgsConstructor
 	static class DefaultDepartment {
+
 		private final String name;
 		private final List<DefaultDepartmentContact> contacts;
 

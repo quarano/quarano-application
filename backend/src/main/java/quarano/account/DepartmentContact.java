@@ -24,21 +24,24 @@ import org.jddd.core.types.Identifier;
 @Entity
 @Table(name = "departments_contacts")
 @EqualsAndHashCode(callSuper = true, of = {})
+@Getter
+@Setter
 public class DepartmentContact extends QuaranoEntity<Department, DepartmentContact.DepartmentContactIdentifier> {
-	private @Enumerated(EnumType.STRING) @Getter @Setter ContactType type;
-	private @Getter @Setter EmailAddress emailAddress;
-	private @Getter @Setter PhoneNumber phoneNumber;
 
-	private DepartmentContact() {
+	private @Enumerated(EnumType.STRING) ContactType type;
+	private EmailAddress emailAddress;
+	private PhoneNumber phoneNumber;
+
+	DepartmentContact() {
 		this.id = DepartmentContactIdentifier.of(UUID.randomUUID());
+	}
+
+	public boolean hasType(ContactType type) {
+		return this.type.equals(type);
 	}
 
 	public enum ContactType {
 		INDEX, CONTACT
-	}
-
-	public static DepartmentContact of() {
-		return new DepartmentContact();
 	}
 
 	@Embeddable
@@ -46,6 +49,7 @@ public class DepartmentContact extends QuaranoEntity<Department, DepartmentConta
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class DepartmentContactIdentifier implements Identifier, Serializable {
+
 		private static final long serialVersionUID = 7871473225101042167L;
 
 		final UUID departmentContactId;

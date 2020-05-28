@@ -1,18 +1,16 @@
 package quarano.account;
 
-import static quarano.account.DepartmentContact.*;
-
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import quarano.account.Department.DepartmentIdentifier;
+import quarano.account.DepartmentContact.ContactType;
 import quarano.core.QuaranoAggregate;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -39,9 +37,10 @@ import org.jddd.core.types.Identifier;
 public class Department extends QuaranoAggregate<Department, DepartmentIdentifier> {
 
 	private @Getter @Column(unique = true) String name;
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "department_id")
-	private @Getter @Setter	Set<DepartmentContact> contacts = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //
+	@JoinColumn(name = "department_id") //
+	private @Getter Set<DepartmentContact> contacts = new HashSet<>();
 
 	public Department(String name) {
 		this(name, UUID.randomUUID());
@@ -58,14 +57,21 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 		this.name = name;
 	}
 
-	Department addDepartmentContacts(Collection<DepartmentContact> departmentContacts) {
-		departmentContacts.forEach(departmentContact -> this.getContacts().add(departmentContact));
+	Set<DepartmentContact> getContacts() {
+		return Collections.unmodifiableSet(contacts);
+	}
+
+	Department setContacts(Set<DepartmentContact> contacts) {
+
+		this.contacts.clear();
+		this.contacts.addAll(contacts);
+
 		return this;
 	}
 
 	public Optional<DepartmentContact> getContact(ContactType contactType) {
-		return getContacts().stream()
-				.filter(contact -> contact.getType().equals(contactType))
+		return getContacts().stream() //
+				.filter(contact -> contact.getType().equals(contactType)) //
 				.findFirst();
 	}
 
@@ -74,6 +80,7 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class DepartmentIdentifier implements Identifier, Serializable {
+
 		private static final long serialVersionUID = 7871473225101042167L;
 
 		final UUID departmentId;
@@ -83,5 +90,4 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 			return departmentId.toString();
 		}
 	}
-
 }
