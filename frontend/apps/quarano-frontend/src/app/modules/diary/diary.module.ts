@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './diary.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
-import { AlertModule } from '../../ui/alert/alert.module';
+import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { MultipleAutocompleteModule } from '../../ui/multiple-autocomplete/multiple-autocomplete.module';
 import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
 import { DiaryEntryResolver } from '../../resolvers/diary-entry.resolver';
@@ -38,7 +38,7 @@ const COMPONENTS = [
     SharedUiMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule,
+    SharedUiAlertModule,
     ConfirmationDialogModule,
     MultipleAutocompleteModule,
     SharedUiButtonModule
