@@ -103,6 +103,9 @@
     },
     "shared-ui-alert": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-ui-confirmation-dialog": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

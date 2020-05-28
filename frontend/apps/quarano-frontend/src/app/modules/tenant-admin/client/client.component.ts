@@ -14,7 +14,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 import { HalResponse } from '../../../models/hal-response';
-import { ConfirmationDialogComponent } from '../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
 import { SymptomDto } from '../../../models/symptom';
 import { QuestionnaireDto } from '../../../models/first-query';

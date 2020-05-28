@@ -14,7 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { MultipleAutocompleteModule } from '../../ui/multiple-autocomplete/multiple-autocomplete.module';
-import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
+import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
 import { DiaryEntryResolver } from '../../resolvers/diary-entry.resolver';
 import { SymptomsResolver } from '../../resolvers/symptoms.resolver';
 import { DiaryResolver } from '../../resolvers/diary.resolver';
@@ -39,7 +39,7 @@ const COMPONENTS = [
     ReactiveFormsModule,
     RouterModule,
     SharedUiAlertModule,
-    ConfirmationDialogModule,
+    SharedUiConfirmationDialogModule,
     MultipleAutocompleteModule,
     SharedUiButtonModule
   ],

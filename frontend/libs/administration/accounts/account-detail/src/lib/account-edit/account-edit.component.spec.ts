@@ -1,9 +1,7 @@
 import { AccountService } from '@qro/administration/accounts/domain';
 import { FormBuilder } from '@angular/forms';
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { AccountEditComponent } from './account-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';

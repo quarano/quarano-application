@@ -7,7 +7,7 @@ import { BasicDataComponent } from './basic-data.component';
 import { BasicDataRoutingModule } from './basic-data-routing.module';
 import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
 import { MultipleAutocompleteModule } from '../../ui/multiple-autocomplete/multiple-autocomplete.module';
-import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
+import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
 import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
 import { EncountersResolver } from '../../resolvers/encounters.resolver';
 import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
@@ -23,7 +23,7 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
     ReactiveFormsModule,
     MultipleAutocompleteModule,
     AppFormsModule,
-    ConfirmationDialogModule,
+    SharedUiConfirmationDialogModule,
     SharedUiButtonModule
   ],
   declarations: [BasicDataComponent, InitialQuestionaireFormComponent],

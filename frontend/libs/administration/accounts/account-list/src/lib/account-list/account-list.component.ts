@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { AccountDto } from '../../../../domain/src/lib/models/account';
+import { AccountDto } from '@qro/administration/accounts/domain';
 import { IRole, roles } from '../../../../../../../apps/quarano-frontend/src/app/models/role';
 import { ApiService } from '../../../../../../../apps/quarano-frontend/src/app/services/api.service';
-import { SnackbarService } from '../../../../../../shared/util/src/lib/snackbar.service';
-import { ConfirmationDialogComponent } from '../../../../../../../apps/quarano-frontend/src/app/ui/confirmation-dialog/confirmation-dialog.component';
+import { SnackbarService } from '@qro/shared/util';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ArrayFunctions } from '@qro/shared/util';
 
 @Component({
