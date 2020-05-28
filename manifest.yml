@@ -37,7 +37,8 @@ applications:
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
     SPRING_PROFILES_ACTIVE: prod
-    
+    QUARANO_JWT_ALLOWED_ORIGINS: quarano-frontend.cfapps.io
+
 ###############   test system #########################
 - name: quarano-frontend-test
   memory: 128M
@@ -54,9 +55,10 @@ applications:
   services:
     - quarano-test
   env:
-    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"  
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+    QUARANO_JWT_ALLOWED_ORIGINS: quarano-frontend-test.cfapps.io
 
-    
+
 ###############   security-test system #########################
 - name: quarano-frontend-sec
   memory: 128M
