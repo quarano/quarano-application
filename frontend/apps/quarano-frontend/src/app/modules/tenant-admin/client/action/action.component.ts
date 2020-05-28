@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { CaseActionDto } from '../../../../models/case-action';
 import { ApiService } from '../../../../services/api.service';
 import { SnackbarService } from '@qro/shared/util';
-import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
 
 @Component({

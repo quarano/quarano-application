@@ -6,8 +6,8 @@ import { CommonModule } from '@angular/common';
 import { BasicDataComponent } from './basic-data.component';
 import { BasicDataRoutingModule } from './basic-data-routing.module';
 import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
-import { MultipleAutocompleteModule } from '../../ui/multiple-autocomplete/multiple-autocomplete.module';
-import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
+import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
+import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
 import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
 import { EncountersResolver } from '../../resolvers/encounters.resolver';
 import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
@@ -21,9 +21,9 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
     SharedUiMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MultipleAutocompleteModule,
+    SharedUiMultipleAutocompleteModule,
     AppFormsModule,
-    ConfirmationDialogModule,
+    SharedUiConfirmationDialogModule,
     SharedUiButtonModule
   ],
   declarations: [BasicDataComponent, InitialQuestionaireFormComponent],

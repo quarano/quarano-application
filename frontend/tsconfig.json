@@ -72,7 +72,14 @@
       "@qro/administration/accounts/shell": [
         "libs/administration/accounts/shell/src/index.ts"
       ],
-      "@qro/auth/api": ["libs/auth/api/src/index.ts"]
+      "@qro/auth/api": ["libs/auth/api/src/index.ts"],
+      "@qro/shared/ui-alert": ["libs/shared/ui-alert/src/index.ts"],
+      "@qro/shared/ui-confirmation-dialog": [
+        "libs/shared/ui-confirmation-dialog/src/index.ts"
+      ],
+      "@qro/shared/ui-multiple-autocomplete": [
+        "libs/shared/ui-multiple-autocomplete/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

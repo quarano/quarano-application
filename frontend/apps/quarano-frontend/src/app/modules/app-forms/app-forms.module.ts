@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactPersonFormComponent } from './contact-person-form/contact-person-form.component';
 import { ContactPersonDialogComponent } from './contact-person-dialog/contact-person-dialog.component';
-import { AlertModule } from '../../ui/alert/alert.module';
+import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    AlertModule,
+    SharedUiAlertModule,
     SharedUiMaterialModule,
     SharedUiButtonModule
   ],

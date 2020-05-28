@@ -22,7 +22,7 @@ import {
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator
 } from '@qro/shared/util-form-validation';
-import { ConfirmationDialogComponent } from '../../ui/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util';
 
 @Component({

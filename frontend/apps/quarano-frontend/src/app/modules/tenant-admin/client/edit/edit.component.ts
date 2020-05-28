@@ -22,8 +22,8 @@ import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { CaseDetailDto } from '../../../../models/case-detail';
-import { SnackbarService } from '../../../../../../../../libs/shared/util/src/lib/snackbar.service';
-import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
+import { SnackbarService } from '@qro/shared/util';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
 
 @Component({

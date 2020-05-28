@@ -1,11 +1,11 @@
-import {FormControl} from '@angular/forms';
-import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {filter, startWith, takeUntil} from 'rxjs/operators';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {IIdentifiable} from '../../models/general';
-import {cloneDeep} from 'lodash';
+import { FormControl } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { filter, startWith, takeUntil } from 'rxjs/operators';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { IIdentifiable } from '../../../../../../apps/quarano-frontend/src/app/models/general';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'qro-multiple-autocomplete',

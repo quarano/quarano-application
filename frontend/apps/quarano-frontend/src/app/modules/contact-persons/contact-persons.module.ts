@@ -6,8 +6,8 @@ import { CommonModule } from '@angular/common';
 import { ContactRoutingModule } from './contact-persons-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactPersonsComponent } from './contact-persons.component';
-import { AlertModule } from '../../ui/alert/alert.module';
-import { ConfirmationDialogModule } from '../../ui/confirmation-dialog/confirmation-dialog.module';
+import { SharedUiAlertModule } from '@qro/shared/ui-alert';
+import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
 import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
 import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
@@ -24,8 +24,8 @@ const COMPONENTS = [
     SharedUiMaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AlertModule,
-    ConfirmationDialogModule,
+    SharedUiAlertModule,
+    SharedUiConfirmationDialogModule,
     AppFormsModule,
   ],
   declarations: [...COMPONENTS],

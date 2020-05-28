@@ -1091,6 +1091,108 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-alert": {
+      "projectType": "library",
+      "root": "libs/shared/ui-alert",
+      "sourceRoot": "libs/shared/ui-alert/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-alert/tsconfig.lib.json",
+              "libs/shared/ui-alert/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-alert/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-alert/jest.config.js",
+            "tsConfig": "libs/shared/ui-alert/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-alert/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-confirmation-dialog": {
+      "projectType": "library",
+      "root": "libs/shared/ui-confirmation-dialog",
+      "sourceRoot": "libs/shared/ui-confirmation-dialog/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-confirmation-dialog/tsconfig.lib.json",
+              "libs/shared/ui-confirmation-dialog/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-confirmation-dialog/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-confirmation-dialog/jest.config.js",
+            "tsConfig": "libs/shared/ui-confirmation-dialog/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-confirmation-dialog/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-multiple-autocomplete": {
+      "projectType": "library",
+      "root": "libs/shared/ui-multiple-autocomplete",
+      "sourceRoot": "libs/shared/ui-multiple-autocomplete/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-multiple-autocomplete/tsconfig.lib.json",
+              "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-multiple-autocomplete/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-multiple-autocomplete/jest.config.js",
+            "tsConfig": "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-multiple-autocomplete/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {
