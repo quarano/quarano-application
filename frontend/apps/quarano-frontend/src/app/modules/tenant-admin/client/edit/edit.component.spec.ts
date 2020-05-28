@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditComponent } from './edit.component';
 import { MatDialog } from '@angular/material/dialog';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SnackbarService} from '../../../../services/snackbar.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SnackbarService } from '@qro/shared/util';
 
 describe('EditComponent', () => {
   let component: EditComponent;

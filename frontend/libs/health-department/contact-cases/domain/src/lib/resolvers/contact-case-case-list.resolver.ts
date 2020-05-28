@@ -1,5 +1,5 @@
 import { ContactCaseService } from './../services/contact-case.service';
-import { CaseListItemDto } from '@quarano-frontend/health-department/domain';
+import { CaseListItemDto } from '@qro/health-department/domain';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';

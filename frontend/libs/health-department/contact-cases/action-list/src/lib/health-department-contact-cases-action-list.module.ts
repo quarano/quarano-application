@@ -1,12 +1,12 @@
-import { SharedUtilModule } from '@quarano-frontend/shared/util';
-import { HealthDepartmentUiActionAlertModule } from '@quarano-frontend/health-department/ui-action-alert';
+import { SharedUtilModule } from '@qro/shared/util';
+import { HealthDepartmentUiActionAlertModule } from '@qro/health-department/ui-action-alert';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActionListComponent } from './action-list/action-list.component';
-import { ContactCaseActionListResolver, HealthDepartmentContactCasesDomainModule } from '@quarano-frontend/health-department/contact-cases/domain';
+import { ContactCaseActionListResolver, HealthDepartmentContactCasesDomainModule } from '@qro/health-department/contact-cases/domain';
 
 @NgModule({
   imports: [

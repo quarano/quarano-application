@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { SnackbarService } from '../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 
 export enum HttpStatusCode {
   unauthorized = 401,

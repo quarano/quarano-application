@@ -1,5 +1,5 @@
 {
-  "npmScope": "quarano-frontend",
+  "npmScope": "qro",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": {
@@ -82,6 +82,24 @@
     },
     "shared-util-form-validation": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "administration-shell": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "administration-accounts-account-list": {
+      "tags": ["scope:administration-accounts", "type:feature"]
+    },
+    "administration-accounts-account-detail": {
+      "tags": ["scope:administration-accounts", "type:feature"]
+    },
+    "administration-accounts-domain": {
+      "tags": ["scope:administration-accounts", "type:domain"]
+    },
+    "administration-accounts-shell": {
+      "tags": ["scope:administration-accounts", "type:feature"]
+    },
+    "auth-api": {
+      "tags": ["scope:auth", "type:api"]
     }
   }
 }

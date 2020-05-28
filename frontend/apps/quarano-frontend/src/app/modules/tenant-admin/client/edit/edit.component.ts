@@ -3,7 +3,7 @@ import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
@@ -22,9 +22,9 @@ import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { CaseDetailDto } from '../../../../models/case-detail';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../../../../../libs/shared/util/src/lib/snackbar.service';
 import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
-import { ClientType } from '@quarano-frontend/health-department/domain';
+import { ClientType } from '@qro/health-department/domain';
 
 @Component({
   selector: 'qro-client-edit',

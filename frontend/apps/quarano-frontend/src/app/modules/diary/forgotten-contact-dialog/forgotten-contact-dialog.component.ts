@@ -1,4 +1,4 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
@@ -7,9 +7,9 @@ import { Moment } from 'moment';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { EncounterEntry } from '../../../models/encounter';
 import { EnrollmentService } from '../../../services/enrollment.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { ContactPersonDto } from '../../../models/contact-person';
-import { ArrayValidator, ValidationErrorGenerator } from '@quarano-frontend/shared/util-form-validation';
+import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-form-validation';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',

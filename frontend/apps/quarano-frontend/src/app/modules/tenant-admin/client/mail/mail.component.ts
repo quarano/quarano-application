@@ -1,8 +1,8 @@
-import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {Subject} from 'rxjs';
-import {SnackbarService} from '../../../../services/snackbar.service';
-import {StartTracking} from '../../../../models/start-tracking';
+import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+import { SnackbarService } from '@qro/shared/util';
+import { StartTracking } from '../../../../models/start-tracking';
 
 @Component({
   selector: 'qro-client-mail',
@@ -20,7 +20,7 @@ export class MailComponent implements OnInit, OnChanges {
   renewTrackingCode: Subject<void> = new Subject<void>();
 
   constructor(private domSanitizer: DomSanitizer,
-              private snackbarService: SnackbarService) {
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActionDto } from '../../../../models/case-action';
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 
 @Component({
   selector: 'qro-client-action-anomaly',

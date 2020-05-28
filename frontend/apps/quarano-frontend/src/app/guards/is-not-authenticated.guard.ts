@@ -1,9 +1,8 @@
-import { SnackbarService } from '../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TokenService } from '../services/token.service';
-import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'

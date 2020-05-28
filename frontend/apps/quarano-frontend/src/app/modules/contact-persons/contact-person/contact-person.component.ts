@@ -7,8 +7,8 @@ import {
   ActivatedRoute, Router
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import {DeactivatableComponent} from '../../../guards/prevent-unsaved-changes.guard';
-import {ContactPersonDto} from '../../../models/contact-person';
+import { DeactivatableComponent } from '@qro/shared/util';
+import { ContactPersonDto } from '../../../models/contact-person';
 
 
 @Component({

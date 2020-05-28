@@ -1,5 +1,5 @@
-import { SharedUiButtonModule } from '@quarano-frontend/shared/ui-button';
-import { SharedUiTileModule } from '@quarano-frontend/shared/ui-tile';
+import { SharedUiButtonModule } from '@qro/shared/ui-button';
+import { SharedUiTileModule } from '@qro/shared/ui-tile';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { WelcomeComponent } from './welcome.component';
@@ -9,7 +9,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { LandingComponent } from './landing/landing.component';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 export const DATE_FORMAT = {
   parse: {

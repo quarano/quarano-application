@@ -6,11 +6,11 @@ import {
   AlertConfiguration,
   getAlertConfigurations,
   Alert
-} from '@quarano-frontend/health-department/domain';
+} from '@qro/health-department/domain';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 
 class ActionRowViewModel {
   lastName: string;

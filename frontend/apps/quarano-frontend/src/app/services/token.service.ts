@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { SnackbarService } from './snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { Router } from '@angular/router';
 
 export const JWT_STORAGE_KEY = 'jwt';

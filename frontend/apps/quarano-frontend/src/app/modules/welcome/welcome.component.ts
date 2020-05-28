@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { ITileViewModel } from '@quarano-frontend/shared/ui-tile';
+import { ITileViewModel } from '@qro/shared/ui-tile';
 
 @Component({
   selector: 'qro-welcome',

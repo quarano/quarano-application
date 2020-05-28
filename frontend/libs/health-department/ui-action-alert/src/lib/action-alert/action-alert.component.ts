@@ -1,4 +1,4 @@
-import { AlertConfiguration } from '@quarano-frontend/health-department/domain';
+import { AlertConfiguration } from '@qro/health-department/domain';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({

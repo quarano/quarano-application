@@ -1,18 +1,18 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { CaseActionDto } from '../../../../models/case-action';
 import { ApiService } from '../../../../services/api.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { ConfirmationDialogComponent } from '../../../../ui/confirmation-dialog/confirmation-dialog.component';
-import { ClientType } from '@quarano-frontend/health-department/domain';
+import { ClientType } from '@qro/health-department/domain';
 
 @Component({
   selector: 'qro-client-action',

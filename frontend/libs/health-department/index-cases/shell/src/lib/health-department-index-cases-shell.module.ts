@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexCasesComponent } from './index-cases/index-cases.component';
-import { SharedUiMaterialModule } from '@quarano-frontend/shared/ui-material';
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -19,12 +19,12 @@ import { RouterModule } from '@angular/router';
         },
         {
           path: 'action-list', loadChildren: () =>
-            import('@quarano-frontend/health-department/index-cases/action-list')
+            import('@qro/health-department/index-cases/action-list')
               .then(m => m.HealthDepartmentIndexCasesActionListModule)
         },
         {
           path: 'case-list', loadChildren: () =>
-            import('@quarano-frontend/health-department/index-cases/case-list')
+            import('@qro/health-department/index-cases/case-list')
               .then(m => m.HealthDepartmentIndexCasesCaseListModule)
         }
       ]

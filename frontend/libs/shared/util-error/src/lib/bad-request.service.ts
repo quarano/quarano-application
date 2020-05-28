@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { SnackbarService } from './../../../../../apps/quarano-frontend/src/app/services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { Injectable } from '@angular/core';
 
 @Injectable({

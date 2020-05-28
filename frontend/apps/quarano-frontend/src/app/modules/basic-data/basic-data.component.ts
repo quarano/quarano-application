@@ -1,4 +1,4 @@
-import { BadRequestService } from '@quarano-frontend/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -15,15 +15,15 @@ import { QuestionnaireDto } from '../../models/first-query';
 import { SymptomDto } from '../../models/symptom';
 import { ContactPersonDto } from '../../models/contact-person';
 import { EncounterEntry } from '../../models/encounter';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { EnrollmentService } from '../../services/enrollment.service';
 import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator
-} from '@quarano-frontend/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { ConfirmationDialogComponent } from '../../ui/confirmation-dialog/confirmation-dialog.component';
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 
 @Component({
   selector: 'qro-basic-data',

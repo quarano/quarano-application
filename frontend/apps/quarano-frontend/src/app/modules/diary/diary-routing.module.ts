@@ -2,11 +2,11 @@ import { DiaryComponent } from './diary.component';
 import { DiaryEntryComponent } from './diary-entry/diary-entry.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {DiaryResolver} from '../../resolvers/diary.resolver';
-import {DiaryEntryResolver} from '../../resolvers/diary-entry.resolver';
-import {SymptomsResolver} from '../../resolvers/symptoms.resolver';
-import {ContactPersonsResolver} from '../../resolvers/contact-persons.resolver';
-import {PreventUnsavedChangesGuard} from '../../guards/prevent-unsaved-changes.guard';
+import { DiaryResolver } from '../../resolvers/diary.resolver';
+import { DiaryEntryResolver } from '../../resolvers/diary-entry.resolver';
+import { SymptomsResolver } from '../../resolvers/symptoms.resolver';
+import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { PreventUnsavedChangesGuard } from '@qro/shared/util';
 
 
 const routes: Routes = [

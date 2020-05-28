@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WelcomeComponent } from './welcome.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import {SnackbarService} from '../../services/snackbar.service';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { SnackbarService } from '@qro/shared/util';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('WelcomeComponent', () => {
   let component: WelcomeComponent;
@@ -14,7 +14,7 @@ describe('WelcomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientModule],
       declarations: [WelcomeComponent],
-      providers: [{ provide: SnackbarService, useValue: {warning: () => {}, success: () => {}} }],
+      providers: [{ provide: SnackbarService, useValue: { warning: () => { }, success: () => { } } }],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();

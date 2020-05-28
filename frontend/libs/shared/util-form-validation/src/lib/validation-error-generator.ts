@@ -1,4 +1,4 @@
-import { DateFunctions } from '@quarano-frontend/shared/util';
+import { DateFunctions } from '@qro/shared/util';
 import { AbstractControl } from '@angular/forms';
 
 export class ValidationErrorGenerator {

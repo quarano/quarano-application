@@ -1,8 +1,8 @@
 import { share, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from '@quarano-frontend/shared/util';
+import { API_URL } from '@qro/shared/util';
 import { Injectable, Inject } from '@angular/core';
-import { ActionListItemDto, CaseListItemDto, ClientType } from '@quarano-frontend/health-department/domain';
+import { ActionListItemDto, CaseListItemDto, ClientType } from '@qro/health-department/domain';
 import { Observable } from 'rxjs';
 
 @Injectable({

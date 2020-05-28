@@ -8,12 +8,12 @@ import { RouterModule } from '@angular/router';
     children: [
       {
         path: 'index-cases', loadChildren: () =>
-          import('@quarano-frontend/health-department/index-cases/shell')
+          import('@qro/health-department/index-cases/shell')
             .then(m => m.HealthDepartmentIndexCasesShellModule),
       },
       {
         path: 'contact-cases', loadChildren: () =>
-          import('@quarano-frontend/health-department/contact-cases/shell')
+          import('@qro/health-department/contact-cases/shell')
             .then(m => m.HealthDepartmentContactCasesShellModule),
       },
       {
