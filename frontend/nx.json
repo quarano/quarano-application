@@ -106,6 +106,9 @@
     },
     "shared-ui-confirmation-dialog": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-ui-multiple-autocomplete": {
+      "tags": []
     }
   }
 }

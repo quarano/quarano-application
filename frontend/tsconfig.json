@@ -76,6 +76,9 @@
       "@qro/shared/ui-alert": ["libs/shared/ui-alert/src/index.ts"],
       "@qro/shared/ui-confirmation-dialog": [
         "libs/shared/ui-confirmation-dialog/src/index.ts"
+      ],
+      "@qro/shared/ui-multiple-autocomplete": [
+        "libs/shared/ui-multiple-autocomplete/src/index.ts"
       ]
     }
   },

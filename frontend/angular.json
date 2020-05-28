@@ -1158,6 +1158,41 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-multiple-autocomplete": {
+      "projectType": "library",
+      "root": "libs/shared/ui-multiple-autocomplete",
+      "sourceRoot": "libs/shared/ui-multiple-autocomplete/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-multiple-autocomplete/tsconfig.lib.json",
+              "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-multiple-autocomplete/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-multiple-autocomplete/jest.config.js",
+            "tsConfig": "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-multiple-autocomplete/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {
