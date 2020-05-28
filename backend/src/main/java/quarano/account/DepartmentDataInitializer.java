@@ -45,7 +45,7 @@ public class DepartmentDataInitializer implements DataInitializer {
 
 		departments.saveAll(List.of( //
 				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //
-						.addDepartmentContacts(List.of( //
+						.add(List.of( //
 								DepartmentContact.of() //
 										.setType(DepartmentContact.ContactType.INDEX) //
 										.setEmailAddress(EmailAddress.of("index-email@gamannheim.de")) //
@@ -57,7 +57,7 @@ public class DepartmentDataInitializer implements DataInitializer {
 						) //
 					), //
 				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2) //
-						.addDepartmentContacts(List.of( //
+						.add(List.of( //
 								DepartmentContact.of() //
 										.setType(DepartmentContact.ContactType.INDEX) //
 								.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de")) //

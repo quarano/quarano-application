@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.account.Account;
 import quarano.account.AccountService;
-import quarano.account.DepartmentContact;
+import quarano.account.DepartmentContact.ContactType;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
@@ -60,14 +60,13 @@ public class UserController {
 				.ifPresent(userDto::setEnrollment);
 
 		trackedCase.map(TrackedCase::getType) //
-				.flatMap(type -> { //
-					var contactType = CaseType.INDEX == type ? DepartmentContact.ContactType.INDEX
-							: DepartmentContact.ContactType.CONTACT; //
+				.flatMap(type -> {
+
+					var contactType = CaseType.INDEX == type ? ContactType.INDEX : ContactType.CONTACT;
+
 					return departments.findById(account.getDepartmentId()) //
-							.flatMap(department -> //
-					department.getContact(contactType) //
-							.map(contact -> new DepartmentDto(department.getName(), contact.getEmailAddress().toString(),
-									contact.getPhoneNumber().toString())));
+							.flatMap(department -> department.getContact(contactType) //
+									.map(contact -> DepartmentDto.of(department, contact)));
 				}) //
 				.ifPresent(userDto::setHealthDepartment);
 

@@ -35,18 +35,18 @@ public class AccountBootstrap implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 
 		Department defaultDepartment = configuration.getDefaultDepartment();
+
 		if (departments.count() > 0) {
 
 			log.info("Found departments in database. Updating their contact informations");
 
-			String departmentName = defaultDepartment.getName();
-			departments.findByName(departmentName)
+			departments.findByName(defaultDepartment.getName()) //
 					.map(department -> {
 						// workaround for hibernate as orphanremoval is not working here
 						departments.deleteDepartmentContacts(department.getContacts());
 						return department;
-					})
-					.map(department -> department.addDepartmentContacts(defaultDepartment.getContacts()))
+					}) //
+					.map(department -> department.add(defaultDepartment.getContacts())) //
 					.ifPresent(departments::save);
 
 			return;
@@ -57,7 +57,6 @@ public class AccountBootstrap implements ApplicationRunner {
 		var department = departments.save(defaultDepartment);
 		var defaults = configuration.getDefaultAccount();
 
-
 		// create initial roles
 		for (RoleType type : RoleType.values()) {
 
@@ -67,11 +66,9 @@ public class AccountBootstrap implements ApplicationRunner {
 				continue;
 			}
 			log.info("Creating initial role " + type.getCode());
-			
+
 			roleRepository.save(new Role(type));
 		}
-
-		
 
 		log.info("Creating default account (root, root).");
 
@@ -80,6 +77,6 @@ public class AccountBootstrap implements ApplicationRunner {
 				defaults.getLastname(), //
 				EmailAddress.of(defaults.getEmailAddress()), //
 				department.getId(), RoleType.ROLE_HD_ADMIN);
-		
+
 	}
 }
