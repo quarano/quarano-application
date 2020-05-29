@@ -15,7 +15,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/quarano-frontend",
+            "outputPath": "dist/apps/quarano-frontend/public",
             "index": "apps/quarano-frontend/src/index.html",
             "main": "apps/quarano-frontend/src/main.ts",
             "polyfills": "apps/quarano-frontend/src/polyfills.ts",
@@ -23,8 +23,7 @@
             "aot": true,
             "assets": [
               "apps/quarano-frontend/src/favicon.ico",
-              "apps/quarano-frontend/src/assets",
-              "apps/quarano-frontend/src/Staticfile"
+              "apps/quarano-frontend/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

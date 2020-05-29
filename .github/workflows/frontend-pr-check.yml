@@ -34,4 +34,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build-stage
+    - run: npm run prepare-deployment
     - run: npm run ci-test

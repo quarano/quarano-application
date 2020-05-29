@@ -34,6 +34,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build-sec
+    - run: npm run prepare-deployment
     - run: npm run ci-test
 
     - name: Set up CF CLI
