@@ -1,8 +1,8 @@
-import { Link } from './general';
-import {HalResponse} from './hal-response';
+import { Link } from '../../../../../../apps/quarano-frontend/src/app/models/general';
+import { HalResponse } from '../../../../../../apps/quarano-frontend/src/app/models/hal-response';
 
 
-export interface EncountersDto extends HalResponse{
+export interface EncountersDto extends HalResponse {
   _embedded?: { encounters: EncounterDto[] };
 }
 

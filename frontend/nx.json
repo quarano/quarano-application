@@ -117,24 +117,30 @@
       "tags": ["scope:auth", "type:feature"]
     },
     "administration-domain": {
-      "tags": []
+      "tags": ["scope:administration", "type:domain"]
     },
     "client-enrollment-domain": {
-      "tags": []
+      "tags": ["scope:client-enrollment", "type:domain"]
     },
     "client-enrollment-api": {
-      "tags": []
+      "tags": ["scope:client-enrollment", "type:api"]
     },
     "administration-api": {
-      "tags": []
+      "tags": ["scope:administration", "type:api"]
     },
     "health-department-api": {
-      "tags": []
+      "tags": ["sccope:health-department", "type:api"]
     },
     "auth-forbidden": {
-      "tags": []
+      "tags": ["scope:auth", "type:feature"]
     },
     "client-enrollment-shell": {
+      "tags": ["scope:client-enrollment", "type:feature"]
+    },
+    "shared-util-progress-bar": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-domain": {
       "tags": []
     }
   }

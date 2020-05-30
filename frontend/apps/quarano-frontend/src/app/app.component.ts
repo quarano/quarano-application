@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { delay } from 'rxjs/operators';
-import {ProgressBarService} from './services/progress-bar.service';
+import { ProgressBarService } from '@qro/shared/util-progress-bar';
 
 @Component({
   selector: 'qro-root',

@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {QuestionnaireDto} from '../../../../models/first-query';
-import {SymptomDto} from '../../../../models/symptom';
+import { Component, Input, OnInit } from '@angular/core';
+import { QuestionnaireDto } from '@qro/client/enrollment/domain';
+import { SymptomDto } from '../../../../models/symptom';
 
 @Component({
   selector: 'qro-client-questionnaire',

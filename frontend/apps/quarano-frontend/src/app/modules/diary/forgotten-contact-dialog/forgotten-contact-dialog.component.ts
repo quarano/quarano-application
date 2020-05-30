@@ -5,7 +5,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Moment } from 'moment';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
-import { EncounterEntry } from '../../../models/encounter';
+import { EncounterEntry } from '../../../../../../../libs/client/domain/src/lib/models/encounter';
 import { EnrollmentService } from '../../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 import { ContactPersonDto } from '../../../models/contact-person';

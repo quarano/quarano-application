@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { QuestionnaireDto } from '../models/first-query';
-import { EnrollmentService } from '../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
+import { QuestionnaireDto, EnrollmentService } from '@qro/client/enrollment/domain';
 
 @Injectable()
 export class MyFirstQueryResolver implements Resolve<QuestionnaireDto> {

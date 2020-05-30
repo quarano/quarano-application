@@ -3,7 +3,9 @@ import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
 import { tap, finalize } from 'rxjs/operators';
 import { ProgressBarService } from '../services/progress-bar.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProgressBarInterceptor implements HttpInterceptor {
 
   constructor(private progressBarService: ProgressBarService) {

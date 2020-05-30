@@ -9,14 +9,11 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BehaviorSubject } from 'rxjs';
-import { EnrollmentStatusDto } from '../../models/enrollment-status';
-import { ClientDto } from '../../models/client';
-import { QuestionnaireDto } from '../../models/first-query';
+import { ClientDto, EncounterEntry } from '@qro/client/domain';
+import { QuestionnaireDto, EnrollmentStatusDto, EnrollmentService } from '@qro/client/enrollment/domain';
 import { SymptomDto } from '../../models/symptom';
 import { ContactPersonDto } from '../../models/contact-person';
-import { EncounterEntry } from '../../models/encounter';
 import { SnackbarService } from '@qro/shared/util';
-import { EnrollmentService } from '../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,

@@ -92,7 +92,11 @@
       "@qro/auth/forbidden": ["libs/auth/forbidden/src/index.ts"],
       "@qro/client/enrollment/shell": [
         "libs/client/enrollment/shell/src/index.ts"
-      ]
+      ],
+      "@qro/shared/util-progress-bar": [
+        "libs/shared/util-progress-bar/src/index.ts"
+      ],
+      "@qro/client/domain": ["libs/client/domain/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

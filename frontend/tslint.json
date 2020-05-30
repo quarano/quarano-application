@@ -112,7 +112,11 @@
           },
           {
             "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": ["type:feature", "type:api"]
+            "onlyDependOnLibsWithTags": [
+              "type:feature",
+              "type:api",
+              "type:util"
+            ]
           },
           {
             "sourceTag": "type:feature",

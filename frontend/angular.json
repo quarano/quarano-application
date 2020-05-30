@@ -1452,6 +1452,73 @@
           "style": "scss"
         }
       }
+    },
+    "shared-util-progress-bar": {
+      "projectType": "library",
+      "root": "libs/shared/util-progress-bar",
+      "sourceRoot": "libs/shared/util-progress-bar/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-progress-bar/tsconfig.lib.json",
+              "libs/shared/util-progress-bar/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-progress-bar/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-progress-bar/jest.config.js",
+            "tsConfig": "libs/shared/util-progress-bar/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-progress-bar/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-domain": {
+      "projectType": "library",
+      "root": "libs/client/domain",
+      "sourceRoot": "libs/client/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/domain/tsconfig.lib.json",
+              "libs/client/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/domain/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/domain/jest.config.js",
+            "tsConfig": "libs/client/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

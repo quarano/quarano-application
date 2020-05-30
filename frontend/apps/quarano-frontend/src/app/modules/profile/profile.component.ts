@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
-import { ClientDto } from '../../models/client';
+import { ClientDto } from '../../../../../../libs/client/domain/src/lib/models/client';
 import { EnrollmentService } from '../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 import {

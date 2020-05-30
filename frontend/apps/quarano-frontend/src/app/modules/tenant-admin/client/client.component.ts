@@ -17,7 +17,7 @@ import { HalResponse } from '../../../models/hal-response';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
 import { SymptomDto } from '../../../models/symptom';
-import { QuestionnaireDto } from '../../../models/first-query';
+import { QuestionnaireDto } from '@qro/client/enrollment/domain';
 import { ContactDto } from '../../../models/contact';
 
 @Component({

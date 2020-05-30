@@ -24,12 +24,10 @@ import { ContactPersonsModule } from './modules/contact-persons/contact-persons.
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
 import { HeaderRightComponent } from './components/layout/header-right/header-right.component';
-import { ProgressBarInterceptor } from './interceptors/progress-bar.interceptor';
 import { BasicDataModule } from './modules/basic-data/basic-data.module';
 import { DateInterceptor } from './interceptors/date-interceptor';
 import { HdContactComponent } from './components/hd-contact/hd-contact.component';
 import { AsideHostDirective } from './directives/aside-host.directive';
-import { SnackbarService } from '@qro/shared/util';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
@@ -75,12 +73,6 @@ const SUB_MODULES = [
   ],
   entryComponents: [HdContactComponent],
   providers: [
-    SnackbarService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ProgressBarInterceptor,
-      multi: true,
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: DateInterceptor,

@@ -1,23 +1,22 @@
+import { QuestionnaireDto } from './../models/questionnaire';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import { DateFunctions, API_URL } from '@qro/shared/util';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
-import { QuestionnaireDto } from '../models/first-query';
-import { ClientDto } from '../models/client';
-import { EncounterCreateDto, EncounterDto, EncounterEntry, EncountersDto } from '../models/encounter';
-import { DateFunctions } from '@qro/shared/util';
+import { ClientDto, EncounterDto, EncounterEntry, EncounterCreateDto, EncountersDto } from '@qro/client/domain';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrollmentService {
-  private baseUrl = `${environment.api.baseUrl}/api`;
-  private enrollmentSubject$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
+  private baseUrl = `${this.apiUrl}/api`;
+  private enrollmentSubject$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
   constructor(
-    private httpClient: HttpClient) {
+    private httpClient: HttpClient,
+    @Inject(API_URL) private apiUrl: string) {
   }
 
   getQuestionnaire(): Observable<QuestionnaireDto> {
