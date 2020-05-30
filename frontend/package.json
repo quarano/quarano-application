@@ -31,9 +31,12 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
-    "format:fix": "pretty-quick --staged",
-    "precommit": "run-s format:fix lint"
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "private": true,
   "dependencies": {
