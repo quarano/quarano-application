@@ -56,8 +56,6 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-		log.debug("Configuring HTTP security, allowing public access to '/login', 'clinet/register' and 'swagger-ui.html'");
-
 		Function<String, Account> accountSource = username -> accounts.findByUsername(username) //
 				.orElseThrow(
 						() -> new UsernameNotFoundException(String.format("Couldn't find account for username %s!", username)));
@@ -87,6 +85,8 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
+		
+
 
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(this.configuration.getAllowedOrigins());
@@ -95,7 +95,12 @@ class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 		configuration.setAllowedHeaders(
 				List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.ORIGIN, TOKEN_HEADER));
 		configuration.setExposedHeaders(List.of(TOKEN_HEADER));
-
+		
+		log.debug("Configuring HTTP-Security:");
+		log.debug("Set Allowed-Origins: " + configuration.getAllowedOrigins());
+		log.debug("Set Allowed-Headers: " + configuration.getAllowedHeaders());
+		log.debug("Exposed Headers: " + configuration.getExposedHeaders());
+	
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

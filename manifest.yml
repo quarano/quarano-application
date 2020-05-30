@@ -37,7 +37,7 @@ applications:
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
     SPRING_PROFILES_ACTIVE: prod
-    QUARANO_JWT_ALLOWED_ORIGINS: quarano-frontend.cfapps.io
+    QUARANO_JWT_ALLOWED_ORIGINS: https://quarano-frontend.cfapps.io
 
 ###############   test system #########################
 - name: quarano-frontend-test
@@ -56,7 +56,7 @@ applications:
     - quarano-test
   env:
     JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
-    QUARANO_JWT_ALLOWED_ORIGINS: quarano-frontend-test.cfapps.io
+    QUARANO_JWT_ALLOWED_ORIGINS: https://quarano-frontend-test.cfapps.io
 
 
 ###############   security-test system #########################
