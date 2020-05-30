@@ -1,7 +1,7 @@
 {
   "name": "quarano-frontend",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "EUPL-1.2-or-later",
   "scripts": {
     "ng": "ng",
     "nx": "nx",
