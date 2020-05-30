@@ -141,7 +141,10 @@
       "tags": ["scope:shared", "type:util"]
     },
     "client-domain": {
-      "tags": []
+      "tags": ["scope:client", "type:domain"]
+    },
+    "shared-ui-aside": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

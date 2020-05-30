@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Type, ComponentFactoryResolver } from '@angular/core';
-import {AsideHostDirective} from '../../directives/aside-host.directive';
-import {AsideService} from '../../services/aside.service';
+import { AsideHostDirective } from '../directives/aside-host.directive';
+import { AsideService } from '../services/aside.service';
 
 @Component({
   selector: 'qro-aside',

@@ -1,3 +1,4 @@
+import { SharedUiAsideModule } from '@qro/shared/ui-aside';
 import { AuthDomainModule } from '@qro/auth/domain';
 import { SharedUtilErrorModule } from '@qro/shared/util-error';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
@@ -6,7 +7,6 @@ import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
-import { AsideComponent } from './components/aside/aside.component';
 import { ProfileModule } from './modules/profile/profile.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
@@ -27,14 +27,9 @@ import { HeaderRightComponent } from './components/layout/header-right/header-ri
 import { BasicDataModule } from './modules/basic-data/basic-data.module';
 import { DateInterceptor } from './interceptors/date-interceptor';
 import { HdContactComponent } from './components/hd-contact/hd-contact.component';
-import { AsideHostDirective } from './directives/aside-host.directive';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
-
-const DIRECTIVES = [
-  AsideHostDirective,
-];
 
 const COMPONENTS = [
   AppComponent,
@@ -42,7 +37,6 @@ const COMPONENTS = [
   FooterComponent,
   HeaderLeftComponent,
   HeaderRightComponent,
-  AsideComponent,
   AgbComponent,
   ImpressumComponent,
   DataProtectionComponent,
@@ -57,11 +51,14 @@ const SUB_MODULES = [
   ProfileModule,
   TenantAdminModule,
   SharedUtilErrorModule,
-  AuthDomainModule
+  AuthDomainModule,
+  SharedUiAsideModule
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...DIRECTIVES],
+  declarations: [
+    ...COMPONENTS,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

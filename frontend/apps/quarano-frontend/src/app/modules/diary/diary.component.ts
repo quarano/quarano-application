@@ -1,12 +1,12 @@
-import {ForgottenContactDialogComponent} from './forgotten-contact-dialog/forgotten-contact-dialog.component';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {SubSink} from 'subsink';
-import {ForgottenContactBannerComponent} from './forgotten-contact-banner/forgotten-contact-banner.component';
-import {MatDialog} from '@angular/material/dialog';
-import {AsideService} from '../../services/aside.service';
-import {DiaryDto} from '../../models/diary-entry';
-import {ApiService} from '../../services/api.service';
+import { AsideService } from '@qro/shared/ui-aside';
+import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { SubSink } from 'subsink';
+import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DiaryDto } from '../../models/diary-entry';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'qro-diary',

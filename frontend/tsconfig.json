@@ -96,7 +96,8 @@
       "@qro/shared/util-progress-bar": [
         "libs/shared/util-progress-bar/src/index.ts"
       ],
-      "@qro/client/domain": ["libs/client/domain/src/index.ts"]
+      "@qro/client/domain": ["libs/client/domain/src/index.ts"],
+      "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

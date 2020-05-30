@@ -1519,6 +1519,38 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-aside": {
+      "projectType": "library",
+      "root": "libs/shared/ui-aside",
+      "sourceRoot": "libs/shared/ui-aside/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/ui-aside/tsconfig.lib.json",
+              "libs/shared/ui-aside/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-aside/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-aside/jest.config.js",
+            "tsConfig": "libs/shared/ui-aside/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-aside/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {
