@@ -7,8 +7,10 @@ import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.server.core.Relation;
@@ -113,8 +115,10 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 
 		var quarantine = trackedCase.getQuarantine();
 
-		return Map.of("from", quarantine.getFrom().format(DateTimeFormatter.ISO_DATE), //
-				"to", quarantine.getTo().format(DateTimeFormatter.ISO_DATE));
+		Map<String, Object> map = new HashMap<>();
+		Optional.ofNullable(quarantine.getFrom()).map(it -> it.format(DateTimeFormatter.ISO_DATE)).ifPresent(it -> map.put("from", it));
+		Optional.ofNullable(quarantine.getTo()).map(it -> it.format(DateTimeFormatter.ISO_DATE)).ifPresent(it -> map.put("to", it));
+		return map;
 	}
 
 	private CaseType getPrimaryCaseType() {
