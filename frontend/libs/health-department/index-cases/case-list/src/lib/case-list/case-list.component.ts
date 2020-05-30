@@ -11,9 +11,9 @@ class CaseRowViewModel {
   lastName: string;
   firstName: string;
   type: ClientType;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   email: string;
-  quarantineEnd: string;
+  quarantineEnd: Date;
   caseId: string;
   status: string;
   zipCode: string;
@@ -88,9 +88,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
-      dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
+      dateOfBirth: c.dateOfBirth,
       email: c.email,
-      quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
+      quarantineEnd: c.quarantineEnd,
       status: c.status,
       zipCode: c.zipCode || '-',
       caseId: c.caseId,

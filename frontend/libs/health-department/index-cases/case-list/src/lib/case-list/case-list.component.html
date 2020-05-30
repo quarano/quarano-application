@@ -86,6 +86,12 @@
       [draggable]="true"
       [canAutoResize]="true"
     >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <ng-container *ngIf="value; else empty_date_of_birth">{{
+          value | date: 'dd.MM.y'
+        }}</ng-container>
+        <ng-template #empty_date_of_birth>-</ng-template>
+      </ng-template>
     </ngx-datatable-column>
 
     <ngx-datatable-column
@@ -97,6 +103,9 @@
       [draggable]="true"
       [canAutoResize]="true"
     >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        {{ getQuarantineEndString(value) }}
+      </ng-template>
     </ngx-datatable-column>
 
     <ngx-datatable-column

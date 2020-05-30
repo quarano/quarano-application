@@ -12,9 +12,9 @@ class CaseRowViewModel {
   firstName: string;
   type: ClientType;
   typeName: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   createdAt: string;
-  quarantineEnd: string;
+  quarantineEnd: Date;
   caseId: string;
   status: string;
   extReferenceNumber: string;
@@ -89,9 +89,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
       firstName: c.firstName || '-',
       type: c.caseType,
       typeName: c.caseTypeLabel,
-      dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
+      dateOfBirth: c.dateOfBirth,
       createdAt: c.createdAt ? DateFunctions.toCustomLocaleDateString(c.createdAt) : '-',
-      quarantineEnd: this.getQuarantineEndString(c.quarantineEnd),
+      quarantineEnd: c.quarantineEnd,
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-'
