@@ -35,11 +35,6 @@
     "format:fix": "pretty-quick --staged",
     "precommit": "run-s format:fix lint"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "private": true,
   "dependencies": {
     "@nrwl/angular": "9.3.0",
