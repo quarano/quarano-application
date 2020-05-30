@@ -76,7 +76,7 @@ public class DiaryController {
 	}
 
 	@PutMapping("/api/diary/{identifier}")
-	HttpEntity<?> addDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, //
+	HttpEntity<?> updateDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, //
 			@Valid @RequestBody DiaryEntryInput payload, Errors errors, //
 			@LoggedIn TrackedPerson person) {
 
