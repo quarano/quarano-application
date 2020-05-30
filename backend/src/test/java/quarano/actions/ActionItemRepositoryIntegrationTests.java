@@ -56,8 +56,9 @@ class ActionItemRepositoryIntegrationTests {
 				.resolveAutomatically(repository::save);
 
 		assertThat(repository.findByTrackedPerson(person).stream()) //
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0)) //
-				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(1));
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, true), Index.atIndex(0)) //
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(1)) //
+				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(2));
 
 		assertThat(repository.findUnresolvedByTrackedPerson(person).stream()) //
 				.hasSize(1) //

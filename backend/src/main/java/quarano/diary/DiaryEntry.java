@@ -119,6 +119,11 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	boolean hasSlot(Slot slot) {
 		return this.slot.equals(slot);
 	}
+	
+	public DiaryEntry markEdited() {
+		registerEvent(DiaryEntryUpdated.of(this));
+		return this;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -151,6 +156,11 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 
 	@Value(staticConstructor = "of")
 	public static class DiaryEntryAdded implements DomainEvent {
+		DiaryEntry entry;
+	}
+	
+	@Value(staticConstructor = "of")
+	public static class DiaryEntryUpdated implements DomainEvent {
 		DiaryEntry entry;
 	}
 }
