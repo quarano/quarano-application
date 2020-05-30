@@ -18,4 +18,8 @@ export class AuthService {
   checkUsername(username: string): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/api/registration/checkusername/${username}`);
   }
+
+  login(username: string, password: string): Observable<{ token: string }> {
+    return this.httpClient.post<{ token: string }>(`${this.apiUrl}/login`, { username, password });
+  }
 }

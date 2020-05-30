@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {HeaderLeftComponent} from './header-left.component';
-import {of} from 'rxjs';
-import {UserService} from '../../../services/user.service';
-import {RouterTestingModule} from '@angular/router/testing';
+import { HeaderLeftComponent } from './header-left.component';
+import { of } from 'rxjs';
+import { UserService } from '../../../../../../../libs/auth/domain/src/lib/services/user.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('HeaderLeftComponent', () => {
   let component: HeaderLeftComponent;
@@ -15,7 +15,7 @@ describe('HeaderLeftComponent', () => {
       declarations: [HeaderLeftComponent],
       imports: [RouterTestingModule],
       providers: [
-        {provide: UserService, useValue: {isLoggedIn$: of()}}
+        { provide: UserService, useValue: { isLoggedIn$: of() } }
       ]
     })
       .compileComponents();

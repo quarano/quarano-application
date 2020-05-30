@@ -1,15 +1,13 @@
-import { IsAdminGuard } from './guards/is-admin.guard';
+import { IsAdminGuard } from '@qro/administration/api';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
-import { BasicDataGuard } from './guards/basic-data.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { EnrollmentCompletedGuard } from './guards/enrollment-completed.guard';
-import { IsAuthenticatedGuard } from './guards/is-authenticated.guard';
-import { IsHealthDepartmentUserGuard } from './guards/is-health-department-user.guard';
+import { EnrollmentCompletedGuard, BasicDataGuard } from '@qro/client/enrollment/api';
+import { IsAuthenticatedGuard } from '@qro/auth/api';
+import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
 const routes: Routes = [
   {
@@ -52,9 +50,8 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, IsAdminGuard]
   },
   {
-    path: 'change-password', loadChildren: () =>
-      import('@qro/auth/change-password').then(m => m.AuthChangePasswordModule),
-    canActivate: [IsAuthenticatedGuard]
+    path: 'auth', loadChildren: () =>
+      import('@qro/auth/shell').then(m => m.AuthShellModule),
   },
   {
     path: 'agb', component: AgbComponent
@@ -69,11 +66,7 @@ const routes: Routes = [
     path: '404/:message',
     component: NotFoundComponent,
   },
-  {
-    path: 'forbidden',
-    component: ForbiddenComponent
-  },
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }
 ];
 

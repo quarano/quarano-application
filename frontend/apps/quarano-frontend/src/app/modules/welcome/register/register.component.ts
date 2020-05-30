@@ -113,7 +113,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         () => {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
-          this.router.navigate(['/welcome/login']);
+          this.router.navigate(['/auth/login']);
         }, error => {
           this.badRequestService.handleBadRequestError(error, this.registrationForm);
         }

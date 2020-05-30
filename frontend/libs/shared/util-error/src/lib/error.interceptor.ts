@@ -24,7 +24,9 @@ export interface IBadRequestError {
   badRequestErrors: any;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private snackbarService: SnackbarService,
@@ -39,7 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
             this.snackbarService.message('Sie müssen sich zunächst einloggen');
-            this.router.navigate(['/welcome/login']);
+            this.router.navigate(['/auth/login']);
             return throwError(error);
           }
 

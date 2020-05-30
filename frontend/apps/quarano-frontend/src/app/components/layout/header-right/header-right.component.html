@@ -18,7 +18,11 @@
     <button data-cy="profile-button" mat-menu-item *qroIsEnrolledClient [routerLink]="['/profile']">
       <mat-icon>person</mat-icon> Benutzerprofil
     </button>
-    <button data-cy="change-password-button" mat-menu-item [routerLink]="['/change-password']">
+    <button
+      data-cy="change-password-button"
+      mat-menu-item
+      [routerLink]="['/auth/change-password']"
+    >
       <mat-icon>vpn_key</mat-icon> Passwort ändern
     </button>
     <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">

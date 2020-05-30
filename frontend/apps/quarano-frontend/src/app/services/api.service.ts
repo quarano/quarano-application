@@ -77,10 +77,6 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/api/contacts/${id}`, contactPerson);
   }
 
-  login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.baseUrl}/login`, { username, password });
-  }
-
   getMe(): Observable<UserDto> {
     return this.httpClient.get<UserDto>(`${this.baseUrl}/api/user/me`);
   }
@@ -88,8 +84,6 @@ export class ApiService {
   checkClientCode(code: string): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/api/registration/checkcode/${code}`);
   }
-
-
 
   getCase(caseId: string): Observable<CaseDetailDto> {
     return this.httpClient.get<CaseDetailDto>(`${this.baseUrl}/api/hd/cases/${caseId}`);

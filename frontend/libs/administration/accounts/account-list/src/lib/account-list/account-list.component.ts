@@ -5,7 +5,7 @@ import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { AccountDto } from '@qro/administration/accounts/domain';
-import { IRole, roles } from '../../../../../../../apps/quarano-frontend/src/app/models/role';
+import { IRole, roles } from '../../../../../../auth/domain/src/lib/models/role';
 import { ApiService } from '../../../../../../../apps/quarano-frontend/src/app/services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';

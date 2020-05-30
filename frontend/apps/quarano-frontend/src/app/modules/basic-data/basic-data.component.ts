@@ -16,7 +16,7 @@ import { SymptomDto } from '../../models/symptom';
 import { ContactPersonDto } from '../../models/contact-person';
 import { EncounterEntry } from '../../models/encounter';
 import { SnackbarService } from '@qro/shared/util';
-import { EnrollmentService } from '../../services/enrollment.service';
+import { EnrollmentService } from '../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,

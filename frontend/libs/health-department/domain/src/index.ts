@@ -4,3 +4,4 @@ export * from './lib/enums/client-type';
 export * from './lib/models/action-list-item';
 export * from './lib/models/alert-configuration';
 export * from './lib/models/case-list-item';
+export * from './lib/directives/is-health-department-user.directive';

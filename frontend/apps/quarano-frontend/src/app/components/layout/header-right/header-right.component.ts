@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {HdContactComponent} from '../../hd-contact/hd-contact.component';
-import {Observable} from 'rxjs';
-import {HealthDepartmentDto} from '../../../models/healthDepartment';
-import {UserService} from '../../../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HdContactComponent } from '../../hd-contact/hd-contact.component';
+import { Observable } from 'rxjs';
+import { HealthDepartmentDto } from '../../../models/healthDepartment';
+import { UserService } from '../../../../../../../libs/auth/domain/src/lib/services/user.service';
 
 @Component({
   selector: 'qro-header-right',
@@ -26,6 +26,6 @@ export class HeaderRightComponent implements OnInit {
   }
 
   showContact(department: HealthDepartmentDto) {
-    this.matDialog.open(HdContactComponent, {data: department});
+    this.matDialog.open(HdContactComponent, { data: department });
   }
 }

@@ -6,7 +6,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { Moment } from 'moment';
 import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { EncounterEntry } from '../../../models/encounter';
-import { EnrollmentService } from '../../../services/enrollment.service';
+import { EnrollmentService } from '../../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 import { ContactPersonDto } from '../../../models/contact-person';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-form-validation';

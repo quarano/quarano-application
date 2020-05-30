@@ -51,7 +51,7 @@ describe('health-department top navigation', () => {
   it('should logout user on logout button click', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="logout-button"]').click();
-    cy.url().should('include', '/welcome/login');
+    cy.url().should('include', '/auth/login');
   });
 
   it('should navigate to change password component on button click', () => {

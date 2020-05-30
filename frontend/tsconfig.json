@@ -79,6 +79,19 @@
       ],
       "@qro/shared/ui-multiple-autocomplete": [
         "libs/shared/ui-multiple-autocomplete/src/index.ts"
+      ],
+      "@qro/auth/shell": ["libs/auth/shell/src/index.ts"],
+      "@qro/auth/login": ["libs/auth/login/src/index.ts"],
+      "@qro/administration/domain": ["libs/administration/domain/src/index.ts"],
+      "@qro/client/enrollment/domain": [
+        "libs/client/enrollment/domain/src/index.ts"
+      ],
+      "@qro/client/enrollment/api": ["libs/client/enrollment/api/src/index.ts"],
+      "@qro/administration/api": ["libs/administration/api/src/index.ts"],
+      "@qro/health-department/api": ["libs/health-department/api/src/index.ts"],
+      "@qro/auth/forbidden": ["libs/auth/forbidden/src/index.ts"],
+      "@qro/client/enrollment/shell": [
+        "libs/client/enrollment/shell/src/index.ts"
       ]
     }
   },

@@ -2,7 +2,7 @@ import { AccountService } from '@qro/administration/accounts/domain';
 import { AuthService } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/util-error';
 import { MatInput } from '@angular/material/input';
-import { roles, IRole } from '../../../../../../../apps/quarano-frontend/src/app/models/role';
+import { roles, IRole } from '../../../../../../auth/domain/src/lib/models/role';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';

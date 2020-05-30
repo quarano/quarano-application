@@ -1,12 +1,12 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {HeaderRightComponent} from './header-right.component';
-import {of} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
-import {UserService} from '../../../services/user.service';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {MatMenuModule} from '@angular/material/menu';
+import { HeaderRightComponent } from './header-right.component';
+import { of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { UserService } from '../../../../../../../libs/auth/domain/src/lib/services/user.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
@@ -24,8 +24,8 @@ describe('HeaderRightComponent', () => {
       declarations: [
         HeaderRightComponent],
       providers: [
-        {provide: UserService, useValue: userService},
-        {provide: MatDialog, useValue: {}}
+        { provide: UserService, useValue: userService },
+        { provide: MatDialog, useValue: {} }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

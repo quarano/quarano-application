@@ -108,6 +108,33 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "shared-ui-multiple-autocomplete": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-shell": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "auth-login": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "administration-domain": {
+      "tags": []
+    },
+    "client-enrollment-domain": {
+      "tags": []
+    },
+    "client-enrollment-api": {
+      "tags": []
+    },
+    "administration-api": {
+      "tags": []
+    },
+    "health-department-api": {
+      "tags": []
+    },
+    "auth-forbidden": {
+      "tags": []
+    },
+    "client-enrollment-shell": {
       "tags": []
     }
   }

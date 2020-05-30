@@ -63,7 +63,8 @@
             "sourceTag": "scope:app",
             "onlyDependOnLibsWithTags": [
               "scope:health-department",
-              "scope:auth"
+              "scope:auth",
+              "scope:shared"
             ]
           },
           {
@@ -111,7 +112,7 @@
           },
           {
             "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": ["type:feature"]
+            "onlyDependOnLibsWithTags": ["type:feature", "type:api"]
           },
           {
             "sourceTag": "type:feature",

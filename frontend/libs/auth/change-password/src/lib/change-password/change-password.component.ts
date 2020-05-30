@@ -6,7 +6,7 @@ import {
 import { BadRequestService } from '@qro/shared/util-error';
 import { AuthService } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
-import { UserService } from './../../../../../../apps/quarano-frontend/src/app/services/user.service';
+import { UserService } from '../../../../domain/src/lib/services/user.service';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util';
 import { Component, OnInit, OnDestroy } from '@angular/core';

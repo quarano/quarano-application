@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {roleNames} from '../../../models/role';
-import {UserService} from '../../../services/user.service';
+import { roleNames } from '../../../../../../../libs/auth/domain/src/lib/models/role';
+import { UserService } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-header-left',
