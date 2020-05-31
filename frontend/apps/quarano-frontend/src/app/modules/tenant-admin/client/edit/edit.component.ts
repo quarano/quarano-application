@@ -1,3 +1,4 @@
+import { distinctUntilChanged } from 'rxjs/operators';
 import {
   ValidationErrorGenerator,
   TrimmedPatternValidator,
@@ -64,10 +65,13 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
     this.updateFormGroup(this.caseDetail);
 
-    this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges.subscribe((value) => {
-      this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
-    }));
-
+    this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe((value) => {
+        if (value) {
+          this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
+        }
+      }));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -157,7 +161,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   trimValue(input: MatInput) {
     input.value = input.value?.trim();
-    console.log(this.formGroup)
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
