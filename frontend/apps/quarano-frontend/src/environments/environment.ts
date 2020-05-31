@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: {
-    baseUrl: 'https://quarano-backend-test.cfapps.io'
+    baseUrl: 'http://localhost:8080'
   }
 };
 

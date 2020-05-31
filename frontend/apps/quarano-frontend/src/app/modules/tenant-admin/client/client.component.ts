@@ -151,7 +151,7 @@ export class ClientComponent implements OnInit, OnDestroy {
         this.trackingStart$$.next(data);
         this.updatedDetail$$.next({ ...cloneDeep(caseDetail), _links: data._links });
 
-        this.tabIndex = 3;
+        this.tabIndex = 4;
       });
   }
 
@@ -159,7 +159,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.subs.sink = this.apiService.putApiCall<StartTracking>(tracking, 'renew')
       .subscribe((data) => {
         this.trackingStart$$.next(data);
-        this.tabIndex = 3;
+        this.tabIndex = 4;
       });
   }
 
