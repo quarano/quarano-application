@@ -158,6 +158,7 @@
         formControlName="quarantineEndDate"
         #quarantine_end_input
         (blur)="trimValue(quarantine_end_input)"
+        [min]="formGroup.controls.quarantineStartDate.value"
       />
       <mat-datepicker-toggle
         matSuffix
