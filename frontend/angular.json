@@ -1551,6 +1551,172 @@
           "style": "scss"
         }
       }
+    },
+    "client-diary-domain": {
+      "projectType": "library",
+      "root": "libs/client/diary/domain",
+      "sourceRoot": "libs/client/diary/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/diary/domain/tsconfig.lib.json",
+              "libs/client/diary/domain/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/diary/domain/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/diary/domain/jest.config.js",
+            "tsConfig": "libs/client/diary/domain/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/diary/domain/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-diary-diary-list": {
+      "projectType": "library",
+      "root": "libs/client/diary/diary-list",
+      "sourceRoot": "libs/client/diary/diary-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/diary/diary-list/tsconfig.lib.json",
+              "libs/client/diary/diary-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/diary/diary-list/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/diary/diary-list/jest.config.js",
+            "tsConfig": "libs/client/diary/diary-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/diary/diary-list/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-diary-diary-detail": {
+      "projectType": "library",
+      "root": "libs/client/diary/diary-detail",
+      "sourceRoot": "libs/client/diary/diary-detail/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/diary/diary-detail/tsconfig.lib.json",
+              "libs/client/diary/diary-detail/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/diary/diary-detail/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/diary/diary-detail/jest.config.js",
+            "tsConfig": "libs/client/diary/diary-detail/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/diary/diary-detail/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-diary-shell": {
+      "projectType": "library",
+      "root": "libs/client/diary/shell",
+      "sourceRoot": "libs/client/diary/shell/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/diary/shell/tsconfig.lib.json",
+              "libs/client/diary/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/diary/shell/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/diary/shell/jest.config.js",
+            "tsConfig": "libs/client/diary/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/diary/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-shell": {
+      "projectType": "library",
+      "root": "libs/client/shell",
+      "sourceRoot": "libs/client/shell/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/shell/tsconfig.lib.json",
+              "libs/client/shell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/shell/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/shell/jest.config.js",
+            "tsConfig": "libs/client/shell/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/shell/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

@@ -97,7 +97,16 @@
         "libs/shared/util-progress-bar/src/index.ts"
       ],
       "@qro/client/domain": ["libs/client/domain/src/index.ts"],
-      "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"]
+      "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"],
+      "@qro/client/diary/domain": ["libs/client/diary/domain/src/index.ts"],
+      "@qro/client/diary/diary-list": [
+        "libs/client/diary/diary-list/src/index.ts"
+      ],
+      "@qro/client/diary/diary-detail": [
+        "libs/client/diary/diary-detail/src/index.ts"
+      ],
+      "@qro/client/diary/shell": ["libs/client/diary/shell/src/index.ts"],
+      "@qro/client/shell": ["libs/client/shell/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

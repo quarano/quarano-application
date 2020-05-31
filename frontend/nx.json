@@ -145,6 +145,21 @@
     },
     "shared-ui-aside": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "client-diary-domain": {
+      "tags": []
+    },
+    "client-diary-diary-list": {
+      "tags": []
+    },
+    "client-diary-diary-detail": {
+      "tags": []
+    },
+    "client-diary-shell": {
+      "tags": []
+    },
+    "client-shell": {
+      "tags": []
     }
   }
 }
