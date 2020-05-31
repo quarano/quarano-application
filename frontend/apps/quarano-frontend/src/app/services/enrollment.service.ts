@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { QuestionnaireDto } from '../models/first-query';
 import { ClientDto } from '../models/client';
-import {EncounterCreateDto, EncounterDto, EncounterEntry, EncountersDto} from '../models/encounter';
+import { EncounterCreateDto, EncounterDto, EncounterEntry, EncountersDto } from '../models/encounter';
 import { DateFunctions } from '@qro/shared/util';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { DateFunctions } from '@qro/shared/util';
 })
 export class EnrollmentService {
   private baseUrl = `${environment.api.baseUrl}/api`;
-  private enrollmentSubject$ = new BehaviorSubject<EnrollmentStatusDto>(null);
+  private enrollmentSubject$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
   constructor(
     private httpClient: HttpClient) {
@@ -40,13 +40,16 @@ export class EnrollmentService {
 
   loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
     return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share()).pipe(
-      tap((data) => this.enrollmentSubject$.next(data)),
-      switchMap(() => this.enrollmentSubject$)
+      tap((data) => this.enrollmentSubject$$.next(data)),
+      switchMap(() => this.enrollmentSubject$$)
     );
   }
 
   getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return this.enrollmentSubject$;
+    if (!this.enrollmentSubject$$.value) {
+      return this.loadEnrollmentStatus();
+    }
+    return this.enrollmentSubject$$;
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
