@@ -49,26 +49,32 @@ public class UserController {
 
 		var userDto = UserDto.of(account);
 
-		var person = trackedPersonRepository.findByAccount(account); //
+		if (account.isTrackedPerson()) {
+			var person = trackedPersonRepository.findByAccount(account); //
 
-		person.map(it -> mapper.map(it, TrackedPersonDto.class)) //
-				.ifPresent(userDto::setClient);
+			person.map(it -> mapper.map(it, TrackedPersonDto.class)) //
+					.ifPresent(userDto::setClient);
 
-		var trackedCase = person.flatMap(cases::findByTrackedPerson);
-		trackedCase//
-				.map(it -> new EnrollmentDto(it.getEnrollment())) //
-				.ifPresent(userDto::setEnrollment);
+			var trackedCase = person.flatMap(cases::findByTrackedPerson);
+			trackedCase//
+					.map(it -> new EnrollmentDto(it.getEnrollment())) //
+					.ifPresent(userDto::setEnrollment);
 
-		trackedCase.map(TrackedCase::getType) //
-				.flatMap(type -> {
+			trackedCase.map(TrackedCase::getType) //
+					.flatMap(type -> {
 
-					var contactType = CaseType.INDEX == type ? ContactType.INDEX : ContactType.CONTACT;
+						var contactType = CaseType.INDEX == type ? ContactType.INDEX : ContactType.CONTACT;
 
-					return departments.findById(account.getDepartmentId()) //
-							.flatMap(department -> department.getContact(contactType) //
-									.map(contact -> DepartmentDto.of(department, contact)));
-				}) //
-				.ifPresent(userDto::setHealthDepartment);
+						return departments.findById(account.getDepartmentId()) //
+								.flatMap(department -> department.getContact(contactType) //
+										.map(contact -> DepartmentDto.of(department, contact)));
+					}) //
+					.ifPresent(userDto::setHealthDepartment);
+		} else {
+			departments.findById(account.getDepartmentId()) //
+					.map(it -> mapper.map(it, DepartmentDto.class)) //
+					.ifPresent(userDto::setHealthDepartment);
+		}
 
 		return ResponseEntity.ok(userDto);
 	}

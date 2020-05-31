@@ -27,25 +27,19 @@ class UserControllerWebIntegrationTests {
 
 	private final String USERNAME = "DemoAccount";
 	private final String PASSWORD = "DemoPassword";
+	private final String AGENT_USERNAME = "agent1";
+	private final String AGENT_PASSWORD = "agent1";
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
 
 	@Test
-	void testLoginWithValidCredentials() throws Exception {
+	void testLoginWithValidCredentialsForTrackedPerson() throws Exception {
 
 		// when
 		var token = login(USERNAME, PASSWORD);
 
-		// check if token is valid for authentication
-		String resultDtoStr = mvc.perform(get("/api/user/me") //
-				.header("Origin", "*") //
-				.header("Authorization", "Bearer " + token) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
-
+		String resultDtoStr = performGet(token);
 		DocumentContext document = JsonPath.parse(resultDtoStr);
 
 		assertThat(document.read("$.username", String.class)).isEqualTo("DemoAccount");
@@ -54,6 +48,35 @@ class UserControllerWebIntegrationTests {
 		assertThat(document.read("$.healthDepartment.name", String.class)).isEqualTo("GA Mannheim");
 		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("index-email@gesundheitsamt.de");
 		assertThat(document.read("$.healthDepartment.phone", String.class)).isEqualTo("0123456789");
+	}
+	
+	@Test
+	void testLoginWithValidCredentialsForAgent() throws Exception {
+		
+		// when
+		var token = login(AGENT_USERNAME, AGENT_PASSWORD);
+		
+		String resultDtoStr = performGet(token);
+		DocumentContext document = JsonPath.parse(resultDtoStr);
+		
+		assertThat(document.read("$.username", String.class)).isEqualTo("agent1");
+		assertThat(document.read("$.firstName", String.class)).isEqualTo("Horst");
+		assertThat(document.read("$.lastName", String.class)).isEqualTo("Hallig");
+		assertThat(document.read("$.healthDepartment.name", String.class)).isEqualTo("GA Mannheim");
+		assertThat(document.read("$.healthDepartment.email", String.class)).isNull();
+		assertThat(document.read("$.healthDepartment.phone", String.class)).isNull();
+	}
+
+	private String performGet(String token) throws Exception {
+		// check if token is valid for authentication
+		String resultDtoStr = mvc.perform(get("/api/user/me") //
+				.header("Origin", "*") //
+				.header("Authorization", "Bearer " + token) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+				.andReturn().getResponse().getContentAsString();
+		return resultDtoStr;
 	}
 
 	@Test
