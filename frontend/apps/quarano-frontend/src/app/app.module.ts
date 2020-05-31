@@ -35,7 +35,7 @@ import { IsHealthDepartmentUserDirective } from './directives/is-health-departme
 import { IsEnrolledClientDirective } from './directives/is-enrolled-client.directive';
 import { AsideHostDirective } from './directives/aside-host.directive';
 import { HasRoleDirective } from './directives/has-role.directive';
-import { SnackbarService } from '../../../../libs/shared/util/src/lib/snackbar.service';
+import { SnackbarService } from '@qro/shared/util';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
@@ -45,7 +45,7 @@ const DIRECTIVES = [
   IsHealthDepartmentUserDirective,
   AsideHostDirective,
   IsEnrolledClientDirective,
-  IsAdminDirective
+  IsAdminDirective,
 ];
 
 const COMPONENTS = [
@@ -59,7 +59,7 @@ const COMPONENTS = [
   AgbComponent,
   ImpressumComponent,
   DataProtectionComponent,
-  HdContactComponent
+  HdContactComponent,
 ];
 
 const SUB_MODULES = [
@@ -70,14 +70,11 @@ const SUB_MODULES = [
   ProfileModule,
   TenantAdminModule,
   AuthChangePasswordModule,
-  SharedUtilErrorModule
+  SharedUtilErrorModule,
 ];
 
 @NgModule({
-  declarations: [
-    ...COMPONENTS,
-    ...DIRECTIVES
-  ],
+  declarations: [...COMPONENTS, ...DIRECTIVES],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -85,30 +82,25 @@ const SUB_MODULES = [
     SharedUiMaterialModule,
     FormsModule,
     HttpClientModule,
-    ...SUB_MODULES
+    ...SUB_MODULES,
   ],
-  entryComponents: [
-    HdContactComponent
-  ],
+  entryComponents: [HdContactComponent],
   providers: [
     SnackbarService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressBarInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: DateInterceptor,
-      multi: true
+      multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'de-de' },
-    { provide: API_URL, useValue: environment.api.baseUrl }
+    { provide: API_URL, useValue: environment.api.baseUrl },
   ],
-  bootstrap: [
-    AppComponent
-  ]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

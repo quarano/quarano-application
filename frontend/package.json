@@ -1,7 +1,7 @@
 {
   "name": "quarano-frontend",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "EUPL-1.2-or-later",
   "scripts": {
     "ng": "ng",
     "nx": "nx",
@@ -32,6 +32,11 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "private": true,
   "dependencies": {
@@ -71,10 +76,12 @@
     "cypress": "^4.2.0",
     "dotenv": "6.2.0",
     "eslint": "6.8.0",
+    "husky": "^4.2.5",
     "jest": "25.2.3",
     "jest-preset-angular": "8.1.2",
     "jest-zone-patch": "0.0.10",
     "prettier": "2.0.4",
+    "pretty-quick": "^2.0.1",
     "ts-jest": "25.2.1",
     "ts-node": "~8.3.0",
     "tslint": "~6.0.0",
