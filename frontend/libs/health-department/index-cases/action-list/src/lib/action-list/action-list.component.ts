@@ -63,7 +63,8 @@ export class ActionListComponent implements OnInit, OnDestroy {
           return acc;
         }, [])
           .map(alert => {
-            return getAlertConfigurations().find(c => c.alert === alert);
+            return getAlertConfigurations().find(c => c.alert === alert)
+              || { alert: Alert.UNDEFINED, color: 'black', icon: '', displayName: 'undefined', order: 0 } as AlertConfiguration;
           })
           .sort((a, b) => a.order - b.order)
           ;

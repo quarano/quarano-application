@@ -67,7 +67,7 @@ export function getAlertConfigurations(): AlertConfiguration[] {
       order: 7
     },
     {
-      alert: Alert.QUARANTINE_END,
+      alert: Alert.QUARANTINE_ENDING,
       color: 'palegreen',
       icon: 'event_available',
       displayName: 'Quarantäne Ende prüfen',
