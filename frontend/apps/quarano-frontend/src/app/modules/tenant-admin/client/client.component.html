@@ -3,7 +3,8 @@
     <div mat-card-avatar class="header-image"></div>
     <mat-card-title *ngIf="caseDetail$ | async as caseDetail; else newCase">
       <span>
-        Falldetails {{ caseDetail.firstName }} {{ caseDetail.lastName }}
+        {{ (type$ | async) === ClientType.Index ? 'Falldetails' : 'Kontaktperson' }} {{ caseDetail.firstName }}
+        {{ caseDetail.lastName }}
         <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
       <span class="type"
