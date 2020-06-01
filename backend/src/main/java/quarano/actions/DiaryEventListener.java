@@ -62,7 +62,7 @@ class DiaryEventListener {
 			return;
 		}
 
-		items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE) //
+		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE) //
 				.resolveAutomatically(items::save);
 
 		// Body temperature exceeds reference
@@ -93,7 +93,7 @@ class DiaryEventListener {
 		var slot = entry.getSlot();
 		var person = entry.getTrackedPersonId();
 
-		var actionItems = items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM);
+		var actionItems = items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM);
 		var diaryEntryActionItems = actionItems.filter(DiaryEntryActionItem.class::isInstance)//
 				.map(DiaryEntryActionItem.class::cast);
 

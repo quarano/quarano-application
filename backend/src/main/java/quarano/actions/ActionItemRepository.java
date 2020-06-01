@@ -39,6 +39,9 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
 	ActionItems findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+	
+	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code and i.resolved = false")
+	ActionItems findUnresolvedByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
 
 	@Query("select i from DiaryEntryMissingActionItem i" //
 			+ " where i.slot = :slot" //
