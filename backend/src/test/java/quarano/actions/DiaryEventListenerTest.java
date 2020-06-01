@@ -67,7 +67,7 @@ class DiaryEventListenerTest {
 				.setBodyTemperature(BodyTemperature.of(41F)));
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
-		when(items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)).thenReturn(ActionItems.empty());
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)).thenReturn(ActionItems.empty());
 
 		listener.onDiaryEntryAddedForBodyTemperature(entry);
 
@@ -89,7 +89,7 @@ class DiaryEventListenerTest {
 				.setBodyTemperature(BodyTemperature.of(41F)));
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
-		when(items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)).thenReturn(ActionItems.empty());
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)).thenReturn(ActionItems.empty());
 
 		listener.onDiaryEntryUpdatedForBodyTemperature(entry);
 
@@ -106,7 +106,7 @@ class DiaryEventListenerTest {
 				.setBodyTemperature(BodyTemperature.of(42F)));
 
 		ActionItem actionItem = createMockedActionItem();
-		when(items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
 		listener.onDiaryEntryUpdatedForBodyTemperature(entry);
@@ -132,7 +132,7 @@ class DiaryEventListenerTest {
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> of(entry)));
 		ActionItem actionItem = createMockedActionItem();
-		when(items.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
 		listener.onDiaryEntryAddedForBodyTemperature(event);
@@ -153,7 +153,7 @@ class DiaryEventListenerTest {
 				.setSymptoms(List.of(symptom)) //
 				.setBodyTemperature(BodyTemperature.of(36)));
 
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.empty());
 
 		listener.onDiaryEntryAddedForCharacteristicSymptoms(event);
@@ -178,7 +178,7 @@ class DiaryEventListenerTest {
 		when(symptom.isCharacteristic()).thenReturn(true);
 
 		var actionItem = createMockedActionItem();
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.of(actionItem));
 		when(actionItem.getEntry()).thenReturn(diaryEntry);
 
@@ -207,7 +207,7 @@ class DiaryEventListenerTest {
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(actionItem.getEntry()).thenReturn(DiaryEntry.of(Slot.now(), person));
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.of(actionItem));
 
 		// Updates older slot
@@ -237,7 +237,7 @@ class DiaryEventListenerTest {
 		var diaryEntry = DiaryEntry.of(Slot.now(), person);
 
 		when(symptom.isCharacteristic()).thenReturn(true);
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.empty());
 
 		// Updates older slot
@@ -272,7 +272,7 @@ class DiaryEventListenerTest {
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(actionItem.getEntry()).thenReturn(diaryEntry1);
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> of(diaryEntry3,diaryEntry2)));
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.of(actionItem));
 
 		var event = DiaryEntry.DiaryEntryUpdated.of(diaryEntry1 //
@@ -294,7 +294,7 @@ class DiaryEventListenerTest {
 		var actionItem = createMockedActionItem();
 		
 		when(actionItem.getEntry()).thenReturn(diaryEntry1);
-		when(items.findByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 		.thenReturn(ActionItems.of(actionItem));
 		
 		var event = DiaryEntry.DiaryEntryUpdated.of(diaryEntry2 //
