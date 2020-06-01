@@ -8,7 +8,7 @@ import { BasicDataRoutingModule } from './basic-data-routing.module';
 import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
-import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
+import { MyClientDataResolver } from '../../../../../../libs/client/domain/src/lib/resolvers/my-client-data.resolver';
 import { EncountersResolver } from '../../resolvers/encounters.resolver';
 import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
 import { ContactPersonsResolver } from '@qro/client/contact-persons/api';

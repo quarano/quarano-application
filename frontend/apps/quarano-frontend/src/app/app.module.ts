@@ -7,7 +7,6 @@ import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
-import { ProfileModule } from './modules/profile/profile.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -44,7 +43,6 @@ const COMPONENTS = [
 const SUB_MODULES = [
   WelcomeModule,
   BasicDataModule,
-  ProfileModule,
   TenantAdminModule,
   SharedUtilErrorModule,
   AuthDomainModule,

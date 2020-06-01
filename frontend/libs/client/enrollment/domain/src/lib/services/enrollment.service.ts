@@ -26,16 +26,6 @@ export class EnrollmentService {
       .pipe(switchMap((_) => this.loadEnrollmentStatus()));
   }
 
-  getPersonalDetails(): Observable<ClientDto> {
-    return this.httpClient.get<ClientDto>(`${this.baseUrl}/enrollment/details`).pipe(share());
-  }
-
-  updatePersonalDetails(client: ClientDto): Observable<any> {
-    return this.httpClient
-      .put(`${this.baseUrl}/enrollment/details`, client)
-      .pipe(switchMap((_) => this.loadEnrollmentStatus()));
-  }
-
   loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
     return this.httpClient
       .get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`)

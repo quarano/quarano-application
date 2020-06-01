@@ -181,6 +181,9 @@
     },
     "client-contact-persons-shell": {
       "tags": ["scope:client-contact-persons", "type:feature"]
+    },
+    "client-profile": {
+      "tags": []
     }
   }
 }

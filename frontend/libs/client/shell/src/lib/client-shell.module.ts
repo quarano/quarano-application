@@ -19,6 +19,11 @@ const routes: Routes = [
     loadChildren: () => import('@qro/client/contact-persons/shell').then((m) => m.ClientContactPersonsShellModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
+  {
+    path: 'profile',
+    loadChildren: () => import('@qro/client/profile').then((m) => m.ClientProfileModule),
+    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
+  },
 ];
 
 @NgModule({

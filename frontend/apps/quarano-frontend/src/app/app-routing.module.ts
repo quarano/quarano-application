@@ -5,7 +5,7 @@ import { AgbComponent } from './components/agb/agb.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { EnrollmentCompletedGuard, BasicDataGuard } from '@qro/client/enrollment/api';
+import { BasicDataGuard } from '@qro/client/enrollment/api';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
@@ -17,11 +17,6 @@ const routes: Routes = [
   {
     path: 'client',
     loadChildren: () => import('@qro/client/shell').then((m) => m.ClientShellModule),
-  },
-  {
-    path: 'profile',
-    loadChildren: () => import('./modules/profile/profile.module').then((m) => m.ProfileModule),
-    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
   {
     path: 'health-department',

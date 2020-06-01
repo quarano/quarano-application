@@ -11,14 +11,8 @@
         #first_name_input
         (blur)="trimValue(first_name_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)
-        "
-      >
-        {{
-          errorGenerator.getErrorMessage(formGroup.controls.firstName, error)
-        }}
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
       </mat-error>
     </mat-form-field>
     <mat-form-field class="half-width">
@@ -31,11 +25,7 @@
         #last_name_input
         (blur)="trimValue(last_name_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
       </mat-error>
     </mat-form-field>
@@ -50,21 +40,10 @@
         #date_of_birth_input
         (blur)="trimValue(date_of_birth_input)"
       />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="dateOfBirthPicker"
-      ></mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="dateOfBirthPicker"></mat-datepicker-toggle>
       <mat-datepicker #dateOfBirthPicker></mat-datepicker>
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(
-            formGroup.controls.dateOfBirth
-          )
-        "
-      >
-        {{
-          errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error)
-        }}
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.dateOfBirth)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error) }}
       </mat-error>
     </mat-form-field>
   </fieldset>
@@ -73,8 +52,7 @@
     <mat-error
       *ngIf="
         formGroup.getError('phoneMissing') &&
-        (formGroup.controls.phone.touched ||
-          formGroup.controls.mobilePhone.touched)
+        (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
       "
     >
       Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
@@ -89,11 +67,7 @@
         #email_input
         (blur)="trimValue(email_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.email)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
       </mat-error>
     </mat-form-field>
@@ -108,11 +82,7 @@
         #phone_input
         (blur)="trimValue(phone_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.phone)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.phone)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.phone, error) }}
       </mat-error>
     </mat-form-field>
@@ -127,16 +97,8 @@
         #mobile_phone_input
         (blur)="trimValue(mobile_phone_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(
-            formGroup.controls.mobilePhone
-          )
-        "
-      >
-        {{
-          errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error)
-        }}
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.mobilePhone)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error) }}
       </mat-error>
     </mat-form-field>
   </fieldset>
@@ -152,11 +114,7 @@
         #street_input
         (blur)="trimValue(street_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.street)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.street)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
       </mat-error>
     </mat-form-field>
@@ -170,16 +128,8 @@
         #house_number_input
         (blur)="trimValue(house_number_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(
-            formGroup.controls.houseNumber
-          )
-        "
-      >
-        {{
-          errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error)
-        }}
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.houseNumber)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
       </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 30%;">
@@ -194,11 +144,7 @@
         #zip_code_input
         (blur)="trimValue(zip_code_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
       </mat-error>
     </mat-form-field>
@@ -212,11 +158,7 @@
         #city_input
         (blur)="trimValue(city_input)"
       />
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.city)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.city)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
       </mat-error>
     </mat-form-field>

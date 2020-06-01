@@ -73,7 +73,8 @@
       "@qro/client/contact-persons/contact-person-detail": [
         "libs/client/contact-persons/contact-person-detail/src/index.ts"
       ],
-      "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"]
+      "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"],
+      "@qro/client/profile": ["libs/client/profile/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
