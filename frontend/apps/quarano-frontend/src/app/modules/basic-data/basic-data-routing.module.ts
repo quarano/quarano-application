@@ -1,29 +1,28 @@
 import { BasicDataComponent } from './basic-data.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SymptomsResolver} from '../../resolvers/symptoms.resolver';
-import {ContactPersonsResolver} from '../../resolvers/contact-persons.resolver';
-import {MyFirstQueryResolver} from '../../resolvers/my-first-query.resolver';
-import {MyClientDataResolver} from '../../resolvers/my-client-data.resolver';
-import {EncountersResolver} from '../../resolvers/encounters.resolver';
+import { SymptomsResolver } from '@qro/shared/util-symptom';
+import { ContactPersonsResolver } from '@qro/client/contact-persons/api';
+import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
+import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
+import { EncountersResolver } from '../../resolvers/encounters.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: BasicDataComponent,
-    resolve:
-    {
+    resolve: {
       symptoms: SymptomsResolver,
       contactPersons: ContactPersonsResolver,
       firstQuery: MyFirstQueryResolver,
       clientData: MyClientDataResolver,
-      encounters: EncountersResolver
+      encounters: EncountersResolver,
     },
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class BasicDataRoutingModule { }
+export class BasicDataRoutingModule {}

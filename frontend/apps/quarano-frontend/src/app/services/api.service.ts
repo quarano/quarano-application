@@ -3,9 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { SymptomDto } from '../models/symptom';
-import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
-import { DiaryDto, DiaryEntryDto, DiaryEntryModifyDto } from '../models/diary-entry';
+import {
+  ContactPersonDto,
+  ContactPersonModifyDto,
+} from '../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
+import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../../../libs/client/diary/domain/src/lib/models/diary-entry';
 import { RegisterDto } from '../models/register';
 import { UserDto } from '../models/user';
 import { CaseDetailDto } from '../models/case-detail';
@@ -14,55 +16,16 @@ import { DeleteLink, Link } from '../models/general';
 import { HalResponse } from '../models/hal-response';
 import { ClientType } from '@qro/health-department/domain';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   private baseUrl = environment.api.baseUrl;
 
-  constructor(protected httpClient: HttpClient) {
-  }
-
-  getSymptoms(): Observable<SymptomDto[]> {
-    return this.httpClient.get<SymptomDto[]>(`${this.baseUrl}/api/symptoms`).pipe(share());
-  }
-
-  getContactPersons(): Observable<ContactPersonDto[]> {
-    return this.httpClient.get<ContactPersonDto[]>(`${this.baseUrl}/api/contacts`).pipe(share());
-  }
+  constructor(protected httpClient: HttpClient) {}
 
   getContactPerson(id: string): Observable<ContactPersonDto> {
     return this.httpClient.get<ContactPersonDto>(`${this.baseUrl}/api/contacts/${id}`).pipe(share());
-  }
-
-  getDiaryEntry(id: string): Observable<DiaryEntryDto> {
-    return this.httpClient.get<DiaryEntryDto>(`${this.baseUrl}/api/diary/${id}`)
-      .pipe(
-        share(),
-        map(entry => {
-          entry.characteristicSymptoms = entry.symptoms.filter(s => s.characteristic);
-          entry.nonCharacteristicSymptoms = entry.symptoms.filter(s => !s.characteristic);
-          entry.date = this.getDate(entry.date);
-          return entry;
-        }),
-      );
-  }
-
-  private getDate(date: Date): Date {
-    return new Date(date + 'Z');
-  }
-
-  createDiaryEntry(diaryEntry: DiaryEntryModifyDto): Observable<DiaryEntryDto> {
-    return this.httpClient.post<DiaryEntryDto>(`${this.baseUrl}/api/diary`, diaryEntry)
-      .pipe(map(entry => {
-        entry.date = this.getDate(entry.date);
-        return entry;
-      }));
-  }
-
-  modifyDiaryEntry(diaryEntry: DiaryEntryModifyDto) {
-    return this.httpClient.put(`${this.baseUrl}/api/diary/${diaryEntry.id}`, diaryEntry);
   }
 
   registerClient(registerClient: RegisterDto): Observable<any> {
@@ -90,8 +53,7 @@ export class ApiService {
   }
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {
-    return this.httpClient.get<CaseActionDto>(`${this.baseUrl}/api/hd/actions/${caseId}`)
-      .pipe(share());
+    return this.httpClient.get<CaseActionDto>(`${this.baseUrl}/api/hd/actions/${caseId}`).pipe(share());
   }
 
   resolveAnomalies(link: Link, comment: string) {
@@ -141,10 +103,6 @@ export class ApiService {
       return this.httpClient.delete<T>(url);
     }
     return of();
-  }
-
-  getDiary(): Observable<DiaryDto> {
-    return this.httpClient.get<DiaryDto>(`${this.baseUrl}/api/diary`);
   }
 
   delete(deleteLink: DeleteLink) {

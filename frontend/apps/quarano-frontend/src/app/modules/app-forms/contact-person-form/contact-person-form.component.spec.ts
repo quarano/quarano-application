@@ -5,7 +5,7 @@ import { ContactPersonFormComponent } from './contact-person-form.component';
 import { FormBuilder } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '@qro/shared/util';
-import { ContactPersonDto } from '../../../models/contact-person';
+import { ContactPersonDto } from '../../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContactPersonFormComponent', () => {
@@ -15,14 +15,9 @@ describe('ContactPersonFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ContactPersonFormComponent],
-      providers: [
-        FormBuilder,
-        { provide: ApiService, useValue: {} },
-        { provide: SnackbarService, useValue: {} }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [FormBuilder, { provide: ApiService, useValue: {} }, { provide: SnackbarService, useValue: {} }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

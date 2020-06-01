@@ -9,20 +9,10 @@
       <qro-personal-data-form [formGroup]="formGroup" class="personal-data-form"></qro-personal-data-form>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-      >
+      <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid || formGroup.pristine">
         Speichern
       </button>
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        [routerLink]="['/diary']"
-      >
+      <button type="button" mat-raised-button color="secondary" [routerLink]="['client/diary/diary-list']">
         Abbrechen
       </button>
     </mat-card-actions>

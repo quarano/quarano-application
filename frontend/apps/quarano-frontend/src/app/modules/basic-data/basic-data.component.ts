@@ -11,13 +11,13 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BehaviorSubject } from 'rxjs';
 import { ClientDto, EncounterEntry } from '@qro/client/domain';
 import { QuestionnaireDto, EnrollmentStatusDto, EnrollmentService } from '@qro/client/enrollment/domain';
-import { SymptomDto } from '../../models/symptom';
-import { ContactPersonDto } from '../../models/contact-person';
+import { SymptomDto } from '../../../../../../libs/shared/util-symptom/src/lib/models/symptom';
+import { ContactPersonDto } from '../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
 import { SnackbarService } from '@qro/shared/util';
 import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator
+  PhoneOrMobilePhoneValidator,
 } from '@qro/shared/util-form-validation';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util';
@@ -25,7 +25,7 @@ import { DateFunctions } from '@qro/shared/util';
 @Component({
   selector: 'qro-basic-data',
   templateUrl: './basic-data.component.html',
-  styleUrls: ['./basic-data.component.scss']
+  styleUrls: ['./basic-data.component.scss'],
 })
 export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   subs = new SubSink();
@@ -35,12 +35,11 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     completedContactRetro: null,
     completedPersonalData: null,
     completedQuestionnaire: null,
-    complete: null
+    complete: null,
   });
 
   @ViewChild('stepper')
   stepper: MatHorizontalStepper;
-
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -69,22 +68,24 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private enrollmentService: EnrollmentService,
     private router: Router,
     private changeDetect: ChangeDetectorRef,
-    private badRequestService: BadRequestService) {
-  }
+    private badRequestService: BadRequestService
+  ) {}
 
   ngOnInit() {
-    this.subs.add(this.route.data.subscribe(data => {
-      this.contactPersons = data.contactPersons;
-      this.firstQuery = data.firstQuery;
-      this.client = data.clientData;
-      this.encounters = data.encounters;
-      this.symptoms = data.symptoms.filter((symptom) => symptom.characteristic);
+    this.subs.add(
+      this.route.data.subscribe((data) => {
+        this.contactPersons = data.contactPersons;
+        this.firstQuery = data.firstQuery;
+        this.client = data.clientData;
+        this.encounters = data.encounters;
+        this.symptoms = data.symptoms.filter((symptom) => symptom.characteristic);
 
-      this.buildForms();
-    }));
+        this.buildForms();
+      })
+    );
 
-    this.subs.add(this.enrollmentService.loadEnrollmentStatus()
-      .subscribe(status => {
+    this.subs.add(
+      this.enrollmentService.loadEnrollmentStatus().subscribe((status) => {
         this.enrollmentStatus$$.next(status);
         if (status.completedPersonalData) {
           this.stepper.next();
@@ -92,7 +93,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         if (status.completedQuestionnaire) {
           this.stepper.next();
         }
-      }));
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -111,7 +113,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   onTabChanged(event: StepperSelectionEvent, status: EnrollmentStatusDto) {
     if (event.previouslySelectedIndex === 0 && event.selectedIndex === 1 && status.completedPersonalData === false) {
-
       this.checkAndSendFirstForm();
     }
 
@@ -127,25 +128,51 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   // ########## STEP I ##########
 
   buildFirstForm() {
-    this.firstFormGroup = this.formBuilder.group({
-      firstName: new FormControl(this.client.firstName,
-        [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
-      lastName: new FormControl(this.client.lastName,
-        [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
-      email: new FormControl(this.client.email, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
-      phone: new FormControl(this.client.phone,
-        [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)]),
-      mobilePhone: new FormControl(this.client.mobilePhone,
-        [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)]),
-      street: new FormControl(this.client.street,
-        [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
-      houseNumber: new FormControl(this.client.houseNumber, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
-      zipCode: new FormControl(this.client.zipCode,
-        [Validators.required, Validators.minLength(5),
-        Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
-      city: new FormControl(this.client.city, [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
-      dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required])
-    }, { validators: [PhoneOrMobilePhoneValidator] });
+    this.firstFormGroup = this.formBuilder.group(
+      {
+        firstName: new FormControl(this.client.firstName, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+        ]),
+        lastName: new FormControl(this.client.lastName, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+        ]),
+        email: new FormControl(this.client.email, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email),
+        ]),
+        phone: new FormControl(this.client.phone, [
+          Validators.minLength(5),
+          Validators.maxLength(17),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+        ]),
+        mobilePhone: new FormControl(this.client.mobilePhone, [
+          Validators.minLength(5),
+          Validators.maxLength(17),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+        ]),
+        street: new FormControl(this.client.street, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street),
+        ]),
+        houseNumber: new FormControl(this.client.houseNumber, [
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
+        ]),
+        zipCode: new FormControl(this.client.zipCode, [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(5),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
+        ]),
+        city: new FormControl(this.client.city, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
+        ]),
+        dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required]),
+      },
+      { validators: [PhoneOrMobilePhoneValidator] }
+    );
   }
 
   checkAndSendFirstForm() {
@@ -153,18 +180,23 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.firstFormLoading = true;
       const value = this.firstFormGroup.value;
       value.dateOfBirth = this.dateOfBirth;
-      this.enrollmentService.updatePersonalDetails(value)
-        .subscribe(result => {
-          this.enrollmentStatus$$.next(result);
-          if (result.completedPersonalData) {
-            this.client = value;
-            this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
-            this.stepper.next();
+      this.enrollmentService
+        .updatePersonalDetails(value)
+        .subscribe(
+          (result) => {
+            this.enrollmentStatus$$.next(result);
+            if (result.completedPersonalData) {
+              this.client = value;
+              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+              this.stepper.next();
+            }
+            this.firstFormLoading = false;
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
           }
-          this.firstFormLoading = false;
-        }, error => {
-          this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
-        }).add(() => this.firstFormLoading = false);
+        )
+        .add(() => (this.firstFormLoading = false));
     }
   }
 
@@ -193,22 +225,26 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   buildSecondForm() {
-
     const symptoms = this.firstQuery?.symptoms || [];
 
     this.secondFormGroup = new FormGroup({
       hasSymptoms: new FormControl(this.firstQuery.hasSymptoms, [Validators.required]),
       dayOfFirstSymptoms: new FormControl(this.firstQuery.dayOfFirstSymptoms),
       symptoms: new FormControl(symptoms),
-      familyDoctor: new FormControl(this.firstQuery.familyDoctor, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
-      guessedOriginOfInfection: new FormControl(this.firstQuery.guessedOriginOfInfection,
-        [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
+      familyDoctor: new FormControl(this.firstQuery.familyDoctor, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
+      ]),
+      guessedOriginOfInfection: new FormControl(this.firstQuery.guessedOriginOfInfection, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
+      ]),
       hasPreExistingConditions: new FormControl(this.firstQuery.hasPreExistingConditions, [Validators.required]),
       hasPreExistingConditionsDescription: new FormControl(this.firstQuery.hasPreExistingConditionsDescription),
       belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
       belongToMedicalStaffDescription: new FormControl(this.firstQuery.belongToMedicalStaffDescription),
-      hasContactToVulnerablePeople: new FormControl(this.firstQuery.hasContactToVulnerablePeople, [Validators.required]),
-      hasContactToVulnerablePeopleDescription: new FormControl(this.firstQuery.hasContactToVulnerablePeopleDescription)
+      hasContactToVulnerablePeople: new FormControl(this.firstQuery.hasContactToVulnerablePeople, [
+        Validators.required,
+      ]),
+      hasContactToVulnerablePeopleDescription: new FormControl(this.firstQuery.hasContactToVulnerablePeopleDescription),
     });
   }
 
@@ -221,15 +257,22 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         questionaireData.symptoms = this.secondFormGroup.get('symptoms').value.map((data) => data.id);
       }
 
-      this.subs.add(this.enrollmentService.updateQuestionnaire(this.secondFormGroup.value)
-        .subscribe(() => {
-          this.firstQuery = this.secondFormGroup.value;
-          this.snackbarService.success('Fragebogen erfolgreich gespeichert');
+      this.subs.add(
+        this.enrollmentService
+          .updateQuestionnaire(this.secondFormGroup.value)
+          .subscribe(
+            () => {
+              this.firstQuery = this.secondFormGroup.value;
+              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
 
-          this.stepper.next();
-        }, error => {
-          this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
-        }).add(() => this.secondFormLoading = false));
+              this.stepper.next();
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
+            }
+          )
+          .add(() => (this.secondFormLoading = false))
+      );
     }
   }
 
@@ -244,9 +287,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     const firstDay = DateFunctions.addDays(firstSymptomsDay, -2);
     while (DateFunctions.getDateWithoutTime(day) >= DateFunctions.getDateWithoutTime(firstDay)) {
       this.datesForRetrospectiveContacts.push(day);
-      this.thirdFormGroup.addControl(day.toLocaleDateString('de'), new FormControl(this.encounters
-        .filter(e => e.date === DateFunctions.getDateWithoutTime(day))
-        .map(e => e.contactPersonId)));
+      this.thirdFormGroup.addControl(
+        day.toLocaleDateString('de'),
+        new FormControl(
+          this.encounters.filter((e) => e.date === DateFunctions.getDateWithoutTime(day)).map((e) => e.contactPersonId)
+        )
+      );
       day = DateFunctions.addDays(day, -1);
     }
   }
@@ -256,39 +302,44 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       height: '90vh',
       data: {
         contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      }
+      },
     });
 
-    this.subs.add(dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
-      if (createdContact) {
-        this.contactPersons.push(createdContact);
-        this.thirdFormGroup.controls[dateString].patchValue([...this.thirdFormGroup.controls[dateString].value, createdContact.id]);
-      }
-    }));
+    this.subs.add(
+      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+        if (createdContact) {
+          this.contactPersons.push(createdContact);
+          this.thirdFormGroup.controls[dateString].patchValue([
+            ...this.thirdFormGroup.controls[dateString].value,
+            createdContact.id,
+          ]);
+        }
+      })
+    );
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService.createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
-      .subscribe(encounter => {
+    this.enrollmentService
+      .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
+      .subscribe((encounter) => {
         this.encounters.push(encounter);
         this.snackbarService.success('Kontakt erfolgreich gespeichert');
       });
   }
 
   onContactRemoved(date: Date, id: string) {
-    const encounterToRemove = this.encounters.find(e =>
-      e.contactPersonId === id
-      && e.date === DateFunctions.getDateWithoutTime(date));
-    this.enrollmentService.deleteEncounter(encounterToRemove.encounter)
-      .subscribe(_ => {
-        this.encounters = this.encounters.filter(e => e !== encounterToRemove);
-        this.snackbarService.success('Kontakt erfolgreich entfernt');
-      });
+    const encounterToRemove = this.encounters.find(
+      (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
+    );
+    this.enrollmentService.deleteEncounter(encounterToRemove.encounter).subscribe((_) => {
+      this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
+      this.snackbarService.success('Kontakt erfolgreich entfernt');
+    });
   }
 
   hasRetrospectiveContacts(): boolean {
     let result = false;
-    Object.keys(this.thirdFormGroup.controls).forEach(key => {
+    Object.keys(this.thirdFormGroup.controls).forEach((key) => {
       if (this.thirdFormGroup.controls[key].value.length > 0) {
         result = true;
       }
@@ -304,29 +355,33 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           title: 'Keine relevanten Kontakte?',
           text:
             'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
-            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten'
-        }
+            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
+        },
       });
 
-      dialogRef.afterClosed()
-        .subscribe(result => {
+      dialogRef
+        .afterClosed()
+        .subscribe((result) => {
           if (result) {
             this.completeEnrollment(true);
           }
-        }).add(() => this.thirdFormLoading = false);
+        })
+        .add(() => (this.thirdFormLoading = false));
     } else {
       this.completeEnrollment(false);
     }
   }
 
   private completeEnrollment(withoutEncounters: boolean) {
-    this.enrollmentService.completeEnrollment(withoutEncounters)
-      .subscribe(result => {
+    this.enrollmentService
+      .completeEnrollment(withoutEncounters)
+      .subscribe((result) => {
         this.enrollmentStatus$$.next(result);
         if (result.completedContactRetro) {
           this.snackbarService.success('Die Registrierung wurde abgeschlossen');
-          this.router.navigate(['/diary']);
+          this.router.navigate(['/client/diary/diary-list']);
         }
-      }).add(() => this.thirdFormLoading = false);
+      })
+      .add(() => (this.thirdFormLoading = false));
   }
 }

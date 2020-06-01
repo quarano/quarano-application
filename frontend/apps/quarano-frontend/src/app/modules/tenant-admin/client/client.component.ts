@@ -16,7 +16,7 @@ import { SnackbarService } from '@qro/shared/util';
 import { HalResponse } from '../../../models/hal-response';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
-import { SymptomDto } from '../../../models/symptom';
+import { SymptomDto } from '../../../../../../../libs/shared/util-symptom/src/lib/models/symptom';
 import { QuestionnaireDto } from '@qro/client/enrollment/domain';
 import { ContactDto } from '../../../models/contact';
 

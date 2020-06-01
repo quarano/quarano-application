@@ -1,23 +1,25 @@
 import { SubSink } from 'subsink';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {ContactPersonDto} from '../../models/contact-person';
+import { ContactPersonDto } from '../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
 
 @Component({
   selector: 'qro-contact-persons',
   templateUrl: './contact-persons.component.html',
-  styleUrls: ['./contact-persons.component.scss']
+  styleUrls: ['./contact-persons.component.scss'],
 })
 export class ContactPersonsComponent implements OnInit {
   contacts: ContactPersonDto[] = [];
   private subs = new SubSink();
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.subs.add(this.route.data.subscribe(data => {
-      this.contacts = data.contacts;
-    }));
+    this.subs.add(
+      this.route.data.subscribe((data) => {
+        this.contacts = data.contacts;
+      })
+    );
   }
 
   getName(contact: ContactPersonDto): string {

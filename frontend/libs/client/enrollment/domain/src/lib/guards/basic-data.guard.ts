@@ -7,35 +7,35 @@ import { SnackbarService } from '@qro/shared/util';
 import { EnrollmentService } from '../services/enrollment.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BasicDataGuard implements CanActivate {
-
   constructor(
     private enrollmentService: EnrollmentService,
     private userService: UserService,
     private router: Router,
-    private snackbarService: SnackbarService) {
-  }
+    private snackbarService: SnackbarService
+  ) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.userService.isHealthDepartmentUser) {
       this.router.navigate(['/forbidden']);
       return false;
     }
 
-    return this.enrollmentService.getEnrollmentStatus()
-      .pipe(map(status => {
+    return this.enrollmentService.getEnrollmentStatus().pipe(
+      map((status) => {
         if (status?.complete) {
           this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
-          this.router.navigate(['/diary']);
+          this.router.navigate(['/client/diary/diary-list']);
           return false;
         }
 
         return true;
-      }));
+      })
+    );
   }
 }

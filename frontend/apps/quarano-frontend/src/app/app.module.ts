@@ -15,7 +15,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { DiaryModule } from './modules/diary/diary.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
@@ -44,7 +43,6 @@ const COMPONENTS = [
 ];
 
 const SUB_MODULES = [
-  DiaryModule,
   WelcomeModule,
   ContactPersonsModule,
   BasicDataModule,
@@ -52,13 +50,11 @@ const SUB_MODULES = [
   TenantAdminModule,
   SharedUtilErrorModule,
   AuthDomainModule,
-  SharedUiAsideModule
+  SharedUiAsideModule,
 ];
 
 @NgModule({
-  declarations: [
-    ...COMPONENTS,
-  ],
+  declarations: [...COMPONENTS],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

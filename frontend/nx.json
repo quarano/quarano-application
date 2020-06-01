@@ -147,19 +147,31 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "client-diary-domain": {
-      "tags": []
+      "tags": ["scope:client-diary", "type:domain"]
     },
     "client-diary-diary-list": {
-      "tags": []
+      "tags": ["scope:client-diary", "type:feature"]
     },
     "client-diary-diary-detail": {
-      "tags": []
+      "tags": ["scope:client-diary", "type:feature"]
     },
     "client-diary-shell": {
-      "tags": []
+      "tags": ["scope:client-diary", "type:feature"]
     },
     "client-shell": {
-      "tags": []
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-diary-forgotten-contact": {
+      "tags": ["scope:client-diary", "type:feature"]
+    },
+    "client-contact-persons-domain": {
+      "tags": ["scope:client-contact-persons", "type:domain"]
+    },
+    "client-contact-persons-api": {
+      "tags": ["scope:client-contact-persons", "type:api"]
+    },
+    "shared-util-symptom": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-header
+    ><mat-card-title>
+      <h1 class="text-center">Symptom-Tagebuch</h1>
+      <ng-template *ngIf="!diary._links.create"
+        ><qro-alert message="Sie haben bereits alle erforderlichen Einträge abgeschlossen"></qro-alert
+      ></ng-template>
+      <button
+        id="contact-button"
+        mat-button
+        type="button"
+        (click)="openContactDialog()"
+        matTooltip="Falls Sie während der anfänglichen Dateneingabe den Kontakt zu einer Person vergessen haben, können Sie diesen hier nachtragen. Dies bezieht sich lediglich auf Kontakte in der Zeit bevor Sie mit der elektronischen Erfassung Ihrer täglichen Einträge begonnen haben."
+      >
+        <mat-icon>group</mat-icon>
+        Kontakt nachtragen
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="bootstrap-wrapper diary-header">
+      <div class="row px-3">
+        <div class="col-2 date-header">
+          <h3>Datum</h3>
+        </div>
+        <div class="col-6 col-lg-5"><h3>Morgens</h3></div>
+        <div class="col-6 col-lg-5"><h3>Abends</h3></div>
+      </div>
+    </div>
+    <ng-container *ngFor="let listItem of diary._embedded.entries; let i = index">
+      <qro-diary-today-list-item [diaryListItem]="listItem" *ngIf="i === 0; else not_today"></qro-diary-today-list-item>
+      <ng-template #not_today><qro-diary-list-item [diaryListItem]="listItem"></qro-diary-list-item></ng-template>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

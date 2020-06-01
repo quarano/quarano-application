@@ -8,14 +8,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactPersonsComponent } from './contact-persons.component';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-dialog';
-import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { ContactPersonsResolver } from '@qro/client/contact-persons/domain';
 import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
-const COMPONENTS = [
-  ContactPersonsComponent,
-  ContactPersonComponent,
-];
+const COMPONENTS = [ContactPersonsComponent, ContactPersonComponent];
 
 @NgModule({
   imports: [
@@ -31,4 +28,4 @@ const COMPONENTS = [
   declarations: [...COMPONENTS],
   providers: [ContactPersonsResolver, ContactPersonResolver],
 })
-export class ContactPersonsModule { }
+export class ContactPersonsModule {}

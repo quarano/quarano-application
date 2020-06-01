@@ -2,20 +2,23 @@ import { BadRequestService } from '@qro/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
-  TrimmedPatternValidator
+  TrimmedPatternValidator,
 } from '@qro/shared/util-form-validation';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
-import { ContactPersonDto, ContactPersonModifyDto } from '../../../models/contact-person';
+import {
+  ContactPersonDto,
+  ContactPersonModifyDto,
+} from '../../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 
 @Component({
   selector: 'qro-contact-person-form',
   templateUrl: './contact-person-form.component.html',
-  styleUrls: ['./contact-person-form.component.scss']
+  styleUrls: ['./contact-person-form.component.scss'],
 })
 export class ContactPersonFormComponent implements OnInit, OnDestroy {
   @Input() contactPerson: ContactPersonDto;
@@ -34,7 +37,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.buildForm();
@@ -45,34 +48,55 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   }
 
   get isNew() {
-    return (!this.contactPerson.id);
+    return !this.contactPerson.id;
   }
 
   buildForm() {
-    this.formGroup = this.formBuilder.group(
-      {
-        firstName: new FormControl(this.contactPerson.firstName, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
-        lastName: new FormControl(this.contactPerson.lastName, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
-        email: new FormControl(this.contactPerson.email, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
-        phone: new FormControl(this.contactPerson.phone,
-          [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)]),
-        mobilePhone: new FormControl(this.contactPerson.mobilePhone,
-          [Validators.minLength(5), Validators.maxLength(17), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)]),
-        street: new FormControl(this.contactPerson.street, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
-        houseNumber: new FormControl(this.contactPerson.houseNumber,
-          [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
-        zipCode: new FormControl(this.contactPerson.zipCode,
-          [Validators.minLength(5), Validators.maxLength(5), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
-        city: new FormControl(this.contactPerson.city, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
-        identificationHint: new FormControl(this.contactPerson.identificationHint,
-          [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
-        isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),
-        isSenior: new FormControl(this.contactPerson.isSenior),
-        hasPreExistingConditions: new FormControl(this.contactPerson.hasPreExistingConditions),
-        remark: new FormControl(this.contactPerson.remark, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)])
-      }
-    );
-    this.formGroup.valueChanges.subscribe(_ => this.dirty.emit(true));
+    this.formGroup = this.formBuilder.group({
+      firstName: new FormControl(this.contactPerson.firstName, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+      ]),
+      lastName: new FormControl(this.contactPerson.lastName, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+      ]),
+      email: new FormControl(this.contactPerson.email, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email),
+      ]),
+      phone: new FormControl(this.contactPerson.phone, [
+        Validators.minLength(5),
+        Validators.maxLength(17),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+      ]),
+      mobilePhone: new FormControl(this.contactPerson.mobilePhone, [
+        Validators.minLength(5),
+        Validators.maxLength(17),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+      ]),
+      street: new FormControl(this.contactPerson.street, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street),
+      ]),
+      houseNumber: new FormControl(this.contactPerson.houseNumber, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
+      ]),
+      zipCode: new FormControl(this.contactPerson.zipCode, [
+        Validators.minLength(5),
+        Validators.maxLength(5),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
+      ]),
+      city: new FormControl(this.contactPerson.city, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
+      ]),
+      identificationHint: new FormControl(this.contactPerson.identificationHint, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
+      ]),
+      isHealthStaff: new FormControl(this.contactPerson.isHealthStaff),
+      isSenior: new FormControl(this.contactPerson.isSenior),
+      hasPreExistingConditions: new FormControl(this.contactPerson.hasPreExistingConditions),
+      remark: new FormControl(this.contactPerson.remark, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
+      ]),
+    });
+    this.formGroup.valueChanges.subscribe((_) => this.dirty.emit(true));
     if (this.contactPerson.identificationHint) {
       this.showIdentificationHintField = true;
     }
@@ -83,10 +107,12 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   }
 
   private isWayToContactSet(): boolean {
-    return this.formGroup.controls.email.value
-      || this.formGroup.controls.phone.value
-      || this.formGroup.controls.mobilePhone.value
-      || this.formGroup.controls.identificationHint.value;
+    return (
+      this.formGroup.controls.email.value ||
+      this.formGroup.controls.phone.value ||
+      this.formGroup.controls.mobilePhone.value ||
+      this.formGroup.controls.identificationHint.value
+    );
   }
 
   onSubmit() {
@@ -100,42 +126,57 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         } else {
           this.modifyContactPerson(contactPersonToModify);
         }
-
       } else if (!this.showIdentificationHintField) {
-        this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
+        this.snackbarService.confirm(
+          'Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein'
+        );
         this.showIdentificationHintField = true;
         this.loading = false;
       } else {
-        this.snackbarService.confirm('Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein');
+        this.snackbarService.confirm(
+          'Bitte geben Sie mindestens eine Kontaktmöglichkeit oder Hinweise zur Identifikation ein'
+        );
         this.loading = false;
       }
     }
   }
 
   createContactPerson(contactPerson: ContactPersonModifyDto) {
-    this.subs.add(this.apiService
-      .createContactPerson(contactPerson)
-      .subscribe(createdContactPerson => {
-        this.snackbarService.success('Kontaktperson erfolgreich angelegt');
-        this.formGroup.markAsPristine();
-        this.contactCreated.emit(createdContactPerson);
-        this.dirty.emit(false);
-      }, error => {
-        this.badRequestService.handleBadRequestError(error, this.formGroup);
-      }).add(() => this.loading = false));
+    this.subs.add(
+      this.apiService
+        .createContactPerson(contactPerson)
+        .subscribe(
+          (createdContactPerson) => {
+            this.snackbarService.success('Kontaktperson erfolgreich angelegt');
+            this.formGroup.markAsPristine();
+            this.contactCreated.emit(createdContactPerson);
+            this.dirty.emit(false);
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+          }
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   modifyContactPerson(contactPerson: ContactPersonModifyDto) {
-    this.subs.add(this.apiService
-      .modifyContactPerson(contactPerson, this.contactPerson.id)
-      .subscribe(_ => {
-        this.snackbarService.success('Kontaktperson erfolgreich aktualisiert');
-        this.formGroup.markAsPristine();
-        this.contactModified.emit();
-        this.dirty.emit(false);
-      }, error => {
-        this.badRequestService.handleBadRequestError(error, this.formGroup);
-      }).add(() => this.loading = false));
+    this.subs.add(
+      this.apiService
+        .modifyContactPerson(contactPerson, this.contactPerson.id)
+        .subscribe(
+          (_) => {
+            this.snackbarService.success('Kontaktperson erfolgreich aktualisiert');
+            this.formGroup.markAsPristine();
+            this.contactModified.emit();
+            this.dirty.emit(false);
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+          }
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   cancel() {

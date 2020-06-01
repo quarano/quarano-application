@@ -17,7 +17,7 @@ export class WelcomeComponent implements OnInit {
       content:
         'Pflegen Sie zwei Mal täglich in Ihrem Tagebuch die eventuell auftretenden Symptome und Ihre Körpertemperatur.',
       linkText: 'Zum Tagebuch',
-      routerLink: ['/diary'],
+      routerLink: ['client/diary/diary-list'],
       headerImageUrl: '/assets/images/diary.png',
       backgroundImageUrl: '/assets/images/diary_tile_background.jpg',
     },

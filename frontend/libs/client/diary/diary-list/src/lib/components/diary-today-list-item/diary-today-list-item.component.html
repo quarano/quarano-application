@@ -1,0 +1,58 @@
+<div class="bootstrap-wrapper">
+  <div class="row">
+    <div class="col-12 col-lg-2 line">
+      <span>{{ date | date: 'EEEEEE, dd.MM.y' }}</span>
+    </div>
+    <div class="col-12 col-md-6 col-lg-5 line">
+      <ng-container *ngIf="morning; else morning_not_completed">
+        <qro-diary-entry-success [entry]="morning" label="Morgens"></qro-diary-entry-success>
+      </ng-container>
+      <ng-template #morning_not_completed>
+        <ng-container *ngIf="currentSlotIsEvening; else morning_create">
+          <qro-diary-entry-warning slot="morning" [date]="diaryListItem.date" [canCreate]="canCreateMorning">
+          </qro-diary-entry-warning>
+        </ng-container>
+        <ng-template #morning_create>
+          <span class="mr-3 label">Morgens</span>
+          <button
+            mat-mini-fab
+            color="primary"
+            [routerLink]="['/client/diary/diary-detail/new', diaryListItem.date, 'morning']"
+            class="create-now-button"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <span class="ml-3 create-now">Jetzt eintragen</span>
+        </ng-template>
+      </ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-5 line">
+      <ng-container *ngIf="evening; else evening_not_completed">
+        <qro-diary-entry-success [entry]="evening" label="Abends"></qro-diary-entry-success>
+      </ng-container>
+      <ng-template #evening_not_completed>
+        <ng-container *ngIf="currentSlotIsEvening; else evening_wait">
+          <span class="mr-3 label">Abends</span>
+          <button
+            mat-mini-fab
+            color="primary"
+            [routerLink]="['/client/diary/diary-detail/new', diaryListItem.date, 'evening']"
+            class="create-now-button"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <span class="ml-3 create-now">Jetzt eintragen</span>
+        </ng-container>
+        <ng-template #evening_wait>
+          <div style="display: flex; align-items: center;">
+            <span class="mr-3 label">Abends</span>
+            <button mat-mini-fab disabled class="info-button">
+              <span class="info-icon">i</span>
+            </button>
+            <span class="text-muted ml-3">Hier kann erst ab 17 Uhr ein Eintrag erfolgen</span>
+          </div></ng-template
+        >
+      </ng-template>
+    </div>
+  </div>
+</div>

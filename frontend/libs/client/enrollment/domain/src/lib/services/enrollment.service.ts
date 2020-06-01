@@ -8,24 +8,22 @@ import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { ClientDto, EncounterDto, EncounterEntry, EncounterCreateDto, EncountersDto } from '@qro/client/domain';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EnrollmentService {
   private baseUrl = `${this.apiUrl}/api`;
-  private enrollmentSubject$ = new BehaviorSubject<EnrollmentStatusDto>(null);
+  private enrollmentSubject$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
-  constructor(
-    private httpClient: HttpClient,
-    @Inject(API_URL) private apiUrl: string) {
-  }
+  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getQuestionnaire(): Observable<QuestionnaireDto> {
     return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`).pipe(share());
   }
 
   updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<any> {
-    return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire)
-      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
+    return this.httpClient
+      .put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire)
+      .pipe(switchMap((_) => this.loadEnrollmentStatus()));
   }
 
   getPersonalDetails(): Observable<ClientDto> {
@@ -33,15 +31,19 @@ export class EnrollmentService {
   }
 
   updatePersonalDetails(client: ClientDto): Observable<any> {
-    return this.httpClient.put(`${this.baseUrl}/enrollment/details`, client)
-      .pipe(switchMap(_ => this.loadEnrollmentStatus()));
+    return this.httpClient
+      .put(`${this.baseUrl}/enrollment/details`, client)
+      .pipe(switchMap((_) => this.loadEnrollmentStatus()));
   }
 
   loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return this.httpClient.get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`).pipe(share()).pipe(
-      tap((data) => this.enrollmentSubject$$.next(data)),
-      switchMap(() => this.enrollmentSubject$$)
-    );
+    return this.httpClient
+      .get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`)
+      .pipe(share())
+      .pipe(
+        tap((data) => this.enrollmentSubject$$.next(data)),
+        switchMap(() => this.enrollmentSubject$$)
+      );
   }
 
   getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
@@ -52,8 +54,10 @@ export class EnrollmentService {
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
-    return this.httpClient.get<EncountersDto>(`${this.baseUrl}/encounters`)
-      .pipe(share(), map(encounters => encounters?._embedded?.encounters.map(e => this.mapEncounterToEncounterEntry(e)) || []));
+    return this.httpClient.get<EncountersDto>(`${this.baseUrl}/encounters`).pipe(
+      share(),
+      map((encounters) => encounters?._embedded?.encounters.map((e) => this.mapEncounterToEncounterEntry(e)) || [])
+    );
   }
 
   private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
@@ -61,17 +65,16 @@ export class EnrollmentService {
   }
 
   createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
-    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto)
-      .pipe(map(encounter => {
+    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto).pipe(
+      map((encounter) => {
         return this.mapEncounterToEncounterEntry(encounter);
-      }));
+      })
+    );
   }
 
   createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
     const dateString = DateFunctions.getDateWithoutTime(date);
-    return forkJoin(
-      contactIds.map(id => this.createEncounter({ contact: id, date: dateString }))
-    );
+    return forkJoin(contactIds.map((id) => this.createEncounter({ contact: id, date: dateString })));
   }
 
   deleteEncounter(encounter: EncounterDto) {
@@ -85,7 +88,8 @@ export class EnrollmentService {
   }
 
   reopenEnrollment(): Observable<EnrollmentStatusDto> {
-    return this.httpClient.delete(`${this.baseUrl}/enrollment/completion`)
+    return this.httpClient
+      .delete(`${this.baseUrl}/enrollment/completion`)
       .pipe(switchMap(() => this.getEnrollmentStatus()));
   }
 }

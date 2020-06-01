@@ -2,34 +2,32 @@ import { ContactPersonComponent } from './contact-person/contact-person.componen
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactPersonsComponent } from './contact-persons.component';
-import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { ContactPersonsResolver } from '@qro/client/contact-persons/domain';
 import { ContactPersonResolver } from '../../resolvers/contact-person.resolver';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util';
-
-
 
 const routes: Routes = [
   {
     path: '',
     component: ContactPersonsComponent,
-    resolve: { contacts: ContactPersonsResolver }
+    resolve: { contacts: ContactPersonsResolver },
   },
   {
     path: 'edit/:id',
     component: ContactPersonComponent,
     resolve: { contactPerson: ContactPersonResolver },
-    canDeactivate: [PreventUnsavedChangesGuard]
+    canDeactivate: [PreventUnsavedChangesGuard],
   },
   {
     path: 'new',
     component: ContactPersonComponent,
     resolve: { contactPerson: ContactPersonResolver },
-    canDeactivate: [PreventUnsavedChangesGuard]
-  }
+    canDeactivate: [PreventUnsavedChangesGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ContactRoutingModule { }
+export class ContactRoutingModule {}

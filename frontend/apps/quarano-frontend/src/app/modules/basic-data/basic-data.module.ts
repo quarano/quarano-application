@@ -11,7 +11,7 @@ import { SharedUiConfirmationDialogModule } from '@qro/shared/ui-confirmation-di
 import { MyClientDataResolver } from '../../resolvers/my-client-data.resolver';
 import { EncountersResolver } from '../../resolvers/encounters.resolver';
 import { MyFirstQueryResolver } from '../../resolvers/my-first-query.resolver';
-import { ContactPersonsResolver } from '../../resolvers/contact-persons.resolver';
+import { ContactPersonsResolver } from '@qro/client/contact-persons/api';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 
 @NgModule({
@@ -24,15 +24,9 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
     SharedUiMultipleAutocompleteModule,
     AppFormsModule,
     SharedUiConfirmationDialogModule,
-    SharedUiButtonModule
+    SharedUiButtonModule,
   ],
   declarations: [BasicDataComponent, InitialQuestionaireFormComponent],
-  providers:
-    [
-      ContactPersonsResolver,
-      MyFirstQueryResolver,
-      MyClientDataResolver,
-      EncountersResolver,
-    ]
+  providers: [ContactPersonsResolver, MyFirstQueryResolver, MyClientDataResolver, EncountersResolver],
 })
-export class BasicDataModule { }
+export class BasicDataModule {}
