@@ -3,9 +3,5 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": [, "../../../shared/util-symptom/src/lib/resolvers/symptoms.resolver.ts"
-    "**/*.ts",
-    "../../../shared/util-symptom/src/lib/models/symptom.ts",
-    "../../contact-persons/domain/src/lib/resolvers/contact-persons.resolver.ts"
-  ]
+  "include": ["**/*.ts"]
 }
