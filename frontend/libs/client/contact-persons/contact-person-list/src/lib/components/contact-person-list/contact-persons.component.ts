@@ -1,7 +1,7 @@
 import { SubSink } from 'subsink';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContactPersonDto } from '../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
+import { ContactPersonDto } from '../../../../../domain/src/lib/models/contact-person';
 
 @Component({
   selector: 'qro-contact-persons',

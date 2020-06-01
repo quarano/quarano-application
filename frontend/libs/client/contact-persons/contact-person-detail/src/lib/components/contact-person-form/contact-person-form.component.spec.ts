@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactPersonFormComponent } from './contact-person-form.component';
 import { FormBuilder } from '@angular/forms';
 import { ApiService } from '../../../../../../../../apps/quarano-frontend/src/app/services/api.service';
-import { SnackbarService } from './node_modules/@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util';
 import { ContactPersonDto } from '../../../../../domain/src/lib/models/contact-person';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

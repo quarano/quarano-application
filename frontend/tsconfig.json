@@ -66,7 +66,14 @@
       "@qro/client/diary/forgotten-contact": ["libs/client/diary/forgotten-contact/src/index.ts"],
       "@qro/client/contact-persons/domain": ["libs/client/contact-persons/domain/src/index.ts"],
       "@qro/client/contact-persons/api": ["libs/client/contact-persons/api/src/index.ts"],
-      "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"]
+      "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
+      "@qro/client/contact-persons/contact-person-list": [
+        "libs/client/contact-persons/contact-person-list/src/index.ts"
+      ],
+      "@qro/client/contact-persons/contact-person-detail": [
+        "libs/client/contact-persons/contact-person-detail/src/index.ts"
+      ],
+      "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

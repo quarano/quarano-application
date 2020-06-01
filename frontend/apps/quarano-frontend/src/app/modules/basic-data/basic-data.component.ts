@@ -4,7 +4,7 @@ import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ContactPersonDialogComponent } from '../app-forms/contact-person-dialog/contact-person-dialog.component';
+import { ContactPersonDialogComponent } from '../../../../../../libs/client/contact-persons/contact-person-detail/src/lib/components/contact-person-dialog/contact-person-dialog.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';

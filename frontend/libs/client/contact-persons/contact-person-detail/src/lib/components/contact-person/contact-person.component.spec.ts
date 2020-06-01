@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ContactPersonComponent} from './contact-person.component';
-import {RouterTestingModule} from '@angular/router/testing';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { ContactPersonComponent } from './contact-person.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContactPersonComponent', () => {
   let component: ContactPersonComponent;
@@ -13,9 +13,8 @@ describe('ContactPersonComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ContactPersonComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

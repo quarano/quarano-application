@@ -1,18 +1,18 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { ApiService } from '../services/api.service';
-import { ContactPersonDto } from '../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
+import { ContactPersonDto } from '../models/contact-person';
+import { ContactPersonService } from '../services/contact-person.service';
 
 @Injectable()
 export class ContactPersonResolver implements Resolve<ContactPersonDto> {
-  constructor(private apiService: ApiService) {}
+  constructor(private contactPersonService: ContactPersonService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ContactPersonDto> {
     const id = route.paramMap.get('id');
 
     if (id) {
-      return this.apiService.getContactPerson(id);
+      return this.contactPersonService.getContactPerson(id);
     } else {
       return of({
         id: null,

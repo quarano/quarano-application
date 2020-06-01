@@ -172,6 +172,15 @@
     },
     "shared-util-symptom": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "client-contact-persons-contact-person-list": {
+      "tags": ["scope:client-contact-persons", "type:feature"]
+    },
+    "client-contact-persons-contact-person-detail": {
+      "tags": ["scope:client-contact-persons", "type:feature"]
+    },
+    "client-contact-persons-shell": {
+      "tags": ["scope:client-contact-persons", "type:feature"]
     }
   }
 }

@@ -7,7 +7,7 @@ import {
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
-import { SymptomDto } from '../../../../../../../libs/shared/util-symptom/src/lib/models/symptom';
+import { SymptomDto } from '@qro/shared/util-symptom';
 
 @Component({
   selector: 'qro-initial-questionaire-form',

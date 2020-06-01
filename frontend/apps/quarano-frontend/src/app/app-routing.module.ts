@@ -19,11 +19,6 @@ const routes: Routes = [
     loadChildren: () => import('@qro/client/shell').then((m) => m.ClientShellModule),
   },
   {
-    path: 'contact-persons',
-    loadChildren: () => import('./modules/contact-persons/contact-persons.module').then((m) => m.ContactPersonsModule),
-    canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
-  },
-  {
     path: 'profile',
     loadChildren: () => import('./modules/profile/profile.module').then((m) => m.ProfileModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],

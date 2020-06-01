@@ -1,4 +1,4 @@
-import { ContactPersonDialogComponent } from './../../../../../../../../apps/quarano-frontend/src/app/modules/app-forms/contact-person-dialog/contact-person-dialog.component';
+import { ContactPersonDialogComponent } from '../../../../../../contact-persons/contact-person-detail/src/lib/components/contact-person-dialog/contact-person-dialog.component';
 import { BadRequestService } from '@qro/shared/util-error';
 import { DateFunctions } from '@qro/shared/util';
 import { SubSink } from 'subsink';

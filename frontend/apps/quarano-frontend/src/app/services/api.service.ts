@@ -7,7 +7,6 @@ import {
   ContactPersonDto,
   ContactPersonModifyDto,
 } from '../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
-import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../../../libs/client/diary/domain/src/lib/models/diary-entry';
 import { RegisterDto } from '../models/register';
 import { UserDto } from '../models/user';
 import { CaseDetailDto } from '../models/case-detail';
@@ -24,20 +23,8 @@ export class ApiService {
 
   constructor(protected httpClient: HttpClient) {}
 
-  getContactPerson(id: string): Observable<ContactPersonDto> {
-    return this.httpClient.get<ContactPersonDto>(`${this.baseUrl}/api/contacts/${id}`).pipe(share());
-  }
-
   registerClient(registerClient: RegisterDto): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient);
-  }
-
-  createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
-    return this.httpClient.post<ContactPersonDto>(`${this.baseUrl}/api/contacts`, contactPerson);
-  }
-
-  modifyContactPerson(contactPerson: ContactPersonModifyDto, id: string) {
-    return this.httpClient.put(`${this.baseUrl}/api/contacts/${id}`, contactPerson);
   }
 
   getMe(): Observable<UserDto> {

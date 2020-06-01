@@ -1,5 +1,5 @@
-@import '../../../../../../libs/shared/util/src/lib/styles/margin';
-@import '../../../../../../libs/shared/util/src/lib/styles/variables';
+@import '../../../../../../../shared/util/src/lib/styles/margin';
+@import '../../../../../../../shared/util/src/lib/styles/variables';
 
 .contact-card {
   @extend .mb-3;
@@ -16,7 +16,7 @@
 }
 
 .header-image {
-  background-image: url('../../../assets/images/contact-person.png');
+  background-image: url('/assets/images/contact-person.png');
   background-size: 32px;
   background-repeat: no-repeat;
   background-position-x: center;

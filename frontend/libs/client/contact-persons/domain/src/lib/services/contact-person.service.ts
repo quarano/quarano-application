@@ -2,7 +2,7 @@ import { API_URL } from '@qro/shared/util';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ContactPersonDto } from '../models/contact-person';
+import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
 import { share } from 'rxjs/operators';
 
 @Injectable({
@@ -13,5 +13,17 @@ export class ContactPersonService {
 
   getContactPersons(): Observable<ContactPersonDto[]> {
     return this.httpClient.get<ContactPersonDto[]>(`${this.apiUrl}/api/contacts`).pipe(share());
+  }
+
+  getContactPerson(id: string): Observable<ContactPersonDto> {
+    return this.httpClient.get<ContactPersonDto>(`${this.apiUrl}/api/contacts/${id}`).pipe(share());
+  }
+
+  createContactPerson(contactPerson: ContactPersonModifyDto): Observable<ContactPersonDto> {
+    return this.httpClient.post<ContactPersonDto>(`${this.apiUrl}/api/contacts`, contactPerson);
+  }
+
+  modifyContactPerson(contactPerson: ContactPersonModifyDto, id: string) {
+    return this.httpClient.put(`${this.apiUrl}/api/contacts/${id}`, contactPerson);
   }
 }

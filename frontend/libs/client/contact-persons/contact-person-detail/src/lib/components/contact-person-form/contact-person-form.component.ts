@@ -1,16 +1,15 @@
-import { BadRequestService } from './node_modules/@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/util-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
-} from './node_modules/@qro/shared/util-form-validation';
+} from '@qro/shared/util-form-validation';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
-import { ContactPersonDto, ContactPersonModifyDto } from '../../../../../domain/src/lib/models/contact-person';
-import { ApiService } from '../../../../../../../../apps/quarano-frontend/src/app/services/api.service';
-import { SnackbarService } from './node_modules/@qro/shared/util';
+import { ContactPersonDto, ContactPersonModifyDto, ContactPersonService } from '@qro/client/contact-persons/domain';
+import { SnackbarService } from '@qro/shared/util';
 
 @Component({
   selector: 'qro-contact-person-form',
@@ -31,7 +30,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ApiService,
+    private contactPersonService: ContactPersonService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService
   ) {}
@@ -140,7 +139,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   createContactPerson(contactPerson: ContactPersonModifyDto) {
     this.subs.add(
-      this.apiService
+      this.contactPersonService
         .createContactPerson(contactPerson)
         .subscribe(
           (createdContactPerson) => {
@@ -159,7 +158,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
 
   modifyContactPerson(contactPerson: ContactPersonModifyDto) {
     this.subs.add(
-      this.apiService
+      this.contactPersonService
         .modifyContactPerson(contactPerson, this.contactPerson.id)
         .subscribe(
           (_) => {

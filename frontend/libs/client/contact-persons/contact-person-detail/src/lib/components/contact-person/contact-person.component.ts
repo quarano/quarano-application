@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DeactivatableComponent } from '@qro/shared/util';
-import { ContactPersonDto } from '../../../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
+import { ContactPersonDto } from '@qro/client/contact-persons/domain';
 
 @Component({
   selector: 'qro-contact-person',

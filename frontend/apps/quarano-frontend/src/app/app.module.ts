@@ -19,7 +19,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { WelcomeModule } from './modules/welcome/welcome.module';
-import { ContactPersonsModule } from './modules/contact-persons/contact-persons.module';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
 import { HeaderRightComponent } from './components/layout/header-right/header-right.component';
@@ -44,7 +43,6 @@ const COMPONENTS = [
 
 const SUB_MODULES = [
   WelcomeModule,
-  ContactPersonsModule,
   BasicDataModule,
   ProfileModule,
   TenantAdminModule,
