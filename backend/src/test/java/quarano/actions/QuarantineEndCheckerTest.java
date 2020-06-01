@@ -108,9 +108,13 @@ class QuarantineEndCheckerTest {
 		});
 	}
 
-	private ArgumentCaptor<TrackedCaseActionItem> verifyRepositorySaveInteraction(int three) {
+	private ArgumentCaptor<TrackedCaseActionItem> verifyRepositorySaveInteraction(int times) {
 		ArgumentCaptor<TrackedCaseActionItem> quarantineEnding = forClass(TrackedCaseActionItem.class);
-		verify(items, times(three)).save(quarantineEnding.capture());
+		if (times == NEVER) {
+			verify(items, never()).save(quarantineEnding.capture());
+		} else {
+			verify(items, atLeast(times)).save(quarantineEnding.capture());
+		}
 		return quarantineEnding;
 	}
 
