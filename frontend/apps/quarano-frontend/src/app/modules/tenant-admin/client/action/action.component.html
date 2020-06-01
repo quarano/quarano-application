@@ -1,8 +1,5 @@
 <mat-accordion [multi]="true">
-  <mat-expansion-panel
-    *ngIf="caseAction.anomalies.health.length > 0"
-    [expanded]="true"
-  >
+  <mat-expansion-panel *ngIf="caseAction.anomalies.health.length > 0" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <span
@@ -15,15 +12,10 @@
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <qro-client-action-anomaly
-      [actions]="caseAction.anomalies.health"
-    ></qro-client-action-anomaly>
+    <qro-client-action-anomaly [actions]="caseAction.anomalies.health"></qro-client-action-anomaly>
   </mat-expansion-panel>
 
-  <mat-expansion-panel
-    *ngIf="caseAction.anomalies.process.length > 0"
-    [expanded]="true"
-  >
+  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <span
@@ -36,9 +28,7 @@
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <qro-client-action-anomaly
-      [actions]="caseAction.anomalies.process"
-    ></qro-client-action-anomaly>
+    <qro-client-action-anomaly [actions]="caseAction.anomalies.process"></qro-client-action-anomaly>
   </mat-expansion-panel>
 
   <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
@@ -54,18 +44,11 @@
         </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <qro-client-action-anomaly
-      [actions]="caseAction.anomalies.resolved"
-    ></qro-client-action-anomaly>
+    <qro-client-action-anomaly [actions]="caseAction.anomalies.resolved"></qro-client-action-anomaly>
   </mat-expansion-panel>
 </mat-accordion>
 
-<form
-  [formGroup]="formGroup"
-  (ngSubmit)="submitForm()"
-  class="mt-5"
-  *ngIf="hasOpenAnomalies()"
->
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-5" *ngIf="hasOpenAnomalies()">
   <fieldset>
     <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
     <mat-form-field class="full-width">
@@ -77,29 +60,14 @@
         formControlName="comment"
         placeholder="Bemerkung"
       ></textarea>
-      <mat-error
-        *ngFor="
-          let error of errorGenerator.getErrorKeys(formGroup.controls.comment)
-        "
-      >
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.comment)">
         {{ errorGenerator.getErrorMessage(formGroup.controls.comment, error) }}
       </mat-error>
     </mat-form-field>
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="formGroup.invalid"
-    >
-      <mat-icon>check</mat-icon> Abschließen
+    <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">
+      <mat-icon>check</mat-icon> Auffälligkeiten abschließen
     </button>
-    <button
-      class="ml-3"
-      type="button"
-      mat-raised-button
-      color="secondary"
-      [routerLink]="[returnLink]"
-    >
+    <button class="ml-3" type="button" mat-raised-button color="secondary" [routerLink]="[returnLink]">
       Abbrechen
     </button>
   </fieldset>

@@ -3,12 +3,8 @@
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
       <mat-card-title>{{ getTitle() }}</mat-card-title>
-      <mat-card-subtitle *ngIf="!isReadonly"
-        >Pflichteingaben sind mit * markiert</mat-card-subtitle
-      >
-      <mat-card-subtitle *ngIf="isReadonly"
-        >Dieser Eintrag kann nicht mehr bearbeitet werden</mat-card-subtitle
-      >
+      <mat-card-subtitle *ngIf="!isReadonly">Pflichteingaben sind mit * markiert</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="isReadonly">Dieser Eintrag kann nicht mehr bearbeitet werden</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content style="margin-top: 16px;">
       <div class="radio-group">
@@ -30,9 +26,7 @@
           ></mat-slider>
           <span class="text-small ml-2">44,0</span>
         </div>
-        <mat-error *ngIf="!slider.value || slider.value === 35.0"
-          >Bitte geben Sie Ihre Körpertemperatur ein</mat-error
-        >
+        <mat-error *ngIf="!slider.value || slider.value === 35.0">Bitte geben Sie Ihre Körpertemperatur ein</mat-error>
       </div>
       <div class="radio-group">
         <mat-label class="mb-3">Krankheitsspezifische Symptome</mat-label>
@@ -61,15 +55,7 @@
         name="contactPersons"
       >
       </qro-multiple-autocomplete>
-      <div
-        *ngIf="!isReadonly"
-        style="
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-end;
-          align-items: center;
-        "
-      >
+      <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">
         <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
         <button
           mat-button
@@ -84,18 +70,10 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button
-        *ngIf="!isReadonly"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading"
+      <qro-button *ngIf="!isReadonly" [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading"
         >Speichern
       </qro-button>
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        [routerLink]="['/diary']"
-      >
+      <button type="button" mat-raised-button color="secondary" [routerLink]="['/diary']">
         Abbrechen
       </button>
     </mat-card-actions>

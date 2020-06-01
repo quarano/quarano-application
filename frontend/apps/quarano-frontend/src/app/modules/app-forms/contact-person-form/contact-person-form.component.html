@@ -2,9 +2,7 @@
   <mat-card class="form__card--small form__card--animated">
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
-      <mat-card-title>{{
-        isNew ? 'Neue Kontaktperson anlegen' : 'Kontaktperson bearbeiten'
-      }}</mat-card-title>
+      <mat-card-title>{{ isNew ? 'Neue Kontaktperson anlegen' : 'Kontaktperson bearbeiten' }}</mat-card-title>
       <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -17,16 +15,8 @@
           #first_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error
-          *ngFor="
-            let error of errorGenerator.getErrorKeys(
-              formGroup.controls.firstName
-            )
-          "
-        >
-          {{
-            errorGenerator.getErrorMessage(formGroup.controls.firstName, error)
-          }}
+        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
+          {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width">
@@ -38,16 +28,8 @@
           #last_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error
-          *ngFor="
-            let error of errorGenerator.getErrorKeys(
-              formGroup.controls.lastName
-            )
-          "
-        >
-          {{
-            errorGenerator.getErrorMessage(formGroup.controls.lastName, error)
-          }}
+        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
+          {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
         </mat-error>
       </mat-form-field>
       <fieldset class="mb-3">
@@ -63,14 +45,8 @@
             #phone_input
             (blur)="trimValue(phone_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(formGroup.controls.phone)
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(formGroup.controls.phone, error)
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.phone)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.phone, error) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -84,19 +60,8 @@
             #mobile_phone_input
             (blur)="trimValue(mobile_phone_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(
-                formGroup.controls.mobilePhone
-              )
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(
-                formGroup.controls.mobilePhone,
-                error
-              )
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.mobilePhone)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -108,20 +73,11 @@
             #email_input
             (blur)="trimValue(email_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(formGroup.controls.email)
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(formGroup.controls.email, error)
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field
-          class="full-width"
-          [class]="showIdentificationHintField ? '' : 'display-none'"
-        >
+        <mat-form-field class="full-width" [class]="showIdentificationHintField ? '' : 'display-none'">
           <mat-label>Hinweise zur Identifikation</mat-label>
           <textarea
             [mat-autosize]="true"
@@ -131,22 +87,10 @@
             placeholder="Bitte geben Sie uns weitere Hinweise, wie wir die Person ermitteln könnten (z.B. Mitarbeiter von Bäckerei 'Müller', Taxifahrer, Mitarbeiter im Pflegeheim oder Krankenhaus 'Klinikum Mannheim' und bitte auch dazugehörige Telefonnummern oder Kontaktwege wie z.B. Nummer des Pflegeheims, etc) damit wir den Kontakt schnellstmöglich ermitteln können"
           ></textarea>
           <mat-error
-            >Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen
-            Hinweis zur Identifikation ein</mat-error
+            >Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen Hinweis zur Identifikation ein</mat-error
           >
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(
-                formGroup.controls.identificationHint
-              )
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(
-                formGroup.controls.identificationHint,
-                error
-              )
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.identificationHint)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.identificationHint, error) }}
           </mat-error>
         </mat-form-field>
       </fieldset>
@@ -161,16 +105,8 @@
             #street_input
             (blur)="trimValue(street_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(
-                formGroup.controls.street
-              )
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(formGroup.controls.street, error)
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.street)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
@@ -183,19 +119,8 @@
             #house_number_input
             (blur)="trimValue(house_number_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(
-                formGroup.controls.houseNumber
-              )
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(
-                formGroup.controls.houseNumber,
-                error
-              )
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.houseNumber)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
@@ -209,16 +134,8 @@
             #zip_code_input
             (blur)="trimValue(zip_code_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(
-                formGroup.controls.zipCode
-              )
-            "
-          >
-            {{
-              errorGenerator.getErrorMessage(formGroup.controls.zipCode, error)
-            }}
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)">
+            {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 70%;">
@@ -230,26 +147,19 @@
             #city_input
             (blur)="trimValue(city_input)"
           />
-          <mat-error
-            *ngFor="
-              let error of errorGenerator.getErrorKeys(formGroup.controls.city)
-            "
-          >
+          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.city)">
             {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
           </mat-error>
         </mat-form-field>
       </fieldset>
       <fieldset class="mb-3">
         <legend>Risikoeinschätzung</legend>
-        <qro-alert
-          message="Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson"
-        >
+        <qro-alert message="Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson">
         </qro-alert>
         <div style="display: flex; flex-direction: column;">
           <div class="risk-question">
             <mat-label id="example-radio-group-label"
-              >Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem
-              Pflegeberuf</mat-label
+              >Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf</mat-label
             >
             <mat-radio-group
               aria-labelledby="example-radio-group-label"
@@ -268,9 +178,7 @@
             </mat-radio-group>
           </div>
           <div class="risk-question">
-            <mat-label id="example-radio-group-label"
-              >Die Kontaktperson ist über 60 jahre alt</mat-label
-            >
+            <mat-label id="example-radio-group-label">Die Kontaktperson ist über 60 Jahre alt</mat-label>
             <mat-radio-group
               aria-labelledby="example-radio-group-label"
               class="example-radio-group"
@@ -288,9 +196,7 @@
             </mat-radio-group>
           </div>
           <div class="risk-question">
-            <mat-label
-              id="example-radio-group-label"
-              style="display: flex; align-items: center;"
+            <mat-label id="example-radio-group-label" style="display: flex; align-items: center;"
               >Die Kontaktperson hat bekannte Vorerkrankungen<mat-icon
                 class="ml-1"
                 style="cursor: pointer;"
@@ -329,32 +235,19 @@
         ></textarea>
         <mat-hint align="start"
           ><strong
-            >Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für
-            das Gesundheitsamt anzugeben</strong
+            >Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben</strong
           >
         </mat-hint>
-        <mat-error
-          *ngFor="
-            let error of errorGenerator.getErrorKeys(formGroup.controls.remark)
-          "
-        >
+        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.remark)">
           {{ errorGenerator.getErrorMessage(formGroup.controls.remark, error) }}
         </mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button
-        [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading"
-      >
+      <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
         Speichern
       </qro-button>
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        (click)="cancel()"
-      >
+      <button type="button" mat-raised-button color="secondary" (click)="cancel()">
         Abbrechen
       </button>
     </mat-card-actions>

@@ -1,40 +1,21 @@
 <div class="container">
-  <img
-    id="logo"
-    src="../../../assets/images/quarano_SW_RGB.png"
-    [routerLink]="['/']"
-    height="50px"
-    class="clickable"
-  />
+  <img id="logo" src="../../../assets/images/quarano_SW_RGB.png" [routerLink]="['/']" height="50px" class="clickable" />
 
   <nav class="ml-3" *ngIf="isLoggedIn$ | async">
     <ng-container *qroIsHealthDepartmentUser
-      ><a
-        data-cy="index-cases"
-        routerLink="/health-department/index-cases"
-        routerLinkActive="active"
-        >Indexfälle</a
-      ><a
-        routerLink="/health-department/contact-cases"
-        routerLinkActive="active"
-        data-cy="contact-cases"
-        >Kontaktfälle</a
+      ><a data-cy="index-cases" routerLink="/health-department/index-cases" routerLinkActive="active">Indexfälle</a
+      ><a routerLink="/health-department/contact-cases" routerLinkActive="active" data-cy="contact-cases"
+        >Kontaktpersonen</a
       ></ng-container
     >
 
     <ng-container *qroIsAdmin>
-      <a
-        routerLink="/administration/accounts/account-list"
-        routerLinkActive="active"
-        >Account-Verwaltung</a
-      >
+      <a routerLink="/administration/accounts/account-list" routerLinkActive="active">Account-Verwaltung</a>
     </ng-container>
 
     <ng-container *qroIsEnrolledClient
       ><a routerLink="/diary" routerLinkActive="active">Tagebuch</a>
-      <a routerLink="/contact-persons" routerLinkActive="active"
-        >Kontaktpersonen</a
-      >
+      <a routerLink="/contact-persons" routerLinkActive="active">Kontaktpersonen</a>
     </ng-container>
   </nav>
 </div>

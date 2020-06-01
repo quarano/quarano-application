@@ -3,7 +3,7 @@ import {
   ValidationErrorGenerator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator
+  PhoneOrMobilePhoneValidator,
 } from '@qro/shared/util-form-validation';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -15,7 +15,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -30,7 +30,7 @@ import { ClientType } from '@qro/health-department/domain';
 @Component({
   selector: 'qro-client-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss']
+  styleUrls: ['./edit.component.scss'],
 })
 export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
@@ -55,23 +55,23 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(
-    private dialog: MatDialog,
-    private snackbarService: SnackbarService) {
-  }
+  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.createFormGroup();
 
     this.updateFormGroup(this.caseDetail);
 
-    this.subs.add(this.formGroup.get('quarantineStartDate').valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe((value) => {
-        if (value) {
-          this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
-        }
-      }));
+    this.subs.add(
+      this.formGroup
+        .get('quarantineStartDate')
+        .valueChanges.pipe(distinctUntilChanged())
+        .subscribe((value) => {
+          if (value) {
+            this.formGroup.get('quarantineEndDate').setValue(moment(value).add(2, 'weeks'));
+          }
+        })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -90,8 +90,14 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   createFormGroup() {
     this.formGroup = new FormGroup({
-      firstName: new FormControl('', [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
-      lastName: new FormControl('', [Validators.required, TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
+      firstName: new FormControl('', [
+        Validators.required,
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+      ]),
+      lastName: new FormControl('', [
+        Validators.required,
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+      ]),
 
       testDate: new FormControl(this.isIndexCase ? this.today : null),
 
@@ -102,16 +108,20 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       city: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
       zipCode: new FormControl('', [
-        Validators.minLength(5), Validators.maxLength(5),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
+        Validators.minLength(5),
+        Validators.maxLength(5),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
+      ]),
 
       mobilePhone: new FormControl('', [
-        Validators.minLength(5), Validators.maxLength(17),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)
+        Validators.minLength(5),
+        Validators.maxLength(17),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
       ]),
       phone: new FormControl('', [
-        Validators.minLength(5), Validators.maxLength(17),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber)
+        Validators.minLength(5),
+        Validators.maxLength(17),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
       ]),
 
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
@@ -119,15 +129,19 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       dateOfBirth: new FormControl(null, []),
       infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
 
-      extReferenceNumber: new FormControl('', [Validators.maxLength(40), TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber)]),
-
+      extReferenceNumber: new FormControl('', [
+        Validators.maxLength(40),
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber),
+      ]),
     });
     this.setValidators();
-    this.subs.add(this.formGroup.get('infected').valueChanges.subscribe(value => {
-      if (value && this.type === ClientType.Contact) {
-        this.onTestDateAdded();
-      }
-    }));
+    this.subs.add(
+      this.formGroup.get('infected').valueChanges.subscribe((value) => {
+        if (value && this.type === ClientType.Contact) {
+          this.onTestDateAdded();
+        }
+      })
+    );
   }
 
   onTestDateAdded() {
@@ -135,11 +149,11 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Zum Indexfall machen?',
         text:
-          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie den Kontaktfall ab sofort als Indexfall'
-      }
+          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.changedToIndex.emit(true);
       } else {
@@ -178,10 +192,12 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private triggerErrorMessages() {
-    this.snackbarService.confirm('Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken');
+    this.snackbarService.confirm(
+      'Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken'
+    );
     this.formGroup.markAsDirty();
     this.formGroup.markAllAsTouched();
-    Object.keys(this.formGroup.controls).forEach(key => {
+    Object.keys(this.formGroup.controls).forEach((key) => {
       this.formGroup.controls[key].markAsDirty();
       this.formGroup.controls[key].updateValueAndValidity();
     });

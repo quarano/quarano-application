@@ -7,7 +7,7 @@
         color="primary"
         [routerLink]="['/tenant-admin/client', 'contact']"
       >
-        <mat-icon>add</mat-icon>Neuen Kontaktfall anlegen
+        <mat-icon>add</mat-icon>Neue Kontaktperson anlegen
       </button>
     </div>
 
@@ -17,13 +17,7 @@
   </div>
 
   <mat-form-field appearance="outline" class="full-width mt-3">
-    <input
-      matInput
-      data-cy="search-case-input"
-      type="text"
-      placeholder="Suchen..."
-      (keyup)="updateFilter($event)"
-    />
+    <input matInput data-cy="search-case-input" type="text" placeholder="Suchen..." (keyup)="updateFilter($event)" />
   </mat-form-field>
 
   <ngx-datatable
@@ -86,9 +80,7 @@
       [draggable]="true"
       [canAutoResize]="true"
       ><ng-template let-value="value" ngx-datatable-cell-template>
-        <ng-container *ngIf="value; else empty_date_of_birth">{{
-          value | date: 'dd.MM.y'
-        }}</ng-container>
+        <ng-container *ngIf="value; else empty_date_of_birth">{{ value | date: 'dd.MM.y' }}</ng-container>
         <ng-template #empty_date_of_birth>-</ng-template>
       </ng-template>
     </ngx-datatable-column>

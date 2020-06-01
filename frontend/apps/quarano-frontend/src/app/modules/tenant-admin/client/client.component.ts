@@ -23,7 +23,7 @@ import { ContactDto } from '../../../models/contact';
 @Component({
   selector: 'qro-clients',
   templateUrl: './client.component.html',
-  styleUrls: ['./client.component.scss']
+  styleUrls: ['./client.component.scss'],
 })
 export class ClientComponent implements OnInit, OnDestroy {
   caseId: string;
@@ -45,8 +45,6 @@ export class ClientComponent implements OnInit, OnDestroy {
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
   questionnaire$$: Subject<QuestionnaireDto> = new Subject<QuestionnaireDto>();
 
-
-
   @ViewChild('tabs', { static: false })
   tabGroup: MatTabGroup;
 
@@ -59,13 +57,13 @@ export class ClientComponent implements OnInit, OnDestroy {
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.caseDetail$ = merge(
-      this.route.data.pipe(map((data) => data.case)),
-      this.updatedDetail$$
-    ).pipe(map((data) => data));
+    this.caseDetail$ = merge(this.route.data.pipe(map((data) => data.case)), this.updatedDetail$$).pipe(
+      map((data) => data)
+    );
 
     this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
     this.caseComments$ = this.caseDetail$.pipe(map((details) => details?.comments));
@@ -80,9 +78,10 @@ export class ClientComponent implements OnInit, OnDestroy {
       this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
     }
 
-    this.caseIndexContacts$ = combineLatest([this.caseDetail$.pipe(
-      map(details => details?.indexContacts)
-    ), this.type$]).pipe(
+    this.caseIndexContacts$ = combineLatest([
+      this.caseDetail$.pipe(map((details) => details?.indexContacts)),
+      this.type$,
+    ]).pipe(
       map(([indexContacts, clientType]) => {
         if (clientType === ClientType.Contact) {
           return indexContacts;
@@ -91,22 +90,25 @@ export class ClientComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subs.sink = this.caseDetail$.pipe(
-      filter((data) => data !== null),
-      filter((data) => data?._links?.hasOwnProperty('renew')),
-      take(1)).subscribe((data) => {
-        this.subs.sink = this.apiService
-          .getApiCall<StartTracking>(data, 'renew')
-          .subscribe((startTracking) => {
-            this.trackingStart$$.next(startTracking);
-          });
-      }
-      );
+    this.subs.sink = this.caseDetail$
+      .pipe(
+        filter((data) => data !== null),
+        filter((data) => data?._links?.hasOwnProperty('renew')),
+        take(1)
+      )
+      .subscribe((data) => {
+        this.subs.sink = this.apiService.getApiCall<StartTracking>(data, 'renew').subscribe((startTracking) => {
+          this.trackingStart$$.next(startTracking);
+        });
+      });
 
-    this.subs.sink = this.caseDetail$.pipe(
-      filter((data) => data !== null),
-      filter((data) => data?._links?.hasOwnProperty('questionnaire')),
-      take(1)).subscribe((data) => {
+    this.subs.sink = this.caseDetail$
+      .pipe(
+        filter((data) => data !== null),
+        filter((data) => data?._links?.hasOwnProperty('questionnaire')),
+        take(1)
+      )
+      .subscribe((data) => {
         this.subs.sink = this.apiService
           .getApiCall<QuestionnaireDto>(data, 'questionnaire')
           .subscribe((questionnaire) => {
@@ -114,8 +116,9 @@ export class ClientComponent implements OnInit, OnDestroy {
             this.symptoms$ = this.route.data.pipe(
               map((resolver) => resolver.symptoms),
               map((symptoms: SymptomDto[]) =>
-                symptoms.filter((symptom) => questionnaire.symptoms
-                  .findIndex((symptomId) => symptomId === symptom.id) !== -1)
+                symptoms.filter(
+                  (symptom) => questionnaire.symptoms.findIndex((symptomId) => symptomId === symptom.id) !== -1
+                )
               )
             );
           });
@@ -123,7 +126,7 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   hasOpenAnomalies(): Observable<boolean> {
-    return this.caseAction$.pipe(map(a => (a.anomalies.health.length + a.anomalies.process.length) > 0));
+    return this.caseAction$.pipe(map((a) => a.anomalies.health.length + a.anomalies.process.length > 0));
   }
 
   saveCaseData(caseDetail: CaseDetailDto) {
@@ -135,10 +138,12 @@ export class ClientComponent implements OnInit, OnDestroy {
       saveData$ = this.apiService.updateCase(caseDetail);
     }
 
-    this.subs.sink = saveData$.subscribe(() => {
-      this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-      this.router.navigate([this.returnLink]);
-    }).add(() => this.personalDataLoading = false);
+    this.subs.sink = saveData$
+      .subscribe(() => {
+        this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
+        this.router.navigate([this.returnLink]);
+      })
+      .add(() => (this.personalDataLoading = false));
   }
 
   get returnLink() {
@@ -146,48 +151,52 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   startTracking(caseDetail: CaseDetailDto) {
-    this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking')
-      .subscribe((data) => {
-        this.trackingStart$$.next(data);
-        this.updatedDetail$$.next({ ...cloneDeep(caseDetail), _links: data._links });
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking').subscribe((data) => {
+      this.trackingStart$$.next(data);
+      this.updatedDetail$$.next({ ...cloneDeep(caseDetail), _links: data._links });
 
-        this.tabIndex = 4;
-      });
+      this.tabIndex = 4;
+    });
   }
 
   renewTracking(tracking: HalResponse) {
-    this.subs.sink = this.apiService.putApiCall<StartTracking>(tracking, 'renew')
-      .subscribe((data) => {
-        this.trackingStart$$.next(data);
-        this.tabIndex = 4;
-      });
+    this.subs.sink = this.apiService.putApiCall<StartTracking>(tracking, 'renew').subscribe((data) => {
+      this.trackingStart$$.next(data);
+      this.tabIndex = 4;
+    });
   }
 
   addComment(commentText: string) {
-    this.commentLoading = true
-    this.subs.sink = this.apiService.addComment(this.caseId, commentText)
+    this.commentLoading = true;
+    this.subs.sink = this.apiService
+      .addComment(this.caseId, commentText)
       .subscribe((data) => {
         this.snackbarService.success('Kommentar erfolgreich eingetragen.');
         this.updatedDetail$$.next(data);
-      }).add(() => this.commentLoading = false);
+      })
+      .add(() => (this.commentLoading = false));
   }
 
   checkForClose(halResponse: HalResponse) {
-    this.subs.sink = this.dialog.open(CloseCaseDialogComponent, { width: '640px' }).afterClosed().pipe(
-      filter((comment) => comment),
-      switchMap((comment: string) => this.apiService.addComment(this.caseId, comment)),
-      map(() => this.closeCase(halResponse))
-    ).subscribe();
+    this.subs.sink = this.dialog
+      .open(CloseCaseDialogComponent, { width: '640px' })
+      .afterClosed()
+      .pipe(
+        filter((comment) => comment),
+        switchMap((comment: string) => this.apiService.addComment(this.caseId, comment)),
+        map(() => this.closeCase(halResponse))
+      )
+      .subscribe();
   }
 
   closeCase(halResponse: HalResponse) {
-    this.subs.sink = this.apiService.deleteApiCall<any>(halResponse, 'conclude').pipe(
-      switchMap(() => this.apiService.getCase(this.caseId))
-    ).subscribe((data) => {
-      this.snackbarService.success('Fall abgeschlossen.');
-      this.updatedDetail$$.next(data);
-
-    });
+    this.subs.sink = this.apiService
+      .deleteApiCall<any>(halResponse, 'conclude')
+      .pipe(switchMap(() => this.apiService.getCase(this.caseId)))
+      .subscribe((data) => {
+        this.snackbarService.success('Fall abgeschlossen.');
+        this.updatedDetail$$.next(data);
+      });
   }
 
   changeToIndexType() {
@@ -199,11 +208,11 @@ export class ClientComponent implements OnInit, OnDestroy {
       data: {
         title: 'Zum Indexfall machen?',
         text:
-          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diesen Kontaktfall als Indexfall weiter bearbeiten wollen?'
-      }
+          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.changeToIndexType();
       }

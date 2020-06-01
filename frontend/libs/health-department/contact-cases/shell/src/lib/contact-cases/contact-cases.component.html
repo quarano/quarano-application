@@ -1,14 +1,8 @@
 <mat-card>
   <mat-card-header class="mb-4">
     <nav mat-tab-nav-bar>
-      <a
-        mat-tab-link
-        [routerLink]="['case-list']"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [active]="rla.isActive"
-      >
-        Fallübersicht
+      <a mat-tab-link [routerLink]="['case-list']" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+        Kontaktübersicht
       </a>
       <a
         mat-tab-link
