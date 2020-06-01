@@ -52,7 +52,7 @@
       </button>
     </div>
     <mat-tab-group #tabs [selectedIndex]="tabIndex">
-      <mat-tab [label]="(type$$ | async) === ClientType.Index ? Falldaten : Stammdaten">
+      <mat-tab [label]="(type$$ | async) === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
         <p class="hint secondary-text-color">
           Pflichteingaben sind mit * markiert
         </p>
