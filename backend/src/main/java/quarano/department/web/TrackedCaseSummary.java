@@ -47,7 +47,7 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 	public String getLastName() {
 		return trackedCase.getTrackedPerson().getLastName();
 	}
-	
+
 	public String getExtReferenceNumber() {
 		return trackedCase.getExtReferenceNumber();
 	}
@@ -108,12 +108,11 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 
 	@Nullable
 	public Map<String, Object> getQuarantine() {
+		var quarantine = trackedCase.getQuarantine();
 
-		if (!trackedCase.isInQuarantine()) {
+		if (quarantine == null) {
 			return null;
 		}
-
-		var quarantine = trackedCase.getQuarantine();
 
 		Map<String, Object> map = new HashMap<>();
 		Optional.ofNullable(quarantine.getFrom()).map(it -> it.format(DateTimeFormatter.ISO_DATE)).ifPresent(it -> map.put("from", it));

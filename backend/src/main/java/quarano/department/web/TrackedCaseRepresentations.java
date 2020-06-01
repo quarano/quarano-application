@@ -207,13 +207,13 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.PARAMETER)
 	@Validated({ Default.class, ValidationGroups.Index.class })
-	static @interface ValidatedIndexCase {
+	@interface ValidatedIndexCase {
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.PARAMETER)
 	@Validated
-	static @interface ValidatedContactCase {
+	@interface ValidatedContactCase {
 	}
 
 	@Data

@@ -8,10 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONArray;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
 import quarano.department.CaseType;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
@@ -22,6 +24,7 @@ import quarano.department.web.TrackedCaseRepresentations.ValidationGroups.Index;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +34,7 @@ import java.util.stream.Stream;
 
 import javax.validation.groups.Default;
 
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -79,7 +83,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertMinimalIndexFieldsSet(document, payload);
 		assertThat(discoverer.findLinkWithRel(CONCLUDE, response)).isPresent();
 	}
-	
+
 	@Test
 	void createNewTrackedIndexCaseWithExtReference() throws Exception {
 
@@ -88,8 +92,9 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
 		var document = JsonPath.parse(response);
-		
-		assertThat(document.read("$.extReferenceNumber", String.class)).isEqualTo(payload.getExtReferenceNumber().toString());
+
+		assertThat(document.read("$.extReferenceNumber", String.class))
+				.isEqualTo(payload.getExtReferenceNumber().toString());
 	}
 
 	@Test
@@ -107,6 +112,56 @@ class TrackedCaseControllerWebIntegrationTests {
 		Stream.of(START_TRACKING, CONCLUDE).forEach(it -> {
 			assertThat(discoverer.findLinkWithRel(it, response)).isPresent();
 		});
+	}
+
+	@Test
+	void receiveTrackedCaseSummaryForTrackedCaseWithEndedQuarantineEndDate() throws Exception {
+
+		LocalDate today = LocalDate.now();
+
+		// get the first case
+		var response = mvc.perform(get("/api/hd/cases") //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		var trackedCaseId = document.read("$._embedded.cases[0].caseId", String.class);
+
+		assertThat(trackedCaseId).isNotNull();
+
+		// modify it to have a quarantine that ended in the past
+		LocalDate quarantineStartDate = today.minusDays(5);
+		LocalDate quarantineEndDate = today.minusDays(1);
+		var payload = createMinimalIndexPayload().setQuarantineEndDate(quarantineEndDate)
+				.setQuarantineStartDate(quarantineStartDate);
+
+		mvc.perform(put("/api/hd/cases/{id}", trackedCaseId) //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		// fetch cases again and check if quarantine start and end dates are shown correctly
+		var readResponseAfterUpdate = mvc.perform(get("/api/hd/cases") //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var documentAfterUpdate = JsonPath.parse(readResponseAfterUpdate);
+
+		String trackedCaseSummaryQuarantineStartAfterUpdate = documentAfterUpdate
+				.read("$..cases[?(@.caseId == '" + trackedCaseId + "')].quarantine.from", JSONArray.class).get(0).toString();
+
+		String trackedCaseSummaryQuarantineEndAfterUpdate = documentAfterUpdate
+				.read("$..cases[?(@.caseId == '" + trackedCaseId + "')].quarantine.to", JSONArray.class).get(0).toString();
+
+		assertThat(trackedCaseSummaryQuarantineStartAfterUpdate)
+				.isEqualTo(quarantineStartDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+		assertThat(trackedCaseSummaryQuarantineEndAfterUpdate)
+				.isEqualTo(quarantineEndDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+
 	}
 
 	@Test
@@ -129,7 +184,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void transformContactCaseToIndexCase() throws Exception {
 
 		// get contact case Tanja and turn it into dto
@@ -156,7 +212,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(contactCaseTanjaAfterTransformation.isIndexCase()).isTrue();
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void rejectTransformContactCaseWhenInfoMissing() throws Exception {
 
 		// get contact case Tanja and turn it into dto
@@ -226,8 +283,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setPhone("0123456789") //
 				.setCity("city 123") //
 				.setStreet("\\") //
-				.setExtReferenceNumber("ADF !")
-				.setHouseNumber("\\");
+				.setExtReferenceNumber("ADF !").setHouseNumber("\\");
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
@@ -269,15 +325,15 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		var lastnamesFromResponse = List.of( //
+		var lastNamesFromResponse = List.of( //
 				document.read("$._embedded.cases[0].lastName", String.class), //
 				document.read("$._embedded.cases[1].lastName", String.class), //
 				document.read("$._embedded.cases[2].lastName", String.class));
 
-		var expectedList = new ArrayList<>(lastnamesFromResponse);
+		var expectedList = new ArrayList<>(lastNamesFromResponse);
 		Collections.sort(expectedList);
 
-		assertThat(lastnamesFromResponse).containsExactlyElementsOf(expectedList);
+		assertThat(lastNamesFromResponse).containsExactlyElementsOf(expectedList);
 	}
 
 	@Test
@@ -301,7 +357,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.comments[0].author", String.class)).isNotBlank();
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
 	void createsContactCaseWithMinimalInput() throws Exception {
 
@@ -315,7 +372,8 @@ class TrackedCaseControllerWebIntegrationTests {
 				.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
 	void updatesContactCaseWithMinimalInput() throws Exception {
 
@@ -333,7 +391,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.email", String.class)).isEqualTo("myemail@email.de");
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void emptyEmailDoesNotTriggerValidation() throws Exception {
 
 		var contactCase = createMinimalContactPayload();
@@ -345,7 +404,8 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isCreated());
 	}
 
-	@Test // CORE-185
+	@Test
+	// CORE-185
 	void updatingContactVulnerableCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -354,7 +414,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void updatingContactMedicalCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -363,7 +424,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void updatingContactCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -372,7 +434,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test // CORE-121
+	@Test
+	// CORE-121
 	void updatesTrackedPersonDetails() throws Exception {
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
@@ -393,7 +456,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
 	}
 
-	@Test // CORE-115
+	@Test
+	// CORE-115
 	void exposesQuestionnaireForCaseAlreadyTracking() throws Exception {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
