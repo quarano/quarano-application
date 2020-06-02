@@ -21,7 +21,6 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
 import { HeaderRightComponent } from './components/layout/header-right/header-right.component';
 import { DateInterceptor } from './interceptors/date-interceptor';
-import { HdContactComponent } from './components/hd-contact/hd-contact.component';
 import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
@@ -35,7 +34,6 @@ const COMPONENTS = [
   AgbComponent,
   ImpressumComponent,
   DataProtectionComponent,
-  HdContactComponent,
 ];
 
 const SUB_MODULES = [WelcomeModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
@@ -51,7 +49,6 @@ const SUB_MODULES = [WelcomeModule, SharedUtilErrorModule, AuthDomainModule, Sha
     HttpClientModule,
     ...SUB_MODULES,
   ],
-  entryComponents: [HdContactComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

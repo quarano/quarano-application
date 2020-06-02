@@ -79,7 +79,9 @@
       "@qro/client/enrollment/register": ["libs/client/enrollment/register/src/index.ts"],
       "@qro/client/enrollment/landing": ["libs/client/enrollment/landing/src/index.ts"],
       "@qro/health-department/case-detail": ["libs/health-department/case-detail/src/index.ts"],
-      "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"]
+      "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
+      "@qro/client/health-department-contact": ["libs/client/health-department-contact/src/index.ts"],
+      "@qro/client/api": ["libs/client/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

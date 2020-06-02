@@ -199,6 +199,12 @@
     },
     "shared-util-data-access": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "client-health-department-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-api": {
+      "tags": ["scope:client", "type:api"]
     }
   }
 }

@@ -1,6 +1,6 @@
+import { HdContactComponent } from '@qro/client/api';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { HdContactComponent } from '../../hd-contact/hd-contact.component';
 import { Observable } from 'rxjs';
 import { HealthDepartmentDto } from '@qro/health-department/domain';
 import { UserService } from '@qro/auth/api';
