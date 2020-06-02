@@ -40,7 +40,7 @@ INSERT INTO public.symptoms VALUES ('da308d57-a4ea-4b93-ab26-bb4a8db4644e', fals
 INSERT INTO public.symptoms VALUES ('6b899ef0-4468-4e87-8b83-a45a7acdabfc', false, 'Dumping-Syndrom');
 INSERT INTO public.symptoms VALUES ('94b89223-76f1-44e6-956a-649423a8fd58', false, 'Durchblutungsstörungen');
 INSERT INTO public.symptoms VALUES ('e9218869-409a-4cd7-8dfd-e44e37e98b58', false, 'Durchbruchschmerzen');
-INSERT INTO public.symptoms VALUES ('33200776-964e-4a54-84fa-7215204590dd', false, 'Durchfall');
+INSERT INTO public.symptoms VALUES ('33200776-964e-4a54-84fa-7215204590dd', true,  'Durchfall');
 INSERT INTO public.symptoms VALUES ('bda51dc9-d194-414d-854f-6e3d6a3c21d6', false, 'Dysarthrie');
 INSERT INTO public.symptoms VALUES ('cd6f5fd9-671f-423d-837d-870bd3d6dec4', false, 'Dysphonie');
 INSERT INTO public.symptoms VALUES ('83994563-4632-484a-b59b-e17195716958', false, 'Dyspnoe');
@@ -52,16 +52,17 @@ INSERT INTO public.symptoms VALUES ('78f3bc3e-1521-40cb-bfdb-c10513a784c2', fals
 INSERT INTO public.symptoms VALUES ('50a9a64f-0e11-4259-a903-794bc66ff210', false, 'Erektile Dysfunktion');
 INSERT INTO public.symptoms VALUES ('a4d4957e-64cf-4b1d-854c-97b28475c6fa', false, 'Exophthalmus');
 INSERT INTO public.symptoms VALUES ('609e8ecc-4aae-46b8-a130-3608f1ea1982', false, 'Fersenschmerzen');
-INSERT INTO public.symptoms VALUES ('db723876-e051-4ccf-9c52-794190694666', true, 'Fieber');
+INSERT INTO public.symptoms VALUES ('db723876-e051-4ccf-9c52-794190694666', true,  'Fieber');
 INSERT INTO public.symptoms VALUES ('27e24977-15c2-492d-abc7-263ec62c7848', false, 'Fingernägel-Kauen');
 INSERT INTO public.symptoms VALUES ('9fe9ba97-5825-4460-9f14-c09451cee5f5', false, 'Fremdkörpergefühl im Auge');
 INSERT INTO public.symptoms VALUES ('cbcfbb5a-9a71-4d71-b3a2-817618627d2b', false, 'Galaktorrhoe');
 INSERT INTO public.symptoms VALUES ('637da3af-2563-4fe0-affa-38b7f03e863d', false, 'Gallenkolik');
 INSERT INTO public.symptoms VALUES ('48609d69-efe3-4327-8fcb-3230e2ef9e35', false, 'Gangstörung');
+INSERT INTO public.symptoms VALUES ('8687c622-d223-42fb-a93f-7a1c3677a4a6', true,  'Gefühl zu wenig / keine Luft zu bekommen');
 INSERT INTO public.symptoms VALUES ('d7154433-6113-4286-8402-f32075554e85', false, 'Gelbe Zähne');
 INSERT INTO public.symptoms VALUES ('92e868e7-e05f-483e-b6b0-c50b31a69dec', false, 'Gelbsucht');
 INSERT INTO public.symptoms VALUES ('cedd6496-7ebf-4014-ba90-b104db89a327', false, 'Gelenkschmerzen');
-INSERT INTO public.symptoms VALUES ('5bb1524e-bccd-4549-8abe-fb92c483593a', false, 'Geschmacksstörung');
+INSERT INTO public.symptoms VALUES ('5bb1524e-bccd-4549-8abe-fb92c483593a', false, 'Geruchs- / Geschmacksstörung');
 INSERT INTO public.symptoms VALUES ('e2c01bb5-679b-4b65-9d8b-04879ecf36ef', false, 'Geschwollene Augen');
 INSERT INTO public.symptoms VALUES ('517c9b83-abe0-4bca-a202-7817fe167ac9', false, 'Geschwollene Lymphknoten');
 INSERT INTO public.symptoms VALUES ('a8290e58-9395-48e0-b9e9-7366ea51aca1', false, 'Gesichtslähmung');
@@ -71,7 +72,7 @@ INSERT INTO public.symptoms VALUES ('b1882538-c028-4fe6-b53e-5095f61dcfc6', fals
 INSERT INTO public.symptoms VALUES ('71193081-6b6c-401a-9cde-df1baa2a8e02', false, 'Glubschaugen');
 INSERT INTO public.symptoms VALUES ('deb375ed-828c-4ed9-acc1-4899f328c391', false, 'Haarausfall');
 INSERT INTO public.symptoms VALUES ('61532c02-561e-4327-a929-f2092bde808c', false, 'Halluzinationen');
-INSERT INTO public.symptoms VALUES ('116e016a-54cf-40a6-aef8-5027abb931c8', false, 'Halsschmerzen');
+INSERT INTO public.symptoms VALUES ('116e016a-54cf-40a6-aef8-5027abb931c8', true,  'Halsschmerzen');
 INSERT INTO public.symptoms VALUES ('5dfbae6b-6213-458b-8051-087e22d2145a', false, 'Hämoptoe (Bluthusten)');
 INSERT INTO public.symptoms VALUES ('8a60046c-6b77-4182-8610-de94f191fbae', false, 'Harnverhalt');
 INSERT INTO public.symptoms VALUES ('82ba4612-bf60-4bea-aa43-c8605fdcb6b9', false, 'Hautausschlag');
@@ -81,7 +82,7 @@ INSERT INTO public.symptoms VALUES ('04a9dcfe-ceb5-4e88-b8f2-d3190e0ba1cc', fals
 INSERT INTO public.symptoms VALUES ('b7fb3785-3aff-4daa-bd5e-7d5dc1526991', false, 'Herzrasen');
 INSERT INTO public.symptoms VALUES ('3d727ff2-dcce-433e-b01c-d26dd5318dbe', false, 'Hirsutismus');
 INSERT INTO public.symptoms VALUES ('5fa4b678-9f3f-4e47-8aae-e398e086641c', false, 'Hitzewallungen');
-INSERT INTO public.symptoms VALUES ('e5cea3b0-c8f4-4e03-a24e-89213f3f6637', true, 'Husten');
+INSERT INTO public.symptoms VALUES ('e5cea3b0-c8f4-4e03-a24e-89213f3f6637', true,  'Husten');
 INSERT INTO public.symptoms VALUES ('93090290-4a55-48eb-ab20-2d1d9e53ba1f', false, 'Hypercortisolismus');
 INSERT INTO public.symptoms VALUES ('e1cc0c86-c4bc-4b55-8d19-286fb7f81ef6', false, 'Hyperhidrose');
 INSERT INTO public.symptoms VALUES ('2c8a4a3e-742a-41e0-9249-2bf9a5853b58', false, 'Hyperventilation');
@@ -100,7 +101,6 @@ INSERT INTO public.symptoms VALUES ('c1aa2884-4e18-4738-a7cd-12a7b9747b96', fals
 INSERT INTO public.symptoms VALUES ('a3369bb5-d6ea-40f6-a73d-bf541be70a86', false, 'Koprolalie');
 INSERT INTO public.symptoms VALUES ('380074e4-1ff2-4ce8-898f-6313c283e26a', false, 'Krampfanfall');
 INSERT INTO public.symptoms VALUES ('800706bd-d7e9-4783-8385-a97388cd8d9c', false, 'Kribbeln');
-INSERT INTO public.symptoms VALUES ('d6fb718e-e9f3-4c47-887c-dafdd702d528', true, 'Kurzatmigkeit');
 INSERT INTO public.symptoms VALUES ('7863636b-9335-4bd3-ad70-5fbc57555290', false, 'Leistenschmerzen');
 INSERT INTO public.symptoms VALUES ('4d2255f1-4818-498e-85e8-89176da59f0b', false, 'Libidoverlust');
 INSERT INTO public.symptoms VALUES ('10b0e240-2adb-4939-87b5-b0a92ce1daab', false, 'Lichtscheu');
@@ -140,11 +140,12 @@ INSERT INTO public.symptoms VALUES ('53910833-00dc-4020-a223-c0da72ea7efb', fals
 INSERT INTO public.symptoms VALUES ('527b542f-60fc-4a2b-b273-542d82b1e4ef', false, 'Schilddrüsenknoten');
 INSERT INTO public.symptoms VALUES ('d84764b4-1f14-40f0-83bd-174a7b6a37f3', false, 'Schluckauf');
 INSERT INTO public.symptoms VALUES ('dbcdfb06-e117-4393-bad5-a2f3ef989237', false, 'Schmerzempfindliche Zähne');
+INSERT INTO public.symptoms VALUES ('288f414e-63b3-4a7d-8752-1548e6615da5', true,  'Schmerzen beim Atmen');
 INSERT INTO public.symptoms VALUES ('f88d8ae7-545c-4e41-8d33-8fa46f08bb54', false, 'Schmerzen beim Sex');
 INSERT INTO public.symptoms VALUES ('7c80d419-9319-4234-ab13-66f97b332b4b', false, 'Schmerzen in der Brust');
 INSERT INTO public.symptoms VALUES ('388dbe1e-2090-433d-af35-4feea62c9340', false, 'Schmierblutung');
 INSERT INTO public.symptoms VALUES ('25f72265-e1f4-418a-abd3-1115e6a55783', false, 'Schnarchen');
-INSERT INTO public.symptoms VALUES ('ced041b6-24c1-429c-9961-dfcdd92270ba', false, 'Schnupfen');
+INSERT INTO public.symptoms VALUES ('ced041b6-24c1-429c-9961-dfcdd92270ba', false, 'Laufende Nase / Schnupfen');
 INSERT INTO public.symptoms VALUES ('9e218db8-3504-4a82-92f2-7cb98e7e5e75', false, 'Schock');
 INSERT INTO public.symptoms VALUES ('f319845f-2202-4f9a-9486-84a3f513a78d', false, 'Schulterschmerzen');
 INSERT INTO public.symptoms VALUES ('95f2c277-093b-4e5f-bb2b-978b3144e5b7', false, 'Schuppen');

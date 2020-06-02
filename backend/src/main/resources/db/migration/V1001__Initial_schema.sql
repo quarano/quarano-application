@@ -5,10 +5,23 @@ CREATE TABLE departments (
 	last_modified timestamp NULL,
 	last_modified_by uuid NULL,
 	name varchar(255) NULL,
-	email varchar(255) NULL,
-	phone_number varchar(255) NULL,
 	CONSTRAINT departments_pkey PRIMARY KEY (department_id),
 	CONSTRAINT uk_qyf2ekbfpnddm6f3rkgt39i9o UNIQUE (name)
+);
+
+CREATE TABLE departments_contacts (
+	department_contact_id uuid NOT NULL,
+	created timestamp NULL,
+	created_by uuid NULL,
+	last_modified timestamp NULL,
+	last_modified_by uuid NULL,
+	type varchar(255) NOT NULL,
+	email varchar(255) NOT NULL,
+	phone_number varchar(255) NOT NULL,
+	department_id uuid NULL,
+	CONSTRAINT department_contacts_pkey PRIMARY KEY (department_contact_id),
+	CONSTRAINT uk_dep_cont UNIQUE (department_id, type),
+	CONSTRAINT contact_department_fk FOREIGN KEY (department_id) REFERENCES departments(department_id)
 );
 
 CREATE TABLE accounts (
@@ -117,6 +130,7 @@ CREATE TABLE tracked_cases (
 	questionnaire_id uuid NULL,
 	tracked_person_id uuid NULL,
 	status varchar(50) NOT NULL,
+	ext_reference_number varchar(40) NULL,
 	CONSTRAINT tracked_cases_pkey PRIMARY KEY (tracked_case_id),
 	CONSTRAINT tracked_cases_department_fk FOREIGN KEY (department_id) REFERENCES departments(department_id),
 	CONSTRAINT tracked_cases_questionnaires_fk FOREIGN KEY (questionnaire_id) REFERENCES questionnaires(questionnaire_id),
@@ -169,8 +183,8 @@ CREATE TABLE diary_entries_contacts (
 CREATE TABLE diary_entries_symptoms (
 	diary_entry_diary_entry_id uuid NOT NULL,
 	symptoms_symptom_id uuid NOT NULL,
-	CONSTRAINT diary_entries_symptoms_diary_entries_fk FOREIGN KEY (diary_entry_diary_entry_id) REFERENCES diary_entries(diary_entry_id),
-	CONSTRAINT diary_entries_symptoms_symptons_fk FOREIGN KEY (symptoms_symptom_id) REFERENCES symptoms(symptom_id)
+	CONSTRAINT diary_entries_symptoms_diary_entries_fk FOREIGN KEY (diary_entry_diary_entry_id) REFERENCES diary_entries(diary_entry_id) ON DELETE CASCADE,
+	CONSTRAINT diary_entries_symptoms_symptoms_fk FOREIGN KEY (symptoms_symptom_id) REFERENCES symptoms(symptom_id) ON DELETE CASCADE
 );
 
 CREATE TABLE questionnaires_symptoms (
