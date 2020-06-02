@@ -17,12 +17,12 @@ export class ClientService {
   ) {}
 
   getPersonalDetails(): Observable<ClientDto> {
-    return this.httpClient.get<ClientDto>(`${this.apiUrl}/enrollment/details`).pipe(share());
+    return this.httpClient.get<ClientDto>(`${this.apiUrl}/api/enrollment/details`).pipe(share());
   }
 
   updatePersonalDetails(client: ClientDto): Observable<any> {
     return this.httpClient
-      .put(`${this.apiUrl}/enrollment/details`, client)
+      .put(`${this.apiUrl}/api/enrollment/details`, client)
       .pipe(switchMap((_) => this.enrollmentService.loadEnrollmentStatus()));
   }
 }

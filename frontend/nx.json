@@ -183,7 +183,7 @@
       "tags": ["scope:client-contact-persons", "type:feature"]
     },
     "client-profile": {
-      "tags": []
+      "tags": ["scope:client", "type:feature"]
     }
   }
 }

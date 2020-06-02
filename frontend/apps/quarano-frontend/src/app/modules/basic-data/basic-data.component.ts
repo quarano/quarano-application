@@ -1,3 +1,4 @@
+import { ClientService } from './../../../../../../libs/client/domain/src/lib/services/client.service';
 import { BadRequestService } from '@qro/shared/util-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -68,7 +69,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private enrollmentService: EnrollmentService,
     private router: Router,
     private changeDetect: ChangeDetectorRef,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    private clientService: ClientService
   ) {}
 
   ngOnInit() {
@@ -180,7 +182,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.firstFormLoading = true;
       const value = this.firstFormGroup.value;
       value.dateOfBirth = this.dateOfBirth;
-      this.enrollmentService
+      this.clientService
         .updatePersonalDetails(value)
         .subscribe(
           (result) => {

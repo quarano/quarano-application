@@ -1,5 +1,4 @@
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
-import { AppFormsModule } from '../app-forms/app-forms.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,7 +21,6 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
     FormsModule,
     ReactiveFormsModule,
     SharedUiMultipleAutocompleteModule,
-    AppFormsModule,
     SharedUiConfirmationDialogModule,
     SharedUiButtonModule,
   ],

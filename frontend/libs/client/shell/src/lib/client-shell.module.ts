@@ -6,6 +6,11 @@ import { IsAuthenticatedGuard } from '@qro/auth/api';
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'diary',
+  },
+  {
     path: 'diary',
     loadChildren: () => import('@qro/client/diary/shell').then((m) => m.ClientDiaryShellModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],

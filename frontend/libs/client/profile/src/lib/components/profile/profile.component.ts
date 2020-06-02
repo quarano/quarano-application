@@ -1,3 +1,4 @@
+import { ClientService } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/util-error';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,7 +6,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
 import { ClientDto } from '@qro/client/domain';
-import { EnrollmentService } from '../../../../../enrollment/domain/src/lib/services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 import {
   VALIDATION_PATTERNS,
@@ -26,10 +26,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     private router: Router,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    private clientService: ClientService
   ) {}
 
   ngOnInit() {
@@ -114,7 +114,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   modifyProfile() {
     this.subs.add(
-      this.enrollmentService.updatePersonalDetails(this.client).subscribe(
+      this.clientService.updatePersonalDetails(this.client).subscribe(
         (_) => {
           this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
           this.formGroup.markAsPristine();
