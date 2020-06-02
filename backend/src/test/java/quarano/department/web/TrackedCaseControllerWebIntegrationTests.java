@@ -426,6 +426,105 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
+	@Test
+	void creatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
+		var payload = createMinimalContactPayload();
+		creatingCasesOnlyWithCorrectQuarantineDates(payload, CaseType.CONTACT, CaseType.CONTACT_MEDICAL,
+				CaseType.CONTACT_VULNERABLE);
+	}
+
+	@Test
+	void creatingIndexCasesOnlyWithCorrectOrderOfQuarantineDates() throws Exception {
+		var payload = createMinimalIndexPayload();
+		creatingCasesOnlyWithCorrectQuarantineDates(payload, CaseType.INDEX);
+	}
+
+	private void creatingCasesOnlyWithCorrectQuarantineDates(TrackedCaseDto payload, CaseType... types) throws Exception {
+		// only with start
+		payload.setQuarantineStartDate(LocalDate.now());
+		payload.setQuarantineEndDate(null);
+
+		for (CaseType type : types) {
+			expectBadRequestOnCreation(payload, type);
+		}
+
+		// only with end
+		payload.setQuarantineStartDate(null);
+		payload.setQuarantineEndDate(LocalDate.now());
+
+		for (CaseType type : types) {
+			expectBadRequestOnCreation(payload, type);
+		}
+
+		// with end before start
+		payload.setQuarantineStartDate(LocalDate.now());
+		payload.setQuarantineEndDate(LocalDate.now().minusDays(1));
+
+		for (CaseType type : types) {
+			expectBadRequestOnCreation(payload, type);
+		}
+
+		// correct with start before end
+		payload.setQuarantineStartDate(LocalDate.now().minusDays(1));
+		payload.setQuarantineEndDate(LocalDate.now());
+
+		for (CaseType type : types) {
+			issueCaseCreation(payload, type);
+		}
+	}
+
+	@Test
+	void updatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+		var payload = createMinimalContactPayload();
+		updatingCasesOnlyWithCorrectQuarantineDates(payload, trackedCase.getId(), CaseType.CONTACT, CaseType.CONTACT_MEDICAL,
+				CaseType.CONTACT_VULNERABLE);
+	}
+
+	@Test
+	void updatingIndexCasesOnlyWithCorrectOrderOfQuarantineDates() throws Exception {
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+		var payload = createMinimalIndexPayload();
+		updatingCasesOnlyWithCorrectQuarantineDates(payload, trackedCase.getId(),CaseType.INDEX);
+	}
+
+	private void updatingCasesOnlyWithCorrectQuarantineDates(TrackedCaseDto payload, TrackedCaseIdentifier caseId,
+			CaseType... types) throws Exception, JsonProcessingException {
+		// only with start
+		payload.setQuarantineStartDate(LocalDate.now());
+		payload.setQuarantineEndDate(null);
+
+		for (CaseType type : types) {
+			expectBadRequestOnUpdate(payload, type, caseId);
+		}
+
+		// only with end
+		payload.setQuarantineStartDate(null);
+		payload.setQuarantineEndDate(LocalDate.now());
+
+		for (CaseType type : types) {
+			expectBadRequestOnUpdate(payload, type, caseId);
+		}
+
+		// with end before start
+		payload.setQuarantineStartDate(LocalDate.now());
+		payload.setQuarantineEndDate(LocalDate.now().minusDays(1));
+
+		for (CaseType type : types) {
+			expectBadRequestOnUpdate(payload, type, caseId);
+		}
+
+		// correct with start before end
+		payload.setQuarantineStartDate(LocalDate.now().minusDays(1));
+		payload.setQuarantineEndDate(LocalDate.now());
+
+		for (CaseType type : types) {
+			issueCaseUpdate(payload, caseId, type);
+		}
+	}
+
 	@Test // CORE-121
 	void updatesTrackedPersonDetails() throws Exception {
 
@@ -503,6 +602,16 @@ class TrackedCaseControllerWebIntegrationTests {
 				.contentType(MediaType.APPLICATION_JSON)) //
 				.andExpect(status().isCreated()) //
 				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+				.andReturn().getResponse();
+	}
+
+	private MockHttpServletResponse expectBadRequestOnCreation(TrackedCaseDto payload, CaseType type) throws Exception {
+
+		return mvc.perform(post("/api/hd/cases") //
+				.param("type", type == CaseType.INDEX ? "index" : "contact") //
+				.content(jackson.writeValueAsString(payload)) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isBadRequest()) //
 				.andReturn().getResponse();
 	}
 
