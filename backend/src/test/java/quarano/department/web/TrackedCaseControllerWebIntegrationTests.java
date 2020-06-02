@@ -25,10 +25,12 @@ import quarano.tracking.TrackedPersonDataInitializer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import javax.validation.groups.Default;
@@ -426,103 +428,64 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test
-	void creatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
-		var payload = createMinimalContactPayload();
-		creatingCasesOnlyWithCorrectQuarantineDates(payload, CaseType.CONTACT, CaseType.CONTACT_MEDICAL,
-				CaseType.CONTACT_VULNERABLE);
+	@lombok.Value(staticConstructor = "of")
+	static class Fixture {
+		LocalDate start, end;
+		CaseType type;
+		BiConsumer<TrackedCaseDto, CaseType> consumer;
 	}
 
-	@Test
-	void creatingIndexCasesOnlyWithCorrectOrderOfQuarantineDates() throws Exception {
-		var payload = createMinimalIndexPayload();
-		creatingCasesOnlyWithCorrectQuarantineDates(payload, CaseType.INDEX);
+	@TestFactory
+	Stream<DynamicTest> creatingContactCasesOnlyWithCorrectQuarantineDates() {
+
+		return createQuarantineTests((payload, type) -> issueCaseCreation(payload, type), //
+				(payload, type) -> expectBadRequestOnCreation(payload, type));
 	}
 
-	private void creatingCasesOnlyWithCorrectQuarantineDates(TrackedCaseDto payload, CaseType... types) throws Exception {
-		// only with start
-		payload.setQuarantineStartDate(LocalDate.now());
-		payload.setQuarantineEndDate(null);
+	@TestFactory
+	Stream<DynamicTest> updatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
 
-		for (CaseType type : types) {
-			expectBadRequestOnCreation(payload, type);
-		}
-
-		// only with end
-		payload.setQuarantineStartDate(null);
-		payload.setQuarantineEndDate(LocalDate.now());
-
-		for (CaseType type : types) {
-			expectBadRequestOnCreation(payload, type);
-		}
-
-		// with end before start
-		payload.setQuarantineStartDate(LocalDate.now());
-		payload.setQuarantineEndDate(LocalDate.now().minusDays(1));
-
-		for (CaseType type : types) {
-			expectBadRequestOnCreation(payload, type);
-		}
-
-		// correct with start before end
-		payload.setQuarantineStartDate(LocalDate.now().minusDays(1));
-		payload.setQuarantineEndDate(LocalDate.now());
-
-		for (CaseType type : types) {
-			issueCaseCreation(payload, type);
-		}
-	}
-
-	@Test
-	void updatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		var payload = createMinimalContactPayload();
-		updatingCasesOnlyWithCorrectQuarantineDates(payload, trackedCase.getId(), CaseType.CONTACT, CaseType.CONTACT_MEDICAL,
-				CaseType.CONTACT_VULNERABLE);
+		var caseId = trackedCase.getId();
+
+		return createQuarantineTests((payload, type) -> issueCaseUpdate(payload, caseId, type),
+				(payload, type) -> expectBadRequestOnUpdate(payload, type, caseId));
 	}
 
-	@Test
-	void updatingIndexCasesOnlyWithCorrectOrderOfQuarantineDates() throws Exception {
-		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
-				.orElseThrow();
-		var payload = createMinimalIndexPayload();
-		updatingCasesOnlyWithCorrectQuarantineDates(payload, trackedCase.getId(),CaseType.INDEX);
-	}
+	private Stream<DynamicTest> createQuarantineTests(BiConsumer<TrackedCaseDto, CaseType> success,
+			BiConsumer<TrackedCaseDto, CaseType> failure) {
 
-	private void updatingCasesOnlyWithCorrectQuarantineDates(TrackedCaseDto payload, TrackedCaseIdentifier caseId,
-			CaseType... types) throws Exception, JsonProcessingException {
-		// only with start
-		payload.setQuarantineStartDate(LocalDate.now());
-		payload.setQuarantineEndDate(null);
+		var fixture = Arrays.stream(CaseType.values()).flatMap(it -> {
 
-		for (CaseType type : types) {
-			expectBadRequestOnUpdate(payload, type, caseId);
-		}
+			var now = LocalDate.now();
 
-		// only with end
-		payload.setQuarantineStartDate(null);
-		payload.setQuarantineEndDate(LocalDate.now());
+			var base = Stream.of(Fixture.of(now, null, it, failure), //
+					Fixture.of(null, now, it, failure), //
+					Fixture.of(now, now.minusDays(1), it, failure), //
+					Fixture.of(now.minusDays(1), now, it, success)); //
 
-		for (CaseType type : types) {
-			expectBadRequestOnUpdate(payload, type, caseId);
-		}
+			return it.equals(CaseType.INDEX) //
+					? Stream.concat(base, Stream.of(Fixture.of(null, null, it, failure))) //
+					: base;
 
-		// with end before start
-		payload.setQuarantineStartDate(LocalDate.now());
-		payload.setQuarantineEndDate(LocalDate.now().minusDays(1));
+		}).iterator();
 
-		for (CaseType type : types) {
-			expectBadRequestOnUpdate(payload, type, caseId);
-		}
+		return DynamicTest.stream(fixture, //
+				it -> {
+					return String.format("Case creation/update with quarantine (%s, %s) for type %s %s.", it.start, it.end,
+							it.type, it.consumer == success ? "succeeds" : "is rejected");
+				}, it -> {
 
-		// correct with start before end
-		payload.setQuarantineStartDate(LocalDate.now().minusDays(1));
-		payload.setQuarantineEndDate(LocalDate.now());
+					var payload = it.type == CaseType.INDEX //
+							? createMinimalIndexPayload() //
+							: createMinimalContactPayload();
 
-		for (CaseType type : types) {
-			issueCaseUpdate(payload, caseId, type);
-		}
+					payload.setQuarantineStartDate(it.start);
+					payload.setQuarantineEndDate(it.end);
+
+					it.consumer.accept(payload, it.type);
+				});
 	}
 
 	@Test // CORE-121
@@ -594,36 +557,53 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()));
 	}
 
-	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload, CaseType type) throws Exception {
+	private MockHttpServletResponse issueCaseCreation(TrackedCaseDto payload, CaseType type) {
 
-		return mvc.perform(post("/api/hd/cases") //
-				.param("type", type == CaseType.INDEX ? "index" : "contact") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isCreated()) //
-				.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
-				.andReturn().getResponse();
+		try {
+
+			return mvc.perform(post("/api/hd/cases") //
+					.param("type", type == CaseType.INDEX ? "index" : "contact") //
+					.content(jackson.writeValueAsString(payload)) //
+					.contentType(MediaType.APPLICATION_JSON)) //
+					.andExpect(status().isCreated()) //
+					.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+					.andReturn().getResponse();
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private MockHttpServletResponse expectBadRequestOnCreation(TrackedCaseDto payload, CaseType type) throws Exception {
+	private MockHttpServletResponse expectBadRequestOnCreation(TrackedCaseDto payload, CaseType type) {
 
-		return mvc.perform(post("/api/hd/cases") //
-				.param("type", type == CaseType.INDEX ? "index" : "contact") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
-				.andReturn().getResponse();
+		try {
+
+			return mvc.perform(post("/api/hd/cases") //
+					.param("type", type == CaseType.INDEX ? "index" : "contact") //
+					.content(jackson.writeValueAsString(payload)) //
+					.contentType(MediaType.APPLICATION_JSON)) //
+					.andExpect(status().isBadRequest()) //
+					.andReturn().getResponse();
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, TrackedCaseIdentifier caseId, CaseType type)
-			throws Exception {
+	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, TrackedCaseIdentifier caseId, CaseType type) {
 
-		return mvc.perform(put("/api/hd/cases/{id}", caseId) //
-				.param("type", type == CaseType.INDEX ? "index" : "contact") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse();
+		try {
+
+			return mvc.perform(put("/api/hd/cases/{id}", caseId) //
+					.param("type", type == CaseType.INDEX ? "index" : "contact") //
+					.content(jackson.writeValueAsString(payload)) //
+					.contentType(MediaType.APPLICATION_JSON)) //
+					.andExpect(status().isOk()) //
+					.andReturn().getResponse();
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload, TrackedCaseIdentifier id)
@@ -647,13 +627,19 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	private MockHttpServletResponse expectBadRequestOnUpdate(TrackedCaseDto payload, CaseType type,
-			TrackedCaseIdentifier caseId) throws Exception, JsonProcessingException {
+			TrackedCaseIdentifier caseId) {
 
-		return mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
-				.andReturn().getResponse();
+		try {
+
+			return mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
+					.content(jackson.writeValueAsString(payload)) //
+					.contentType(MediaType.APPLICATION_JSON)) //
+					.andExpect(status().isBadRequest()) //
+					.andReturn().getResponse();
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static void assertMinimalIndexFieldsSet(DocumentContext document, TrackedCaseDto payload) {

@@ -61,7 +61,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Column(name = "case_type") //
 	@Enumerated(EnumType.STRING) //
 	private @Getter @Setter CaseType type = CaseType.INDEX;
-	private @Getter @Setter Quarantine quarantine = null;
+	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
 
 	private @Getter @Setter String extReferenceNumber;
 

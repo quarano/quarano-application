@@ -190,8 +190,6 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		if (type.equals(CaseType.INDEX) || payload.getTestDate() != null) {
 			validationGroups.add(ValidationGroups.Index.class);
-		} else if (payload.getQuarantineStartDate() != null || payload.getQuarantineEndDate() != null) {
-			validationGroups.add(ValidationGroups.Contact.class);
 		}
 
 		return errors //
@@ -227,8 +225,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName;
 		private @Pattern(regexp = Strings.EXT_REFERENCE_NUMBER) String extReferenceNumber;
 		private @NotNull(groups = ValidationGroups.Index.class) LocalDate testDate;
-		private @NotNull(groups = {ValidationGroups.Index.class, ValidationGroups.Contact.class}) LocalDate quarantineStartDate;
-		private @NotNull(groups = {ValidationGroups.Index.class, ValidationGroups.Contact.class}) LocalDate quarantineEndDate;
+		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineStartDate;
+		private @NotNull(groups = ValidationGroups.Index.class) LocalDate quarantineEndDate;
 
 		private @Pattern(regexp = Strings.STREET) String street;
 		private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
@@ -242,10 +240,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		Errors validate(Errors errors, CaseType type) {
 
-			if (quarantineStartDate != null && quarantineEndDate != null && quarantineStartDate.isAfter(quarantineEndDate)) {
-				errors.rejectValue("quarantineEndDate", "EndBeforeStart");
-			}
-			
+			verifyQuarantine(errors);
+
 			if (type.equals(CaseType.CONTACT)) {
 				return errors;
 			}
@@ -256,6 +252,26 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			}
 
 			return errors;
+		}
+
+		void verifyQuarantine(Errors errors) {
+
+			if (quarantineStartDate != null || quarantineEndDate != null) {
+
+				if (quarantineStartDate == null) {
+					errors.reject("quarantineStartDate", "NotNull");
+					return;
+				}
+
+				if (quarantineEndDate == null) {
+					errors.reject("quarantineEndDate", "NotNull");
+					return;
+				}
+
+				if (quarantineStartDate.isAfter(quarantineEndDate)) {
+					errors.rejectValue("quarantineEndDate", "EndBeforeStart");
+				}
+			}
 		}
 	}
 
