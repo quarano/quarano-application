@@ -1,4 +1,4 @@
-import { IIdentifiable, SelfLink } from '../../../../../../../apps/quarano-frontend/src/app/models/general';
+import { IIdentifiable, SelfLink } from '../../../../../../shared/util-data-access/src/lib/models/general';
 
 export interface ContactPersonDto extends IIdentifiable {
   firstName: string;

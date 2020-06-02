@@ -3,7 +3,7 @@ import {
   CreateLink,
   SelfLink,
   Link,
-} from '../../../../../../../apps/quarano-frontend/src/app/models/general';
+} from '../../../../../../shared/util-data-access/src/lib/models/general';
 
 export interface DiaryEntryDto extends IIdentifiable {
   bodyTemperature: number;

@@ -2021,6 +2021,70 @@
           "style": "scss"
         }
       }
+    },
+    "health-department-case-detail": {
+      "projectType": "library",
+      "root": "libs/health-department/case-detail",
+      "sourceRoot": "libs/health-department/case-detail/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/health-department/case-detail/tsconfig.lib.json",
+              "libs/health-department/case-detail/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/health-department/case-detail/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/case-detail/jest.config.js",
+            "tsConfig": "libs/health-department/case-detail/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/case-detail/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-data-access": {
+      "projectType": "library",
+      "root": "libs/shared/util-data-access",
+      "sourceRoot": "libs/shared/util-data-access/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-data-access/tsconfig.lib.json",
+              "libs/shared/util-data-access/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-data-access/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-data-access/jest.config.js",
+            "tsConfig": "libs/shared/util-data-access/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-data-access/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

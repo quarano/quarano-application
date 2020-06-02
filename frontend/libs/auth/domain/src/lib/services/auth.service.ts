@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { ChangePasswordDto } from './../models/change-password';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { UserDto } from '../models/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
-  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) { }
+  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   changePassword(dto: ChangePasswordDto) {
     return this.httpClient.put(`${this.apiUrl}/api/user/me/password`, dto);
@@ -21,5 +21,9 @@ export class AuthService {
 
   login(username: string, password: string): Observable<{ token: string }> {
     return this.httpClient.post<{ token: string }>(`${this.apiUrl}/login`, { username, password });
+  }
+
+  getMe(): Observable<UserDto> {
+    return this.httpClient.get<UserDto>(`${this.apiUrl}/api/user/me`);
   }
 }

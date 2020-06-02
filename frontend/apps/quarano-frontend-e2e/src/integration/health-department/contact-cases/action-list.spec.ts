@@ -3,7 +3,7 @@
 describe('health-department contact cases action-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/hd/actions'/*, 'fixture:get-api-hd-cases.json'*/).as('allactions');
+    cy.route('GET', '/api/hd/actions' /*, 'fixture:get-api-hd-cases.json'*/).as('allactions');
 
     cy.loginAgent();
     cy.get('[data-cy="contact-cases"]').click();
@@ -29,7 +29,7 @@ describe('health-department contact cases action-list', () => {
 
     it('should open selected case', () => {
       cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').eq(2).click();
-      cy.url().should('include', '/tenant-admin/client/').should('include', '?tab=1');
+      cy.url().should('include', '/health-department/case-detail/').should('include', '?tab=1');
     });
   });
 });

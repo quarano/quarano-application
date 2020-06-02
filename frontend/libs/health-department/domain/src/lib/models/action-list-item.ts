@@ -1,4 +1,4 @@
-import { SelfLink } from './../../../../../../apps/quarano-frontend/src/app/models/general';
+import { SelfLink } from '../../../../../shared/util-data-access/src/lib/models/general';
 import { Alert } from '../enums/alert';
 import { ClientType } from '../enums/client-type';
 

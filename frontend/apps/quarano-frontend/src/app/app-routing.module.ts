@@ -23,11 +23,6 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard],
   },
   {
-    path: 'tenant-admin',
-    loadChildren: () => import('./modules/tenant-admin/tenant-admin.module').then((m) => m.TenantAdminModule),
-    canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard],
-  },
-  {
     path: 'administration',
     loadChildren: () => import('@qro/administration/shell').then((m) => m.AdministrationShellModule),
     canActivate: [IsAuthenticatedGuard, IsAdminGuard],

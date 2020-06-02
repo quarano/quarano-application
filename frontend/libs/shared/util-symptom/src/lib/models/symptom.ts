@@ -1,4 +1,4 @@
-import { IIdentifiable } from '../../../../../../apps/quarano-frontend/src/app/models/general';
+import { IIdentifiable } from '../../../../util-data-access/src/lib/models/general';
 
 export interface SymptomDto extends IIdentifiable {
   name: string;

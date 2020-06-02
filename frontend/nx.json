@@ -193,6 +193,12 @@
     },
     "client-enrollment-landing": {
       "tags": ["scope:client-enrollment", "type:feature"]
+    },
+    "health-department-case-detail": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "shared-util-data-access": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

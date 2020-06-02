@@ -6,7 +6,7 @@ import {
   ActionListItemDto,
   AlertConfiguration,
   getAlertConfigurations,
-  Alert
+  Alert,
 } from '@qro/health-department/domain';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class ActionRowViewModel {
 @Component({
   selector: 'qro-contact-case-action-list',
   templateUrl: './action-list.component.html',
-  styleUrls: ['./action-list.component.scss']
+  styleUrls: ['./action-list.component.scss'],
 })
 export class ActionListComponent implements OnInit, OnDestroy {
   actions: ActionListItemDto[] = [];
@@ -40,36 +40,37 @@ export class ActionListComponent implements OnInit, OnDestroy {
   alertConfigs: AlertConfiguration[] = [];
   @ViewChild(MatSelect) filterSelect: MatSelect;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.loading = true;
 
-    this.subs.add(this.route.data.subscribe(
-      data => {
-        this.actions = data.actions;
-        this.rows = this.actions.map(action => this.getRowData(action));
-        this.filteredRows = [...this.rows];
-        this.loading = false;
+    this.subs.add(
+      this.route.data.subscribe(
+        (data) => {
+          this.actions = data.actions;
+          this.rows = this.actions.map((action) => this.getRowData(action));
+          this.filteredRows = [...this.rows];
+          this.loading = false;
 
-        this.alertConfigs = this.actions.reduce((acc, next) => {
-          next.alerts.forEach(alert => {
-            if (!acc.includes(alert)) {
-              acc.push(alert);
-            }
-          });
+          this.alertConfigs = this.actions
+            .reduce((acc, next) => {
+              next.alerts.forEach((alert) => {
+                if (!acc.includes(alert)) {
+                  acc.push(alert);
+                }
+              });
 
-          return acc;
-        }, [])
-          .map(alert => {
-            return getAlertConfigurations().find(c => c.alert === alert);
-          })
-          .sort((a, b) => a.order - b.order)
-          ;
-      },
-      () => this.loading = false));
+              return acc;
+            }, [])
+            .map((alert) => {
+              return getAlertConfigurations().find((c) => c.alert === alert);
+            })
+            .sort((a, b) => a.order - b.order);
+        },
+        () => (this.loading = false)
+      )
+    );
   }
 
   get isFiltered(): boolean {
@@ -105,16 +106,17 @@ export class ActionListComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    this.router.navigate(
-      ['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId],
-      {
-        queryParams: { tab: 1 }
-      });
+    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.caseId], {
+      queryParams: { tab: 1 },
+    });
   }
 
   onAlertFilterChanged(selectedValues: string[]) {
-    if (selectedValues.length === 0) { this.filteredRows = this.rows; return; }
-    this.filteredRows = this.rows.filter(r => r.alerts.filter(a => selectedValues.includes(a)).length > 0);
+    if (selectedValues.length === 0) {
+      this.filteredRows = this.rows;
+      return;
+    }
+    this.filteredRows = this.rows.filter((r) => r.alerts.filter((a) => selectedValues.includes(a)).length > 0);
   }
 
   resetFilter() {
@@ -123,7 +125,6 @@ export class ActionListComponent implements OnInit, OnDestroy {
   }
 
   alertConfigurationFor(alert: Alert) {
-    return getAlertConfigurations().find(c => c.alert === alert);
+    return getAlertConfigurations().find((c) => c.alert === alert);
   }
-
 }

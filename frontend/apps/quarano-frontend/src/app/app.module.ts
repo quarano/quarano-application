@@ -3,7 +3,6 @@ import { AuthDomainModule } from '@qro/auth/domain';
 import { SharedUtilErrorModule } from '@qro/shared/util-error';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { API_URL } from '@qro/shared/util';
-import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { AgbComponent } from './components/agb/agb.component';
@@ -39,7 +38,7 @@ const COMPONENTS = [
   HdContactComponent,
 ];
 
-const SUB_MODULES = [WelcomeModule, TenantAdminModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
+const SUB_MODULES = [WelcomeModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
 
 @NgModule({
   declarations: [...COMPONENTS],

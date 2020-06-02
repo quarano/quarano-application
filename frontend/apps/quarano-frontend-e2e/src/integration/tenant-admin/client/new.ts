@@ -3,12 +3,12 @@
 describe('new case', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/hd/cases'/*, 'fixture:get-api-hd-cases.json'*/).as('createcase');
-    cy.route('PUT', '/api/hd/cases'/*, 'fixture:get-api-hd-cases.json'*/).as('updatecase');
+    cy.route('POST', '/api/hd/cases' /*, 'fixture:get-api-hd-cases.json'*/).as('createcase');
+    cy.route('PUT', '/api/hd/cases' /*, 'fixture:get-api-hd-cases.json'*/).as('updatecase');
 
     cy.loginAgent();
 
-    cy.visit('http://localhost:4200/tenant-admin/client/index');
+    cy.visit('http://localhost:4200/health-department/case-detail/index');
   });
 
   describe('field validations: required', () => {
@@ -95,7 +95,9 @@ describe('new case', () => {
     const dateChecks = (selector: string, calendarClass: string) => {
       it('should be a date string', () => {
         cy.get(selector).should('exist');
-        cy.get(selector + ' input[matInput]').clear().type('invalid');
+        cy.get(selector + ' input[matInput]')
+          .clear()
+          .type('invalid');
         cy.get(selector + ' input[matInput]').blur();
 
         cy.get(selector + ' mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
@@ -103,7 +105,9 @@ describe('new case', () => {
 
       it('should be valid a correct date string', () => {
         cy.get(selector).should('exist');
-        cy.get(selector + ' input[matInput]').clear().type('20.12.1987');
+        cy.get(selector + ' input[matInput]')
+          .clear()
+          .type('20.12.1987');
         cy.get(selector + ' input[matInput]').blur();
 
         cy.get(selector + ' mat-error').should('not.exist');
@@ -119,7 +123,6 @@ describe('new case', () => {
       });
     };
 
-
     describe('base data', () => {
       describe('firstName', () => {
         it('should not be empty', () => {
@@ -127,14 +130,19 @@ describe('new case', () => {
           cy.get('[data-cy="input-firstname"] input[matInput]').clear();
           cy.get('[data-cy="input-firstname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
+          cy.get('[data-cy="input-firstname"] mat-error').should(
+            'contain.text',
+            'Bitte füllen Sie dieses Pflichtfeld aus'
+          );
         });
         it('should be invalid', () => {
           cy.get('[data-cy="input-firstname"] input[matInput]').clear().type('Testfirstn5ame');
           cy.get('[data-cy="input-firstname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-firstname"] mat-error').should('contain.text',
-            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt');
+          cy.get('[data-cy="input-firstname"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt'
+          );
         });
       });
 
@@ -144,14 +152,19 @@ describe('new case', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').clear();
           cy.get('[data-cy="input-lastname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text', 'Bitte füllen Sie dieses Pflichtfeld aus');
+          cy.get('[data-cy="input-lastname"] mat-error').should(
+            'contain.text',
+            'Bitte füllen Sie dieses Pflichtfeld aus'
+          );
         });
         it('should be invalid', () => {
           cy.get('[data-cy="input-lastname"] input[matInput]').clear().type('Testlast09name');
           cy.get('[data-cy="input-lastname"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-lastname"] mat-error').should('contain.text',
-            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt');
+          cy.get('[data-cy="input-lastname"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt'
+          );
         });
       });
 
@@ -160,7 +173,10 @@ describe('new case', () => {
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').type('invalid');
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-dayofbirth"] mat-error').should('contain.text', 'Bitte geben Sie ein gültiges Datum ein');
+          cy.get('[data-cy="input-dayofbirth"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie ein gültiges Datum ein'
+          );
         });
 
         it('should be a date string lower or equal today', () => {
@@ -209,7 +225,9 @@ describe('new case', () => {
         it('should be a date string lower or equal today', () => {
           const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
           cy.get(selector).should('exist');
-          cy.get(selector + ' input[matInput]').clear().type(dateTomorrow);
+          cy.get(selector + ' input[matInput]')
+            .clear()
+            .type(dateTomorrow);
           cy.get(selector + ' input[matInput]').blur();
 
           cy.get(selector + ' mat-error').should('contain.text', 'Das größte zulässige Datum ist der');
@@ -219,10 +237,15 @@ describe('new case', () => {
           const now = new Date();
           const fourteenDaysLater = new Date(new Date().setDate(now.getDate() + 14));
           cy.get(selector).should('exist');
-          cy.get(selector + ' input[matInput]').clear().type(now.toLocaleDateString());
+          cy.get(selector + ' input[matInput]')
+            .clear()
+            .type(now.toLocaleDateString());
           cy.get(selector + ' input[matInput]').blur();
 
-          cy.get('[data-cy="input-quarantineend"] input[matInput]').should('contain.value', fourteenDaysLater.toLocaleDateString());
+          cy.get('[data-cy="input-quarantineend"] input[matInput]').should(
+            'contain.value',
+            fourteenDaysLater.toLocaleDateString()
+          );
         });
       });
 
@@ -244,22 +267,28 @@ describe('new case', () => {
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
-            'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen');
+          cy.get('[data-cy="input-phone"] mat-error').should(
+            'contain.text',
+            'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen'
+          );
         });
 
         it('should be invalid with invalid symbols', () => {
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621 i');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
-            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
+          cy.get('[data-cy="input-phone"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten'
+          );
 
           cy.get('[data-cy="input-phone"] input[matInput]').type('0621 $');
           cy.get('[data-cy="input-phone"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-phone"] mat-error').should('contain.text',
-            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
+          cy.get('[data-cy="input-phone"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten'
+          );
         });
 
         it('should be shortened long phone number to 17 symbols', () => {
@@ -268,7 +297,6 @@ describe('new case', () => {
 
           cy.get('[data-cy="input-phone"] input[matInput]').should('contain.value', '0621 123456789 12');
         });
-
       });
 
       describe('mobile phone number', () => {
@@ -283,21 +311,28 @@ describe('new case', () => {
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text', 'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen');
+          cy.get('[data-cy="input-mobile"] mat-error').should(
+            'contain.text',
+            'Dieses Feld erfordert eine Eingabe von mindestens 5 Zeichen'
+          );
         });
 
         it('should be invalid with invalid symbols', () => {
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 i');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text',
-            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
+          cy.get('[data-cy="input-mobile"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten'
+          );
 
           cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 $');
           cy.get('[data-cy="input-mobile"] input[matInput]').blur();
 
-          cy.get('[data-cy="input-mobile"] mat-error').should('contain.text',
-            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten');
+          cy.get('[data-cy="input-mobile"] mat-error').should(
+            'contain.text',
+            'Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten'
+          );
         });
 
         it('should be shortened long phone number to 17 symbols', () => {
@@ -306,7 +341,6 @@ describe('new case', () => {
 
           cy.get('[data-cy="input-mobile"] input[matInput]').should('contain.value', '0621 123456789 12');
         });
-
       });
       describe('email address', () => {
         it('should have a valid email address', () => {
@@ -326,7 +360,6 @@ describe('new case', () => {
           cy.get('[data-cy="input-email"] input[matInput]').blur();
 
           cy.get('[data-cy="input-email"] mat-error').should('exist');
-
 
           cy.get('[data-cy="input-email"] input[matInput]').clear().type('test@testde');
           cy.get('[data-cy="input-email"] input[matInput]').blur();
@@ -355,7 +388,6 @@ describe('new case', () => {
 
             cy.get('[data-cy="input-zipcode"] mat-error').should('exist');
 
-
             cy.get('[data-cy="input-zipcode"] input[matInput]').clear().type('2204$');
             cy.get('[data-cy="input-zipcode"] input[matInput]').blur();
 
@@ -371,7 +403,6 @@ describe('new case', () => {
           it('should be shortened with too long zip', () => {
             cy.get('[data-cy="input-zipcode"] input[matInput]').type('22041001');
             cy.get('[data-cy="input-zipcode"] input[matInput]').blur();
-
 
             cy.get('[data-cy="input-zipcode"] input[matInput]').should('contain.value', '22041');
             cy.get('[data-cy="input-zipcode"] mat-error').should('not.exist');
