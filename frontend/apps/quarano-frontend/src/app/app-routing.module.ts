@@ -1,7 +1,4 @@
 import { IsAdminGuard } from '@qro/administration/api';
-import { DataProtectionComponent } from './components/data-protection/data-protection.component';
-import { ImpressumComponent } from './components/impressum/impressum.component';
-import { AgbComponent } from './components/agb/agb.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -32,16 +29,8 @@ const routes: Routes = [
     loadChildren: () => import('@qro/auth/shell').then((m) => m.AuthShellModule),
   },
   {
-    path: 'agb',
-    component: AgbComponent,
-  },
-  {
-    path: 'impressum',
-    component: ImpressumComponent,
-  },
-  {
-    path: 'data-protection',
-    component: DataProtectionComponent,
+    path: 'info',
+    loadChildren: () => import('@qro/info/shell').then((m) => m.InfoShellModule),
   },
   {
     path: '404/:message',

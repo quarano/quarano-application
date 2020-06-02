@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import {DataProtectionComponent} from './data-protection.component';
+import { DataProtectionComponent } from './data-protection.component';
 
 describe('DataProtectionComponent', () => {
   let component: DataProtectionComponent;
@@ -11,9 +11,8 @@ describe('DataProtectionComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [DataProtectionComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

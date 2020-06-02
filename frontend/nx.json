@@ -205,6 +205,21 @@
     },
     "client-api": {
       "tags": ["scope:client", "type:api"]
+    },
+    "info-shell": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-data-protection": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-imprint": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-terms": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-api": {
+      "tags": ["scope:info", "type:api"]
     }
   }
 }

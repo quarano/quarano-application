@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ImpressumComponent} from './impressum.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ImpressumComponent } from './impressum.component';
 
 describe('ImpressumComponent', () => {
   let component: ImpressumComponent;
@@ -10,9 +10,8 @@ describe('ImpressumComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ImpressumComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

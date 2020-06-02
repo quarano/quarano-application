@@ -3,9 +3,6 @@ import { AuthDomainModule } from '@qro/auth/domain';
 import { SharedUtilErrorModule } from '@qro/shared/util-error';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { API_URL } from '@qro/shared/util';
-import { DataProtectionComponent } from './components/data-protection/data-protection.component';
-import { ImpressumComponent } from './components/impressum/impressum.component';
-import { AgbComponent } from './components/agb/agb.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -25,16 +22,7 @@ import { environment } from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
 
-const COMPONENTS = [
-  AppComponent,
-  NotFoundComponent,
-  FooterComponent,
-  HeaderLeftComponent,
-  HeaderRightComponent,
-  AgbComponent,
-  ImpressumComponent,
-  DataProtectionComponent,
-];
+const COMPONENTS = [AppComponent, NotFoundComponent, FooterComponent, HeaderLeftComponent, HeaderRightComponent];
 
 const SUB_MODULES = [WelcomeModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
 

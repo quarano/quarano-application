@@ -6,7 +6,6 @@ import { ActionComponent } from './action.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ApiService } from '../../../../../../../apps/quarano-frontend/src/app/services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 import { CaseActionDto } from '../../../../../domain/src/lib/models/case-action';
 
@@ -18,12 +17,7 @@ describe('ActionComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ActionComponent],
-      providers: [
-        FormBuilder,
-        { provide: MatDialog, useValue: {} },
-        { provide: ApiService, useValue: {} },
-        { provide: SnackbarService, useValue: {} },
-      ],
+      providers: [FormBuilder, { provide: MatDialog, useValue: {} }, { provide: SnackbarService, useValue: {} }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

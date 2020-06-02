@@ -1,3 +1,4 @@
+import { DataProtectionComponent } from '@qro/info/api';
 import { AuthService } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/util-error';
 import {
@@ -7,7 +8,6 @@ import {
   VALIDATION_PATTERNS,
   PasswordValidator,
 } from '@qro/shared/util-form-validation';
-import { DataProtectionComponent } from '../../../../../../../../apps/quarano-frontend/src/app/components/data-protection/data-protection.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
