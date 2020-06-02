@@ -159,6 +159,14 @@ public class Slot implements Comparable<Slot> {
 				&& timeOfDay.contains(date.toLocalTime());
 	}
 
+	public boolean isAfter(Slot that) {
+		return this.compareTo(that) > 0;
+	}
+
+	public boolean isBefore(Slot that) {
+		return this.compareTo(that) < 0;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()

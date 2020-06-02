@@ -4,15 +4,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.actions.ActionItem.ItemType;
+import quarano.diary.DiaryEntry;
+import quarano.diary.DiaryEntry.DiaryEntryAdded;
+import quarano.diary.DiaryEntry.DiaryEntryUpdated;
 import quarano.diary.DiaryEntryMissing;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.diary.DiaryEntry;
-import quarano.diary.DiaryEntry.DiaryEntryAdded;
-import quarano.diary.DiaryEntry.DiaryEntryUpdated;
-
-import java.util.Comparator;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -27,9 +25,26 @@ class DiaryEventListener {
 	private final @NonNull DiaryManagement diaryManagement;
 
 	@EventListener
-	void onDiaryEntryAddedToResolveMissingItems(DiaryEntryAdded event) {
+	void on(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
+
+		handleDiaryEntryForBodyTemprature(entry);
+		handleDiaryEntryForCharacteristicSymptoms(entry);
+		resolveMissingItemsActionItem(entry);
+	}
+
+	@EventListener
+	void on(DiaryEntryUpdated event) {
+
+		var entry = event.getEntry();
+
+		handleDiaryEntryForBodyTemprature(entry);
+		handleDiaryEntryForCharacteristicSymptoms(entry);
+	}
+
+	void resolveMissingItemsActionItem(DiaryEntry entry) {
+
 		var person = entry.getTrackedPersonId();
 		var slot = entry.getSlot();
 
@@ -38,24 +53,15 @@ class DiaryEventListener {
 				.resolveAutomatically(items::save);
 	}
 
-	@EventListener
-	void onDiaryEntryAddedForBodyTemperature(DiaryEntryAdded event) {
-		handleDiaryEntryForBodyTemprature(event.getEntry());
-	}
-
-	@EventListener
-	void onDiaryEntryUpdatedForBodyTemperature(DiaryEntryUpdated event) {
-		handleDiaryEntryForBodyTemprature(event.getEntry());
-	}
-
 	/**
 	 * Only does something if the entry with the most current slot is edited. First resolves all existing action items for
 	 * temperature. If handles an added or updated diary entry with to high temperature a new action item is added. There
 	 * is no update of existing items.
-	 * 
+	 *
 	 * @param entry
 	 */
-	private void handleDiaryEntryForBodyTemprature(DiaryEntry entry) {
+	void handleDiaryEntryForBodyTemprature(DiaryEntry entry) {
+
 		var person = entry.getTrackedPersonId();
 
 		if (!determineWhetherEntryMostRecent(person, entry.getSlot())) {
@@ -76,62 +82,30 @@ class DiaryEventListener {
 	}
 
 	private boolean determineWhetherEntryMostRecent(TrackedPersonIdentifier personId, Slot slot) {
-		return diaryManagement.findDiaryFor(personId).filter(it -> it.getSlot().compareTo(slot) > 0).isEmpty();
+
+		return diaryManagement.findDiaryFor(personId) //
+				.filter(it -> it.getSlot().isAfter(slot)) //
+				.isEmpty();
 	}
 
-	@EventListener
-	void onDiaryEntryAddedForCharacteristicSymptoms(DiaryEntryAdded event) {
-		handleDiaryEntryForCharacteristicSymptoms(event.getEntry());
-	}
+	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry) {
 
-	@EventListener
-	void onDiaryEntryUpdatedForCharacteristicSymptoms(DiaryEntryUpdated event) {
-		handleDiaryEntryForCharacteristicSymptoms(event.getEntry());
-	}
-
-	private void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry) {
-		var slot = entry.getSlot();
 		var person = entry.getTrackedPersonId();
+		var actionItems = DiaryEntryActionItems
+				.of(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM), items::save);
 
-		var actionItems = items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM);
-		var diaryEntryActionItems = actionItems.filter(DiaryEntryActionItem.class::isInstance)//
-				.map(DiaryEntryActionItem.class::cast);
-
-		// First characteristic symptom reported
+		// Characteristic symptom reported
 		if (entry.getSymptoms().hasCharacteristicSymptom()) {
-			if (actionItems.isEmpty()) {
-				createAndSaveItem(person, entry);
-			} else {
-				var isNewer = diaryEntryActionItems//
-						.filter(it -> it.getEntry().getSlot().compareTo(slot) > 0)//
-						.map(DiaryEntryActionItem::resolve)//
-						.map(items::save).isEmpty();
-				if (!isNewer) {
-					createAndSaveItem(person, entry);
-				}
-			}
+			actionItems.adjustFirstCharacteristicSymptomTo(entry, it -> createItem(person, it));
 		} else {
-			// resolve action item if the corresponding diary entry was modified
-			var actionResolved = !diaryEntryActionItems.filter(it -> it.getEntry().getSlot().compareTo(slot) == 0)//
-					.map(DiaryEntryActionItem::resolve)//
-					.map(items::save)//
-					.isEmpty();
-
-			if (actionResolved) {
-				// search another first diary entry with symptoms when the previous action item was resolved
-				var diary = diaryManagement.findDiaryFor(person);
-				var firstEntryWithSymptoms = diary.stream()//
-						.sorted(Comparator.comparing(DiaryEntry::getSlot))//
-						.filter(it -> it.getSymptoms().hasCharacteristicSymptom())//
-						.findFirst();
-				firstEntryWithSymptoms.ifPresent(it -> createAndSaveItem(person, it));
-			}
+			actionItems.removeFirstCharacteristicSymptomFrom(entry, () -> diaryManagement.findDiaryFor(person),
+					it -> createItem(person, it));
 		}
 	}
 
-	private DiaryEntryActionItem createAndSaveItem(TrackedPersonIdentifier person, DiaryEntry entry) {
-		return items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
-				Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM)));
+	private DiaryEntryActionItem createItem(TrackedPersonIdentifier person, DiaryEntry entry) {
+		return new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
+				Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM));
 	}
 
 	@EventListener

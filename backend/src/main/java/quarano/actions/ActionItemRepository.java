@@ -29,17 +29,16 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 			+ " where i.resolved = false" //
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
-	
+
 	@Query("select i from ActionItem i, TrackedCase t" //
 			+ " where i.resolved = false" //
-			+ " and t.trackedPerson.id = i.personIdentifier"
-			+ " and t.status <> 'CONCLUDED'"
+			+ " and t.trackedPerson.id = i.personIdentifier" + " and t.status <> 'CONCLUDED'"
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByActiveCaseByPersonIdentifier(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
 	ActionItems findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
-	
+
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code and i.resolved = false")
 	ActionItems findUnresolvedByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
 

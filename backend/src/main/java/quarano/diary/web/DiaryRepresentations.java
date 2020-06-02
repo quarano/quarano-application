@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.web.MapperWrapper;
 import quarano.diary.Diary;
 import quarano.diary.Diary.DiaryEntryDay;
-import quarano.diary.Slot.TimeOfDay;
 import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryProperties;
 import quarano.diary.Slot;
+import quarano.diary.Slot.TimeOfDay;
 import quarano.reference.SymptomDto;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
@@ -76,7 +76,9 @@ class DiaryRepresentations {
 	}
 
 	Either<DiaryEntry, Errors> from(DiaryEntryInput input, DiaryEntry existing, Errors errors) {
-		return mapper.map(input, existing, errors).peekLeft(DiaryEntry::markEdited);
+
+		return mapper.map(input, existing, errors) //
+				.peekLeft(DiaryEntry::markEdited);
 	}
 
 	@Data

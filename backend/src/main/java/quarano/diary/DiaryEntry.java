@@ -119,10 +119,18 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	boolean hasSlot(Slot slot) {
 		return this.slot.equals(slot);
 	}
-	
+
 	public DiaryEntry markEdited() {
 		registerEvent(DiaryEntryUpdated.of(this));
 		return this;
+	}
+
+	public boolean isAfter(DiaryEntry entry) {
+		return this.slot.isAfter(entry.slot);
+	}
+
+	public boolean isBefore(DiaryEntry entry) {
+		return this.slot.isBefore(entry.slot);
 	}
 
 	/*
@@ -158,7 +166,7 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	public static class DiaryEntryAdded implements DomainEvent {
 		DiaryEntry entry;
 	}
-	
+
 	@Value(staticConstructor = "of")
 	public static class DiaryEntryUpdated implements DomainEvent {
 		DiaryEntry entry;
