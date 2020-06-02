@@ -13,7 +13,6 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
 import quarano.department.CaseType;
-import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
@@ -34,7 +33,6 @@ import java.util.stream.Stream;
 
 import javax.validation.groups.Default;
 
-import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -357,8 +355,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.comments[0].author", String.class)).isNotBlank();
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
 	void createsContactCaseWithMinimalInput() throws Exception {
 
@@ -372,8 +369,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	// Only firstname, and lastname is mandatory for contact cases
 	void updatesContactCaseWithMinimalInput() throws Exception {
 
@@ -391,8 +387,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.email", String.class)).isEqualTo("myemail@email.de");
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void emptyEmailDoesNotTriggerValidation() throws Exception {
 
 		var contactCase = createMinimalContactPayload();
@@ -404,8 +399,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andExpect(status().isCreated());
 	}
 
-	@Test
-	// CORE-185
+	@Test // CORE-185
 	void updatingContactVulnerableCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -414,8 +408,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void updatingContactMedicalCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -424,8 +417,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void updatingContactCaseDoesNotRequireQuarantineData() throws Exception {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
@@ -434,8 +426,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void updatesTrackedPersonDetails() throws Exception {
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
@@ -456,8 +447,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
 	}
 
-	@Test
-	// CORE-115
+	@Test // CORE-115
 	void exposesQuestionnaireForCaseAlreadyTracking() throws Exception {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
