@@ -5,7 +5,6 @@ import { AgbComponent } from './components/agb/agb.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { BasicDataGuard } from '@qro/client/enrollment/api';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
@@ -27,11 +26,6 @@ const routes: Routes = [
     path: 'tenant-admin',
     loadChildren: () => import('./modules/tenant-admin/tenant-admin.module').then((m) => m.TenantAdminModule),
     canActivate: [IsAuthenticatedGuard, IsHealthDepartmentUserGuard],
-  },
-  {
-    path: 'basic-data',
-    loadChildren: () => import('./modules/basic-data/basic-data.module').then((m) => m.BasicDataModule),
-    canActivate: [IsAuthenticatedGuard, BasicDataGuard],
   },
   {
     path: 'administration',

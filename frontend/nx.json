@@ -184,6 +184,15 @@
     },
     "client-profile": {
       "tags": ["scope:client", "type:feature"]
+    },
+    "client-enrollment-basic-data": {
+      "tags": ["scope:client-enrollment", "type:feature"]
+    },
+    "client-enrollment-register": {
+      "tags": ["scope:client-enrollment", "type:feature"]
+    },
+    "client-enrollment-landing": {
+      "tags": ["scope:client-enrollment", "type:feature"]
     }
   }
 }

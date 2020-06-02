@@ -74,7 +74,10 @@
         "libs/client/contact-persons/contact-person-detail/src/index.ts"
       ],
       "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"],
-      "@qro/client/profile": ["libs/client/profile/src/index.ts"]
+      "@qro/client/profile": ["libs/client/profile/src/index.ts"],
+      "@qro/client/enrollment/basic-data": ["libs/client/enrollment/basic-data/src/index.ts"],
+      "@qro/client/enrollment/register": ["libs/client/enrollment/register/src/index.ts"],
+      "@qro/client/enrollment/landing": ["libs/client/enrollment/landing/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

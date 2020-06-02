@@ -22,7 +22,7 @@ export class BasicDataGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.userService.isHealthDepartmentUser) {
-      this.router.navigate(['/forbidden']);
+      this.router.navigate(['/auth/forbidden']);
       return false;
     }
 

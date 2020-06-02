@@ -25,19 +25,14 @@ export interface IBadRequestError {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(
-    private snackbarService: SnackbarService,
-    private router: Router) { }
+  constructor(private snackbarService: SnackbarService, private router: Router) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler,
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      catchError(error => {
+      catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
             this.snackbarService.message('Sie müssen sich zunächst einloggen');
@@ -46,7 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (error.status === HttpStatusCode.forbidden.valueOf()) {
-            this.router.navigate(['/forbidden']);
+            this.router.navigate(['/auth/forbidden']);
             return throwError(error);
           }
 
@@ -64,7 +59,9 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (error.status === 0) {
-            this.snackbarService.error('Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal.');
+            this.snackbarService.error(
+              'Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal.'
+            );
             return throwError(error);
           }
 
@@ -72,8 +69,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
           if (
             error.status === HttpStatusCode.notFound.valueOf() ||
-            (error.status === HttpStatusCode.badRequest.valueOf() &&
-              req.method === 'GET')
+            (error.status === HttpStatusCode.badRequest.valueOf() && req.method === 'GET')
           ) {
             if (serverError.errors) {
               for (const key in serverError.errors) {
@@ -97,7 +93,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           return throwError(serverError || 'Server Fehler');
         }
         return throwError(error);
-      }),
+      })
     );
   }
 }

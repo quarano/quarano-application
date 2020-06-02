@@ -6,6 +6,7 @@ import { map, share, switchMap, tap } from 'rxjs/operators';
 import { DateFunctions, API_URL } from '@qro/shared/util';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { ClientDto, EncounterDto, EncounterEntry, EncounterCreateDto, EncountersDto } from '@qro/client/domain';
+import { RegisterDto } from '../models/register';
 
 @Injectable({
   providedIn: 'root',
@@ -81,5 +82,9 @@ export class EnrollmentService {
     return this.httpClient
       .delete(`${this.baseUrl}/enrollment/completion`)
       .pipe(switchMap(() => this.getEnrollmentStatus()));
+  }
+
+  registerClient(registerClient: RegisterDto): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/registration`, registerClient);
   }
 }

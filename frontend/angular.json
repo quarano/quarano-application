@@ -1925,6 +1925,102 @@
           "style": "scss"
         }
       }
+    },
+    "client-enrollment-basic-data": {
+      "projectType": "library",
+      "root": "libs/client/enrollment/basic-data",
+      "sourceRoot": "libs/client/enrollment/basic-data/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/enrollment/basic-data/tsconfig.lib.json",
+              "libs/client/enrollment/basic-data/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/enrollment/basic-data/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/enrollment/basic-data/jest.config.js",
+            "tsConfig": "libs/client/enrollment/basic-data/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/enrollment/basic-data/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-enrollment-register": {
+      "projectType": "library",
+      "root": "libs/client/enrollment/register",
+      "sourceRoot": "libs/client/enrollment/register/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/enrollment/register/tsconfig.lib.json",
+              "libs/client/enrollment/register/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/enrollment/register/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/enrollment/register/jest.config.js",
+            "tsConfig": "libs/client/enrollment/register/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/enrollment/register/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-enrollment-landing": {
+      "projectType": "library",
+      "root": "libs/client/enrollment/landing",
+      "sourceRoot": "libs/client/enrollment/landing/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/enrollment/landing/tsconfig.lib.json",
+              "libs/client/enrollment/landing/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/enrollment/landing/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/enrollment/landing/jest.config.js",
+            "tsConfig": "libs/client/enrollment/landing/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/enrollment/landing/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

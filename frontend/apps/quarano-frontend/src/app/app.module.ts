@@ -21,7 +21,6 @@ import { WelcomeModule } from './modules/welcome/welcome.module';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
 import { HeaderRightComponent } from './components/layout/header-right/header-right.component';
-import { BasicDataModule } from './modules/basic-data/basic-data.module';
 import { DateInterceptor } from './interceptors/date-interceptor';
 import { HdContactComponent } from './components/hd-contact/hd-contact.component';
 import { environment } from '../environments/environment';
@@ -40,14 +39,7 @@ const COMPONENTS = [
   HdContactComponent,
 ];
 
-const SUB_MODULES = [
-  WelcomeModule,
-  BasicDataModule,
-  TenantAdminModule,
-  SharedUtilErrorModule,
-  AuthDomainModule,
-  SharedUiAsideModule,
-];
+const SUB_MODULES = [WelcomeModule, TenantAdminModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
 
 @NgModule({
   declarations: [...COMPONENTS],

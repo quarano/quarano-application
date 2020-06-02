@@ -7,7 +7,7 @@ import {
   ContactPersonDto,
   ContactPersonModifyDto,
 } from '../../../../../libs/client/contact-persons/domain/src/lib/models/contact-person';
-import { RegisterDto } from '../models/register';
+import { RegisterDto } from '../../../../../libs/client/enrollment/domain/src/lib/models/register';
 import { UserDto } from '../models/user';
 import { CaseDetailDto } from '../models/case-detail';
 import { CaseActionDto } from '../models/case-action';
@@ -22,10 +22,6 @@ export class ApiService {
   private baseUrl = environment.api.baseUrl;
 
   constructor(protected httpClient: HttpClient) {}
-
-  registerClient(registerClient: RegisterDto): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/registration`, registerClient);
-  }
 
   getMe(): Observable<UserDto> {
     return this.httpClient.get<UserDto>(`${this.baseUrl}/api/user/me`);

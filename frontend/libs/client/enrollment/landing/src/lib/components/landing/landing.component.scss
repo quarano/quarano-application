@@ -1,0 +1,9 @@
+.footnote {
+  font-size: 12px;
+}
+
+::ng-deep {
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+}

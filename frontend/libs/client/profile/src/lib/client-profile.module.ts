@@ -21,5 +21,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [PersonalDataFormComponent, ProfileComponent],
   imports: [CommonModule, SharedUiMaterialModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  exports: [PersonalDataFormComponent],
 })
 export class ClientProfileModule {}
