@@ -20,7 +20,31 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: true
       SPRING_FLYWAY_BASELINE_VERSION: 0
 
-  ###############   Mannheim system #########################
+  ###############   internal security test  system #########################
+  - name: quarano-frontend-sec
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/staticfile-buildpack
+    path: ./frontend/dist/apps/quarano-frontend
+    command: "$HOME/boot.sh"
+    routes:
+      - route: quarano-frontend-sec.cf.evoila.io
+  - name: quarano-backend-sec
+    buildpacks:
+      - java_buildpack
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    services:
+      - database
+    routes:
+      - route: quarano-backend-sec.cf.evoila.io
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      SPRING_PROFILES_ACTIVE: develop
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano-frontend-sec.cf.evoila.io
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: true
+      SPRING_FLYWAY_BASELINE_VERSION: 0
+
+  ###############   Mannheim PROD system #########################
   - name: quarano-frontend
     memory: 128M
     buildpacks:

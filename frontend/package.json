@@ -9,6 +9,7 @@
     "build": "ng build",
     "build-prod": "ng build --prod",
     "build-prod-evoila": "ng build --configuration=production-evoila",
+    "build-sec-evoila": "ng build --configuration=sec-evoila",
     "build-stage": "ng build --configuration=stage",
     "build-test": "ng build --configuration=test",
     "build-sec": "ng build --configuration=sec",
