@@ -18,29 +18,7 @@ Licensed under the [EUPL-1.2-or-later](https://github.com/coronareportteam/coron
 
 ## Backend
 
-### Development Setup
-
-Initial DB setup
-
-- run docker-compose up
-- connect to the database container `docker exec -it <CONTAINER_ID> bash`
-- `su - postgres`
-- `createuser --interactive --pwprompt`
-  - rolename : `corona-report-app`
-    _password: `corona`
-    _ superuser: yes
-- `createdb -O corona-report-app corona-report`
-
-### Dummy Data
-
-Two health departments are created as dummy data upon startup with the following id and passcode:
-Testamt1 aba0ec65-6c1d-4b7b-91b4-c31ef16ad0a2
-Testamt2 ca3f3e9a-414a-4117-a623-59b109b269f1
-
-### Run Locally
-
-navigate to backend folder.
-Run `mvn spring-boot:run -P inmemory`. `Runs at http://localhost:8080/`
+See the backend specific readme [here](backend/readme.adoc).
 
 ## Frontend
 
