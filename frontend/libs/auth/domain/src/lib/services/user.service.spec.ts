@@ -1,23 +1,22 @@
 import { UserService } from './user.service';
-import { ApiService } from '../../../../../../apps/quarano-frontend/src/app/services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 import { TokenService } from './token.service';
+import { AuthService } from './auth.service';
 
 describe('UserService', () => {
   let service: UserService;
 
   beforeEach(() => {
-    const apiService: ApiService = { getMe: () => null } as any;
+    const authService: AuthService = { getMe: () => null } as any;
     const snackbarService: SnackbarService = {
-      success: () => { },
-      warning: () => { },
-      message: () => { }
+      success: () => {},
+      warning: () => {},
+      message: () => {},
     } as any;
     const tokenService: TokenService = {
-      unsetToken: () => {
-      }
+      unsetToken: () => {},
     } as any;
-    service = new UserService(apiService, snackbarService, tokenService);
+    service = new UserService(authService, snackbarService, tokenService);
   });
 
   it('should be created', () => {

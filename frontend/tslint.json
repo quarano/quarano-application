@@ -79,7 +79,7 @@
           },
           {
             "sourceTag": "scope:layout",
-            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared"]
+            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared", "scope:auth", "scope:health-department"]
           },
           {
             "sourceTag": "scope:welcome",

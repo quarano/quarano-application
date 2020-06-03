@@ -1,9 +1,7 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DiaryTodayListItemComponent } from './diary-today-list-item.component';
-import { DiaryListItemDto } from '../../../models/diary-entry';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { DiaryListItemDto } from '@qro/client/diary/domain';
 
 describe('DiaryTodayListItemComponent', () => {
   let component: DiaryTodayListItemComponent;

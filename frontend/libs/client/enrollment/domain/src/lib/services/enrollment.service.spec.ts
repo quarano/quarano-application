@@ -1,14 +1,15 @@
 /* tslint:disable:no-unused-variable */
 
-import {inject, TestBed} from '@angular/core/testing';
-import {EnrollmentService} from './enrollment.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { inject, TestBed } from '@angular/core/testing';
+import { EnrollmentService } from './enrollment.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { API_URL } from '@qro/shared/util';
 
 describe('Service: Enrollment', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [EnrollmentService]
+      providers: [EnrollmentService, { provide: API_URL, useValue: '' }],
     });
   });
 

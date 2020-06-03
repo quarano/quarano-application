@@ -1,10 +1,8 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from '../../../services/api.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ContactPersonService } from '@qro/client/contact-persons/api';
 
 describe('ForgottenContactBannerComponent', () => {
   let component: ForgottenContactBannerComponent;
@@ -15,7 +13,7 @@ describe('ForgottenContactBannerComponent', () => {
       declarations: [ForgottenContactBannerComponent],
       providers: [
         { provide: MatDialog, useValue: {} },
-        { provide: ApiService, useValue: {} },
+        { provide: ContactPersonService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

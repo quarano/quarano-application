@@ -1,9 +1,7 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { DiaryEntrySuccessComponent } from './diary-entry-success.component';
-import { DiaryEntryListItemDto } from '../../../models/diary-entry';
+import { DiaryEntryListItemDto } from '@qro/client/diary/domain';
 
 describe('DiaryEntrySuccessComponent', () => {
   let component: DiaryEntrySuccessComponent;

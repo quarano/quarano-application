@@ -1,13 +1,12 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { ActionComponent } from './action.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SnackbarService } from '@qro/shared/util';
-import { CaseActionDto } from '../../../../../domain/src/lib/models/case-action';
+import { HealthDepartmentService } from '@qro/health-department/domain';
+import { CaseActionDto } from '@qro/health-department/domain';
 
 describe('ActionComponent', () => {
   let component: ActionComponent;
@@ -17,7 +16,12 @@ describe('ActionComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ActionComponent],
-      providers: [FormBuilder, { provide: MatDialog, useValue: {} }, { provide: SnackbarService, useValue: {} }],
+      providers: [
+        FormBuilder,
+        { provide: MatDialog, useValue: {} },
+        { provide: SnackbarService, useValue: {} },
+        { provide: HealthDepartmentService, useValue: {} },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

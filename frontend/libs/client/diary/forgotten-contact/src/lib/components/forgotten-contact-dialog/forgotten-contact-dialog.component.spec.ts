@@ -1,12 +1,10 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EnrollmentService } from '../../../../../../../libs/client/enrollment/domain/src/lib/services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EnrollmentService } from '@qro/client/enrollment/api';
 
 describe('ForgottenContactDialogComponent', () => {
   let component: ForgottenContactDialogComponent;

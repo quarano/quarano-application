@@ -5,6 +5,7 @@ import { WelcomeComponent } from './welcome.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SnackbarService } from '@qro/shared/util';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { UserService } from '@qro/auth/api';
 
 describe('WelcomeComponent', () => {
   let component: WelcomeComponent;
@@ -14,7 +15,10 @@ describe('WelcomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientModule],
       declarations: [WelcomeComponent],
-      providers: [{ provide: SnackbarService, useValue: { warning: () => {}, success: () => {} } }],
+      providers: [
+        { provide: SnackbarService, useValue: { warning: () => {}, success: () => {} } },
+        { provide: UserService, useValue: {} },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

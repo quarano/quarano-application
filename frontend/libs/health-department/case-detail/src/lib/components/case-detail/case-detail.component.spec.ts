@@ -4,10 +4,11 @@ import { CaseDetailComponent } from './case-detail.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ApiService } from '../../../../../../../apps/quarano-frontend/src/app/services/api.service';
 import { SnackbarService } from '@qro/shared/util';
+import { ApiService } from '@qro/shared/util-data-access';
+import { HealthDepartmentService } from '@qro/health-department/domain';
 
-describe('ClientComponent', () => {
+describe('CaseDetailComponent', () => {
   let component: CaseDetailComponent;
   let fixture: ComponentFixture<CaseDetailComponent>;
 
@@ -19,7 +20,7 @@ describe('ClientComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: ApiService, useValue: {} },
         { provide: SnackbarService, useValue: {} },
-        { provide: MatDialog, useValue: {} },
+        { provide: HealthDepartmentService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

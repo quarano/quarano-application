@@ -1,12 +1,16 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
+import { UserService } from '@qro/auth/api';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { HealthDepartmentService } from './health-department.service';
+import { API_URL } from '@qro/shared/util';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('Service: HealthDepartment', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HealthDepartmentService],
+      imports: [HttpClientTestingModule],
+      providers: [HealthDepartmentService, { provide: API_URL, useValue: '' }, { provide: UserService, useValue: {} }],
+      schemas: [NO_ERRORS_SCHEMA],
     });
   });
 

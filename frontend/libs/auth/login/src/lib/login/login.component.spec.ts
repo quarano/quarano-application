@@ -3,11 +3,11 @@ import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { UserService } from '../../../../domain/src/lib/services/user.service';
 import { SnackbarService } from '@qro/shared/util';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EnrollmentService } from '../../../../../../apps/quarano-frontend/src/app/services/enrollment.service';
+import { UserService } from '@qro/auth/domain';
+import { EnrollmentService } from '@qro/client/enrollment/api';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,32 +15,28 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     const userService = {
-      login: () => {
-      }, isHealthDepartmentUser: () => {
-      }
+      login: () => {},
+      isHealthDepartmentUser: () => {},
     } as any;
     userService.isLoggedIn$ = of();
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
       declarations: [LoginComponent],
       providers: [
         { provide: UserService, useValue: userService },
         {
-          provide: SnackbarService, useValue: {
-            warning: () => {
-            }, success: () => {
-            }
-          }
+          provide: SnackbarService,
+          useValue: {
+            warning: () => {},
+            success: () => {},
+          },
         },
         {
-          provide: EnrollmentService, useValue: {}
-        }
+          provide: EnrollmentService,
+          useValue: {},
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
   }));
 

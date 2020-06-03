@@ -1,12 +1,11 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeaderRightComponent } from './header-right.component';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../../../../../auth/domain/src/lib/services/user.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
+import { UserService } from '@qro/auth/api';
+import { HealthDepartmentService } from '@qro/health-department/api';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
@@ -24,6 +23,7 @@ describe('HeaderRightComponent', () => {
       providers: [
         { provide: UserService, useValue: userService },
         { provide: MatDialog, useValue: {} },
+        { provide: HealthDepartmentService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
