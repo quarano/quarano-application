@@ -21,10 +21,7 @@
             "polyfills": "apps/quarano-frontend/src/polyfills.ts",
             "tsConfig": "apps/quarano-frontend/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "apps/quarano-frontend/src/favicon.ico",
-              "apps/quarano-frontend/src/assets"
-            ],
+            "assets": ["apps/quarano-frontend/src/favicon.ico", "apps/quarano-frontend/src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
@@ -41,6 +38,34 @@
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
                   "with": "apps/quarano-frontend/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "production-evoila": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
+                  "with": "apps/quarano-frontend/src/environments/environment.prod-evoila.ts"
                 }
               ],
               "optimization": true,
@@ -198,10 +223,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/quarano-frontend/tsconfig.app.json",
-              "apps/quarano-frontend/tsconfig.spec.json"
-            ],
+            "tsConfig": ["apps/quarano-frontend/tsconfig.app.json", "apps/quarano-frontend/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!apps/quarano-frontend/**"]
           }
         },
@@ -252,10 +274,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/auth/change-password/tsconfig.lib.json",
-              "libs/auth/change-password/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/auth/change-password/tsconfig.lib.json", "libs/auth/change-password/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/auth/change-password/**"]
           }
         },
@@ -284,10 +303,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/auth/domain/tsconfig.lib.json",
-              "libs/auth/domain/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/auth/domain/tsconfig.lib.json", "libs/auth/domain/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/auth/domain/**"]
           }
         },
@@ -316,10 +332,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/util/tsconfig.lib.json",
-              "libs/shared/util/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/util/tsconfig.lib.json", "libs/shared/util/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/util/**"]
           }
         },
@@ -352,10 +365,7 @@
               "libs/health-department/index-cases/action-list/tsconfig.lib.json",
               "libs/health-department/index-cases/action-list/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/index-cases/action-list/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/index-cases/action-list/**"]
           }
         },
         "test": {
@@ -387,10 +397,7 @@
               "libs/health-department/index-cases/case-list/tsconfig.lib.json",
               "libs/health-department/index-cases/case-list/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/index-cases/case-list/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/index-cases/case-list/**"]
           }
         },
         "test": {
@@ -422,10 +429,7 @@
               "libs/health-department/contact-cases/case-list/tsconfig.lib.json",
               "libs/health-department/contact-cases/case-list/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/contact-cases/case-list/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/contact-cases/case-list/**"]
           }
         },
         "test": {
@@ -457,10 +461,7 @@
               "libs/health-department/contact-cases/action-list/tsconfig.lib.json",
               "libs/health-department/contact-cases/action-list/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/contact-cases/action-list/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/contact-cases/action-list/**"]
           }
         },
         "test": {
@@ -488,10 +489,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/ui-material/tsconfig.lib.json",
-              "libs/shared/ui-material/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/ui-material/tsconfig.lib.json", "libs/shared/ui-material/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/ui-material/**"]
           }
         },
@@ -524,10 +522,7 @@
               "libs/health-department/domain/tsconfig.lib.json",
               "libs/health-department/domain/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/domain/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/domain/**"]
           }
         },
         "test": {
@@ -559,10 +554,7 @@
               "libs/health-department/ui-action-alert/tsconfig.lib.json",
               "libs/health-department/ui-action-alert/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/ui-action-alert/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/ui-action-alert/**"]
           }
         },
         "test": {
@@ -594,10 +586,7 @@
               "libs/health-department/shell/tsconfig.lib.json",
               "libs/health-department/shell/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/shell/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/shell/**"]
           }
         },
         "test": {
@@ -629,10 +618,7 @@
               "libs/health-department/contact-cases/shell/tsconfig.lib.json",
               "libs/health-department/contact-cases/shell/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/contact-cases/shell/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/contact-cases/shell/**"]
           }
         },
         "test": {
@@ -664,10 +650,7 @@
               "libs/health-department/index-cases/shell/tsconfig.lib.json",
               "libs/health-department/index-cases/shell/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/index-cases/shell/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/index-cases/shell/**"]
           }
         },
         "test": {
@@ -699,10 +682,7 @@
               "libs/health-department/contact-cases/domain/tsconfig.lib.json",
               "libs/health-department/contact-cases/domain/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/contact-cases/domain/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/contact-cases/domain/**"]
           }
         },
         "test": {
@@ -734,10 +714,7 @@
               "libs/health-department/index-cases/domain/tsconfig.lib.json",
               "libs/health-department/index-cases/domain/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/health-department/index-cases/domain/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/health-department/index-cases/domain/**"]
           }
         },
         "test": {
@@ -765,10 +742,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/ui-tile/tsconfig.lib.json",
-              "libs/shared/ui-tile/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/ui-tile/tsconfig.lib.json", "libs/shared/ui-tile/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**"]
           }
         },
@@ -797,10 +771,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/ui-button/tsconfig.lib.json",
-              "libs/shared/ui-button/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/ui-button/tsconfig.lib.json", "libs/shared/ui-button/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/ui-button/**"]
           }
         },
@@ -829,10 +800,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/util-error/tsconfig.lib.json",
-              "libs/shared/util-error/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/util-error/tsconfig.lib.json", "libs/shared/util-error/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/util-error/**"]
           }
         },
@@ -865,10 +833,7 @@
               "libs/shared/util-form-validation/tsconfig.lib.json",
               "libs/shared/util-form-validation/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared/util-form-validation/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-form-validation/**"]
           }
         },
         "test": {
@@ -896,10 +861,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/administration/shell/tsconfig.lib.json",
-              "libs/administration/shell/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/administration/shell/tsconfig.lib.json", "libs/administration/shell/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/administration/shell/**"]
           }
         },
@@ -932,10 +894,7 @@
               "libs/administration/accounts/account-list/tsconfig.lib.json",
               "libs/administration/accounts/account-list/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/administration/accounts/account-list/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/administration/accounts/account-list/**"]
           }
         },
         "test": {
@@ -967,10 +926,7 @@
               "libs/administration/accounts/account-detail/tsconfig.lib.json",
               "libs/administration/accounts/account-detail/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/administration/accounts/account-detail/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/administration/accounts/account-detail/**"]
           }
         },
         "test": {
@@ -1002,10 +958,7 @@
               "libs/administration/accounts/domain/tsconfig.lib.json",
               "libs/administration/accounts/domain/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/administration/accounts/domain/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/administration/accounts/domain/**"]
           }
         },
         "test": {
@@ -1037,10 +990,7 @@
               "libs/administration/accounts/shell/tsconfig.lib.json",
               "libs/administration/accounts/shell/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/administration/accounts/shell/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/administration/accounts/shell/**"]
           }
         },
         "test": {
@@ -1068,10 +1018,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/auth/api/tsconfig.lib.json",
-              "libs/auth/api/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/auth/api/tsconfig.lib.json", "libs/auth/api/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/auth/api/**"]
           }
         },
@@ -1100,10 +1047,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/shared/ui-alert/tsconfig.lib.json",
-              "libs/shared/ui-alert/tsconfig.spec.json"
-            ],
+            "tsConfig": ["libs/shared/ui-alert/tsconfig.lib.json", "libs/shared/ui-alert/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**", "!libs/shared/ui-alert/**"]
           }
         },
@@ -1136,10 +1080,7 @@
               "libs/shared/ui-confirmation-dialog/tsconfig.lib.json",
               "libs/shared/ui-confirmation-dialog/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared/ui-confirmation-dialog/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-confirmation-dialog/**"]
           }
         },
         "test": {
@@ -1171,10 +1112,7 @@
               "libs/shared/ui-multiple-autocomplete/tsconfig.lib.json",
               "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/shared/ui-multiple-autocomplete/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-multiple-autocomplete/**"]
           }
         },
         "test": {

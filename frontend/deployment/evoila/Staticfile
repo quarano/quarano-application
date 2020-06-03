@@ -8,3 +8,4 @@ location_include: includes/*.conf
 http_strict_transport_security: true
 http_strict_transport_security_include_subdomains: true
 http_strict_transport_security_preload: true
+Strict-Transport-Security: max-age=31536000; includeSubDomains
