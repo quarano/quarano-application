@@ -1,3 +1,4 @@
+import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { SharedUiAsideModule } from '@qro/shared/ui-aside';
 import { AuthDomainModule } from '@qro/auth/domain';
 import { SharedUtilErrorModule } from '@qro/shared/util-error';
@@ -9,40 +10,27 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HttpClientModule } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import { WelcomeModule } from './modules/welcome/welcome.module';
-import { FooterComponent } from './components/layout/footer/footer.component';
-import { HeaderLeftComponent } from './components/layout/header-left/header-left.component';
-import { HeaderRightComponent } from './components/layout/header-right/header-right.component';
-import { DateInterceptor } from './interceptors/date-interceptor';
 import { environment } from '../environments/environment';
+import { LayoutModule } from '@qro/layout';
 
 registerLocaleData(localeDe, 'de');
 
-const COMPONENTS = [AppComponent, NotFoundComponent, FooterComponent, HeaderLeftComponent, HeaderRightComponent];
-
-const SUB_MODULES = [WelcomeModule, SharedUtilErrorModule, AuthDomainModule, SharedUiAsideModule];
+const SUB_MODULES = [
+  SharedUtilErrorModule,
+  AuthDomainModule,
+  SharedUiAsideModule,
+  SharedUtilDateModule,
+  SharedUiMaterialModule,
+  LayoutModule,
+];
 
 @NgModule({
-  declarations: [...COMPONENTS],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedUiMaterialModule,
-    FormsModule,
-    HttpClientModule,
-    ...SUB_MODULES,
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, FormsModule, HttpClientModule, ...SUB_MODULES],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: DateInterceptor,
-      multi: true,
-    },
     { provide: LOCALE_ID, useValue: 'de-de' },
     { provide: API_URL, useValue: environment.api.baseUrl },
   ],

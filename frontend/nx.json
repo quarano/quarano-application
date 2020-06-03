@@ -220,6 +220,12 @@
     },
     "info-api": {
       "tags": ["scope:info", "type:api"]
+    },
+    "layout": {
+      "tags": ["scope:layout", "type:api"]
+    },
+    "shared-util-date": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

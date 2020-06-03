@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { DateFunctions, API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
-import { ClientDto, EncounterDto, EncounterEntry, EncounterCreateDto, EncountersDto } from '@qro/client/domain';
+import { EncounterDto, EncounterEntry, EncounterCreateDto, EncountersDto } from '@qro/client/domain';
 import { RegisterDto } from '../models/register';
+import { DateFunctions } from '@qro/shared/util-date';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 import { ActionDto } from '@qro/health-department/domain';
 
 @Component({

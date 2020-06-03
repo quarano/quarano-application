@@ -1,6 +1,5 @@
-import { ContactPersonDialogComponent } from '../../../../../../contact-persons/contact-person-detail/src/lib/components/contact-person-dialog/contact-person-dialog.component';
 import { BadRequestService } from '@qro/shared/util-error';
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -11,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeactivatableComponent, SnackbarService } from '@qro/shared/util';
 import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/diary/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { ContactPersonDto } from '@qro/client/contact-persons/api';
+import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';
 
 @Component({
   selector: 'qro-diary-entry',

@@ -10,7 +10,7 @@ import {
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 
 class ActionRowViewModel {
   lastName: string;

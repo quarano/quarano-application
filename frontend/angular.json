@@ -2291,6 +2291,64 @@
           "style": "scss"
         }
       }
+    },
+    "layout": {
+      "projectType": "library",
+      "root": "libs/layout",
+      "sourceRoot": "libs/layout/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/layout/tsconfig.lib.json", "libs/layout/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/layout/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/layout/jest.config.js",
+            "tsConfig": "libs/layout/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/layout/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-date": {
+      "projectType": "library",
+      "root": "libs/shared/util-date",
+      "sourceRoot": "libs/shared/util-date/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/util-date/tsconfig.lib.json", "libs/shared/util-date/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-date/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-date/jest.config.js",
+            "tsConfig": "libs/shared/util-date/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-date/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

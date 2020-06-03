@@ -5,7 +5,7 @@ import { SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 
 class CaseRowViewModel {
   lastName: string;

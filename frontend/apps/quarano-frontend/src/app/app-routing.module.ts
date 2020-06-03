@@ -1,15 +1,11 @@
 import { IsAdminGuard } from '@qro/administration/api';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { NotFoundComponent } from '@qro/shared/util-error';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
 const routes: Routes = [
-  {
-    path: 'welcome',
-    loadChildren: () => import('./modules/welcome/welcome.module').then((m) => m.WelcomeModule),
-  },
   {
     path: 'client',
     loadChildren: () => import('@qro/client/shell').then((m) => m.ClientShellModule),

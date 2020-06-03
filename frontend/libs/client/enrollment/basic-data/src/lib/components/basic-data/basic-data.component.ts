@@ -20,7 +20,7 @@ import {
   PhoneOrMobilePhoneValidator,
 } from '@qro/shared/util-form-validation';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 
 @Component({
   selector: 'qro-basic-data',

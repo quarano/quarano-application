@@ -1,4 +1,4 @@
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
 import { CaseListItemDto, ClientType } from '@qro/health-department/domain';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
