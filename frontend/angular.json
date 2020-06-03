@@ -2349,6 +2349,35 @@
           "style": "scss"
         }
       }
+    },
+    "welcome": {
+      "projectType": "library",
+      "root": "libs/welcome",
+      "sourceRoot": "libs/welcome/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/welcome/tsconfig.lib.json", "libs/welcome/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/welcome/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/welcome/jest.config.js",
+            "tsConfig": "libs/welcome/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/welcome/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

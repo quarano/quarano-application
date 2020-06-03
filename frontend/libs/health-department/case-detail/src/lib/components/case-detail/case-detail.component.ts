@@ -17,7 +17,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { SnackbarService } from '@qro/shared/util';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
-import { QuestionnaireDto } from '@qro/client/enrollment/domain';
+import { QuestionnaireDto } from '@qro/client/enrollment/api';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';

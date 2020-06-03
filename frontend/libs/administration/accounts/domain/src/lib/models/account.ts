@@ -1,4 +1,4 @@
-import { Link } from '../../../../../../shared/util-data-access/src/lib/models/general';
+import { Link } from '@qro/shared/util-data-access';
 
 export interface AccountDto {
   accountId: string;

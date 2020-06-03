@@ -14,3 +14,4 @@ export * from './lib/models/case-comment';
 export * from './lib/models/contact';
 export * from './lib/models/start-tracking';
 export * from './lib/models/health-department';
+export * from './lib/guards/is-health-department-user.guard';

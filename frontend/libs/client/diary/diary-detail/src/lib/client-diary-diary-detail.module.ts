@@ -1,11 +1,10 @@
-import { ClientDiaryDomainModule } from '@qro/client/diary/domain';
+import { ClientDiaryDomainModule, DiaryDetailResolver } from '@qro/client/diary/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { ContactPersonsResolver } from '@qro/client/contact-persons/api';
-import { DiaryDetailResolver } from '@qro/client/diary/domain';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

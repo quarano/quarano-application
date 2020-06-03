@@ -5,11 +5,9 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    HasRoleDirective
-  ],
+  declarations: [HasRoleDirective],
   imports: [CommonModule],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
-  exports: [HasRoleDirective]
+  exports: [HasRoleDirective],
 })
-export class AuthDomainModule { }
+export class AuthDomainModule {}

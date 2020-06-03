@@ -1,4 +1,4 @@
-import { HalResponse } from '../../../../../shared/util-data-access/src/lib/models/hal-response';
+import { HalResponse } from '@qro/shared/util-data-access';
 import { CaseCommentDto } from './case-comment';
 import { ContactDto } from './contact';
 

@@ -3,12 +3,10 @@ import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
 import { TokenService } from '../services/token.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthInterceptor implements HttpInterceptor {
-
-  constructor(private tokenService: TokenService) {
-  }
+  constructor(private tokenService: TokenService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     const authToken = this.tokenService.token;

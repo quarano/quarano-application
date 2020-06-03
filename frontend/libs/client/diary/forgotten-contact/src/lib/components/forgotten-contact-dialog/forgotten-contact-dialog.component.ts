@@ -1,4 +1,3 @@
-import { ContactPersonDialogComponent } from '../../../../../../contact-persons/contact-person-detail/src/lib/components/contact-person-dialog/contact-person-dialog.component';
 import { BadRequestService } from '@qro/shared/util-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,7 +7,7 @@ import { Moment } from 'moment';
 import { EncounterEntry } from '@qro/client/domain';
 import { EnrollmentService } from '@qro/client/enrollment/api';
 import { SnackbarService } from '@qro/shared/util';
-import { ContactPersonDto } from '@qro/client/contact-persons/api';
+import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-form-validation';
 
 @Component({

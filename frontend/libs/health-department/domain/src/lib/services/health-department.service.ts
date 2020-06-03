@@ -6,13 +6,19 @@ import { CaseDetailDto } from '../models/case-detail';
 import { ClientType } from '../enums/client-type';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../models/case-action';
-import { share } from 'rxjs/operators';
+import { share, distinctUntilChanged, map } from 'rxjs/operators';
+import { HealthDepartmentDto } from '../models/health-department';
+import { UserService } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HealthDepartmentService {
-  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(API_URL) private apiUrl: string,
+    private userService: UserService
+  ) {}
 
   resolveAnomalies(link: Link, comment: string) {
     return this.httpClient.put(link.href, { comment });
@@ -36,5 +42,12 @@ export class HealthDepartmentService {
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {
     return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/api/hd/actions/${caseId}`).pipe(share());
+  }
+
+  public get healthDepartment$(): Observable<HealthDepartmentDto> {
+    return this.userService.user$.pipe(
+      distinctUntilChanged(),
+      map((user) => user?.healthDepartment)
+    );
   }
 }

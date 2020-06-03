@@ -1,8 +1,8 @@
 import { Directive, OnInit, Input, ViewContainerRef, TemplateRef } from '@angular/core';
-import { UserService } from '../../../../../auth/domain/src/lib/services/user.service';
+import { UserService } from '@qro/auth/api';
 
 @Directive({
-  selector: '[qroIsAdmin]'
+  selector: '[qroIsAdmin]',
 })
 export class IsAdminDirective implements OnInit {
   @Input() qroIsAdmin: boolean;
@@ -11,7 +11,8 @@ export class IsAdminDirective implements OnInit {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
-    private userService: UserService) { }
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     if (this.userService.isAdmin) {
@@ -24,5 +25,4 @@ export class IsAdminDirective implements OnInit {
       this.viewContainerRef.clear();
     }
   }
-
 }

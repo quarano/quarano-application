@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { QuestionnaireDto } from '@qro/client/enrollment/domain';
+import { QuestionnaireDto } from '@qro/client/enrollment/api';
 import { SymptomDto } from '@qro/shared/util-symptom';
 
 @Component({

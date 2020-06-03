@@ -1,2 +1,7 @@
 export * from './lib/health-department-api.module';
-export * from '../../domain/src/lib/guards/is-health-department-user.guard';
+export {
+  HealthDepartmentDto,
+  HealthDepartmentService,
+  IsHealthDepartmentUserGuard,
+  ClientType,
+} from '@qro/health-department/domain';

@@ -1,4 +1,4 @@
-import { ClientType } from '@qro/health-department/domain';
+import { ClientType } from '@qro/health-department/api';
 
 export interface ClientDto {
   clientCode?: string;
@@ -18,4 +18,3 @@ export interface ClientDto {
   dateOfBirth: Date;
   type: ClientType;
 }
-

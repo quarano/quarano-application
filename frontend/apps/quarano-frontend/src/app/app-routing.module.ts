@@ -7,6 +7,10 @@ import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
 const routes: Routes = [
   {
+    path: 'welcome',
+    loadChildren: () => import('@qro/welcome').then((m) => m.WelcomeModule),
+  },
+  {
     path: 'client',
     loadChildren: () => import('@qro/client/shell').then((m) => m.ClientShellModule),
   },
@@ -32,7 +36,7 @@ const routes: Routes = [
     path: '404/:message',
     component: NotFoundComponent,
   },
-  { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },
 ];
 

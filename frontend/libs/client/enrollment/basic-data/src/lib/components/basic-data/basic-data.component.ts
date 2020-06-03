@@ -1,4 +1,4 @@
-import { ClientService } from '@qro/client/domain';
+import { ClientService, ClientDto, EncounterEntry } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/util-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -9,7 +9,6 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BehaviorSubject } from 'rxjs';
-import { ClientDto, EncounterEntry } from '@qro/client/domain';
 import { QuestionnaireDto, EnrollmentStatusDto, EnrollmentService } from '@qro/client/enrollment/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';

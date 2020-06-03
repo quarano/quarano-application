@@ -12,10 +12,10 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
       {
         path: '',
         pathMatch: 'full',
-        component: ForbiddenComponent
-      }
-    ])
+        component: ForbiddenComponent,
+      },
+    ]),
   ],
-  declarations: [ForbiddenComponent]
+  declarations: [ForbiddenComponent],
 })
-export class AuthForbiddenModule { }
+export class AuthForbiddenModule {}

@@ -6,7 +6,6 @@ import { TokenService } from './token.service';
 import { UserDto } from '../models/user';
 import { roles } from '../models/role';
 import { AuthService } from './auth.service';
-import { HealthDepartmentDto } from '@qro/health-department/domain';
 
 @Injectable({
   providedIn: 'root',
@@ -20,41 +19,6 @@ export class UserService {
 
   public get user$(): Observable<UserDto> {
     return this.authService.getMe().pipe(distinctUntilChanged());
-  }
-
-  public get client$() {
-    return this.user$.pipe(
-      distinctUntilChanged(),
-      map((user) => user?.client)
-    );
-  }
-
-  public get healthDepartment$(): Observable<HealthDepartmentDto> {
-    return this.user$.pipe(
-      distinctUntilChanged(),
-      map((user) => user?.healthDepartment)
-    );
-  }
-
-  public get currentUserName$(): Observable<string> {
-    return this.user$.pipe(
-      map((user) => {
-        if (user) {
-          if (this.isHealthDepartmentUser) {
-            if (user.firstName && user.lastName) {
-              return `${user.firstName} ${user.lastName} (${
-                user.healthDepartment?.name || 'Gesundheitsamt unbekannt'
-              })`;
-            }
-            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
-          } else if (user.client?.firstName || user.client?.lastName) {
-            return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
-          }
-          return user.username;
-        }
-        return null;
-      })
-    );
   }
 
   public get isLoggedIn$(): Observable<boolean> {

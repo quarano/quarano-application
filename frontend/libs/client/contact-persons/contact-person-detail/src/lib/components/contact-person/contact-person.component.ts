@@ -1,6 +1,5 @@
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DeactivatableComponent } from '@qro/shared/util';

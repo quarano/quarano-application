@@ -1,2 +1,3 @@
 export * from './lib/client-api.module';
-export * from '../../health-department-contact/src/lib/components/hd-contact/hd-contact.component';
+export { HdContactComponent } from '@qro/client/health-department-contact';
+export { ClientDto } from '@qro/client/domain';

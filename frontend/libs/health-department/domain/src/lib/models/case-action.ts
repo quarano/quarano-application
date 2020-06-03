@@ -1,5 +1,5 @@
-import { Link } from '../../../../../shared/util-data-access/src/lib/models/general';
-import { Alert } from '@qro/health-department/domain';
+import { Link } from '@qro/shared/util-data-access';
+import { Alert } from '../enums/alert';
 
 export interface CaseActionDto {
   caseId: string;

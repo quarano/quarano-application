@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HealthDepartmentDto } from '@qro/health-department/domain';
+import { HealthDepartmentDto } from '@qro/health-department/api';
 
 @Component({
   selector: 'qro-hd-contact',

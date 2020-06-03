@@ -1,8 +1,5 @@
 {
-  "rulesDirectory": [
-    "node_modules/@nrwl/workspace/src/tslint",
-    "node_modules/codelyzer"
-  ],
+  "rulesDirectory": ["node_modules/@nrwl/workspace/src/tslint", "node_modules/codelyzer"],
   "linterOptions": {
     "exclude": ["**/*"]
   },
@@ -20,12 +17,7 @@
     "member-ordering": [
       true,
       {
-        "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
-        ]
+        "order": ["static-field", "instance-field", "static-method", "instance-method"]
       }
     ],
     "no-arg": true,
@@ -61,50 +53,41 @@
         "depConstraints": [
           {
             "sourceTag": "scope:app",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department",
-              "scope:auth",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:auth", "scope:shared"]
           },
           {
             "sourceTag": "scope:health-department",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department",
-              "scope:shared"
-            ]
-          },
-          {
-            "sourceTag": "scope:health-department-contact-cases",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department-contact-cases",
-              "scope:health-department",
-              "scope:shared"
-            ]
-          },
-          {
-            "sourceTag": "scope:health-department-index-cases",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department-index-cases",
-              "scope:health-department",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:shared", "scope:auth", "scope:client"]
           },
           {
             "sourceTag": "scope:administration",
-            "onlyDependOnLibsWithTags": ["scope:administration", "scope:shared"]
+            "onlyDependOnLibsWithTags": ["scope:administration", "scope:shared", "scope:auth"]
           },
           {
-            "sourceTag": "scope:administration-accounts",
+            "sourceTag": "scope:client",
             "onlyDependOnLibsWithTags": [
-              "scope:administration-accounts",
-              "scope:administration",
-              "scope:shared"
+              "scope:client",
+              "scope:shared",
+              "scope:auth",
+              "scope:info",
+              "scope:health-department"
             ]
           },
           {
+            "sourceTag": "scope:info",
+            "onlyDependOnLibsWithTags": ["scope:info", "scope:shared"]
+          },
+          {
+            "sourceTag": "scope:layout",
+            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared"]
+          },
+          {
+            "sourceTag": "scope:welcome",
+            "onlyDependOnLibsWithTags": ["scope:welcome", "scope:shared"]
+          },
+          {
             "sourceTag": "scope:auth",
-            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
+            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared", "scope:client"]
           },
           {
             "sourceTag": "scope:shared",
@@ -112,24 +95,15 @@
           },
           {
             "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": [
-              "type:feature",
-              "type:api",
-              "type:util"
-            ]
+            "onlyDependOnLibsWithTags": ["type:feature", "type:api", "type:util"]
           },
           {
             "sourceTag": "type:feature",
-            "onlyDependOnLibsWithTags": [
-              "type:domain",
-              "type:util",
-              "type:api",
-              "type:ui"
-            ]
+            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui", "type:feature"]
           },
           {
             "sourceTag": "type:api",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:util"]
+            "onlyDependOnLibsWithTags": ["type:domain", "type:feature"]
           },
           {
             "sourceTag": "type:ui",

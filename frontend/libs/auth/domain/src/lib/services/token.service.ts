@@ -8,10 +8,9 @@ import { Router } from '@angular/router';
 export const JWT_STORAGE_KEY = 'jwt';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
-
   private readonly token$$: BehaviorSubject<string>;
   public readonly token$: Observable<string>;
 
@@ -44,15 +43,13 @@ export class TokenService {
     }
   }
 
-  constructor(
-    private snackbarService: SnackbarService,
-    private router: Router) {
+  constructor(private snackbarService: SnackbarService, private router: Router) {
     const storageToken = this.localJwt;
     this.token$$ = new BehaviorSubject<string>(storageToken);
     this.token$ = this.token$$.asObservable();
 
     // Subscribe to token change
-    this.token$.subscribe(token => {
+    this.token$.subscribe((token) => {
       if (token !== null) {
         const payload = jwt_decode(token);
         this.roles$$.next(payload.aut);
@@ -70,14 +67,13 @@ export class TokenService {
       this.expDateTime$$
         .pipe(
           distinctUntilChanged(),
-          filter(expDate => expDate !== null),
-          filter(expDate => expDate <= new Date())
+          filter((expDate) => expDate !== null),
+          filter((expDate) => expDate <= new Date())
         )
         .subscribe(() => {
           this.snackbarService.message('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
           this.unsetToken();
         });
-
     });
   }
 

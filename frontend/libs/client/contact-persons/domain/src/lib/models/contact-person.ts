@@ -1,4 +1,4 @@
-import { IIdentifiable, SelfLink } from '../../../../../../shared/util-data-access/src/lib/models/general';
+import { IIdentifiable, SelfLink } from '@qro/shared/util-data-access';
 
 export interface ContactPersonDto extends IIdentifiable {
   firstName: string;

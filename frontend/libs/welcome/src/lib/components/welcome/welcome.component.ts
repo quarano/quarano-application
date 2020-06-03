@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../../../../libs/auth/domain/src/lib/services/user.service';
+import { UserService } from '@qro/auth/api';
 import { ITileViewModel } from '@qro/shared/ui-tile';
 
 @Component({

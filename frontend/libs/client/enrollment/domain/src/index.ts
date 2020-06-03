@@ -6,3 +6,4 @@ export * from './lib/models/register';
 export * from './lib/guards/basic-data.guard';
 export * from './lib/resolvers/encounters.resolver';
 export * from './lib/resolvers/my-first-query.resolver';
+export * from './lib/guards/enrollment-completed.guard';

@@ -1,11 +1,10 @@
-import { ClientService } from '@qro/client/domain';
+import { ClientService, ClientDto } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/util-error';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
-import { ClientDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
 import {
   VALIDATION_PATTERNS,

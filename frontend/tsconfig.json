@@ -88,7 +88,8 @@
       "@qro/info/terms": ["libs/info/terms/src/index.ts"],
       "@qro/info/api": ["libs/info/api/src/index.ts"],
       "@qro/layout": ["libs/layout/src/index.ts"],
-      "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"]
+      "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
+      "@qro/welcome": ["libs/welcome/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

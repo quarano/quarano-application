@@ -1,4 +1,4 @@
-import { share, map, filter } from 'rxjs/operators';
+import { share, map } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util';
 import { HttpClient } from '@angular/common/http';
 import { CaseListItemDto, ActionListItemDto, ClientType } from '@qro/health-department/domain';
@@ -6,35 +6,33 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactCaseService {
-
-  constructor(
-    private httpClient: HttpClient,
-    @Inject(API_URL) private apiUrl: string
-  ) { }
+  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases`)
-      .pipe(
-        share(),
-        map(result => {
-          if (result?._embedded?.cases) {
-            return result._embedded.cases
-              .filter((r: any) => r.caseType === ClientType.Contact)
-              .map((item: any) => this.mapCaseListItem(item));
-          } else { return []; }
-        }));
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases`).pipe(
+      share(),
+      map((result) => {
+        if (result?._embedded?.cases) {
+          return result._embedded.cases
+            .filter((r: any) => r.caseType === ClientType.Contact)
+            .map((item: any) => this.mapCaseListItem(item));
+        } else {
+          return [];
+        }
+      })
+    );
   }
 
   getActionList(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`)
-      .pipe(
-        share(),
-        map(result => result
-          .filter(r => r.caseType === ClientType.Contact)
-          .map(item => this.mapActionListItem(item))));
+    return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
+      share(),
+      map((result) =>
+        result.filter((r) => r.caseType === ClientType.Contact).map((item) => this.mapActionListItem(item))
+      )
+    );
   }
 
   private mapCaseListItem(item: any): CaseListItemDto {
@@ -54,7 +52,7 @@ export class ContactCaseService {
       caseId: item.caseId,
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
-      extReferenceNumber: item.extReferenceNumber
+      extReferenceNumber: item.extReferenceNumber,
     };
   }
 
@@ -76,8 +74,7 @@ export class ContactCaseService {
       status: item.status,
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
-      extReferenceNumber: item.extReferenceNumber
+      extReferenceNumber: item.extReferenceNumber,
     };
   }
-
 }

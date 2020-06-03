@@ -1,9 +1,9 @@
 import { Directive, Input, ViewContainerRef, TemplateRef, OnInit } from '@angular/core';
 import { EnrollmentService } from '../services/enrollment.service';
-import { UserService } from '../../../../../../auth/domain/src/lib/services/user.service';
+import { UserService } from '@qro/auth/api';
 
 @Directive({
-  selector: '[qroIsEnrolledClient]'
+  selector: '[qroIsEnrolledClient]',
 })
 export class IsEnrolledClientDirective implements OnInit {
   @Input() qroIsEnrolledClient: boolean;
@@ -13,7 +13,8 @@ export class IsEnrolledClientDirective implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
     private userService: UserService,
-    private enrollmentService: EnrollmentService) { }
+    private enrollmentService: EnrollmentService
+  ) {}
 
   ngOnInit() {
     if (this.userService.isHealthDepartmentUser) {
@@ -21,22 +22,20 @@ export class IsEnrolledClientDirective implements OnInit {
       return;
     }
 
-    this.enrollmentService.getEnrollmentStatus()
-      .subscribe(status => {
-        if (status?.complete) {
-          if (!this.isVisible) {
-            this.isVisible = true;
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-          }
-        } else {
-          this.setInivisibility();
+    this.enrollmentService.getEnrollmentStatus().subscribe((status) => {
+      if (status?.complete) {
+        if (!this.isVisible) {
+          this.isVisible = true;
+          this.viewContainerRef.createEmbeddedView(this.templateRef);
         }
-      });
+      } else {
+        this.setInivisibility();
+      }
+    });
   }
 
   private setInivisibility() {
     this.isVisible = false;
     this.viewContainerRef.clear();
-
   }
 }

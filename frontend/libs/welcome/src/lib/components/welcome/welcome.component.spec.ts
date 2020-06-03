@@ -14,10 +14,9 @@ describe('WelcomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientModule],
       declarations: [WelcomeComponent],
-      providers: [{ provide: SnackbarService, useValue: { warning: () => { }, success: () => { } } }],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [{ provide: SnackbarService, useValue: { warning: () => {}, success: () => {} } }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

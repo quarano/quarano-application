@@ -1,4 +1,3 @@
-import { ClientDiaryDiaryListModule } from './../../../diary-list/src/lib/client-diary-diary-list.module';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

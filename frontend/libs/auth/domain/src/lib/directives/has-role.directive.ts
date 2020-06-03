@@ -2,7 +2,7 @@ import { Directive, Input, ViewContainerRef, TemplateRef, OnInit } from '@angula
 import { UserService } from '../services/user.service';
 
 @Directive({
-  selector: '[qroHasRole]'
+  selector: '[qroHasRole]',
 })
 export class HasRoleDirective implements OnInit {
   @Input() qroHasRole: string[];
@@ -11,7 +11,8 @@ export class HasRoleDirective implements OnInit {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
-    private userService: UserService) { }
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     if (this.userService.roleMatch(this.qroHasRole)) {
