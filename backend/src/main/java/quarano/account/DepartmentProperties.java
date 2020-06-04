@@ -29,7 +29,7 @@ public class DepartmentProperties {
 				.setContacts(defaultDepartment.contacts.stream() //
 						.map(contact -> new DepartmentContact() //
 								.setType(ContactType.valueOf(contact.type)) //
-								.setEmailAddress(EmailAddress.of(contact.emailAddress)) //
+								.setEmailAddress(EmailAddress.ofNullable(contact.emailAddress)) //
 								.setPhoneNumber(PhoneNumber.of(contact.phoneNumber))) //
 						.collect(Collectors.toUnmodifiableSet()));
 	}

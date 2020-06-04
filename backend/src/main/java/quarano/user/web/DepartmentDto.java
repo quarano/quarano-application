@@ -18,8 +18,7 @@ class DepartmentDto {
 	private String phone;
 
 	public static DepartmentDto of(Department department, DepartmentContact contact) {
-
-		return new DepartmentDto(department.getName(), contact.getEmailAddress().toString(),
-				contact.getPhoneNumber().toString());
+		var email = contact.getEmailAddress() != null ? contact.getEmailAddress().toString() : null;
+		return new DepartmentDto(department.getName(), email, contact.getPhoneNumber().toString());
 	}
 }
