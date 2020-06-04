@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'client-profile',
+  name: 'client-profile-profile',
   preset: '../../../../jest.config.js',
   coverageDirectory: '../../../../coverage/libs/client/profile',
   snapshotSerializers: [

@@ -182,7 +182,7 @@
     "client-contact-persons-shell": {
       "tags": ["scope:client", "type:feature"]
     },
-    "client-profile": {
+    "client-profile-profile": {
       "tags": ["scope:client", "type:feature"]
     },
     "client-enrollment-basic-data": {

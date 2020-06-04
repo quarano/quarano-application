@@ -83,7 +83,7 @@
           },
           {
             "sourceTag": "scope:welcome",
-            "onlyDependOnLibsWithTags": ["scope:welcome", "scope:shared"]
+            "onlyDependOnLibsWithTags": ["scope:welcome", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:auth",

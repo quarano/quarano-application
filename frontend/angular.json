@@ -1897,26 +1897,29 @@
         }
       }
     },
-    "client-profile": {
+    "client-profile-profile": {
       "projectType": "library",
-      "root": "libs/client/profile",
-      "sourceRoot": "libs/client/profile/src",
+      "root": "libs/client/profile/profile",
+      "sourceRoot": "libs/client/profile/profile/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/client/profile/tsconfig.lib.json", "libs/client/profile/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/profile/**"]
+            "tsConfig": [
+              "libs/client/profile/profile/tsconfig.lib.json",
+              "libs/client/profile/profile/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/profile/profile/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/client/profile/jest.config.js",
-            "tsConfig": "libs/client/profile/tsconfig.spec.json",
+            "jestConfig": "libs/client/profile/profile/jest.config.js",
+            "tsConfig": "libs/client/profile/profile/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/client/profile/src/test-setup.ts"
+            "setupFile": "libs/client/profile/profile/src/test-setup.ts"
           }
         }
       },
