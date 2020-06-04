@@ -1,5 +1,24 @@
 # App Manifest
 applications:
+  ###############   dev system #########################
+  - name: quarano-frontend-dev
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/staticfile-buildpack
+    path: ./frontend/dist/apps/quarano-frontend
+    command: "$HOME/boot.sh"
+    routes:
+      - route: quarano-frontend-dev.cf.evoila.io
+  - name: quarano-backend-dev
+    buildpacks:
+      - java_buildpack
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      SPRING_PROFILES_ACTIVE: develop
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano-frontend-dev.cf.evoila.io
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: true
+      SPRING_FLYWAY_BASELINE_VERSION: 0
   ###############   test system #########################
   - name: quarano-frontend-test
     memory: 128M
@@ -33,8 +52,6 @@ applications:
     buildpacks:
       - java_buildpack
     path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
-    services:
-      - database
     routes:
       - route: quarano-backend-sec.cf.evoila.io
     env:
