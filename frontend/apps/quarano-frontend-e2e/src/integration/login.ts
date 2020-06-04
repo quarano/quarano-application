@@ -25,7 +25,7 @@ describe('login', () => {
       cy.wait('@login').its('status').should('eq', 200);
       cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
 
-      cy.url().should('include', '/diary-list');
+      cy.url().should('include', '/client/diary/diary-list');
     });
 
     it('should fail to login', () => {
@@ -35,7 +35,7 @@ describe('login', () => {
       cy.get('simple-snack-bar').children('span').should('contain', 'Benutzername oder Passwort falsch');
 
       cy.wait(5);
-      cy.url().should('not.include', '/diary-list');
+      cy.url().should('not.include', '/client/diary/diary-list');
     });
   });
 

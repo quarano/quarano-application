@@ -17,18 +17,15 @@ describe('health-department top navigation', () => {
   });
 
   it('should switch to contact cases on click', () => {
-
     cy.get('[data-cy="contact-cases"]').click();
     cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
     cy.url().should('include', '/health-department/contact-cases/case-list');
-
   });
 
   it('should show the current logged in agent', () => {
     cy.wait('@me').its('status').should('eq', 200);
 
     cy.get('@me').then((request: any) => {
-
       const user = request.response?.body;
       console.log(user);
       const fullName = user.firstName + ' ' + user.lastName;
@@ -57,6 +54,6 @@ describe('health-department top navigation', () => {
   it('should navigate to change password component on button click', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="change-password-button"]').click();
-    cy.url().should('include', 'change-password');
-  })
+    cy.url().should('include', '/auth/change-password');
+  });
 });
