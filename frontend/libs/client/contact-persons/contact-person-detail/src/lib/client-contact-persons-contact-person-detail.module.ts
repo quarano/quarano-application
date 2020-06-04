@@ -2,7 +2,7 @@ import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
-import { ContactPersonResolver } from '@qro/client/contact-persons/domain';
+import { ContactPersonResolver, ClientContactPersonsDomainModule } from '@qro/client/contact-persons/domain';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -36,6 +36,7 @@ const routes: Routes = [
     SharedUiButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    ClientContactPersonsDomainModule,
     RouterModule.forChild(routes),
   ],
 })

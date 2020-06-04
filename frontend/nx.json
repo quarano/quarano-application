@@ -229,6 +229,9 @@
     },
     "welcome": {
       "tags": ["scope:welcome", "type:feature"]
+    },
+    "client-profile-ui-personal-data": {
+      "tags": ["scope:client", "type:ui"]
     }
   }
 }

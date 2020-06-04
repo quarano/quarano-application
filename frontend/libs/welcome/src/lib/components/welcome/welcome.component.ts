@@ -17,7 +17,7 @@ export class WelcomeComponent implements OnInit {
       content:
         'Pflegen Sie zwei Mal täglich in Ihrem Tagebuch die eventuell auftretenden Symptome und Ihre Körpertemperatur.',
       linkText: 'Zum Tagebuch',
-      routerLink: ['client/diary/diary-list'],
+      routerLink: ['/client/diary/diary-list'],
       headerImageUrl: '/assets/images/diary.png',
       backgroundImageUrl: '/assets/images/diary_tile_background.jpg',
     },
@@ -27,7 +27,7 @@ export class WelcomeComponent implements OnInit {
       content:
         'Verwalten Sie Ihre persönlichen Kontaktpersonen, damit Sie diese einfach und schnell in den Tagebucheinträgen referenzieren können, ohne sie neu eingeben zu müssen.',
       linkText: 'Zu den Kontaktpersonen',
-      routerLink: ['/contact-persons'],
+      routerLink: ['/client/contact-persons/contact-person-list'],
       headerImageUrl: '/assets/images/contact-person.png',
       backgroundImageUrl: '/assets/images/contact_tile_background.jpg',
     },

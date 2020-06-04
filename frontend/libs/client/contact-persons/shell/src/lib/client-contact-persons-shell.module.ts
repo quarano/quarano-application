@@ -16,7 +16,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'diary-detail',
+    path: 'contact-person-detail',
     loadChildren: () =>
       import('@qro/client/contact-persons/contact-person-detail').then(
         (m) => m.ClientContactPersonsContactPersonDetailModule

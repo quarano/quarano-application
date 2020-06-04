@@ -74,7 +74,7 @@
         "libs/client/contact-persons/contact-person-detail/src/index.ts"
       ],
       "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"],
-      "@qro/client/profile": ["libs/client/profile/src/index.ts"],
+      "@qro/client/profile/profile": ["libs/client/profile/profile/src/index.ts"],
       "@qro/client/enrollment/basic-data": ["libs/client/enrollment/basic-data/src/index.ts"],
       "@qro/client/enrollment/register": ["libs/client/enrollment/register/src/index.ts"],
       "@qro/client/enrollment/landing": ["libs/client/enrollment/landing/src/index.ts"],
@@ -89,7 +89,8 @@
       "@qro/info/api": ["libs/info/api/src/index.ts"],
       "@qro/layout": ["libs/layout/src/index.ts"],
       "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
-      "@qro/welcome": ["libs/welcome/src/index.ts"]
+      "@qro/welcome": ["libs/welcome/src/index.ts"],
+      "@qro/client/profile/ui-personal-data": ["libs/client/profile/ui-personal-data/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -4,45 +4,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { HealthDepartmentDto, HealthDepartmentService } from '@qro/health-department/api';
 import { UserService } from '@qro/auth/api';
-import { map } from 'rxjs/operators';
+import { map, distinctUntilChanged } from 'rxjs/operators';
+import { EnrollmentService } from '@qro/client/enrollment/api';
 
 @Component({
   selector: 'qro-header-right',
   templateUrl: './header-right.component.html',
   styleUrls: ['./header-right.component.scss'],
 })
-export class HeaderRightComponent implements OnInit {
-  public isLoggedIn$ = this.userService.isLoggedIn$;
+export class HeaderRightComponent {
   public healthDepartment$: Observable<HealthDepartmentDto> = this.healthDepartmentService.healthDepartment$;
-
-  public get currentUserName$(): Observable<string> {
-    return this.userService.user$.pipe(
-      map((user) => {
-        if (user) {
-          if (this.userService.isHealthDepartmentUser) {
-            if (user.firstName && user.lastName) {
-              return `${user.firstName} ${user.lastName} (${
-                user.healthDepartment?.name || 'Gesundheitsamt unbekannt'
-              })`;
-            }
-            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
-          } else if (user.client?.firstName || user.client?.lastName) {
-            return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
-          }
-          return user.username;
-        }
-        return null;
-      })
-    );
-  }
+  public currentUserName$ = this.userService.currentUserName$;
 
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private healthDepartmentService: HealthDepartmentService,
+    public enrollmentService: EnrollmentService,
     private matDialog: MatDialog
   ) {}
-
-  ngOnInit() {}
 
   logout() {
     this.userService.logout();

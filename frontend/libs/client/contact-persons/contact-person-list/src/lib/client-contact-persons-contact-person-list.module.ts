@@ -1,3 +1,4 @@
+import { ClientContactPersonsDomainModule } from '@qro/client/contact-persons/domain';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { ContactPersonsComponent } from './components/contact-person-list/contact-persons.component';
@@ -12,6 +13,7 @@ import { ContactPersonsResolver } from '@qro/client/contact-persons/domain';
     CommonModule,
     SharedUiMaterialModule,
     SharedUiAlertModule,
+    ClientContactPersonsDomainModule,
     RouterModule.forChild([
       {
         path: '',

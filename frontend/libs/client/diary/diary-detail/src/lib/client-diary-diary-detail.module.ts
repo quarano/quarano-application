@@ -1,3 +1,4 @@
+import { ClientContactPersonsDomainModule } from '@qro/client/contact-persons/domain';
 import { ClientDiaryDomainModule, DiaryDetailResolver } from '@qro/client/diary/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -38,6 +39,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     ClientDiaryDomainModule,
     SharedUtilSymptomModule,
+    ClientContactPersonsDomainModule,
   ],
 })
 export class ClientDiaryDiaryDetailModule {}

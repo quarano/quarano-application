@@ -92,7 +92,7 @@ describe('new case', () => {
   });
 
   describe('field tests', () => {
-    const dateChecks = (selector: string, calendarClass: string) => {
+    const dateChecks = (selector: string, calendarClass: string, dateInput: string) => {
       it('should be a date string', () => {
         cy.get(selector).should('exist');
         cy.get(selector + ' input[matInput]')
@@ -107,7 +107,7 @@ describe('new case', () => {
         cy.get(selector).should('exist');
         cy.get(selector + ' input[matInput]')
           .clear()
-          .type('20.12.1987');
+          .type(dateInput);
         cy.get(selector + ' input[matInput]').blur();
 
         cy.get(selector + ' mat-error').should('not.exist');
@@ -206,7 +206,7 @@ describe('new case', () => {
 
     describe('disease data', () => {
       describe('test date', () => {
-        dateChecks('[data-cy="input-testdate"]', '.mat-calendar-body-today');
+        dateChecks('[data-cy="input-testdate"]', '.mat-calendar-body-today', '04.06.2020');
 
         it('should be a date string lower or equal today', () => {
           const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
@@ -220,7 +220,7 @@ describe('new case', () => {
 
       describe('quarantine start date', () => {
         const selector = '[data-cy="input-quarantinestart"]';
-        dateChecks(selector, '.mat-calendar-body-today');
+        dateChecks(selector, '.mat-calendar-body-today', '04.06.2020');
 
         it('should be a date string lower or equal today', () => {
           const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
@@ -250,7 +250,7 @@ describe('new case', () => {
       });
 
       describe('quarantine end date', () => {
-        dateChecks('[data-cy="input-quarantineend"]', '.mat-calendar-body-selected');
+        dateChecks('[data-cy="input-quarantineend"]', '.mat-calendar-body-selected', '14.06.2020');
       });
     });
 

@@ -2378,6 +2378,38 @@
           "style": "scss"
         }
       }
+    },
+    "client-profile-ui-personal-data": {
+      "projectType": "library",
+      "root": "libs/client/profile/ui-personal-data",
+      "sourceRoot": "libs/client/profile/ui-personal-data/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/profile/ui-personal-data/tsconfig.lib.json",
+              "libs/client/profile/ui-personal-data/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/profile/ui-personal-data/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/profile/ui-personal-data/jest.config.js",
+            "tsConfig": "libs/client/profile/ui-personal-data/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/profile/ui-personal-data/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

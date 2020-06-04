@@ -1,12 +1,16 @@
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
-import { SymptomsResolver } from '@qro/shared/util-symptom';
+import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { CaseDetailComponent } from './components/case-detail/case-detail.component';
-import { ReportCaseResolver, ReportCaseActionsResolver } from '@qro/health-department/domain';
+import {
+  ReportCaseResolver,
+  ReportCaseActionsResolver,
+  HealthDepartmentDomainModule,
+} from '@qro/health-department/domain';
 import { QuestionnaireComponent } from './components/questionnaire/questionnaire.component';
 import { MailComponent } from './components/mail/mail.component';
 import { IndexContactsComponent } from './components/index-contacts/index-contacts.component';
@@ -47,6 +51,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     SharedUiButtonModule,
+    HealthDepartmentDomainModule,
+    SharedUtilSymptomModule,
   ],
 })
 export class HealthDepartmentCaseDetailModule {}

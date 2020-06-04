@@ -28,6 +28,27 @@ export class UserService {
     );
   }
 
+  public get currentUserName$(): Observable<string> {
+    return this.user$.pipe(
+      map((user) => {
+        if (user) {
+          if (this.isHealthDepartmentUser) {
+            if (user.firstName && user.lastName) {
+              return `${user.firstName} ${user.lastName} (${
+                user.healthDepartment?.name || 'Gesundheitsamt unbekannt'
+              })`;
+            }
+            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+          } else if (user.client?.firstName || user.client?.lastName) {
+            return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
+          }
+          return user.username;
+        }
+        return null;
+      })
+    );
+  }
+
   public login(username: string, password: string): Observable<any> {
     return this.authService
       .login(username, password)

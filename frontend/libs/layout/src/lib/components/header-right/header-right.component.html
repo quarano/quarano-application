@@ -1,4 +1,4 @@
-<div class="container" *ngIf="isLoggedIn$ | async">
+<div class="container" *ngIf="userService.isLoggedIn$ | async">
   <ng-container *qroIsEnrolledClient>
     <button
       *ngIf="healthDepartment$ | async as healthDepartment"
@@ -15,9 +15,13 @@
     <mat-icon style="color: white;">arrow_drop_down</mat-icon>
   </button>
   <mat-menu #profilemenu="matMenu">
-    <button data-cy="profile-button" mat-menu-item *qroIsEnrolledClient [routerLink]="['/client/profile']">
-      <mat-icon>person</mat-icon> Benutzerprofil
-    </button>
+    <ng-container
+      *ngIf="!userService.isHealthDepartmentUser && (enrollmentService.getEnrollmentStatus() | async)?.complete"
+    >
+      <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
+        <mat-icon>person</mat-icon> Benutzerprofil
+      </button>
+    </ng-container>
     <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
       <mat-icon>vpn_key</mat-icon> Passwort ändern
     </button>

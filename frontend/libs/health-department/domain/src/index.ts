@@ -4,7 +4,6 @@ export * from './lib/enums/client-type';
 export * from './lib/models/action-list-item';
 export * from './lib/models/alert-configuration';
 export * from './lib/models/case-list-item';
-export * from './lib/directives/is-health-department-user.directive';
 export * from './lib/resolvers/report-case-actions.resolver';
 export * from './lib/resolvers/report-case.resolver';
 export * from './lib/models/case-action';

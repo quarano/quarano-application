@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { roleNames, UserService } from '@qro/auth/api';
+import { EnrollmentService } from '@qro/client/enrollment/api';
 
 @Component({
   selector: 'qro-header-left',
@@ -10,7 +11,7 @@ export class HeaderLeftComponent implements OnInit {
   public readonly isLoggedIn$ = this.userService.isLoggedIn$;
   public rolesNames = roleNames;
 
-  constructor(private userService: UserService) {}
+  constructor(public userService: UserService, public enrollmentService: EnrollmentService) {}
 
   ngOnInit() {}
 }

@@ -17,7 +17,7 @@ import { ForgottenContactDialogComponent } from './components/forgotten-contact-
     SharedUiButtonModule,
   ],
   declarations: [ForgottenContactBannerComponent, ForgottenContactDialogComponent],
-  entryComponents: [ForgottenContactBannerComponent, ForgottenContactDialogComponent],
+  entryComponents: [ForgottenContactDialogComponent],
   exports: [ForgottenContactBannerComponent, ForgottenContactDialogComponent],
 })
 export class ClientDiaryForgottenContactModule {}
