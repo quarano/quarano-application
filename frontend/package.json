@@ -17,7 +17,7 @@
     "prepare-deployment": "ncp ./deployment/pivotal/ ./dist/apps/quarano-frontend/",
     "prepare-deployment-evoila": "ncp ./deployment/evoila/ ./dist/apps/quarano-frontend/",
     "test": "ng test",
-    "ci-test": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng test -- --silent",
+    "ci-test": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng test -- --silent --verbose",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",
