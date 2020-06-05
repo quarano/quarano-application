@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -17,12 +17,15 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() control: FormControl;
   @Input() placeholder: string;
   @Input() selectableItems: IIdentifiable[];
+  @Input() clearInputField: Observable<boolean>;
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
+  @Output() itemNotFound = new EventEmitter<string>();
   selectedItemIds: string[];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') autocomplete;
   destroy$: Subject<void> = new Subject<void>();
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
 
@@ -36,19 +39,23 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       .subscribe((data: string[]) => {
         this.selectedItemIds = data;
         this.control.markAsDirty();
-        this.input.nativeElement.blur();
         data.forEach((value) => this.added.emit(value));
       });
 
     this.selectedItemIds = this.control.value;
 
-    this.inputControl.valueChanges
-      .pipe(takeUntil(this.destroy$), startWith(null as string))
-      .subscribe((searchTearm) => {
-        if (typeof searchTearm === 'string') {
-          this._filter(searchTearm);
-        }
-      });
+    this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
+      if (typeof searchTerm === 'string') {
+        this._filter(searchTerm);
+      }
+    });
+
+    this.clearInputField.subscribe(() => {
+      console.log('clear now');
+      // fixme: best to do this only via formControl ! ..... :(
+      this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
+      this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
+    });
   }
 
   ngOnDestroy(): void {
@@ -62,6 +69,18 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       arrayToReturn = arrayToReturn.filter((item) => item.id !== selectedItem);
     });
     return arrayToReturn;
+  }
+
+  checkInputForData() {
+    const input = this.inputControl.value;
+    const inList = this.isInputInSelectedList(input);
+    if (!inList && input) {
+      this.itemNotFound.emit(input);
+    }
+  }
+
+  private isInputInSelectedList(searchString: string): IIdentifiable {
+    return this.selectableItems.find((item) => this.getName(item) === searchString);
   }
 
   private _filter(searchTerm: string) {

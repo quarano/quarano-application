@@ -10,9 +10,11 @@
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [mat-dialog-close]="true" data-cy="confirm-button">
     <mat-icon>check</mat-icon>
-    OK
+    <span *ngIf="data.confirmButtonText; else ok">{{ data.confirmButtonText }}</span>
+    <ng-template #ok>OK</ng-template>
   </button>
   <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>
-    Abbrechen
+    <span *ngIf="data.abortButtonText; else abort">{{ data.abortButtonText }}</span>
+    <ng-template #abort>Abbrechen</ng-template>
   </button>
 </mat-dialog-actions>

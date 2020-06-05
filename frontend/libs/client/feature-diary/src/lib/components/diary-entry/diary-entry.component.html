@@ -53,6 +53,9 @@
         placeholder="Kontakte mit anderen Menschen seit letztem Eintrag"
         [nameProperties]="['firstName', 'lastName']"
         name="contactPersons"
+        (itemNotFound)="openConfirmContactDialog($event)"
+        itemType="contactPerson"
+        [clearInputField]="clearMultiSelectInput$$.asObservable()"
       >
       </qro-multiple-autocomplete>
       <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">
@@ -61,7 +64,7 @@
           mat-button
           color="primary"
           type="button"
-          (click)="openContactDialog()"
+          (click)="openContactDialog(null, null)"
           class="p-2 mr-0"
           style="line-height: normal;"
         >

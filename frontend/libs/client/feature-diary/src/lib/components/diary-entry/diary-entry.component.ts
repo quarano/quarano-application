@@ -1,11 +1,11 @@
 import { BadRequestService } from '@qro/shared/ui-error';
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DeactivatableComponent } from '@qro/shared/util-forms';
 import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
@@ -20,6 +20,7 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
   styleUrls: ['./diary-entry.component.scss'],
 })
 export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
+  clearMultiSelectInput$$: Subject<boolean> = new Subject<boolean>();
   formGroup: FormGroup;
   diaryEntry: DiaryEntryDto;
   nonCharacteristicSymptoms: SymptomDto[] = [];
@@ -216,12 +217,36 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     return value.toLocaleString();
   }
 
-  openContactDialog() {
+  openConfirmContactDialog(name: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        text:
+          'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
+          'Möchte Sie die Kontaktperson jetzt anlegen?',
+        title: 'Neue Kontaktperson',
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'Kontakt anlegen',
+      },
+    });
+
+    this.subs.add(
+      dialogRef.afterClosed().subscribe((choice) => {
+        if (choice) {
+          const firstName = name.split(' ')[0];
+          const lastName = name.split(' ')[1];
+          this.openContactDialog(firstName, lastName);
+        }
+        this.clearMultiSelectInput$$.next(true);
+      })
+    );
+  }
+
+  openContactDialog(firstName: string, lastName: string) {
     const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
       height: '90vh',
       maxWidth: '100vw',
       data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
+        contactPerson: { id: null, lastName: lastName, firstName: firstName, phone: null, email: null },
       },
     });
 
