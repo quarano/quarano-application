@@ -4,13 +4,13 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { IIdentifiable } from '../../../../../../apps/quarano-frontend/src/app/models/general';
+import { IIdentifiable } from '../../../../util-data-access/src/lib/models/general';
 import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'qro-multiple-autocomplete',
   templateUrl: './multiple-autocomplete.component.html',
-  styleUrls: ['./multiple-autocomplete.component.scss']
+  styleUrls: ['./multiple-autocomplete.component.scss'],
 })
 export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() nameProperties: string[];
@@ -28,23 +28,23 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.filteredList$$.next(this.selectableItems);
-    this.control.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      filter((data) => !!data)
-    ).subscribe((data: string[]) => {
-      this.selectedItemIds = data;
-      this.control.markAsDirty();
-      this.input.nativeElement.blur();
-      data.forEach(value => this.added.emit(value));
-    });
+    this.control.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((data) => !!data)
+      )
+      .subscribe((data: string[]) => {
+        this.selectedItemIds = data;
+        this.control.markAsDirty();
+        this.input.nativeElement.blur();
+        data.forEach((value) => this.added.emit(value));
+      });
 
     this.selectedItemIds = this.control.value;
 
     this.inputControl.valueChanges
-      .pipe(takeUntil(this.destroy$),
-        startWith(null as string)
-      )
-      .subscribe(searchTearm => {
+      .pipe(takeUntil(this.destroy$), startWith(null as string))
+      .subscribe((searchTearm) => {
         if (typeof searchTearm === 'string') {
           this._filter(searchTearm);
         }
@@ -58,20 +58,20 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
   get prefilteredList(): IIdentifiable[] {
     let arrayToReturn: IIdentifiable[] = cloneDeep(this.selectableItems);
-    this.selectedItemIds.forEach(selectedItem => {
-      arrayToReturn = arrayToReturn.filter(item => item.id !== selectedItem);
-    })
+    this.selectedItemIds.forEach((selectedItem) => {
+      arrayToReturn = arrayToReturn.filter((item) => item.id !== selectedItem);
+    });
     return arrayToReturn;
   }
 
   private _filter(searchTerm: string) {
-    let arrayToReturn = this.prefilteredList.filter(item => !this.selectedItemIds.includes(item.id));
+    let arrayToReturn = this.prefilteredList.filter((item) => !this.selectedItemIds.includes(item.id));
 
     if (!searchTerm) {
       this.filteredList$$.next(this.prefilteredList);
     }
     const filterValue = searchTerm.toLowerCase();
-    arrayToReturn = arrayToReturn.filter(item => this.getName(item).toLowerCase().indexOf(filterValue) === 0);
+    arrayToReturn = arrayToReturn.filter((item) => this.getName(item).toLowerCase().indexOf(filterValue) === 0);
     this.filteredList$$.next(arrayToReturn);
   }
 
@@ -106,7 +106,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   getNameById(id: string) {
-    const item = this.selectableItems.find(i => i.id === id);
+    const item = this.selectableItems.find((i) => i.id === id);
     return this.getName(item);
   }
 
@@ -115,7 +115,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       return '';
     }
     let name = '';
-    this.nameProperties.forEach(prop => {
+    this.nameProperties.forEach((prop) => {
       name += item[prop] + ' ';
     });
     return name.substring(0, name.length - 1);

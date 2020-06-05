@@ -3,7 +3,7 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -13,12 +13,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     SharedUiButtonModule,
-    RouterModule.forChild([{
-      path: '',
-      pathMatch: 'full',
-      component: ChangePasswordComponent,
-    }])
+    RouterModule.forChild([
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ChangePasswordComponent,
+      },
+    ]),
   ],
   declarations: [ChangePasswordComponent],
 })
-export class AuthChangePasswordModule { }
+export class AuthChangePasswordModule {}

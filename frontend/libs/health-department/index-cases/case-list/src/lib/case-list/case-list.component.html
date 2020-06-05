@@ -5,7 +5,7 @@
         mat-raised-button
         data-cy="new-case-button"
         color="primary"
-        [routerLink]="['/tenant-admin/client', 'index']"
+        [routerLink]="['/health-department/case-detail', 'index']"
       >
         <mat-icon>add</mat-icon>Neuen Indexfall anlegen
       </button>
@@ -17,13 +17,7 @@
   </div>
 
   <mat-form-field appearance="outline" class="full-width mt-3">
-    <input
-      matInput
-      data-cy="search-case-input"
-      type="text"
-      placeholder="Suchen..."
-      (keyup)="updateFilter($event)"
-    />
+    <input matInput data-cy="search-case-input" type="text" placeholder="Suchen..." (keyup)="updateFilter($event)" />
   </mat-form-field>
 
   <ngx-datatable
@@ -87,9 +81,7 @@
       [canAutoResize]="true"
     >
       <ng-template let-value="value" ngx-datatable-cell-template>
-        <ng-container *ngIf="value; else empty_date_of_birth">{{
-          value | date: 'dd.MM.y'
-        }}</ng-container>
+        <ng-container *ngIf="value; else empty_date_of_birth">{{ value | date: 'dd.MM.y' }}</ng-container>
         <ng-template #empty_date_of_birth>-</ng-template>
       </ng-template>
     </ngx-datatable-column>
@@ -130,12 +122,7 @@
     >
     </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="email"
-      name="E-Mail"
-      width="80"
-      [sortable]="false"
-    >
+    <ngx-datatable-column prop="email" name="E-Mail" width="80" [sortable]="false">
       <ng-template let-value="value" ngx-datatable-cell-template>
         <button
           *ngIf="value"

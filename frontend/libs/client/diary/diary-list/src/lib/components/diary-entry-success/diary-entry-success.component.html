@@ -1,0 +1,27 @@
+<div class="entry-container">
+  <span class="mr-3 label">{{ label }}</span>
+  <button
+    mat-mini-fab
+    color="basic"
+    aria-label="Danke für Ihren Eintrag!"
+    [routerLink]="['/client/diary/diary-detail/edit', entry.id]"
+    [matTooltip]="isReadonly ? 'Eintrag ansehen' : 'Eintrag bearbeiten'"
+    matTooltipPosition="after"
+  >
+    <mat-icon *ngIf="isReadonly; else editable" class="text-muted">visibility</mat-icon>
+    <ng-template #editable><mat-icon class="text-muted">create</mat-icon></ng-template>
+  </button>
+  <div class="data-container text-muted">
+    <div class="row-container">
+      <mat-icon class="icon">timeline</mat-icon><span>{{ entry.bodyTemperature | number: '1.1-1':'de' }} °C</span>
+    </div>
+    <div class="row-container" *ngIf="entry.contacts.length > 0">
+      <mat-icon class="icon">group</mat-icon>
+      <span>{{ contactsString }}</span>
+    </div>
+    <div class="row-container" *ngIf="entry.symptoms.length > 0">
+      <mat-icon class="icon">healing</mat-icon>
+      <span>{{ symptomsString }}</span>
+    </div>
+  </div>
+</div>

@@ -36,16 +36,16 @@
       "tags": ["scope:shared", "type:util"]
     },
     "health-department-index-cases-action-list": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-index-cases-case-list": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-contact-cases-case-list": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-contact-cases-action-list": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "shared-ui-material": {
       "tags": ["scope:shared", "type:ui"]
@@ -60,16 +60,16 @@
       "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-contact-cases-shell": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-index-cases-shell": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
+      "tags": ["scope:health-department", "type:feature"]
     },
     "health-department-contact-cases-domain": {
-      "tags": ["scope:health-department-contact-cases", "type:domain"]
+      "tags": ["scope:health-department", "type:domain"]
     },
     "health-department-index-cases-domain": {
-      "tags": ["scope:health-department-index-cases", "type:domain"]
+      "tags": ["scope:health-department", "type:domain"]
     },
     "shared-ui-tile": {
       "tags": ["scope:shared", "type:ui"]
@@ -87,16 +87,16 @@
       "tags": ["scope:administration", "type:feature"]
     },
     "administration-accounts-account-list": {
-      "tags": ["scope:administration-accounts", "type:feature"]
+      "tags": ["scope:administration", "type:feature"]
     },
     "administration-accounts-account-detail": {
-      "tags": ["scope:administration-accounts", "type:feature"]
+      "tags": ["scope:administration", "type:feature"]
     },
     "administration-accounts-domain": {
-      "tags": ["scope:administration-accounts", "type:domain"]
+      "tags": ["scope:administration", "type:domain"]
     },
     "administration-accounts-shell": {
-      "tags": ["scope:administration-accounts", "type:feature"]
+      "tags": ["scope:administration", "type:feature"]
     },
     "auth-api": {
       "tags": ["scope:auth", "type:api"]
@@ -108,7 +108,130 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "shared-ui-multiple-autocomplete": {
-      "tags": []
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-shell": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "auth-login": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "administration-domain": {
+      "tags": ["scope:administration", "type:domain"]
+    },
+    "client-enrollment-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "client-enrollment-api": {
+      "tags": ["scope:client", "type:api"]
+    },
+    "administration-api": {
+      "tags": ["scope:administration", "type:api"]
+    },
+    "health-department-api": {
+      "tags": ["sccope:health-department", "type:api"]
+    },
+    "auth-forbidden": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "client-enrollment-shell": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "shared-util-progress-bar": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "shared-ui-aside": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "client-diary-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "client-diary-diary-list": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-diary-diary-detail": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-diary-shell": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-shell": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-diary-forgotten-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-contact-persons-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "client-contact-persons-api": {
+      "tags": ["scope:client", "type:api"]
+    },
+    "shared-util-symptom": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-contact-persons-contact-person-list": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-contact-persons-contact-person-detail": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-contact-persons-shell": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-profile-profile": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-enrollment-basic-data": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-enrollment-register": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-enrollment-landing": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "health-department-case-detail": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "shared-util-data-access": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-health-department-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-api": {
+      "tags": ["scope:client", "type:api"]
+    },
+    "info-shell": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-data-protection": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-imprint": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-terms": {
+      "tags": ["scope:info", "type:feature"]
+    },
+    "info-api": {
+      "tags": ["scope:info", "type:api"]
+    },
+    "layout": {
+      "tags": ["scope:layout", "type:api"]
+    },
+    "shared-util-date": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "welcome": {
+      "tags": ["scope:welcome", "type:feature"]
+    },
+    "client-profile-ui-personal-data": {
+      "tags": ["scope:client", "type:ui"]
     }
   }
 }

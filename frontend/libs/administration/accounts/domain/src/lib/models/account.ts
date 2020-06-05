@@ -1,4 +1,4 @@
-import { Link } from "../../../../../../../apps/quarano-frontend/src/app/models/general";
+import { Link } from '@qro/shared/util-data-access';
 
 export interface AccountDto {
   accountId: string;

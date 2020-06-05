@@ -3,5 +3,12 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts",
+    "../../health-department/domain/src/lib/directives/is-health-department-user.directive.spec.ts",
+    "../../health-department/domain/src/lib/directives/is-health-department-user.directive.ts",
+    "../../administration/domain/src/lib/directives/is-admin.directive.ts",
+    "../../client/enrollment/domain/src/lib/directives/is-enrolled-client.directive.ts",
+    "../../client/enrollment/domain/src/lib/directives/is-enrolled-client.directive.spec.ts"
+  ]
 }

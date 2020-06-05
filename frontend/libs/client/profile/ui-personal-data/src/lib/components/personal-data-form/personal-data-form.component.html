@@ -1,0 +1,166 @@
+<div [formGroup]="formGroup">
+  <fieldset class="mb-3">
+    <legend>Person</legend>
+    <mat-form-field class="half-width">
+      <input
+        required
+        matInput
+        placeholder="Vorname"
+        formControlName="firstName"
+        type="text"
+        #first_name_input
+        (blur)="trimValue(first_name_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <input
+        matInput
+        required
+        placeholder="Nachname"
+        formControlName="lastName"
+        type="text"
+        #last_name_input
+        (blur)="trimValue(last_name_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Geburtsdatum</mat-label>
+      <input
+        matInput
+        required
+        [max]="today"
+        [matDatepicker]="dateOfBirthPicker"
+        formControlName="dateOfBirth"
+        #date_of_birth_input
+        (blur)="trimValue(date_of_birth_input)"
+      />
+      <mat-datepicker-toggle matSuffix [for]="dateOfBirthPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.dateOfBirth)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error) }}
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Kontaktmöglichkeiten</legend>
+    <mat-error
+      *ngIf="
+        formGroup.getError('phoneMissing') &&
+        (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
+      "
+    >
+      Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
+    >
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        required
+        placeholder="E-Mail"
+        formControlName="email"
+        type="email"
+        #email_input
+        (blur)="trimValue(email_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (Festnetz)"
+        formControlName="phone"
+        type="phone"
+        #phone_input
+        (blur)="trimValue(phone_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.phone)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.phone, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        matInput
+        maxlength="17"
+        minlength="5"
+        placeholder="Telefonnummer (mobil)"
+        formControlName="mobilePhone"
+        type="phone"
+        #mobile_phone_input
+        (blur)="trimValue(mobile_phone_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.mobilePhone)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error) }}
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Adresse</legend>
+    <mat-form-field style="width: 70%;">
+      <input
+        matInput
+        required
+        placeholder="Straße"
+        formControlName="street"
+        type="text"
+        #street_input
+        (blur)="trimValue(street_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.street)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        placeholder="Hausnummer"
+        maxlength="6"
+        formControlName="houseNumber"
+        type="text"
+        #house_number_input
+        (blur)="trimValue(house_number_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.houseNumber)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%;">
+      <input
+        matInput
+        required
+        placeholder="Postleitzahl"
+        minlength="5"
+        maxlength="5"
+        formControlName="zipCode"
+        type="text"
+        #zip_code_input
+        (blur)="trimValue(zip_code_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 70%;">
+      <input
+        matInput
+        required
+        placeholder="Ort"
+        formControlName="city"
+        type="text"
+        #city_input
+        (blur)="trimValue(city_input)"
+      />
+      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.city)">
+        {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+</div>

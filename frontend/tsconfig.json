@@ -19,67 +19,78 @@
       "@qro/auth/change-password": ["libs/auth/change-password/src/index.ts"],
       "@qro/auth/domain": ["libs/auth/domain/src/index.ts"],
       "@qro/shared/util": ["libs/shared/util/src/index.ts"],
-      "@qro/health-department/index-cases/action-list": [
-        "libs/health-department/index-cases/action-list/src/index.ts"
-      ],
-      "@qro/health-department/index-cases/case-list": [
-        "libs/health-department/index-cases/case-list/src/index.ts"
-      ],
-      "@qro/health-department/contact-cases/case-list": [
-        "libs/health-department/contact-cases/case-list/src/index.ts"
-      ],
+      "@qro/health-department/index-cases/action-list": ["libs/health-department/index-cases/action-list/src/index.ts"],
+      "@qro/health-department/index-cases/case-list": ["libs/health-department/index-cases/case-list/src/index.ts"],
+      "@qro/health-department/contact-cases/case-list": ["libs/health-department/contact-cases/case-list/src/index.ts"],
       "@qro/health-department/contact-cases/action-list": [
         "libs/health-department/contact-cases/action-list/src/index.ts"
       ],
       "@qro/shared/ui-material": ["libs/shared/ui-material/src/index.ts"],
-      "@qro/health-department/domain": [
-        "libs/health-department/domain/src/index.ts"
-      ],
-      "@qro/health-department/ui-action-alert": [
-        "libs/health-department/ui-action-alert/src/index.ts"
-      ],
-      "@qro/health-department/shell": [
-        "libs/health-department/shell/src/index.ts"
-      ],
-      "@qro/health-department/contact-cases/shell": [
-        "libs/health-department/contact-cases/shell/src/index.ts"
-      ],
-      "@qro/health-department/index-cases/shell": [
-        "libs/health-department/index-cases/shell/src/index.ts"
-      ],
-      "@qro/health-department/contact-cases/domain": [
-        "libs/health-department/contact-cases/domain/src/index.ts"
-      ],
-      "@qro/health-department/index-cases/domain": [
-        "libs/health-department/index-cases/domain/src/index.ts"
-      ],
+      "@qro/health-department/domain": ["libs/health-department/domain/src/index.ts"],
+      "@qro/health-department/ui-action-alert": ["libs/health-department/ui-action-alert/src/index.ts"],
+      "@qro/health-department/shell": ["libs/health-department/shell/src/index.ts"],
+      "@qro/health-department/contact-cases/shell": ["libs/health-department/contact-cases/shell/src/index.ts"],
+      "@qro/health-department/index-cases/shell": ["libs/health-department/index-cases/shell/src/index.ts"],
+      "@qro/health-department/contact-cases/domain": ["libs/health-department/contact-cases/domain/src/index.ts"],
+      "@qro/health-department/index-cases/domain": ["libs/health-department/index-cases/domain/src/index.ts"],
       "@qro/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
       "@qro/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
       "@qro/shared/util-error": ["libs/shared/util-error/src/index.ts"],
-      "@qro/shared/util-form-validation": [
-        "libs/shared/util-form-validation/src/index.ts"
-      ],
+      "@qro/shared/util-form-validation": ["libs/shared/util-form-validation/src/index.ts"],
       "@qro/administration/shell": ["libs/administration/shell/src/index.ts"],
-      "@qro/administration/accounts/account-list": [
-        "libs/administration/accounts/account-list/src/index.ts"
-      ],
-      "@qro/administration/accounts/account-detail": [
-        "libs/administration/accounts/account-detail/src/index.ts"
-      ],
-      "@qro/administration/accounts/domain": [
-        "libs/administration/accounts/domain/src/index.ts"
-      ],
-      "@qro/administration/accounts/shell": [
-        "libs/administration/accounts/shell/src/index.ts"
-      ],
+      "@qro/administration/accounts/account-list": ["libs/administration/accounts/account-list/src/index.ts"],
+      "@qro/administration/accounts/account-detail": ["libs/administration/accounts/account-detail/src/index.ts"],
+      "@qro/administration/accounts/domain": ["libs/administration/accounts/domain/src/index.ts"],
+      "@qro/administration/accounts/shell": ["libs/administration/accounts/shell/src/index.ts"],
       "@qro/auth/api": ["libs/auth/api/src/index.ts"],
       "@qro/shared/ui-alert": ["libs/shared/ui-alert/src/index.ts"],
-      "@qro/shared/ui-confirmation-dialog": [
-        "libs/shared/ui-confirmation-dialog/src/index.ts"
+      "@qro/shared/ui-confirmation-dialog": ["libs/shared/ui-confirmation-dialog/src/index.ts"],
+      "@qro/shared/ui-multiple-autocomplete": ["libs/shared/ui-multiple-autocomplete/src/index.ts"],
+      "@qro/auth/shell": ["libs/auth/shell/src/index.ts"],
+      "@qro/auth/login": ["libs/auth/login/src/index.ts"],
+      "@qro/administration/domain": ["libs/administration/domain/src/index.ts"],
+      "@qro/client/enrollment/domain": ["libs/client/enrollment/domain/src/index.ts"],
+      "@qro/client/enrollment/api": ["libs/client/enrollment/api/src/index.ts"],
+      "@qro/administration/api": ["libs/administration/api/src/index.ts"],
+      "@qro/health-department/api": ["libs/health-department/api/src/index.ts"],
+      "@qro/auth/forbidden": ["libs/auth/forbidden/src/index.ts"],
+      "@qro/client/enrollment/shell": ["libs/client/enrollment/shell/src/index.ts"],
+      "@qro/shared/util-progress-bar": ["libs/shared/util-progress-bar/src/index.ts"],
+      "@qro/client/domain": ["libs/client/domain/src/index.ts"],
+      "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"],
+      "@qro/client/diary/domain": ["libs/client/diary/domain/src/index.ts"],
+      "@qro/client/diary/diary-list": ["libs/client/diary/diary-list/src/index.ts"],
+      "@qro/client/diary/diary-detail": ["libs/client/diary/diary-detail/src/index.ts"],
+      "@qro/client/diary/shell": ["libs/client/diary/shell/src/index.ts"],
+      "@qro/client/shell": ["libs/client/shell/src/index.ts"],
+      "@qro/client/diary/forgotten-contact": ["libs/client/diary/forgotten-contact/src/index.ts"],
+      "@qro/client/contact-persons/domain": ["libs/client/contact-persons/domain/src/index.ts"],
+      "@qro/client/contact-persons/api": ["libs/client/contact-persons/api/src/index.ts"],
+      "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
+      "@qro/client/contact-persons/contact-person-list": [
+        "libs/client/contact-persons/contact-person-list/src/index.ts"
       ],
-      "@qro/shared/ui-multiple-autocomplete": [
-        "libs/shared/ui-multiple-autocomplete/src/index.ts"
-      ]
+      "@qro/client/contact-persons/contact-person-detail": [
+        "libs/client/contact-persons/contact-person-detail/src/index.ts"
+      ],
+      "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"],
+      "@qro/client/profile/profile": ["libs/client/profile/profile/src/index.ts"],
+      "@qro/client/enrollment/basic-data": ["libs/client/enrollment/basic-data/src/index.ts"],
+      "@qro/client/enrollment/register": ["libs/client/enrollment/register/src/index.ts"],
+      "@qro/client/enrollment/landing": ["libs/client/enrollment/landing/src/index.ts"],
+      "@qro/health-department/case-detail": ["libs/health-department/case-detail/src/index.ts"],
+      "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
+      "@qro/client/health-department-contact": ["libs/client/health-department-contact/src/index.ts"],
+      "@qro/client/api": ["libs/client/api/src/index.ts"],
+      "@qro/info/shell": ["libs/info/shell/src/index.ts"],
+      "@qro/info/data-protection": ["libs/info/data-protection/src/index.ts"],
+      "@qro/info/imprint": ["libs/info/imprint/src/index.ts"],
+      "@qro/info/terms": ["libs/info/terms/src/index.ts"],
+      "@qro/info/api": ["libs/info/api/src/index.ts"],
+      "@qro/layout": ["libs/layout/src/index.ts"],
+      "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
+      "@qro/welcome": ["libs/welcome/src/index.ts"],
+      "@qro/client/profile/ui-personal-data": ["libs/client/profile/ui-personal-data/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

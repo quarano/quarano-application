@@ -1,4 +1,4 @@
-import { DateFunctions } from '@qro/shared/util';
+import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
 import { CaseListItemDto, ClientType } from '@qro/health-department/domain';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
@@ -23,7 +23,7 @@ class CaseRowViewModel {
 @Component({
   selector: 'qro-contact-cases-case-list',
   templateUrl: './case-list.component.html',
-  styleUrls: ['./case-list.component.scss']
+  styleUrls: ['./case-list.component.scss'],
 })
 export class CaseListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
@@ -49,27 +49,27 @@ export class CaseListComponent implements OnInit, OnDestroy {
 
   set filteredData(filteredData: CaseListItemDto[]) {
     this._filteredData.next(filteredData);
-    this.rows = filteredData.map(c => this.getRowData(c));
+    this.rows = filteredData.map((c) => this.getRowData(c));
   }
 
   private dateTimeNow = new Date();
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router) {
-  }
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.loading = true;
-    this.subs.add(this.route.data.subscribe(
-      data => {
-        this.cases = data.cases;
-        this.filteredData = [...data.cases];
-        this.loading = false;
-      },
-      () => this.loading = false));
+    this.subs.add(
+      this.route.data.subscribe(
+        (data) => {
+          this.cases = data.cases;
+          this.filteredData = [...data.cases];
+          this.loading = false;
+        },
+        () => (this.loading = false)
+      )
+    );
   }
 
   ngOnDestroy(): void {
@@ -94,7 +94,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       quarantineEnd: c.quarantineEnd,
       status: c.status,
       caseId: c.caseId,
-      extReferenceNumber: c.extReferenceNumber || '-'
+      extReferenceNumber: c.extReferenceNumber || '-',
     };
   }
 
@@ -108,22 +108,22 @@ export class CaseListComponent implements OnInit, OnDestroy {
     }
 
     return DateFunctions.toCustomLocaleDateString(quarantineEnd);
-
   }
 
   updateFilter(event) {
     this.filter = event.target.value;
 
-    this.filteredData =
-      !this.filter ? this.cases : this.cases.filter(obj => this.filterPredicate(obj, this.filter));
+    this.filteredData = !this.filter ? this.cases : this.cases.filter((obj) => this.filterPredicate(obj, this.filter));
 
     this.table.offset = 0;
   }
 
   filterPredicate(obj: CaseListItemDto, filter: string): boolean {
-    const dataStr = Object.keys(obj).reduce((currentTerm: string, key: string) => {
-      return currentTerm + (obj as { [key: string]: any })[key] + '◬';
-    }, '').toLowerCase();
+    const dataStr = Object.keys(obj)
+      .reduce((currentTerm: string, key: string) => {
+        return currentTerm + (obj as { [key: string]: any })[key] + '◬';
+      }, '')
+      .toLowerCase();
 
     const transformedFilter = filter.trim().toLowerCase();
 
@@ -136,6 +136,6 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    this.router.navigate(['/tenant-admin/client', event?.selected[0]?.type, event?.selected[0]?.caseId]);
+    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.caseId]);
   }
 }

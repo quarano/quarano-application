@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="link-wrapper">
+    <a [routerLink]="['/info/terms']">AGB</a>
+    <a [routerLink]="['/info/data-protection']">Datenschutz</a>
+    <a [routerLink]="['/info/imprint']">Impressum</a>
+  </div>
+
+  <div class="anchor-wrapper" *ngFor="let item of pictureUris | keyvalue">
+    <a [href]="item.key" target="_blank">
+      <img [src]="item.value" />
+    </a>
+  </div>
+</div>

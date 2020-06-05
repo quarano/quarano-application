@@ -1,0 +1,44 @@
+<button type="button" mat-icon-button color="primary" routerLink="/client/contact-persons/contact-person-detail/new">
+  <i class="material-icons">add</i>
+  Neue Kontaktperson anlegen
+</button>
+<qro-alert *ngIf="contacts.length === 0" message="Noch keine Einträge vorhanden"></qro-alert>
+<div class="bootstrap-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-6 col-xl-4" *ngFor="let contact of contacts">
+        <mat-card
+          class="contact-card"
+          [routerLink]="['/client/contact-persons/contact-person-detail/edit', contact.id]"
+          [matTooltip]="contact.identificationHint"
+        >
+          <mat-card-header>
+            <div mat-card-avatar class="header-image"></div>
+            <mat-card-title>{{ getName(contact) }}</mat-card-title>
+            <mat-card-subtitle
+              ><mat-icon *ngIf="contact.phone">local_phone</mat-icon
+              ><span>{{ contact.phone || 'Telefonnummer nicht verfügbar' }}</span></mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="contact.email">
+              <mat-icon>alternate_email</mat-icon>
+              <span class="ellipsis">{{ contact.email }}</span>
+            </p>
+            <p *ngIf="contact.mobilePhone">
+              <mat-icon>smartphone</mat-icon>
+              <span>{{ contact.mobilePhone }}</span>
+            </p>
+            <p *ngIf="contact.street || contact.zipCode || contact.city">
+              <mat-icon>house</mat-icon>
+              <span style="display: flex; flex-direction: column;">
+                <span *ngIf="contact.street">{{ contact.street }} {{ contact.houseNumber }}</span>
+                <span *ngIf="contact.zipCode || contact.city">{{ contact.zipCode }} {{ contact.city }}</span></span
+              >
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
