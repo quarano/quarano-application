@@ -18,10 +18,17 @@ export interface CaseDetailDto extends HalResponse {
   email?: string;
   dateOfBirth: Date;
   comments?: CaseCommentDto[];
-  status?: string;
+  status?: CaseStatus;
   infected: boolean;
   caseTypeLabel: string;
   extReferenceNumber: string;
-
   indexContacts?: ContactDto[];
+}
+
+export enum CaseStatus {
+  Angelegt = 'angelegt',
+  InRegistrierung = 'in Registrierung',
+  RegistrierungAbgeschlossen = 'Registrierung abgeschlossen',
+  InNachverfolgung = 'in Nachverfolgung',
+  Abgeschlossen = 'abgeschlossen',
 }

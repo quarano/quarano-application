@@ -32,15 +32,25 @@
   <mat-card-content>
     <div class="button-area" *ngIf="caseDetail$ | async as caseDetail">
       <button
+        #start_tracking_btn
         (click)="startTracking(caseDetail)"
         color="primary"
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
       >
-        Nachverfolgung starten
+        <span [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
+          >Nachverfolgung starten</span
+        >
       </button>
-      <button color="primary" [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')" mat-button>
-        Analog nachverfolgen
+      <button
+        #analog_tracking_btn
+        color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
+        mat-button
+      >
+        <span [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
+          >Analog nachverfolgen</span
+        >
       </button>
       <div class="spacer"></div>
       <button
