@@ -51,8 +51,6 @@ describe('PersonalDataFormComponent', () => {
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       zipCode: new FormControl('', [
         Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(5),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
       ]),
       city: new FormControl('', [Validators.required]),

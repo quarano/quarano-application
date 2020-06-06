@@ -106,11 +106,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       street: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
       city: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
-      zipCode: new FormControl('', [
-        Validators.minLength(5),
-        Validators.maxLength(5),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
-      ]),
+      zipCode: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip)]),
 
       mobilePhone: new FormControl('', [
         Validators.minLength(5),

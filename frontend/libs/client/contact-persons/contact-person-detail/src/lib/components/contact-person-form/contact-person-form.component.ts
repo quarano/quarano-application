@@ -75,8 +75,6 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
       ]),
       zipCode: new FormControl(this.contactPerson.zipCode, [
-        Validators.minLength(5),
-        Validators.maxLength(5),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
       ]),
       city: new FormControl(this.contactPerson.city, [

@@ -78,8 +78,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         ]),
         zipCode: new FormControl(this.client.zipCode, [
           Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(5),
           TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
         ]),
         city: new FormControl(this.client.city, [
