@@ -400,12 +400,10 @@ describe('new case', () => {
 
             cy.get('[data-cy="input-zipcode"] mat-error').should('exist');
           });
-          it('should be shortened with too long zip', () => {
+          it('should be invalid with too long zip', () => {
             cy.get('[data-cy="input-zipcode"] input[matInput]').type('22041001');
             cy.get('[data-cy="input-zipcode"] input[matInput]').blur();
-
-            cy.get('[data-cy="input-zipcode"] input[matInput]').should('contain.value', '22041');
-            cy.get('[data-cy="input-zipcode"] mat-error').should('not.exist');
+            cy.get('[data-cy="input-zipcode"] mat-error').should('exist');
           });
         });
       });
