@@ -1,6 +1,5 @@
 import { BadRequestService } from '@qro/shared/util-error';
 import { DateFunctions, DeactivatableComponent, SnackbarService } from '@qro/shared/util';
-import { ContactPersonDialogComponent } from '../../app-forms/contact-person-dialog/contact-person-dialog.component';
 import { SubSink } from 'subsink';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +11,11 @@ import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../models/diary-entry'
 import { SymptomDto } from '../../../models/symptom';
 import { ContactPersonDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import {
+  ConfirmDialogData,
+  ContactPersonDialogData,
+  QroDialogServiceService,
+} from '../../../services/qro-dialog-service.service';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -53,7 +56,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    private dialogService: QroDialogServiceService
   ) {}
 
   ngOnDestroy(): void {
@@ -217,48 +221,45 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     return value.toLocaleString();
   }
 
-  openConfirmContactDialog(name: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        text:
-          'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
-          'Möchte Sie die Kontaktperson jetzt anlegen?',
-        title: 'Neue Kontaktperson',
-        abortButtonText: 'Abbrechen',
-        confirmButtonText: 'Kontakt anlegen',
-      },
-    });
-
-    this.subs.add(
-      dialogRef.afterClosed().subscribe((choice) => {
+  addMissingContactPerson(name: string) {
+    const dialogData: ConfirmDialogData = {
+      text:
+        'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
+        'Möchte Sie die Kontaktperson jetzt anlegen?',
+      title: 'Neue Kontaktperson',
+      abortButtonText: 'Abbrechen',
+      confirmButtonText: 'Kontakt anlegen',
+    };
+    this.dialogService
+      .openConfirmDialog({ data: dialogData })
+      .afterClosed()
+      .subscribe((choice) => {
         if (choice) {
           const firstName = name.split(' ')[0];
           const lastName = name.split(' ')[1];
           this.openContactDialog(firstName, lastName);
         }
         this.clearMultiSelectInput$$.next(true);
-      })
-    );
+      });
   }
 
   openContactDialog(firstName: string, lastName: string) {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      maxWidth: '100vw',
-      data: {
-        contactPerson: { id: null, lastName: lastName, firstName: firstName, phone: null, email: null },
+    const contactData: ContactPersonDialogData = {
+      contactPerson: {
+        firstName: firstName,
+        lastName: lastName,
       },
-    });
-
-    this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+    };
+    this.dialogService
+      .openContactPersonDialog({ data: contactData })
+      .afterClosed()
+      .subscribe((createdContact: ContactPersonDto | null) => {
         if (createdContact) {
           this.contactPersons.push(createdContact);
           this.formGroup
             .get('contactPersons')
             .patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
         }
-      })
-    );
+      });
   }
 }
