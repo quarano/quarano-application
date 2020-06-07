@@ -27,6 +27,11 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { CaseDetailDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
 
+export interface CaseDetailResult {
+  caseDetail: CaseDetailDto;
+  closeAfterSave: boolean;
+}
+
 @Component({
   selector: 'qro-client-edit',
   templateUrl: './edit.component.html',
@@ -53,7 +58,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('editForm') editFormElement: NgForm;
 
   @Output()
-  submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
+  submittedValues: Subject<CaseDetailResult> = new Subject<CaseDetailResult>();
 
   constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
 
@@ -201,7 +206,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     this.editFormElement.ngSubmit.emit();
   }
 
-  submitForm() {
+  submitForm(closeAfterSave: boolean) {
     if (this.formGroup.valid) {
       const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
 
@@ -215,7 +220,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         submitData.caseId = this.caseDetail.caseId;
       }
 
-      this.submittedValues.next(submitData);
+      this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
     }
   }
 

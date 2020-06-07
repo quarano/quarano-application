@@ -22,12 +22,12 @@ export class HealthDepartmentService {
     return this.httpClient.put(link.href, { comment });
   }
 
-  createCase(caseDetail: CaseDetailDto, type: ClientType): Observable<any> {
-    return this.httpClient.post<any>(`${this.apiUrl}/api/hd/cases?type=${type}`, caseDetail);
+  createCase(caseDetail: CaseDetailDto, type: ClientType): Observable<CaseDetailDto> {
+    return this.httpClient.post<CaseDetailDto>(`${this.apiUrl}/api/hd/cases?type=${type}`, caseDetail);
   }
 
-  updateCase(caseDetail: CaseDetailDto): Observable<any> {
-    return this.httpClient.put<any>(`${this.apiUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
+  updateCase(caseDetail: CaseDetailDto): Observable<CaseDetailDto> {
+    return this.httpClient.put<CaseDetailDto>(`${this.apiUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail);
   }
 
   addComment(caseId: string, comment: string): Observable<any> {
