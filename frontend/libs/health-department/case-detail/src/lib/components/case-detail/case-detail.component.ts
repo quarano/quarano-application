@@ -138,13 +138,20 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     if (caseDetail.status === CaseStatus.Abgeschlossen) {
       return 'Der Fall ist bereits abgeschlossen worden';
     }
+    if (
+      caseDetail.status === CaseStatus.InNachverfolgung ||
+      caseDetail.status === CaseStatus.InRegistrierung ||
+      caseDetail.status === CaseStatus.RegistrierungAbgeschlossen
+    ) {
+      return 'Nachverfolgung bereits aktiv';
+    }
     if (!buttonIsDisabled) {
       return 'Sobald Sie die Person telefonisch kontaktiert haben, können Sie hier die Nachverfolgung starten';
     }
     if (caseDetail.infected) {
-      return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, Telefonnummer, Abstrichdatum, Quarantänezeitraum, eine Telefonnummer, sowie die Emailadresse';
+      return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, Abstrichdatum, Quarantänezeitraum, eine Telefonnummer sowie die Emailadresse';
     }
-    return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, Telefonnummer, eine Telefonnummer, sowie die Emailadresse';
+    return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, eine Telefonnummer sowie die Emailadresse';
   }
 
   getAnalogTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
