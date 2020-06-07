@@ -53,3 +53,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 We use [Angular Material](https://v7.material.angular.io)
 [Corona Icons](https://icon-icons.com/de/pack/Coronavirus/2364)
+
+## For quick and good cooperation
+- [Getting started](https://github.com/quarano/quarano-application/wiki/Getting-started)
+- [More informations in our Wiki](https://github.com/quarano/quarano-application/wiki)
