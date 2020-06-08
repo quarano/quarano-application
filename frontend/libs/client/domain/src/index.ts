@@ -15,3 +15,7 @@ export * from './lib/resolvers/diary.resolver';
 export * from './lib/resolvers/diary-detail.resolver';
 export * from './lib/models/diary-entry';
 export * from './lib/services/diary.service';
+export * from './lib/resolvers/contact-persons.resolver';
+export * from './lib/models/contact-person';
+export * from './lib/services/contact-person.service';
+export * from './lib/resolvers/contact-person.resolver';

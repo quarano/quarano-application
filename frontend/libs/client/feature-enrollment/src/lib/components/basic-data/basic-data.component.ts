@@ -11,7 +11,7 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionnaireDto, EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';
+import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
 import {
   TrimmedPatternValidator,
@@ -20,6 +20,7 @@ import {
 } from '@qro/shared/util-form-validation';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
+import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 
 @Component({
   selector: 'qro-basic-data',

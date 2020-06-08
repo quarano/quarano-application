@@ -56,20 +56,9 @@
       "@qro/client/domain": ["libs/client/domain/src/index.ts"],
       "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"],
       "@qro/client/shell": ["libs/client/shell/src/index.ts"],
-      "@qro/client/contact-persons/domain": ["libs/client/contact-persons/domain/src/index.ts"],
-      "@qro/client/contact-persons/api": ["libs/client/contact-persons/api/src/index.ts"],
       "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
-      "@qro/client/contact-persons/contact-person-list": [
-        "libs/client/contact-persons/contact-person-list/src/index.ts"
-      ],
-      "@qro/client/contact-persons/contact-person-detail": [
-        "libs/client/contact-persons/contact-person-detail/src/index.ts"
-      ],
-      "@qro/client/contact-persons/shell": ["libs/client/contact-persons/shell/src/index.ts"],
-      "@qro/client/profile/profile": ["libs/client/profile/profile/src/index.ts"],
       "@qro/health-department/case-detail": ["libs/health-department/case-detail/src/index.ts"],
       "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
-      "@qro/client/health-department-contact": ["libs/client/health-department-contact/src/index.ts"],
       "@qro/client/api": ["libs/client/api/src/index.ts"],
       "@qro/info/shell": ["libs/info/shell/src/index.ts"],
       "@qro/info/data-protection": ["libs/info/data-protection/src/index.ts"],
@@ -79,9 +68,13 @@
       "@qro/layout": ["libs/layout/src/index.ts"],
       "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
       "@qro/welcome": ["libs/welcome/src/index.ts"],
-      "@qro/client/profile/ui-personal-data": ["libs/client/profile/ui-personal-data/src/index.ts"],
       "@qro/client/feature-diary": ["libs/client/feature-diary/src/index.ts"],
-      "@qro/client/feature-enrollment": ["libs/client/feature-enrollment/src/index.ts"]
+      "@qro/client/feature-enrollment": ["libs/client/feature-enrollment/src/index.ts"],
+      "@qro/client/feature-profile": ["libs/client/feature-profile/src/index.ts"],
+      "@qro/client/feature-health-department-contact": ["libs/client/feature-health-department-contact/src/index.ts"],
+      "@qro/client/feature-contact-persons": ["libs/client/feature-contact-persons/src/index.ts"],
+      "@qro/client/ui-personal-data": ["libs/client/ui-personal-data/src/index.ts"],
+      "@qro/client/ui-contact-person-detail": ["libs/client/ui-contact-person-detail/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

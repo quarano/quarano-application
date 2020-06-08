@@ -140,35 +140,14 @@
     "client-shell": {
       "tags": ["scope:client", "type:shell"]
     },
-    "client-contact-persons-domain": {
-      "tags": ["scope:client", "type:domain"]
-    },
-    "client-contact-persons-api": {
-      "tags": ["scope:client", "type:api"]
-    },
     "shared-util-symptom": {
       "tags": ["scope:shared", "type:util"]
-    },
-    "client-contact-persons-contact-person-list": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-contact-persons-contact-person-detail": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-contact-persons-shell": {
-      "tags": ["scope:client", "type:shell"]
-    },
-    "client-profile-profile": {
-      "tags": ["scope:client", "type:feature"]
     },
     "health-department-case-detail": {
       "tags": ["scope:health-department", "type:feature"]
     },
     "shared-util-data-access": {
       "tags": ["scope:shared", "type:util"]
-    },
-    "client-health-department-contact": {
-      "tags": ["scope:client", "type:feature"]
     },
     "client-api": {
       "tags": ["scope:client", "type:api"]
@@ -197,14 +176,26 @@
     "welcome": {
       "tags": ["scope:welcome", "type:feature"]
     },
-    "client-profile-ui-personal-data": {
-      "tags": ["scope:client", "type:ui"]
-    },
     "client-feature-diary": {
       "tags": ["scope:client", "type:feature"]
     },
     "client-feature-enrollment": {
       "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-profile": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-health-department-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-contact-persons": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-ui-personal-data": {
+      "tags": ["scope:client", "type:ui"]
+    },
+    "client-ui-contact-person-detail": {
+      "tags": ["scope:client", "type:ui"]
     }
   }
 }

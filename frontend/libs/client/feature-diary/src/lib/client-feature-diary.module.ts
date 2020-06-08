@@ -5,14 +5,13 @@ import { DiaryComponent } from './components/diary/diary.component';
 import { DiaryResolver, DiaryDetailResolver } from '@qro/client/domain';
 import { DiaryEntryComponent } from './components/diary-entry/diary-entry.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
-import { ContactPersonsResolver } from '@qro/client/contact-persons/api';
+import { ContactPersonsResolver } from '@qro/client/domain';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClientContactPersonsDomainModule } from '@qro/client/contact-persons/domain';
 import { DiaryEntrySuccessComponent } from './components/diary-entry-success/diary-entry-success.component';
 import { DiaryEntryWarningComponent } from './components/diary-entry-warning/diary-entry-warning.component';
 import { DiaryListItemComponent } from './components/diary-list-item/diary-list-item.component';
@@ -69,7 +68,6 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     SharedUtilSymptomModule,
-    ClientContactPersonsDomainModule,
   ],
   declarations: [
     DiaryComponent,

@@ -1,4 +1,4 @@
-import { ContactPersonService } from '@qro/client/contact-persons/api';
+import { ContactPersonService } from '@qro/client/domain';
 import { AsideService } from '@qro/shared/ui-aside';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';

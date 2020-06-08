@@ -5,9 +5,19 @@ import { DiaryDetailResolver } from './resolvers/diary-detail.resolver';
 import { DiaryResolver } from './resolvers/diary.resolver';
 import { MyFirstQueryResolver } from './resolvers/my-first-query.resolver';
 import { EncountersResolver } from './resolvers/encounters.resolver';
+import { ContactPersonResolver } from './resolvers/contact-person.resolver';
+import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
 
 @NgModule({
   imports: [CommonModule],
-  providers: [MyClientDataResolver, DiaryDetailResolver, DiaryResolver, MyFirstQueryResolver, EncountersResolver],
+  providers: [
+    MyClientDataResolver,
+    DiaryDetailResolver,
+    DiaryResolver,
+    MyFirstQueryResolver,
+    EncountersResolver,
+    ContactPersonsResolver,
+    ContactPersonResolver,
+  ],
 })
 export class ClientDomainModule {}

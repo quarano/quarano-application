@@ -21,12 +21,12 @@ const routes: Routes = [
   },
   {
     path: 'contact-persons',
-    loadChildren: () => import('@qro/client/contact-persons/shell').then((m) => m.ClientContactPersonsShellModule),
+    loadChildren: () => import('@qro/client/feature-contact-persons').then((m) => m.ClientFeatureContactPersonsModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
   {
     path: 'profile',
-    loadChildren: () => import('@qro/client/profile/profile').then((m) => m.ClientProfileModule),
+    loadChildren: () => import('@qro/client/feature-profile').then((m) => m.ClientProfileModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
 ];

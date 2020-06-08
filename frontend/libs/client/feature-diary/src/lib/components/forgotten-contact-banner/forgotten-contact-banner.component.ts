@@ -1,4 +1,4 @@
-import { ContactPersonService } from '@qro/client/contact-persons/api';
+import { ContactPersonService } from '@qro/client/domain';
 import { SubSink } from 'subsink';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy } from '@angular/core';

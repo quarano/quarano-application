@@ -10,7 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeactivatableComponent, SnackbarService } from '@qro/shared/util';
 import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';
+import { ContactPersonDto } from '@qro/client/domain';
+import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 
 @Component({
   selector: 'qro-diary-entry',

@@ -6,8 +6,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
-import { ContactPersonDto, ContactPersonDialogComponent } from '@qro/client/contact-persons/api';
+import { ContactPersonDto } from '@qro/client/domain';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-form-validation';
+import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',
