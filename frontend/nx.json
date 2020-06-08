@@ -57,13 +57,13 @@
       "tags": ["scope:health-department", "type:ui"]
     },
     "health-department-shell": {
-      "tags": ["scope:health-department", "type:feature"]
+      "tags": ["scope:health-department", "type:shell"]
     },
     "health-department-contact-cases-shell": {
-      "tags": ["scope:health-department", "type:feature"]
+      "tags": ["scope:health-department", "type:shell"]
     },
     "health-department-index-cases-shell": {
-      "tags": ["scope:health-department", "type:feature"]
+      "tags": ["scope:health-department", "type:shell"]
     },
     "health-department-contact-cases-domain": {
       "tags": ["scope:health-department", "type:domain"]
@@ -84,7 +84,7 @@
       "tags": ["scope:shared", "type:util"]
     },
     "administration-shell": {
-      "tags": ["scope:administration", "type:feature"]
+      "tags": ["scope:administration", "type:shell"]
     },
     "administration-accounts-account-list": {
       "tags": ["scope:administration", "type:feature"]
@@ -96,7 +96,7 @@
       "tags": ["scope:administration", "type:domain"]
     },
     "administration-accounts-shell": {
-      "tags": ["scope:administration", "type:feature"]
+      "tags": ["scope:administration", "type:shell"]
     },
     "auth-api": {
       "tags": ["scope:auth", "type:api"]
@@ -111,19 +111,13 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "auth-shell": {
-      "tags": ["scope:auth", "type:feature"]
+      "tags": ["scope:auth", "type:shell"]
     },
     "auth-login": {
       "tags": ["scope:auth", "type:feature"]
     },
     "administration-domain": {
       "tags": ["scope:administration", "type:domain"]
-    },
-    "client-enrollment-domain": {
-      "tags": ["scope:client", "type:domain"]
-    },
-    "client-enrollment-api": {
-      "tags": ["scope:client", "type:api"]
     },
     "administration-api": {
       "tags": ["scope:administration", "type:api"]
@@ -134,9 +128,6 @@
     "auth-forbidden": {
       "tags": ["scope:auth", "type:feature"]
     },
-    "client-enrollment-shell": {
-      "tags": ["scope:client", "type:feature"]
-    },
     "shared-util-progress-bar": {
       "tags": ["scope:shared", "type:util"]
     },
@@ -146,23 +137,8 @@
     "shared-ui-aside": {
       "tags": ["scope:shared", "type:ui"]
     },
-    "client-diary-domain": {
-      "tags": ["scope:client", "type:domain"]
-    },
-    "client-diary-diary-list": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-diary-diary-detail": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-diary-shell": {
-      "tags": ["scope:client", "type:feature"]
-    },
     "client-shell": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-diary-forgotten-contact": {
-      "tags": ["scope:client", "type:feature"]
+      "tags": ["scope:client", "type:shell"]
     },
     "client-contact-persons-domain": {
       "tags": ["scope:client", "type:domain"]
@@ -180,18 +156,9 @@
       "tags": ["scope:client", "type:feature"]
     },
     "client-contact-persons-shell": {
-      "tags": ["scope:client", "type:feature"]
+      "tags": ["scope:client", "type:shell"]
     },
     "client-profile-profile": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-enrollment-basic-data": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-enrollment-register": {
-      "tags": ["scope:client", "type:feature"]
-    },
-    "client-enrollment-landing": {
       "tags": ["scope:client", "type:feature"]
     },
     "health-department-case-detail": {
@@ -207,7 +174,7 @@
       "tags": ["scope:client", "type:api"]
     },
     "info-shell": {
-      "tags": ["scope:info", "type:feature"]
+      "tags": ["scope:info", "type:shell"]
     },
     "info-data-protection": {
       "tags": ["scope:info", "type:feature"]
@@ -232,6 +199,12 @@
     },
     "client-profile-ui-personal-data": {
       "tags": ["scope:client", "type:ui"]
+    },
+    "client-feature-diary": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-enrollment": {
+      "tags": ["scope:client", "type:feature"]
     }
   }
 }

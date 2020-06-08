@@ -1,4 +1,4 @@
-import { EnrollmentCompletedGuard } from '@qro/client/enrollment/api';
+import { EnrollmentCompletedGuard } from '@qro/client/api';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,12 +12,12 @@ const routes: Routes = [
   },
   {
     path: 'diary',
-    loadChildren: () => import('@qro/client/diary/shell').then((m) => m.ClientDiaryShellModule),
+    loadChildren: () => import('@qro/client/feature-diary').then((m) => m.ClientFeatureDiaryModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
   {
     path: 'enrollment',
-    loadChildren: () => import('@qro/client/enrollment/shell').then((m) => m.ClientEnrollmentShellModule),
+    loadChildren: () => import('@qro/client/feature-enrollment').then((m) => m.ClientFeatureEnrollmentModule),
   },
   {
     path: 'contact-persons',

@@ -95,15 +95,26 @@
           },
           {
             "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": ["type:feature", "type:api", "type:util"]
+            "onlyDependOnLibsWithTags": [
+              "type:feature",
+              "type:api",
+              "type:util",
+              "type:ui",
+              "type:domain",
+              "type:shell"
+            ]
+          },
+          {
+            "sourceTag": "type:shell",
+            "onlyDependOnLibsWithTags": ["type:feature", "type:domain"]
           },
           {
             "sourceTag": "type:feature",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui", "type:feature"]
+            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui"]
           },
           {
             "sourceTag": "type:api",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:feature"]
+            "onlyDependOnLibsWithTags": ["type:domain"]
           },
           {
             "sourceTag": "type:ui",

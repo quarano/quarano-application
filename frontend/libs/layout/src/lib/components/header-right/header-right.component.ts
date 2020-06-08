@@ -1,11 +1,10 @@
 import { HdContactComponent } from '@qro/client/api';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { HealthDepartmentDto, HealthDepartmentService } from '@qro/health-department/api';
 import { UserService } from '@qro/auth/api';
-import { map, distinctUntilChanged } from 'rxjs/operators';
-import { EnrollmentService } from '@qro/client/enrollment/api';
+import { EnrollmentService } from '@qro/client/api';
 
 @Component({
   selector: 'qro-header-right',

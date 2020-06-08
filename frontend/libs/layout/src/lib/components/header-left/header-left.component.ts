@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { roleNames, UserService } from '@qro/auth/api';
-import { EnrollmentService } from '@qro/client/enrollment/api';
+import { EnrollmentService } from '@qro/client/api';
 
 @Component({
   selector: 'qro-header-left',
