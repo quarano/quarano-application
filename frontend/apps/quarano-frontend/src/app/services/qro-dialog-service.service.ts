@@ -1,7 +1,6 @@
-import { Injectable, TemplateRef } from '@angular/core';
+import { ComponentRef, Injectable, TemplateRef } from '@angular/core';
 import { ContactPersonDialogComponent } from '../modules/app-forms/contact-person-dialog/contact-person-dialog.component';
-import { DialogRole, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 
 export interface ContactPersonDialogData {
@@ -57,9 +56,5 @@ export class QroDialogServiceService {
     };
     const combinedConfig = { ...standardConfig, ...dialogConfig };
     return this.dialog.open(ConfirmationDialogComponent, combinedConfig);
-  }
-
-  open(component: TemplateRef<any>, dialogConfig: MatDialogConfig): MatDialogRef<any> {
-    return this.dialog.open(component, dialogConfig);
   }
 }

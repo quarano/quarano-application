@@ -26,10 +26,10 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   constructor(
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService,
+    private dialogService: QroDialogServiceService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[] }
   ) {}
@@ -75,21 +75,16 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   }
 
   openContactDialog() {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      maxWidth: '100vw',
-      data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      },
-    });
-
     this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
-        if (createdContact) {
-          this.data.contactPersons.push(createdContact);
-          this.formGroup.get('contactIds').patchValue([...this.formGroup.get('contactIds').value, createdContact.id]);
-        }
-      })
+      this.dialogService
+        .openContactPersonDialog()
+        .afterClosed()
+        .subscribe((createdContact: ContactPersonDto | null) => {
+          if (createdContact) {
+            this.data.contactPersons.push(createdContact);
+            this.formGroup.get('contactIds').patchValue([...this.formGroup.get('contactIds').value, createdContact.id]);
+          }
+        })
     );
   }
 }

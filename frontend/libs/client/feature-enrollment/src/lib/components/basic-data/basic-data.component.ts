@@ -60,7 +60,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
@@ -295,23 +294,19 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   openContactDialog(dateString: string) {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      },
-    });
-
     this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
-        if (createdContact) {
-          this.contactPersons.push(createdContact);
-          this.thirdFormGroup.controls[dateString].patchValue([
-            ...this.thirdFormGroup.controls[dateString].value,
-            createdContact.id,
-          ]);
-        }
-      })
+      this.dialogService
+        .openContactPersonDialog()
+        .afterClosed()
+        .subscribe((createdContact: ContactPersonDto | null) => {
+          if (createdContact) {
+            this.contactPersons.push(createdContact);
+            this.thirdFormGroup.controls[dateString].patchValue([
+              ...this.thirdFormGroup.controls[dateString].value,
+              createdContact.id,
+            ]);
+          }
+        })
     );
   }
 
@@ -347,16 +342,15 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          title: 'Keine relevanten Kontakte?',
-          text:
-            'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
-            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
-        },
-      });
+      const data = {
+        title: 'Keine relevanten Kontakte?',
+        text:
+          'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
+          'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
+      };
 
-      dialogRef
+      this.dialogService
+        .openConfirmDialog({ data: data })
         .afterClosed()
         .subscribe((result) => {
           if (result) {
