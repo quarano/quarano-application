@@ -53,7 +53,13 @@
         "depConstraints": [
           {
             "sourceTag": "scope:app",
-            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:auth", "scope:client", "scope:administration" "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:health-department",
+              "scope:auth",
+              "scope:client",
+              "scope:administration",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:health-department",
@@ -65,11 +71,7 @@
           },
           {
             "sourceTag": "scope:client",
-            "onlyDependOnLibsWithTags": [
-              "scope:client",
-              "scope:shared",
-              "scope:auth"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:client", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:info",
