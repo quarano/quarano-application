@@ -14,17 +14,19 @@ import { RouterModule } from '@angular/router';
       {
         path: 'index-cases',
         loadChildren: () =>
-          import('@qro/health-department/index-cases/shell').then((m) => m.HealthDepartmentIndexCasesShellModule),
+          import('@qro/health-department/feature-index-cases').then((m) => m.HealthDepartmentFeatureIndexCasesModule),
       },
       {
         path: 'contact-cases',
         loadChildren: () =>
-          import('@qro/health-department/contact-cases/shell').then((m) => m.HealthDepartmentContactCasesShellModule),
+          import('@qro/health-department/feature-contact-cases').then(
+            (m) => m.HealthDepartmentFeatureContactCasesModule
+          ),
       },
       {
         path: 'case-detail',
         loadChildren: () =>
-          import('@qro/health-department/case-detail').then((m) => m.HealthDepartmentCaseDetailModule),
+          import('@qro/health-department/feature-case-detail').then((m) => m.HealthDepartmentFeatureCaseDetailModule),
       },
     ]),
   ],

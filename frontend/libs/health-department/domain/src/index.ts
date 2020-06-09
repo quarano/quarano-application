@@ -14,3 +14,8 @@ export * from './lib/models/contact';
 export * from './lib/models/start-tracking';
 export * from './lib/models/health-department';
 export * from './lib/guards/is-health-department-user.guard';
+export * from './lib/resolvers/contact-case-action-list.resolver';
+export * from './lib/resolvers/contact-case-case-list.resolver';
+export * from './lib/services/contact-case.service';
+export * from './lib/resolvers/index-case-action-list.resolver';
+export * from './lib/resolvers/index-case-case-list.resolver';

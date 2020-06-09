@@ -35,18 +35,6 @@
     "shared-util": {
       "tags": ["scope:shared", "type:util"]
     },
-    "health-department-index-cases-action-list": {
-      "tags": ["scope:health-department", "type:feature"]
-    },
-    "health-department-index-cases-case-list": {
-      "tags": ["scope:health-department", "type:feature"]
-    },
-    "health-department-contact-cases-case-list": {
-      "tags": ["scope:health-department", "type:feature"]
-    },
-    "health-department-contact-cases-action-list": {
-      "tags": ["scope:health-department", "type:feature"]
-    },
     "shared-ui-material": {
       "tags": ["scope:shared", "type:ui"]
     },
@@ -58,18 +46,6 @@
     },
     "health-department-shell": {
       "tags": ["scope:health-department", "type:shell"]
-    },
-    "health-department-contact-cases-shell": {
-      "tags": ["scope:health-department", "type:shell"]
-    },
-    "health-department-index-cases-shell": {
-      "tags": ["scope:health-department", "type:shell"]
-    },
-    "health-department-contact-cases-domain": {
-      "tags": ["scope:health-department", "type:domain"]
-    },
-    "health-department-index-cases-domain": {
-      "tags": ["scope:health-department", "type:domain"]
     },
     "shared-ui-tile": {
       "tags": ["scope:shared", "type:ui"]
@@ -123,7 +99,7 @@
       "tags": ["scope:administration", "type:api"]
     },
     "health-department-api": {
-      "tags": ["sccope:health-department", "type:api"]
+      "tags": ["scope:health-department", "type:api"]
     },
     "auth-forbidden": {
       "tags": ["scope:auth", "type:feature"]
@@ -142,9 +118,6 @@
     },
     "shared-util-symptom": {
       "tags": ["scope:shared", "type:util"]
-    },
-    "health-department-case-detail": {
-      "tags": ["scope:health-department", "type:feature"]
     },
     "shared-util-data-access": {
       "tags": ["scope:shared", "type:util"]
@@ -196,6 +169,15 @@
     },
     "client-ui-contact-person-detail": {
       "tags": ["scope:client", "type:ui"]
+    },
+    "health-department-feature-contact-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-index-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-case-detail": {
+      "tags": ["scope:health-department", "type:feature"]
     }
   }
 }

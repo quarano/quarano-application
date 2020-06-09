@@ -19,20 +19,10 @@
       "@qro/auth/change-password": ["libs/auth/change-password/src/index.ts"],
       "@qro/auth/domain": ["libs/auth/domain/src/index.ts"],
       "@qro/shared/util": ["libs/shared/util/src/index.ts"],
-      "@qro/health-department/index-cases/action-list": ["libs/health-department/index-cases/action-list/src/index.ts"],
-      "@qro/health-department/index-cases/case-list": ["libs/health-department/index-cases/case-list/src/index.ts"],
-      "@qro/health-department/contact-cases/case-list": ["libs/health-department/contact-cases/case-list/src/index.ts"],
-      "@qro/health-department/contact-cases/action-list": [
-        "libs/health-department/contact-cases/action-list/src/index.ts"
-      ],
       "@qro/shared/ui-material": ["libs/shared/ui-material/src/index.ts"],
       "@qro/health-department/domain": ["libs/health-department/domain/src/index.ts"],
       "@qro/health-department/ui-action-alert": ["libs/health-department/ui-action-alert/src/index.ts"],
       "@qro/health-department/shell": ["libs/health-department/shell/src/index.ts"],
-      "@qro/health-department/contact-cases/shell": ["libs/health-department/contact-cases/shell/src/index.ts"],
-      "@qro/health-department/index-cases/shell": ["libs/health-department/index-cases/shell/src/index.ts"],
-      "@qro/health-department/contact-cases/domain": ["libs/health-department/contact-cases/domain/src/index.ts"],
-      "@qro/health-department/index-cases/domain": ["libs/health-department/index-cases/domain/src/index.ts"],
       "@qro/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
       "@qro/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
       "@qro/shared/util-error": ["libs/shared/util-error/src/index.ts"],
@@ -57,7 +47,6 @@
       "@qro/shared/ui-aside": ["libs/shared/ui-aside/src/index.ts"],
       "@qro/client/shell": ["libs/client/shell/src/index.ts"],
       "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
-      "@qro/health-department/case-detail": ["libs/health-department/case-detail/src/index.ts"],
       "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
       "@qro/client/api": ["libs/client/api/src/index.ts"],
       "@qro/info/shell": ["libs/info/shell/src/index.ts"],
@@ -74,7 +63,10 @@
       "@qro/client/feature-health-department-contact": ["libs/client/feature-health-department-contact/src/index.ts"],
       "@qro/client/feature-contact-persons": ["libs/client/feature-contact-persons/src/index.ts"],
       "@qro/client/ui-personal-data": ["libs/client/ui-personal-data/src/index.ts"],
-      "@qro/client/ui-contact-person-detail": ["libs/client/ui-contact-person-detail/src/index.ts"]
+      "@qro/client/ui-contact-person-detail": ["libs/client/ui-contact-person-detail/src/index.ts"],
+      "@qro/health-department/feature-contact-cases": ["libs/health-department/feature-contact-cases/src/index.ts"],
+      "@qro/health-department/feature-index-cases": ["libs/health-department/feature-index-cases/src/index.ts"],
+      "@qro/health-department/feature-case-detail": ["libs/health-department/feature-case-detail/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
