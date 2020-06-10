@@ -6,3 +6,6 @@ export * from './lib/services/token.service';
 export * from './lib/guards/is-authenticated.guard';
 export * from './lib/models/user';
 export * from './lib/models/role';
+export * from './lib/models/health-department';
+export * from './lib/models/client';
+export * from './lib/enums/client-type';

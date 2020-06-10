@@ -1,4 +1,4 @@
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClientModule } from '@angular/common/http';
 /* tslint:disable:no-unused-variable */
 
@@ -9,8 +9,7 @@ describe('Service: Auth', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
-      providers: [AuthService, { provide: API_URL, useValue: '' },
-      ]
+      providers: [AuthService, { provide: API_URL, useValue: '' }],
     });
   });
 

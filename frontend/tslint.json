@@ -53,11 +53,17 @@
         "depConstraints": [
           {
             "sourceTag": "scope:app",
-            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:auth", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:health-department",
+              "scope:auth",
+              "scope:client",
+              "scope:administration",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:health-department",
-            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:shared", "scope:auth", "scope:client"]
+            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:administration",
@@ -65,13 +71,7 @@
           },
           {
             "sourceTag": "scope:client",
-            "onlyDependOnLibsWithTags": [
-              "scope:client",
-              "scope:shared",
-              "scope:auth",
-              "scope:info",
-              "scope:health-department"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:client", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:info",
@@ -79,7 +79,7 @@
           },
           {
             "sourceTag": "scope:layout",
-            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared", "scope:auth", "scope:health-department"]
+            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:welcome",
@@ -87,31 +87,46 @@
           },
           {
             "sourceTag": "scope:auth",
-            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared", "scope:client"]
+            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
           },
           {
             "sourceTag": "scope:shared",
             "onlyDependOnLibsWithTags": ["scope:shared"]
           },
           {
+            "sourceTag": "scope:all-users",
+            "onlyDependOnLibsWithTags": ["scope:all-users", "scope:shared", "scope:auth"]
+          },
+          {
             "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": ["type:feature", "type:api", "type:util"]
+            "onlyDependOnLibsWithTags": [
+              "type:feature",
+              "type:api",
+              "type:util",
+              "type:ui",
+              "type:domain",
+              "type:shell"
+            ]
+          },
+          {
+            "sourceTag": "type:shell",
+            "onlyDependOnLibsWithTags": ["type:feature", "type:domain", "type:api"]
           },
           {
             "sourceTag": "type:feature",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui", "type:feature"]
+            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui"]
           },
           {
             "sourceTag": "type:api",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:feature"]
+            "onlyDependOnLibsWithTags": ["type:domain"]
           },
           {
             "sourceTag": "type:ui",
-            "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
+            "onlyDependOnLibsWithTags": ["type:ui", "type:util", "type:domain"]
           },
           {
             "sourceTag": "type:util",
-            "onlyDependOnLibsWithTags": ["type:util"]
+            "onlyDependOnLibsWithTags": ["type:util", "type:ui"]
           }
         ]
       }

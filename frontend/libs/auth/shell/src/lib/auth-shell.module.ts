@@ -13,17 +13,19 @@ import { IsAuthenticatedGuard } from '@qro/auth/domain';
         redirectTo: 'login',
       },
       {
-        path: 'change-password', loadChildren: () =>
-          import('@qro/auth/change-password').then(m => m.AuthChangePasswordModule),
-        canActivate: [IsAuthenticatedGuard]
+        path: 'forbidden',
+        loadChildren: () => import('@qro/auth/forbidden').then((m) => m.AuthForbiddenModule),
       },
       {
-        path: 'login', loadChildren: () =>
-          import('@qro/auth/login').then(m => m.AuthLoginModule)
+        path: 'change-password',
+        loadChildren: () => import('@qro/auth/feature-change-password').then((m) => m.AuthFeatureChangePasswordModule),
+        canActivate: [IsAuthenticatedGuard],
       },
       {
-        path: 'forbidden', loadChildren: () =>
-          import('@qro/auth/forbidden').then(m => m.AuthForbiddenModule)
-      }])]
+        path: 'login',
+        loadChildren: () => import('@qro/auth/feature-login').then((m) => m.AuthFeatureLoginModule),
+      },
+    ]),
+  ],
 })
-export class AuthShellModule { }
+export class AuthShellModule {}

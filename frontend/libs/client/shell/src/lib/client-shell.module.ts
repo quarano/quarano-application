@@ -1,4 +1,4 @@
-import { EnrollmentCompletedGuard } from '@qro/client/enrollment/api';
+import { EnrollmentCompletedGuard } from '@qro/client/domain';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,21 +12,21 @@ const routes: Routes = [
   },
   {
     path: 'diary',
-    loadChildren: () => import('@qro/client/diary/shell').then((m) => m.ClientDiaryShellModule),
+    loadChildren: () => import('@qro/client/feature-diary').then((m) => m.ClientFeatureDiaryModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
   {
     path: 'enrollment',
-    loadChildren: () => import('@qro/client/enrollment/shell').then((m) => m.ClientEnrollmentShellModule),
+    loadChildren: () => import('@qro/client/feature-enrollment').then((m) => m.ClientFeatureEnrollmentModule),
   },
   {
     path: 'contact-persons',
-    loadChildren: () => import('@qro/client/contact-persons/shell').then((m) => m.ClientContactPersonsShellModule),
+    loadChildren: () => import('@qro/client/feature-contact-persons').then((m) => m.ClientFeatureContactPersonsModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
   {
     path: 'profile',
-    loadChildren: () => import('@qro/client/profile/profile').then((m) => m.ClientProfileModule),
+    loadChildren: () => import('@qro/client/feature-profile').then((m) => m.ClientProfileModule),
     canActivate: [IsAuthenticatedGuard, EnrollmentCompletedGuard],
   },
 ];

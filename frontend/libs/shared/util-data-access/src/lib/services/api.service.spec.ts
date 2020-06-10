@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed, async, inject } from '@angular/core/testing';
 import { ApiService } from './api.service';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 
 describe('Service: Api', () => {
   beforeEach(() => {

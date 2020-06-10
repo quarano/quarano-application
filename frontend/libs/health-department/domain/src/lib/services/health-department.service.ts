@@ -1,14 +1,12 @@
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Link } from '@qro/shared/util-data-access';
 import { CaseDetailDto } from '../models/case-detail';
-import { ClientType } from '../enums/client-type';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../models/case-action';
 import { share, distinctUntilChanged, map } from 'rxjs/operators';
-import { HealthDepartmentDto } from '../models/health-department';
-import { UserService } from '@qro/auth/api';
+import { UserService, HealthDepartmentDto, ClientType } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',

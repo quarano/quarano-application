@@ -1,4 +1,4 @@
-import { IIdentifiable } from '../../../../util-data-access/src/lib/models/general';
+import { IIdentifiable } from '@qro/shared/util-data-access';
 
 export interface SymptomDto extends IIdentifiable {
   name: string;

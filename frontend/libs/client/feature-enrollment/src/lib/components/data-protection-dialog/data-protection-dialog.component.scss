@@ -1,0 +1,24 @@
+:host {
+  .header {
+    position: relative;
+    button[mat-dialog-close] {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+    }
+  }
+  mat-dialog-actions {
+    padding-bottom: 24px;
+
+    button {
+      margin-left: 16px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .mat-dialog-content {
+    max-height: none !important;
+  }
+}

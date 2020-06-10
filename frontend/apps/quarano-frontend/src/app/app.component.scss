@@ -1,4 +1,4 @@
-@import '../../../../libs/shared/util/src/lib/styles/variables';
+@import '../../../../libs/shared/ui-styles/src/lib/styles/variables';
 
 .container {
   margin: 0;
@@ -55,11 +55,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(
-    to right,
-    $primary-color,
-    $accent-color
-  ) !important;
+  background-image: linear-gradient(to right, $primary-color, $accent-color) !important;
 }
 
 @media all and (max-width: $break-lg) {

@@ -1,5 +1,5 @@
-import { ClientDto } from '@qro/client/api';
-import { HealthDepartmentDto } from '@qro/health-department/api';
+import { ClientDto } from './client';
+import { HealthDepartmentDto } from './health-department';
 
 export interface UserDto {
   client?: ClientDto;

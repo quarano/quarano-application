@@ -1,15 +1,11 @@
 import { IsAdminGuard } from '@qro/administration/api';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from '@qro/shared/util-error';
+import { NotFoundComponent } from '@qro/shared/ui-error';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
 const routes: Routes = [
-  {
-    path: 'welcome',
-    loadChildren: () => import('@qro/welcome').then((m) => m.WelcomeModule),
-  },
   {
     path: 'client',
     loadChildren: () => import('@qro/client/shell').then((m) => m.ClientShellModule),
@@ -29,14 +25,14 @@ const routes: Routes = [
     loadChildren: () => import('@qro/auth/shell').then((m) => m.AuthShellModule),
   },
   {
-    path: 'info',
-    loadChildren: () => import('@qro/info/shell').then((m) => m.InfoShellModule),
+    path: 'all-users',
+    loadChildren: () => import('@qro/all-users/shell').then((m) => m.AllUsersShellModule),
   },
   {
     path: '404/:message',
     component: NotFoundComponent,
   },
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+  { path: '', redirectTo: 'all-users', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },
 ];
 
