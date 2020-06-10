@@ -1,4 +1,3 @@
-import { DataProtectionComponent } from '@qro/info/api';
 import { AuthService } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/util-error';
 import {
@@ -16,6 +15,7 @@ import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util';
 import { RegisterDto, EnrollmentService } from '@qro/client/domain';
+import { DataProtectionDialogComponent } from '../data-protection-dialog/data-protection-dialog.component';
 
 @Component({
   selector: 'qro-register',
@@ -119,7 +119,7 @@ export class RegisterComponent implements OnInit {
   }
 
   openDataProtection() {
-    this.dialog.open(DataProtectionComponent, { maxHeight: '95vh' });
+    this.dialog.open(DataProtectionDialogComponent, { maxHeight: '95vh' });
   }
 
   trimValue(input: MatInput) {

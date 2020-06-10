@@ -1,3 +1,4 @@
+import { SharedUiDataProtectionModule } from '@qro/shared/ui-data-protection';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { NgModule } from '@angular/core';
@@ -13,6 +14,7 @@ import { ContactPersonsResolver } from '@qro/client/domain';
 import { InitialQuestionaireFormComponent } from './components/initial-questionaire-form/initial-questionaire-form.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { RegisterComponent } from './components/register/register.component';
+import { DataProtectionDialogComponent } from './components/data-protection-dialog/data-protection-dialog.component';
 
 const routes: Routes = [
   {
@@ -44,8 +46,15 @@ const routes: Routes = [
     SharedUtilSymptomModule,
     ClientUiPersonalDataModule,
     ClientDomainModule,
+    SharedUiDataProtectionModule,
     RouterModule.forChild(routes),
   ],
-  declarations: [BasicDataComponent, InitialQuestionaireFormComponent, LandingComponent, RegisterComponent],
+  declarations: [
+    DataProtectionDialogComponent,
+    BasicDataComponent,
+    InitialQuestionaireFormComponent,
+    LandingComponent,
+    RegisterComponent,
+  ],
 })
 export class ClientFeatureEnrollmentModule {}

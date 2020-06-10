@@ -94,6 +94,10 @@
             "onlyDependOnLibsWithTags": ["scope:shared"]
           },
           {
+            "sourceTag": "scope:all-users",
+            "onlyDependOnLibsWithTags": ["scope:all-users", "scope:shared", "scope:auth"]
+          },
+          {
             "sourceTag": "type:app",
             "onlyDependOnLibsWithTags": [
               "type:feature",

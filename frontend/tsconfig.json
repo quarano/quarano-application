@@ -49,14 +49,8 @@
       "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
       "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
       "@qro/client/api": ["libs/client/api/src/index.ts"],
-      "@qro/info/shell": ["libs/info/shell/src/index.ts"],
-      "@qro/info/data-protection": ["libs/info/data-protection/src/index.ts"],
-      "@qro/info/imprint": ["libs/info/imprint/src/index.ts"],
-      "@qro/info/terms": ["libs/info/terms/src/index.ts"],
-      "@qro/info/api": ["libs/info/api/src/index.ts"],
       "@qro/layout": ["libs/layout/src/index.ts"],
       "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
-      "@qro/welcome": ["libs/welcome/src/index.ts"],
       "@qro/client/feature-diary": ["libs/client/feature-diary/src/index.ts"],
       "@qro/client/feature-enrollment": ["libs/client/feature-enrollment/src/index.ts"],
       "@qro/client/feature-profile": ["libs/client/feature-profile/src/index.ts"],
@@ -66,7 +60,13 @@
       "@qro/client/ui-contact-person-detail": ["libs/client/ui-contact-person-detail/src/index.ts"],
       "@qro/health-department/feature-contact-cases": ["libs/health-department/feature-contact-cases/src/index.ts"],
       "@qro/health-department/feature-index-cases": ["libs/health-department/feature-index-cases/src/index.ts"],
-      "@qro/health-department/feature-case-detail": ["libs/health-department/feature-case-detail/src/index.ts"]
+      "@qro/health-department/feature-case-detail": ["libs/health-department/feature-case-detail/src/index.ts"],
+      "@qro/all-users/feature-welcome": ["libs/all-users/feature-welcome/src/index.ts"],
+      "@qro/all-users/feature-data-protection": ["libs/all-users/feature-data-protection/src/index.ts"],
+      "@qro/all-users/feature-imprint": ["libs/all-users/feature-imprint/src/index.ts"],
+      "@qro/all-users/feature-terms": ["libs/all-users/feature-terms/src/index.ts"],
+      "@qro/all-users/shell": ["libs/all-users/shell/src/index.ts"],
+      "@qro/shared/ui-data-protection": ["libs/shared/ui-data-protection/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

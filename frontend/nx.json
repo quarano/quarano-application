@@ -125,29 +125,11 @@
     "client-api": {
       "tags": ["scope:client", "type:api"]
     },
-    "info-shell": {
-      "tags": ["scope:info", "type:shell"]
-    },
-    "info-data-protection": {
-      "tags": ["scope:info", "type:feature"]
-    },
-    "info-imprint": {
-      "tags": ["scope:info", "type:feature"]
-    },
-    "info-terms": {
-      "tags": ["scope:info", "type:feature"]
-    },
-    "info-api": {
-      "tags": ["scope:info", "type:api"]
-    },
     "layout": {
       "tags": ["scope:layout", "type:api"]
     },
     "shared-util-date": {
       "tags": ["scope:shared", "type:util"]
-    },
-    "welcome": {
-      "tags": ["scope:welcome", "type:feature"]
     },
     "client-feature-diary": {
       "tags": ["scope:client", "type:feature"]
@@ -178,6 +160,24 @@
     },
     "health-department-feature-case-detail": {
       "tags": ["scope:health-department", "type:feature"]
+    },
+    "all-users-feature-welcome": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-data-protection": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-imprint": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-terms": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-shell": {
+      "tags": ["scope:all-users", "type:shell"]
+    },
+    "shared-ui-data-protection": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

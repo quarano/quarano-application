@@ -1,0 +1,14 @@
+<div class="header">
+  <button mat-dialog-close mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+  <h1 mat-dialog-title>Datenschutzerklärung</h1>
+</div>
+<mat-dialog-content>
+  <qro-data-protection></qro-data-protection>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>
+    Schließen
+  </button>
+</mat-dialog-actions>
