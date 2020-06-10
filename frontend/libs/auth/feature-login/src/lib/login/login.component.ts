@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { UserService } from '@qro/auth/api';
+import { UserService } from '@qro/auth/domain';
 import { SnackbarService } from '@qro/shared/util';
 
 @Component({

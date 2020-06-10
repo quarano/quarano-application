@@ -109,7 +109,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         () => {
           this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
-          this.router.navigate(['/all-users/login']);
+          this.router.navigate(['/auth/login']);
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.registrationForm);
@@ -119,7 +119,7 @@ export class RegisterComponent implements OnInit {
   }
 
   openDataProtection() {
-    this.dialog.open(DataProtectionDialogComponent, { maxHeight: '95vh' });
+    this.dialog.open(DataProtectionDialogComponent, { maxHeight: '100vh' });
   }
 
   trimValue(input: MatInput) {

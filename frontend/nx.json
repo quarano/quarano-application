@@ -164,10 +164,10 @@
     "shared-ui-error": {
       "tags": ["scope:shared", "type:ui"]
     },
-    "all-users-feature-login": {
+    "auth-feature-change-password": {
       "tags": ["scope:all-users", "type:feature"]
     },
-    "all-users-feature-change-password": {
+    "auth-feature-login": {
       "tags": ["scope:all-users", "type:feature"]
     }
   }

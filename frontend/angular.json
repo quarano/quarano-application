@@ -1705,29 +1705,29 @@
         }
       }
     },
-    "all-users-feature-login": {
+    "auth-feature-change-password": {
       "projectType": "library",
-      "root": "libs/all-users/feature-login",
-      "sourceRoot": "libs/all-users/feature-login/src",
+      "root": "libs/auth/feature-change-password",
+      "sourceRoot": "libs/auth/feature-change-password/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/all-users/feature-login/tsconfig.lib.json",
-              "libs/all-users/feature-login/tsconfig.spec.json"
+              "libs/auth/feature-change-password/tsconfig.lib.json",
+              "libs/auth/feature-change-password/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-login/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/feature-change-password/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-login/jest.config.js",
-            "tsConfig": "libs/all-users/feature-login/tsconfig.spec.json",
+            "jestConfig": "libs/auth/feature-change-password/jest.config.js",
+            "tsConfig": "libs/auth/feature-change-password/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-login/src/test-setup.ts"
+            "setupFile": "libs/auth/feature-change-password/src/test-setup.ts"
           }
         }
       },
@@ -1737,29 +1737,26 @@
         }
       }
     },
-    "all-users-feature-change-password": {
+    "auth-feature-login": {
       "projectType": "library",
-      "root": "libs/all-users/feature-change-password",
-      "sourceRoot": "libs/all-users/feature-change-password/src",
+      "root": "libs/auth/feature-login",
+      "sourceRoot": "libs/auth/feature-login/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/all-users/feature-change-password/tsconfig.lib.json",
-              "libs/all-users/feature-change-password/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-change-password/**"]
+            "tsConfig": ["libs/auth/feature-login/tsconfig.lib.json", "libs/auth/feature-login/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/auth/feature-login/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-change-password/jest.config.js",
-            "tsConfig": "libs/all-users/feature-change-password/tsconfig.spec.json",
+            "jestConfig": "libs/auth/feature-login/jest.config.js",
+            "tsConfig": "libs/auth/feature-login/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-change-password/src/test-setup.ts"
+            "setupFile": "libs/auth/feature-login/src/test-setup.ts"
           }
         }
       },

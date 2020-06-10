@@ -83,7 +83,7 @@ export class TokenService {
 
   public unsetToken() {
     this.token$$.next(null);
-    this.router.navigate(['/all-users/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   public isAuthenticated() {

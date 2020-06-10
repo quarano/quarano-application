@@ -22,16 +22,6 @@ const routes: Routes = [
     loadChildren: () => import('@qro/all-users/feature-welcome').then((m) => m.AllUsersFeatureWelcomeModule),
   },
   {
-    path: 'change-password',
-    loadChildren: () =>
-      import('@qro/all-users/feature-change-password').then((m) => m.AllUsersFeatureChangePasswordModule),
-    canActivate: [IsAuthenticatedGuard],
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('@qro/all-users/feature-login').then((m) => m.AllUsersFeatureLoginModule),
-  },
-  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'welcome',
