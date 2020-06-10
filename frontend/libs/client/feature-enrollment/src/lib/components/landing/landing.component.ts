@@ -12,7 +12,7 @@ export class LandingComponent implements OnInit {
   public userType = ClientType.Index;
   public clientcode: string;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.userType = (this.route.snapshot.paramMap.get('usertype') as ClientType) || this.userType;

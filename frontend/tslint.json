@@ -110,7 +110,7 @@
           },
           {
             "sourceTag": "type:shell",
-            "onlyDependOnLibsWithTags": ["type:feature", "type:domain"]
+            "onlyDependOnLibsWithTags": ["type:feature", "type:domain", "type:api"]
           },
           {
             "sourceTag": "type:feature",

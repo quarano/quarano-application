@@ -1,4 +1,4 @@
-import { EnrollmentCompletedGuard } from '@qro/client/api';
+import { EnrollmentCompletedGuard } from '@qro/client/domain';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
