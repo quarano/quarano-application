@@ -9,7 +9,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { BehaviorSubject } from 'rxjs';
-import { QuestionnaireDto, EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
+import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
@@ -22,6 +22,7 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { DateFunctions } from '@qro/shared/util-date';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 import { ClientDto } from '@qro/auth/api';
+import { QuestionnaireDto } from '@qro/shared/util-data-access';
 
 @Component({
   selector: 'qro-basic-data',
