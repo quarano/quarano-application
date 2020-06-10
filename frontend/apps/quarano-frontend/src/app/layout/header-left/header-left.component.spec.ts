@@ -5,7 +5,7 @@ import { HeaderLeftComponent } from './header-left.component';
 import { of } from 'rxjs';
 import { UserService } from '@qro/auth/api';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EnrollmentService } from '@qro/client/enrollment/api';
+import { EnrollmentService } from '@qro/client/api';
 
 describe('HeaderLeftComponent', () => {
   let component: HeaderLeftComponent;

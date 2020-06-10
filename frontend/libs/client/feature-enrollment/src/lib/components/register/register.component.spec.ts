@@ -5,7 +5,7 @@ import { RegisterComponent } from './register.component';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EnrollmentService } from '@qro/client/enrollment/domain';
+import { EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

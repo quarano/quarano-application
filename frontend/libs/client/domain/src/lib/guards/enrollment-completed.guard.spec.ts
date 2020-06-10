@@ -1,6 +1,6 @@
 import { EnrollmentCompletedGuard } from './enrollment-completed.guard';
-import { NavigationExtras, Router } from '@angular/router';
-import { UserService } from '../../../../../../auth/domain/src/lib/services/user.service';
+import { Router } from '@angular/router';
+import { UserService } from '@qro/auth/api';
 import { EnrollmentService } from '../services/enrollment.service';
 import { SnackbarService } from '@qro/shared/util';
 

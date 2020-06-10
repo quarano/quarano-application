@@ -3,7 +3,7 @@ import { ContactPersonFormComponent } from './contact-person-form.component';
 import { FormBuilder } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ContactPersonService, ContactPersonDto } from '@qro/client/contact-persons/domain';
+import { ContactPersonService, ContactPersonDto } from '@qro/client/domain';
 
 describe('ContactPersonFormComponent', () => {
   let component: ContactPersonFormComponent;

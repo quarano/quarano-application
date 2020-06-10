@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { SnackbarService } from '@qro/shared/util';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DiaryService, DiaryEntryDto } from '@qro/client/diary/domain';
+import { DiaryService, DiaryEntryDto } from '@qro/client/domain';
 
 describe('DiaryEntryComponent', () => {
   let component: DiaryEntryComponent;

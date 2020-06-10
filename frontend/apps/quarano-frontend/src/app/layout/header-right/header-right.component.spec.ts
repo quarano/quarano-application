@@ -6,7 +6,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserService } from '@qro/auth/api';
 import { HealthDepartmentService } from '@qro/health-department/api';
-import { EnrollmentService } from '@qro/client/enrollment/api';
+import { EnrollmentService } from '@qro/client/api';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;

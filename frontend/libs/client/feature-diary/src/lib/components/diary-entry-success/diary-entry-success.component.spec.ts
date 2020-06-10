@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DiaryEntrySuccessComponent } from './diary-entry-success.component';
-import { DiaryEntryListItemDto } from '@qro/client/diary/domain';
+import { DiaryEntryListItemDto } from '@qro/client/domain';
 
 describe('DiaryEntrySuccessComponent', () => {
   let component: DiaryEntrySuccessComponent;

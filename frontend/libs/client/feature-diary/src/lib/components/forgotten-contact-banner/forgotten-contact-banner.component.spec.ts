@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ContactPersonService } from '@qro/client/contact-persons/api';
+import { ContactPersonService } from '@qro/client/domain';
 
 describe('ForgottenContactBannerComponent', () => {
   let component: ForgottenContactBannerComponent;

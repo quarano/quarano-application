@@ -1,7 +1,6 @@
-/* tslint:disable:no-unused-variable */
+import { MatDialogRef } from '@angular/material/dialog';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { DataProtectionDialogComponent } from './data-protection-dialog.component';
 
@@ -12,6 +11,8 @@ describe('DataProtectionDialogComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [DataProtectionDialogComponent],
+      providers: [{ provide: MatDialogRef, useValue: {} }],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
