@@ -5,6 +5,7 @@ import {
   CaseCommentDto,
   StartTracking,
   HealthDepartmentService,
+  CaseStatus,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -130,6 +131,37 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
 
   hasOpenAnomalies(): Observable<boolean> {
     return this.caseAction$.pipe(map((a) => a.anomalies.health.length + a.anomalies.process.length > 0));
+  }
+
+  getStartTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
+    console.log(caseDetail.status);
+    if (caseDetail.status === CaseStatus.Abgeschlossen) {
+      return 'Der Fall ist bereits abgeschlossen worden';
+    }
+    if (
+      caseDetail.status === CaseStatus.InNachverfolgung ||
+      caseDetail.status === CaseStatus.InRegistrierung ||
+      caseDetail.status === CaseStatus.RegistrierungAbgeschlossen
+    ) {
+      return 'Nachverfolgung bereits aktiv';
+    }
+    if (!buttonIsDisabled) {
+      return 'Sobald Sie die Person telefonisch kontaktiert haben, können Sie hier die Nachverfolgung starten';
+    }
+    if (caseDetail.infected) {
+      return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, Abstrichdatum, Quarantänezeitraum, eine Telefonnummer sowie die Emailadresse';
+    }
+    return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, eine Telefonnummer sowie die Emailadresse';
+  }
+
+  getAnalogTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
+    if (!buttonIsDisabled) {
+      return 'Hiermit stoppen Sie die systemseitige Nachverfolgung des Falles und geben an, dass Sie den Fall manuell weiter verfolgen möchten';
+    }
+    if (caseDetail.status === CaseStatus.Abgeschlossen) {
+      return 'Der Fall ist bereits abgeschlossen worden';
+    }
+    return '';
   }
 
   saveCaseData(caseDetail: CaseDetailDto) {

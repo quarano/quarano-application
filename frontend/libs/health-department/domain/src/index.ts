@@ -8,7 +8,7 @@ export * from './lib/resolvers/report-case-actions.resolver';
 export * from './lib/resolvers/report-case.resolver';
 export * from './lib/models/case-action';
 export * from './lib/services/health-department.service';
-export * from './lib/models/case-detail';
+export { CaseDetailDto, CaseStatus } from './lib/models/case-detail';
 export * from './lib/models/case-comment';
 export * from './lib/models/contact';
 export * from './lib/models/start-tracking';
