@@ -126,7 +126,7 @@
           },
           {
             "sourceTag": "type:util",
-            "onlyDependOnLibsWithTags": ["type:util"]
+            "onlyDependOnLibsWithTags": ["type:util", "type:ui"]
           }
         ]
       }
