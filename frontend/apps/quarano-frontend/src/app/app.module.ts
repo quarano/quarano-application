@@ -4,7 +4,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { SharedUiAsideModule } from '@qro/shared/ui-aside';
 import { AuthDomainModule } from '@qro/auth/domain';
-import { SharedUtilErrorModule } from '@qro/shared/util-error';
+import { SharedUiErrorModule } from '@qro/shared/ui-error';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { API_URL } from '@qro/shared/util';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,7 +21,7 @@ import { environment } from '../environments/environment';
 registerLocaleData(localeDe, 'de');
 
 const SUB_MODULES = [
-  SharedUtilErrorModule,
+  SharedUiErrorModule,
   AuthDomainModule,
   SharedUiAsideModule,
   SharedUtilDateModule,

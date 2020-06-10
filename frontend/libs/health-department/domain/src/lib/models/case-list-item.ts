@@ -1,4 +1,4 @@
-import { ClientType } from '../enums/client-type';
+import { ClientType } from '@qro/auth/api';
 
 export interface CaseListItemDto {
   dateOfBirth: Date;

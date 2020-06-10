@@ -1,4 +1,4 @@
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';

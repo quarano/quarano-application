@@ -1,7 +1,7 @@
 import { IsAdminGuard } from '@qro/administration/api';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from '@qro/shared/util-error';
+import { NotFoundComponent } from '@qro/shared/ui-error';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 

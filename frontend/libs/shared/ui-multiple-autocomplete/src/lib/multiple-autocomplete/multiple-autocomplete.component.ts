@@ -4,7 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { IIdentifiable } from '../../../../util-data-access/src/lib/models/general';
+import { IIdentifiable } from '@qro/shared/util-data-access';
 import { cloneDeep } from 'lodash';
 
 @Component({

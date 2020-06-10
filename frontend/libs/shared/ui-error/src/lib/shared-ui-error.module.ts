@@ -11,4 +11,4 @@ import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
   exports: [NotFoundComponent],
   providers: [ErrorInterceptorProvider],
 })
-export class SharedUtilErrorModule {}
+export class SharedUiErrorModule {}

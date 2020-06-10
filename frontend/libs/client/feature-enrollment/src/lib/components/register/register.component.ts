@@ -1,5 +1,5 @@
 import { AuthService } from '@qro/auth/api';
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import {
   ValidationErrorGenerator,
   ConfirmValidPasswordMatcher,

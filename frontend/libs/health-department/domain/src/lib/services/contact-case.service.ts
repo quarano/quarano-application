@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseListItemDto } from '../models/case-list-item';
-import { ClientType } from '../enums/client-type';
+import { ClientType } from '@qro/auth/api';
 import { ActionListItemDto } from '../models/action-list-item';
 
 @Injectable({

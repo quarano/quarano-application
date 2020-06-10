@@ -25,7 +25,6 @@
       "@qro/health-department/shell": ["libs/health-department/shell/src/index.ts"],
       "@qro/shared/ui-tile": ["libs/shared/ui-tile/src/index.ts"],
       "@qro/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
-      "@qro/shared/util-error": ["libs/shared/util-error/src/index.ts"],
       "@qro/shared/util-form-validation": ["libs/shared/util-form-validation/src/index.ts"],
       "@qro/administration/shell": ["libs/administration/shell/src/index.ts"],
       "@qro/auth/api": ["libs/auth/api/src/index.ts"],
@@ -63,7 +62,8 @@
       "@qro/all-users/shell": ["libs/all-users/shell/src/index.ts"],
       "@qro/shared/ui-data-protection": ["libs/shared/ui-data-protection/src/index.ts"],
       "@qro/administration/feature-account-detail": ["libs/administration/feature-account-detail/src/index.ts"],
-      "@qro/administration/feature-account-list": ["libs/administration/feature-account-list/src/index.ts"]
+      "@qro/administration/feature-account-list": ["libs/administration/feature-account-list/src/index.ts"],
+      "@qro/shared/ui-error": ["libs/shared/ui-error/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

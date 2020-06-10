@@ -2,9 +2,9 @@ import { API_URL } from '@qro/shared/util';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ClientDto } from '../models/client';
 import { share, switchMap } from 'rxjs/operators';
 import { EnrollmentService } from './enrollment.service';
+import { ClientDto } from '@qro/client/api';
 
 @Injectable({
   providedIn: 'root',

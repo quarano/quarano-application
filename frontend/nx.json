@@ -53,9 +53,6 @@
     "shared-ui-button": {
       "tags": ["scope:shared", "type:ui"]
     },
-    "shared-util-error": {
-      "tags": ["scope:shared", "type:util"]
-    },
     "shared-util-form-validation": {
       "tags": ["scope:shared", "type:util"]
     },
@@ -169,6 +166,9 @@
     },
     "administration-feature-account-list": {
       "tags": ["scope:administration", "type:feature"]
+    },
+    "shared-ui-error": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

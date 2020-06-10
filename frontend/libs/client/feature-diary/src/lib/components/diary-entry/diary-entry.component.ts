@@ -1,4 +1,4 @@
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';

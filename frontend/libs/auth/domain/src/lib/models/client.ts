@@ -1,4 +1,4 @@
-import { ClientType } from '@qro/health-department/api';
+import { ClientType } from '../enums/client-type';
 
 export interface ClientDto {
   clientCode?: string;

@@ -1,5 +1,5 @@
 import { ClientService, ClientDto, EncounterEntry } from '@qro/client/domain';
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';

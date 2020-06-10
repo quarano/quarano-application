@@ -1,6 +1,6 @@
 import { AccountService, AccountDto } from '@qro/administration/domain';
 import { AuthService, roles, IRole } from '@qro/auth/api';
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';

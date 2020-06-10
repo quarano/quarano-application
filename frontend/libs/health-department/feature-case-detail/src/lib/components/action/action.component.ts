@@ -1,4 +1,4 @@
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import {
   ValidationErrorGenerator,
   VALIDATION_PATTERNS,

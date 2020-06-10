@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'shared-util-error',
+  name: 'shared-ui-error',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/libs/shared/util-error',
+  coverageDirectory: '../../../coverage/libs/shared/ui-error',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

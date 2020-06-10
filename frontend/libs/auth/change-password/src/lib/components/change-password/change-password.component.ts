@@ -3,7 +3,7 @@ import {
   PasswordValidator,
   ConfirmValidPasswordMatcher,
 } from '@qro/shared/util-form-validation';
-import { BadRequestService } from '@qro/shared/util-error';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { AuthService } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';

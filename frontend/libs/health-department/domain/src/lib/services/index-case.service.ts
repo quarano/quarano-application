@@ -4,7 +4,7 @@ import { API_URL } from '@qro/shared/util';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseListItemDto } from '../models/case-list-item';
-import { ClientType } from '../enums/client-type';
+import { ClientType } from '@qro/auth/api';
 import { ActionListItemDto } from '../models/action-list-item';
 
 @Injectable({

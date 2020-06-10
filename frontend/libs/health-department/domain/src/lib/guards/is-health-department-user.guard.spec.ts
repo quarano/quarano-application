@@ -1,6 +1,6 @@
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IsHealthDepartmentUserGuard } from './is-health-department-user.guard';
-import { UserService } from '../../../../../auth/domain/src/lib/services/user.service';
+import { UserService } from '@qro/auth/api';
 
 describe('IsHealthDepartmentUserGuard', () => {
   let guard: IsHealthDepartmentUserGuard;
@@ -9,7 +9,7 @@ describe('IsHealthDepartmentUserGuard', () => {
 
   beforeEach(() => {
     userService = { isHealthDepartmentUser: () => true } as any;
-    router = { navigate: () => { } } as any;
+    router = { navigate: () => {} } as any;
     guard = new IsHealthDepartmentUserGuard(userService, router);
   });
 
