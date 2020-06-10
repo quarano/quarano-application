@@ -1,21 +1,17 @@
 import { TokenService } from './token.service';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 describe('TokenService', () => {
   let service: TokenService;
 
   beforeEach(() => {
     const snackbarService: SnackbarService = {
-      success: () => {
-      },
-      warning: () => {
-      },
-      message: () => {
-      }
+      success: () => {},
+      warning: () => {},
+      message: () => {},
     } as any;
     const router = {
-      navigate: () => {
-      }
+      navigate: () => {},
     } as any;
     service = new TokenService(snackbarService, router);
   });

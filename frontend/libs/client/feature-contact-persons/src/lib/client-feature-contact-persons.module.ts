@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactPersonComponent } from './components/contact-person/contact-person.component';
 import { ContactPersonResolver, ContactPersonsResolver, ClientDomainModule } from '@qro/client/domain';
-import { PreventUnsavedChangesGuard } from '@qro/shared/util';
+import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

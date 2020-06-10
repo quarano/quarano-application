@@ -8,7 +8,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import {
   ValidationErrorGenerator,
   ArrayValidator,

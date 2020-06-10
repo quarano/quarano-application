@@ -1,7 +1,7 @@
 import { IsAuthenticatedGuard } from './is-authenticated.guard';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 describe('IsAuthenticatedGuard', () => {
   let userService: UserService;
@@ -11,7 +11,7 @@ describe('IsAuthenticatedGuard', () => {
 
   beforeEach(() => {
     userService = { isHealthDepartmentUser: () => true } as any;
-    router = { navigate: () => { } } as any;
+    router = { navigate: () => {} } as any;
     snackbar = { message: () => true } as any;
     guard = new IsAuthenticatedGuard(userService, router, snackbar);
   });

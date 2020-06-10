@@ -1,6 +1,6 @@
 import { share, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseListItemDto } from '../models/case-list-item';

@@ -7,9 +7,9 @@ import { map } from 'rxjs/operators';
 import { AccountDto } from '@qro/administration/domain';
 import { IRole, roles } from '@qro/auth/api';
 import { ApiService } from '@qro/shared/util-data-access';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { ArrayFunctions } from '@qro/shared/util';
+import { ArrayFunctions } from '@qro/shared/util-common-functions';
 
 @Component({
   selector: 'qro-account-list',

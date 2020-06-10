@@ -6,7 +6,7 @@ import { AccountEditComponent } from './account-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { AuthService } from '@qro/auth/api';
 
 describe('AccountEditComponent', () => {

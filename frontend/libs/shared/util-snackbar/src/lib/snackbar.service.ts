@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SnackbarService {
   duration = 3000;
 
-  constructor(public snackbar: MatSnackBar) { }
+  constructor(public snackbar: MatSnackBar) {}
 
   confirm(message: string): MatSnackBarRef<SimpleSnackBar> {
     const config = new MatSnackBarConfig();

@@ -1,5 +1,4 @@
 import { HealthDepartmentUiActionAlertModule } from '@qro/health-department/ui-action-alert';
-import { SharedUtilModule } from '@qro/shared/util';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -47,7 +46,6 @@ const routes: Routes = [
     NgxDatatableModule,
     HealthDepartmentUiActionAlertModule,
     HealthDepartmentDomainModule,
-    SharedUtilModule,
     RouterModule.forChild(routes),
   ],
   declarations: [ActionListComponent, CaseListComponent, ContactCasesComponent],

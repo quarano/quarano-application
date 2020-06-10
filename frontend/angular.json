@@ -322,35 +322,6 @@
         }
       }
     },
-    "shared-util": {
-      "projectType": "library",
-      "root": "libs/shared/util",
-      "sourceRoot": "libs/shared/util/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["libs/shared/util/tsconfig.lib.json", "libs/shared/util/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/shared/util/jest.config.js",
-            "tsConfig": "libs/shared/util/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "shared-ui-material": {
       "projectType": "library",
       "root": "libs/shared/ui-material",
@@ -1783,6 +1754,67 @@
             "tsConfig": "libs/shared/util-forms/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/shared/util-forms/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-common-functions": {
+      "projectType": "library",
+      "root": "libs/shared/util-common-functions",
+      "sourceRoot": "libs/shared/util-common-functions/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-common-functions/tsconfig.lib.json",
+              "libs/shared/util-common-functions/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-common-functions/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-common-functions/jest.config.js",
+            "tsConfig": "libs/shared/util-common-functions/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-common-functions/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-snackbar": {
+      "projectType": "library",
+      "root": "libs/shared/util-snackbar",
+      "sourceRoot": "libs/shared/util-snackbar/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/util-snackbar/tsconfig.lib.json", "libs/shared/util-snackbar/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-snackbar/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-snackbar/jest.config.js",
+            "tsConfig": "libs/shared/util-snackbar/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-snackbar/src/test-setup.ts"
           }
         }
       },

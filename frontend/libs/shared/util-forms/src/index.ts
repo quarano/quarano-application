@@ -6,3 +6,4 @@ export * from './lib/validators/password.validator';
 export * from './lib/validators/phone.validator';
 export * from './lib/validators/trimmed-pattern.validator';
 export * from './lib/validators/validation-patterns';
+export * from './lib/guards/prevent-unsaved-changes.guard';

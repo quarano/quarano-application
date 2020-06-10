@@ -15,7 +15,7 @@ import { filter, map, switchMap, take } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { MatTabGroup } from '@angular/material/tabs';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { SymptomDto } from '@qro/shared/util-symptom';

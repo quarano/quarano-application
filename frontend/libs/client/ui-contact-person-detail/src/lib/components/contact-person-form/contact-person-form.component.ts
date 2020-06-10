@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { ContactPersonDto, ContactPersonModifyDto, ContactPersonService } from '@qro/client/domain';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Component({
   selector: 'qro-contact-person-form',

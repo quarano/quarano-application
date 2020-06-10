@@ -4,7 +4,7 @@ import { ActionComponent } from './action.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { HealthDepartmentService } from '@qro/health-department/domain';
 import { CaseActionDto } from '@qro/health-department/domain';
 

@@ -22,7 +22,7 @@ import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseDetailDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';

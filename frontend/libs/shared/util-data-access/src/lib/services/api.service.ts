@@ -1,9 +1,9 @@
-import { API_URL } from '@qro/shared/util';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { HalResponse } from '../models/hal-response';
 import { Observable, of } from 'rxjs';
 import { DeleteLink } from '../models/general';
+import { API_URL } from '../models/api-url';
 
 @Injectable({
   providedIn: 'root',

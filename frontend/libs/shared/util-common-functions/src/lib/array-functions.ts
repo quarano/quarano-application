@@ -1,8 +1,7 @@
 export class ArrayFunctions {
-
   public static remove<T>(arr: T[], elem: T): T[] {
     return arr.filter((e: T) => e !== elem);
-  };
+  }
 
   public static groupBy<T>(list: T[], keyGetter: (n: T) => string): Map<string, T[]> {
     const group = new Map<string, T[]>();

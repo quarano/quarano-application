@@ -17,7 +17,6 @@
     "baseUrl": ".",
     "paths": {
       "@qro/auth/domain": ["libs/auth/domain/src/index.ts"],
-      "@qro/shared/util": ["libs/shared/util/src/index.ts"],
       "@qro/shared/ui-material": ["libs/shared/ui-material/src/index.ts"],
       "@qro/health-department/domain": ["libs/health-department/domain/src/index.ts"],
       "@qro/health-department/ui-action-alert": ["libs/health-department/ui-action-alert/src/index.ts"],
@@ -64,7 +63,9 @@
       "@qro/auth/feature-change-password": ["libs/auth/feature-change-password/src/index.ts"],
       "@qro/auth/feature-login": ["libs/auth/feature-login/src/index.ts"],
       "@qro/shared/ui-styles": ["libs/shared/ui-styles/src/index.ts"],
-      "@qro/shared/util-forms": ["libs/shared/util-forms/src/index.ts"]
+      "@qro/shared/util-forms": ["libs/shared/util-forms/src/index.ts"],
+      "@qro/shared/util-common-functions": ["libs/shared/util-common-functions/src/index.ts"],
+      "@qro/shared/util-snackbar": ["libs/shared/util-snackbar/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

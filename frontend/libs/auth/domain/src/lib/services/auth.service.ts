@@ -1,4 +1,4 @@
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { ChangePasswordDto } from './../models/change-password';
 import { Injectable, Inject } from '@angular/core';

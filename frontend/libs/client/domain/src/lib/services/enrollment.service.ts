@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { EnrollmentStatusDto } from '../models/enrollment-status';
 import { RegisterDto } from '../models/register';
 import { DateFunctions } from '@qro/shared/util-date';

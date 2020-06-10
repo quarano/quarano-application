@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '@qro/auth/api';
 import { EnrollmentService } from '../services/enrollment.service';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Injectable({
   providedIn: 'root',

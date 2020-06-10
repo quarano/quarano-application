@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Component({
   selector: 'qro-login',

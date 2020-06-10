@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccountEditComponent } from './account-edit/account-edit.component';
-import { PreventUnsavedChangesGuard } from '@qro/shared/util';
+import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 
 @NgModule({
   declarations: [AccountEditComponent],

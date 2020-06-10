@@ -6,7 +6,7 @@ import { DiaryResolver, DiaryDetailResolver, ClientDomainModule } from '@qro/cli
 import { DiaryEntryComponent } from './components/diary-entry/diary-entry.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { ContactPersonsResolver } from '@qro/client/domain';
-import { PreventUnsavedChangesGuard } from '@qro/shared/util';
+import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';

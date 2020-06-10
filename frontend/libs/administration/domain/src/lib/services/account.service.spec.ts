@@ -2,7 +2,7 @@
 
 import { TestBed, inject } from '@angular/core/testing';
 import { AccountService } from './account.service';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('Service: Account', () => {

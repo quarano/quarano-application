@@ -3,7 +3,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EnrollmentService } from './enrollment.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 
 describe('Service: Enrollment', () => {
   beforeEach(() => {

@@ -29,9 +29,6 @@
     "auth-domain": {
       "tags": ["scope:auth", "type:domain"]
     },
-    "shared-util": {
-      "tags": ["scope:shared", "type:util"]
-    },
     "shared-ui-material": {
       "tags": ["scope:shared", "type:ui"]
     },
@@ -171,6 +168,12 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "shared-util-forms": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-common-functions": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-snackbar": {
       "tags": ["scope:shared", "type:util"]
     }
   }

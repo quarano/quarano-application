@@ -13,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { RegisterDto, EnrollmentService } from '@qro/client/domain';
 import { DataProtectionDialogComponent } from '../data-protection-dialog/data-protection-dialog.component';
 

@@ -2,7 +2,7 @@ import { EnrollmentCompletedGuard } from './enrollment-completed.guard';
 import { Router } from '@angular/router';
 import { UserService } from '@qro/auth/api';
 import { EnrollmentService } from '../services/enrollment.service';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 describe('IsAuthenticatedFullyClientGuard', () => {
   let userService: UserService;

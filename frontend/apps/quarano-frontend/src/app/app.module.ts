@@ -1,12 +1,12 @@
+import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
 import { FooterComponent } from './layout/footer/footer.component';
-import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { SharedUiAsideModule } from '@qro/shared/ui-aside';
 import { AuthDomainModule } from '@qro/auth/domain';
 import { SharedUiErrorModule } from '@qro/shared/ui-error';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
-import { API_URL } from '@qro/shared/util';
+import { API_URL } from '@qro/shared/util-data-access';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';

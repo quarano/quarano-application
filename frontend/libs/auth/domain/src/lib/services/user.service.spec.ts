@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
 import { AuthService } from './auth.service';
 

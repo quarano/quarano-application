@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { SnackbarService } from '@qro/shared/util';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { Injectable } from '@angular/core';
 
 @Injectable({
