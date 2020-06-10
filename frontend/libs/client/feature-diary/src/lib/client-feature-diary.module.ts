@@ -2,7 +2,7 @@ import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './components/diary/diary.component';
-import { DiaryResolver, DiaryDetailResolver } from '@qro/client/domain';
+import { DiaryResolver, DiaryDetailResolver, ClientDomainModule } from '@qro/client/domain';
 import { DiaryEntryComponent } from './components/diary-entry/diary-entry.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { ContactPersonsResolver } from '@qro/client/domain';
@@ -68,6 +68,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     SharedUtilSymptomModule,
+    ClientDomainModule,
   ],
   declarations: [
     DiaryComponent,

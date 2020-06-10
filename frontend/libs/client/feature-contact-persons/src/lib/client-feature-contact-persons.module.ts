@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactPersonComponent } from './components/contact-person/contact-person.component';
-import { ContactPersonResolver, ContactPersonsResolver } from '@qro/client/domain';
+import { ContactPersonResolver, ContactPersonsResolver, ClientDomainModule } from '@qro/client/domain';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
@@ -51,6 +51,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     ClientUiContactPersonDetailModule,
+    ClientDomainModule,
     RouterModule.forChild(routes),
   ],
 })

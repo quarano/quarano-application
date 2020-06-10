@@ -29,10 +29,20 @@ const routes: Routes = [
       encounters: EncountersResolver,
     },
   },
-  { path: 'landing:usertype/:clientcode', component: LandingComponent },
-  { path: 'landing', component: LandingComponent, pathMatch: 'full' },
-  { path: 'register:clientcode', component: RegisterComponent },
-  { path: 'register', component: RegisterComponent, pathMatch: 'full' },
+  {
+    path: 'landing',
+    children: [
+      { path: '', pathMatch: 'full', component: LandingComponent },
+      { path: ':usertype/:clientcode', component: LandingComponent },
+    ],
+  },
+  {
+    path: 'register',
+    children: [
+      { path: '', component: RegisterComponent, pathMatch: 'full' },
+      { path: ':clientcode', component: RegisterComponent },
+    ],
+  },
 ];
 
 @NgModule({

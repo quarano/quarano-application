@@ -1,36 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
+const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'accounts' },
+  {
+    path: 'accounts',
+    children: [
       {
         path: '',
-        redirectTo: 'accounts',
         pathMatch: 'full',
+        redirectTo: 'account-list',
       },
       {
-        path: 'accounts',
-        redirectTo: 'account-list',
-        pathMatch: 'full',
-        children: [
-          {
-            path: 'account-list',
-            loadChildren: () =>
-              import('@qro/administration/feature-account-list').then((m) => m.AdministrationFeatureAccountListModule),
-          },
-          {
-            path: 'account-detail',
-            loadChildren: () =>
-              import('@qro/administration/feature-account-detail').then(
-                (m) => m.AdministrationFeatureAccountDetailModule
-              ),
-          },
-        ],
+        path: 'account-list',
+        loadChildren: () =>
+          import('@qro/administration/feature-account-list').then((m) => m.AdministrationFeatureAccountListModule),
       },
-    ]),
-  ],
+      {
+        path: 'account-detail',
+        loadChildren: () =>
+          import('@qro/administration/feature-account-detail').then((m) => m.AdministrationFeatureAccountDetailModule),
+      },
+    ],
+  },
+];
+
+@NgModule({
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
 export class AdministrationShellModule {}
