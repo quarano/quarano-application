@@ -28,7 +28,7 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "./libs/shared/util/src/lib/styles/styles.scss"
+              "./libs/shared/ui-styles/src/lib/styles/styles.scss"
             ],
             "scripts": []
           },
@@ -1757,6 +1757,35 @@
             "tsConfig": "libs/auth/feature-login/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/auth/feature-login/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-styles": {
+      "projectType": "library",
+      "root": "libs/shared/ui-styles",
+      "sourceRoot": "libs/shared/ui-styles/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/ui-styles/tsconfig.lib.json", "libs/shared/ui-styles/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-styles/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-styles/jest.config.js",
+            "tsConfig": "libs/shared/ui-styles/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-styles/src/test-setup.ts"
           }
         }
       },

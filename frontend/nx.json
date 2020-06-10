@@ -169,6 +169,9 @@
     },
     "auth-feature-login": {
       "tags": ["scope:all-users", "type:feature"]
+    },
+    "shared-ui-styles": {
+      "tags": []
     }
   }
 }

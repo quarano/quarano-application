@@ -63,7 +63,8 @@
       "@qro/administration/feature-account-list": ["libs/administration/feature-account-list/src/index.ts"],
       "@qro/shared/ui-error": ["libs/shared/ui-error/src/index.ts"],
       "@qro/auth/feature-change-password": ["libs/auth/feature-change-password/src/index.ts"],
-      "@qro/auth/feature-login": ["libs/auth/feature-login/src/index.ts"]
+      "@qro/auth/feature-login": ["libs/auth/feature-login/src/index.ts"],
+      "@qro/shared/ui-styles": ["libs/shared/ui-styles/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

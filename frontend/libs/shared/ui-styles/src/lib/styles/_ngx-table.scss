@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 ::ng-deep {
   .datatable-row-center.datatable-row-group.ng-star-inserted {
@@ -7,24 +7,16 @@
   }
 
   .ngx-datatable.material.single-selection .datatable-body-row.active,
-  .ngx-datatable.material.single-selection
-    .datatable-body-row.active
-    .datatable-row-group,
+  .ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group,
   .ngx-datatable.material.multi-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-selection
-    .datatable-body-row.active
-    .datatable-row-group,
+  .ngx-datatable.material.multi-selection .datatable-body-row.active .datatable-row-group,
   .ngx-datatable.material.multi-click-selection .datatable-body-row.active,
-  .ngx-datatable.material.multi-click-selection
-    .datatable-body-row.active
-    .datatable-row-group {
+  .ngx-datatable.material.multi-click-selection .datatable-body-row.active .datatable-row-group {
     background-color: $primary-color !important;
   }
 
   .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover,
-  .ngx-datatable.material:not(.cell-selection)
-    .datatable-body-row:hover
-    .datatable-row-group {
+  .ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover .datatable-row-group {
     background-color: initial;
     transition: none;
   }
@@ -33,7 +25,7 @@
     cursor: pointer;
 
     & .datatable-row-group:hover:before {
-      content: "";
+      content: '';
       display: block;
       width: 5px;
       position: absolute;
@@ -50,10 +42,7 @@
     background-color: $primary-color;
   }
 
-  .ngx-datatable.material
-    .datatable-body
-    .datatable-body-row
-    .datatable-body-cell {
+  .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
     padding: 0.2rem 1.2rem;
   }
 
