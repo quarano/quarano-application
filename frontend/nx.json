@@ -62,18 +62,6 @@
     "administration-shell": {
       "tags": ["scope:administration", "type:shell"]
     },
-    "administration-accounts-account-list": {
-      "tags": ["scope:administration", "type:feature"]
-    },
-    "administration-accounts-account-detail": {
-      "tags": ["scope:administration", "type:feature"]
-    },
-    "administration-accounts-domain": {
-      "tags": ["scope:administration", "type:domain"]
-    },
-    "administration-accounts-shell": {
-      "tags": ["scope:administration", "type:shell"]
-    },
     "auth-api": {
       "tags": ["scope:auth", "type:api"]
     },
@@ -175,6 +163,12 @@
     },
     "shared-ui-data-protection": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "administration-feature-account-detail": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "administration-feature-account-list": {
+      "tags": ["scope:administration", "type:feature"]
     }
   }
 }

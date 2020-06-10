@@ -28,10 +28,6 @@
       "@qro/shared/util-error": ["libs/shared/util-error/src/index.ts"],
       "@qro/shared/util-form-validation": ["libs/shared/util-form-validation/src/index.ts"],
       "@qro/administration/shell": ["libs/administration/shell/src/index.ts"],
-      "@qro/administration/accounts/account-list": ["libs/administration/accounts/account-list/src/index.ts"],
-      "@qro/administration/accounts/account-detail": ["libs/administration/accounts/account-detail/src/index.ts"],
-      "@qro/administration/accounts/domain": ["libs/administration/accounts/domain/src/index.ts"],
-      "@qro/administration/accounts/shell": ["libs/administration/accounts/shell/src/index.ts"],
       "@qro/auth/api": ["libs/auth/api/src/index.ts"],
       "@qro/shared/ui-alert": ["libs/shared/ui-alert/src/index.ts"],
       "@qro/shared/ui-confirmation-dialog": ["libs/shared/ui-confirmation-dialog/src/index.ts"],
@@ -65,7 +61,9 @@
       "@qro/all-users/feature-imprint": ["libs/all-users/feature-imprint/src/index.ts"],
       "@qro/all-users/feature-terms": ["libs/all-users/feature-terms/src/index.ts"],
       "@qro/all-users/shell": ["libs/all-users/shell/src/index.ts"],
-      "@qro/shared/ui-data-protection": ["libs/shared/ui-data-protection/src/index.ts"]
+      "@qro/shared/ui-data-protection": ["libs/shared/ui-data-protection/src/index.ts"],
+      "@qro/administration/feature-account-detail": ["libs/administration/feature-account-detail/src/index.ts"],
+      "@qro/administration/feature-account-list": ["libs/administration/feature-account-list/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

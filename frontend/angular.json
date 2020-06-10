@@ -653,134 +653,6 @@
         }
       }
     },
-    "administration-accounts-account-list": {
-      "projectType": "library",
-      "root": "libs/administration/accounts/account-list",
-      "sourceRoot": "libs/administration/accounts/account-list/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/administration/accounts/account-list/tsconfig.lib.json",
-              "libs/administration/accounts/account-list/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/administration/accounts/account-list/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/administration/accounts/account-list/jest.config.js",
-            "tsConfig": "libs/administration/accounts/account-list/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/accounts/account-list/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "administration-accounts-account-detail": {
-      "projectType": "library",
-      "root": "libs/administration/accounts/account-detail",
-      "sourceRoot": "libs/administration/accounts/account-detail/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/administration/accounts/account-detail/tsconfig.lib.json",
-              "libs/administration/accounts/account-detail/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/administration/accounts/account-detail/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/administration/accounts/account-detail/jest.config.js",
-            "tsConfig": "libs/administration/accounts/account-detail/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/accounts/account-detail/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "administration-accounts-domain": {
-      "projectType": "library",
-      "root": "libs/administration/accounts/domain",
-      "sourceRoot": "libs/administration/accounts/domain/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/administration/accounts/domain/tsconfig.lib.json",
-              "libs/administration/accounts/domain/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/administration/accounts/domain/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/administration/accounts/domain/jest.config.js",
-            "tsConfig": "libs/administration/accounts/domain/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/accounts/domain/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "administration-accounts-shell": {
-      "projectType": "library",
-      "root": "libs/administration/accounts/shell",
-      "sourceRoot": "libs/administration/accounts/shell/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/administration/accounts/shell/tsconfig.lib.json",
-              "libs/administration/accounts/shell/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/administration/accounts/shell/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/administration/accounts/shell/jest.config.js",
-            "tsConfig": "libs/administration/accounts/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/accounts/shell/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "auth-api": {
       "projectType": "library",
       "root": "libs/auth/api",
@@ -1818,6 +1690,70 @@
             "tsConfig": "libs/shared/ui-data-protection/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/shared/ui-data-protection/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "administration-feature-account-detail": {
+      "projectType": "library",
+      "root": "libs/administration/feature-account-detail",
+      "sourceRoot": "libs/administration/feature-account-detail/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/administration/feature-account-detail/tsconfig.lib.json",
+              "libs/administration/feature-account-detail/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-detail/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/administration/feature-account-detail/jest.config.js",
+            "tsConfig": "libs/administration/feature-account-detail/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/administration/feature-account-detail/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "administration-feature-account-list": {
+      "projectType": "library",
+      "root": "libs/administration/feature-account-list",
+      "sourceRoot": "libs/administration/feature-account-list/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/administration/feature-account-list/tsconfig.lib.json",
+              "libs/administration/feature-account-list/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-list/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/administration/feature-account-list/jest.config.js",
+            "tsConfig": "libs/administration/feature-account-list/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/administration/feature-account-list/src/test-setup.ts"
           }
         }
       },

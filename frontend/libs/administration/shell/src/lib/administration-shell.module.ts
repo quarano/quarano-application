@@ -13,8 +13,22 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'accounts',
-        loadChildren: () =>
-          import('@qro/administration/accounts/shell').then((m) => m.AdministrationAccountsShellModule),
+        redirectTo: 'account-list',
+        pathMatch: 'full',
+        children: [
+          {
+            path: 'account-list',
+            loadChildren: () =>
+              import('@qro/administration/feature-account-list').then((m) => m.AdministrationFeatureAccountListModule),
+          },
+          {
+            path: 'account-detail',
+            loadChildren: () =>
+              import('@qro/administration/feature-account-detail').then(
+                (m) => m.AdministrationFeatureAccountDetailModule
+              ),
+          },
+        ],
       },
     ]),
   ],
