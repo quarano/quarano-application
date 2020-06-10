@@ -4,8 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { EnrollmentService } from '@qro/client/api';
-import { UserService } from '@qro/auth/domain';
+import { UserService } from '@qro/auth/api';
 import { SnackbarService } from '@qro/shared/util';
 
 @Component({
@@ -22,12 +21,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, Validators.required),
   });
 
-  constructor(
-    private userService: UserService,
-    private enrollmentService: EnrollmentService,
-    private snackbarService: SnackbarService,
-    private router: Router
-  ) {}
+  constructor(private userService: UserService, private snackbarService: SnackbarService, private router: Router) {}
 
   ngOnInit(): void {
     this.userService.isLoggedIn$
@@ -50,9 +44,7 @@ export class LoginComponent implements OnInit {
           if (this.userService.isHealthDepartmentUser) {
             this.router.navigate(['/health-department/index-cases/case-list']);
           } else {
-            this.enrollmentService.loadEnrollmentStatus().subscribe(() => {
-              this.router.navigate(['/client/diary/diary-list']);
-            });
+            this.router.navigate(['/client/diary/diary-list']);
           }
         },
         (error) => {

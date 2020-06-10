@@ -26,9 +26,6 @@
       "tags": ["*"],
       "implicitDependencies": ["quarano-frontend"]
     },
-    "auth-change-password": {
-      "tags": ["scope:auth", "type:feature"]
-    },
     "auth-domain": {
       "tags": ["scope:auth", "type:domain"]
     },
@@ -73,9 +70,6 @@
     },
     "auth-shell": {
       "tags": ["scope:auth", "type:shell"]
-    },
-    "auth-login": {
-      "tags": ["scope:auth", "type:feature"]
     },
     "administration-domain": {
       "tags": ["scope:administration", "type:domain"]
@@ -169,6 +163,12 @@
     },
     "shared-ui-error": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "all-users-feature-login": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-change-password": {
+      "tags": ["scope:all-users", "type:feature"]
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IsAuthenticatedGuard } from '@qro/auth/api';
 
 const routes: Routes = [
   {
@@ -19,6 +20,16 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('@qro/all-users/feature-welcome').then((m) => m.AllUsersFeatureWelcomeModule),
+  },
+  {
+    path: 'change-password',
+    loadChildren: () =>
+      import('@qro/all-users/feature-change-password').then((m) => m.AllUsersFeatureChangePasswordModule),
+    canActivate: [IsAuthenticatedGuard],
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('@qro/all-users/feature-login').then((m) => m.AllUsersFeatureLoginModule),
   },
   {
     path: '',

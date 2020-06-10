@@ -21,7 +21,7 @@ export class IsAuthenticatedGuard implements CanActivate {
           return true;
         }
         this.snackbarService.message('Bitte loggen Sie sich zuerst ein');
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/all-users/login']);
         return false;
       })
     );

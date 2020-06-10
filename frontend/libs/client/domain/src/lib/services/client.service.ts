@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { share, switchMap } from 'rxjs/operators';
 import { EnrollmentService } from './enrollment.service';
-import { ClientDto } from '@qro/client/api';
+import { ClientDto } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',

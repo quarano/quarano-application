@@ -2,8 +2,8 @@ import { HdContactComponent } from '@qro/client/api';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { HealthDepartmentDto, HealthDepartmentService } from '@qro/health-department/api';
-import { UserService } from '@qro/auth/api';
+import { HealthDepartmentService } from '@qro/health-department/api';
+import { HealthDepartmentDto, UserService } from '@qro/auth/api';
 import { EnrollmentService } from '@qro/client/api';
 
 @Component({

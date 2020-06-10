@@ -48,12 +48,12 @@ describe('health-department top navigation', () => {
   it('should logout user on logout button click', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="logout-button"]').click();
-    cy.url().should('include', '/auth/login');
+    cy.url().should('include', '/all-users/login');
   });
 
   it('should navigate to change password component on button click', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="change-password-button"]').click();
-    cy.url().should('include', '/auth/change-password');
+    cy.url().should('include', '/all-users/change-password');
   });
 });

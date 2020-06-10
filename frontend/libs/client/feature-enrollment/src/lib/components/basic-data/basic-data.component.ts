@@ -1,4 +1,4 @@
-import { ClientService, ClientDto, EncounterEntry } from '@qro/client/domain';
+import { ClientService, EncounterEntry } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -21,6 +21,7 @@ import {
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
+import { ClientDto } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-basic-data',

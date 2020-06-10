@@ -1,4 +1,4 @@
-import { CaseListItemDto, ClientType } from '@qro/health-department/domain';
+import { CaseListItemDto } from '@qro/health-department/domain';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
+import { ClientType } from '@qro/auth/api';
 
 class CaseRowViewModel {
   lastName: string;

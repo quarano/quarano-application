@@ -1,16 +1,11 @@
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import {
-  ActionListItemDto,
-  ClientType,
-  AlertConfiguration,
-  getAlertConfigurations,
-  Alert,
-} from '@qro/health-department/domain';
+import { ActionListItemDto, AlertConfiguration, getAlertConfigurations, Alert } from '@qro/health-department/domain';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';
 import { DateFunctions } from '@qro/shared/util-date';
+import { ClientType } from '@qro/auth/api';
 
 class ActionRowViewModel {
   lastName: string;

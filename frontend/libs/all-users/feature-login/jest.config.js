@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'auth-change-password',
+  name: 'all-users-feature-login',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/libs/auth/change-password',
+  coverageDirectory: '../../../coverage/libs/all-users/feature-login',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

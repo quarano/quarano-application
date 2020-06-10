@@ -16,7 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@qro/auth/change-password": ["libs/auth/change-password/src/index.ts"],
       "@qro/auth/domain": ["libs/auth/domain/src/index.ts"],
       "@qro/shared/util": ["libs/shared/util/src/index.ts"],
       "@qro/shared/ui-material": ["libs/shared/ui-material/src/index.ts"],
@@ -32,7 +31,6 @@
       "@qro/shared/ui-confirmation-dialog": ["libs/shared/ui-confirmation-dialog/src/index.ts"],
       "@qro/shared/ui-multiple-autocomplete": ["libs/shared/ui-multiple-autocomplete/src/index.ts"],
       "@qro/auth/shell": ["libs/auth/shell/src/index.ts"],
-      "@qro/auth/login": ["libs/auth/login/src/index.ts"],
       "@qro/administration/domain": ["libs/administration/domain/src/index.ts"],
       "@qro/administration/api": ["libs/administration/api/src/index.ts"],
       "@qro/health-department/api": ["libs/health-department/api/src/index.ts"],
@@ -63,7 +61,9 @@
       "@qro/shared/ui-data-protection": ["libs/shared/ui-data-protection/src/index.ts"],
       "@qro/administration/feature-account-detail": ["libs/administration/feature-account-detail/src/index.ts"],
       "@qro/administration/feature-account-list": ["libs/administration/feature-account-list/src/index.ts"],
-      "@qro/shared/ui-error": ["libs/shared/ui-error/src/index.ts"]
+      "@qro/shared/ui-error": ["libs/shared/ui-error/src/index.ts"],
+      "@qro/all-users/feature-login": ["libs/all-users/feature-login/src/index.ts"],
+      "@qro/all-users/feature-change-password": ["libs/all-users/feature-change-password/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

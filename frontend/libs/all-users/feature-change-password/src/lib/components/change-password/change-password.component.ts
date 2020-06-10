@@ -4,9 +4,8 @@ import {
   ConfirmValidPasswordMatcher,
 } from '@qro/shared/util-form-validation';
 import { BadRequestService } from '@qro/shared/ui-error';
-import { AuthService } from '@qro/auth/domain';
+import { AuthService, UserService } from '@qro/auth/api';
 import { MatInput } from '@angular/material/input';
-import { UserService } from '@qro/auth/domain';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util';
 import { Component, OnInit, OnDestroy } from '@angular/core';

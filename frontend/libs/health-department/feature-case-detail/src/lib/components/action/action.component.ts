@@ -10,7 +10,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { ClientType, CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
+import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
+import { ClientType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-client-action',

@@ -1,6 +1,6 @@
-import { ClientType } from '@qro/health-department/domain';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ClientType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-landing',

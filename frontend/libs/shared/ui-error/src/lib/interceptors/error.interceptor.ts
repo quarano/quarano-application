@@ -36,7 +36,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
             this.snackbarService.message('Sie müssen sich zunächst einloggen');
-            this.router.navigate(['/auth/login']);
+            this.router.navigate(['/all-users/login']);
             return throwError(error);
           }
 

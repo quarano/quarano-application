@@ -7,7 +7,6 @@ import { SnackbarService } from '@qro/shared/util';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '@qro/auth/domain';
-import { EnrollmentService } from '@qro/client/api';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -30,10 +29,6 @@ describe('LoginComponent', () => {
             warning: () => {},
             success: () => {},
           },
-        },
-        {
-          provide: EnrollmentService,
-          useValue: {},
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

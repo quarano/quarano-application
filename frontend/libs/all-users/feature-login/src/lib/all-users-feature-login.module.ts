@@ -1,26 +1,26 @@
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoginComponent } from './login/login.component';
 import { RouterModule } from '@angular/router';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedUiMaterialModule,
+    SharedUiButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedUiButtonModule,
     RouterModule.forChild([
       {
         path: '',
         pathMatch: 'full',
-        component: ChangePasswordComponent,
+        component: LoginComponent,
       },
     ]),
   ],
-  declarations: [ChangePasswordComponent],
+  declarations: [LoginComponent],
 })
-export class AuthChangePasswordModule {}
+export class AllUsersFeatureLoginModule {}

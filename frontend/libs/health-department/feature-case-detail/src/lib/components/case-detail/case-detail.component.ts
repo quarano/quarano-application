@@ -17,11 +17,11 @@ import { SubSink } from 'subsink';
 import { MatTabGroup } from '@angular/material/tabs';
 import { SnackbarService } from '@qro/shared/util';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { ClientType } from '@qro/health-department/domain';
-import { QuestionnaireDto } from '@qro/client/api';
+import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
+import { ClientType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-case-detail',
