@@ -125,9 +125,6 @@
     "client-api": {
       "tags": ["scope:client", "type:api"]
     },
-    "layout": {
-      "tags": ["scope:layout", "type:api"]
-    },
     "shared-util-date": {
       "tags": ["scope:shared", "type:util"]
     },

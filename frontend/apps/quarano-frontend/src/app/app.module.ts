@@ -1,3 +1,6 @@
+import { HeaderRightComponent } from './layout/header-right/header-right.component';
+import { HeaderLeftComponent } from './layout/header-left/header-left.component';
+import { FooterComponent } from './layout/footer/footer.component';
 import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { SharedUiAsideModule } from '@qro/shared/ui-aside';
 import { AuthDomainModule } from '@qro/auth/domain';
@@ -14,7 +17,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { environment } from '../environments/environment';
-import { LayoutModule } from '@qro/layout';
 
 registerLocaleData(localeDe, 'de');
 
@@ -24,11 +26,10 @@ const SUB_MODULES = [
   SharedUiAsideModule,
   SharedUtilDateModule,
   SharedUiMaterialModule,
-  LayoutModule,
 ];
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FooterComponent, HeaderLeftComponent, HeaderRightComponent],
   imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, FormsModule, HttpClientModule, ...SUB_MODULES],
   providers: [
     { provide: LOCALE_ID, useValue: 'de-de' },

@@ -1292,35 +1292,6 @@
         }
       }
     },
-    "layout": {
-      "projectType": "library",
-      "root": "libs/layout",
-      "sourceRoot": "libs/layout/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["libs/layout/tsconfig.lib.json", "libs/layout/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/layout/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/layout/jest.config.js",
-            "tsConfig": "libs/layout/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/layout/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "shared-util-date": {
       "projectType": "library",
       "root": "libs/shared/util-date",

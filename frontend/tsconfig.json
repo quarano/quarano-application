@@ -49,7 +49,6 @@
       "@qro/shared/util-symptom": ["libs/shared/util-symptom/src/index.ts"],
       "@qro/shared/util-data-access": ["libs/shared/util-data-access/src/index.ts"],
       "@qro/client/api": ["libs/client/api/src/index.ts"],
-      "@qro/layout": ["libs/layout/src/index.ts"],
       "@qro/shared/util-date": ["libs/shared/util-date/src/index.ts"],
       "@qro/client/feature-diary": ["libs/client/feature-diary/src/index.ts"],
       "@qro/client/feature-enrollment": ["libs/client/feature-enrollment/src/index.ts"],
