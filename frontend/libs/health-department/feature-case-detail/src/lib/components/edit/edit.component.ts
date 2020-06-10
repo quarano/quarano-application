@@ -4,7 +4,7 @@ import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator,
-} from '@qro/shared/util-form-validation';
+} from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
   Component,

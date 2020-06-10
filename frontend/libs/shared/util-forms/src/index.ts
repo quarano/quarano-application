@@ -1,4 +1,4 @@
-export * from './lib/shared-util-form-validation.module';
+export * from './lib/shared-util-forms.module';
 export * from './lib/validation-error-generator';
 export * from './lib/validators/confirm-valid-password-matcher';
 export * from './lib/validators/array.validator';

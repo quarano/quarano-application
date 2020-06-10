@@ -6,7 +6,7 @@ import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PasswordValidator,
-} from '@qro/shared/util-form-validation';
+} from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

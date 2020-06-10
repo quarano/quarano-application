@@ -1,9 +1,5 @@
 import { BadRequestService } from '@qro/shared/ui-error';
-import {
-  ValidationErrorGenerator,
-  VALIDATION_PATTERNS,
-  TrimmedPatternValidator,
-} from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';

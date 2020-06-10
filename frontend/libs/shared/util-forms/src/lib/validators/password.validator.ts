@@ -1,7 +1,6 @@
 import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 
 export class PasswordValidator {
-
   public static secure(control: FormControl): ValidationErrors {
     const password: string = control.value?.trim();
     const errors: ValidationErrors = {};
@@ -11,10 +10,10 @@ export class PasswordValidator {
     }
 
     if (password.length < 7) {
-      errors.minlength = { 'requiredLength': 7, 'actualLength': password.length };
+      errors.minlength = { requiredLength: 7, actualLength: password.length };
     }
     if (password.length > 500) {
-      errors.maxlength = { 'requiredLength': 500, 'actualLength': password.length };
+      errors.maxlength = { requiredLength: 500, actualLength: password.length };
     }
     if (!password.match(/(?=.*[A-Z])/)) {
       errors.uppercase = true;

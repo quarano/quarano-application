@@ -1,4 +1,4 @@
-import { ValidationErrorGenerator } from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { FormGroup } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { MatInput } from '@angular/material/input';

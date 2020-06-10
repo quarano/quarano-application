@@ -7,7 +7,7 @@ import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util';
 import { ContactPersonDto } from '@qro/client/domain';
-import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-form-validation';
+import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 
 @Component({

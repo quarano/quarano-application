@@ -1,8 +1,4 @@
-import {
-  ValidationErrorGenerator,
-  TrimmedPatternValidator,
-  VALIDATION_PATTERNS,
-} from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator, TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

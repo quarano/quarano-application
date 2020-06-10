@@ -1,4 +1,4 @@
-import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-form-validation';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonalDataFormComponent } from './personal-data-form.component';

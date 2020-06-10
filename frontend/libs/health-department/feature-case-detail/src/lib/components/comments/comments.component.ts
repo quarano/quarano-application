@@ -1,8 +1,4 @@
-import {
-  ValidationErrorGenerator,
-  VALIDATION_PATTERNS,
-  TrimmedPatternValidator,
-} from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';

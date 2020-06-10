@@ -16,7 +16,7 @@ import {
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
   ConfirmValidPasswordMatcher,
-} from '@qro/shared/util-form-validation';
+} from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-account-edit',

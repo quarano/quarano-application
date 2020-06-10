@@ -534,38 +534,6 @@
         }
       }
     },
-    "shared-util-form-validation": {
-      "projectType": "library",
-      "root": "libs/shared/util-form-validation",
-      "sourceRoot": "libs/shared/util-form-validation/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/shared/util-form-validation/tsconfig.lib.json",
-              "libs/shared/util-form-validation/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-form-validation/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/shared/util-form-validation/jest.config.js",
-            "tsConfig": "libs/shared/util-form-validation/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-form-validation/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "administration-shell": {
       "projectType": "library",
       "root": "libs/administration/shell",
@@ -1786,6 +1754,35 @@
             "tsConfig": "libs/shared/ui-styles/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/shared/ui-styles/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-forms": {
+      "projectType": "library",
+      "root": "libs/shared/util-forms",
+      "sourceRoot": "libs/shared/util-forms/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/util-forms/tsconfig.lib.json", "libs/shared/util-forms/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-forms/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-forms/jest.config.js",
+            "tsConfig": "libs/shared/util-forms/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-forms/src/test-setup.ts"
           }
         }
       },

@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'shared-util-form-validation',
+  name: 'shared-util-forms',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/libs/shared/util-form-validation',
+  coverageDirectory: '../../../coverage/libs/shared/util-forms',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

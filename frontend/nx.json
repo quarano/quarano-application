@@ -50,9 +50,6 @@
     "shared-ui-button": {
       "tags": ["scope:shared", "type:ui"]
     },
-    "shared-util-form-validation": {
-      "tags": ["scope:shared", "type:util"]
-    },
     "administration-shell": {
       "tags": ["scope:administration", "type:shell"]
     },
@@ -171,7 +168,10 @@
       "tags": ["scope:all-users", "type:feature"]
     },
     "shared-ui-styles": {
-      "tags": []
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-util-forms": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

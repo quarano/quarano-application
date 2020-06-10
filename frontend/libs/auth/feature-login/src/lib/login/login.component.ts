@@ -1,4 +1,4 @@
-import { ValidationErrorGenerator } from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';

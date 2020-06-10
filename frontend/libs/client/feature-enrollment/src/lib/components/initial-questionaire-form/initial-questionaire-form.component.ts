@@ -3,7 +3,7 @@ import {
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
   ArrayValidator,
-} from '@qro/shared/util-form-validation';
+} from '@qro/shared/util-forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';

@@ -1,8 +1,4 @@
-import {
-  ValidationErrorGenerator,
-  PasswordValidator,
-  ConfirmValidPasswordMatcher,
-} from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator, PasswordValidator, ConfirmValidPasswordMatcher } from '@qro/shared/util-forms';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { AuthService, UserService } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';

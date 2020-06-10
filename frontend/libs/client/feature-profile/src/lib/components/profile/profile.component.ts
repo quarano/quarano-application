@@ -6,11 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
 import { SnackbarService } from '@qro/shared/util';
-import {
-  VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator,
-  TrimmedPatternValidator,
-} from '@qro/shared/util-form-validation';
+import { VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { ClientDto } from '@qro/auth/api';
 
 @Component({

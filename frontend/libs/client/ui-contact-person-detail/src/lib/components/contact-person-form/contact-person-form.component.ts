@@ -1,9 +1,5 @@
 import { BadRequestService } from '@qro/shared/ui-error';
-import {
-  ValidationErrorGenerator,
-  VALIDATION_PATTERNS,
-  TrimmedPatternValidator,
-} from '@qro/shared/util-form-validation';
+import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
