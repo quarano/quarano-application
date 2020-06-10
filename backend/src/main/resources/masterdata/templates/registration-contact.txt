@@ -6,7 +6,7 @@ Bitte bleiben Sie in den nächsten Tagen zu Hause und vermeiden Sie Kontakte. Wi
 
 Aufgrund der dynamischen Entwicklung der positiven Fälle und der Flut an Anfragen kann sich unser Anruf etwas verzögern. Um den Ablauf zu erleichtern und zu beschleunigen, melden Sie sich bitte umgehend umgehend in unserem Tool zur Erfassung der Kontakte und Symptome an unter:
 
-https://{host}/welcome/landing/contact/{activationCode}
+https://{host}/client/enrollment/landing/contact/{activationCode}
 
 In dem für Sie persönlich bereitgestelltem Zugang erfassen Sie bitte Ihre Stammdaten sowie mögliche Krankheitszeichen. Wir bitten Sie, ab jetzt täglich zweimal Fieber zu messen, die Temperatur einzutragen und mögliche andere Krankheitszeichen direkt in unserer Online-Anwendung anzugeben.
 

@@ -4,7 +4,7 @@ wie Sie bereits wissen, sind Sie bis einschließlich {quarantineEndDate} in häu
 
 Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserem Tool zur Erfassung der Kontakte und Symptome an unter:
 
-https://{host}/welcome/landing/index/{activationCode}
+https://{host}/client/enrollment/landing/index/{activationCode}
 
 Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen nach, so dass wir zu diesen Kontakt aufnehmen können. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptomen (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
 
