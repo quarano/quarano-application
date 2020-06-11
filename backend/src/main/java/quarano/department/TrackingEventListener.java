@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.diary.DiaryManagement;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.EncounterReported;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
@@ -78,18 +77,8 @@ public class TrackingEventListener {
 		if (!caseOfContactInitializer.isIndexCase()) {
 			return;
 		}
-
-		var person = new TrackedPerson(contactPerson);
-		var caseType = CaseType.CONTACT;
-
-		// CORE-185 medical staff overwrites the others
-		if (contactPerson.getIsHealthStaff() == Boolean.TRUE) {
-			caseType = CaseType.CONTACT_MEDICAL;
-		} else if (contactPerson.isVulnerable()) {
-			caseType = CaseType.CONTACT_VULNERABLE;
-		}
-
-		cases.save(new TrackedCase(person, caseType, caseOfContactInitializer.getDepartment(), contactPerson));
+			
+		cases.save(TrackedCase.of(contactPerson, caseOfContactInitializer.getDepartment()));
 
 		log.info("Created automatic contact case from contact " + contactPerson.getId());
 	}
