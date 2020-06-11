@@ -27,30 +27,31 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run build-sec
-    - run: npm run prepare-deployment
-    - run: npm run ci-test
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build-sec
+      - run: npm run prepare-deployment
+      - run: npm run ci-test
+      - run: npm run lint
 
-    - name: Set up CF CLI
-      if: success()
-      uses: jvalkeal/setup-cf-cli-action@master
-      with:
-        version: 6.51.0
-    - name: CF Login
-      if: success()
-      run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
-      env:
-        CF_API: ${{ secrets.CF_API }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-    - name: Deploy Frontend SECURITY
-      if: success()
-      run: cf push quarano-frontend-sec-f ../manifest.yml
+      - name: Set up CF CLI
+        if: success()
+        uses: jvalkeal/setup-cf-cli-action@master
+        with:
+          version: 6.51.0
+      - name: CF Login
+        if: success()
+        run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
+        env:
+          CF_API: ${{ secrets.CF_API }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      - name: Deploy Frontend SECURITY
+        if: success()
+        run: cf push quarano-frontend-sec-f ../manifest.yml

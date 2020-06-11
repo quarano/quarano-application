@@ -39,8 +39,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "pre-push": "npm run affected:build && npm run affected:lint && npm run affected:test"
+      "pre-commit": "pretty-quick --staged"
     }
   },
   "private": true,
