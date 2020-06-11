@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @author Oliver Drotbohm
  */
 @Slf4j
-@Component
+@Component("actions.TrackedCaseEventListener")
 @RequiredArgsConstructor
 class TrackedCaseEventListener {
 
