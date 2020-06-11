@@ -104,7 +104,7 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>Adresse</legend>
-    <mat-form-field style="width: 70%;">
+    <mat-form-field style="width: 70%;" data-cy="street-input">
       <input
         matInput
         required
@@ -118,7 +118,7 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;">
+    <mat-form-field style="width: 30%;" data-cy="house-number-input">
       <input
         matInput
         placeholder="Hausnummer"
@@ -132,7 +132,7 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;">
+    <mat-form-field style="width: 30%;" data-cy="zip-code-input">
       <input
         matInput
         required
@@ -146,7 +146,7 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 70%;">
+    <mat-form-field style="width: 70%;" data-cy="city-input">
       <input
         matInput
         required

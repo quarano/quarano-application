@@ -14,8 +14,10 @@
 
     <ng-template #is_client
       ><ng-container *ngIf="(enrollmentService.getEnrollmentStatus() | async)?.complete"
-        ><a routerLink="/client/diary/diary-list" routerLinkActive="active">Tagebuch</a>
-        <a routerLink="/client/contact-persons" routerLinkActive="active">Kontaktpersonen</a>
+        ><a routerLink="/client/diary/diary-list" routerLinkActive="active" data-cy="diary-menu-item">Tagebuch</a>
+        <a routerLink="/client/contact-persons" routerLinkActive="active" data-cy="contact-person-menu-item"
+          >Kontaktpersonen</a
+        >
       </ng-container></ng-template
     >
   </nav>

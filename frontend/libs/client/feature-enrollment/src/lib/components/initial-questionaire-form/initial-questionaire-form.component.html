@@ -11,7 +11,9 @@
       formControlName="hasSymptoms"
     >
       <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="false" data-cy="has-no-symptoms-option"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">
@@ -69,7 +71,9 @@
     </mat-label>
     <mat-radio-group required formControlName="hasPreExistingConditions">
       <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="false" data-cy="has-no-pre-existion-conditions-option"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasPreExistingConditions').value">
@@ -89,7 +93,9 @@
     </mat-label>
     <mat-radio-group required formControlName="belongToMedicalStaff">
       <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="false" data-cy="no-medical-staff-option"
+        >Nein</mat-radio-button
+      >
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('belongToMedicalStaff').value">
@@ -108,7 +114,7 @@
     </mat-label>
     <mat-radio-group required formControlName="hasContactToVulnerablePeople">
       <mat-radio-button class="example-radio-button" [value]="true">Ja</mat-radio-button>
-      <mat-radio-button class="example-radio-button" [value]="false">Nein</mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="false" data-cy="no-contact-option">Nein</mat-radio-button>
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasContactToVulnerablePeople').value">
