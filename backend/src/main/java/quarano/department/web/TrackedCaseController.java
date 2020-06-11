@@ -1,5 +1,7 @@
 package quarano.department.web;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.NonNull;
@@ -21,12 +23,15 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
+import quarano.tracking.Encounter;
+import quarano.tracking.Encounters;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
@@ -94,12 +99,14 @@ class TrackedCaseController {
 	@PostMapping(path = "/api/hd/cases", params = "type=index")
 	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
 			@LoggedIn Department department) {
+
 		return postCase(payload, errors, department);
 	}
 
 	@PostMapping("/api/hd/cases")
 	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
 			@LoggedIn Department department) {
+
 		return createTrackedCase(payload, CaseType.INDEX, department, errors);
 	}
 
@@ -120,6 +127,7 @@ class TrackedCaseController {
 
 	@GetMapping(path = "/api/hd/cases/form")
 	HttpEntity<?> getCaseForm() {
+
 		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
 
@@ -138,6 +146,26 @@ class TrackedCaseController {
 				.filter(it -> it.belongsTo(department)) //
 				.map(TrackedCase::getQuestionnaire) //
 				.map(representations::toRepresentation));
+	}
+
+	@GetMapping("/api/hd/cases/{identifier}/contacts")
+	RepresentationModel<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
+
+		var contactRepresentations = cases.findById(identifier) //
+				.filter(it -> it.belongsTo(department)) //
+				.map(TrackedCase::getTrackedPerson) //
+				.map(it -> it.getEncounters())//
+				.stream()//
+				.flatMap(Encounters::stream)//
+				.sorted(comparing(Encounter::getDate,reverseOrder()))
+				.map(it -> representations.toContactSummary(it.getContact(), it.getDate()))//
+				.collect(Collectors.toList());
+
+		Object collection = contactRepresentations.isEmpty() //
+				? List.of(wrappers.emptyCollectionOf(TrackedCaseContactSummary.class)) //
+				: contactRepresentations;
+		
+		return RepresentationModel.of(collection);
 	}
 
 	// PUT Mapping for transformation into index case

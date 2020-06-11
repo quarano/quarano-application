@@ -12,4 +12,5 @@ public class TrackedCaseLinkRelations {
 	public static final LinkRelation RENEW = LinkRelation.of("renew");
 
 	public static final LinkRelation QUESTIONNAIRE = LinkRelation.of("questionnaire");
+	public static final LinkRelation CONTACTS = LinkRelation.of("contacts");
 }
