@@ -40,6 +40,9 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 		var links = Links.of(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
 				TrackedCaseLinkRelations.CONCLUDE));
 
+		links = links.and(Link.of(fromMethodCall(controller.getContactsOfCase(trackedCase.getId(), null)).toUriString(),
+				TrackedCaseLinkRelations.CONTACTS));
+
 		Supplier<String> uri = () -> fromMethodCall(
 				on(RegistrationController.class).createRegistration(trackedCase.getId(), null)).toUriString();
 

@@ -19,6 +19,7 @@ import quarano.department.ContactChaser;
 import quarano.department.Questionnaire;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
@@ -57,11 +58,13 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 @Component
 @RequiredArgsConstructor
 class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
+	private final @NonNull TrackedCaseRepository cases;
 	private final MapperWrapper mapper;
 	private final SmartValidator validator;
 	private final MessageSourceAccessor messages;
@@ -84,11 +87,19 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 				.map(Contact::new) //
 				.collect(Collectors.toList());
 
-		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
+		var contactCount = trackedCase.getTrackedPerson().getEncounters().stream().count();
+		
+		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases, contactCount);
 	}
 
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
 		return new TrackedCaseSummary(trackedCase, messages);
+	}
+	
+	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, LocalDate contactDate) {
+		
+		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
+		return new TrackedCaseContactSummary(contactPerson, contactDate, contactTrackedCase);
 	}
 
 	QuestionnaireDto toRepresentation(Questionnaire report) {
@@ -282,14 +293,16 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 		private final @Getter List<Contact> indexContacts;
+		private final @Getter long contactCount;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
-				List<Contact> indexContacts) {
+				List<Contact> indexContacts, long contactCount) {
 
 			super(trackedCase, messages);
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
+			this.contactCount = contactCount;
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
 		}

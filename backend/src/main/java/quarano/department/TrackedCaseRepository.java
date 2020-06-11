@@ -35,4 +35,12 @@ public interface TrackedCaseRepository extends QuaranoRepository<TrackedCase, Tr
 	 * @return
 	 */
 	boolean existsByOriginContacts(ContactPerson person);
+	
+	/**
+	 * Returns the optional {@link TrackedCase} that's associated with the given {@link ContactPerson}.
+	 *
+	 * @param person must not be {@literal null}.
+	 * @return
+	 */
+	Optional<TrackedCase> findByOriginContacts(ContactPerson person);
 }
