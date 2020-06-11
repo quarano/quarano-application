@@ -29,6 +29,11 @@ const routes: Routes = [
     loadChildren: () => import('@qro/all-users/shell').then((m) => m.AllUsersShellModule),
   },
   {
+    // ToDo: Remove this route after next go live
+    path: 'welcome/landing/:usertype/:clientcode',
+    redirectTo: 'client/enrollment/landing/:usertype/:clientcode',
+  },
+  {
     path: '404/:message',
     component: NotFoundComponent,
   },
