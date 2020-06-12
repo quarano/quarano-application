@@ -35,6 +35,8 @@ import org.springframework.data.util.Streamable;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class ContactChaserTest {
 
+	private static final LocalDate YESTERDAY = LocalDate.now().minusDays(1);
+	
 	@Mock TrackedCaseRepository cases;
 	@Mock DiaryManagement diaries;
 
@@ -64,7 +66,7 @@ class ContactChaserTest {
 		assertThat(contacts).hasSize(1).satisfies(contact -> {
 
 			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
-			assertThat(contact.getContactAt()).isEqualTo(LocalDate.now());
+			assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
 			assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
 			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
 
@@ -85,7 +87,7 @@ class ContactChaserTest {
 		assertThat(contacts).hasSize(1).satisfies(contact -> {
 
 			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
-			assertThat(contact.getContactAt()).isEqualTo(LocalDate.now());
+			assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
 			assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
 			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
 
@@ -109,7 +111,7 @@ class ContactChaserTest {
 		assertThat(contacts).hasSize(1).satisfies(contact -> {
 
 			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
-			assertThat(contact.getContactAt()).isEqualTo(LocalDate.now());
+			assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
 			assertThat(contact.getPerson()).isEqualTo(trackedPerson);
 			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
 
@@ -145,7 +147,8 @@ class ContactChaserTest {
 
 		var person = spy(new TrackedPerson("indexFirstName", "indexLastName"));
 		lenient().when(person.getId()).thenReturn(identifier);
-		when(person.getEncounters()).thenReturn(Encounters.of(List.of(Encounter.with(contactPerson, LocalDate.now()))));
+		// test with two encounters because CORE-270
+		when(person.getEncounters()).thenReturn(Encounters.of(List.of(Encounter.with(contactPerson, LocalDate.now()), Encounter.with(contactPerson, YESTERDAY))));
 
 		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
 	}
@@ -159,7 +162,7 @@ class ContactChaserTest {
 
 	private static Diary diary(TrackedPersonIdentifier trackedPersonIdentifier, ContactPerson contactPerson) {
 		return Diary
-				.of(Streamable.of(DiaryEntry.of(Slot.of(LocalDate.now(), Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
+				.of(Streamable.of(DiaryEntry.of(Slot.of(YESTERDAY, Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
 						.setContacts(List.of(contactPerson))));
 	}
 }
