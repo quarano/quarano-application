@@ -3,11 +3,16 @@ package quarano.tracking;
 import lombok.RequiredArgsConstructor;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.util.Streamable;
 
@@ -47,11 +52,26 @@ public class Encounters implements Streamable<Encounter> {
 
 		return encounters.stream() //
 				.filter(it -> it.isEncounterWith(contact)) //
-				.sorted(Comparator.comparing(Encounter::getDate))
+				.sorted(Comparator.comparing(Encounter::getDate))//
 				.findFirst() //
 				.map(Encounter::getDate);
 	}
 
+	public Map<ContactPerson, List<Encounter>> getEncountersGroupedByContactPerson() {
+		return encounters.stream().collect(Collectors.groupingBy(Encounter::getContact));
+	}
+
+	public Map<ContactPerson, List<LocalDate>> getContactDatesGroupedByContactPerson() {
+
+		var contactDatesGroupedByContactPerson = encounters.stream()//
+				.collect(groupingBy(Encounter::getContact,
+						mapping(Encounter::getDate, Collectors.toList())));
+		
+		contactDatesGroupedByContactPerson.forEach((key, list) -> list.sort(Comparator.naturalOrder()));
+	
+		return contactDatesGroupedByContactPerson;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()

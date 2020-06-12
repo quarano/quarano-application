@@ -3,7 +3,6 @@ package quarano.department.web;
 import lombok.Getter;
 import lombok.NonNull;
 import quarano.core.EnumMessageSourceResolvable;
-import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 
 import java.time.format.DateTimeFormatter;
@@ -86,7 +85,7 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 	}
 
 	public String getCaseType() {
-		return getPrimaryCaseType().name().toLowerCase(Locale.US);
+		return trackedCase.getType().getPrimaryCaseType().name().toLowerCase(Locale.US);
 	}
 
 	public Boolean isMedicalStaff() {
@@ -115,17 +114,5 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 
 		return Map.of("from", quarantine.getFrom().format(DateTimeFormatter.ISO_DATE), //
 				"to", quarantine.getTo().format(DateTimeFormatter.ISO_DATE));
-	}
-
-	private CaseType getPrimaryCaseType() {
-
-		switch (trackedCase.getType()) {
-			case CONTACT:
-			case CONTACT_MEDICAL:
-			case CONTACT_VULNERABLE:
-				return CaseType.CONTACT;
-			default:
-				return CaseType.INDEX;
-		}
 	}
 }
