@@ -29,7 +29,7 @@ public class DiaryManagement {
 		var person = persons.findById(entry.getTrackedPersonId()) //
 				.orElseThrow(() -> new IllegalStateException("No tracked person found for id " + entry.getTrackedPersonId()));
 
-		var date = entry.getDate();
+		var date = entry.getSlotDate();
 
 		entry.getContacts().forEach(it -> person.reportContactWith(it, date));
 
