@@ -26,4 +26,16 @@ public enum CaseType {
 	 * A contact case for someone at high risk.
 	 */
 	CONTACT_VULNERABLE;
+	
+	public CaseType getPrimaryCaseType() {
+
+		switch (this) {
+			case CONTACT:
+			case CONTACT_MEDICAL:
+			case CONTACT_VULNERABLE:
+				return CaseType.CONTACT;
+			default:
+				return CaseType.INDEX;
+		}
+	}
 }

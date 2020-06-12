@@ -96,10 +96,10 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
 	
-	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, LocalDate contactDate) {
+	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
 		
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
-		return new TrackedCaseContactSummary(contactPerson, contactDate, contactTrackedCase);
+		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
 	}
 
 	QuestionnaireDto toRepresentation(Questionnaire report) {
