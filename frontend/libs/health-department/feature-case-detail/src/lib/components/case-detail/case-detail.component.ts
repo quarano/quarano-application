@@ -165,7 +165,7 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  saveCaseData(caseDetail: CaseDetailDto) {
+  saveCaseData(result: CaseDetailResult) {
     this.personalDataLoading = true;
 
     if (!result.caseDetail.caseId) {
