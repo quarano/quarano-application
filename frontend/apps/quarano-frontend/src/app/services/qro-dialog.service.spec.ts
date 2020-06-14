@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { QroDialogService } from './qro-dialog.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
-describe('QroDialogServiceService', () => {
+describe('QroDialogService', () => {
   let service: QroDialogService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [MatDialogModule],
+    });
     service = TestBed.inject(QroDialogService);
   });
 

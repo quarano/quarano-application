@@ -3,8 +3,8 @@ import { ContactPersonDialogComponent } from '../modules/app-forms/contact-perso
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 
 export interface ContactPerson {
   id?: string;
