@@ -3,9 +3,7 @@ export class ContactDto {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
-
   contactAt: Date;
-
   isHealthStaff: boolean;
   isSenior: boolean;
   hasPreExistingConditions: boolean;

@@ -97,10 +97,10 @@
       <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{ caseComments.length }})">
         <ng-template mat-tab-label>
           Kommentare
-          <span class="comment-cnt">{{ (caseComments$ | async)?.length }}</span>
+          <span class="comment-cnt">{{ caseComments.length }}</span>
         </ng-template>
         <qro-client-comments
-          [comments]="caseComments$ | async"
+          [comments]="caseComments"
           [loading]="commentLoading"
           (newComment)="addComment($event)"
         ></qro-client-comments>
@@ -119,6 +119,16 @@
           [questionnaire]="questionnaire"
           [symptoms]="symptoms$ | async"
         ></qro-client-questionnaire>
+      </mat-tab>
+      <mat-tab *ngIf="contacts$$ | async as contacts" label="Kontakte ({{ contacts.length }})">
+        <ng-template mat-tab-label>
+          Kontakte
+          <span class="comment-cnt">{{ contacts.length }}</span>
+        </ng-template>
+        <qro-contact-list
+          [contacts]="contacts"
+          [caseName]="(caseDetail$ | async).firstName + ' ' + (caseDetail$ | async).lastName"
+        ></qro-contact-list>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
