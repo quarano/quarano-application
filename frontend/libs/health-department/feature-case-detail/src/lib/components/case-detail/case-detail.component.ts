@@ -6,6 +6,7 @@ import {
   StartTracking,
   HealthDepartmentService,
   CaseStatus,
+  ContactListItemDto,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,14 +41,13 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
   caseDetail$: Observable<CaseDetailDto>;
   caseAction$: Observable<CaseActionDto>;
   caseIndexContacts$: Observable<ContactDto[]>;
-
   caseComments$: Observable<CaseCommentDto[]>;
-
   symptoms$: Observable<SymptomDto[]>;
 
   updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
   questionnaire$$: Subject<QuestionnaireDto> = new Subject<QuestionnaireDto>();
+  contacts$$: Subject<ContactListItemDto[]> = new Subject<ContactListItemDto[]>();
 
   @ViewChild('tabs', { static: false })
   tabGroup: MatTabGroup;
@@ -127,6 +127,18 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
               )
             );
           });
+      });
+
+    this.subs.sink = this.caseDetail$
+      .pipe(
+        filter((data) => data !== null),
+        filter((data) => data?._links?.hasOwnProperty('contacts')),
+        take(1)
+      )
+      .subscribe((data) => {
+        this.subs.sink = this.apiService.getApiCall<any>(data, 'contacts').subscribe((contacts) => {
+          this.contacts$$.next(contacts?._embedded?.contacts);
+        });
       });
   }
 

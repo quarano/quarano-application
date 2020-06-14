@@ -1,6 +1,7 @@
+import { HalResponse } from '@qro/shared/util-data-access';
 import { ClientType } from '@qro/auth/api';
 
-export interface CaseListItemDto {
+export interface CaseListItemDto extends HalResponse {
   dateOfBirth: Date;
   firstName: string;
   lastName: string;

@@ -17,3 +17,4 @@ export * from './lib/resolvers/contact-case-case-list.resolver';
 export * from './lib/services/contact-case.service';
 export * from './lib/resolvers/index-case-action-list.resolver';
 export * from './lib/resolvers/index-case-case-list.resolver';
+export * from './lib/models/contact-list-item';

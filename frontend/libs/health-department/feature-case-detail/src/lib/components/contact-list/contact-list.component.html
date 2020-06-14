@@ -1,0 +1,102 @@
+<h3>
+  <strong>Angegebene Kontaktpersonen von {{ caseName }}</strong>
+</h3>
+<ngx-datatable
+  #table
+  data-cy="case-data-table"
+  class="material fixed-header"
+  style="max-width: 1110px;"
+  [count]="rows.length"
+  [headerHeight]="50"
+  rowHeight="auto"
+  [rows]="rows"
+  [messages]="{
+    emptyMessage: caseName + ' hat bisher noch keine Kontakte erfasst',
+    selectedMessage: 'ausgewählt',
+    totalMessage: rows.length === 1 ? 'Kontakt' : 'Kontakte'
+  }"
+  [footerHeight]="50"
+  selectionType="single"
+  (select)="onSelect($event)"
+  [limit]="15"
+>
+  <ngx-datatable-column
+    prop="lastName"
+    name="Nachname"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+    width="150"
+  ></ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="firstName"
+    name="Vorname"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+    width="150"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="isHealthStaff"
+    name="Med."
+    width="100"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="isSenior"
+    name="Ü60"
+    width="100"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="hasPreExistingConditions"
+    name="Vorerkrank."
+    width="100"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="lastContact"
+    name="Letzter Kontakt"
+    width="200"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <ng-container *ngIf="value; else empty_last_Contact">{{ value | date: 'dd.MM.y' }}</ng-container>
+      <ng-template #empty_last_Contact>-</ng-template>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    prop="status"
+    name="Status"
+    width="300"
+    [resizeable]="true"
+    [sortable]="true"
+    [draggable]="true"
+    [canAutoResize]="true"
+  >
+  </ngx-datatable-column>
+</ngx-datatable>

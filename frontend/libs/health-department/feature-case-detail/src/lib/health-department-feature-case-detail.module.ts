@@ -1,3 +1,5 @@
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ContactListComponent } from './components/contact-list/contact-list.component';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
@@ -44,6 +46,7 @@ const routes: Routes = [
     IndexContactsComponent,
     MailComponent,
     QuestionnaireComponent,
+    ContactListComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +57,7 @@ const routes: Routes = [
     SharedUiButtonModule,
     HealthDepartmentDomainModule,
     SharedUtilSymptomModule,
+    NgxDatatableModule,
   ],
 })
 export class HealthDepartmentFeatureCaseDetailModule {}

@@ -1,4 +1,4 @@
-import { HalResponse } from '@qro/shared/util-data-access';
+import { HalResponse, Link } from '@qro/shared/util-data-access';
 import { CaseCommentDto } from './case-comment';
 import { ContactDto } from './contact';
 
@@ -23,6 +23,7 @@ export interface CaseDetailDto extends HalResponse {
   caseTypeLabel: string;
   extReferenceNumber: string;
   indexContacts?: ContactDto[];
+  contactCount: number;
 }
 
 export enum CaseStatus {
