@@ -1,3 +1,4 @@
+import { SnackbarService } from '@qro/shared/util-snackbar';
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { ContactListItemDto } from '@qro/health-department/domain';
@@ -10,6 +11,8 @@ interface RowViewModel {
   hasPreExistingConditions: string;
   lastContact: Date;
   status: string;
+  caseType: string;
+  caseId: string;
 }
 
 @Component({
@@ -23,16 +26,22 @@ export class ContactListComponent implements OnInit {
 
   rows: RowViewModel[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private snackbarService: SnackbarService) {}
 
   ngOnInit() {
     this.rows = this.contacts.map((c) => this.getRowData(c));
   }
 
   onSelect(event) {
-    // ToDo: Anpassen, wenn type und id des Falls mitgeliefert werden.
-    // Snackbar anzeigen, wenn kein Fall existiert
-    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.contactId]);
+    console.log(event);
+    const selectedItem = event?.selected[0] as RowViewModel;
+    if (selectedItem?.caseId && selectedItem?.caseType) {
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate(['/health-department/case-detail', selectedItem.caseType, selectedItem.caseId]);
+    } else {
+      this.snackbarService.message(`Zu ${selectedItem.firstName} ${selectedItem.lastName} liegt noch kein Fall vor.`);
+    }
   }
 
   private getRowData(listItem: ContactListItemDto): RowViewModel {
@@ -43,6 +52,8 @@ export class ContactListComponent implements OnInit {
       isHealthStaff: this.getBooleanText(listItem.isHealthStaff),
       isSenior: this.getBooleanText(listItem.isSenior),
       hasPreExistingConditions: this.getBooleanText(listItem.hasPreExistingConditions),
+      caseId: listItem.caseId,
+      caseType: listItem.caseType,
       lastContact:
         listItem.descendingSortedContactDates.length > 0 ? new Date(listItem.descendingSortedContactDates[0]) : null,
     };
