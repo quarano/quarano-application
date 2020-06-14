@@ -30,7 +30,7 @@ import { ClientType } from '@qro/auth/api';
   templateUrl: './case-detail.component.html',
   styleUrls: ['./case-detail.component.scss'],
 })
-export class CaseDetailComponent implements OnInit, OnDestroy {
+export class CaseDetailComponent implements OnDestroy {
   caseId: string;
   type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
   type$: Observable<ClientType> = this.type$$.asObservable();
@@ -63,9 +63,15 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     private snackbarService: SnackbarService,
     private apiService: ApiService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.subs.add(
+      this.route.params.subscribe((_) => {
+        this.initData();
+      })
+    );
+  }
 
-  ngOnInit(): void {
+  initData(): void {
     this.caseDetail$ = merge(this.route.data.pipe(map((data) => data.case)), this.updatedDetail$$).pipe(
       map((data) => data)
     );
@@ -98,47 +104,56 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     this.subs.sink = this.caseDetail$
       .pipe(
         filter((data) => data !== null),
-        filter((data) => data?._links?.hasOwnProperty('renew')),
         take(1)
       )
       .subscribe((data) => {
-        this.subs.sink = this.apiService.getApiCall<StartTracking>(data, 'renew').subscribe((startTracking) => {
-          this.trackingStart$$.next(startTracking);
-        });
-      });
-
-    this.subs.sink = this.caseDetail$
-      .pipe(
-        filter((data) => data !== null),
-        filter((data) => data?._links?.hasOwnProperty('questionnaire')),
-        take(1)
-      )
-      .subscribe((data) => {
-        this.subs.sink = this.apiService
-          .getApiCall<QuestionnaireDto>(data, 'questionnaire')
-          .subscribe((questionnaire) => {
-            this.questionnaire$$.next(questionnaire);
-            this.symptoms$ = this.route.data.pipe(
-              map((resolver) => resolver.symptoms),
-              map((symptoms: SymptomDto[]) =>
-                symptoms.filter(
-                  (symptom) => questionnaire.symptoms.findIndex((symptomId) => symptomId === symptom.id) !== -1
-                )
-              )
-            );
+        if (data?._links?.hasOwnProperty('renew')) {
+          this.subs.sink = this.apiService.getApiCall<StartTracking>(data, 'renew').subscribe((startTracking) => {
+            this.trackingStart$$.next(startTracking);
           });
+        } else {
+          this.trackingStart$$.next(null);
+        }
       });
 
     this.subs.sink = this.caseDetail$
       .pipe(
         filter((data) => data !== null),
-        filter((data) => data?._links?.hasOwnProperty('contacts')),
         take(1)
       )
       .subscribe((data) => {
-        this.subs.sink = this.apiService.getApiCall<any>(data, 'contacts').subscribe((contacts) => {
-          this.contacts$$.next(contacts?._embedded?.contacts);
-        });
+        if (data?._links?.hasOwnProperty('questionnaire')) {
+          this.subs.sink = this.apiService
+            .getApiCall<QuestionnaireDto>(data, 'questionnaire')
+            .subscribe((questionnaire) => {
+              this.questionnaire$$.next(questionnaire);
+              this.symptoms$ = this.route.data.pipe(
+                map((resolver) => resolver.symptoms),
+                map((symptoms: SymptomDto[]) =>
+                  symptoms.filter(
+                    (symptom) => questionnaire.symptoms.findIndex((symptomId) => symptomId === symptom.id) !== -1
+                  )
+                )
+              );
+            });
+        } else {
+          this.questionnaire$$.next(null);
+        }
+      });
+
+    this.subs.sink = this.caseDetail$
+      .pipe(
+        filter((data) => data !== null),
+        take(1)
+      )
+      .subscribe((data) => {
+        if (data?._links?.hasOwnProperty('contacts')) {
+          this.subs.sink = this.apiService.getApiCall<any>(data, 'contacts').subscribe((contacts) => {
+            this.contacts$$.next(contacts?._embedded?.contacts);
+          });
+        } else {
+          this.contacts$$.next(null);
+        }
       });
   }
 

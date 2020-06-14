@@ -184,8 +184,6 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   }
 
   trimValue(input: MatInput) {
-    console.log(this.formGroup);
-    console.log(this.formGroup.hasError('passwordConfirmWrong'));
     input.value = input.value?.trim();
   }
 }

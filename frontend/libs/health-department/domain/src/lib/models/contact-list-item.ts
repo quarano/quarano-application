@@ -10,4 +10,7 @@ export interface ContactListItemDto extends HalResponse {
   contactId: string;
   hasPreExistingConditions: boolean;
   isSenior: boolean;
+  caseId: string;
+  caseType: string;
+  caseTypeLabel: string;
 }
