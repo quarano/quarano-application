@@ -15,13 +15,13 @@
       </mat-error>
     </mat-form-field>
 
-    <qro-multiple-autocomplete
+    <qro-multiple-contact-autocomplete
       [control]="formGroup.controls.contactIds"
       [selectableItems]="data.contactPersons"
       placeholder="Wählen Sie die Kontaktpersonen *"
       [nameProperties]="['firstName', 'lastName']"
     >
-    </qro-multiple-autocomplete>
+    </qro-multiple-contact-autocomplete>
 
     <div style="display: flex; flex-direction: row; align-items: center;">
       <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>

@@ -79,14 +79,14 @@
       <fieldset *ngFor="let date of datesForRetrospectiveContacts">
         <legend>Kontaktpersonen vom {{ date | date: 'dd.MM.y' }}</legend>
 
-        <qro-multiple-autocomplete
+        <qro-multiple-contact-autocomplete
           [control]="this.thirdFormGroup.controls[date.toLocaleDateString('de')]"
           [selectableItems]="contactPersons"
           [placeholder]="'Kontakte mit anderen Menschen am ' + date.toLocaleDateString('de')"
           [nameProperties]="['firstName', 'lastName']"
           (added)="onContactAdded(date, $event)"
           (removed)="onContactRemoved(date, $event)"
-        ></qro-multiple-autocomplete>
+        ></qro-multiple-contact-autocomplete>
         <div style="display: flex; flex-direction: row; align-items: center;">
           <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
           <button
