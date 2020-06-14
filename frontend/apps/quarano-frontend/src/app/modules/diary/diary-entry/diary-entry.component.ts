@@ -1,7 +1,7 @@
 import { BadRequestService } from '@qro/shared/util-error';
 import { DateFunctions, DeactivatableComponent, SnackbarService } from '@qro/shared/util';
 import { SubSink } from 'subsink';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -12,6 +12,7 @@ import { SymptomDto } from '../../../models/symptom';
 import { ContactPersonDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
 import { QroDialogService } from '../../../services/qro-dialog.service';
+import { MultipleAutocompleteComponent } from '../../../../../../../libs/shared/ui-multiple-autocomplete/src/lib/multiple-autocomplete/multiple-autocomplete.component';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -19,7 +20,6 @@ import { QroDialogService } from '../../../services/qro-dialog.service';
   styleUrls: ['./diary-entry.component.scss'],
 })
 export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
-  clearMultiSelectInput$$: Subject<boolean> = new Subject<boolean>();
   formGroup: FormGroup;
   diaryEntry: DiaryEntryDto;
   nonCharacteristicSymptoms: SymptomDto[] = [];
@@ -30,6 +30,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   date: string;
   slot: string;
   loading = false;
+
+  @ViewChild('contactMultipleAutoComplete')
+  contactMultipleAutocomplete: MultipleAutocompleteComponent;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -219,7 +222,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   addMissingContactPerson(name: string) {
     this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
-      this.clearMultiSelectInput$$.next(true);
+      this.contactMultipleAutocomplete.clearInput();
       this.contactPersons.push(createdContact);
       this.formGroup
         .get('contactPersons')
