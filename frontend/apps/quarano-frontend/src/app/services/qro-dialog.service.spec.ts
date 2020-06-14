@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { QroDialogServiceService } from './qro-dialog-service.service';
+import { QroDialogService } from './qro-dialog.service';
 
 describe('QroDialogServiceService', () => {
-  let service: QroDialogServiceService;
+  let service: QroDialogService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(QroDialogServiceService);
+    service = TestBed.inject(QroDialogService);
   });
 
   it('should be created', () => {
