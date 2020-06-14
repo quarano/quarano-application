@@ -5,7 +5,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DeactivatableComponent } from '@qro/shared/util-forms';
 import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
@@ -30,9 +30,6 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   date: string;
   slot: string;
   loading = false;
-
-  @ViewChild('contactMultipleAutoComplete')
-  contactMultipleAutocomplete: MultipleAutocompleteComponent;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -218,16 +215,6 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
       return '';
     }
     return value.toLocaleString();
-  }
-
-  addMissingContactPerson(name: string) {
-    this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
-      this.contactMultipleAutocomplete.clearInput();
-      this.contactPersons.push(createdContact);
-      this.formGroup
-        .get('contactPersons')
-        .patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
-    });
   }
 
   openContactDialog() {
