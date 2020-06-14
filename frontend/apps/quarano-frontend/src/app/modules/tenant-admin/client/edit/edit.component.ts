@@ -1,11 +1,10 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 import {
-  ValidationErrorGenerator,
+  PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator,
+  ValidationErrorGenerator,
 } from '@qro/shared/util-form-validation';
-import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
   EventEmitter,
@@ -24,8 +23,8 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { CaseDetailDto } from '../../../../models/case-detail';
 import { SnackbarService } from '@qro/shared/util';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
+import { ConfirmDialogData, QroDialogService } from '../../../../services/qro-dialog.service';
 
 @Component({
   selector: 'qro-client-edit',
@@ -37,6 +36,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
+
   get isIndexCase() {
     return this.type === ClientType.Index;
   }
@@ -55,7 +55,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
+  constructor(private dialog: QroDialogService, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.createFormGroup();
@@ -145,21 +145,22 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onTestDateAdded() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Zum Indexfall machen?',
-        text:
-          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
-      },
-    });
+    const data: ConfirmDialogData = {
+      title: 'Zum Indexfall machen?',
+      text:
+        'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
+    };
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.changedToIndex.emit(true);
-      } else {
-        this.formGroup.get('testDate').setValue(null);
-      }
-    });
+    this.dialog
+      .openConfirmDialog({ data: data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.changedToIndex.emit(true);
+        } else {
+          this.formGroup.get('testDate').setValue(null);
+        }
+      });
   }
 
   setValidators() {

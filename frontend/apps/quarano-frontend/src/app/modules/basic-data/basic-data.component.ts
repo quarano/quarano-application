@@ -20,8 +20,7 @@ import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
 } from '@qro/shared/util-form-validation';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { QroDialogServiceService } from '../../services/qro-dialog-service.service';
+import { ConfirmDialogData, QroDialogService } from '../../services/qro-dialog.service';
 
 @Component({
   selector: 'qro-basic-data',
@@ -69,7 +68,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private dialogService: QroDialogServiceService
+    private dialogService: QroDialogService
   ) {}
 
   ngOnInit() {
@@ -347,7 +346,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const data = {
+      const data: ConfirmDialogData = {
         title: 'Keine relevanten Kontakte?',
         text:
           'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
@@ -355,7 +354,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       };
 
       this.dialogService
-        .openContactPersonDialog({ data: data })
+        .openConfirmDialog({ data: data })
         .afterClosed()
         .subscribe((result) => {
           if (result) {

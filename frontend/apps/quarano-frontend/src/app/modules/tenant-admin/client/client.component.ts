@@ -1,4 +1,3 @@
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
@@ -14,11 +13,11 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { ApiService } from '../../../services/api.service';
 import { SnackbarService } from '@qro/shared/util';
 import { HalResponse } from '../../../models/hal-response';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ClientType } from '@qro/health-department/domain';
 import { SymptomDto } from '../../../models/symptom';
 import { QuestionnaireDto } from '../../../models/first-query';
 import { ContactDto } from '../../../models/contact';
+import { ConfirmDialogData, QroDialogService } from '../../../services/qro-dialog.service';
 
 @Component({
   selector: 'qro-clients',
@@ -57,7 +56,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     private router: Router,
     private apiService: ApiService,
     private snackbarService: SnackbarService,
-    private dialog: MatDialog
+    private dialog: QroDialogService
   ) {}
 
   ngOnInit(): void {
@@ -204,19 +203,20 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   onChangeTypeKeyPressed(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Zum Indexfall machen?',
-        text:
-          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',
-      },
-    });
+    const data: ConfirmDialogData = {
+      title: 'Zum Indexfall machen?',
+      text:
+        'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',
+    };
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.changeToIndexType();
-      }
-    });
+    this.dialog
+      .openConfirmDialog({ data: data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.changeToIndexType();
+        }
+      });
   }
 
   ngOnDestroy() {
