@@ -20,7 +20,6 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
   styleUrls: ['./diary-entry.component.scss'],
 })
 export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComponent {
-  clearMultiSelectInput$$: Subject<boolean> = new Subject<boolean>();
   formGroup: FormGroup;
   diaryEntry: DiaryEntryDto;
   nonCharacteristicSymptoms: SymptomDto[] = [];
@@ -31,6 +30,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   date: string;
   slot: string;
   loading = false;
+
+  @ViewChild('contactMultipleAutoComplete')
+  contactMultipleAutocomplete: MultipleAutocompleteComponent;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -220,7 +222,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   addMissingContactPerson(name: string) {
     this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
-      this.clearMultiSelectInput$$.next(true);
+      this.contactMultipleAutocomplete.clearInput();
       this.contactPersons.push(createdContact);
       this.formGroup
         .get('contactPersons')

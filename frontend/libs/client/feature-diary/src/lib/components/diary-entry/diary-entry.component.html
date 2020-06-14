@@ -48,6 +48,7 @@
         name="nonCharacteristicSymptoms"
       ></qro-multiple-autocomplete>
       <qro-multiple-autocomplete
+        #contactMultipleAutoComplete
         [control]="this.formGroup.controls.contactPersons"
         [selectableItems]="contactPersons"
         placeholder="Kontakte mit anderen Menschen seit letztem Eintrag"
@@ -55,7 +56,6 @@
         name="contactPersons"
         (itemNotFound)="addMissingContactPerson($event)"
         itemType="contactPerson"
-        [clearInputField]="clearMultiSelectInput$$.asObservable()"
       >
       </qro-multiple-autocomplete>
       <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">

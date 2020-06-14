@@ -17,7 +17,6 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() control: FormControl;
   @Input() placeholder: string;
   @Input() selectableItems: IIdentifiable[];
-  @Input() clearInputField: Observable<boolean>;
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
   @Output() itemNotFound = new EventEmitter<string>();
@@ -49,13 +48,12 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
         this._filter(searchTerm);
       }
     });
+  }
 
-    this.clearInputField.subscribe(() => {
-      console.log('clear now');
-      // fixme: best to do this only via formControl ! ..... :(
-      this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
-      this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
-    });
+  clearInput(): void {
+    // fixme: best to do this only via formControl ! ..... :(
+    this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
+    this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
   }
 
   ngOnDestroy(): void {
