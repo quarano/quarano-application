@@ -13,25 +13,25 @@ export interface DeactivatableComponent {
   providedIn: 'root',
 })
 export class PreventUnsavedChangesGuard implements CanDeactivate<DeactivatableComponent> {
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: QroDialogService) {}
 
   canDeactivate(component: DeactivatableComponent) {
     return component.canDeactivate() ? true : this.confirmProceeding();
   }
 
   confirmProceeding(): Observable<boolean> {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Fortfahren?',
-        text:
-          'Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen.',
-      },
-    });
-
-    return dialogRef.afterClosed().pipe(
-      map((result) => {
-        return !!result;
-      })
-    );
+    const data: ConfirmDialogData = {
+      title: 'Fortfahren?',
+      text:
+        'Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen.',
+    };
+    return this.dialog
+      .openConfirmDialog({ data: data })
+      .afterClosed()
+      .pipe(
+        map((result) => {
+          return !!result;
+        })
+      );
   }
 }

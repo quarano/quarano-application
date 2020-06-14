@@ -22,7 +22,7 @@ export class ActionComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: QroDialogService,
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private router: Router,
@@ -36,17 +36,17 @@ export class ActionComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.formGroup.valid) {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          title: 'Auffälligkeiten abschließen?',
-          text:
-            'Möchten Sie die aktuellen Auffälligkeiten tatsächlich als abgeschlossen kennzeichnen? ' +
-            'Diese werden dann in der Aktionsübersicht nicht mehr angezeigt.',
-        },
-      });
+    const data: ConfirmDialogData = {
+      title: 'Auffälligkeiten abschließen?',
+      text:
+        'Möchten Sie die aktuellen Auffälligkeiten tatsächlich als abgeschlossen kennzeichnen? ' +
+        'Diese werden dann in der Aktionsübersicht nicht mehr angezeigt.',
+    };
 
-      dialogRef.afterClosed().subscribe((result) => {
+    if (this.formGroup.valid) {
+      this.dialog
+        .openConfirmDialog({ data: data })
+        .afterClosed().subscribe((result) => {
         if (result) {
           this.resolveAnomalies();
         }

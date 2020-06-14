@@ -342,7 +342,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const data = {
+      const data: ConfirmDialogData = {
         title: 'Keine relevanten Kontakte?',
         text:
           'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +

@@ -61,7 +61,7 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private apiService: ApiService,
-    private dialog: MatDialog
+    private dialog: QroDialogService
   ) {}
 
   ngOnInit(): void {
@@ -239,19 +239,20 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
   }
 
   onChangeTypeKeyPressed(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Zum Indexfall machen?',
-        text:
-          'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',
-      },
-    });
+    const data: ConfirmDialogData = {
+      title: 'Zum Indexfall machen?',
+      text:
+        'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',
+    };
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.changeToIndexType();
-      }
-    });
+    this.dialog
+      .openConfirmDialog({ data: data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.changeToIndexType();
+        }
+      });
   }
 
   ngOnDestroy() {

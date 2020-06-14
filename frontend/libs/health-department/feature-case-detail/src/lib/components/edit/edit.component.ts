@@ -1,6 +1,6 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 import {
-  ValidationErrorGenerator,
+  PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PhoneOrMobilePhoneValidator,
@@ -37,6 +37,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
+
   get isIndexCase() {
     return this.type === ClientType.Index;
   }
@@ -55,7 +56,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
+  constructor(private dialog: QroDialogService, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.createFormGroup();
@@ -141,21 +142,22 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onTestDateAdded() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Zum Indexfall machen?',
-        text:
-          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
-      },
-    });
+    const data: ConfirmDialogData = {
+      title: 'Zum Indexfall machen?',
+      text:
+        'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
+    };
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.changedToIndex.emit(true);
-      } else {
-        this.formGroup.get('testDate').setValue(null);
-      }
-    });
+    this.dialog
+      .openConfirmDialog({ data: data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.changedToIndex.emit(true);
+        } else {
+          this.formGroup.get('testDate').setValue(null);
+        }
+      });
   }
 
   setValidators() {

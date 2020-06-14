@@ -29,7 +29,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService,
-    private dialogService: QroDialogServiceService,
+    private dialogService: QroDialogService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[] }
   ) {}
