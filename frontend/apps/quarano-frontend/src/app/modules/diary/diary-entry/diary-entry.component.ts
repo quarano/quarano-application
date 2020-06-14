@@ -1,18 +1,17 @@
 import { BadRequestService } from '@qro/shared/util-error';
 import { DateFunctions, DeactivatableComponent, SnackbarService } from '@qro/shared/util';
 import { SubSink } from 'subsink';
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../models/diary-entry';
 import { SymptomDto } from '../../../models/symptom';
 import { ContactPersonDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
 import { QroDialogService } from '../../../services/qro-dialog.service';
-import { MultipleAutocompleteComponent } from '../../../../../../../libs/shared/ui-multiple-autocomplete/src/lib/multiple-autocomplete/multiple-autocomplete.component';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -30,9 +29,6 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   date: string;
   slot: string;
   loading = false;
-
-  @ViewChild('contactMultipleAutoComplete')
-  contactMultipleAutocomplete: MultipleAutocompleteComponent;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -218,16 +214,6 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
       return '';
     }
     return value.toLocaleString();
-  }
-
-  addMissingContactPerson(name: string) {
-    this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
-      this.contactMultipleAutocomplete.clearInput();
-      this.contactPersons.push(createdContact);
-      this.formGroup
-        .get('contactPersons')
-        .patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
-    });
   }
 
   openContactDialog() {
