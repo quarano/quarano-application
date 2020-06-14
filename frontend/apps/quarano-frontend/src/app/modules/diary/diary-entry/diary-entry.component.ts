@@ -11,11 +11,7 @@ import { DiaryEntryDto, DiaryEntryModifyDto } from '../../../models/diary-entry'
 import { SymptomDto } from '../../../models/symptom';
 import { ContactPersonDto } from '../../../models/contact-person';
 import { ApiService } from '../../../services/api.service';
-import {
-  ConfirmDialogData,
-  ContactPersonDialogData,
-  QroDialogServiceService,
-} from '../../../services/qro-dialog-service.service';
+import { QroDialogService } from '../../../services/qro-dialog.service';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -57,7 +53,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private badRequestService: BadRequestService,
-    private dialogService: QroDialogServiceService
+    private dialogService: QroDialogService
   ) {}
 
   ngOnDestroy(): void {
@@ -222,36 +218,18 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   addMissingContactPerson(name: string) {
-    const dialogData: ConfirmDialogData = {
-      text:
-        'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
-        'Möchte Sie die Kontaktperson jetzt anlegen?',
-      title: 'Neue Kontaktperson',
-      abortButtonText: 'Abbrechen',
-      confirmButtonText: 'Kontakt anlegen',
-    };
-    this.dialogService
-      .openConfirmDialog({ data: dialogData })
-      .afterClosed()
-      .subscribe((choice) => {
-        if (choice) {
-          const firstName = name.split(' ')[0];
-          const lastName = name.split(' ')[1];
-          this.openContactDialog(firstName, lastName);
-        }
-        this.clearMultiSelectInput$$.next(true);
-      });
+    this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
+      this.clearMultiSelectInput$$.next(true);
+      this.contactPersons.push(createdContact);
+      this.formGroup
+        .get('contactPersons')
+        .patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
+    });
   }
 
-  openContactDialog(firstName: string, lastName: string) {
-    const contactData: ContactPersonDialogData = {
-      contactPerson: {
-        firstName: firstName,
-        lastName: lastName,
-      },
-    };
+  openContactDialog() {
     this.dialogService
-      .openContactPersonDialog({ data: contactData })
+      .openContactPersonDialog()
       .afterClosed()
       .subscribe((createdContact: ContactPersonDto | null) => {
         if (createdContact) {
