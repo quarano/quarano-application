@@ -125,7 +125,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  public submitForm() {
+  public submitForm(closeAfterSave: boolean) {
     if (this.formGroup.invalid) {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
@@ -134,22 +134,25 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     Object.assign(this.account, this.formGroup.value);
 
     if (this.isNew) {
-      this.createAccount();
+      this.createAccount(closeAfterSave);
     } else {
-      this.editAccount();
+      this.editAccount(closeAfterSave);
     }
   }
 
-  private createAccount() {
+  private createAccount(closeAfterSave: boolean) {
     this.accountService
       .createAccount(this.account)
       .subscribe(
-        () => {
+        (result) => {
           this.snackbarService.success(
             `Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`
           );
-          this.formGroup.markAsPristine();
-          this.router.navigate(['/administration/accounts/account-list']);
+          this.account = result;
+          if (closeAfterSave) {
+            this.router.navigate(['/administration/accounts/account-list']);
+          }
+          this.buildForm();
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);
@@ -158,17 +161,20 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       .add(() => (this.loading = false));
   }
 
-  private editAccount() {
+  private editAccount(closeAfterSave: boolean) {
     this.accountService
       .editAccount(this.account)
       .subscribe(
-        () => {
+        (result) => {
           this.snackbarService.success(
             `Die Accountdaten für ${this.account.firstName} ` +
               `${this.account.lastName} wurden erfolgreich aktualisiert`
           );
-          this.formGroup.markAsPristine();
-          this.router.navigate(['/administration/accounts/account-list']);
+          this.account = result;
+          if (closeAfterSave) {
+            this.router.navigate(['/administration/accounts/account-list']);
+          }
+          this.buildForm();
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);

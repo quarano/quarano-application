@@ -21,6 +21,7 @@ import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
+import { CaseDetailResult } from '../edit/edit.component';
 import { ClientType } from '@qro/auth/api';
 
 @Component({
@@ -134,7 +135,6 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
   }
 
   getStartTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
-    console.log(caseDetail.status);
     if (caseDetail.status === CaseStatus.Abgeschlossen) {
       return 'Der Fall ist bereits abgeschlossen worden';
     }
@@ -164,19 +164,21 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  saveCaseData(caseDetail: CaseDetailDto) {
+  saveCaseData(result: CaseDetailResult) {
     this.personalDataLoading = true;
-    let saveData$: Observable<any>;
-    if (!caseDetail.caseId) {
-      saveData$ = this.healthDepartmentService.createCase(caseDetail, this.type$$.value);
+
+    if (!result.caseDetail.caseId) {
+      this.caseDetail$ = this.healthDepartmentService.createCase(result.caseDetail, this.type$$.value);
     } else {
-      saveData$ = this.healthDepartmentService.updateCase(caseDetail);
+      this.caseDetail$ = this.healthDepartmentService.updateCase(result.caseDetail);
     }
 
-    this.subs.sink = saveData$
-      .subscribe(() => {
+    this.subs.sink = this.caseDetail$
+      .subscribe((res) => {
         this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-        this.router.navigate([this.returnLink]);
+        if (result.closeAfterSave) {
+          this.router.navigate([this.returnLink]);
+        }
       })
       .add(() => (this.personalDataLoading = false));
   }

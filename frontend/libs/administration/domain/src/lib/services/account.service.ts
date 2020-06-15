@@ -26,7 +26,7 @@ export class AccountService {
     return this.httpClient.post<AccountDto>(`${this.apiUrl}/api/hd/accounts`, account);
   }
 
-  editAccount(account: AccountDto) {
+  editAccount(account: AccountDto): Observable<AccountDto> {
     return this.httpClient.put<AccountDto>(`${this.apiUrl}/api/hd/accounts/${account.accountId}`, account);
   }
 }

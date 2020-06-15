@@ -9,7 +9,7 @@
       Pflichtfelder sind mit * markiert
     </mat-card-subtitle>
   </mat-card-header>
-  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm(false)">
     <mat-card-content>
       <mat-form-field class="half-width">
         <input
@@ -121,6 +121,15 @@
     <mat-card-actions>
       <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
         Speichern
+      </qro-button>
+      <qro-button
+        style="margin-left: 8px;"
+        type="button"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+        (buttonClicked)="submitForm(true)"
+      >
+        Speichern und schließen
       </qro-button>
       <button
         type="button"
