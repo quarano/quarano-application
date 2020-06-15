@@ -206,7 +206,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     this.editFormElement.ngSubmit.emit();
   }
 
-  submitForm(closeAfterSave: boolean) {
+  submitForm(form: NgForm, closeAfterSave: boolean) {
     if (this.formGroup.valid) {
       const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
 
@@ -221,6 +221,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       }
 
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
+      this.createFormGroup();
     }
   }
 

@@ -135,7 +135,6 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
   }
 
   getStartTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
-    console.log(caseDetail.status);
     if (caseDetail.status === CaseStatus.Abgeschlossen) {
       return 'Der Fall ist bereits abgeschlossen worden';
     }

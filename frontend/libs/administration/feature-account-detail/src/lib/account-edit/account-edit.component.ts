@@ -149,10 +149,10 @@ export class AccountEditComponent implements OnInit, OnDestroy {
             `Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`
           );
           this.account = result;
-          this.formGroup.markAsPristine();
           if (closeAfterSave) {
             this.router.navigate(['/administration/accounts/account-list']);
           }
+          this.buildForm();
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);
@@ -171,10 +171,10 @@ export class AccountEditComponent implements OnInit, OnDestroy {
               `${this.account.lastName} wurden erfolgreich aktualisiert`
           );
           this.account = result;
-          this.formGroup.markAsPristine();
           if (closeAfterSave) {
             this.router.navigate(['/administration/accounts/account-list']);
           }
+          this.buildForm();
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);
