@@ -58,7 +58,7 @@ public class Address {
 		 */
 		@Override
 		public String toString() {
-			return value;
+			return (isAbsent()) ? "" : value;
 		}
 	}
 }
