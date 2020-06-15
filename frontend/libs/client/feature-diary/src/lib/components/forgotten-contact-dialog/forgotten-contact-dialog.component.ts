@@ -9,6 +9,7 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
+import { QroDialogService } from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',

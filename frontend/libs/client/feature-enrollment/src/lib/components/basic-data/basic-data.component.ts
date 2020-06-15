@@ -19,6 +19,10 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
+import {
+  ConfirmDialogData,
+  QroDialogService,
+} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-basic-data',
@@ -66,7 +70,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private dialogService: QroDialogService
   ) {}
 
   ngOnInit() {

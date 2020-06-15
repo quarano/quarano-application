@@ -1,10 +1,10 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { ContactPersonDialogComponent } from '../modules/app-forms/contact-person-dialog/contact-person-dialog.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
+import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 
 export interface ContactPerson {
   id?: string;

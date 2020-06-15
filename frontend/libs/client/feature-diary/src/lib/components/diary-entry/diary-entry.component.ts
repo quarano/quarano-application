@@ -13,6 +13,7 @@ import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { QroDialogService } from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-diary-entry',

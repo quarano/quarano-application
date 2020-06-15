@@ -8,6 +8,10 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
+import {
+  ConfirmDialogData,
+  QroDialogService,
+} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-client-action',
@@ -46,11 +50,12 @@ export class ActionComponent implements OnInit {
     if (this.formGroup.valid) {
       this.dialog
         .openConfirmDialog({ data: data })
-        .afterClosed().subscribe((result) => {
-        if (result) {
-          this.resolveAnomalies();
-        }
-      });
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.resolveAnomalies();
+          }
+        });
     }
   }
 
