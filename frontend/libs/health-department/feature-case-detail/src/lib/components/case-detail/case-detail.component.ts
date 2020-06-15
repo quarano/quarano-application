@@ -7,7 +7,6 @@ import {
   HealthDepartmentService,
   CaseStatus,
 } from '@qro/health-department/domain';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
@@ -16,16 +15,12 @@ import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { MatTabGroup } from '@angular/material/tabs';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { ClientType } from '@qro/auth/api';
-import {
-  ConfirmDialogData,
-  QroDialogService,
-} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
+import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-case-detail',

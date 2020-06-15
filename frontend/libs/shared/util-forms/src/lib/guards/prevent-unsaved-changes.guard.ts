@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import {
-  ConfirmDialogData,
-  QroDialogService,
-} from '../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
+import { ConfirmDialogData, QroDialogService } from '../services/qro-dialog.service';
 
 export interface DeactivatableComponent {
   canDeactivate: () => boolean | Observable<boolean>;

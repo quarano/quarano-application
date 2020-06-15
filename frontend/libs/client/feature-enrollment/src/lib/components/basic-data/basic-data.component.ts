@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
@@ -13,16 +12,16 @@ import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { DateFunctions } from '@qro/shared/util-date';
-import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
-import { ClientDto } from '@qro/auth/api';
-import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import {
+  TrimmedPatternValidator,
+  VALIDATION_PATTERNS,
+  PhoneOrMobilePhoneValidator,
   ConfirmDialogData,
   QroDialogService,
-} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
+} from '@qro/shared/util-forms';
+import { DateFunctions } from '@qro/shared/util-date';
+import { ClientDto } from '@qro/auth/api';
+import { QuestionnaireDto } from '@qro/shared/util-data-access';
 
 @Component({
   selector: 'qro-basic-data',

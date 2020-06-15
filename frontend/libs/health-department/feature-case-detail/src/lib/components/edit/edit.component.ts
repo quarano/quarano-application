@@ -1,6 +1,8 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 import {
+  ConfirmDialogData,
   PhoneOrMobilePhoneValidator,
+  QroDialogService,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   ValidationErrorGenerator,
@@ -24,10 +26,6 @@ import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { CaseDetailDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
-import {
-  ConfirmDialogData,
-  QroDialogService,
-} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-client-edit',

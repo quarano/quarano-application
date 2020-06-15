@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MultipleAutocompleteComponent } from '../multiple-autocomplete/multiple-autocomplete.component';
 import { IIdentifiable } from '@qro/shared/util-data-access';
-import { QroDialogService } from '../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
+import { QroDialogService } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-multiple-contact-autocomplete',

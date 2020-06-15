@@ -2,14 +2,12 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
-import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
-import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
-import { QroDialogService } from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
+import { ArrayValidator, QroDialogService, ValidationErrorGenerator } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',

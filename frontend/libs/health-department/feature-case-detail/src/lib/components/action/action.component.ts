@@ -1,17 +1,17 @@
 import { BadRequestService } from '@qro/shared/ui-error';
-import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
+import {
+  ValidationErrorGenerator,
+  VALIDATION_PATTERNS,
+  TrimmedPatternValidator,
+  ConfirmDialogData,
+  QroDialogService,
+} from '@qro/shared/util-forms';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
-import {
-  ConfirmDialogData,
-  QroDialogService,
-} from '../../../../../../../apps/quarano-frontend/src/app/services/qro-dialog.service';
 
 @Component({
   selector: 'qro-client-action',
