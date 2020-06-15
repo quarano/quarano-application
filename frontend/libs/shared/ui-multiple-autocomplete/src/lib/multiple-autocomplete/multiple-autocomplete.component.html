@@ -1,4 +1,4 @@
-<mat-form-field class="chip-list">
+<mat-form-field class="chip-list" (click)="trigger.openPanel()">
   <mat-chip-list #chipList>
     <mat-chip
       *ngFor="let itemId of selectedItemIds"
@@ -21,7 +21,6 @@
       [matTooltip]="filteredList$$.value.length === 0 ? 'Es gibt keine weiteren Auswahlmöglichkeiten' : null"
       (blur)="checkInputForData()"
       #trigger="matAutocompleteTrigger"
-      (click)="trigger.openPanel()"
     />
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
