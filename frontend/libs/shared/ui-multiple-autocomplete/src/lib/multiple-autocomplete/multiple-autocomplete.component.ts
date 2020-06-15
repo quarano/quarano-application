@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { IIdentifiable } from '../../../../../../apps/quarano-frontend/src/app/models/general';
+import { IIdentifiable } from '@qro/shared/util-data-access';
 import { cloneDeep } from 'lodash';
 
 @Component({
@@ -43,11 +43,13 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
     this.selectedItemIds = this.control.value;
 
-    this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
-      if (typeof searchTerm === 'string') {
-        this._filter(searchTerm);
-      }
-    });
+    this.inputControl.valueChanges
+      .pipe(takeUntil(this.destroy$), startWith(null as string))
+      .subscribe((searchTearm) => {
+        if (typeof searchTearm === 'string') {
+          this._filter(searchTearm);
+        }
+      });
   }
 
   clearInput(): void {

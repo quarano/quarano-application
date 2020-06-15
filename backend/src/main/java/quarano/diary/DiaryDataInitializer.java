@@ -92,7 +92,7 @@ class DiaryDataInitializer implements DataInitializer {
 		entries.updateDiaryEntry(entry2);
 
 		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), sandra) //
-				.setContacts(contactsOfPerson3.subList(1, 1)) //
+				.setContacts(contactsOfPerson3.subList(1, 2)) //
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'

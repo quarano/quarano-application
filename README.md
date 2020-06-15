@@ -26,6 +26,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Development Server
 
+The modules must be installed with `npm install` before the first start.
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ### Code scaffolding
@@ -48,14 +49,12 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-### json server
-
-To start the server run `json-server --watch db.json`
-
-runs at `http://localhost:3000`
-further information at [github](https://github.com/typicode/json-server)
-
 ### CSS framework
 
 We use [Angular Material](https://v7.material.angular.io)
 [Corona Icons](https://icon-icons.com/de/pack/Coronavirus/2364)
+
+## For quick and good cooperation
+
+- [Getting started](https://github.com/quarano/quarano-application/wiki/Getting-started)
+- [More informations in our Wiki](https://github.com/quarano/quarano-application/wiki)

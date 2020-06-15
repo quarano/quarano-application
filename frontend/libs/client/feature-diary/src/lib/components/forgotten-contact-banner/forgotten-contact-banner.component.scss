@@ -1,0 +1,9 @@
+@import '../../../../../../shared/ui-styles/src/lib/styles/variables';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}

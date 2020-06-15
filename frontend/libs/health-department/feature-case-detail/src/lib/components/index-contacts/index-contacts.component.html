@@ -1,0 +1,29 @@
+<h1 class="mt-3">Angaben Indexfall</h1>
+<div *ngIf="contacts.length == 0; else contact">
+  Fall wurde manuell angelegt!
+</div>
+<ng-template #contact>
+  <mat-accordion [multi]="true">
+    <mat-expansion-panel *ngFor="let contact of contacts" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span>{{ contact.firstName + ' ' + contact.lastName }}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      Geburtsdatum: {{ contact.dateOfBirth | date }} <br />
+      Kontaktdatum: {{ contact.contactAt ? (contact.contactAt | date) : 'unbekannt' }} <br />
+      <span *ngIf="contact.identificationHint"> Kommentar zur Recherche: {{ contact.identificationHint }} <br /> </span>
+      <br />
+
+      Risikoeinschätzung: <br />
+      <div class="ml-3">
+        Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf:
+        {{ contact.isHealthStaff ? 'Ja' : 'Nein' }} <br />
+        Die Kontaktperson ist über 60 Jahre alt: {{ contact.isSenior ? 'Ja' : 'Nein' }} <br />
+        Die Kontaktperson hat bekannte Vorerkrankungen: {{ contact.hasPreExistingConditions ? 'Ja' : 'Nein' }} <br />
+      </div>
+      <br />
+      <!--      <a [routerLink]="['/health-department/case-detail/index', contact.caseId]" [queryParams]="{'tab': 0}">Zum Indexfall wechseln (not fully working)</a>-->
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>

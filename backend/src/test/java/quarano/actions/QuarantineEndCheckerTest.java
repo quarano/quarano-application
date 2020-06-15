@@ -1,20 +1,15 @@
 package quarano.actions;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentCaptor.*;
-import static org.mockito.Mockito.*;
-
-import quarano.QuaranoUnitTest;
-import quarano.account.Department;
-import quarano.actions.ActionItem.ItemType;
-import quarano.department.CaseType;
-import quarano.department.TrackedCase;
-import quarano.department.TrackedCaseRepository;
-import quarano.tracking.Quarantine;
-import quarano.tracking.TrackedPerson;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-
+import java.time.ZoneId;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +19,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.data.util.Streamable;
+import quarano.QuaranoUnitTest;
+import quarano.account.Department;
+import quarano.actions.ActionItem.ItemType;
+import quarano.department.CaseType;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
+import quarano.tracking.Quarantine;
+import quarano.tracking.TrackedPerson;
 
 @QuaranoUnitTest
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -31,19 +34,24 @@ class QuarantineEndCheckerTest {
 
 	private static final Department DEPARTMENT = new Department("Department A");
 
-	private static final LocalDate TODAY = LocalDate.now();
+	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
+
+	private static final LocalDate TODAY = LocalDate.now(ZONE_BERLIN);
 	private static final LocalDate TWO_WEEKS_AGO = TODAY.minusWeeks(2);
 	private static final LocalDate THREE_WEEKS_AGO = TODAY.minusWeeks(3);
 	private static final LocalDate SIX_DAYS_AGO = TODAY.minusDays(6);
 
-	private static final TrackedCase IN_QUARANTINE = new TrackedCase(new TrackedPerson("Erika", "Musterfrau"),
-			CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(SIX_DAYS_AGO));
+	private static final TrackedCase IN_QUARANTINE =
+			new TrackedCase(new TrackedPerson("Erika", "Musterfrau"),
+					CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(SIX_DAYS_AGO));
 
-	private static final TrackedCase QUARANTINE_OVER = new TrackedCase(new TrackedPerson("Max", "Mustermann"),
-			CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(THREE_WEEKS_AGO));
+	private static final TrackedCase QUARANTINE_OVER =
+			new TrackedCase(new TrackedPerson("Max", "Mustermann"),
+					CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(THREE_WEEKS_AGO));
 
-	private static final TrackedCase QUARANTINE_ENDS_TODAY = new TrackedCase(new TrackedPerson("Olaf", "Beispiel"),
-			CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(TWO_WEEKS_AGO));
+	private static final TrackedCase QUARANTINE_ENDS_TODAY =
+			new TrackedCase(new TrackedPerson("Olaf", "Beispiel"),
+					CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(TWO_WEEKS_AGO));
 
 	private static final Streamable<TrackedCase> TRACKED_CASES = Streamable //
 			.of(IN_QUARANTINE, QUARANTINE_OVER, QUARANTINE_ENDS_TODAY);
@@ -68,7 +76,10 @@ class QuarantineEndCheckerTest {
 		}));
 	}
 
-	@Test // CORE-70
+	/**
+	 * CORE-70
+	 */
+	@Test
 	void expectActionItemForCaseOutOfQuarantine() {
 
 		prepareNonExistingActionItems();
@@ -78,10 +89,13 @@ class QuarantineEndCheckerTest {
 		var values = verifyRepositorySaveInteraction(ONCE).getAllValues();
 
 		assertThat(values).hasSize(1);
-		assertThat(values.get(0)).satisfies(isQuarantineEndedActionItemFor(QUARANTINE_OVER));
+		assertThat(values.get(0)).satisfies(isQuarantineEndedActionItemFor());
 	}
 
-	@Test // CORE-70
+	/**
+	 * CORE-70
+	 */
+	@Test
 	void expectNoActionItemAsOneAlreadyExists() {
 
 		prepareExistingActionItems(QUARANTINE_OVER);
@@ -110,11 +124,7 @@ class QuarantineEndCheckerTest {
 
 	private ArgumentCaptor<TrackedCaseActionItem> verifyRepositorySaveInteraction(int times) {
 		ArgumentCaptor<TrackedCaseActionItem> quarantineEnding = forClass(TrackedCaseActionItem.class);
-		if (times == NEVER) {
-			verify(items, never()).save(quarantineEnding.capture());
-		} else {
-			verify(items, atLeast(times)).save(quarantineEnding.capture());
-		}
+		verify(items, times(times)).save(quarantineEnding.capture());
 		return quarantineEnding;
 	}
 
@@ -123,22 +133,23 @@ class QuarantineEndCheckerTest {
 	}
 
 	private static TrackedCaseActionItem createQuarantineEndedActionItem(TrackedCase trackedCase) {
-		return new TrackedCaseActionItem(trackedCase, ItemType.PROCESS_INCIDENT, DescriptionCode.QUARANTINE_ENDING);
+		return new TrackedCaseActionItem(trackedCase, ItemType.PROCESS_INCIDENT,
+				DescriptionCode.QUARANTINE_ENDING);
 	}
 
-	private static Condition<TrackedCaseActionItem> isQuarantineEndedActionItemFor(TrackedCase trackedCase) {
+	private static Condition<TrackedCaseActionItem> isQuarantineEndedActionItemFor() {
 
-		return new Condition<TrackedCaseActionItem>() {
+		return new Condition<>() {
 
 			@Override
 			public boolean matches(TrackedCaseActionItem item) {
 
-				assertThat(item.getCaseIdentifier()).isEqualTo(trackedCase.getId());
+				assertThat(item.getCaseIdentifier()).isEqualTo(QUARANTINE_OVER.getId());
 				assertThat(item.getType()).isEqualTo(ItemType.PROCESS_INCIDENT);
 				assertThat(item.getDescription().getCode()).isEqualTo(DescriptionCode.QUARANTINE_ENDING);
 
 				return true;
-			};
+			}
 		};
 	}
 }

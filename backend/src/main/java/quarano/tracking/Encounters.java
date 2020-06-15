@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class Encounters implements Streamable<Encounter> {
 
 		return encounters.stream() //
 				.filter(it -> it.isEncounterWith(contact)) //
+				.sorted(Comparator.comparing(Encounter::getDate))
 				.findFirst() //
 				.map(Encounter::getDate);
 	}

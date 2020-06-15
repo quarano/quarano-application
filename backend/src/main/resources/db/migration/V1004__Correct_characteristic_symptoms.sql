@@ -1,0 +1,3 @@
+INSERT INTO public.symptoms VALUES ('5397f942-95cb-4e7e-8146-8201cf5bf623', true, 'Allgemeine Schwäche');
+UPDATE public.symptoms SET is_characteristic = true WHERE symptom_id = 'ced041b6-24c1-429c-9961-dfcdd92270ba'; --  Laufende Nase / Schnupfen gets charakteristic
+UPDATE public.symptoms SET is_characteristic = true WHERE symptom_id = '5bb1524e-bccd-4549-8abe-fb92c483593a'; --  Geruchs- / Geschmacksstörung gets charakteristic

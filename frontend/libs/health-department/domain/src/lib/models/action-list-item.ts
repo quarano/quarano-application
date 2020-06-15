@@ -1,6 +1,6 @@
-import { SelfLink } from './../../../../../../apps/quarano-frontend/src/app/models/general';
+import { SelfLink } from '@qro/shared/util-data-access';
 import { Alert } from '../enums/alert';
-import { ClientType } from '../enums/client-type';
+import { ClientType } from '@qro/auth/api';
 
 export interface ActionListItemDto {
   name: string;

@@ -1,8 +1,5 @@
 {
-  "rulesDirectory": [
-    "node_modules/@nrwl/workspace/src/tslint",
-    "node_modules/codelyzer"
-  ],
+  "rulesDirectory": ["node_modules/@nrwl/workspace/src/tslint", "node_modules/codelyzer"],
   "linterOptions": {
     "exclude": ["**/*"]
   },
@@ -20,12 +17,7 @@
     "member-ordering": [
       true,
       {
-        "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
-        ]
+        "order": ["static-field", "instance-field", "static-method", "instance-method"]
       }
     ],
     "no-arg": true,
@@ -63,43 +55,35 @@
             "sourceTag": "scope:app",
             "onlyDependOnLibsWithTags": [
               "scope:health-department",
-              "scope:auth"
+              "scope:auth",
+              "scope:client",
+              "scope:administration",
+              "scope:shared"
             ]
           },
           {
             "sourceTag": "scope:health-department",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department",
-              "scope:shared"
-            ]
-          },
-          {
-            "sourceTag": "scope:health-department-contact-cases",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department-contact-cases",
-              "scope:health-department",
-              "scope:shared"
-            ]
-          },
-          {
-            "sourceTag": "scope:health-department-index-cases",
-            "onlyDependOnLibsWithTags": [
-              "scope:health-department-index-cases",
-              "scope:health-department",
-              "scope:shared"
-            ]
+            "onlyDependOnLibsWithTags": ["scope:health-department", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:administration",
-            "onlyDependOnLibsWithTags": ["scope:administration", "scope:shared"]
+            "onlyDependOnLibsWithTags": ["scope:administration", "scope:shared", "scope:auth"]
           },
           {
-            "sourceTag": "scope:administration-accounts",
-            "onlyDependOnLibsWithTags": [
-              "scope:administration-accounts",
-              "scope:administration",
-              "scope:shared"
-            ]
+            "sourceTag": "scope:client",
+            "onlyDependOnLibsWithTags": ["scope:client", "scope:shared", "scope:auth"]
+          },
+          {
+            "sourceTag": "scope:info",
+            "onlyDependOnLibsWithTags": ["scope:info", "scope:shared"]
+          },
+          {
+            "sourceTag": "scope:layout",
+            "onlyDependOnLibsWithTags": ["scope:layout", "scope:shared", "scope:auth"]
+          },
+          {
+            "sourceTag": "scope:welcome",
+            "onlyDependOnLibsWithTags": ["scope:welcome", "scope:shared", "scope:auth"]
           },
           {
             "sourceTag": "scope:auth",
@@ -110,29 +94,39 @@
             "onlyDependOnLibsWithTags": ["scope:shared"]
           },
           {
-            "sourceTag": "type:app",
-            "onlyDependOnLibsWithTags": ["type:feature"]
+            "sourceTag": "scope:all-users",
+            "onlyDependOnLibsWithTags": ["scope:all-users", "scope:shared", "scope:auth"]
           },
           {
-            "sourceTag": "type:feature",
+            "sourceTag": "type:app",
             "onlyDependOnLibsWithTags": [
-              "type:domain",
-              "type:util",
+              "type:feature",
               "type:api",
-              "type:ui"
+              "type:util",
+              "type:ui",
+              "type:domain",
+              "type:shell"
             ]
           },
           {
+            "sourceTag": "type:shell",
+            "onlyDependOnLibsWithTags": ["type:feature", "type:domain", "type:api"]
+          },
+          {
+            "sourceTag": "type:feature",
+            "onlyDependOnLibsWithTags": ["type:domain", "type:util", "type:api", "type:ui"]
+          },
+          {
             "sourceTag": "type:api",
-            "onlyDependOnLibsWithTags": ["type:domain", "type:util"]
+            "onlyDependOnLibsWithTags": ["type:domain"]
           },
           {
             "sourceTag": "type:ui",
-            "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
+            "onlyDependOnLibsWithTags": ["type:ui", "type:util", "type:domain"]
           },
           {
             "sourceTag": "type:util",
-            "onlyDependOnLibsWithTags": ["type:util"]
+            "onlyDependOnLibsWithTags": ["type:util", "type:ui"]
           }
         ]
       }

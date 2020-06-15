@@ -1,2 +1,12 @@
 export * from './lib/auth-api.module';
-export * from '../../domain/src/lib/services/auth.service';
+export {
+  ClientDto,
+  HealthDepartmentDto,
+  AuthService,
+  UserService,
+  IsAuthenticatedGuard,
+  IRole,
+  roleNames,
+  roles,
+  ClientType,
+} from '@qro/auth/domain';

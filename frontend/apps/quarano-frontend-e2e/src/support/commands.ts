@@ -7,6 +7,7 @@ declare namespace Cypress {
      */
     loginAgent: () => void;
     loginClient: () => void;
+    loginNotEnrolledClient: () => void;
   }
 }
 
@@ -14,10 +15,10 @@ const login = (username: string, password: string) => {
   cy.server();
   cy.route('POST', '/login').as('login');
 
-  cy.visit( 'http://localhost:4200', {
+  cy.visit('http://localhost:4200', {
     onBeforeLoad(win) {
       cy.stub(win, 'open').as('windowOpen');
-    }
+    },
   });
 
   cy.get('#username').type(username);
@@ -32,4 +33,7 @@ Cypress.Commands.add('loginAgent', () => {
 });
 Cypress.Commands.add('loginClient', () => {
   login('test3', 'test123');
+});
+Cypress.Commands.add('loginNotEnrolledClient', () => {
+  login('DemoAccount', 'DemoPassword');
 });

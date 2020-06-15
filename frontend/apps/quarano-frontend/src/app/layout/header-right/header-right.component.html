@@ -1,0 +1,32 @@
+<div class="container" *ngIf="userService.isLoggedIn$ | async">
+  <ng-container *qroIsEnrolledClient>
+    <button
+      *ngIf="healthDepartment$ | async as healthDepartment"
+      mat-stroked-button
+      data-cy="contact-button"
+      class="contact-button"
+      (click)="showContact(healthDepartment)"
+    >
+      Kontakt zum Amt
+    </button>
+  </ng-container>
+  <button data-cy="profile-user-button" mat-button [matMenuTriggerFor]="profilemenu">
+    <span>{{ currentUserName$ | async }} </span>
+    <mat-icon style="color: white;">arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #profilemenu="matMenu">
+    <ng-container
+      *ngIf="!userService.isHealthDepartmentUser && (enrollmentService.getEnrollmentStatus() | async)?.complete"
+    >
+      <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
+        <mat-icon>person</mat-icon> Benutzerprofil
+      </button>
+    </ng-container>
+    <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
+      <mat-icon>vpn_key</mat-icon> Passwort ändern
+    </button>
+    <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon> Abmelden
+    </button>
+  </mat-menu>
+</div>

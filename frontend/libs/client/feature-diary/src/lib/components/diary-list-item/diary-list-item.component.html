@@ -1,0 +1,32 @@
+<div class="bootstrap-wrapper">
+  <div class="row">
+    <div class="col-12 col-lg-2 line">
+      <span>{{ date | date: 'EEEEEE, dd.MM.y' }}</span>
+    </div>
+    <div class="col-12 col-md-6 col-lg-5 line">
+      <ng-container *ngIf="morning; else morning_warning"
+        ><qro-diary-entry-success [entry]="morning" label="Morgens"></qro-diary-entry-success
+      ></ng-container>
+      <ng-template #morning_warning
+        ><qro-diary-entry-warning
+          slot="morning"
+          [date]="diaryListItem.date"
+          [canCreate]="canCreateMorning"
+        ></qro-diary-entry-warning
+      ></ng-template>
+    </div>
+    <div class="col-12 col-md-6 col-lg-5 line">
+      <ng-container *ngIf="evening; else evening_warning"
+        ><qro-diary-entry-success [entry]="evening" label="Abends"></qro-diary-entry-success
+      ></ng-container>
+      <ng-template #evening_warning>
+        <qro-diary-entry-warning
+          slot="EVENING"
+          [date]="diaryListItem.date"
+          [canCreate]="canCreateEvening"
+        ></qro-diary-entry-warning>
+      </ng-template>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</div>

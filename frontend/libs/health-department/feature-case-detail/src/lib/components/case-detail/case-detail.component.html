@@ -1,0 +1,125 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title *ngIf="caseDetail$ | async as caseDetail; else newCase">
+      <span>
+        {{ (type$ | async) === ClientType.Index ? 'Falldetails' : 'Kontaktperson' }} {{ caseDetail.firstName }}
+        {{ caseDetail.lastName }}
+        <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
+      </span>
+      <span class="type"
+        >{{ caseDetail.caseTypeLabel }}
+        <button
+          (click)="onChangeTypeKeyPressed()"
+          *ngIf="(type$ | async) === ClientType.Contact"
+          mat-icon-button
+          matTooltip="Zum Indexfall machen"
+          matTooltipPosition="after"
+        >
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </span>
+    </mat-card-title>
+    <ng-template #newCase>
+      <mat-card-title
+        ><span>
+          {{ (type$ | async) === ClientType.Index ? 'Neuen Indexfall' : 'Neue Kontaktperson' }}
+          anlegen</span
+        >
+      </mat-card-title>
+    </ng-template>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="button-area" *ngIf="caseDetail$ | async as caseDetail">
+      <button
+        #start_tracking_btn
+        (click)="startTracking(caseDetail)"
+        color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
+        mat-button
+      >
+        <span [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
+          >Nachverfolgung starten</span
+        >
+      </button>
+      <button
+        #analog_tracking_btn
+        color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
+        mat-button
+      >
+        <span [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
+          >Analog nachverfolgen</span
+        >
+      </button>
+      <div class="spacer"></div>
+      <button
+        mat-button
+        color="primary"
+        (click)="checkForClose(caseDetail)"
+        [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'"
+      >
+        Fall abschließen
+      </button>
+    </div>
+    <mat-tab-group #tabs [selectedIndex]="tabIndex">
+      <mat-tab [label]="(type$$ | async) === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
+        <p class="hint secondary-text-color">
+          Pflichteingaben sind mit * markiert
+        </p>
+        <qro-client-edit
+          [caseDetail]="caseDetail$ | async"
+          (submittedValues)="saveCaseData($event)"
+          [type]="type$ | async"
+          (changedToIndex)="changeToIndexType()"
+          [loading]="personalDataLoading"
+        >
+        </qro-client-edit>
+      </mat-tab>
+      <mat-tab *ngIf="caseAction$ | async">
+        <ng-template mat-tab-label>
+          <span
+            *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
+            [matBadge]="
+              (
+                (caseAction$ | async).anomalies.health.length + (caseAction$ | async).anomalies.process.length
+              ).toString()
+            "
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+            >Aktionen</span
+          >
+          <ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
+        </ng-template>
+        <qro-client-action [caseAction]="caseAction$ | async" [type]="type$ | async"></qro-client-action>
+      </mat-tab>
+      <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{ caseComments.length }})">
+        <ng-template mat-tab-label>
+          Kommentare
+          <span class="comment-cnt">{{ (caseComments$ | async)?.length }}</span>
+        </ng-template>
+        <qro-client-comments
+          [comments]="caseComments$ | async"
+          [loading]="commentLoading"
+          (newComment)="addComment($event)"
+        ></qro-client-comments>
+      </mat-tab>
+      <mat-tab *ngIf="caseIndexContacts$ | async as caseIndexContacts">
+        <ng-template mat-tab-label>
+          Angaben Indexfall
+        </ng-template>
+        <qro-client-index-contacts [contacts]="caseIndexContacts"></qro-client-index-contacts>
+      </mat-tab>
+      <mat-tab *ngIf="trackingStart$$ | async as tracking" label="E-Mail Vorlage">
+        <qro-client-mail [tracking]="tracking" (renewTrackingCode)="renewTracking(tracking)"></qro-client-mail>
+      </mat-tab>
+      <mat-tab *ngIf="questionnaire$$ | async as questionnaire" label="Fragebogen">
+        <qro-client-questionnaire
+          [questionnaire]="questionnaire"
+          [symptoms]="symptoms$ | async"
+        ></qro-client-questionnaire>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

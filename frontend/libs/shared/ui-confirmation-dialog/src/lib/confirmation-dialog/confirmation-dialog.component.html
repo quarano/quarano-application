@@ -8,7 +8,7 @@
   <p [innerHTML]="data.text"></p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button color="primary" [mat-dialog-close]="true">
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" data-cy="confirm-button">
     <mat-icon>check</mat-icon>
     <span>{{ data.confirmButtonText }}</span>
   </button>

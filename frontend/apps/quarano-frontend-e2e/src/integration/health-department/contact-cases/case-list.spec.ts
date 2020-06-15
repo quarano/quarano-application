@@ -3,7 +3,7 @@
 describe('health-department contact cases case-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/hd/cases'/*, 'fixture:get-api-hd-cases.json'*/).as('allcases');
+    cy.route('GET', '/api/hd/cases' /*, 'fixture:get-api-hd-cases.json'*/).as('allcases');
 
     cy.loginAgent();
     cy.get('[data-cy="contact-cases"]').click();
@@ -32,17 +32,16 @@ describe('health-department contact cases case-list', () => {
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
       cy.get('[data-cy="search-case-input"]').type('drogler');
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 1);
-
     });
 
     it('should open new case page on button click', () => {
       cy.get('[data-cy="new-case-button"]').click();
-      cy.url().should('include', '/tenant-admin/client');
+      cy.url().should('include', '/health-department/case-detail');
     });
 
     it('should open selected case', () => {
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).click();
-      cy.url().should('include', '/tenant-admin/client/');
+      cy.url().should('include', '/health-department/case-detail');
     });
   });
 });

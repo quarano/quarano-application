@@ -26,26 +26,8 @@
       "tags": ["*"],
       "implicitDependencies": ["quarano-frontend"]
     },
-    "auth-change-password": {
-      "tags": ["scope:auth", "type:feature"]
-    },
     "auth-domain": {
       "tags": ["scope:auth", "type:domain"]
-    },
-    "shared-util": {
-      "tags": ["scope:shared", "type:util"]
-    },
-    "health-department-index-cases-action-list": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
-    },
-    "health-department-index-cases-case-list": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
-    },
-    "health-department-contact-cases-case-list": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
-    },
-    "health-department-contact-cases-action-list": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
     },
     "shared-ui-material": {
       "tags": ["scope:shared", "type:ui"]
@@ -57,19 +39,7 @@
       "tags": ["scope:health-department", "type:ui"]
     },
     "health-department-shell": {
-      "tags": ["scope:health-department", "type:feature"]
-    },
-    "health-department-contact-cases-shell": {
-      "tags": ["scope:health-department-contact-cases", "type:feature"]
-    },
-    "health-department-index-cases-shell": {
-      "tags": ["scope:health-department-index-cases", "type:feature"]
-    },
-    "health-department-contact-cases-domain": {
-      "tags": ["scope:health-department-contact-cases", "type:domain"]
-    },
-    "health-department-index-cases-domain": {
-      "tags": ["scope:health-department-index-cases", "type:domain"]
+      "tags": ["scope:health-department", "type:shell"]
     },
     "shared-ui-tile": {
       "tags": ["scope:shared", "type:ui"]
@@ -77,26 +47,8 @@
     "shared-ui-button": {
       "tags": ["scope:shared", "type:ui"]
     },
-    "shared-util-error": {
-      "tags": ["scope:shared", "type:util"]
-    },
-    "shared-util-form-validation": {
-      "tags": ["scope:shared", "type:util"]
-    },
     "administration-shell": {
-      "tags": ["scope:administration", "type:feature"]
-    },
-    "administration-accounts-account-list": {
-      "tags": ["scope:administration-accounts", "type:feature"]
-    },
-    "administration-accounts-account-detail": {
-      "tags": ["scope:administration-accounts", "type:feature"]
-    },
-    "administration-accounts-domain": {
-      "tags": ["scope:administration-accounts", "type:domain"]
-    },
-    "administration-accounts-shell": {
-      "tags": ["scope:administration-accounts", "type:feature"]
+      "tags": ["scope:administration", "type:shell"]
     },
     "auth-api": {
       "tags": ["scope:auth", "type:api"]
@@ -108,7 +60,121 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "shared-ui-multiple-autocomplete": {
-      "tags": []
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-shell": {
+      "tags": ["scope:auth", "type:shell"]
+    },
+    "administration-domain": {
+      "tags": ["scope:administration", "type:domain"]
+    },
+    "administration-api": {
+      "tags": ["scope:administration", "type:api"]
+    },
+    "health-department-api": {
+      "tags": ["scope:health-department", "type:api"]
+    },
+    "auth-forbidden": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "shared-util-progress-bar": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "shared-ui-aside": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "client-shell": {
+      "tags": ["scope:client", "type:shell"]
+    },
+    "shared-util-symptom": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-data-access": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-api": {
+      "tags": ["scope:client", "type:api"]
+    },
+    "shared-util-date": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-feature-diary": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-enrollment": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-profile": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-health-department-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-contact-persons": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-ui-personal-data": {
+      "tags": ["scope:client", "type:ui"]
+    },
+    "client-ui-contact-person-detail": {
+      "tags": ["scope:client", "type:ui"]
+    },
+    "health-department-feature-contact-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-index-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-case-detail": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "all-users-feature-welcome": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-data-protection": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-imprint": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-feature-terms": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "all-users-shell": {
+      "tags": ["scope:all-users", "type:shell"]
+    },
+    "shared-ui-data-protection": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "administration-feature-account-detail": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "administration-feature-account-list": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "shared-ui-error": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-feature-change-password": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "auth-feature-login": {
+      "tags": ["scope:all-users", "type:feature"]
+    },
+    "shared-ui-styles": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-util-forms": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-common-functions": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-snackbar": {
+      "tags": ["scope:shared", "type:util"]
     }
   }
 }

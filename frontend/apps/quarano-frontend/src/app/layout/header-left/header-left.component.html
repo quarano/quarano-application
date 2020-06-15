@@ -1,0 +1,24 @@
+<div class="container">
+  <img id="logo" src="/assets/images/quarano_SW_RGB.png" [routerLink]="['/']" height="50px" class="clickable" />
+
+  <nav class="ml-3" *ngIf="isLoggedIn$ | async">
+    <ng-container *ngIf="userService.isHealthDepartmentUser; else is_client"
+      ><a data-cy="index-cases" routerLink="/health-department/index-cases" routerLinkActive="active">Indexfälle</a
+      ><a routerLink="/health-department/contact-cases" routerLinkActive="active" data-cy="contact-cases"
+        >Kontaktpersonen</a
+      >
+      <ng-container *ngIf="userService.isAdmin">
+        <a routerLink="/administration/accounts/account-list" routerLinkActive="active">Account-Verwaltung</a>
+      </ng-container></ng-container
+    >
+
+    <ng-template #is_client
+      ><ng-container *ngIf="(enrollmentService.getEnrollmentStatus() | async)?.complete"
+        ><a routerLink="/client/diary/diary-list" routerLinkActive="active" data-cy="diary-menu-item">Tagebuch</a>
+        <a routerLink="/client/contact-persons" routerLinkActive="active" data-cy="contact-person-menu-item"
+          >Kontaktpersonen</a
+        >
+      </ng-container></ng-template
+    >
+  </nav>
+</div>
