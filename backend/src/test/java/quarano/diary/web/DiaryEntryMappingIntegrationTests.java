@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.web.MapperWrapper;
-import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMappingException;
+import quarano.core.web.RepositoryMappingModule.AggregateReferenceMappingException;
 import quarano.diary.DiaryEntry;
 import quarano.diary.Slot;
 import quarano.diary.web.DiaryRepresentations;

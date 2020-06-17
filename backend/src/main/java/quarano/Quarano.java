@@ -1,8 +1,10 @@
 package quarano;
 
 import lombok.extern.slf4j.Slf4j;
+import quarano.account.Role;
 import quarano.core.EmailTemplates;
 import quarano.core.web.MappingCustomizer;
+import quarano.core.web.RepositoryMappingModule;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +16,13 @@ import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertiesPropertySource;
@@ -28,6 +32,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,9 +72,16 @@ public class Quarano {
 	}
 
 	@Bean
-	ModelMapper modelMapper(List<MappingCustomizer> customizers) {
+	ModelMapper modelMapper(List<MappingCustomizer> customizers, ApplicationContext context,
+			ConversionService conversionService) {
+
+		Repositories repositories = new Repositories(context);
+
+		var module = new RepositoryMappingModule(repositories, conversionService) //
+				.exclude(Role.class);
 
 		var mapper = new ModelMapper();
+		mapper.registerModule(module);
 
 		customizers.stream() //
 				.peek(it -> log.debug("Applying {} for model mapping.", it.getClass().getName()))

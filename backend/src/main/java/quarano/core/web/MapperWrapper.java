@@ -3,7 +3,7 @@ package quarano.core.web;
 import io.vavr.control.Either;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.core.web.RepositoryMappingConfiguration.AggregateReferenceMappingException;
+import quarano.core.web.RepositoryMappingModule.AggregateReferenceMappingException;
 
 import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
