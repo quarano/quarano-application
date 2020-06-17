@@ -1,20 +1,8 @@
 package quarano.department;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.account.Department;
@@ -24,6 +12,14 @@ import quarano.tracking.ContactWays;
 import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
 
 /**
  * @author Jens Kutzsche
@@ -35,30 +31,30 @@ class TrackedCaseEventListenerTests {
 	private static final String MORITZ = "Moritz";
 	private static final String MUSTERMANN = "Mustermann";
 	private static final String MANNHEIM = "Mannheim";
-	
+
 	private static final String FIRST_NAME = "trackedPerson.firstName";
 	private static final String LAST_NAME = "trackedPerson.lastName";
 	private static final String DEPARTMENT_NAME = "department.name";
 
+	TrackedCaseEventListener listener;
+
 	@Mock TrackedCaseRepository cases;
-
 	@Captor ArgumentCaptor<TrackedCase> captor;
-
-	private TrackedCaseEventListener listener;
 
 	@BeforeEach
 	void setup() {
-
 		listener = new TrackedCaseEventListener(cases);
 	}
 
-	@Test
+	@Test // CORE-258
 	void testIgnoreNonIndexCase() {
 
 		var contactDate = LocalDate.now();
 		var person = TrackedPersonDataInitializer.createTanja();
+
 		createEncounterWithMaxFor(person, contactDate);
 		createEncounterWithMoritzFor(person, contactDate);
+
 		var trackedCase = createCaseFor(person, CaseType.CONTACT);
 
 		listener.on(CaseConvertedToIndex.of(trackedCase));
@@ -66,12 +62,13 @@ class TrackedCaseEventListenerTests {
 		verify(cases, never()).save(any());
 	}
 
-	@Test
+	@Test // CORE-258
 	void testCreateContactCase() {
 
 		var contactDate = LocalDate.now().minusDays(5);
 		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = createCaseFor(person, CaseType.INDEX);
+
 		createEncounterWithMaxFor(person, contactDate);
 		createEncounterWithMoritzFor(person, contactDate);
 
@@ -84,7 +81,7 @@ class TrackedCaseEventListenerTests {
 				.containsOnly(tuple(MAX, MUSTERMANN, MANNHEIM), tuple(MORITZ, MUSTERMANN, MANNHEIM));
 	}
 
-	@Test
+	@Test // CORE-258
 	void testCreateNoDuplicateCase() {
 
 		var contactDate = LocalDate.now();
@@ -107,7 +104,7 @@ class TrackedCaseEventListenerTests {
 				.containsOnly(tuple(MAX, MUSTERMANN, MANNHEIM));
 	}
 
-	private Encounter createEncounterWithMaxFor(TrackedPerson person, LocalDate date) {
+	private static Encounter createEncounterWithMaxFor(TrackedPerson person, LocalDate date) {
 
 		var contactWays = ContactWays.ofEmailAddress("max@mustermann.de");
 		var contactPerson = new ContactPerson(MAX, MUSTERMANN, contactWays) //
@@ -116,7 +113,7 @@ class TrackedCaseEventListenerTests {
 		return person.reportContactWith(contactPerson, date);
 	}
 
-	private Encounter createEncounterWithMoritzFor(TrackedPerson person, LocalDate date) {
+	private static Encounter createEncounterWithMoritzFor(TrackedPerson person, LocalDate date) {
 
 		var contactWays = ContactWays.ofEmailAddress("moritz@mustermann.de");
 		var contactPerson = new ContactPerson(MORITZ, MUSTERMANN, contactWays) //
@@ -125,7 +122,7 @@ class TrackedCaseEventListenerTests {
 		return person.reportContactWith(contactPerson, date);
 	}
 
-	private TrackedCase createCaseFor(TrackedPerson person, CaseType type) {
+	private static TrackedCase createCaseFor(TrackedPerson person, CaseType type) {
 
 		return new TrackedCase(person, type, new Department(MANNHEIM)) //
 				.submitEnrollmentDetails() //

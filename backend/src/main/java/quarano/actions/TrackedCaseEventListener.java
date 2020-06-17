@@ -38,7 +38,7 @@ class TrackedCaseEventListener {
 	}
 
 	@EventListener
-	public void on(CaseStatusUpdated event) {
+	void on(CaseStatusUpdated event) {
 		handleCreatedOrUpdatedCase(event.getTrackedCase());
 	}
 
@@ -61,6 +61,7 @@ class TrackedCaseEventListener {
 	}
 
 	private void handleCreatedOrUpdatedCase(TrackedCase trackedCase) {
+
 		initialCallHandler.handleInitialCallOpen(trackedCase);
 		missingDetailsHandler.handleTrackedCaseMissingDetails(trackedCase);
 	}

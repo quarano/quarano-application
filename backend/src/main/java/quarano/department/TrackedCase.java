@@ -17,8 +17,6 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,20 +77,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private @Getter Status status;
 
 	public static TrackedCase of(ContactPerson contactPerson, Department department) {
-		
+
 		var person = new TrackedPerson(contactPerson);
 		var caseType = CaseType.CONTACT;
 
 		// CORE-185 medical staff overwrites the others
-		if (isTrue(contactPerson.getIsHealthStaff())) {
+		if (Boolean.TRUE.equals(contactPerson.getIsHealthStaff())) {
 			caseType = CaseType.CONTACT_MEDICAL;
 		} else if (contactPerson.isVulnerable()) {
 			caseType = CaseType.CONTACT_VULNERABLE;
 		}
 
-		return new TrackedCase(person, caseType, department, contactPerson);		
+		return new TrackedCase(person, caseType, department, contactPerson);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private TrackedCase() {
 		this.id = TrackedCaseIdentifier.of(UUID.randomUUID());
@@ -213,7 +211,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		if (this.type != CaseType.INDEX && testResult.isInfected()) {
 			registerEvent(CaseConvertedToIndex.of(this));
 		}
-		
+
 		this.testResult = testResult;
 		this.type = testResult.isInfected() ? CaseType.INDEX : type;
 
@@ -340,7 +338,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public static class CaseStatusUpdated implements DomainEvent {
 		TrackedCase trackedCase;
 	}
-	
+
 	@Value(staticConstructor = "of")
 	public static class CaseConvertedToIndex implements DomainEvent {
 		TrackedCase trackedCase;
