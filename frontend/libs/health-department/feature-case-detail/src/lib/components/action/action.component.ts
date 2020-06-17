@@ -1,17 +1,12 @@
 import { BadRequestService } from '@qro/shared/ui-error';
-import {
-  ValidationErrorGenerator,
-  VALIDATION_PATTERNS,
-  TrimmedPatternValidator,
-  ConfirmDialogData,
-  QroDialogService,
-} from '@qro/shared/util-forms';
+import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
+import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-client-action',

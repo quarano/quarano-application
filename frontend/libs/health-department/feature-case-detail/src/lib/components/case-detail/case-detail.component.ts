@@ -20,7 +20,7 @@ import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { ClientType } from '@qro/auth/api';
-import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-forms';
+import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-case-detail',

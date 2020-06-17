@@ -7,7 +7,8 @@ import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
-import { ArrayValidator, QroDialogService, ValidationErrorGenerator } from '@qro/shared/util-forms';
+import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
+import { QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',

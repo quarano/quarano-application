@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { FormControl } from '@angular/forms';
 import { MultipleAutocompleteComponent } from '../multiple-autocomplete/multiple-autocomplete.component';
 import { IIdentifiable } from '@qro/shared/util-data-access';
-import { QroDialogService } from '@qro/shared/util-forms';
+import { QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-multiple-contact-autocomplete',

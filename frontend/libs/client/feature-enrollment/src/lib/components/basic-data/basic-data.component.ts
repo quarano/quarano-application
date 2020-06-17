@@ -12,16 +12,11 @@ import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import {
-  TrimmedPatternValidator,
-  VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator,
-  ConfirmDialogData,
-  QroDialogService,
-} from '@qro/shared/util-forms';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
+import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-basic-data',

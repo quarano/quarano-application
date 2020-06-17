@@ -7,11 +7,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { DeactivatableComponent, QroDialogService } from '@qro/shared/util-forms';
-import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
+import { QroDialogService } from '@qro/shared/util-dialogs';
+import { ContactPersonDto, DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { DeactivatableComponent } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-diary-entry',
