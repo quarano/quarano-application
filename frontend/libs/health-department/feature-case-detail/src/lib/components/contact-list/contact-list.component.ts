@@ -29,7 +29,7 @@ export class ContactListComponent implements OnInit {
   constructor(private router: Router, private snackbarService: SnackbarService) {}
 
   ngOnInit() {
-    this.rows = this.contacts.map((c) => this.getRowData(c));
+    this.rows = this.contacts?.map((c) => this.getRowData(c));
   }
 
   onSelect(event) {
