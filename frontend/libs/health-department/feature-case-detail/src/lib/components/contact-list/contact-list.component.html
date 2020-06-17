@@ -6,14 +6,14 @@
   data-cy="case-data-table"
   class="material fixed-header"
   style="max-width: 1110px;"
-  [count]="rows.length"
+  [count]="rows?.length"
   [headerHeight]="50"
   rowHeight="auto"
   [rows]="rows"
   [messages]="{
     emptyMessage: caseName + ' hat bisher noch keine Kontakte erfasst',
     selectedMessage: 'ausgewählt',
-    totalMessage: rows.length === 1 ? 'Kontakt' : 'Kontakte'
+    totalMessage: rows?.length === 1 ? 'Kontakt' : 'Kontakte'
   }"
   [footerHeight]="50"
   selectionType="single"
