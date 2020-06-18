@@ -175,9 +175,6 @@
     },
     "shared-util-snackbar": {
       "tags": ["scope:shared", "type:util"]
-    },
-    "shared-util-dialogs": {
-      "tags": ["scope:shared", "type:util"]
     }
   }
 }

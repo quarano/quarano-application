@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
@@ -13,10 +14,11 @@ import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
-import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
+import {ContactDialogService} from "@qro/client/ui-contact-person-detail";
 
 @Component({
   selector: 'qro-basic-data',
@@ -58,6 +60,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
     private enrollmentService: EnrollmentService,
@@ -65,7 +68,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
     private clientService: ClientService,
-    private dialogService: QroDialogService
+    private dialogService: ContactDialogService
   ) {}
 
   ngOnInit() {
@@ -341,15 +344,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const data: ConfirmDialogData = {
-        title: 'Keine relevanten Kontakte?',
-        text:
-          'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
-          'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
-      };
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          abortButtonText: 'Abbrechen',
+          confirmButtonText: 'ok',
+          title: 'Keine relevanten Kontakte?',
+          text:
+            'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
+            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
+        },
+      });
 
-      this.dialogService
-        .openConfirmDialog({ data: data })
+      dialogRef
         .afterClosed()
         .subscribe((result) => {
           if (result) {

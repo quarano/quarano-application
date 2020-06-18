@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { QroDialogService } from '@qro/shared/util-dialogs';
+import { ContactDialogService } from "@qro/client/ui-contact-person-detail";
 import { ContactPersonDto, DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -52,7 +52,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private badRequestService: BadRequestService,
-    private dialogService: QroDialogService
+    private dialogService: ContactDialogService
   ) {}
 
   ngOnDestroy(): void {

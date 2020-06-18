@@ -65,9 +65,7 @@
       "@qro/shared/ui-styles": ["libs/shared/ui-styles/src/index.ts"],
       "@qro/shared/util-forms": ["libs/shared/util-forms/src/index.ts"],
       "@qro/shared/util-common-functions": ["libs/shared/util-common-functions/src/index.ts"],
-      "@qro/shared/util-snackbar": ["libs/shared/util-snackbar/src/index.ts"],
-      "@qro/shared/dialog": ["libs/shared/util-dialog/src/index.ts"],
-      "@qro/shared/util-dialogs": ["libs/shared/util-dialogs/src/index.ts"]
+      "@qro/shared/util-snackbar": ["libs/shared/util-snackbar/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

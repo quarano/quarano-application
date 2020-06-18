@@ -1,12 +1,13 @@
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
-import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-client-action',
@@ -21,7 +22,7 @@ export class ActionComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialog: QroDialogService,
+    private dialog: MatDialog,
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private router: Router,
@@ -35,22 +36,23 @@ export class ActionComponent implements OnInit {
   }
 
   submitForm() {
-    const data: ConfirmDialogData = {
-      title: 'Auffälligkeiten abschließen?',
-      text:
-        'Möchten Sie die aktuellen Auffälligkeiten tatsächlich als abgeschlossen kennzeichnen? ' +
-        'Diese werden dann in der Aktionsübersicht nicht mehr angezeigt.',
-    };
-
     if (this.formGroup.valid) {
-      this.dialog
-        .openConfirmDialog({ data: data })
-        .afterClosed()
-        .subscribe((result) => {
-          if (result) {
-            this.resolveAnomalies();
-          }
-        });
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          abortButtonText: 'Abbrechen',
+          confirmButtonText: 'ok',
+          title: 'Auffälligkeiten abschließen?',
+          text:
+            'Möchten Sie die aktuellen Auffälligkeiten tatsächlich als abgeschlossen kennzeichnen? ' +
+            'Diese werden dann in der Aktionsübersicht nicht mehr angezeigt.',
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.resolveAnomalies();
+        }
+      });
     }
   }
 

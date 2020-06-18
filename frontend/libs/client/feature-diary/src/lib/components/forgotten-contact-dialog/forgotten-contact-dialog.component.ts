@@ -8,7 +8,7 @@ import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
-import { QroDialogService } from '@qro/shared/util-dialogs';
+import {ContactDialogService} from "@qro/client/ui-contact-person-detail";
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',
@@ -29,7 +29,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService,
-    private dialogService: QroDialogService,
+    private dialogService: ContactDialogService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[] }
   ) {}

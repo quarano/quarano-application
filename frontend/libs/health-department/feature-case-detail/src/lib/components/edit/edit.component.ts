@@ -5,6 +5,7 @@ import {
   VALIDATION_PATTERNS,
   ValidationErrorGenerator,
 } from '@qro/shared/util-forms';
+import { MatDialog } from '@angular/material/dialog';
 import {
   Component,
   EventEmitter,
@@ -22,9 +23,9 @@ import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseDetailDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
-import { ConfirmDialogData, QroDialogService } from '@qro/shared/util-dialogs';
 
 @Component({
   selector: 'qro-client-edit',
@@ -55,7 +56,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
 
-  constructor(private dialog: QroDialogService, private snackbarService: SnackbarService) {}
+  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.createFormGroup();
@@ -141,22 +142,23 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onTestDateAdded() {
-    const data: ConfirmDialogData = {
-      title: 'Zum Indexfall machen?',
-      text:
-        'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
-    };
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'ok',
+        title: 'Zum Indexfall machen?',
+        text:
+          'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',
+      },
+    });
 
-    this.dialog
-      .openConfirmDialog({ data: data })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.changedToIndex.emit(true);
-        } else {
-          this.formGroup.get('testDate').setValue(null);
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.changedToIndex.emit(true);
+      } else {
+        this.formGroup.get('testDate').setValue(null);
+      }
+    });
   }
 
   setValidators() {

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MultipleAutocompleteComponent } from '../multiple-autocomplete/multiple-autocomplete.component';
 import { IIdentifiable } from '@qro/shared/util-data-access';
-import { QroDialogService } from '@qro/shared/util-dialogs';
+import { ContactDialogService } from "../../services/contact-dialog.service";
+import {MultipleAutocompleteComponent} from "@qro/shared/ui-multiple-autocomplete";
 
 @Component({
   selector: 'qro-multiple-contact-autocomplete',
@@ -21,7 +21,7 @@ export class MultipleContactAutocompleteComponent {
   @ViewChild('contactMultipleAutoComplete')
   contactMultipleAutocomplete: MultipleAutocompleteComponent;
 
-  constructor(private dialogService: QroDialogService) {}
+  constructor(private dialogService: ContactDialogService) {}
 
   addMissingContactPerson(name: string) {
     this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
