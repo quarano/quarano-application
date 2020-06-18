@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IIdentifiable } from '@qro/shared/util-data-access';
-import { ContactDialogService } from "../../services/contact-dialog.service";
-import {MultipleAutocompleteComponent} from "@qro/shared/ui-multiple-autocomplete";
+import { ContactDialogService } from '../../services/contact-dialog.service';
+import { MultipleAutocompleteComponent } from '@qro/shared/ui-multiple-autocomplete';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-multiple-contact-autocomplete',
@@ -24,11 +25,14 @@ export class MultipleContactAutocompleteComponent {
   constructor(private dialogService: ContactDialogService) {}
 
   addMissingContactPerson(name: string) {
-    this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
-      this.contactMultipleAutocomplete.clearInput();
-      this.selectableItems.push(createdContact);
-      this.control.patchValue([...this.control.value, createdContact.id]);
-    });
+    this.dialogService
+      .askAndOpenContactPersonDialog(name)
+      .pipe(filter((contact) => !!contact))
+      .subscribe((createdContact) => {
+        this.contactMultipleAutocomplete.clearInput();
+        this.selectableItems.push(createdContact);
+        this.control.patchValue([...this.control.value, createdContact.id]);
+      });
   }
 
   emitItemNotFound(event: any) {
