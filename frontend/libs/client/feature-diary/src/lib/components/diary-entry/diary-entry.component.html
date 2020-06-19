@@ -47,14 +47,15 @@
         [nameProperties]="['name']"
         name="nonCharacteristicSymptoms"
       ></qro-multiple-autocomplete>
-      <qro-multiple-autocomplete
+      <qro-multiple-contact-autocomplete
+        #contactMultipleAutoComplete
         [control]="this.formGroup.controls.contactPersons"
         [selectableItems]="contactPersons"
         placeholder="Kontakte mit anderen Menschen seit letztem Eintrag"
         [nameProperties]="['firstName', 'lastName']"
         name="contactPersons"
       >
-      </qro-multiple-autocomplete>
+      </qro-multiple-contact-autocomplete>
       <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">
         <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
         <button

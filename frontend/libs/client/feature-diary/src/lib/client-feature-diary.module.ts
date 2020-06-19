@@ -8,6 +8,7 @@ import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symp
 import { ContactPersonsResolver } from '@qro/client/domain';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 import { Routes, RouterModule } from '@angular/router';
+import { ClientUiContactPersonDetailModule} from "@qro/client/ui-contact-person-detail";
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -69,6 +70,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     SharedUtilSymptomModule,
     ClientDomainModule,
+    ClientUiContactPersonDetailModule
   ],
   declarations: [
     DiaryComponent,

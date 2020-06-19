@@ -2,13 +2,13 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
-import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
+import {ContactDialogService} from "@qro/client/ui-contact-person-detail";
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',
@@ -26,10 +26,10 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   constructor(
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
     private enrollmentService: EnrollmentService,
     private snackbarService: SnackbarService,
     private badRequestService: BadRequestService,
+    private dialogService: ContactDialogService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[] }
   ) {}
@@ -75,21 +75,16 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   }
 
   openContactDialog() {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      maxWidth: '100vw',
-      data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      },
-    });
-
     this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
-        if (createdContact) {
-          this.data.contactPersons.push(createdContact);
-          this.formGroup.get('contactIds').patchValue([...this.formGroup.get('contactIds').value, createdContact.id]);
-        }
-      })
+      this.dialogService
+        .openContactPersonDialog()
+        .afterClosed()
+        .subscribe((createdContact: ContactPersonDto | null) => {
+          if (createdContact) {
+            this.data.contactPersons.push(createdContact);
+            this.formGroup.get('contactIds').patchValue([...this.formGroup.get('contactIds').value, createdContact.id]);
+          }
+        })
     );
   }
 }

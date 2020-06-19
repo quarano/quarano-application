@@ -1,0 +1,11 @@
+<qro-multiple-autocomplete
+  #contactMultipleAutoComplete
+  [control]="control"
+  [selectableItems]="selectableItems"
+  [nameProperties]="nameProperties"
+  [placeholder]="placeholder"
+  (itemNotFound)="addMissingContactPerson($event)"
+  (removed)="emitRemoved($event)"
+  (added)="emitAdded($event)"
+>
+</qro-multiple-autocomplete>

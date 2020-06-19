@@ -243,6 +243,8 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
   onChangeTypeKeyPressed(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'ok',
         title: 'Zum Indexfall machen?',
         text:
           'Sind Sie sich sicher, dass ein positiver Befund vorliegt und Sie diese Kontaktperson als Indexfall weiter bearbeiten wollen?',

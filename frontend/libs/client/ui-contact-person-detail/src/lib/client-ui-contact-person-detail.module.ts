@@ -6,6 +6,8 @@ import { ContactPersonFormComponent } from './components/contact-person-form/con
 import { ContactPersonDialogComponent } from './components/contact-person-dialog/contact-person-dialog.component';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MultipleContactAutocompleteComponent} from "./components/multiple-contact-autocomplete/multiple-contact-autocomplete.component";
+import {SharedUiMultipleAutocompleteModule} from "@qro/shared/ui-multiple-autocomplete";
 
 @NgModule({
   imports: [
@@ -15,9 +17,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     SharedUiAlertModule,
     SharedUiButtonModule,
+    SharedUiMultipleAutocompleteModule
   ],
-  declarations: [ContactPersonDialogComponent, ContactPersonFormComponent],
-  exports: [ContactPersonDialogComponent, ContactPersonFormComponent],
+  declarations: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
+  exports: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
   entryComponents: [ContactPersonDialogComponent],
 })
 export class ClientUiContactPersonDetailModule {}

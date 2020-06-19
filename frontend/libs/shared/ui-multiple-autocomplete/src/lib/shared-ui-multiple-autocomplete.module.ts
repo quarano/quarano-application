@@ -5,12 +5,8 @@ import { CommonModule } from '@angular/common';
 import { MultipleAutocompleteComponent } from './multiple-autocomplete/multiple-autocomplete.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedUiMaterialModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, SharedUiMaterialModule, ReactiveFormsModule],
   declarations: [MultipleAutocompleteComponent],
-  exports: [MultipleAutocompleteComponent]
+  exports: [MultipleAutocompleteComponent],
 })
-export class SharedUiMultipleAutocompleteModule { }
+export class SharedUiMultipleAutocompleteModule {}

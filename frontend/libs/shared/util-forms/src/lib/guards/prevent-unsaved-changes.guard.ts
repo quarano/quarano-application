@@ -23,6 +23,8 @@ export class PreventUnsavedChangesGuard implements CanDeactivate<DeactivatableCo
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Fortfahren?',
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'ok',
         text:
           'Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen.',
       },

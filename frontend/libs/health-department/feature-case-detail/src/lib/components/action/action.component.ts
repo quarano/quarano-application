@@ -39,6 +39,8 @@ export class ActionComponent implements OnInit {
     if (this.formGroup.valid) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
+          abortButtonText: 'Abbrechen',
+          confirmButtonText: 'ok',
           title: 'Auffälligkeiten abschließen?',
           text:
             'Möchten Sie die aktuellen Auffälligkeiten tatsächlich als abgeschlossen kennzeichnen? ' +

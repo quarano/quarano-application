@@ -1,9 +1,9 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 import {
-  ValidationErrorGenerator,
+  PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  PhoneOrMobilePhoneValidator,
+  ValidationErrorGenerator,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -42,6 +42,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
+
   get isIndexCase() {
     return this.type === ClientType.Index;
   }
@@ -148,6 +149,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   onTestDateAdded() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'ok',
         title: 'Zum Indexfall machen?',
         text:
           'Sind Sie sich sicher? Durch das Eintragen eines positiven Tests bearbeiten Sie diese Kontaktperson ab sofort als Indexfall',

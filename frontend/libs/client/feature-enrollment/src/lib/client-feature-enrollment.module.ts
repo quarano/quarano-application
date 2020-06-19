@@ -15,6 +15,10 @@ import { InitialQuestionaireFormComponent } from './components/initial-questiona
 import { LandingComponent } from './components/landing/landing.component';
 import { RegisterComponent } from './components/register/register.component';
 import { DataProtectionDialogComponent } from './components/data-protection-dialog/data-protection-dialog.component';
+import {
+  ClientUiContactPersonDetailModule,
+  MultipleContactAutocompleteComponent,
+} from '@qro/client/ui-contact-person-detail';
 
 const routes: Routes = [
   {
@@ -55,6 +59,7 @@ const routes: Routes = [
     SharedUiMultipleAutocompleteModule,
     SharedUtilSymptomModule,
     ClientUiPersonalDataModule,
+    ClientUiContactPersonDetailModule,
     ClientDomainModule,
     SharedUiDataProtectionModule,
     RouterModule.forChild(routes),

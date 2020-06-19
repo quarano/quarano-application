@@ -1,18 +1,17 @@
 import { BadRequestService } from '@qro/shared/ui-error';
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { DeactivatableComponent } from '@qro/shared/util-forms';
-import { DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
+import { ContactDialogService } from "@qro/client/ui-contact-person-detail";
+import { ContactPersonDto, DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { ContactPersonDto } from '@qro/client/domain';
-import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { DeactivatableComponent } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-diary-entry',
@@ -52,7 +51,8 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    private dialogService: ContactDialogService
   ) {}
 
   ngOnDestroy(): void {
@@ -217,23 +217,16 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
   }
 
   openContactDialog() {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      maxWidth: '100vw',
-      data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      },
-    });
-
-    this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
+    this.dialogService
+      .openContactPersonDialog()
+      .afterClosed()
+      .subscribe((createdContact: ContactPersonDto | null) => {
         if (createdContact) {
           this.contactPersons.push(createdContact);
           this.formGroup
             .get('contactPersons')
             .patchValue([...this.formGroup.get('contactPersons').value, createdContact.id]);
         }
-      })
-    );
+      });
   }
 }

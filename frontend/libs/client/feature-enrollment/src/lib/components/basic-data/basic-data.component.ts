@@ -16,9 +16,9 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
-import { ContactPersonDialogComponent } from '@qro/client/ui-contact-person-detail';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
+import {ContactDialogService} from "@qro/client/ui-contact-person-detail";
 
 @Component({
   selector: 'qro-basic-data',
@@ -67,7 +67,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private dialogService: ContactDialogService
   ) {}
 
   ngOnInit() {
@@ -295,23 +296,19 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   openContactDialog(dateString: string) {
-    const dialogRef = this.dialog.open(ContactPersonDialogComponent, {
-      height: '90vh',
-      data: {
-        contactPerson: { id: null, lastName: null, firstName: null, phone: null, email: null },
-      },
-    });
-
     this.subs.add(
-      dialogRef.afterClosed().subscribe((createdContact: ContactPersonDto | null) => {
-        if (createdContact) {
-          this.contactPersons.push(createdContact);
-          this.thirdFormGroup.controls[dateString].patchValue([
-            ...this.thirdFormGroup.controls[dateString].value,
-            createdContact.id,
-          ]);
-        }
-      })
+      this.dialogService
+        .openContactPersonDialog()
+        .afterClosed()
+        .subscribe((createdContact: ContactPersonDto | null) => {
+          if (createdContact) {
+            this.contactPersons.push(createdContact);
+            this.thirdFormGroup.controls[dateString].patchValue([
+              ...this.thirdFormGroup.controls[dateString].value,
+              createdContact.id,
+            ]);
+          }
+        })
     );
   }
 
@@ -349,6 +346,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (!this.hasRetrospectiveContacts()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
+          abortButtonText: 'Abbrechen',
+          confirmButtonText: 'ok',
           title: 'Keine relevanten Kontakte?',
           text:
             'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +

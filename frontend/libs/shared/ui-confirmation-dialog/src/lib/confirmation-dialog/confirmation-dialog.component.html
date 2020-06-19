@@ -10,9 +10,9 @@
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [mat-dialog-close]="true" data-cy="confirm-button">
     <mat-icon>check</mat-icon>
-    OK
+    <span>{{ data.confirmButtonText }}</span>
   </button>
   <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>
-    Abbrechen
+    <span>{{ data.abortButtonText }}</span>
   </button>
 </mat-dialog-actions>
