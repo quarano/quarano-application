@@ -1,7 +1,14 @@
 package quarano.department.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
+import lombok.Getter;
+import lombok.NonNull;
+import quarano.core.EnumMessageSourceResolvable;
+import quarano.department.CaseType;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.tracking.ContactPerson;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -18,23 +25,15 @@ import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
-import lombok.NonNull;
-import quarano.core.EnumMessageSourceResolvable;
-import quarano.department.CaseType;
-import quarano.department.TrackedCase;
-import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.tracking.ContactPerson;
-
 @Relation(collectionRelation = "contacts")
 public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseContactSummary> {
 
 	public static final LinkRelation TRACKED_CASE = LinkRelation.of("trackedCase");
 	private final MessageSourceAccessor messages;
-	
+
 	private final @Getter(onMethod = @__(@JsonIgnore)) @NonNull ContactPerson contactPerson;
 	private final @Getter(onMethod = @__(@JsonIgnore)) Optional<TrackedCase> contactTrackedCase;
-	private final @Getter @NonNull List<LocalDate> descendingSortedContactDates;
+	private final @Getter @NonNull List<LocalDate> contactDates;
 
 	public TrackedCaseContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates,
 			Optional<TrackedCase> contactTrackedCase, MessageSourceAccessor messages) {
@@ -42,8 +41,8 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 		this.contactTrackedCase = contactTrackedCase;
 		this.messages = messages;
 		this.contactPerson = contactPerson;
-		this.descendingSortedContactDates = contactDates;
-		this.descendingSortedContactDates.sort(Comparator.reverseOrder());
+		this.contactDates = contactDates;
+		this.contactDates.sort(Comparator.reverseOrder());
 
 		contactTrackedCase.ifPresent(it -> add(getLinks(it)));
 	}
@@ -87,32 +86,40 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 
 		return contactPerson.getIsSenior();
 	}
-	
-	public String getCaseId() {
-		return contactTrackedCase.map(TrackedCase::getId).map(TrackedCaseIdentifier::toString).orElse(null);
-	}
-	
-	public String getCaseType() {
 
-		return contactTrackedCase.map(TrackedCase::getType)//
-				.map(CaseType::getPrimaryCaseType)//
-				.map(CaseType::name)//
-				.map(it -> it.toLowerCase(Locale.US))//
+	public String getCaseId() {
+		return contactTrackedCase.map(TrackedCase::getId) //
+				.map(TrackedCaseIdentifier::toString) //
 				.orElse(null);
 	}
-	
-	public String getCaseTypeLabel() {
-		
-		return contactTrackedCase.map(TrackedCase::getType)//
-				.map(CaseType::getPrimaryCaseType)//
-				.map(it -> messages.getMessage(EnumMessageSourceResolvable.of(it)))//
-		.orElse("");
+
+	public String getCaseType() {
+
+		return contactTrackedCase.map(TrackedCase::getType) //
+				.map(CaseType::getPrimaryCaseType) //
+				.map(CaseType::name) //
+				.map(it -> it.toLowerCase(Locale.US)) //
+				.orElse(null);
 	}
-	
+
+	public String getCaseTypeLabel() {
+
+		return toResolvedEnum(contactTrackedCase.map(TrackedCase::getType) //
+				.map(CaseType::getPrimaryCaseType));
+	}
+
 	public String getCaseStatusLabel() {
-		
-		return contactTrackedCase.map(TrackedCase::getStatus)//
-				.map(it -> messages.getMessage(EnumMessageSourceResolvable.of(it)))//
-				.orElse("");
+		return toResolvedEnum(contactTrackedCase.map(TrackedCase::getStatus));
+	}
+
+	private String toResolvedEnum(Optional<Enum<?>> source) {
+		return toResolvedEnum(source, "");
+	}
+
+	private String toResolvedEnum(Optional<Enum<?>> source, String defaultValue) {
+
+		return source.map(EnumMessageSourceResolvable::of) //
+				.map(messages::getMessage) //
+				.orElse(defaultValue);
 	}
 }
