@@ -54,8 +54,7 @@ export class ContactListComponent implements OnInit {
       hasPreExistingConditions: this.getBooleanText(listItem.hasPreExistingConditions),
       caseId: listItem.caseId,
       caseType: listItem.caseType,
-      lastContact:
-        listItem.descendingSortedContactDates.length > 0 ? new Date(listItem.descendingSortedContactDates[0]) : null,
+      lastContact: listItem.contactDates.length > 0 ? new Date(listItem.contactDates[0]) : null,
     };
   }
 
