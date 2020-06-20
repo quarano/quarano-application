@@ -1,7 +1,5 @@
 package quarano.department.web;
 
-import static java.util.Comparator.reverseOrder;
-import static java.util.stream.Collectors.toList;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.NonNull;
@@ -23,16 +21,12 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.Encounter;
-import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +35,7 @@ import javax.validation.Valid;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -160,19 +155,9 @@ class TrackedCaseController {
 				.flatMap(this::createSummaries)//
 				.collect(Collectors.toList());
 
-		Object collection = contactRepresentations.isEmpty() //
-				? List.of(wrappers.emptyCollectionOf(TrackedCaseContactSummary.class)) //
-				: contactRepresentations;
-
-		return RepresentationModel.of(collection);
-	}
-
-	private Stream<TrackedCaseContactSummary> createSummaries(TrackedCase trackedCase) {
-
-		var encounters = trackedCase.getTrackedPerson().getEncounters();
-
-		return encounters.getContactDatesGroupedByContactPerson().entrySet().stream()//
-				.map(it -> representations.toContactSummary(it.getKey(), it.getValue()));
+		return HalModelBuilder.halModel() //
+				.embed(contactRepresentations, TrackedCaseContactSummary.class) //
+				.build();
 	}
 
 	// PUT Mapping for transformation into index case
@@ -341,6 +326,14 @@ class TrackedCaseController {
 		return ResponseEntity.ok() //
 				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
 				.build();
+	}
+
+	private Stream<TrackedCaseContactSummary> createSummaries(TrackedCase trackedCase) {
+
+		var encounters = trackedCase.getTrackedPerson().getEncounters();
+
+		return encounters.getContactDatesGroupedByContactPerson().entrySet().stream()//
+				.map(it -> representations.toContactSummary(it.getKey(), it.getValue()));
 	}
 
 	@SuppressWarnings("null")

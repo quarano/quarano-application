@@ -19,8 +19,8 @@ import quarano.department.ContactChaser;
 import quarano.department.Questionnaire;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
-import quarano.department.TrackedCaseRepository;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseRepository;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
@@ -87,17 +87,15 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 				.map(Contact::new) //
 				.collect(Collectors.toList());
 
-		var contactCount = trackedCase.getTrackedPerson().getEncounters().stream().count();
-		
-		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases, contactCount);
+		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
 	}
 
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
-	
+
 	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
-		
+
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
 	}
@@ -293,16 +291,16 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 		private final @Getter List<Contact> indexContacts;
-		private final @Getter long contactCount;
+		private final @Getter int contactCount;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
-				List<Contact> indexContacts, long contactCount) {
+				List<Contact> indexContacts) {
 
 			super(trackedCase, messages);
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
-			this.contactCount = contactCount;
+			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfEncounters();
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
 		}

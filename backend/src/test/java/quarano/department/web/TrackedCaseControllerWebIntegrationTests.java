@@ -529,43 +529,46 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$.belongToMedicalStaffDescription", String.class)).isNotNull();
 	}
-	
+
 	@Test // CORE-119
+	@SuppressWarnings("unchecked")
 	void exposesContactsForCase() throws Exception {
-		
+
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
-		
+
 		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId())) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
-		
+
 		var document = JsonPath.parse(response);
 		assertThat(document.read("$.contactCount", Integer.class)).isEqualTo(2);
-		
+
 		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.CONTACTS, response);
 		assertThat(link).isNotNull();
-		
+
 		response = mvc.perform(get(link.getHref())) //
 				.andExpect(status().isOk()) //
 				.andReturn().getResponse().getContentAsString();
-		
+
 		document = JsonPath.parse(response);
-		
+
 		assertThat(document.read("$._embedded.contacts.length()", Integer.class)).isEqualTo(2);
-		
-		List<Map<String, Object>> data = document.read("$._embedded.contacts[?(@.lastName=='Drogler')]");
-		Map<String, Object> dataMap = data.get(0);
-		var contactDates = dataMap.get("descendingSortedContactDates").toString();
-		var links = dataMap.get("_links").toString();
-		
-		assertThat(dataMap).extractingByKey("firstName").isEqualTo("Dorothea");
-		assertThat(dataMap).extractingByKey("isHealthStaff").isEqualTo(Boolean.TRUE);
-		assertThat(dataMap).extractingByKey("isSenior").isNull();
-		assertThat(dataMap).extractingByKey("hasPreExistingConditions").isNull();
-		assertThat(dataMap).extractingByKey("caseStatusLabel").isEqualTo("angelegt");
-		assertThat(dataMap).extractingByKey("caseType").isEqualTo("contact");
-		assertThat(links).contains(TrackedCaseContactSummary.TRACKED_CASE.toString());
-		assertThat(contactDates).contains(LocalDate.now().minusDays(1).toString());
+
+		List<Map<String, Object>> contacts = document.read("$._embedded.contacts[?(@.lastName=='Drogler')]");
+
+		assertThat(contacts).hasSize(1);
+
+		DocumentContext contact = JsonPath.parse(contacts.get(0));
+
+		assertThat(contact.read("$.firstName", String.class)).isEqualTo("Dorothea");
+		assertThat(contact.read("$.isHealthStaff", boolean.class)).isTrue();
+		assertThat(contact.read("$.isSenior", Boolean.class)).isNull();
+		assertThat(contact.read("$.hasPreExistingConditions", Boolean.class)).isNull();
+		assertThat(contact.read("$.caseStatusLabel", String.class)).isEqualTo("angelegt");
+		assertThat(contact.read("$.caseType", String.class)).isEqualTo("contact");
+		assertThat(contact.read("$.contactDates", List.class)).contains(LocalDate.now().minusDays(1).toString());
+
+		assertThat(discoverer.findLinkWithRel(TrackedCaseContactSummary.TRACKED_CASE, contact.jsonString())).isPresent();
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
