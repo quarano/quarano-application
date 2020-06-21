@@ -1,5 +1,7 @@
 package quarano.department.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +35,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -46,6 +49,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -92,6 +99,10 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
 		return new TrackedCaseSummary(trackedCase, messages);
+	}
+
+	TrackedCaseSelect toSelect(TrackedCase trackedCase) {
+		return TrackedCaseSelect.of(trackedCase);
 	}
 
 	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
@@ -382,5 +393,45 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		interface Index {}
 
 		interface Contact {}
+	}
+
+	/**
+	 * Trimmed down representation to be used from selection dialogues that basically need a link to a case by the
+	 * person's name.
+	 *
+	 * @author Oliver Drotbohm
+	 */
+	@Relation(collectionRelation = "cases")
+	@RequiredArgsConstructor(staticName = "of")
+	static class TrackedCaseSelect extends RepresentationModel<TrackedCaseSelect> {
+
+		private final TrackedCase trackedCase;
+
+		public String getFirstName() {
+			return trackedCase.getTrackedPerson().getFirstName();
+		}
+
+		public String getLastName() {
+			return trackedCase.getTrackedPerson().getLastName();
+		}
+
+		public String getDateOfBirth() {
+
+			var dateOfBirth = trackedCase.getTrackedPerson().getDateOfBirth();
+
+			return dateOfBirth == null ? null : dateOfBirth.format(DateTimeFormatter.ISO_DATE);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.springframework.hateoas.RepresentationModel#getLinks()
+		 */
+		@Override
+		public Links getLinks() {
+
+			var caseLink = on(TrackedCaseController.class).getCase(trackedCase.getId(), trackedCase.getDepartment());
+
+			return super.getLinks().and(Link.of(fromMethodCall(caseLink).toUriString(), IanaLinkRelations.SELF));
+		}
 	}
 }

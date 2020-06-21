@@ -40,6 +40,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -580,6 +581,24 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(JsonPath.parse(response).read("$._embedded.cases[*].lastName", String[].class)) //
 				.containsExactly("Ebert", "Mertens", "Seufert");
+	}
+
+	@Test // CORE-252
+	void projectsCasesIfProjectionGiven() throws Exception {
+
+		String response = mvc.perform(get("/api/hd/cases?q={query}&projection={projection}", "ert", "select")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var firstCase = JsonPath.parse(response).read("$._embedded.cases[0]", Map.class);
+
+		// Contains required fields
+		assertThat(firstCase.get("firstName")).isEqualTo("Nadine");
+		assertThat(firstCase.get("lastName")).isEqualTo("Ebert");
+		assertThat(firstCase.get("dateOfBirth")).isEqualTo("1980-01-01");
+
+		// Contains self link
+		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.SELF, JsonPath.parse(firstCase).jsonString())).isPresent();
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {

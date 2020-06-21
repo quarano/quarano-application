@@ -27,13 +27,13 @@ import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -67,11 +67,15 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull SmartValidator validator;
 
-	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
-	RepresentationModel<?> getCases(@LoggedIn Department department, @RequestParam("q") Optional<String> query) {
+	@GetMapping(path = "/api/hd/cases")
+	RepresentationModel<?> getCases(@LoggedIn Department department, //
+			@RequestParam("q") Optional<String> query, //
+			@RequestParam("projection") Optional<String> projection) {
 
 		var summaries = cases.findFiltered(query, department.getId()) //
-				.map(representations::toSummary) //
+				.map(projection.filter(it -> it.equals("select")) //
+						.<Function<TrackedCase, Object>> map(it -> representations::toSelect) //
+						.orElse(representations::toSummary)) //
 				.toList();
 
 		return HalModelBuilder.emptyHalModel() //
