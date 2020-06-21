@@ -23,7 +23,7 @@
       "tags": ["scope:app", "type:app"]
     },
     "quarano-frontend-e2e": {
-      "tags": ["*"],
+      "tags": ["scope:tests", "type:app"],
       "implicitDependencies": ["quarano-frontend"]
     },
     "auth-domain": {

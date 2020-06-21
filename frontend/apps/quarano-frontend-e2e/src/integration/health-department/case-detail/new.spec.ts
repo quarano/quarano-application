@@ -1,4 +1,4 @@
-import { DateFunctions } from './../../../../../../libs/shared/util-date/src/lib/date-functions';
+import { DateFunctions } from '@qro/shared/util-date';
 /// <reference types="cypress" />
 
 describe('new case', () => {
