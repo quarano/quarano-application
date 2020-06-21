@@ -1,3 +1,4 @@
+import { DateFunctions } from './../../../../../../libs/shared/util-date/src/lib/date-functions';
 /// <reference types="cypress" />
 
 describe('new case', () => {
@@ -250,7 +251,8 @@ describe('new case', () => {
       });
 
       describe('quarantine end date', () => {
-        dateChecks('[data-cy="input-quarantineend"]', '.mat-calendar-body-selected', '14.06.2020');
+        const date = DateFunctions.toCustomLocaleDateString(DateFunctions.addDays(new Date(), 14));
+        dateChecks('[data-cy="input-quarantineend"]', '.mat-calendar-body-selected', date);
       });
     });
 
