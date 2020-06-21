@@ -28,10 +28,9 @@ class CaseRowViewModel {
 })
 export class CaseListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
-  cases: CaseListItemDto[] = [];
+  cases: CaseRowViewModel[] = [];
   loading = false;
   selectionType = SelectionType.single;
-  rows: CaseRowViewModel[] = [];
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   get filter(): string {
@@ -43,14 +42,14 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   private readonly _filter = new BehaviorSubject<string>('');
-  private _filteredData = new BehaviorSubject<CaseListItemDto[]>([]);
-  get filteredData(): CaseListItemDto[] {
+  private _filteredData = new BehaviorSubject<CaseRowViewModel[]>([]);
+
+  get filteredData(): CaseRowViewModel[] {
     return this._filteredData.value;
   }
 
-  set filteredData(filteredData: CaseListItemDto[]) {
+  set filteredData(filteredData: CaseRowViewModel[]) {
     this._filteredData.next(filteredData);
-    this.rows = filteredData.map((c) => this.getRowData(c));
   }
 
   private dateTimeNow = new Date();
@@ -64,8 +63,8 @@ export class CaseListComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.route.data.subscribe(
         (data) => {
-          this.cases = data.cases;
-          this.filteredData = [...data.cases];
+          this.cases = data.cases.map((c) => this.getRowData(c));
+          this.filteredData = [...this.cases];
           this.loading = false;
         },
         () => (this.loading = false)
@@ -113,19 +112,25 @@ export class CaseListComponent implements OnInit, OnDestroy {
 
   updateFilter(event) {
     this.filter = event.target.value;
-
     this.filteredData = !this.filter ? this.cases : this.cases.filter((obj) => this.filterPredicate(obj, this.filter));
-
     this.table.offset = 0;
   }
 
-  filterPredicate(obj: CaseListItemDto, filter: string): boolean {
+  filterPredicate(obj: CaseRowViewModel, filter: string): boolean {
     const dataStr = Object.keys(obj)
       .reduce((currentTerm: string, key: string) => {
+        if (key === 'caseId') {
+          return currentTerm;
+        }
+        if (obj[key] instanceof Date) {
+          return (
+            currentTerm + DateFunctions.toCustomLocaleDateString((obj as { [key: string]: any })[key] as Date) + '◬'
+          );
+        }
         return currentTerm + (obj as { [key: string]: any })[key] + '◬';
       }, '')
       .toLowerCase();
-
+    console.log(dataStr);
     const transformedFilter = filter.trim().toLowerCase();
 
     return dataStr.indexOf(transformedFilter) !== -1;
