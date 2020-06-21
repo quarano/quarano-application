@@ -571,6 +571,17 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(discoverer.findLinkWithRel(TrackedCaseContactSummary.TRACKED_CASE, contact.jsonString())).isPresent();
 	}
 
+	@Test // CORE-252
+	void filtersCasesIfQueryGiven() throws Exception {
+
+		String response = mvc.perform(get("/api/hd/cases?q={query}", "ert")) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		assertThat(JsonPath.parse(response).read("$._embedded.cases[*].lastName", String[].class)) //
+				.containsExactly("Ebert", "Mertens", "Seufert");
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri) //

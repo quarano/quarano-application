@@ -26,7 +26,7 @@ import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,7 +36,6 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
-import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -68,20 +67,16 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull SmartValidator validator;
 
-	private final EmbeddedWrappers wrappers = new EmbeddedWrappers(false);
-
 	@GetMapping(path = "/api/hd/cases", produces = MediaTypes.HAL_JSON_VALUE)
-	RepresentationModel<?> getCases(@LoggedIn Department department) {
+	RepresentationModel<?> getCases(@LoggedIn Department department, @RequestParam("q") Optional<String> query) {
 
-		var summaries = cases.findByDepartmentIdOrderByLastNameAsc(department.getId()) //
+		var summaries = cases.findFiltered(query, department.getId()) //
 				.map(representations::toSummary) //
 				.toList();
 
-		Object collection = summaries.isEmpty() //
-				? List.of(wrappers.emptyCollectionOf(TrackedCaseSummary.class)) //
-				: summaries;
-
-		return RepresentationModel.of(collection);
+		return HalModelBuilder.emptyHalModel() //
+				.embed(summaries, TrackedCaseSummary.class) //
+				.build();
 	}
 
 	@PostMapping(path = "/api/hd/cases", params = "type=contact")
