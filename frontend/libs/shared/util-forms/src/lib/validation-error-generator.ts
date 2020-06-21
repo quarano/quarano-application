@@ -3,14 +3,14 @@ import { AbstractControl } from '@angular/forms';
 
 export class ValidationErrorGenerator {
   public static getErrorKeys(control: AbstractControl): string[] {
-    if (!control.errors) {
+    if (!control?.errors) {
       return null;
     }
     return Object.keys(control.errors);
   }
 
   public static getErrorMessage(control: AbstractControl, errorKey: string): string {
-    if (control.valid) {
+    if (!control || control.valid) {
       return '';
     }
     switch (errorKey) {
@@ -33,6 +33,10 @@ export class ValidationErrorGenerator {
       case 'matDatepickerMax':
         return `Das größte zulässige Datum ist der ${DateFunctions.toCustomLocaleDateString(
           control.getError('matDatepickerMax').max.toDate()
+        )}`;
+      case 'matDatepickerMin':
+        return `Das kleinste zulässige Datum ist der ${DateFunctions.toCustomLocaleDateString(
+          control.getError('matDatepickerMin').min.toDate()
         )}`;
       case 'uppercase':
         return 'Dieses Feld muss mindestens einen Großbuchstaben enthalten';
