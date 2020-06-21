@@ -178,6 +178,8 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
         this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
         if (result.closeAfterSave) {
           this.router.navigate([this.returnLink]);
+        } else {
+          this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${res.caseId}`]);
         }
       })
       .add(() => (this.personalDataLoading = false));

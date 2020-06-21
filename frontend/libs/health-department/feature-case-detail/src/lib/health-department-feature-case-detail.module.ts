@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { CaseDetailComponent } from './components/case-detail/case-detail.component';
 import {
-  ReportCaseResolver,
+  CaseDetailResolver,
   ReportCaseActionsResolver,
   HealthDepartmentDomainModule,
 } from '@qro/health-department/domain';
@@ -24,7 +24,8 @@ const routes: Routes = [
   {
     path: ':type/:id',
     component: CaseDetailComponent,
-    resolve: { case: ReportCaseResolver, actions: ReportCaseActionsResolver, symptoms: SymptomsResolver },
+    resolve: { case: CaseDetailResolver, actions: ReportCaseActionsResolver, symptoms: SymptomsResolver },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: ':type',

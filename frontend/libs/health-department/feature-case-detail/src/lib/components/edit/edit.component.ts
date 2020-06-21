@@ -224,7 +224,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       }
 
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
-      this.createFormGroup();
     }
   }
 

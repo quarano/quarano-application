@@ -6,12 +6,11 @@ import { CaseDetailDto } from '../models/case-detail';
 import { HealthDepartmentService } from '../services/health-department.service';
 
 @Injectable()
-export class ReportCaseResolver implements Resolve<CaseDetailDto> {
+export class CaseDetailResolver implements Resolve<CaseDetailDto> {
   constructor(private healthDepartmentService: HealthDepartmentService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CaseDetailDto> {
     const id = route.paramMap.get('id');
-
     if (id) {
       return this.healthDepartmentService.getCase(id).pipe(
         map((detail) => {
