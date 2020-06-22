@@ -39,7 +39,7 @@ import org.springframework.data.util.Streamable;
 class ContactChaserTest {
 
 	private static final LocalDate YESTERDAY = LocalDate.now().minusDays(1);
-	
+
 	@Mock TrackedCaseRepository cases;
 	@Mock DiaryManagement diaries;
 
@@ -135,7 +135,8 @@ class ContactChaserTest {
 		var person = spy(new TrackedPerson("indexFirstName", "indexLastName"));
 		lenient().when(person.getId()).thenReturn(identifier);
 		// test with two encounters because CORE-270
-		when(person.getEncounters()).thenReturn(Encounters.of(List.of(Encounter.with(contactPerson, LocalDate.now()), Encounter.with(contactPerson, YESTERDAY))));
+		when(person.getEncounters()).thenReturn(Encounters
+				.of(List.of(Encounter.with(contactPerson, LocalDate.now()), Encounter.with(contactPerson, YESTERDAY))));
 
 		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
 	}
@@ -148,8 +149,7 @@ class ContactChaserTest {
 	}
 
 	private static Diary diary(TrackedPersonIdentifier trackedPersonIdentifier, ContactPerson contactPerson) {
-		return Diary
-				.of(Streamable.of(DiaryEntry.of(Slot.of(YESTERDAY, Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
-						.setContacts(List.of(contactPerson))));
+		return Diary.of(Streamable.of(DiaryEntry.of(Slot.of(YESTERDAY, Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
+				.setContacts(List.of(contactPerson))));
 	}
 }
