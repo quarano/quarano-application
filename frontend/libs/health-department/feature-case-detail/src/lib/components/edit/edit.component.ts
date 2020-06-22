@@ -18,7 +18,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -206,23 +206,20 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       this.formGroup.controls[key].updateValueAndValidity();
     });
     this.formGroup.updateValueAndValidity();
-    this.editFormElement.ngSubmit.emit();
+    setTimeout(() => this.editFormElement.ngSubmit.emit(), 0); // prevent premature submit
   }
 
   submitForm(form: NgForm, closeAfterSave: boolean) {
     if (this.formGroup.valid) {
       const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
-
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
           submitData[key] = submitData[key].toDate();
         }
       });
-
       if (this.caseDetail?.caseId) {
         submitData.caseId = this.caseDetail.caseId;
       }
-
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
     }
   }
