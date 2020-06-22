@@ -27,7 +27,7 @@ public class ContactChaser {
 
 	public Stream<Contact> findIndexContactsFor(TrackedCase contactCase) {
 
-		if (!contactCase.isContactCase() && !contactCase.isMedicalContactCase()) {
+		if (contactCase.isIndexCase()) {
 			return Stream.empty();
 		}
 

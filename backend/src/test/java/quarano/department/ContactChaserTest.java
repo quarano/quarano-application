@@ -21,10 +21,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.assertj.core.data.Index;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -52,46 +55,30 @@ class ContactChaserTest {
 		assertThat(contactChaser.findIndexContactsFor(indexCase())).isEmpty();
 	}
 
-	@Test
-	void testFindIndexContactsForContactCase() {
+	@TestFactory
+	Stream<DynamicTest> testFindIndexContactsForContactCase() {
 
-		var indexPersonId = TrackedPersonIdentifier.of(UUID.randomUUID());
-		var contactCase = contactCase(CaseType.CONTACT, indexPersonId);
+		var iterator = Stream.of(CaseType.CONTACT, CaseType.CONTACT_MEDICAL, CaseType.CONTACT_VULNERABLE).iterator();
 
-		var indexCase = indexCase(indexPersonId, contactCase.getOriginContacts().get(0));
-		when(cases.findByTrackedPerson(indexPersonId)).thenReturn(Optional.of(indexCase));
+		return DynamicTest.stream(iterator, it -> "Finds index contacts for case of type " + it, it -> {
 
-		var contacts = contactChaser.findIndexContactsFor(contactCase);
+			var indexPersonId = TrackedPersonIdentifier.of(UUID.randomUUID());
+			var contactCase = contactCase(it, indexPersonId);
 
-		assertThat(contacts).hasSize(1).satisfies(contact -> {
+			var indexCase = indexCase(indexPersonId, contactCase.getOriginContacts().get(0));
+			when(cases.findByTrackedPerson(indexPersonId)).thenReturn(Optional.of(indexCase));
 
-			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
-			assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
-			assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
-			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
+			var contacts = contactChaser.findIndexContactsFor(contactCase);
 
-		}, Index.atIndex(0));
-	}
+			assertThat(contacts).hasSize(1).satisfies(contact -> {
 
-	@Test
-	void testFindIndexContactsForMedicalContactCase() {
+				assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
+				assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
+				assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
+				assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
 
-		var indexPersonId = TrackedPersonIdentifier.of(UUID.randomUUID());
-		var contactCase = contactCase(CaseType.CONTACT_MEDICAL, indexPersonId);
-
-		var indexCase = indexCase(indexPersonId, contactCase.getOriginContacts().get(0));
-		when(cases.findByTrackedPerson(indexPersonId)).thenReturn(Optional.of(indexCase));
-
-		var contacts = contactChaser.findIndexContactsFor(contactCase);
-
-		assertThat(contacts).hasSize(1).satisfies(contact -> {
-
-			assertThat(contact.getCaseId()).isEqualTo(indexCase.getId());
-			assertThat(contact.getContactAt()).isEqualTo(YESTERDAY);
-			assertThat(contact.getPerson()).isEqualTo(indexCase.getTrackedPerson());
-			assertThat(contact.getContactPerson()).isEqualTo(contactCase.getOriginContacts().get(0));
-
-		}, Index.atIndex(0));
+			}, Index.atIndex(0));
+		});
 	}
 
 	@Test
