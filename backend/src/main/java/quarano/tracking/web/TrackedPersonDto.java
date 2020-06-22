@@ -9,7 +9,10 @@ import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.tracking.ZipCode;
 
+import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -30,4 +33,5 @@ public class TrackedPersonDto {
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @NotEmpty @Email String email;
 	private @NotNull @Past LocalDate dateOfBirth;
+	private List<URI> originContacts;
 }

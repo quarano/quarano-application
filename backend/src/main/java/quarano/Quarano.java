@@ -3,6 +3,7 @@ package quarano;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Role;
 import quarano.core.EmailTemplates;
+import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
 import quarano.core.web.RepositoryMappingModule;
 
@@ -73,12 +74,14 @@ public class Quarano {
 
 	@Bean
 	ModelMapper modelMapper(List<MappingCustomizer> customizers, ApplicationContext context,
-			ConversionService conversionService) {
+			ConversionService conversionService, List<IdentifierProcessor> processors) {
 
 		Repositories repositories = new Repositories(context);
 
 		var module = new RepositoryMappingModule(repositories, conversionService) //
-				.exclude(Role.class);
+				.exclude(Role.class); //
+
+		processors.forEach(module::register);
 
 		var mapper = new ModelMapper();
 		mapper.registerModule(module);

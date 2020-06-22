@@ -33,6 +33,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,6 +54,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -79,22 +81,34 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 	private final ContactChaser contactChaser;
 
 	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
+		return toDtoRepresentation(trackedCase, TrackedCaseDto.Input.class);
+	}
+
+	private TrackedCaseDto toDtoRepresentation(TrackedCase trackedCase, Class<? extends TrackedCaseDto> type) {
 
 		var personDto = mapper.map(trackedCase.getTrackedPerson(), TrackedPersonDto.class);
-		var caseDto = mapper.map(trackedCase, TrackedCaseDto.class);
+		var caseDto = mapper.map(trackedCase, type);
 
 		return mapper.map(personDto, caseDto);
 	}
 
-	TrackedCaseDetails toRepresentation(TrackedCase trackedCase) {
+	RepresentationModel<?> toRepresentation(TrackedCase trackedCase) {
 
-		var dto = toInputRepresentation(trackedCase);
+		var dto = toDtoRepresentation(trackedCase, TrackedCaseDto.Output.class);
 
 		List<Contact> contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase) //
 				.map(Contact::new) //
 				.collect(Collectors.toList());
 
-		return new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
+		var details = new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
+
+		var originCases = trackedCase.getOriginCases().stream() //
+				.map(it -> toSelect(it)) //
+				.collect(Collectors.toUnmodifiableList());
+
+		return HalModelBuilder.halModelOf(details) //
+				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES) //
+				.build();
 	}
 
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
@@ -293,6 +307,13 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 				}
 			}
 		}
+
+		@Data
+		static class Input extends TrackedCaseDto {
+			private List<URI> originCases = new ArrayList<>();
+		}
+
+		static class Output extends TrackedCaseDto {}
 	}
 
 	@Relation(collectionRelation = "cases")
@@ -314,6 +335,16 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfEncounters();
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
+
+			var controller = on(TrackedCaseController.class);
+
+			add(trackedCase.getOriginCases().stream() //
+					.map(it -> {
+
+						var href = fromMethodCall(controller.getCase(it.getId(), it.getDepartment())).toUriString();
+						return Link.of(href, TrackedCaseLinkRelations.ORIGIN_CASES); //
+
+					}).collect(Collectors.toUnmodifiableList()));
 		}
 
 		public String getCaseId() {

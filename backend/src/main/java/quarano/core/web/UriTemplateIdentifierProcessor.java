@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriTemplate;
@@ -50,7 +51,20 @@ public class UriTemplateIdentifierProcessor implements IdentifierProcessor {
 		Assert.notNull(template, "UriTemplate must not be null!");
 		Assert.hasText(variableName, "Variable name must not be null or empty!");
 
-		configuration.put(type, ExtractionConfiguration.of(template, variableName));
+		configuration.put(type,
+				ExtractionConfiguration.of(template, variableName, it -> template.expand(Map.of(variableName, it))));
+
+		return this;
+	}
+
+	public <T> UriTemplateIdentifierProcessor register(Class<?> type, UriTemplate template, String variableName,
+			Function<T, Object> uriCreator) {
+
+		Assert.notNull(type, "Aggregate type must not be null!");
+		Assert.notNull(template, "UriTemplate must not be null!");
+		Assert.hasText(variableName, "Variable name must not be null or empty!");
+
+		configuration.put(type, ExtractionConfiguration.of(template, variableName, (Function<Object, Object>) uriCreator));
 
 		return this;
 	}
@@ -82,11 +96,9 @@ public class UriTemplateIdentifierProcessor implements IdentifierProcessor {
 
 		ExtractionConfiguration configuration = this.configuration.get(sourceType);
 
-		if (configuration == null) {
-			return identifier;
-		}
-
-		return configuration.template.expand(Map.of(configuration.variableName, identifier));
+		return configuration == null //
+				? identifier //
+				: configuration.uriCreator.apply(identifier);
 	}
 
 	/*
@@ -113,5 +125,6 @@ public class UriTemplateIdentifierProcessor implements IdentifierProcessor {
 
 		UriTemplate template;
 		String variableName;
+		Function<Object, Object> uriCreator;
 	}
 }

@@ -84,7 +84,7 @@ class TrackedCaseController {
 	}
 
 	@PostMapping(path = "/api/hd/cases", params = "type=contact")
-	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto payload, Errors errors,
+	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 
 		// Disallowed: contact case + infected == true
@@ -93,14 +93,14 @@ class TrackedCaseController {
 	}
 
 	@PostMapping(path = "/api/hd/cases", params = "type=index")
-	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
+	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 
 		return postCase(payload, errors, department);
 	}
 
 	@PostMapping("/api/hd/cases")
-	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto payload, Errors errors,
+	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 
 		return createTrackedCase(payload, CaseType.INDEX, department, errors);
@@ -163,7 +163,7 @@ class TrackedCaseController {
 
 	@PutMapping("/api/hd/cases/{identifier}")
 	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, //
-			@RequestBody TrackedCaseDto payload, //
+			@RequestBody TrackedCaseDto.Input payload, //
 			Errors errors) {
 
 		var existing = cases.findById(identifier).orElse(null);

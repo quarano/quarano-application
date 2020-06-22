@@ -13,4 +13,5 @@ public class TrackedCaseLinkRelations {
 
 	public static final LinkRelation QUESTIONNAIRE = LinkRelation.of("questionnaire");
 	public static final LinkRelation CONTACTS = LinkRelation.of("contacts");
+	public static final LinkRelation ORIGIN_CASES = LinkRelation.of("originCases");
 }

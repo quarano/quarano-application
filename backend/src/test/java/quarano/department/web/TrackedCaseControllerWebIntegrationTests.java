@@ -21,6 +21,7 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidationGroups.Index;
 import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.util.TestUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,6 +53,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import com.jayway.jsonpath.ReadContext;
 
 /**
@@ -185,8 +187,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.infected", boolean.class)).isTrue();
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void transformContactCaseToIndexCase() throws Exception {
 
 		// get contact case Tanja and turn it into dto
@@ -213,8 +214,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(contactCaseTanjaAfterTransformation.isIndexCase()).isTrue();
 	}
 
-	@Test
-	// CORE-121
+	@Test // CORE-121
 	void rejectTransformContactCaseWhenInfoMissing() throws Exception {
 
 		// get contact case Tanja and turn it into dto
@@ -599,6 +599,36 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		// Contains self link
 		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.SELF, JsonPath.parse(firstCase).jsonString())).isPresent();
+	}
+
+	@Test // CORE-252
+	void updatesOriginCasesCorrectly() throws Exception {
+
+		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
+		var contactCase = cases.findAll() //
+				.filter(it -> !it.getType().equals(CaseType.INDEX)) //
+				.stream().findFirst().orElseThrow();
+
+		contactCase.addOriginCase(originCase);
+
+		TestUtils.fakeRequest(HttpMethod.GET, "/api/hd/cases", mvc.getDispatcherServlet().getWebApplicationContext());
+
+		var response = mvc.perform(put("/api/hd/cases/{id}", contactCase.getId()) //
+				.contentType(MediaType.APPLICATION_JSON) //
+				.content(jackson.writeValueAsString(representations.toInputRepresentation(contactCase)))) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> document.read("$.originCases"));
+		assertThat(document.read("$._embedded.originCases[0].firstName", String.class)).isEqualTo("Sandra");
+		assertThat(document.read("$._embedded.originCases[0].lastName", String.class)).isEqualTo("Schubert");
+		assertThat(document.read("$._embedded.originCases[0]._links.self.href", String.class)).isNotNull();
+
+		assertThat(cases.findById(contactCase.getId())).hasValueSatisfying(it -> {
+			assertThat(it.getOriginCases()).contains(originCase);
+		});
 	}
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {

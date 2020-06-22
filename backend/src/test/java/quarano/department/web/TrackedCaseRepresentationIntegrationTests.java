@@ -22,6 +22,7 @@ import quarano.QuaranoIntegrationTest;
 import quarano.core.EnumMessageSourceResolvable;
 import quarano.department.CaseType;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.util.TestUtils;
 
@@ -29,6 +30,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 
 /**
  * @author Oliver Drotbohm
@@ -40,6 +46,7 @@ class TrackedCaseRepresentationIntegrationTests {
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
 	private final TrackedCaseRepository cases;
+	private final ObjectMapper jackson;
 
 	private final WebApplicationContext context;
 
@@ -62,5 +69,27 @@ class TrackedCaseRepresentationIntegrationTests {
 
 		assertThat(representations.toSummary(contactCase.setType(CaseType.INDEX)).getCaseTypeLabel())
 				.isEqualTo(messages.getMessage(EnumMessageSourceResolvable.of(CaseType.INDEX)));
+	}
+
+	@Test // CORE-252
+	void deserializesOriginCases() throws Exception {
+
+		var result = jackson.readValue("{ \"originCases\" : [ \"/cases/4711\" ] }", TrackedCaseDto.Input.class);
+
+		assertThat(result.getOriginCases()).hasSize(1);
+	}
+
+	@Test // CORE-252
+	void doesNotSerializeOriginCasesInMainBody() throws Exception {
+
+		TestUtils.fakeRequest(HttpMethod.GET, "/api/hd/cases", context);
+
+		var contactCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+
+		var result = jackson.writeValueAsString(representations.toRepresentation(contactCase));
+		var document = JsonPath.parse(result, Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS));
+
+		assertThat(document.read("$.originCases", String.class)).isNull();
 	}
 }

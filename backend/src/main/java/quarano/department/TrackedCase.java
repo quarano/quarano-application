@@ -76,6 +76,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Enumerated(EnumType.STRING) //
 	private @Getter Status status;
 
+	@OneToMany //
+	private @Getter List<TrackedCase> originCases = new ArrayList<>();
+
 	public static TrackedCase of(ContactPerson contactPerson, Department department) {
 
 		var person = new TrackedPerson(contactPerson);
@@ -113,6 +116,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.type = type;
 		this.department = department;
 		this.status = Status.OPEN;
+		this.originCases = new ArrayList<>();
 
 		this.registerEvent(CaseCreated.of(this));
 
@@ -135,11 +139,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	public void addOriginContact(ContactPerson contact) {
+	public TrackedCase addOriginCase(TrackedCase trackedCase) {
 
-		if (!originContacts.contains(contact)) {
-			this.originContacts.add(contact);
-		}
+		Assert.state(trackedCase.isIndexCase(), () -> String.format("Case %s is not an index case!", trackedCase.getId()));
+
+		this.originCases.add(trackedCase);
+
+		return this;
 	}
 
 	public boolean isEligibleForTracking() {
