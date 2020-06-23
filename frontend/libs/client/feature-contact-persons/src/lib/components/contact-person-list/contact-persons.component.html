@@ -15,15 +15,14 @@
           <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
             <mat-card-title>{{ getName(contact) }}</mat-card-title>
-            <mat-card-subtitle
-              ><mat-icon *ngIf="contact.phone">local_phone</mat-icon
-              ><span>{{ contact.phone || 'Telefonnummer nicht verfügbar' }}</span></mat-card-subtitle
-            >
           </mat-card-header>
           <mat-card-content>
             <p *ngIf="contact.email">
               <mat-icon>alternate_email</mat-icon>
               <span class="ellipsis">{{ contact.email }}</span>
+            </p>
+            <p *ngIf="contact.phone">
+              <mat-icon *ngIf="contact.phone">local_phone</mat-icon><span class="ellipsis">{{ contact.phone }}</span>
             </p>
             <p *ngIf="contact.mobilePhone">
               <mat-icon>smartphone</mat-icon>

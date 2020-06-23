@@ -28,6 +28,14 @@
   .mat-card-header-text {
     overflow: hidden !important;
   }
+
+  .mat-card-header .mat-card-title {
+    line-height: 2rem;
+  }
+
+  mat-card-content {
+    margin-top: 1rem;
+  }
 }
 
 mat-card-content p span,

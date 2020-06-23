@@ -1,3 +1,5 @@
+@import '../../../../../../libs/shared/ui-styles/src/lib/styles/variables';
+
 .container {
   display: flex;
   align-items: center;
@@ -22,4 +24,16 @@
 span {
   color: white;
   font-size: large;
+}
+
+@media all and (max-width: $break-sm) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    button:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
+  }
 }
