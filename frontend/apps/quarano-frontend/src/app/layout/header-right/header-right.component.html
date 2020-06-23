@@ -1,5 +1,5 @@
 <div class="container" *ngIf="userService.isLoggedIn$ | async">
-  <ng-container *qroIsEnrolledClient>
+  <ng-container *ngIf="(enrollmentService.getEnrollmentStatus() | async)?.complete">
     <button
       *ngIf="healthDepartment$ | async as healthDepartment"
       mat-stroked-button
