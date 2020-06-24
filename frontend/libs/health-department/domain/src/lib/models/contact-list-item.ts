@@ -3,7 +3,7 @@ import { CaseStatus } from './case-detail';
 
 export interface ContactListItemDto extends HalResponse {
   contactDates: Date[];
-  contactStatus: CaseStatus;
+  caseStatusLabel: string;
   lastName: string;
   firstName: string;
   isHealthStaff: boolean;

@@ -48,7 +48,7 @@ export class ContactListComponent implements OnInit {
     return {
       firstName: listItem.firstName,
       lastName: listItem.lastName,
-      status: listItem.contactStatus,
+      status: listItem.caseStatusLabel,
       isHealthStaff: this.getBooleanText(listItem.isHealthStaff),
       isSenior: this.getBooleanText(listItem.isSenior),
       hasPreExistingConditions: this.getBooleanText(listItem.hasPreExistingConditions),
