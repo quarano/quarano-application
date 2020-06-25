@@ -1,13 +1,22 @@
 Sehr geehrte/geehrter Frau/Herr {lastName},
 
-wie Sie bereits wissen, sind Sie bis einschließlich {quarantineEndDate} in häuslicher Isolation.
+wie Sie bereits wissen, befinden Sie sich bis einschließlich {quarantineEndDate} in Quarantäne.
 
-Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserem Tool zur Erfassung der Kontakte und Symptome an unter:
+Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserer Online-Anwendung zur Erfassung der Kontaktpersonen und der Symptome an unter:
 
 https://{host}/client/enrollment/landing/index/{activationCode}
 
-Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen nach, so dass wir zu diesen Kontakt aufnehmen können. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptomen (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
+Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein, so dass wir zu diesen Kontakt aufnehmen können. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
 
-Fühlen Sie sich aktuell schwer krank oder werden die Symptome schlimmer, rufen Sie bitte Ihren Hausarzt an oder den Ärztlicher Bereitschaftsdienst (Tel: 116117). Bei sonstigen Rückfragen melden Sie sich bitte auf unserem Hotline-Telefon (0621-293-2253 von 07:30 Uhr bis 19 Uhr).
+Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer 0621-293 2253. 
 
-Mit freundlichen Grüßen
+•   Montag bis Freitag von 9:00 – 17:00 Uhr
+•   Samstags sowie an Sonn- und Feiertagen von 9:00 – 14:00 Uhr 
+
+Auch die Internetseite der Stadt Mannheim (www.mannheim.de) bietet eine Vielzahl von Informationen an.
+
+
+Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.
+
+
+Mit freundlichen Grüßen,
