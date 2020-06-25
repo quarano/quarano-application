@@ -1,3 +1,4 @@
+import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HdContactComponent } from './components/hd-contact/hd-contact.component';
@@ -6,6 +7,6 @@ import { HdContactComponent } from './components/hd-contact/hd-contact.component
   declarations: [HdContactComponent],
   entryComponents: [HdContactComponent],
   exports: [HdContactComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, SharedUiMaterialModule],
 })
 export class ClientFeatureHealthDepartmentContactModule {}

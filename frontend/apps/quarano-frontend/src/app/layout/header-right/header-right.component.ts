@@ -27,6 +27,6 @@ export class HeaderRightComponent {
   }
 
   showContact(department: HealthDepartmentDto) {
-    this.matDialog.open(HdContactComponent, { data: department });
+    this.matDialog.open(HdContactComponent, { data: department, maxWidth: 600 });
   }
 }
