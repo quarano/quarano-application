@@ -18,8 +18,8 @@ export class WelcomeComponent implements OnInit {
         'Pflegen Sie zwei Mal täglich in Ihrem Tagebuch die eventuell auftretenden Symptome und Ihre Körpertemperatur.',
       linkText: 'Zum Tagebuch',
       routerLink: ['/client/diary/diary-list'],
-      headerImageUrl: '/assets/images/diary.png',
-      backgroundImageUrl: '/assets/images/diary_tile_background.jpg',
+      headerImageUrl: 'assets/images/diary.png',
+      backgroundImageUrl: 'assets/images/diary_tile_background.jpg',
     },
     {
       title: 'Kontaktpersonen',
@@ -28,8 +28,8 @@ export class WelcomeComponent implements OnInit {
         'Verwalten Sie Ihre persönlichen Kontaktpersonen, damit Sie diese einfach und schnell in den Tagebucheinträgen referenzieren können, ohne sie neu eingeben zu müssen.',
       linkText: 'Zu den Kontaktpersonen',
       routerLink: ['/client/contact-persons/contact-person-list'],
-      headerImageUrl: '/assets/images/contact-person.png',
-      backgroundImageUrl: '/assets/images/contact_tile_background.jpg',
+      headerImageUrl: 'assets/images/contact-person.png',
+      backgroundImageUrl: 'assets/images/contact_tile_background.jpg',
     },
   ];
 
@@ -42,8 +42,8 @@ export class WelcomeComponent implements OnInit {
         'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.',
       linkText: 'Zu den Indexfällen',
       routerLink: ['/health-department/index-cases'],
-      headerImageUrl: '/assets/images/diary.png',
-      backgroundImageUrl: '/assets/images/clients_tile_background.jpg',
+      headerImageUrl: 'assets/images/diary.png',
+      backgroundImageUrl: 'assets/images/clients_tile_background.jpg',
     },
     {
       title: 'Kontaktpersonen',
@@ -53,8 +53,8 @@ export class WelcomeComponent implements OnInit {
         'Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.',
       linkText: 'Zu den Kontaktpersonen',
       routerLink: ['/health-department/contact-cases'],
-      headerImageUrl: '/assets/images/contact-person.png',
-      backgroundImageUrl: '/assets/images/contact_tile_background.jpg',
+      headerImageUrl: 'assets/images/contact-person.png',
+      backgroundImageUrl: 'assets/images/contact_tile_background.jpg',
     },
   ];
 

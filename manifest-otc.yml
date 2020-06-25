@@ -1,0 +1,157 @@
+applications:
+  ###############   Mannheim PROD system #########################
+  - name: quarano-mannheim-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/mannheim
+      - route: www.quarano.de/mannheim
+    env:
+      ENVIRONMENT_NAME: "mannheim"
+  - name: quarano-mannheim-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/mannheim
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: ""
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 0621 293 2253
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      SERVER_SERVLET_CONTEXTPATH: "/api/mannheim"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://demo.quarano.de
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: prod
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/mannheim/api
+    services:
+      - quarano-mannheim-prod-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  ###############   Mannheim STAGE system #########################
+  - name: quarano-mannheim-stage-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/mannheim-stage
+      - route: www.quarano.de/mannheim-stage
+    env:
+      ENVIRONMENT_NAME: "mannheim-stage"
+  - name: quarano-mannheim-stage-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/mannheim-stage
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: ""
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 0621 293 2253
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      SERVER_SERVLET_CONTEXTPATH: "/mannheim-stage/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/mannheim-stage/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: prod
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/mannheim-stage/api
+    services:
+      - quarano-mannheim-stage-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+
+  ####################################################################
+  ########################   INTERNAL  ###############################
+  -
+  ###############   Internal DEMO system #########################
+  - name: quarano-demo-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: demo.quarano.de/demo
+    env:
+      ENVIRONMENT_NAME: "demo"
+
+  ###############   Internal DEV system #########################
+  - name: internal-dev-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/internal-dev
+    env:
+      ENVIRONMENT_NAME: "internal-dev"
+
+  - name: internal-dev-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/internal-dev
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: ""
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 0621 293 2253
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      SERVER_SERVLET_CONTEXTPATH: "/internal-dev/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-dev/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: develop
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/internal-dev/api
+    services:
+      - quarano-internal-dev-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+
+  ###############   Internal TEST system #########################
+  - name: internal-test-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/internal-test
+    env:
+      ENVIRONMENT_NAME: "internal-test"
+
+  - name: internal-test-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/internal-test
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: ""
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 0621 293 2253
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      SERVER_SERVLET_CONTEXTPATH: "/internal-test/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-test/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: prod
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/internal-test/api
+    services:
+      - quarano-internal-test-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
