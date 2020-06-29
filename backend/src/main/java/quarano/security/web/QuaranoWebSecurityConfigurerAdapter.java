@@ -93,7 +93,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	CorsConfigurationSource corsConfigurationSource() {
 
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(this.configuration.getAllowedOrigins());
+		configuration.setAllowedOriginPatterns(this.configuration.getAllowedOrigins());
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(
