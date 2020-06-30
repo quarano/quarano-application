@@ -1,5 +1,5 @@
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { ContactListComponent } from './components/contact-list/contact-list.component';
+import { ContactListComponent } from './contact-list/contact-list.component';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
@@ -7,20 +7,20 @@ import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symp
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { CaseDetailComponent } from './components/case-detail/case-detail.component';
+import { CaseDetailComponent } from './case-detail/case-detail.component';
 import {
   CaseDetailResolver,
   ReportCaseActionsResolver,
   HealthDepartmentDomainModule,
 } from '@qro/health-department/domain';
-import { QuestionnaireComponent } from './components/questionnaire/questionnaire.component';
-import { MailComponent } from './components/mail/mail.component';
-import { IndexContactsComponent } from './components/index-contacts/index-contacts.component';
-import { EditComponent } from './components/edit/edit.component';
-import { CommentsComponent } from './components/comments/comments.component';
-import { CloseCaseDialogComponent } from './components/close-case-dialog/close-case-dialog.component';
-import { AnomalyComponent } from './components/anomaly/anomaly.component';
-import { ActionComponent } from './components/action/action.component';
+import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
+import { MailComponent } from './mail/mail.component';
+import { IndexContactsComponent } from './index-contacts/index-contacts.component';
+import { EditComponent } from './edit/edit.component';
+import { CommentsComponent } from './comments/comments.component';
+import { CloseCaseDialogComponent } from './close-case-dialog/close-case-dialog.component';
+import { AnomalyComponent } from './anomaly/anomaly.component';
+import { ActionComponent } from './action/action.component';
 
 const routes: Routes = [
   {

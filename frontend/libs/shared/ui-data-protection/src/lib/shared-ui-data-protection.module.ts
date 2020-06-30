@@ -1,4 +1,4 @@
-import { DataProtectionComponent } from './components/data-protection/data-protection.component';
+import { DataProtectionComponent } from './/data-protection/data-protection.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

@@ -28,7 +28,7 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "./libs/shared/ui-styles/src/lib/styles/styles.scss"
+              "./libs/shared/ui-styles/src/lib/styles.scss"
             ],
             "scripts": []
           },

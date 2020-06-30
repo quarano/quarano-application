@@ -1,0 +1,49 @@
+@import '../../../../../shared/ui-styles/src/lib/variables';
+
+.hidden {
+  display: none;
+}
+
+::ng-deep {
+  .mat-checkbox-layout {
+    white-space: initial !important;
+  }
+
+  mat-checkbox {
+    margin-bottom: 1rem !important;
+  }
+}
+
+.bool-question {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+
+  &:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+
+  @media screen and (max-width: $break-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+.risk-question {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

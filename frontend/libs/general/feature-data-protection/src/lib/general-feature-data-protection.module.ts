@@ -3,7 +3,7 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataProtectionCardComponent } from './components/data-protection-card/data-protection-card.component';
+import { DataProtectionCardComponent } from './data-protection-card/data-protection-card.component';
 
 @NgModule({
   declarations: [DataProtectionCardComponent],
