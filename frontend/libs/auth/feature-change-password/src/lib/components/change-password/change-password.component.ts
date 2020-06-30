@@ -60,7 +60,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           .subscribe(
             () => {
               this.snackbarService.success('Ihr Passwort wurde geändert');
-              this.router.navigate(['/all-users/welcome']);
+              this.router.navigate(['/general/welcome']);
             },
             (error) => {
               this.badRequestService.handleBadRequestError(error, this.formGroup);
