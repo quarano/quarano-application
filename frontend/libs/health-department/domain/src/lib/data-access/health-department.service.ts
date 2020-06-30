@@ -2,9 +2,9 @@ import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Link } from '@qro/shared/util-data-access';
-import { CaseDetailDto } from '../models/case-detail';
+import { CaseDetailDto } from '../model/case-detail';
 import { Observable } from 'rxjs';
-import { CaseActionDto } from '../models/case-action';
+import { CaseActionDto } from '../model/case-action';
 import { share, distinctUntilChanged, map } from 'rxjs/operators';
 import { UserService, HealthDepartmentDto, ClientType } from '@qro/auth/api';
 

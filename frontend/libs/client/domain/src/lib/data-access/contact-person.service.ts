@@ -2,7 +2,7 @@ import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ContactPersonDto, ContactPersonModifyDto } from '../models/contact-person';
+import { ContactPersonDto, ContactPersonModifyDto } from '../model/contact-person';
 import { share } from 'rxjs/operators';
 
 @Injectable({

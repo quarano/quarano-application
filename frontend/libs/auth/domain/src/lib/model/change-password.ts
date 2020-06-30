@@ -3,4 +3,3 @@ export interface ChangePasswordDto {
   password: string;
   passwordConfirm: string;
 }
-

@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
-import { UserDto } from '../models/user';
-import { roles } from '../models/role';
+import { UserDto } from '../model/user';
+import { roles } from '../model/role';
 import { AuthService } from './auth.service';
 
 @Injectable({

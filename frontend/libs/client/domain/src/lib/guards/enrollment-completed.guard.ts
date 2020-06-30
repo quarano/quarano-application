@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '@qro/auth/api';
-import { EnrollmentService } from '../services/enrollment.service';
+import { EnrollmentService } from '../data-access/enrollment.service';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Injectable({

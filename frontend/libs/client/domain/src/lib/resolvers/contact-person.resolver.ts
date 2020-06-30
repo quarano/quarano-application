@@ -1,8 +1,8 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { ContactPersonDto } from '../models/contact-person';
-import { ContactPersonService } from '../services/contact-person.service';
+import { ContactPersonDto } from '../model/contact-person';
+import { ContactPersonService } from '../data-access/contact-person.service';
 
 @Injectable()
 export class ContactPersonResolver implements Resolve<ContactPersonDto> {

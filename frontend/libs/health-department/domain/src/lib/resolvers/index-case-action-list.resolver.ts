@@ -1,8 +1,8 @@
-import { IndexCaseService } from '../services/index-case.service';
+import { IndexCaseService } from '../data-access/index-case.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { ActionListItemDto } from '../models/action-list-item';
+import { ActionListItemDto } from '../model/action-list-item';
 
 @Injectable()
 export class IndexCaseActionListResolver implements Resolve<ActionListItemDto[]> {

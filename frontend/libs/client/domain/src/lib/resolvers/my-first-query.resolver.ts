@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { EnrollmentService } from '../services/enrollment.service';
+import { EnrollmentService } from '../data-access/enrollment.service';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 
 @Injectable()

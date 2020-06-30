@@ -1,16 +1,16 @@
 import { share, map } from 'rxjs/operators';
-import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
+import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseListItemDto } from '../models/case-list-item';
+import { CaseListItemDto } from '../model/case-list-item';
 import { ClientType } from '@qro/auth/api';
-import { ActionListItemDto } from '../models/action-list-item';
+import { ActionListItemDto } from '../model/action-list-item';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactCaseService {
+export class IndexCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getCaseList(): Observable<CaseListItemDto[]> {
@@ -19,7 +19,7 @@ export class ContactCaseService {
       map((result) => {
         if (result?._embedded?.cases) {
           return result._embedded.cases
-            .filter((r: any) => r.caseType === ClientType.Contact)
+            .filter((r: any) => r.caseType === ClientType.Index)
             .map((item: any) => this.mapCaseListItem(item));
         } else {
           return [];
@@ -31,9 +31,7 @@ export class ContactCaseService {
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),
-      map((result) =>
-        result.filter((r) => r.caseType === ClientType.Contact).map((item) => this.mapActionListItem(item))
-      )
+      map((result) => result.filter((r) => r.caseType === ClientType.Index).map((item) => this.mapActionListItem(item)))
     );
   }
 

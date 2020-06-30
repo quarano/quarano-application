@@ -4,10 +4,10 @@ import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, share, switchMap, tap } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
-import { EnrollmentStatusDto } from '../models/enrollment-status';
-import { RegisterDto } from '../models/register';
+import { EnrollmentStatusDto } from '../model/enrollment-status';
+import { RegisterDto } from '../model/register';
 import { DateFunctions } from '@qro/shared/util-date';
-import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from '../models/encounter';
+import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from '../model/encounter';
 
 @Injectable({
   providedIn: 'root',

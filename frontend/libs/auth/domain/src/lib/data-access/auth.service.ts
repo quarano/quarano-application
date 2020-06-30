@@ -1,9 +1,9 @@
 import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
-import { ChangePasswordDto } from './../models/change-password';
+import { ChangePasswordDto } from './../model/change-password';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserDto } from '../models/user';
+import { UserDto } from '../model/user';
 
 @Injectable({
   providedIn: 'root',

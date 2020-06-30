@@ -2,7 +2,7 @@ import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AccountListDto, AccountDto } from '../models/account';
+import { AccountListDto, AccountDto } from '../model/account';
 import { share, map } from 'rxjs/operators';
 
 @Injectable({
