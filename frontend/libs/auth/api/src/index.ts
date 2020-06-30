@@ -1,4 +1,3 @@
-export * from './lib/auth-api.module';
 export {
   ClientDto,
   HealthDepartmentDto,
