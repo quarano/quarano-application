@@ -28,6 +28,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import quarano.department.TokenGenerator;
 
 /**
  * @author Oliver Drotbohm
@@ -35,7 +36,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 @ConstructorBinding
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "quarano.jwt")
-class JwtProperties implements JwtTokenGenerator, JwtConfiguration {
+class JwtProperties implements TokenGenerator, JwtConfiguration {
 
 	static final String ROLE_CLAIM = "aut";
 	static final String PERSON_CLAIM = "pid";

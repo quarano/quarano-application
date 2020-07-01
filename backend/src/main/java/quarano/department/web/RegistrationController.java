@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import quarano.department.TokenGenerator;
+import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class RegistrationController {
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull RegistrationRepresentations representations;
+	private final @NonNull TokenGenerator generator;
 
 	@PostMapping("/api/registration")
 	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors) {
@@ -55,7 +58,12 @@ public class RegistrationController {
 		ErrorsDto dto = ErrorsDto.of(errors, messages);
 
 		return registration.createTrackedPersonAccount(details) //
-				.<HttpEntity<?>> map(__ -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build())
+				.map(generator::generateTokenFor).<HttpEntity<?>>map(token ->
+								ResponseEntity.ok()
+										.header(TOKEN_HEADER, token)
+										.contentType(MediaType.APPLICATION_JSON)
+										.build()
+				)
 				.recover(RegistrationException.class, it -> dto //
 						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage()) //
 						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage()) //

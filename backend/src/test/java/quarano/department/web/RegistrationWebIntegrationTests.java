@@ -61,14 +61,23 @@ class RegistrationWebIntegrationTests {
 				.build();
 
 		// when
-		mvc.perform(post("/api/registration") //
+		var response = mvc.perform(post("/api/registration") //
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
 				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn().getResponse();
 
-		// then check if login works with new account
-		String token = loginAndCheckSuccess(password, username);
+			// then check for token
+		assertThat(response.getHeader("X-Auth-Token")).isNotNull();
+
+		String token = response.getHeader("X-Auth-Token");
+
+		// check login works with token
+		callUserMeAndCheckSuccess(token, person);
+
+		// check if login works with new account
+		token = loginAndCheckSuccess(password, username);
 
 		// and check if token is valid for authentication
 		callUserMeAndCheckSuccess(token, person);

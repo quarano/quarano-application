@@ -11,7 +11,7 @@ import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
-import quarano.security.JwtTokenGenerator;
+import quarano.department.TokenGenerator;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Map;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 @RestController
 @RequestMapping
@@ -35,7 +36,7 @@ class AuthenticationController {
 	private final @NonNull AccountService accounts;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull TrackedPersonRepository people;
-	private final @NonNull JwtTokenGenerator generator;
+	private final @NonNull TokenGenerator generator;
 
 	@PostMapping({ "/login", "/api/login" })
 	HttpEntity<?> login(@RequestBody AuthenticationRequest request) {
@@ -57,7 +58,7 @@ class AuthenticationController {
 				.<HttpEntity<?>> map(it -> {
 
 					var headers = new HttpHeaders();
-					headers.set(QuaranoWebSecurityConfigurerAdapter.TOKEN_HEADER, it);
+					headers.set(TOKEN_HEADER, it);
 
 					return ResponseEntity.status(HttpStatus.OK) //
 							.headers(headers) //

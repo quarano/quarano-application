@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 /**
  * Configures security settings and defines which url pattern can be accessed by which role
@@ -32,9 +33,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 @EnableWebSecurity
 @RequiredArgsConstructor
-class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-
-	static final String TOKEN_HEADER = "X-Auth-Token";
+public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 	private final JwtConfiguration configuration;
 	private final AccountService accounts;
