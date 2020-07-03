@@ -1,7 +1,16 @@
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, startWith, takeUntil } from 'rxjs/operators';
+import {
+  filter,
+  startWith,
+  takeUntil,
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+  switchMap,
+  finalize,
+} from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IIdentifiable } from '@qro/shared/util-data-access';
@@ -16,7 +25,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() nameProperties: string[];
   @Input() control: FormControl;
   @Input() placeholder: string;
-  @Input() selectableItems: IIdentifiable[];
+  @Input() selectableItems: IIdentifiable[] = [];
+  @Input() lazy: boolean;
+  @Input() loadFunction: ((value: string) => Observable<string[]>) | null;
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
   @Output() itemNotFound = new EventEmitter<string>();
@@ -27,9 +38,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @ViewChild('auto') autocomplete;
   destroy$: Subject<void> = new Subject<void>();
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
+  isLoading = false;
 
   ngOnInit() {
     this.filteredList$$.next(this.selectableItems);
+
     this.control.valueChanges
       .pipe(
         takeUntil(this.destroy$),
