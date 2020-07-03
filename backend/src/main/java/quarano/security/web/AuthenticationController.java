@@ -9,16 +9,14 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.core.web.QuaranoHttpHeaders;
+import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.TokenGenerator;
 import quarano.tracking.TrackedPersonRepository;
-
-import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 @RestController
 @RequestMapping
@@ -55,15 +52,7 @@ class AuthenticationController {
 
 				}, () -> new AccessDeniedException("Case already closed!")) //
 				.map(generator::generateTokenFor) //
-				.<HttpEntity<?>> map(it -> {
-
-					var headers = new HttpHeaders();
-					headers.set(TOKEN_HEADER, it);
-
-					return ResponseEntity.status(HttpStatus.OK) //
-							.headers(headers) //
-							.body(Map.of("token", it));
-				}) //
+				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse) //
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
 	}

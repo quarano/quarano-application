@@ -1,5 +1,7 @@
 package quarano.security.web;
 
+import static quarano.core.web.QuaranoHttpHeaders.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Account;
@@ -22,7 +24,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 /**
  * Configures security settings and defines which url pattern can be accessed by which role
@@ -84,22 +85,20 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
-		
-
 
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(this.configuration.getAllowedOrigins());
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(
-				List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.ORIGIN, TOKEN_HEADER));
-		configuration.setExposedHeaders(List.of(TOKEN_HEADER));
-		
+				List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.ORIGIN, AUTH_TOKEN));
+		configuration.setExposedHeaders(List.of(AUTH_TOKEN));
+
 		log.debug("Configuring HTTP-Security:");
 		log.debug("Set Allowed-Origins: " + configuration.getAllowedOrigins());
 		log.debug("Set Allowed-Headers: " + configuration.getAllowedHeaders());
 		log.debug("Exposed Headers: " + configuration.getExposedHeaders());
-	
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

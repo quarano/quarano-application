@@ -6,10 +6,12 @@ import quarano.account.Account;
 import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MapperWrapper;
+import quarano.core.web.QuaranoHttpHeaders;
 import quarano.department.RegistrationDetails;
 import quarano.department.RegistrationException;
 import quarano.department.RegistrationException.Problem;
 import quarano.department.RegistrationManagement;
+import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
@@ -22,7 +24,6 @@ import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import quarano.department.TokenGenerator;
-import static quarano.core.web.QuaranoHttpHeaders.TOKEN_HEADER;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,16 +57,12 @@ public class RegistrationController {
 		ErrorsDto dto = ErrorsDto.of(errors, messages);
 
 		return registration.createTrackedPersonAccount(details) //
-				.map(generator::generateTokenFor).<HttpEntity<?>>map(token ->
-								ResponseEntity.ok()
-										.header(TOKEN_HEADER, token)
-										.contentType(MediaType.APPLICATION_JSON)
-										.build()
-				)
+				.map(generator::generateTokenFor) //
+				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse) //
 				.recover(RegistrationException.class, it -> dto //
 						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage()) //
 						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage()) //
-						.toBadRequest())				
+						.toBadRequest())
 				.recover(ActivationCodeException.class, it -> dto //
 						.rejectField("clientCode", "Invalid", it.getMessage()) //
 						.toBadRequest())
@@ -102,18 +97,6 @@ public class RegistrationController {
 							.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(it)));
 
 				}).orElseGet(() -> ResponseEntity.notFound().build());
-	}
-
-	private ErrorsDto map(ErrorsDto errors, RegistrationException o_O) {
-
-		switch (o_O.getProblem()) {
-			case INVALID_BIRTHDAY:
-				return errors.rejectField("dateOfBirth", "Invalid", o_O.getMessage());
-			case INVALID_USERNAME:
-				return errors.rejectField("username", "Invalid", o_O.getMessage());
-			default:
-				return errors;
-		}
 	}
 
 	/**

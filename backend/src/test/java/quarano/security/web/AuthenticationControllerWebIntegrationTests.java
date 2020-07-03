@@ -59,6 +59,6 @@ class AuthenticationControllerWebIntegrationTests {
 		mvc.perform(post("/api/login") //
 				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password))) //
 				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk());
+				.andExpect(status().is2xxSuccessful());
 	}
 }

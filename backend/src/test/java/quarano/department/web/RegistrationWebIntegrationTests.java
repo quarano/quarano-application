@@ -7,16 +7,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.core.web.QuaranoHttpHeaders;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.activation.ActivationCodeDataInitializer;
 import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
-import quarano.util.TokenResponse;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -64,14 +62,13 @@ class RegistrationWebIntegrationTests {
 		var response = mvc.perform(post("/api/registration") //
 				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
 				.content(mapper.writeValueAsString(registrationDto))) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(status().is2xxSuccessful()) //
 				.andReturn().getResponse();
 
-			// then check for token
-		assertThat(response.getHeader("X-Auth-Token")).isNotNull();
+		// then check for token
+		var token = response.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
 
-		String token = response.getHeader("X-Auth-Token");
+		assertThat(token).isNotNull();
 
 		// check login works with token
 		callUserMeAndCheckSuccess(token, person);
@@ -217,8 +214,6 @@ class RegistrationWebIntegrationTests {
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
 	}
-	
-	
 
 	@Test
 	@Disabled
@@ -256,7 +251,7 @@ class RegistrationWebIntegrationTests {
 		// when
 		var responseBody = expectFailedRegistration(payload);
 		var document = JsonPath.parse(responseBody);
-		
+
 		var wrongDateMessage = messages.getMessage("Invalid.accountRegistration.wrongBirthDate");
 
 		assertThat(document.read("$.dateOfBirth", String.class)).isEqualTo(wrongDateMessage);
@@ -280,21 +275,21 @@ class RegistrationWebIntegrationTests {
 		assertThat(document.read("$.client.lastName", String.class)).isEqualTo(person.getLastName());
 	}
 
-	private String loginAndCheckSuccess(final String password, final String username)
-			throws UnsupportedEncodingException, Exception, IOException {
-		// login with new account
-		String requestbody = createLoginRequestBody(username, password);
+	@SuppressWarnings("null")
+	private String loginAndCheckSuccess(final String password, final String username) throws Exception {
 
-		String jwtToken = mvc.perform(post("/login") //
+		var response = mvc.perform(post("/login") //
 				.header("Origin", "*") //
 				.contentType(MediaType.APPLICATION_JSON) //
-				.content(requestbody)).andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)).andReturn().getResponse()
-				.getContentAsString();
+				.content(createLoginRequestBody(username, password))) //
+				.andExpect(status().is2xxSuccessful()) //
+				.andReturn().getResponse();
 
-		TokenResponse response = mapper.readValue(jwtToken, TokenResponse.class);
+		var token = response.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
 
-		return response.getToken();
+		assertThat(token).isNotBlank();
+
+		return token;
 	}
 
 	private void checkLoginFails(String username, String password) throws Exception {

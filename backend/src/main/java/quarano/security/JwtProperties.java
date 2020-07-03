@@ -7,6 +7,7 @@ import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Role;
+import quarano.department.TokenGenerator;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,10 +29,10 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import quarano.department.TokenGenerator;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jan Stamer
  */
 @ConstructorBinding
 @RequiredArgsConstructor

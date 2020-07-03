@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.core.web.QuaranoHttpHeaders;
 import quarano.user.web.UserController.NewPassword;
 
 import java.util.Map;
@@ -49,16 +50,16 @@ class UserControllerWebIntegrationTests {
 		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("index-email@gesundheitsamt.de");
 		assertThat(document.read("$.healthDepartment.phone", String.class)).isEqualTo("0123456789");
 	}
-	
+
 	@Test
 	void testLoginWithValidCredentialsForAgent() throws Exception {
-		
+
 		// when
 		var token = login(AGENT_USERNAME, AGENT_PASSWORD);
-		
+
 		String resultDtoStr = performGet(token);
 		DocumentContext document = JsonPath.parse(resultDtoStr);
-		
+
 		assertThat(document.read("$.username", String.class)).isEqualTo("agent1");
 		assertThat(document.read("$.firstName", String.class)).isEqualTo("Horst");
 		assertThat(document.read("$.lastName", String.class)).isEqualTo("Hallig");
@@ -173,10 +174,9 @@ class UserControllerWebIntegrationTests {
 				.header("Origin", "*") //
 				.contentType(MediaType.APPLICATION_JSON) //
 				.content(createLoginRequestBody(username, password))) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().is2xxSuccessful()) //
 				.andReturn().getResponse() //
-				.getHeader("X-Auth-Token");
+				.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
 	}
 
 	private void expectLoginRejectedFor(String username, String password) throws Exception {
