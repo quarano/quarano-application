@@ -1,4 +1,4 @@
-import { ClientService } from './../services/client.service';
+import { ClientService } from './../data-access/client.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';

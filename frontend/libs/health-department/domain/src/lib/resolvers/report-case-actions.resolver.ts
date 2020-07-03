@@ -1,8 +1,8 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { CaseActionDto } from '../models/case-action';
-import { HealthDepartmentService } from '../services/health-department.service';
+import { CaseActionDto } from '../model/case-action';
+import { HealthDepartmentService } from '../data-access/health-department.service';
 
 @Injectable()
 export class ReportCaseActionsResolver implements Resolve<CaseActionDto> {

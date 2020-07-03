@@ -2,8 +2,8 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { CaseDetailDto } from '../models/case-detail';
-import { HealthDepartmentService } from '../services/health-department.service';
+import { CaseDetailDto } from '../model/case-detail';
+import { HealthDepartmentService } from '../data-access/health-department.service';
 
 @Injectable()
 export class CaseDetailResolver implements Resolve<CaseDetailDto> {

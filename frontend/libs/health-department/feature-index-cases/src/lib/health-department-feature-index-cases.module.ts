@@ -4,9 +4,9 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CaseListComponent } from './components/case-list/case-list.component';
-import { ActionListComponent } from './components/action-list/action-list.component';
-import { IndexCasesComponent } from './components/index-cases/index-cases.component';
+import { CaseListComponent } from './case-list/case-list.component';
+import { ActionListComponent } from './action-list/action-list.component';
+import { IndexCasesComponent } from './index-cases/index-cases.component';
 import {
   IndexCaseActionListResolver,
   IndexCaseCaseListResolver,

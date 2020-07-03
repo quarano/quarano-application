@@ -25,8 +25,8 @@ const routes: Routes = [
     loadChildren: () => import('@qro/auth/shell').then((m) => m.AuthShellModule),
   },
   {
-    path: 'all-users',
-    loadChildren: () => import('@qro/all-users/shell').then((m) => m.AllUsersShellModule),
+    path: 'general',
+    loadChildren: () => import('@qro/general/shell').then((m) => m.GeneralShellModule),
   },
   {
     // ToDo: Remove this route after next go live
@@ -37,7 +37,7 @@ const routes: Routes = [
     path: '404/:message',
     component: NotFoundComponent,
   },
-  { path: '', redirectTo: 'all-users', pathMatch: 'full' },
+  { path: '', redirectTo: 'general', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },
 ];
 

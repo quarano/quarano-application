@@ -1,5 +1,5 @@
 import { IsAuthenticatedGuard } from './is-authenticated.guard';
-import { UserService } from '../services/user.service';
+import { UserService } from '../data-access/user.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 

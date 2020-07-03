@@ -1,8 +1,8 @@
-import { AccountService } from './../services/account.service';
+import { AccountService } from './../data-access/account.service';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { AccountDto } from '../models/account';
+import { AccountDto } from '../model/account';
 
 @Injectable()
 export class AccountDetailResolver implements Resolve<AccountDto> {

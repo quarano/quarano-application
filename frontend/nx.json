@@ -131,20 +131,20 @@
     "health-department-feature-case-detail": {
       "tags": ["scope:health-department", "type:feature"]
     },
-    "all-users-feature-welcome": {
-      "tags": ["scope:all-users", "type:feature"]
+    "general-feature-welcome": {
+      "tags": ["scope:general", "type:feature"]
     },
-    "all-users-feature-data-protection": {
-      "tags": ["scope:all-users", "type:feature"]
+    "general-feature-data-protection": {
+      "tags": ["scope:general", "type:feature"]
     },
-    "all-users-feature-imprint": {
-      "tags": ["scope:all-users", "type:feature"]
+    "general-feature-imprint": {
+      "tags": ["scope:general", "type:feature"]
     },
-    "all-users-feature-terms": {
-      "tags": ["scope:all-users", "type:feature"]
+    "general-feature-terms": {
+      "tags": ["scope:general", "type:feature"]
     },
-    "all-users-shell": {
-      "tags": ["scope:all-users", "type:shell"]
+    "general-shell": {
+      "tags": ["scope:general", "type:shell"]
     },
     "shared-ui-data-protection": {
       "tags": ["scope:shared", "type:ui"]
@@ -159,10 +159,10 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "auth-feature-change-password": {
-      "tags": ["scope:all-users", "type:feature"]
+      "tags": ["scope:general", "type:feature"]
     },
     "auth-feature-login": {
-      "tags": ["scope:all-users", "type:feature"]
+      "tags": ["scope:general", "type:feature"]
     },
     "shared-ui-styles": {
       "tags": ["scope:shared", "type:ui"]

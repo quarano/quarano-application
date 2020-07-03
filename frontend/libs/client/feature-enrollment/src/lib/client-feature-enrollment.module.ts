@@ -4,17 +4,17 @@ import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-auto
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { BasicDataComponent } from './components/basic-data/basic-data.component';
+import { BasicDataComponent } from './basic-data/basic-data.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { MyClientDataResolver, ClientDomainModule, MyFirstQueryResolver, EncountersResolver } from '@qro/client/domain';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { ContactPersonsResolver } from '@qro/client/domain';
-import { InitialQuestionaireFormComponent } from './components/initial-questionaire-form/initial-questionaire-form.component';
-import { LandingComponent } from './components/landing/landing.component';
-import { RegisterComponent } from './components/register/register.component';
-import { DataProtectionDialogComponent } from './components/data-protection-dialog/data-protection-dialog.component';
+import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
+import { LandingComponent } from './landing/landing.component';
+import { RegisterComponent } from './register/register.component';
+import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 import {
   ClientUiContactPersonDetailModule,
   MultipleContactAutocompleteComponent,

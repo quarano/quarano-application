@@ -1,8 +1,8 @@
-import { ContactCaseService } from '../services/contact-case.service';
+import { ContactCaseService } from '../data-access/contact-case.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { CaseListItemDto } from '../models/case-list-item';
+import { CaseListItemDto } from '../model/case-list-item';
 
 @Injectable()
 export class ContactCaseCaseListResolver implements Resolve<CaseListItemDto[]> {

@@ -28,7 +28,7 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "./libs/shared/ui-styles/src/lib/styles/styles.scss"
+              "./libs/shared/ui-styles/src/lib/styles.scss"
             ],
             "scripts": []
           },
@@ -1362,29 +1362,29 @@
         }
       }
     },
-    "all-users-feature-welcome": {
+    "general-feature-welcome": {
       "projectType": "library",
-      "root": "libs/all-users/feature-welcome",
-      "sourceRoot": "libs/all-users/feature-welcome/src",
+      "root": "libs/general/feature-welcome",
+      "sourceRoot": "libs/general/feature-welcome/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/all-users/feature-welcome/tsconfig.lib.json",
-              "libs/all-users/feature-welcome/tsconfig.spec.json"
+              "libs/general/feature-welcome/tsconfig.lib.json",
+              "libs/general/feature-welcome/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-welcome/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-welcome/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-welcome/jest.config.js",
-            "tsConfig": "libs/all-users/feature-welcome/tsconfig.spec.json",
+            "jestConfig": "libs/general/feature-welcome/jest.config.js",
+            "tsConfig": "libs/general/feature-welcome/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-welcome/src/test-setup.ts"
+            "setupFile": "libs/general/feature-welcome/src/test-setup.ts"
           }
         }
       },
@@ -1394,29 +1394,29 @@
         }
       }
     },
-    "all-users-feature-data-protection": {
+    "general-feature-data-protection": {
       "projectType": "library",
-      "root": "libs/all-users/feature-data-protection",
-      "sourceRoot": "libs/all-users/feature-data-protection/src",
+      "root": "libs/general/feature-data-protection",
+      "sourceRoot": "libs/general/feature-data-protection/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/all-users/feature-data-protection/tsconfig.lib.json",
-              "libs/all-users/feature-data-protection/tsconfig.spec.json"
+              "libs/general/feature-data-protection/tsconfig.lib.json",
+              "libs/general/feature-data-protection/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-data-protection/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-data-protection/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-data-protection/jest.config.js",
-            "tsConfig": "libs/all-users/feature-data-protection/tsconfig.spec.json",
+            "jestConfig": "libs/general/feature-data-protection/jest.config.js",
+            "tsConfig": "libs/general/feature-data-protection/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-data-protection/src/test-setup.ts"
+            "setupFile": "libs/general/feature-data-protection/src/test-setup.ts"
           }
         }
       },
@@ -1426,29 +1426,29 @@
         }
       }
     },
-    "all-users-feature-imprint": {
+    "general-feature-imprint": {
       "projectType": "library",
-      "root": "libs/all-users/feature-imprint",
-      "sourceRoot": "libs/all-users/feature-imprint/src",
+      "root": "libs/general/feature-imprint",
+      "sourceRoot": "libs/general/feature-imprint/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/all-users/feature-imprint/tsconfig.lib.json",
-              "libs/all-users/feature-imprint/tsconfig.spec.json"
+              "libs/general/feature-imprint/tsconfig.lib.json",
+              "libs/general/feature-imprint/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-imprint/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-imprint/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-imprint/jest.config.js",
-            "tsConfig": "libs/all-users/feature-imprint/tsconfig.spec.json",
+            "jestConfig": "libs/general/feature-imprint/jest.config.js",
+            "tsConfig": "libs/general/feature-imprint/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-imprint/src/test-setup.ts"
+            "setupFile": "libs/general/feature-imprint/src/test-setup.ts"
           }
         }
       },
@@ -1458,29 +1458,29 @@
         }
       }
     },
-    "all-users-feature-terms": {
+    "general-feature-terms": {
       "projectType": "library",
-      "root": "libs/all-users/feature-terms",
-      "sourceRoot": "libs/all-users/feature-terms/src",
+      "root": "libs/general/feature-terms",
+      "sourceRoot": "libs/general/feature-terms/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/all-users/feature-terms/tsconfig.lib.json",
-              "libs/all-users/feature-terms/tsconfig.spec.json"
+              "libs/general/feature-terms/tsconfig.lib.json",
+              "libs/general/feature-terms/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/all-users/feature-terms/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-terms/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/feature-terms/jest.config.js",
-            "tsConfig": "libs/all-users/feature-terms/tsconfig.spec.json",
+            "jestConfig": "libs/general/feature-terms/jest.config.js",
+            "tsConfig": "libs/general/feature-terms/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/feature-terms/src/test-setup.ts"
+            "setupFile": "libs/general/feature-terms/src/test-setup.ts"
           }
         }
       },
@@ -1490,26 +1490,26 @@
         }
       }
     },
-    "all-users-shell": {
+    "general-shell": {
       "projectType": "library",
-      "root": "libs/all-users/shell",
-      "sourceRoot": "libs/all-users/shell/src",
+      "root": "libs/general/shell",
+      "sourceRoot": "libs/general/shell/src",
       "prefix": "qro",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/all-users/shell/tsconfig.lib.json", "libs/all-users/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/all-users/shell/**"]
+            "tsConfig": ["libs/general/shell/tsconfig.lib.json", "libs/general/shell/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/general/shell/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/all-users/shell/jest.config.js",
-            "tsConfig": "libs/all-users/shell/tsconfig.spec.json",
+            "jestConfig": "libs/general/shell/jest.config.js",
+            "tsConfig": "libs/general/shell/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/all-users/shell/src/test-setup.ts"
+            "setupFile": "libs/general/shell/src/test-setup.ts"
           }
         }
       },

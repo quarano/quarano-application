@@ -3,9 +3,9 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActionListComponent } from './components/action-list/action-list.component';
-import { CaseListComponent } from './components/case-list/case-list.component';
-import { ContactCasesComponent } from './components/contact-cases/contact-cases.component';
+import { ActionListComponent } from './action-list/action-list.component';
+import { CaseListComponent } from './case-list/case-list.component';
+import { ContactCasesComponent } from './contact-cases/contact-cases.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {
   HealthDepartmentDomainModule,

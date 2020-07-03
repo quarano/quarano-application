@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { SymptomDto } from '../models/symptom';
-import { SymptomService } from '../services/symptom.service';
+import { SymptomDto } from '../model/symptom';
+import { SymptomService } from '../data-access/symptom.service';
 
 @Injectable()
 export class SymptomsResolver implements Resolve<SymptomDto[]> {
