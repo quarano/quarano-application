@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { UserService } from '@qro/auth/domain';
 import { RegisterDto, EnrollmentService } from '@qro/client/domain';
 import { DataProtectionDialogComponent } from '../data-protection-dialog/data-protection-dialog.component';
 
@@ -57,7 +58,8 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private badRequestService: BadRequestService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -108,13 +110,24 @@ export class RegisterComponent implements OnInit {
       .registerClient(register)
       .subscribe(
         () => {
-          this.snackbarService.success(`Die Registrierung war erfolgreich. Bitte loggen Sie sich ein.`);
-          this.router.navigate(['/auth/login']);
+          this.snackbarService.success(`Die Registrierung war erfolgreich. Sie werden automatisch angemeldet.`);
+          this.loginAutomatically();
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.registrationForm);
         }
       )
+      .add(() => (this.loading = false));
+  }
+
+  public loginAutomatically() {
+    this.loading = true;
+    this.userService
+      .login(this.registrationForm.controls.username.value, this.registrationForm.controls.password.value)
+      .subscribe((_) => {
+        this.snackbarService.success('Willkommen bei quarano');
+        this.router.navigate(['/client/diary/diary-list']);
+      })
       .add(() => (this.loading = false));
   }
 
