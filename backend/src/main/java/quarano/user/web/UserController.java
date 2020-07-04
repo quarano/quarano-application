@@ -80,7 +80,7 @@ public class UserController {
 	}
 
 	@PutMapping("/me/password")
-	HttpEntity<?> putPassword(@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account account) {
+	public HttpEntity<?> putPassword(@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account account) {
 
 		return payload
 				.validate(ErrorsDto.of(errors, messages), account.getPassword(), accounts)

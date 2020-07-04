@@ -6,14 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
-import quarano.core.web.QuaranoHttpHeaders;
 import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonRepository;
+
+import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
@@ -24,6 +28,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import quarano.user.web.UserController;
+
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static quarano.core.web.QuaranoHttpHeaders.*;
 
 @RestController
 @RequestMapping
@@ -44,17 +52,34 @@ class AuthenticationController {
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!"))
 				.filter(it -> {
-
 					return !it.isTrackedPerson() || people.findByAccount(it)
 							.flatMap(cases::findByTrackedPerson)
 							.filter(TrackedCase::isOpen)
 							.isPresent();
 
 				}, () -> new AccessDeniedException("Case already closed!"))
-				.map(generator::generateTokenFor)
-				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
-				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
+				.map(it -> {
+					var token = generator.generateTokenFor(it);
+
+					if (it.getPassword().isExpired()) {
+						return ResponseEntity.ok()
+								.header(AUTH_TOKEN, token)
+								.body(createBodyWithChangePasswordLink());
+					}
+
+					return toTokenResponse(token);
+				}) //
+				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
+	}
+
+	private Map<String, Object> createBodyWithChangePasswordLink() {
+		var userController = on(UserController.class);
+
+		var linkToChangePassword = Link.of(fromMethodCall(userController.putPassword(null, null, null)).toUriString(),
+				IanaLinkRelations.NEXT); //
+
+		return Map.of("_links", Links.of(linkToChangePassword));
 	}
 
 	private Account lookupAccountFor(String username) {

@@ -9,6 +9,7 @@ import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.core.EmailAddress;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class AccountService {
 			String lastname, DepartmentIdentifier departmentId) {
 
 		var role = roles.findByName(RoleType.ROLE_USER.toString());
+
 		var account = accounts.save(new Account(username, encrypt(password), firstname, lastname, departmentId, role));
 
 		return account;
@@ -55,6 +57,7 @@ public class AccountService {
 			EmailAddress email, DepartmentIdentifier departmentId, List<RoleType> roleTypes) {
 
 		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
+		encryptedPassword.setExpiryDate(LocalDateTime.now());
 
 		var roleList = roleTypes.stream().map(it -> roles.findByName(it.toString())).collect(Collectors.toList());
 		var account = accounts
@@ -148,6 +151,25 @@ public class AccountService {
 	 */
 	public Account changePassword(UnencryptedPassword password, Account account) {
 		return accounts.save(account.setPassword(encrypt(password)));
+	}
+
+	/**
+	 * Resets the password of the given staff account {@link Account} to the given {@link UnencryptedPassword} one-time
+	 * password.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @param account must not be {@literal null}.
+	 * @return the account with the new password applied.
+	 */
+	public Account resetStaffAccountPassword(UnencryptedPassword password, Account account) {
+		Assert.isTrue(!account.isTrackedPerson(), "Password reset allowed for staff accounts only.");
+
+		log.info("Reset password for staff account " + account.getUsername());
+
+		var encryptedPassword = encrypt(password);
+		encryptedPassword.setExpiryDate(LocalDateTime.now());
+
+		return accounts.save(account.setPassword(encryptedPassword));
 	}
 
 	private EncryptedPassword encrypt(UnencryptedPassword password) {

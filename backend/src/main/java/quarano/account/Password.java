@@ -17,13 +17,18 @@ package quarano.account;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Setter;
 import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * @author Oliver Gierke
@@ -44,6 +49,14 @@ public abstract class Password {
 	public static class EncryptedPassword extends Password {
 
 		private final @Column(name = "password") String value;
+		private @Getter @Setter LocalDateTime expiryDate;
+
+		public boolean isExpired() {
+			if (expiryDate == null) {
+					return false;
+			}
+			return expiryDate.isBefore(LocalDateTime.now());
+		}
 
 		/*
 		 * (non-Javadoc)

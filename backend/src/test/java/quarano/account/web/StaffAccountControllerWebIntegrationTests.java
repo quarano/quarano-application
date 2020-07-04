@@ -14,9 +14,7 @@ import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -182,6 +180,90 @@ class StaffAccountControllerWebIntegrationTests {
 		assertThat(document.read("$.email", String.class)).isEqualTo(emailMessage);
 	}
 
+	@Test
+	@WithQuaranoUser("admin")
+	void resetPasswordOfStaffAccountFromSameDepartment() throws Exception {
+		// get reference accounts
+		var agent1 = accounts.findByUsername("agent1");
+
+		var password = "MyN3wAgentPassw0rD";
+		var newPassword = Map.of("password", password, "passwordConfirm", password);
+
+		mvc.perform(
+				put("/api/hd/accounts/" + agent1.get().getId() + "/password").content(jackson.writeValueAsString(newPassword)) //
+						.contentType(MediaType.APPLICATION_JSON)) // ) //
+				.andExpect(status().isOk()) //
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	@Test
+	@WithQuaranoUser("admin")
+	void resetPasswordOfStaffAccountFromDifferentDepartment() throws Exception {
+		// get reference accounts
+		var agent3 = accounts.findByUsername("agent3");
+
+		var password = "MyN3wAgentPassw0rD";
+		var newPassword = Map.of("password", password, "passwordConfirm", password);
+
+		mvc.perform(
+				put("/api/hd/accounts/" + agent3.get().getId() + "/password").content(jackson.writeValueAsString(newPassword)) //
+						.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isNotFound()) //
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	@Test
+	@WithQuaranoUser("admin")
+	void resetPasswordOfStaffAccountWithNonMatchingPasswords() throws Exception {
+		// get reference accounts
+		var agent1 = accounts.findByUsername("agent1");
+
+		var password = "MyN3wAgentPassw0rD";
+		var newPassword = Map.of("password", password, "passwordConfirm", "-not matching-");
+
+		var responseBody = mvc
+				.perform(put("/api/hd/accounts/" + agent1.get().getId() + "/password")
+						.content(jackson.writeValueAsString(newPassword)) //
+						.contentType(MediaType.APPLICATION_JSON)) // ) //
+				.andExpect(status().isBadRequest()) //
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(responseBody);
+
+		var nonMatchingPassword = messages.getMessage("NonMatching.password");
+
+		assertThat(document.read("$.password", String.class)).isEqualTo(nonMatchingPassword);
+		assertThat(document.read("$.passwordConfirm", String.class)).isEqualTo(nonMatchingPassword);
+	}
+
+	@Test
+	@WithQuaranoUser("admin")
+	void resetPasswordOfUnknownAccount() throws Exception {
+		var password = "MyN3wAgentPassw0rD";
+		var newPassword = Map.of("password", password, "passwordConfirm", password);
+
+		mvc.perform(put("/api/hd/accounts/" + UUID.randomUUID().toString() + "/password")
+				.content(jackson.writeValueAsString(newPassword)) //
+				.contentType(MediaType.APPLICATION_JSON)) // ) //
+				.andExpect(status().isNotFound()) //
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	@Test
+	@WithQuaranoUser("admin")
+	void resetPasswordOfUserIsNotPossible() throws Exception {
+		// get reference accounts
+		var user1 = accounts.findByUsername("user1");
+
+		var password = "MyN3wAgentPassw0rD";
+		var newPassword = Map.of("password", password, "passwordConfirm", password);
+
+		mvc.perform(
+				put("/api/hd/accounts/" + user1.get().getId() + "/password").content(jackson.writeValueAsString(newPassword)) //
+						.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isNotFound()) //
+				.andReturn().getResponse().getContentAsString();
+	}
 
 	private StaffAccountCreateInputDto createTestUserInput(RoleType... roles) {
 		List<String> rolesToAdd = new ArrayList<>();

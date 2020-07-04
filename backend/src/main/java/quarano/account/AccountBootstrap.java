@@ -69,11 +69,10 @@ public class AccountBootstrap implements ApplicationRunner {
 
 		log.info("Creating default account (root, root).");
 
-		accounts.createStaffAccount("root", UnencryptedPassword.of("root"),
+		accounts.changePassword(UnencryptedPassword.of("root"), accounts.createStaffAccount("root", UnencryptedPassword.of("root"),
 				defaults.getFirstname(),
 				defaults.getLastname(),
 				EmailAddress.of(defaults.getEmailAddress()),
-				department.getId(), RoleType.ROLE_HD_ADMIN);
-
+				department.getId(), RoleType.ROLE_HD_ADMIN));
 	}
 }

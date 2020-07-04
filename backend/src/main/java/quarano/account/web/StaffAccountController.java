@@ -4,12 +4,10 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.account.Account;
+import lombok.Value;
+import quarano.account.*;
 import quarano.account.Account.AccountIdentifier;
-import quarano.account.AccountService;
-import quarano.account.Department;
 import quarano.account.Password.UnencryptedPassword;
-import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 import quarano.core.EmailAddress;
@@ -36,6 +34,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 @RestController
 @RequiredArgsConstructor
 class StaffAccountController {
@@ -43,6 +44,7 @@ class StaffAccountController {
 	private final @NonNull AccountService accounts;
 	private final @NonNull StaffAccountRepresentations representations;
 	private final @NonNull MessageSourceAccessor accessor;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@PostMapping("/api/hd/accounts")
 	HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload,
@@ -71,6 +73,30 @@ class StaffAccountController {
 		return ResponseEntity
 				.created(URI.create(fromMethodCall(location).toUriString()))
 				.body(representations.toSummary(storedAccount));
+	}
+
+	@PutMapping("/api/hd/accounts/{accountId}/password")
+	HttpEntity<?> putStaffAccountPassword(@PathVariable AccountIdentifier accountId, @Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account admin) {
+		var existing = accounts.findById(accountId).orElse(null);
+
+		if (existing == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (existing.isTrackedPerson()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		if (!admin.getDepartmentId().equals(existing.getDepartmentId())) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return payload
+				.validate(ErrorsDto.of(errors, messages))
+				.toBadRequestOrElse(() -> {
+						accounts.resetStaffAccountPassword(UnencryptedPassword.of(payload.password), existing);
+						return ResponseEntity.ok().build();
+				});
 	}
 
 	@PutMapping("/api/hd/accounts/{accountId}")
@@ -132,5 +158,20 @@ class StaffAccountController {
 
 					return ResponseEntity.badRequest().build();
 				});
+	}
+
+	@Value
+	static class NewPassword {
+
+		@NotBlank String password, passwordConfirm;
+
+		ErrorsDto validate(ErrorsDto errors) {
+				if (!password.equals(passwordConfirm)) {
+            errors.rejectField("password", "NonMatching.password");
+						errors.rejectField("passwordConfirm", "NonMatching.password");
+				}
+
+				return errors;
+		}
 	}
 }

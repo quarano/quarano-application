@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import quarano.account.Password.UnencryptedPassword;
 
 @QuaranoIntegrationTest
 class AccountServiceMouleTests {
@@ -38,6 +39,40 @@ class AccountServiceMouleTests {
 		assertThat(accounts).containsOnlyOnce(referenceAdminAccount.get());
 		assertThat(accounts).containsOnlyOnce(referenceAgentAccount.get());
 
+	}
+
+	@Test
+	void changePasswordForUser() {
+		var unencryptedPassword = UnencryptedPassword.of("12345");
+		var agentAccount = accounts.findByUsername("user1");
+		assertThat(agentAccount.get().getPassword().isExpired()).isFalse();
+
+		var updatedAgentAccount = service.changePassword(unencryptedPassword, agentAccount.get());
+
+		assertThat(service.matches(unencryptedPassword, updatedAgentAccount.getPassword())).isTrue();
+		assertThat(updatedAgentAccount.getPassword().isExpired()).isFalse();
+	}
+
+	@Test
+	void resetStaffAccountPasswordForStaffAccount() {
+		var unencryptedPassword = UnencryptedPassword.of("12345");
+		var agentAccount = accounts.findByUsername("agent3");
+		assertThat(agentAccount.get().getPassword().isExpired()).isFalse();
+
+		var updatedAgentAccount = service.resetStaffAccountPassword(unencryptedPassword, agentAccount.get());
+
+		assertThat(service.matches(unencryptedPassword, updatedAgentAccount.getPassword())).isTrue();
+		assertThat(updatedAgentAccount.getPassword().isExpired()).isTrue();
+	}
+
+	@Test
+	void resetStaffAccountPasswordForUser() {
+		var unencryptedPassword = UnencryptedPassword.of("12345");
+		var agentAccount = accounts.findByUsername("user1");
+
+		assertThatExceptionOfType(IllegalArgumentException.class)
+				.isThrownBy(() -> service.resetStaffAccountPassword(unencryptedPassword, agentAccount.get()))
+				.withMessage("Password reset allowed for staff accounts only.");
 	}
 
 	private boolean hasAtLeastOneDepartmentRole(Account account) {

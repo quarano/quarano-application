@@ -1,5 +1,6 @@
 package quarano.security.web;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,6 +48,15 @@ class AuthenticationControllerWebIntegrationTests {
 	@Test
 	void logsInStaffMember() throws Exception {
 		assertSuccessfulLogin("agent1", "agent1");
+	}
+
+	@Test
+	void logsInStaffMemberWithPasswordToChange() throws Exception {
+		mvc.perform(post("/api/login") //
+				.content(jackson.writeValueAsString(new AuthenticationRequest("agent4", "agent4"))) //
+				.contentType(MediaType.APPLICATION_JSON)) //
+				.andExpect(status().isOk()).andExpect(jsonPath("$._links[0].rel", is("next")))
+				.andExpect(jsonPath("$._links[0].href", containsString("/user/me/password")));
 	}
 
 	@Test
