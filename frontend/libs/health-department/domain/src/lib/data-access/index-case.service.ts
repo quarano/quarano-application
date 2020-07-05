@@ -28,6 +28,10 @@ export class IndexCaseService {
     );
   }
 
+  searchCases(searchTerm: string): Observable<any[]> {
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}&projection=select`);
+  }
+
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),
