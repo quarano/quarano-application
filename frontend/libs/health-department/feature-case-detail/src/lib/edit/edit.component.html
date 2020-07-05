@@ -109,7 +109,8 @@
       </mat-error>
     </mat-form-field>
     <qro-multiple-autocomplete
-      [loadFunction]="indexCaseService.searchCases"
+      (completeMethod)="onIndexCaseSearch($event)"
+      [selectableItems]="selectableIndexCases"
       [nameProperties]="['firstName', 'lastName', 'dateOfBirth']"
       [control]="formGroup.controls.originCases"
     ></qro-multiple-autocomplete>

@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, startWith, takeUntil } from 'rxjs/operators';
+import { filter, startWith, takeUntil, debounce, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IIdentifiable } from '@qro/shared/util-data-access';
@@ -20,13 +20,14 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
   @Output() itemNotFound = new EventEmitter<string>();
+  @Output() completeMethod: EventEmitter<string> = new EventEmitter();
   selectedItemIds: string[];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   @ViewChild('auto') autocomplete;
   destroy$: Subject<void> = new Subject<void>();
-  filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
+  filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>([]);
 
   ngOnInit() {
     this.filteredList$$.next(this.selectableItems);
@@ -43,11 +44,14 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
     this.selectedItemIds = this.control.value;
 
-    this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
-      if (typeof searchTerm === 'string') {
-        this._filter(searchTerm);
-      }
-    });
+    this.inputControl.valueChanges
+      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged(), startWith(null as string))
+      .subscribe((searchTerm) => {
+        if (typeof searchTerm === 'string') {
+          this.completeMethod.emit(searchTerm);
+          this._filter(searchTerm);
+        }
+      });
   }
 
   clearInput(): void {

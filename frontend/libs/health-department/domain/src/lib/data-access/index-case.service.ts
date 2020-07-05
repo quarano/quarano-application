@@ -29,7 +29,9 @@ export class IndexCaseService {
   }
 
   searchCases(searchTerm: string): Observable<any[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}&projection=select`);
+    return this.httpClient
+      .get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}&projection=select`)
+      .pipe(map((res) => res?._embedded?.cases));
   }
 
   getActionList(): Observable<ActionListItemDto[]> {

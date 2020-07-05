@@ -42,6 +42,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
+  selectableIndexCases = [];
 
   get isIndexCase() {
     return this.type === ClientType.Index;
@@ -149,6 +150,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
     );
+  }
+
+  onIndexCaseSearch(searchTerm: string) {
+    this.indexCaseService.searchCases(searchTerm).subscribe((result) => (this.selectableIndexCases = [...result]));
   }
 
   onTestDateAdded() {
