@@ -45,7 +45,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.selectedItemIds = this.control.value;
 
     this.inputControl.valueChanges
-      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged(), startWith(null as string))
+      .pipe(takeUntil(this.destroy$), debounceTime(500), distinctUntilChanged(), startWith(null as string))
       .subscribe((searchTerm) => {
         if (typeof searchTerm === 'string') {
           this.completeMethod.emit(searchTerm);

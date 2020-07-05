@@ -24,7 +24,7 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto, IndexCaseService } from '@qro/health-department/domain';
+import { CaseDetailDto, IndexCaseService, CaseListItemDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
 
 export interface CaseDetailResult {
@@ -42,7 +42,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
-  selectableIndexCases = [];
+  selectableIndexCases: CaseListItemDto[] = [];
 
   get isIndexCase() {
     return this.type === ClientType.Index;
