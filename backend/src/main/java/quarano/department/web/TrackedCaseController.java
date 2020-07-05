@@ -8,11 +8,10 @@ import quarano.account.Account;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
 import quarano.department.EnrollmentCompletion;
-import quarano.department.Questionnaire;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
@@ -35,7 +34,6 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -43,7 +41,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,10 +62,8 @@ class TrackedCaseController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull DiaryManagement diaries;
 	private final @NonNull DepartmentRepository departments;
-	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
-	private final @NonNull SmartValidator validator;
 
 	@GetMapping(path = "/api/hd/cases")
 	RepresentationModel<?> getCases(@LoggedIn Department department,
@@ -90,9 +85,6 @@ class TrackedCaseController {
 	@PostMapping(path = "/api/hd/cases", params = "type=contact")
 	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
-
-		// Disallowed: contact case + infected == true
-
 		return createTrackedCase(payload, CaseType.CONTACT, department, errors);
 	}
 
@@ -112,17 +104,19 @@ class TrackedCaseController {
 
 	HttpEntity<?> createTrackedCase(TrackedCaseDto payload, CaseType type, Department department, Errors errors) {
 
-		var foo = ErrorsDto.of(errors, accessor);
-		var trackedCase = representations.from(payload, department, type, foo);
+		var trackedCase = representations.from(payload, department, type, errors);
 
-		return foo.toBadRequestOrElse(() -> {
+		return MappedPayloads.of(trackedCase, errors)
+				.map(cases::save)
+				.map(representations::toRepresentation)
+				.concludeIfValid(it -> {
 
-			var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
+					var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
 
-			return ResponseEntity
-					.created(URI.create(fromMethodCall(location).toUriString()))
-					.body(representations.toRepresentation(cases.save(trackedCase)));
-		});
+					return ResponseEntity
+							.created(URI.create(fromMethodCall(location).toUriString()))
+							.body(it);
+				});
 	}
 
 	@GetMapping(path = "/api/hd/cases/form")
@@ -191,15 +185,12 @@ class TrackedCaseController {
 
 		var existing = cases.findById(identifier).orElse(null);
 
-		if (existing == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		var foo = ErrorsDto.of(errors, accessor);
-
-		var result = representations.from(payload, existing, foo);
-
-		return foo.toBadRequestOrElse(() -> ResponseEntity.ok(representations.toRepresentation(cases.save(result))));
+		return MappedPayloads.of(payload, errors)
+				.notFoundIf(existing == null)
+				.map((it, nested) -> representations.from(it, existing, nested))
+				.map(cases::save)
+				.map(representations::toRepresentation)
+				.concludeIfValid(ResponseEntity::ok);
 	}
 
 	@DeleteMapping("/api/hd/cases/{identifier}")
@@ -220,17 +211,13 @@ class TrackedCaseController {
 				.filter(it -> it.belongsTo(account.getDepartmentId()))
 				.orElse(null);
 
-		if (trackedCase == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		if (errors.hasErrors()) {
-			return ErrorsDto.of(errors, accessor).toBadRequest();
-		}
-
-		trackedCase.addComment(representations.from(payload, account));
-
-		return ResponseEntity.ok(representations.toRepresentation(cases.save(trackedCase)));
+		return MappedPayloads.of(payload, errors)
+				.notFoundIf(trackedCase == null)
+				.map(it -> representations.from(it, account))
+				.map(trackedCase::addComment)
+				.map(cases::save)
+				.map(representations::toRepresentation)
+				.concludeIfValid(ResponseEntity::ok);
 	}
 
 	@GetMapping("/api/enrollments")
@@ -238,7 +225,7 @@ class TrackedCaseController {
 
 		return cases.findAll()
 				.map(TrackedCase::getEnrollment)
-				.map(EnrollmentDto::new)
+				.map(representations::toRepresentation)
 				.stream();
 	}
 
@@ -247,7 +234,7 @@ class TrackedCaseController {
 
 		var map = cases.findByTrackedPerson(person)
 				.map(TrackedCase::getEnrollment)
-				.map(EnrollmentDto::new);
+				.map(representations::toRepresentation);
 
 		return ResponseEntity.of(map);
 	}
@@ -256,19 +243,19 @@ class TrackedCaseController {
 	HttpEntity<?> submitEnrollmentDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
-		}
+		return MappedPayloads.of(errors)
+				.onValidGet(() -> {
 
-		tracking.updateTrackedPersonDetails(dto, errors, user);
+					tracking.updateTrackedPersonDetails(dto, errors, user);
 
-		cases.findByTrackedPerson(user)
-				.map(TrackedCase::submitEnrollmentDetails)
-				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
+					cases.findByTrackedPerson(user)
+							.map(TrackedCase::submitEnrollmentDetails)
+							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
-		return ResponseEntity.ok()
-				.header(HttpHeaders.LOCATION, getEnrollmentLink())
-				.build();
+					return ResponseEntity.ok()
+							.header(HttpHeaders.LOCATION, getEnrollmentLink())
+							.build();
+				});
 	}
 
 	@GetMapping("/api/enrollment/questionnaire")
@@ -294,31 +281,19 @@ class TrackedCaseController {
 		if (!trackedCase.getEnrollment().isCompletedPersonalData()) {
 
 			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
-					.body(accessor.getMessage("enrollment.detailsSubmissionRequired"));
+					.body(representations.resolve("enrollment.detailsSubmissionRequired"));
 		}
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
-		}
-
-		// Trigger custom validation
-		var validated = dto.validate(errors);
-
-		if (validated.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
-		}
-
-		Questionnaire report = trackedCase.getQuestionnaire() == null
-				? representations.from(dto)
-				: representations.from(dto, trackedCase.getQuestionnaire());
-
-		trackedCase.submitQuestionnaire(report);
-
-		cases.save(trackedCase);
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.LOCATION, getEnrollmentLink())
-				.build();
+		return MappedPayloads.of(dto, errors)
+				.map(QuestionnaireDto::validate)
+				.map(it -> representations.from(it, trackedCase.getQuestionnaire()))
+				.map(trackedCase::submitQuestionnaire)
+				.map(cases::save)
+				.concludeIfValid(__ -> {
+					return ResponseEntity.ok()
+							.header(HttpHeaders.LOCATION, getEnrollmentLink())
+							.build();
+				});
 	}
 
 	@PostMapping("/api/enrollment/completion")
@@ -368,7 +343,6 @@ class TrackedCaseController {
 
 	@SuppressWarnings("null")
 	private static String getEnrollmentLink() {
-
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}
 }

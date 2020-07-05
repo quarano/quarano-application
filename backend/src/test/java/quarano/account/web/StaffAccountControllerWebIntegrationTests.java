@@ -68,7 +68,6 @@ class StaffAccountControllerWebIntegrationTests {
 		assertThat(usernameEntries).containsOnlyOnce(referenceAdminAccount.get().getUsername());
 		assertThat(usernameEntries).containsOnlyOnce(referenceAgentAccount.get().getUsername());
 		assertThat(usernameEntries).doesNotContain(referenceNonDepartmentAccount.get().getUsername());
-
 	}
 
 	@Test
@@ -84,7 +83,8 @@ class StaffAccountControllerWebIntegrationTests {
 	void getAccountsForbiddenForTrackedUser() throws Exception {
 
 		mvc.perform(get("/api/hd/accounts"))
-				.andExpect(status().isForbidden());
+				.andExpect(status().isForbidden())
+				.andReturn().getResponse().getContentAsString();
 	}
 
 	@Test
@@ -101,19 +101,21 @@ class StaffAccountControllerWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString();
 
 		// assert user is stored
-		assertThat(accounts.findByUsername(source.getUsername())).hasValueSatisfying(account -> {
+		var document = JsonPath.parse(result);
 
-			// assert response format
-			assertThat(JsonPath.parse(result).read("$.username", String.class).equals(source.getUsername()));
-			assertThat(JsonPath.parse(result).read("$.firstName", String.class).equals(source.getFirstName()));
-			assertThat(JsonPath.parse(result).read("$.lastName", String.class).equals(source.getLastName()));
-			assertThat(JsonPath.parse(result).read("$.accountId", String.class).equals(account.getId().toString()));
-			assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).size() == 2);
-			assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).contains("ROLE_HD_CASE_AGENT"));
-			assertThat(JsonPath.parse(result).read("$.roles", JSONArray.class).contains("ROLE_HD_ADMIN"));
-			assertThatExceptionOfType(PathNotFoundException.class)
-					.isThrownBy(() -> JsonPath.parse(result).read("$.password", String.class));
+		assertThat(accounts.findByUsername(source.getUsername())).hasValueSatisfying(it -> {
+			assertThat(document.read("$.accountId", String.class).equals(it.getId().toString()));
 		});
+
+		// assert response format
+		assertThat(document.read("$.username", String.class).equals(source.getUsername()));
+		assertThat(document.read("$.firstName", String.class).equals(source.getFirstName()));
+		assertThat(document.read("$.lastName", String.class).equals(source.getLastName()));
+		assertThat(document.read("$.roles", JSONArray.class).size() == 2);
+		assertThat(document.read("$.roles", JSONArray.class).contains("ROLE_HD_CASE_AGENT"));
+		assertThat(document.read("$.roles", JSONArray.class).contains("ROLE_HD_ADMIN"));
+
+		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> document.read("$.password", String.class));
 	}
 
 	@Test

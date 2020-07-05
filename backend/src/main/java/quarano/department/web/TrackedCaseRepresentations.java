@@ -13,11 +13,11 @@ import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
 import quarano.department.ContactChaser;
+import quarano.department.Enrollment;
 import quarano.department.Questionnaire;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
@@ -29,6 +29,7 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
+import quarano.tracking.web.TrackingController;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -41,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,11 +54,11 @@ import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -64,6 +66,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
@@ -72,25 +75,34 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  */
 @Component
 @RequiredArgsConstructor
-class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
+public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 	private final @NonNull TrackedCaseRepository cases;
-	private final MapperWrapper mapper;
-	private final SmartValidator validator;
-	private final MessageSourceAccessor messages;
+	private final @NonNull MapperWrapper mapper;
+	private final @NonNull SmartValidator validator;
+	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
-	private final ContactChaser contactChaser;
+	private final @NonNull ContactChaser contactChaser;
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.department.web.ExternalTrackedCaseRepresentations#toSummary(quarano.department.TrackedCase)
+	 */
+	@Override
+	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
+		return new TrackedCaseSummary(trackedCase, messages);
+	}
+
+	public EnrollmentDto toRepresentation(Enrollment enrollment) {
+		return new EnrollmentDto(enrollment);
+	}
+
+	String resolve(String source) {
+		return messages.getMessage(source);
+	}
 
 	TrackedCaseDto toInputRepresentation(TrackedCase trackedCase) {
 		return toDtoRepresentation(trackedCase, TrackedCaseDto.Input.class);
-	}
-
-	private TrackedCaseDto toDtoRepresentation(TrackedCase trackedCase, Class<? extends TrackedCaseDto> type) {
-
-		var personDto = mapper.map(trackedCase.getTrackedPerson(), TrackedPersonDto.class);
-		var caseDto = mapper.map(trackedCase, type);
-
-		return mapper.map(personDto, caseDto);
 	}
 
 	RepresentationModel<?> toRepresentation(TrackedCase trackedCase) {
@@ -112,15 +124,11 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 				.build();
 	}
 
-	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
-		return new TrackedCaseSummary(trackedCase, messages);
-	}
-
 	TrackedCaseSelect toSelect(TrackedCase trackedCase) {
 		return TrackedCaseSelect.of(trackedCase);
 	}
 
-	public TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
+	TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
 
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
@@ -134,7 +142,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(report, QuestionnaireDto.class);
 	}
 
-	TrackedCase from(TrackedCaseDto source, TrackedCase existing, ErrorsDto errors) {
+	TrackedCase from(TrackedCaseDto source, TrackedCase existing, Errors errors) {
 
 		validateForUpdate(source, existing, errors);
 
@@ -150,7 +158,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		return mapper.map(source, result).markEdited();
 	}
 
-	TrackedCase from(TrackedCaseDto source, Department department, CaseType type, ErrorsDto errors) {
+	TrackedCase from(TrackedCaseDto source, Department department, CaseType type, Errors errors) {
 
 		validateForCreation(source, type, errors);
 
@@ -158,6 +166,41 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		var person = mapper.map(personDto, TrackedPerson.class);
 
 		return mapper.map(source, new TrackedCase(person, type, department));
+	}
+
+	Questionnaire from(QuestionnaireDto source) {
+
+		var report = createQuestionnaireFrom(source);
+		return source.applyTo(mapper.map(source, report), symptoms);
+
+	}
+
+	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase) {
+
+		return trackedCase.getQuestionnaire() == null
+				? from(source)
+				: from(source, trackedCase.getQuestionnaire());
+	}
+
+	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing) {
+
+		var mapped = existing == null
+				? from(source)
+				: mapper.map(source, existing);
+
+		return source.applyTo(mapped, symptoms);
+	}
+
+	Comment from(CommentInput payload, Account account) {
+		return new Comment(payload.getComment(), account.getFullName());
+	}
+
+	private TrackedCaseDto toDtoRepresentation(TrackedCase trackedCase, Class<? extends TrackedCaseDto> type) {
+
+		var personDto = mapper.map(trackedCase.getTrackedPerson(), TrackedPersonDto.class);
+		var caseDto = mapper.map(trackedCase, type);
+
+		return mapper.map(personDto, caseDto);
 	}
 
 	private Questionnaire createQuestionnaireFrom(QuestionnaireDto source) {
@@ -180,48 +223,30 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 				source.getBelongToMedicalStaffDescription());
 	}
 
-	Questionnaire from(QuestionnaireDto source) {
-
-		var report = createQuestionnaireFrom(source);
-		return source.applyTo(mapper.map(source, report), symptoms);
-
-	}
-
-	Questionnaire from(QuestionnaireDto source, Questionnaire existing) {
-		return source.applyTo(mapper.map(source, existing), symptoms);
-	}
-
-	Comment from(CommentInput payload, Account account) {
-		return new Comment(payload.getComment(), account.getFullName());
-	}
-
-	private ErrorsDto validateForUpdate(TrackedCaseDto payload, TrackedCase existing, ErrorsDto errors) {
+	private Errors validateForUpdate(TrackedCaseDto payload, TrackedCase existing, Errors errors) {
 
 		if (existing.isEnrollmentCompleted()) {
-			errors = validateAfterEnrollment(payload, errors);
+			validateAfterEnrollment(payload, errors);
 		}
 
 		return validate(payload, existing.getType(), errors);
 	}
 
-	private ErrorsDto validateForCreation(TrackedCaseDto payload, CaseType type, ErrorsDto errors) {
+	private Errors validateForCreation(TrackedCaseDto payload, CaseType type, Errors errors) {
 
-		if (type.equals(CaseType.CONTACT)) {
-
-			var positiveTestResult = payload.getTestDate() != null && payload.isInfected();
+		if (type.equals(CaseType.CONTACT) && payload.getTestDate() != null && payload.isInfected()) {
 
 			Stream.of("infected", "testDate")
-					.forEach(it -> errors.rejectField(positiveTestResult, it, "ContactCase.infected"));
-
+					.forEach(it -> errors.rejectValue(it, "ContactCase.infected"));
 		}
 
 		return validate(payload, type, errors);
 	}
 
-	private ErrorsDto validate(TrackedCaseDto payload, CaseType type, ErrorsDto errors) {
+	private Errors validate(TrackedCaseDto payload, CaseType type, Errors errors) {
 
 		if (payload.getTestDate() == null && payload.isInfected()) {
-			errors.rejectField("testDate", "ContactCase.infected");
+			errors.rejectValue("testDate", "ContactCase.infected");
 		}
 
 		var validationGroups = new ArrayList<>();
@@ -231,29 +256,28 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			validationGroups.add(ValidationGroups.Index.class);
 		}
 
-		return errors
-				.doWith(it -> validator.validate(payload, it, validationGroups.toArray()))
-				.doWith(it -> payload.validate(it, type));
+		validator.validate(payload, errors, validationGroups.toArray());
+		payload.validate(errors, type);
+
+		return errors;
 	}
 
-	private ErrorsDto validateAfterEnrollment(TrackedCaseDto source, ErrorsDto errors) {
+	private void validateAfterEnrollment(TrackedCaseDto source, Errors errors) {
 
 		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
 
-		return errors.doWith(it -> validator.validate(dto, it));
+		validator.validate(dto, errors);
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.PARAMETER)
 	@Validated({ Default.class, ValidationGroups.Index.class })
-	@interface ValidatedIndexCase {
-	}
+	@interface ValidatedIndexCase {}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.PARAMETER)
 	@Validated
-	@interface ValidatedContactCase {
-	}
+	@interface ValidatedContactCase {}
 
 	@Data
 	@Getter(onMethod = @__(@Nullable))
@@ -344,12 +368,9 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			var controller = on(TrackedCaseController.class);
 
 			add(trackedCase.getOriginCases().stream()
-					.map(it -> {
-
-						var href = fromMethodCall(controller.getCase(it.getId(), it.getDepartment())).toUriString();
-						return Link.of(href, TrackedCaseLinkRelations.ORIGIN_CASES);
-
-					}).collect(Collectors.toUnmodifiableList()));
+					.map(it -> MvcLink.of(controller.getCase(it.getId(), it.getDepartment()),
+							TrackedCaseLinkRelations.ORIGIN_CASES))
+					.collect(Collectors.toUnmodifiableList()));
 		}
 
 		public String getCaseId() {
@@ -465,9 +486,54 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 		@Override
 		public Links getLinks() {
 
-			var caseLink = on(TrackedCaseController.class).getCase(trackedCase.getId(), trackedCase.getDepartment());
+			var id = trackedCase.getId();
+			var department = trackedCase.getDepartment();
 
-			return super.getLinks().and(Link.of(fromMethodCall(caseLink).toUriString(), IanaLinkRelations.SELF));
+			return super.getLinks()
+					.and(MvcLink.of(on(TrackedCaseController.class).getCase(id, department), IanaLinkRelations.SELF));
+		}
+	}
+
+	@RequiredArgsConstructor
+	public static class EnrollmentDto {
+
+		private final @Getter(onMethod = @__(@JsonUnwrapped)) Enrollment enrollment;
+
+		@JsonProperty("_links")
+		@SuppressWarnings("null")
+		public Map<String, Object> getLinks() {
+
+			var caseController = on(TrackedCaseController.class);
+			var trackingController = on(TrackingController.class);
+
+			var questionnareUri = fromMethodCall(caseController.addQuestionaire(null, null, null)).toUriString();
+			var detailsUri = fromMethodCall(trackingController.enrollmentOverview(null)).toUriString();
+			var encountersUri = fromMethodCall(trackingController.getEncounters(null)).toUriString();
+			var reopenUri = fromMethodCall(caseController.reopenEnrollment(null)).toUriString();
+
+			if (enrollment.isComplete()) {
+				return Map.of(//
+						"details", Map.of("href", detailsUri),
+						"questionnaire", Map.of("href", questionnareUri),
+						"encounters", Map.of("href", encountersUri),
+						"reopen", Map.of("href", reopenUri));
+			}
+
+			if (enrollment.isCompletedQuestionnaire()) {
+				return Map.of(//
+						"details", Map.of("href", detailsUri),
+						"questionnaire", Map.of("href", questionnareUri),
+						"next", Map.of("href", encountersUri));
+			}
+
+			if (enrollment.isCompletedPersonalData()) {
+				return Map.of(//
+						"details", Map.of("href", detailsUri),
+						"next", Map.of("href", questionnareUri));
+			}
+
+			return Map.of(//
+					"next", Map.of("href", detailsUri));
 		}
 	}
 }

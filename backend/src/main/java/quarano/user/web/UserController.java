@@ -9,20 +9,16 @@ import quarano.account.DepartmentContact.ContactType;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
-import quarano.core.web.MapperWrapper;
+import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.web.EnrollmentDto;
 import quarano.tracking.TrackedPersonRepository;
-import quarano.tracking.web.TrackedPersonDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +40,7 @@ public class UserController {
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull AccountService accounts;
-	private final @NonNull MapperWrapper mapper;
-	private final @NonNull MessageSourceAccessor messages;
+	private final @NonNull UserRepresentations representations;
 
 	@GetMapping("/me")
 	ResponseEntity<?> getMe(@LoggedIn Account account) {
@@ -55,12 +50,14 @@ public class UserController {
 		if (account.isTrackedPerson()) {
 			var person = trackedPersonRepository.findByAccount(account);
 
-			person.map(it -> mapper.map(it, TrackedPersonDto.class))
+			person.map(representations::toRepresentation)
 					.ifPresent(userDto::setClient);
 
 			var trackedCase = person.flatMap(cases::findByTrackedPerson);
+
 			trackedCase//
-					.map(it -> new EnrollmentDto(it.getEnrollment()))
+					.map(TrackedCase::getEnrollment)
+					.map(representations::toRepresentation)
 					.ifPresent(userDto::setEnrollment);
 
 			trackedCase.map(TrackedCase::getType)
@@ -75,7 +72,7 @@ public class UserController {
 					.ifPresent(userDto::setHealthDepartment);
 		} else {
 			departments.findById(account.getDepartmentId())
-					.map(it -> mapper.map(it, DepartmentDto.class))
+					.map(representations::toRepresentation)
 					.ifPresent(userDto::setHealthDepartment);
 		}
 
@@ -85,14 +82,10 @@ public class UserController {
 	@PutMapping("/me/password")
 	public HttpEntity<?> putPassword(@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account account) {
 
-		return payload
-				.validate(ErrorsDto.of(errors, messages), account.getPassword(), accounts)
-				.toBadRequestOrElse(() -> {
-
-					accounts.changePassword(UnencryptedPassword.of(payload.password), account);
-
-					return ResponseEntity.ok().build();
-				});
+		return MappedPayloads.of(payload, errors)
+				.alwaysMap((password, it) -> password.validate(it, account.getPassword(), accounts))
+				.peek(it -> accounts.changePassword(UnencryptedPassword.of(it.password), account))
+				.onValidGet(() -> ResponseEntity.noContent().build());
 	}
 
 	@Value
@@ -100,18 +93,18 @@ public class UserController {
 
 		private final @NotBlank String current, password, passwordConfirm;
 
-		ErrorsDto validate(ErrorsDto errors, EncryptedPassword existing, AccountService accounts) {
+		NewPassword validate(Errors errors, EncryptedPassword existing, AccountService accounts) {
 
 			if (!accounts.matches(UnencryptedPassword.of(current), existing)) {
-				errors.rejectField("current", "Invalid");
+				errors.rejectValue("current", "Invalid");
 			}
 
 			if (!password.equals(passwordConfirm)) {
-				errors.rejectField("password", "NonMatching.password");
-				errors.rejectField("passwordConfirm", "NonMatching.password");
+				errors.rejectValue("password", "NonMatching.password");
+				errors.rejectValue("passwordConfirm", "NonMatching.password");
 			}
 
-			return errors;
+			return this;
 		}
 	}
 }

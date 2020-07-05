@@ -2,6 +2,12 @@ package quarano.reference;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Sort;
@@ -13,11 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import quarano.core.web.ErrorsDto;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Stream;
 
 @Transactional
 @RestController
@@ -51,8 +52,9 @@ class SymptomController {
 	 */
 	@PostMapping("/api/symptoms")
 	public HttpEntity<?> addSymptom(@Valid @RequestBody SymptomDto symptomDto, Errors errors) {
+
 		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+			return ResponseEntity.badRequest().body(errors);
 		}
 
 		var symptom = modelMapper.map(symptomDto, Symptom.class);
@@ -62,8 +64,7 @@ class SymptomController {
 	}
 
 	/**
-	 * //TODO: needed?
-	 * Stores an array
+	 * //TODO: needed? Stores an array
 	 *
 	 * @param symptomDtos
 	 * @return

@@ -3,15 +3,15 @@ package quarano.department.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
-import quarano.core.web.MapperWrapper;
+import quarano.core.web.MappedPayloads;
+import quarano.core.web.MappedPayloads.MappedErrors;
 import quarano.core.web.QuaranoHttpHeaders;
-import quarano.department.RegistrationDetails;
 import quarano.department.RegistrationException;
 import quarano.department.RegistrationException.Problem;
 import quarano.department.RegistrationManagement;
 import quarano.department.TokenGenerator;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -37,36 +36,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-	private final @NonNull MapperWrapper mapper;
 	private final @NonNull RegistrationManagement registration;
 	private final @NonNull ActivationCodeService activationCodes;
-	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull RegistrationRepresentations representations;
 	private final @NonNull TokenGenerator generator;
+
+	private final @NonNull RegistrationRepresentations representations;
 
 	@PostMapping("/api/registration")
 	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors) {
 
-		if (payload.validate(errors).hasErrors()) {
-			return ErrorsDto.of(errors, messages).toBadRequest();
-		}
-
-		var details = mapper.map(payload, RegistrationDetails.class);
-
-		ErrorsDto dto = ErrorsDto.of(errors, messages);
-
-		return registration.createTrackedPersonAccount(details)
-				.map(generator::generateTokenFor)
-				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
-				.recover(RegistrationException.class, it -> dto
-						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage())
-						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage())
-						.toBadRequest())
-				.recover(ActivationCodeException.class, it -> dto
-						.rejectField("clientCode", "Invalid", it.getMessage())
-						.toBadRequest())
-				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
+		return MappedPayloads.of(payload, errors)
+				.alwaysMap(RegistrationDto::validate)
+				.concludeSelfIfValid(this::doRegisterClient);
 	}
 
 	@PutMapping("/api/hd/cases/{id}/registration")
@@ -90,13 +72,8 @@ public class RegistrationController {
 
 		return cases.findById(id)
 				.filter(it -> it.belongsTo(account.getDepartmentId()))
-				.map(it -> {
-
-					return registration.getPendingActivationCode(it.getTrackedPerson().getId())
-							.<HttpEntity<?>> map(code -> ResponseEntity.ok(representations.toRepresentation(code, it)))
-							.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(it)));
-
-				}).orElseGet(() -> ResponseEntity.notFound().build());
+				.map(this::toPendingActivationCode)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	/**
@@ -112,12 +89,43 @@ public class RegistrationController {
 	}
 
 	/**
-	 * Checks if the given username is available and complient to username conventions
+	 * Checks if the given username is available and compliant to username conventions
 	 *
-	 * @return true if the username is available and valid, error json otherwise
+	 * @return true if the username is available and valid, error JSON otherwise
 	 */
 	@GetMapping("api/registration/checkusername/{userName}")
 	public ResponseEntity<Boolean> checkUserName(@PathVariable String userName) {
 		return ResponseEntity.ok(registration.isUsernameAvailable(userName));
+	}
+
+	private HttpEntity<?> doRegisterClient(RegistrationDto payload, MappedErrors errors) {
+
+		return registration.createTrackedPersonAccount(representations.from(payload))
+				.map(generator::generateTokenFor)
+				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
+				.recover(RegistrationException.class, it -> recover(it, errors))
+				.recover(ActivationCodeException.class, it -> recover(it, errors))
+				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
+	}
+
+	private HttpEntity<?> toPendingActivationCode(TrackedCase trackedCase) {
+
+		var personId = trackedCase.getTrackedPerson().getId();
+
+		return registration.getPendingActivationCode(personId)
+				.<HttpEntity<?>> map(it -> ResponseEntity.ok(representations.toRepresentation(it, trackedCase)))
+				.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(trackedCase)));
+	}
+
+	private static HttpEntity<?> recover(RegistrationException it, MappedErrors errors) {
+
+		return errors
+				.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage())
+				.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage())
+				.toBadRequest();
+	}
+
+	private static HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
+		return errors.rejectField("clientCode", "Invalid", it.getMessage()).toBadRequest();
 	}
 }

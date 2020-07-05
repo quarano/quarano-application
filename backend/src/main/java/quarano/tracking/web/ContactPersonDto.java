@@ -13,9 +13,12 @@ import quarano.tracking.ZipCode;
 
 import java.util.Collections;
 import java.util.Map;
+
 import javax.validation.constraints.Pattern;
+
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,7 +59,7 @@ class ContactPersonDto {
 		return Map.of("self", Map.of("href", fromMethodCall(contactResource).toUriString()));
 	}
 
-	Errors validate(Errors errors) {
+	ContactPersonDto validate(Errors errors) {
 
 		if (phone == null && email == null && mobilePhone == null && !StringUtils.hasText(identificationHint)) {
 			errors.rejectValue("phone", INVALID_CONTACT_WAYS_KEY);
@@ -65,6 +68,6 @@ class ContactPersonDto {
 			errors.rejectValue("identificationHint", INVALID_CONTACT_WAYS_KEY);
 		}
 
-		return errors;
+		return this;
 	}
 }

@@ -1,7 +1,6 @@
 package quarano.security.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
-import static quarano.core.web.QuaranoHttpHeaders.*;
 
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.core.web.QuaranoHttpHeaders;
 import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,26 +51,29 @@ class AuthenticationController {
 		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername()))
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!"))
-				.filter(it -> {
-					return !it.isTrackedPerson() || people.findByAccount(it)
-							.flatMap(cases::findByTrackedPerson)
-							.filter(TrackedCase::isOpen)
-							.isPresent();
-
-				}, () -> new AccessDeniedException("Case already closed!"))
-				.map(it -> {
-					var token = generator.generateTokenFor(it);
-
-					if (it.getPassword().isExpired()) {
-						return ResponseEntity.ok()
-								.header(AUTH_TOKEN, token)
-								.body(createBodyWithChangePasswordLink());
-					}
-
-					return toTokenResponse(token);
-				})
-				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
+				.filter(this::hasOpenCaseForAccount, () -> new AccessDeniedException("Case already closed!"))
+				.<HttpEntity<?>> map(this::toTokenResponse)
+				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
 				.get();
+	}
+
+	private boolean hasOpenCaseForAccount(Account it) {
+
+		return !it.isTrackedPerson() || people.findByAccount(it)
+				.flatMap(cases::findByTrackedPerson)
+				.filter(TrackedCase::isOpen)
+				.isPresent();
+	}
+
+	private HttpEntity<?> toTokenResponse(Account it) {
+
+		var token = generator.generateTokenFor(it);
+
+		return !it.getPassword().isExpired()
+				? QuaranoHttpHeaders.toTokenResponse(token)
+				: ResponseEntity.ok()
+						.header(QuaranoHttpHeaders.AUTH_TOKEN, token)
+						.body(createBodyWithChangePasswordLink());
 	}
 
 	private Account lookupAccountFor(String username) {
@@ -82,9 +85,10 @@ class AuthenticationController {
 	@SuppressWarnings("null")
 	private static Map<String, Object> createBodyWithChangePasswordLink() {
 
-		var target = fromMethodCall(on(UserController.class).putPassword(null, null, null)).toUriString();
-		var links = Links.of(Link.of(target, IanaLinkRelations.NEXT))
-				.and(Link.of(target, UserController.CHANGE_PASSWORD));
+		var target = on(UserController.class).putPassword(null, null, null);
+
+		var links = Links.of(MvcLink.of(target, IanaLinkRelations.NEXT))
+				.and(MvcLink.of(target, UserController.CHANGE_PASSWORD));
 
 		return Map.of("_links", links);
 	}

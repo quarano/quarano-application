@@ -72,7 +72,9 @@ class DiaryRepresentations {
 
 		var entry = DiaryEntry.of(input.getSlot(), person);
 
-		return mapper.map(input, entry, errors);
+		var result = mapper.map(input, entry, errors);
+
+		return result;
 	}
 
 	Either<DiaryEntry, Errors> from(DiaryEntryInput input, DiaryEntry existing, Errors errors) {
@@ -147,6 +149,7 @@ class DiaryRepresentations {
 					.map(it -> mapper.map(it, SymptomDto.class));
 		}
 
+		@SuppressWarnings("null")
 		@JsonProperty("_links")
 		public Map<String, Object> getLinks() {
 
@@ -181,6 +184,7 @@ class DiaryRepresentations {
 			}
 
 			@JsonProperty("_links")
+			@SuppressWarnings("null")
 			public Map<String, Object> getLinks() {
 
 				var itemResource = on(ContactPersonController.class).getContact(null, contact.getId());
@@ -244,6 +248,7 @@ class DiaryRepresentations {
 
 			@JsonInclude(Include.NON_EMPTY)
 			@JsonProperty("_links")
+			@SuppressWarnings("null")
 			Map<String, Object> getLinks() {
 
 				if (!allowCreation) {

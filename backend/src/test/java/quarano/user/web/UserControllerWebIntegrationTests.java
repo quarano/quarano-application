@@ -111,7 +111,7 @@ class UserControllerWebIntegrationTests {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token))
-				.andExpect(status().isOk());
+				.andExpect(status().is2xxSuccessful());
 
 		expectLoginRejectedFor(USERNAME, PASSWORD);
 		assertThat(login(USERNAME, newPassword)).isNotNull();
@@ -131,7 +131,7 @@ class UserControllerWebIntegrationTests {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token))
-				.andExpect(status().isOk());
+				.andExpect(status().is2xxSuccessful());
 
 		expectLoginRejectedFor(username, password);
 		assertThat(login(username, newPassword)).isNotNull();

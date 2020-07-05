@@ -34,6 +34,7 @@ class CoreMappingConfiguration implements MappingCustomizer {
 	 * @see quarano.core.web.MappingCustomizer#customize(org.modelmapper.ModelMapper)
 	 */
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void customize(ModelMapper mapper) {
 
 		new PersistentEntities(List.of(context))
@@ -59,6 +60,7 @@ class CoreMappingConfiguration implements MappingCustomizer {
 		 * @see org.modelmapper.Converter#convert(org.modelmapper.spi.MappingContext)
 		 */
 		@Override
+		@SuppressWarnings("null")
 		public Object convert(MappingContext<Identifier, Object> context) {
 
 			var source = TypeDescriptor.valueOf(context.getSourceType());

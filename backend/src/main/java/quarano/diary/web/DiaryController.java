@@ -4,8 +4,8 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
 import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
 import quarano.diary.DiaryManagement;
@@ -17,7 +17,6 @@ import quarano.tracking.TrackedPersonRepository;
 
 import javax.validation.Valid;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DiaryController {
 
-	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull DiaryRepresentations representations;
 	private final @NonNull DiaryManagement diaries;
 
@@ -54,14 +52,12 @@ public class DiaryController {
 	HttpEntity<?> addDiaryEntry(@Valid @RequestBody DiaryEntryInput payload, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
-		}
+		return MappedPayloads.of(errors).onValidGet(() -> {
 
-		return representations.from(payload, person, errors)
-				.mapLeft(it -> diaries.updateDiaryEntry(it))
-				.fold(entry -> handle(entry, person),
-						error -> ErrorsDto.of(errors, messages).toBadRequest());
+			return representations.from(payload, person, errors)
+					.mapLeft(it -> diaries.updateDiaryEntry(it))
+					.fold(entry -> handle(entry, person), MappedPayloads::toBadRequest);
+		});
 	}
 
 	@GetMapping("/api/diary/{identifier}")
@@ -80,23 +76,16 @@ public class DiaryController {
 			@Valid @RequestBody DiaryEntryInput payload, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
-		var entry = diaries.findDiaryFor(person)
-				.getEntryFor(identifier)
-				.orElse(null);
+		return MappedPayloads.of(person, errors)
+				.alwaysMap(diaries::findDiaryFor)
+				.alwaysFlatMap(it -> it.getEntryFor(identifier))
+				.concludeIfValid(it -> {
 
-		if (entry == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		if (errors.hasErrors()) {
-			return ErrorsDto.of(errors, messages).toBadRequest();
-		}
-
-		return representations.from(payload, entry, errors)
-				.mapLeft(it -> diaries.updateDiaryEntry(it))
-				.mapLeft(representations::toRepresentation)
-				.<HttpEntity<?>> fold(ResponseEntity.ok()::body,
-						__ -> ErrorsDto.of(errors, messages).toBadRequest());
+					return representations.from(payload, it, errors)
+							.mapLeft(diaries::updateDiaryEntry)
+							.mapLeft(representations::toRepresentation)
+							.fold(ResponseEntity.ok()::body, MappedPayloads::toBadRequest);
+				});
 	}
 
 	private HttpEntity<?> handle(DiaryEntry entry, TrackedPerson person) {

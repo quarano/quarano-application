@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 /**
@@ -21,7 +20,9 @@ class QuestionnaireDtoUnitTests {
 				.setBelongToMedicalStaff(true)
 				.setHasPreExistingConditions(true);
 
-		Errors errors = dto.validate(new MapBindingResult(new HashMap<>(), "name"));
+		var errors = new MapBindingResult(new HashMap<>(), "name");
+
+		dto.validate(errors);
 
 		assertThat(errors.hasFieldErrors("dayOfFirstSymptoms")).isTrue();
 		assertThat(errors.hasFieldErrors("belongToMedicalStaffDescription")).isTrue();

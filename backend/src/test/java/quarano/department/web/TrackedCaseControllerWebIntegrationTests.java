@@ -398,7 +398,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		mvc.perform(post("/api/hd/cases")
 				.content(jackson.writeValueAsString(contactCase))
-				.contentType(MediaType.APPLICATION_JSON).param("type", "contact"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("type", "contact"))
 				.andExpect(status().isCreated());
 	}
 
@@ -454,6 +455,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				(payload, type) -> expectBadRequestOnUpdate(payload, type, caseId));
 	}
 
+	@SuppressWarnings("null")
 	private Stream<DynamicTest> createQuarantineTests(BiConsumer<TrackedCaseDto, CaseType> success,
 			BiConsumer<TrackedCaseDto, CaseType> failure) {
 

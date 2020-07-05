@@ -196,8 +196,7 @@ class RegistrationWebIntegrationTests {
 				.password(password)
 				.passwordConfirm(password)
 				.dateOfBirth(person.getDateOfBirth())
-				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId()
-						.toString()))
+				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString()))
 				.build();
 
 		// when

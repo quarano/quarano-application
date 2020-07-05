@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.With;
 import quarano.account.Account;
-import quarano.department.web.EnrollmentDto;
+import quarano.department.web.TrackedCaseRepresentations.EnrollmentDto;
 import quarano.tracking.web.TrackedPersonDto;
 
 @Data
@@ -15,7 +14,7 @@ import quarano.tracking.web.TrackedPersonDto;
 @AllArgsConstructor
 public class UserDto {
 
-	@With private String username;
+	private String username;
 	private DepartmentDto healthDepartment;
 	private TrackedPersonDto client;
 	private String firstName;

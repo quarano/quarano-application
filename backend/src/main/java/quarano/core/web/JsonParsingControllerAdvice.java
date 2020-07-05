@@ -1,12 +1,10 @@
 package quarano.core.web;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,8 +21,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class JsonParsingControllerAdvice {
-
-	private final @NonNull MessageSourceAccessor messages;
 
 	@ExceptionHandler
 	public HttpEntity<?> handle(HttpMessageNotReadableException o_O) {
@@ -43,7 +39,7 @@ public class JsonParsingControllerAdvice {
 
 			errors.rejectValue(path, "Invalid." + path);
 
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+			return ResponseEntity.badRequest().body(errors);
 		}
 
 		return ResponseEntity.badRequest().build();

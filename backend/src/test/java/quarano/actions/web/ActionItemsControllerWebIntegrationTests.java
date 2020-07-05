@@ -9,6 +9,8 @@ import net.minidev.json.JSONArray;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.actions.DescriptionCode;
+import quarano.actions.web.ActionRepresentations.ActionsReviewed;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -173,22 +175,20 @@ class ActionItemsControllerWebIntegrationTests {
 		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
 
 		// conclude the case
-		TrackedCaseIdentifier caseIdentifier = TrackedCaseIdentifier.of(UUID.fromString(contactCaseId));
-		var trackedCase = cases.findById(caseIdentifier).get();
+		cases.findById(TrackedCaseIdentifier.of(UUID.fromString(contactCaseId)))
+				.map(TrackedCase::conclude)
 
-		trackedCase.conclude();
-		cases.save(trackedCase);
+				.map(cases::save)
+				.orElseThrow();
 
 		// request list again
-		var actionsResponseAfterConclude = mvc.perform(get("/api/hd/actions"))
+		var result = mvc.perform(get("/api/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		var cases = JsonPath.parse(actionsResponseAfterConclude).read("$..caseId", JSONArray.class);
+		var cases = JsonPath.parse(result).read("$..caseId", JSONArray.class);
 
-		// check that case is not cntained anymore
+		// check that case is not contained anymore
 		assertThat(cases).doesNotContain(contactCaseId);
-
-
 	}
 }

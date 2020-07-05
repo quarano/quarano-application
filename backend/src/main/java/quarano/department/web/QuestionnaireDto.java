@@ -91,7 +91,7 @@ public class QuestionnaireDto {
 		return report;
 	}
 
-	Errors validate(Errors errors) {
+	QuestionnaireDto validate(Errors errors) {
 
 		if (Boolean.TRUE.equals(hasPreExistingConditions)
 				&& (hasPreExistingConditionsDescription == null
@@ -117,6 +117,6 @@ public class QuestionnaireDto {
 			errors.rejectValue("dayOfFirstSymptoms", "NotNull.IntialReportDto.dayOfFirstSymptoms");
 		}
 
-		return errors;
+		return this;
 	}
 }

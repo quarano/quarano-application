@@ -14,8 +14,8 @@ import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 import quarano.core.EmailAddress;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
 
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
@@ -46,56 +45,46 @@ class StaffAccountController {
 
 	private final @NonNull AccountService accounts;
 	private final @NonNull StaffAccountRepresentations representations;
-	private final @NonNull MessageSourceAccessor accessor;
-	private final @NonNull MessageSourceAccessor messages;
 
 	@PostMapping("/api/hd/accounts")
-	HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload,
+	HttpEntity<?> addStaffAccount(@Valid @RequestBody StaffAccountCreateInputDto payload,
 			Errors errors,
 			@LoggedIn Department department) {
 
-		// start validation manually because of required reference to account object from database
-		payload.validate(errors, accounts);
+		return MappedPayloads.of(payload, errors)
+				.alwaysMap((it, nested) -> it.validate(nested, accounts))
+				.map(it -> {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
-		}
+					return accounts.createStaffAccount(it.getUsername(),
+							UnencryptedPassword.of(it.getPassword()),
+							it.getFirstName(),
+							it.getLastName(),
+							EmailAddress.of(it.getEmail()),
+							department.getId(),
+							payload.getRoles().stream()
+									.map(RoleType::valueOf)
+									.collect(Collectors.toList()));
 
-		var storedAccount = accounts.createStaffAccount(payload.getUsername(),
-				UnencryptedPassword.of(payload.getPassword()),
-				payload.getFirstName(),
-				payload.getLastName(),
-				EmailAddress.of(payload.getEmail()),
-				department.getId(),
-				payload.getRoles().stream()
-						.map(it -> RoleType.valueOf(it))
-						.collect(Collectors.toList()));
+				}).concludeIfValid(it -> {
 
-		var location = on(StaffAccountController.class).getStaffAccount(storedAccount.getId(), storedAccount);
+					var location = on(StaffAccountController.class).getStaffAccount(it.getId(), it);
 
-		return ResponseEntity
-				.created(URI.create(fromMethodCall(location).toUriString()))
-				.body(representations.toSummary(storedAccount));
+					return ResponseEntity
+							.created(URI.create(fromMethodCall(location).toUriString()))
+							.body(representations.toSummary(it));
+				});
 	}
 
 	@PutMapping("/api/hd/accounts/{accountId}/password")
 	HttpEntity<?> putStaffAccountPassword(@PathVariable AccountIdentifier accountId,
 			@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account admin) {
 
-		var existing = accounts.findById(accountId).orElse(null);
-
-		if (existing == null || existing.isTrackedPerson()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		if (!admin.getDepartmentId().equals(existing.getDepartmentId())) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return payload
-				.validate(ErrorsDto.of(errors, messages))
-				.toBadRequestOrElse(() -> {
-					accounts.changePassword(UnencryptedPassword.of(payload.password), existing);
+		return MappedPayloads.of(accounts.findById(accountId), errors) //
+				.notFoundIf(it -> it.isTrackedPerson()) //
+				.notFoundIf(it -> !admin.belongsTo(it.getDepartmentId())) //
+				.peek((__, err) -> payload.validate(err)) //
+				.concludeIfValid(it -> {
+					accounts.changePassword(UnencryptedPassword.of(payload.password), it);
 					return ResponseEntity.noContent().build();
 				});
 	}
@@ -108,19 +97,17 @@ class StaffAccountController {
 
 		var existing = accounts.findById(accountId).orElse(null);
 
-		if (existing == null) {
-			return ResponseEntity.notFound().build();
-		}
+		return MappedPayloads.of(payload, errors)
+				.notFoundIf(existing == null)
+				.alwaysMap((it, foo) -> it.validate(foo, existing, accounts))
+				.map(dto -> {
 
-		// start validation manually because of required reference to account object from database
-		payload.validate(errors, existing, accounts);
+					return accounts.findById(accountId)
+							.map(it -> representations.from(dto, it))
+							.map(it -> accounts.saveStaffAccount(it))
+							.map(it -> representations.toSummary(it));
 
-		var errorsDto = ErrorsDto.of(errors, accessor);
-
-		return errorsDto.toBadRequestOrElse(() -> ResponseEntity.of(accounts.findById(accountId)
-				.map(it -> representations.from(payload, it))
-				.map(accounts::saveStaffAccount)
-				.map(representations::toSummary)));
+				}).concludeIfValid(ResponseEntity::of);
 	}
 
 	@GetMapping(path = "/api/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
@@ -166,13 +153,14 @@ class StaffAccountController {
 
 		@NotBlank String password, passwordConfirm;
 
-		ErrorsDto validate(ErrorsDto errors) {
+		NewPassword validate(Errors errors) {
+
 			if (!password.equals(passwordConfirm)) {
-				errors.rejectField("password", "NonMatching.password");
-				errors.rejectField("passwordConfirm", "NonMatching.password");
+				errors.rejectValue("password", "NonMatching.password");
+				errors.rejectValue("passwordConfirm", "NonMatching.password");
 			}
 
-			return errors;
+			return this;
 		}
 	}
 }

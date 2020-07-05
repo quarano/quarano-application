@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.core.web.ErrorsDto;
 import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
@@ -67,13 +67,10 @@ public class TrackingController {
 	public HttpEntity<?> updateTrackedPersonDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().build();
-		}
-
-		people.save(mapper.map(dto, user));
-
-		return ResponseEntity.ok().build();
+		return MappedPayloads.of(dto, errors)
+				.map(it -> mapper.map(it, user))
+				.map(people::save)
+				.onValidGet(() -> ResponseEntity.ok().build());
 	}
 
 	@GetMapping("/api/details/form")
@@ -100,7 +97,7 @@ public class TrackingController {
 	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, Errors errors, @LoggedIn TrackedPerson person) {
 
 		if (errors.hasErrors() && errors.hasFieldErrors("contact")) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+			return ResponseEntity.badRequest().body(errors);
 		}
 
 		return contacts.findById(payload.getContactId())
@@ -121,7 +118,7 @@ public class TrackingController {
 
 					errors.rejectValue("contact", "Invalid.contact", new Object[] { payload.getContact().toString() }, "");
 
-					return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+					return ResponseEntity.badRequest().body(errors);
 				});
 	}
 

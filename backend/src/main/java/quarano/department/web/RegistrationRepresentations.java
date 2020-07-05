@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.CoreProperties;
 import quarano.core.EmailTemplates;
 import quarano.core.EmailTemplates.Keys;
+import quarano.core.web.MapperWrapper;
+import quarano.department.RegistrationDetails;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.activation.ActivationCode;
@@ -31,6 +33,7 @@ class RegistrationRepresentations {
 
 	private final EmailTemplates templates;
 	private final CoreProperties configuration;
+	private final MapperWrapper mapper;
 
 	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
 
@@ -38,6 +41,10 @@ class RegistrationRepresentations {
 		var result = PendingRegistration.of(trackedCase.getId(), code, email);
 
 		return result.add(TrackedCaseStatusAware.getDefaultLinks(trackedCase));
+	}
+
+	RegistrationDetails from(RegistrationDto payload) {
+		return mapper.map(payload, RegistrationDetails.class);
 	}
 
 	private String getEmailTemplateFor(TrackedCase trackedCase, ActivationCode code) {

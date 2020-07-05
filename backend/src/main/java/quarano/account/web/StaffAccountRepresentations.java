@@ -25,11 +25,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
-import org.springframework.lang.Nullable;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -75,22 +74,18 @@ class StaffAccountRepresentations {
 		@SuppressWarnings("null")
 		public Links getLinks() {
 
-			var staffAccountController = on(StaffAccountController.class);
+			var controller = on(StaffAccountController.class);
 
-			return super.getLinks().and(Links.of(
-					Link.of(fromMethodCall(
-							staffAccountController.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null))
-									.toUriString(),
-							IanaLinkRelations.SELF),
-					Link.of(fromMethodCall(
-							staffAccountController.deleteStaffAccounts(AccountIdentifier.of(UUID.fromString(accountId)), null))
-									.toUriString(),
-							StaffAccountLinkRelations.DELETE)));
+			return super.getLinks()
+					.and(MvcLink.of(controller.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null),
+							IanaLinkRelations.SELF))
+					.and(MvcLink.of(controller.deleteStaffAccounts(AccountIdentifier.of(UUID.fromString(accountId)), null),
+							StaffAccountLinkRelations.DELETE));
 		}
 	}
 
 	@Data
-	@Getter(onMethod = @__(@Nullable))
+	@Getter
 	static class StaffAccountCreateInputDto {
 
 		private @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
@@ -99,7 +94,7 @@ class StaffAccountRepresentations {
 		private @NotBlank @Email String email;
 		private List<String> roles = new ArrayList<>();
 
-		Errors validate(Errors errors, AccountService accounts) {
+		StaffAccountCreateInputDto validate(Errors errors, AccountService accounts) {
 
 			if (!Objects.nullSafeEquals(password, passwordConfirm)) {
 				errors.rejectValue("passwordConfirm", "NonMatching.password");
@@ -107,7 +102,7 @@ class StaffAccountRepresentations {
 
 			validateUsername(errors, this.username, accounts);
 
-			return errors;
+			return this;
 		}
 	}
 
@@ -120,18 +115,19 @@ class StaffAccountRepresentations {
 		private @NotBlank @Email String email;
 		private List<String> roles = new ArrayList<>();
 
-		Errors validate(Errors errors, Account existing, AccountService accounts) {
+		StaffAccountUpdateInputDto validate(Errors errors, Account existing, AccountService accounts) {
 
 			// validate username only if it has changed
 			if (!existing.getUsername().equals(this.username)) {
 				validateUsername(errors, this.username, accounts);
 			}
 
-			return errors;
+			return this;
 		}
 	}
 
 	static void validateUsername(Errors errors, String username, AccountService accounts) {
+
 		if (!accounts.isUsernameAvailable(username)) {
 			errors.rejectValue("username", "UserNameNotAvailable");
 		}

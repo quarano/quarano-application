@@ -29,12 +29,12 @@ public class RegistrationDto {
 	private UUID clientId;
 	private String departmentId;
 
-	Errors validate(Errors errors) {
+	RegistrationDto validate(Errors errors) {
 
 		if (!Objects.nullSafeEquals(password, passwordConfirm)) {
 			errors.rejectValue("passwordConfirm", "NonMatching.password");
 		}
 
-		return errors;
+		return this;
 	}
 }
