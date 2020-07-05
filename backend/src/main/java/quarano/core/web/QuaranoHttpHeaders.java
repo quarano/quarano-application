@@ -1,5 +1,7 @@
 package quarano.core.web;
 
+import java.util.Map;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -27,8 +29,8 @@ public interface QuaranoHttpHeaders {
 
 		Assert.hasText(token, "Token must not be null or empty!");
 
-		return ResponseEntity.noContent() //
+		return ResponseEntity.ok() //
 				.header(AUTH_TOKEN, token) //
-				.build();
+				.body(Map.of("token", token));
 	}
 }
