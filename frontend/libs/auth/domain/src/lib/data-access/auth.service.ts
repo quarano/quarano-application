@@ -4,6 +4,7 @@ import { ChangePasswordDto } from './../model/change-password';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserDto } from '../model/user';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,13 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`${this.apiUrl}/login`, { username, password });
+    return this.httpClient
+      .post<{ token: string }>(`${this.apiUrl}/login`, { username, password }, { observe: 'response' })
+      .pipe(
+        map((response) => {
+          return { token: response.headers.get('x-auth-token') };
+        })
+      );
   }
 
   getMe(): Observable<UserDto> {

@@ -1,3 +1,4 @@
+import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -58,6 +59,7 @@ const routes: Routes = [
     HealthDepartmentDomainModule,
     SharedUtilSymptomModule,
     NgxDatatableModule,
+    SharedUiMultipleAutocompleteModule,
   ],
 })
 export class HealthDepartmentFeatureCaseDetailModule {}

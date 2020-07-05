@@ -24,7 +24,7 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto } from '@qro/health-department/domain';
+import { CaseDetailDto, IndexCaseService } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
 
 export interface CaseDetailResult {
@@ -61,7 +61,11 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailResult> = new Subject<CaseDetailResult>();
 
-  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
+  constructor(
+    private dialog: MatDialog,
+    private snackbarService: SnackbarService,
+    public indexCaseService: IndexCaseService
+  ) {}
 
   ngOnInit(): void {
     this.createFormGroup();
@@ -135,6 +139,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         Validators.maxLength(40),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber),
       ]),
+      originCases: new FormControl([]),
     });
     this.setValidators();
     this.subs.add(

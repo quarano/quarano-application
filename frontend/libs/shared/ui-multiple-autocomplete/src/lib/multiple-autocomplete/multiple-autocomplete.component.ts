@@ -1,16 +1,7 @@
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, identity } from 'rxjs';
-import {
-  filter,
-  startWith,
-  takeUntil,
-  debounceTime,
-  distinctUntilChanged,
-  tap,
-  switchMap,
-  finalize,
-} from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IIdentifiable } from '@qro/shared/util-data-access';
@@ -25,8 +16,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @Input() nameProperties: string[];
   @Input() control: FormControl;
   @Input() placeholder: string;
-  @Input() selectableItems: IIdentifiable[] = [];
-  @Input() loadFunction: ((value: string) => Observable<IIdentifiable[]>) | null;
+  @Input() selectableItems: IIdentifiable[];
   @Output() removed = new EventEmitter<string>();
   @Output() added = new EventEmitter<string>();
   @Output() itemNotFound = new EventEmitter<string>();
@@ -37,14 +27,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   @ViewChild('auto') autocomplete;
   destroy$: Subject<void> = new Subject<void>();
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
-  isLoading = false;
-  private lazy: boolean = this.loadFunction !== null;
 
   ngOnInit() {
-    if (!this.lazy) {
-      this.filteredList$$.next(this.selectableItems);
-    }
-
+    this.filteredList$$.next(this.selectableItems);
     this.control.valueChanges
       .pipe(
         takeUntil(this.destroy$),
@@ -58,39 +43,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
 
     this.selectedItemIds = this.control.value;
 
-    const changes$ = this.inputControl.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      startWith(null as string),
-      debounceTime(500),
-      distinctUntilChanged()
-    );
-
-    if (this.lazy) {
-      changes$
-        .pipe(
-          tap(() => {
-            this.filteredList$$.next([]);
-            this.isLoading = true;
-          }),
-          switchMap((value) =>
-            this.loadFunction(value).pipe(
-              finalize(() => {
-                this.isLoading = false;
-              })
-            )
-          )
-        )
-        .subscribe((data) => {
-          this.filteredList$$.next(data);
-          console.log(data);
-        });
-    } else {
-      changes$.subscribe((searchTerm) => {
-        if (typeof searchTerm === 'string') {
-          this._filter(searchTerm);
-        }
-      });
-    }
+    this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
+      if (typeof searchTerm === 'string') {
+        this._filter(searchTerm);
+      }
+    });
   }
 
   clearInput(): void {

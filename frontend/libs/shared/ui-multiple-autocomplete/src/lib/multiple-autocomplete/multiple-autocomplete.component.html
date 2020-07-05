@@ -24,11 +24,8 @@
     />
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-    <mat-option *ngIf="isLoading" class="is-loading">Lade...</mat-option>
-    <ng-container *ngIf="!isLoading">
-      <mat-option (click)="$event.stopPropagation()" *ngFor="let item of filteredList$$ | async" [value]="item.id">
-        {{ getName(item) }}
-      </mat-option></ng-container
-    >
+    <mat-option (click)="$event.stopPropagation()" *ngFor="let item of filteredList$$ | async" [value]="item.id">
+      {{ getName(item) }}
+    </mat-option>
   </mat-autocomplete>
 </mat-form-field>
