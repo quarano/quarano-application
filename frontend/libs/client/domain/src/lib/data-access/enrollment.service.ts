@@ -86,6 +86,6 @@ export class EnrollmentService {
   }
 
   registerClient(registerClient: RegisterDto): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/registration`, registerClient);
+    return this.httpClient.post(`${this.baseUrl}/registration`, registerClient, { observe: 'response' });
   }
 }

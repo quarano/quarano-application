@@ -52,7 +52,7 @@ export class UserService {
   public login(username: string, password: string): Observable<any> {
     return this.authService
       .login(username, password)
-      .pipe(tap((response) => this.tokenService.setToken(response.token)));
+      .pipe(tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))));
   }
 
   public logout() {
