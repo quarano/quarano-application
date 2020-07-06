@@ -1,7 +1,7 @@
 <ngx-datatable
   class="material fixed-header"
   data-cy="action-data-table"
-  style="max-width: 1110px;"
+  style="max-width: 1600px;"
   [count]="actions.length"
   [headerHeight]="50"
   rowHeight="auto"
@@ -36,18 +36,18 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false" width="100"> </ngx-datatable-column>
+  <ngx-datatable-column prop="lastName" name="Nachname" [sortable]="false" width="140"> </ngx-datatable-column>
 
-  <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false" width="100"> </ngx-datatable-column>
+  <ngx-datatable-column prop="firstName" name="Vorname" [sortable]="false" width="140"> </ngx-datatable-column>
 
-  <ngx-datatable-column prop="dateOfBirth" name="Geburtsdatum" [sortable]="false" width="110"> </ngx-datatable-column>
+  <ngx-datatable-column prop="dateOfBirth" name="Geburtsdatum" [sortable]="false" width="130"> </ngx-datatable-column>
 
-  <ngx-datatable-column prop="status" name="Status" width="170" [sortable]="false"> </ngx-datatable-column>
+  <ngx-datatable-column prop="status" name="Status" width="200" [sortable]="false"> </ngx-datatable-column>
 
-  <ngx-datatable-column prop="quarantineStart" name="Quarantäne seit" [sortable]="false" width="130">
+  <ngx-datatable-column prop="quarantineStart" name="Quarantäne seit" [sortable]="false" width="150">
   </ngx-datatable-column>
 
-  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false" width="120"> </ngx-datatable-column>
+  <ngx-datatable-column prop="phone" name="Telefon" [sortable]="false" width="180"> </ngx-datatable-column>
 
   <ngx-datatable-column prop="email" name="E-Mail" [sortable]="false" width="70">
     <ng-template let-value="value" ngx-datatable-cell-template>

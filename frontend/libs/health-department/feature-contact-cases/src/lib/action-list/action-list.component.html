@@ -1,7 +1,7 @@
 <ngx-datatable
   class="material fixed-header"
   data-cy="action-data-table"
-  style="max-width: 1110px;"
+  style="max-width: 1600px;"
   [count]="actions.length"
   [headerHeight]="50"
   rowHeight="auto"
@@ -51,6 +51,8 @@
 
   <ngx-datatable-column prop="quarantineStart" name="Quarantäne seit" [sortable]="false" width="120">
   </ngx-datatable-column>
+
+  <ngx-datatable-column prop="status" name="EXTRA" [sortable]="true" width="210"> </ngx-datatable-column>
 
   <ngx-datatable-column prop="email" name="E-Mail" [sortable]="false" width="70">
     <ng-template let-value="value" ngx-datatable-cell-template>

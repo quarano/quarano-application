@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1600px;">
   <div style="display: flex; justify-content: space-between;">
     <div style="display: flex;">
       <button
@@ -24,7 +24,7 @@
     #table
     data-cy="case-data-table"
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1600px;"
     [count]="cases.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -129,6 +129,17 @@
       [draggable]="true"
       [canAutoResize]="true"
       width="140"
+    >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="status"
+      name="EXTRA"
+      width="210"
+      [resizeable]="true"
+      [sortable]="true"
+      [draggable]="true"
+      [canAutoResize]="true"
     >
     </ngx-datatable-column>
   </ngx-datatable>

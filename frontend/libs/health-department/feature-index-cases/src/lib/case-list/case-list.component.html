@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1600px;">
   <div style="display: flex; justify-content: space-between;">
     <div style="display: flex;">
       <button
@@ -24,7 +24,7 @@
     #table
     data-cy="case-data-table"
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1600px;"
     [count]="cases.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -43,7 +43,7 @@
     <ngx-datatable-column
       prop="status"
       name="Status"
-      width="290"
+      width="300"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -58,7 +58,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="140"
     ></ngx-datatable-column>
 
     <ngx-datatable-column
@@ -68,14 +68,14 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="140"
     >
     </ngx-datatable-column>
 
     <ngx-datatable-column
       prop="dateOfBirth"
       name="Geburtsdatum"
-      width="120"
+      width="180"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -90,7 +90,7 @@
     <ngx-datatable-column
       prop="quarantineEnd"
       name="Quarantäne bis"
-      width="140"
+      width="180"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -123,7 +123,7 @@
     >
     </ngx-datatable-column>
 
-    <ngx-datatable-column prop="email" name="E-Mail" width="80" [sortable]="false">
+    <ngx-datatable-column prop="email" name="E-Mail" width="140" [sortable]="false">
       <ng-template let-value="value" ngx-datatable-cell-template>
         <button
           *ngIf="value"

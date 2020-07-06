@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1600px;">
   <button
     class="mb-3"
     mat-raised-button
@@ -11,7 +11,7 @@
 
   <ngx-datatable
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1600px;"
     [count]="accounts.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -41,6 +41,8 @@
         </div>
       </ng-template>
     </ngx-datatable-column>
+
+    <ngx-datatable-column prop="firstName" name="EXTRA" width="210"> </ngx-datatable-column>
 
     <ngx-datatable-column prop="_links" name="Löschen" width="80" [sortable]="false">
       <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
