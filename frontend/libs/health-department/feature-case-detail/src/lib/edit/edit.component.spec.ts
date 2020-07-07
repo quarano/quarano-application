@@ -1,3 +1,4 @@
+import { IndexCaseService } from '@qro/health-department/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -17,6 +18,7 @@ describe('EditComponent', () => {
       providers: [
         { provide: MatDialog, useValue: {} },
         { provide: SnackbarService, useValue: {} },
+        { provide: IndexCaseService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
