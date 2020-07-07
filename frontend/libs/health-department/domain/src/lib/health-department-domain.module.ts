@@ -6,9 +6,12 @@ import { ContactCaseCaseListResolver } from './resolvers/contact-case-case-list.
 import { ContactCaseActionListResolver } from './resolvers/contact-case-action-list.resolver';
 import { IndexCaseActionListResolver } from './resolvers/index-case-action-list.resolver';
 import { IndexCaseCaseListResolver } from './resolvers/index-case-case-list.resolver';
+import { DefaultDataServiceConfig, EntityDataService, EntityDefinitionService } from '@ngrx/data';
+import { healthDepartmentConfig } from './store/entity-metadata';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   providers: [
     ReportCaseActionsResolver,
     CaseDetailResolver,
@@ -18,4 +21,8 @@ import { IndexCaseCaseListResolver } from './resolvers/index-case-case-list.reso
     IndexCaseCaseListResolver,
   ],
 })
-export class HealthDepartmentDomainModule {}
+export class HealthDepartmentDomainModule {
+  constructor(eds: EntityDefinitionService, entityDataService: EntityDataService) {
+    eds.registerMetadataMap(healthDepartmentConfig.entityMetadata);
+  }
+}

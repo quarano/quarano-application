@@ -24,6 +24,9 @@ import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseDetailResult } from '../edit/edit.component';
 import { ClientType } from '@qro/auth/api';
+//@todo SC: CORE-341 später ändern nur FÜR TESTZWECKE
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { CaseService } from '../../../../domain/src/lib/store/case.service';
 
 @Component({
   selector: 'qro-case-detail',
@@ -62,7 +65,8 @@ export class CaseDetailComponent implements OnDestroy {
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private apiService: ApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private caseService: CaseService
   ) {
     this.subs.add(
       this.route.params.subscribe((_) => {
@@ -72,6 +76,9 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   initData(): void {
+    //@ todo SC: CORE-341 test laden der daten in den state
+    this.caseService.getAll().subscribe();
+
     this.caseDetail$ = merge(this.route.data.pipe(map((data) => data.case)), this.updatedDetail$$).pipe(
       map((data) => data)
     );
