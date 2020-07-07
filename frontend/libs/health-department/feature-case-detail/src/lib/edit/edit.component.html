@@ -1,4 +1,4 @@
-<p>{{ caseDetail._embedded.originCases | json }}</p>
+<!-- <p>{{ caseDetail._embedded.originCases | json }}</p> -->
 <form [formGroup]="formGroup" (ngSubmit)="submitForm(editForm, false)" class="mt-3" #editForm="ngForm">
   <fieldset class="mb-3">
     <legend>Basisdaten</legend>
@@ -109,14 +109,14 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineEndDate, error) }}
       </mat-error>
     </mat-form-field>
-    <qro-lazy-autocomplete
+    <!-- <qro-lazy-autocomplete
       keyProperty="caseId"
       (completeMethod)="onIndexCaseSearch($event)"
       [selectableItems]="selectableIndexCases"
       [displayWith]="showIndexCaseItem"
       [control]="formGroup.controls.originCases"
       placeholder="Ursprungsfälle"
-    ></qro-lazy-autocomplete>
+    ></qro-lazy-autocomplete> -->
   </fieldset>
   <fieldset class="mb-3">
     <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>
