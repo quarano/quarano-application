@@ -1,0 +1,31 @@
+<mat-form-field class="chip-list" (click)="trigger.openPanel()">
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let item of selectedItems"
+      [selectable]="!disabled"
+      [removable]="!disabled"
+      (removed)="remove(item)"
+    >
+      {{ displayWith(item) }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      #input
+      [formControl]="inputControl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="true"
+      [matTooltip]="filteredList$$.value.length === 0 ? 'Es gibt keine weiteren Auswahlmöglichkeiten' : null"
+      (blur)="checkInputForData()"
+      #trigger="matAutocompleteTrigger"
+    />
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option (click)="$event.stopPropagation()" *ngFor="let item of filteredList$$ | async" [value]="item">
+      {{ displayWith(item) }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

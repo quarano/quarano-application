@@ -108,12 +108,14 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineEndDate, error) }}
       </mat-error>
     </mat-form-field>
-    <qro-multiple-autocomplete
+    <qro-lazy-autocomplete
+      keyProperty="caseId"
       (completeMethod)="onIndexCaseSearch($event)"
       [selectableItems]="selectableIndexCases"
-      [nameProperties]="['firstName', 'lastName', 'dateOfBirth']"
+      [displayWith]="showIndexCaseItem"
       [control]="formGroup.controls.originCases"
-    ></qro-multiple-autocomplete>
+      placeholder="Ursprungsfälle"
+    ></qro-lazy-autocomplete>
   </fieldset>
   <fieldset class="mb-3">
     <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>

@@ -26,6 +26,7 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseDetailDto, IndexCaseService, CaseListItemDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
+import { DateFunctions } from '@qro/shared/util-date';
 
 export interface CaseDetailResult {
   caseDetail: CaseDetailDto;
@@ -174,6 +175,13 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         this.formGroup.get('testDate').setValue(null);
       }
     });
+  }
+
+  showIndexCaseItem(item: CaseListItemDto): string {
+    if (!item) return '';
+    return `${item.firstName} ${item.lastName} (${
+      item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
+    })`;
   }
 
   setValidators() {
