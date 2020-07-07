@@ -1,3 +1,4 @@
+<p>{{ caseDetail._embedded.originCases | json }}</p>
 <form [formGroup]="formGroup" (ngSubmit)="submitForm(editForm, false)" class="mt-3" #editForm="ngForm">
   <fieldset class="mb-3">
     <legend>Basisdaten</legend>
