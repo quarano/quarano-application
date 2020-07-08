@@ -5,10 +5,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.web.QuaranoHttpHeaders;
+import quarano.department.RegistrationManagement;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.activation.ActivationCode;
 import quarano.department.activation.ActivationCodeDataInitializer;
 import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson;
@@ -18,12 +21,12 @@ import quarano.tracking.TrackedPersonRepository;
 import java.util.Map;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,12 +43,14 @@ class RegistrationWebIntegrationTests {
 	private final ActivationCodeService codes;
 	private final HalLinkDiscoverer links;
 	private final MessageSourceAccessor messages;
+	private final RegistrationManagement registration;
 
 	@Test
 	public void registerNewAccountForClientSuccess() throws Exception {
 
 		// Given
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var activation = createActivation();
+		var person = activation.getPerson();
 
 		var password = "myPassword";
 		var username = "testusername";
@@ -55,7 +60,7 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+				.clientCode(activation.getCode()) //
 				.build();
 
 		// when
@@ -83,8 +88,7 @@ class RegistrationWebIntegrationTests {
 	@Test
 	public void registerNewAccountWithInvalidActivationCodeFails() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
-
+		var activation = createActivation();
 		var password = "myPassword";
 		var username = "testusername";
 
@@ -92,7 +96,7 @@ class RegistrationWebIntegrationTests {
 				.username(username) //
 				.password(password) //
 				.passwordConfirm(password) //
-				.dateOfBirth(person.getDateOfBirth()) //
+				.dateOfBirth(activation.getPerson().getDateOfBirth()) //
 				.clientCode(UUID.randomUUID()) //
 				.build();
 
@@ -110,7 +114,8 @@ class RegistrationWebIntegrationTests {
 	@Test
 	public void registerAccountWithExistingUsernameFails() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var activation = createActivation();
+		var person = activation.getPerson();
 		var password = "myPassword";
 
 		var registrationDto = RegistrationDto.builder() //
@@ -118,7 +123,7 @@ class RegistrationWebIntegrationTests {
 				.password(password) //
 				.passwordConfirm(password) //
 				.dateOfBirth(person.getDateOfBirth()) //
-				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+				.clientCode(activation.getCode()) //
 				.build();
 
 		// when
@@ -130,20 +135,6 @@ class RegistrationWebIntegrationTests {
 		assertThat(document.read("$.username", String.class)).isEqualTo(invalidUsernameMessage);
 
 		checkLoginFails("DemoAccount", password);
-	}
-
-	@Test
-	@Disabled
-	void testCheckClientCodeWithValidCode() throws Exception {
-
-		var code = ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1;
-
-		String resultAsString = mvc
-				.perform(get("/client/checkcode/" + code).header("Origin", "*").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andReturn().getResponse().getContentAsString();
-		Assertions.assertTrue(Boolean.parseBoolean(resultAsString));
-
 	}
 
 	@Test
@@ -316,5 +307,25 @@ class RegistrationWebIntegrationTests {
 				.andExpect(status().isBadRequest()) //
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
 				.andReturn().getResponse().getContentAsString();
+	}
+
+	private PersonAndCode createActivation() {
+
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var activationCode = registration.initiateRegistration(cases.findByTrackedPerson(person).orElseThrow()).get();
+
+		return new PersonAndCode(person, activationCode);
+	}
+
+	@Value
+	private static class PersonAndCode {
+
+		TrackedPerson person;
+		ActivationCode code;
+
+		@SuppressWarnings("null")
+		UUID getCode() {
+			return (UUID) ReflectionTestUtils.getField(code.getId(), "activationCodeId");
+		}
 	}
 }

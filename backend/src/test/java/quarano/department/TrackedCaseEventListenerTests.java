@@ -125,6 +125,8 @@ class TrackedCaseEventListenerTests {
 	private static TrackedCase createCaseFor(TrackedPerson person, CaseType type) {
 
 		return new TrackedCase(person, type, new Department(MANNHEIM)) //
+				.markInRegistration() //
+				.markRegistrationCompleted() //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}

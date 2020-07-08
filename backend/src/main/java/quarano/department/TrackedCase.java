@@ -186,6 +186,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public TrackedCase submitEnrollmentDetails() {
 
+		assertStatus(Status.REGISTERED, "Cannot submit enrollment details for case %s in state %s!", id, status);
+
 		if (trackedPerson.isDetailsCompleted()) {
 			this.enrollment.markDetailsSubmitted();
 		}
@@ -203,6 +205,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	public TrackedCase submitQuestionnaire(Questionnaire questionnaire) {
+
+		assertStatus(Status.REGISTERED, "Cannot submit questionnaire for case %s in state %s!", id, status);
 
 		this.questionnaire = questionnaire;
 		log.debug("Submitting questionnaire {}.", questionnaire);
@@ -310,9 +314,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	private static void assertStatus(Status status, String message, Object... args) {
+	private void assertStatus(Status status, String message, Object... args) {
 
-		if (!status.equals(status)) {
+		if (!this.status.equals(status)) {
 			throw new IllegalStateException(String.format(message, args));
 		}
 	}

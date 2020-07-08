@@ -36,6 +36,8 @@ class TrackedCaseUnitTests {
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
 		return new TrackedCase(person, CaseType.INDEX, department) //
+				.markInRegistration() //
+				.markRegistrationCompleted() //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
@@ -97,7 +99,9 @@ class TrackedCaseUnitTests {
 		var person = TrackedPersonDataInitializer.createMarkus();
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, department);
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, department) //
+				.markInRegistration() //
+				.markRegistrationCompleted();
 
 		assertThatExceptionOfType(EnrollmentException.class) //
 				.isThrownBy(() -> trackedCase.submitQuestionnaire(new MinimalQuestionnaire()));

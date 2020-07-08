@@ -50,6 +50,8 @@ class TrackingEventListenerUnitTests {
 
 		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
+				.markInRegistration() //
+				.markRegistrationCompleted() //
 				.submitEnrollmentDetails();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de")) //
@@ -230,7 +232,10 @@ class TrackingEventListenerUnitTests {
 	}
 
 	private TrackedCase createIndexCaseFor(TrackedPerson person) {
+
 		return new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
+				.markInRegistration() //
+				.markRegistrationCompleted() //
 				.submitEnrollmentDetails() //
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
