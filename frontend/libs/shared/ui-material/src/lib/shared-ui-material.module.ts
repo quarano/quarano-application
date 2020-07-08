@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MatTreeModule } from '@angular/material/tree';
-import {
-  MatMomentDateModule, MAT_MOMENT_DATE_FORMATS,
-} from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -31,6 +29,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const materialModules = [
   MatButtonModule,
@@ -61,7 +60,8 @@ const materialModules = [
   MatStepperModule,
   MatCheckboxModule,
   MatMenuModule,
-  MatTabsModule
+  MatTabsModule,
+  MatProgressSpinnerModule,
 ];
 
 @NgModule({
@@ -70,7 +70,7 @@ const materialModules = [
   declarations: [],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de' },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
-  ]
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ],
 })
-export class SharedUiMaterialModule { }
+export class SharedUiMaterialModule {}

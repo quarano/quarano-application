@@ -24,6 +24,11 @@ export interface CaseDetailDto extends HalResponse {
   extReferenceNumber: string;
   indexContacts?: ContactDto[];
   contactCount: number;
+  _embedded: CaseDetailsEmbeddedDto;
+}
+
+export interface CaseDetailsEmbeddedDto {
+  originCases: [];
 }
 
 export enum CaseStatus {

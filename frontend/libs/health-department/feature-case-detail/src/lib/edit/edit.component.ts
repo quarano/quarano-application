@@ -24,8 +24,9 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto } from '@qro/health-department/domain';
+import { CaseDetailDto, IndexCaseService, CaseListItemDto } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
+import { DateFunctions } from '@qro/shared/util-date';
 
 export interface CaseDetailResult {
   caseDetail: CaseDetailDto;
@@ -42,6 +43,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
+  selectableIndexCases: CaseListItemDto[] = [];
 
   get isIndexCase() {
     return this.type === ClientType.Index;
@@ -61,7 +63,11 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   submittedValues: Subject<CaseDetailResult> = new Subject<CaseDetailResult>();
 
-  constructor(private dialog: MatDialog, private snackbarService: SnackbarService) {}
+  constructor(
+    private dialog: MatDialog,
+    private snackbarService: SnackbarService,
+    public indexCaseService: IndexCaseService
+  ) {}
 
   ngOnInit(): void {
     this.createFormGroup();
@@ -135,6 +141,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         Validators.maxLength(40),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber),
       ]),
+      originCases: new FormControl([]),
     });
     this.setValidators();
     this.subs.add(
@@ -144,6 +151,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
     );
+  }
+
+  onIndexCaseSearch(searchTerm: string) {
+    this.indexCaseService.searchCases(searchTerm).subscribe((result) => (this.selectableIndexCases = [...result]));
   }
 
   onTestDateAdded() {
@@ -164,6 +175,13 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         this.formGroup.get('testDate').setValue(null);
       }
     });
+  }
+
+  showIndexCaseItem(item: CaseListItemDto): string {
+    if (!item) return '';
+    return `${item.firstName} ${item.lastName} (${
+      item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
+    })`;
   }
 
   setValidators() {

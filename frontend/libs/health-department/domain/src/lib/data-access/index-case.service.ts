@@ -28,6 +28,12 @@ export class IndexCaseService {
     );
   }
 
+  searchCases(searchTerm: string): Observable<CaseListItemDto[]> {
+    return this.httpClient
+      .get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}`)
+      .pipe(map((res) => res?._embedded?.cases));
+  }
+
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),

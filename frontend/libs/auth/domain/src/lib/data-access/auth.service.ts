@@ -4,6 +4,7 @@ import { ChangePasswordDto } from './../model/change-password';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserDto } from '../model/user';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
