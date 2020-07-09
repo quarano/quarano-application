@@ -1,3 +1,4 @@
+import { CaseSearchItem } from './../model/case-search-item';
 import { share, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@qro/shared/util-data-access';
@@ -28,9 +29,9 @@ export class IndexCaseService {
     );
   }
 
-  searchCases(searchTerm: string): Observable<CaseListItemDto[]> {
+  searchCases(searchTerm: string): Observable<CaseSearchItem[]> {
     return this.httpClient
-      .get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}`)
+      .get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}&projection=select`)
       .pipe(map((res) => res?._embedded?.cases));
   }
 

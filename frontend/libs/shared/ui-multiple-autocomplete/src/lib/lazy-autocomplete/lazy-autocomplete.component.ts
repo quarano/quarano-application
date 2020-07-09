@@ -1,3 +1,4 @@
+import { HalResponse } from '@qro/shared/util-data-access';
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -13,30 +14,29 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 export class LazyAutocompleteComponent implements OnInit, OnDestroy {
   @Input() control: FormControl;
   @Input() placeholder: string;
-  private _selectableItems: any[] = [];
-  @Input() get selectableItems(): any[] {
+  private _selectableItems: HalResponse[] = [];
+  @Input() get selectableItems(): HalResponse[] {
     return this._selectableItems;
   }
 
-  set selectableItems(val: any[]) {
+  set selectableItems(val: HalResponse[]) {
     this._selectableItems = val;
     if (typeof this.searchTerm === 'string') {
       this._filter(this.searchTerm);
     }
   }
-  @Input() displayWith: ((value: any) => string) | null;
-  @Input() keyProperty: string;
-  @Output() removed = new EventEmitter<any>();
-  @Output() added = new EventEmitter<any>();
+  @Input() displayWith: ((value: HalResponse) => string) | null;
+  @Output() removed = new EventEmitter<HalResponse>();
+  @Output() added = new EventEmitter<HalResponse>();
   @Output() itemNotFound = new EventEmitter<string>();
   @Output() completeMethod: EventEmitter<string> = new EventEmitter();
-  selectedItems: any[] = [];
+  selectedItems: HalResponse[] = [];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   @ViewChild('auto') autocomplete;
   destroy$: Subject<void> = new Subject<void>();
-  filteredList$$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  filteredList$$: BehaviorSubject<HalResponse[]> = new BehaviorSubject<HalResponse[]>([]);
   private searchTerm = '';
 
   ngOnInit() {
@@ -46,13 +46,13 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         filter((data) => !!data)
       )
-      .subscribe((data: any[]) => {
+      .subscribe((data: HalResponse[]) => {
         this.selectableItems = data;
         this.control.markAsDirty();
         data.forEach((value) => this.added.emit(value));
       });
 
-    this.selectableItems = this.control.value;
+    this.selectedItems = this.control.value;
 
     this.inputControl.valueChanges
       .pipe(
@@ -81,9 +81,9 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  get prefilteredList(): any[] {
+  get prefilteredList(): HalResponse[] {
     return this.selectableItems.reduce((total, item) => {
-      if (!this.selectedItems.find((i) => i[this.keyProperty] === item[this.keyProperty])) {
+      if (!this.selectedItems.find((i) => i._links.self.href === item._links.self.href)) {
         total.push(item);
       }
       return total;
@@ -104,7 +104,7 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
 
   private _filter(searchTerm: string) {
     let arrayToReturn = this.prefilteredList.filter(
-      (item) => !this.selectedItems.find((i) => i[this.keyProperty] === item[this.keyProperty])
+      (item) => !this.selectedItems.find((i) => i._links.self.href === item._links.self.href)
     );
 
     if (!searchTerm) {
@@ -146,7 +146,7 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   getNameById(id: string) {
-    const item = this.selectableItems.find((i) => i[this.keyProperty] === id);
+    const item = this.selectableItems.find((i) => i._links.self.href === id);
     if (item) {
       return this.displayWith(item);
     }
