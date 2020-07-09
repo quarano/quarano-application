@@ -18,13 +18,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Subject, timer } from 'rxjs';
+import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto, IndexCaseService, CaseListItemDto } from '@qro/health-department/domain';
+import { CaseDetailDto, IndexCaseService, CaseListItemDto, CaseSearchItem } from '@qro/health-department/domain';
 import { ClientType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
@@ -43,7 +43,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   ClientType = ClientType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
-  selectableIndexCases: CaseListItemDto[] = [];
+  selectableIndexCases: CaseSearchItem[] = [];
 
   get isIndexCase() {
     return this.type === ClientType.Index;
@@ -141,7 +141,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         Validators.maxLength(40),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber),
       ]),
-      originCases: new FormControl([]),
+      originCases: new FormControl(this.caseDetail?._embedded?.originCases || []),
     });
     this.setValidators();
     this.subs.add(
@@ -238,6 +238,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       if (this.caseDetail?.caseId) {
         submitData.caseId = this.caseDetail.caseId;
       }
+      submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
+      console.log(submitData);
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
     }
   }

@@ -1,3 +1,4 @@
+import { CaseSearchItem } from './case-search-item';
 import { HalResponse, Link } from '@qro/shared/util-data-access';
 import { CaseCommentDto } from './case-comment';
 import { ContactDto } from './contact';
@@ -24,11 +25,12 @@ export interface CaseDetailDto extends HalResponse {
   extReferenceNumber: string;
   indexContacts?: ContactDto[];
   contactCount: number;
+  originCases: string[];
   _embedded: CaseDetailsEmbeddedDto;
 }
 
 export interface CaseDetailsEmbeddedDto {
-  originCases: [];
+  originCases: CaseSearchItem[];
 }
 
 export enum CaseStatus {

@@ -19,3 +19,4 @@ export * from './lib/resolvers/index-case-action-list.resolver';
 export * from './lib/resolvers/index-case-case-list.resolver';
 export * from './lib/model/contact-list-item';
 export * from './lib/data-access/index-case.service';
+export * from './lib/model/case-search-item';
