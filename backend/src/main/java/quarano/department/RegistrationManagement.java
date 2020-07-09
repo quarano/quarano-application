@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Transactional
 @Component
@@ -27,7 +28,15 @@ public class RegistrationManagement {
 	private final @NonNull TrackedPersonRepository trackedPeople;
 	private final @NonNull TrackedCaseRepository cases;
 
+	/**
+	 * Initiates the registration for the given {@link TrackedCase}.
+	 *
+	 * @param trackedCase must not be {@literal null}.
+	 * @return
+	 */
 	public Try<ActivationCode> initiateRegistration(TrackedCase trackedCase) {
+
+		Assert.notNull(trackedCase, "TrackedCase must not be null!");
 
 		var departmentId = trackedCase.getDepartment().getId();
 		var personId = trackedCase.getTrackedPerson().getId();

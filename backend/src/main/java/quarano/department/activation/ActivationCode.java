@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import quarano.account.Account;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
@@ -73,6 +74,14 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 		return !isExpired();
 	}
 
+	public boolean isRedeemed() {
+		return status == ActivationCodeStatus.REDEEMED;
+	}
+
+	public boolean isCancelled() {
+		return status == ActivationCodeStatus.CANCELED;
+	}
+
 	/**
 	 * Checks validity of the code and sets the state of the code to REDEEMED. Only possible if code was in status
 	 * 'WAITING_FOR_ACTIVATION' before.
@@ -87,18 +96,22 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 				.onSuccess(it -> it.status = ActivationCodeStatus.REDEEMED); //
 	}
 
-	public boolean isRedeemed() {
-		return status == ActivationCodeStatus.REDEEMED;
-	}
-
 	/**
-	 * Deactivates an existing code, so that it cannot be used anymore
+	 * Deactivates an existing code, so that it cannot be used to activate an {@link Account} anymore. TODO: Should cancel
+	 * be an idempotent operation? Currently we can only cancel {@link ActivationCode}s that are waiting for activation.
+	 * Trying to cancel already cancelled ones
 	 *
 	 * @return
 	 */
-	public Try<ActivationCode> cancel() {
+	Try<ActivationCode> cancel() {
 
-		return Try.success(this) //
+		var result = Try.success(this);
+
+		if (isCancelled()) {
+			return result;
+		}
+
+		return result //
 				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled)
 				.onSuccess(it -> it.status = ActivationCodeStatus.CANCELED);
 	}

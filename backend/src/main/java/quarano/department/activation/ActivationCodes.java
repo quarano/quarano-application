@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.data.util.Streamable;
 
@@ -33,6 +34,20 @@ class ActivationCodes implements Streamable<ActivationCode> {
 		return codes.stream() //
 				.filter(ActivationCode::isWaitingForActivation) //
 				.findFirst();
+	}
+
+	/**
+	 * Cancels all {@link ActivationCode}s contained
+	 *
+	 * @param callback
+	 * @return
+	 */
+	ActivationCodes cancelAll(Consumer<ActivationCode> callback) {
+
+		codes.map(ActivationCode::cancel) //
+				.forEach(it -> it.andThen(callback));
+
+		return this;
 	}
 
 	/*
