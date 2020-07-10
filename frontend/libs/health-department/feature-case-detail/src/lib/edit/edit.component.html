@@ -109,12 +109,15 @@
         {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineEndDate, error) }}
       </mat-error>
     </mat-form-field>
+  </fieldset>
+  <fieldset class="mb-3">
+    <legend>Ursprungsfälle</legend>
     <qro-lazy-autocomplete
       (completeMethod)="onIndexCaseSearch($event)"
       [selectableItems]="selectableIndexCases"
       [displayWith]="showIndexCaseItem"
       [control]="formGroup.controls.originCases"
-      placeholder="Ursprungsfälle"
+      placeholder="Ursprungsfälle wählen"
     ></qro-lazy-autocomplete>
   </fieldset>
   <fieldset class="mb-3">
