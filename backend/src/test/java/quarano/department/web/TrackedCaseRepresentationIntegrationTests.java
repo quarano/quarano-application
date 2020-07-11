@@ -17,12 +17,17 @@ package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.EnumMessageSourceResolvable;
 import quarano.department.CaseType;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
+import quarano.diary.DiaryEntry;
+import quarano.diary.Slot;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.util.TestUtils;
 
@@ -35,6 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+
+import java.util.UUID;
 
 /**
  * @author Oliver Drotbohm
@@ -91,5 +98,25 @@ class TrackedCaseRepresentationIntegrationTests {
 		var document = JsonPath.parse(result, Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS));
 
 		assertThat(document.read("$.originCases", String.class)).isNull();
+	}
+
+	@Test
+	void mapsDiaryEntryToDiaryEntrySummary() {
+
+		var source = DiaryEntry.of(Slot.now(), TrackedPerson.TrackedPersonIdentifier.of(UUID.randomUUID()))
+				.setBodyTemperature(BodyTemperature.of(40.0f));
+
+		var result = representations.toDiaryEntrySummary(source);
+
+		assertThat(result.getId()).isEqualTo(source.getId().toString());
+		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());
+		assertThat(result.getReportedAt()).isEqualTo(source.getDateTime());
+		assertThat(result.getSlot()).containsEntry("date", source.getSlot().getDate());
+		assertThat(result.getSlot()).containsEntry("timeOfDay", source.getSlot().getTimeOfDay().name().toLowerCase());
+		assertThat(result.getSymptoms()).allSatisfy(it -> {
+			assertThat(it.getId()).isNotNull();
+			assertThat(it.getName()).isNotBlank();
+			assertThat(it.isCharacteristic()).isNotNull();
+		});
 	}
 }
