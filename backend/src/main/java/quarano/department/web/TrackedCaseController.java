@@ -21,6 +21,7 @@ import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
+import quarano.diary.DiaryManagement;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -61,6 +62,7 @@ class TrackedCaseController {
 
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull DiaryManagement diaries;
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull MessageSourceAccessor accessor;
 	private final @NonNull TrackedCaseProperties configuration;
@@ -145,6 +147,19 @@ class TrackedCaseController {
 				.map(representations::toRepresentation));
 	}
 
+	@GetMapping("/api/hd/cases/{identifier}/diary")
+	RepresentationModel<?> getDiaryOfCase(@PathVariable TrackedCaseIdentifier identifier) {
+
+		var diaryEntryRepresentations = cases.findById(identifier)
+				.stream()
+				.flatMap(this::createDiaryEntrySummaries)
+				.collect(Collectors.toList());
+
+		return HalModelBuilder.halModel()
+				.embed(diaryEntryRepresentations, TrackedCaseDiaryEntrySummary.class)
+				.build();
+	}
+
 	@GetMapping("/api/hd/cases/{identifier}/contacts")
 	RepresentationModel<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn Department department) {
@@ -152,7 +167,7 @@ class TrackedCaseController {
 		var contactRepresentations = cases.findById(identifier)
 				.filter(it -> it.belongsTo(department))
 				.stream()//
-				.flatMap(this::createSummaries)//
+				.flatMap(this::createContactSummaries)//
 				.collect(Collectors.toList());
 
 		return HalModelBuilder.halModel()
@@ -328,12 +343,20 @@ class TrackedCaseController {
 				.build();
 	}
 
-	private Stream<TrackedCaseContactSummary> createSummaries(TrackedCase trackedCase) {
+	private Stream<TrackedCaseContactSummary> createContactSummaries(TrackedCase trackedCase) {
 
 		var encounters = trackedCase.getTrackedPerson().getEncounters();
 
 		return encounters.getContactDatesGroupedByContactPerson().entrySet().stream()//
 				.map(it -> representations.toContactSummary(it.getKey(), it.getValue()));
+	}
+
+	private Stream<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
+
+		var diary = diaries.findDiaryFor(trackedCase.getTrackedPerson());
+
+		return diary.stream()
+				.map(representations::toDiaryEntrySummary);
 	}
 
 	@SuppressWarnings("null")

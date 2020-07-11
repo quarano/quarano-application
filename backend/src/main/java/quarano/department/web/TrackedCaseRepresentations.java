@@ -23,6 +23,7 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
@@ -123,6 +124,10 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
+	}
+
+	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry) {
+		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper);
 	}
 
 	QuestionnaireDto toRepresentation(Questionnaire report) {
