@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  DefaultDataServiceConfig,
-  EntityActionOptions,
-  EntityCollectionServiceBase,
-  EntityCollectionServiceElementsFactory,
-} from '@ngrx/data';
+import { EntityActionOptions, EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
 import { CaseDetailDto } from '@qro/health-department/domain';
 import { Observable } from 'rxjs';
 
