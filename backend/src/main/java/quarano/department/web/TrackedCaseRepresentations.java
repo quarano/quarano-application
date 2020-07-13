@@ -49,6 +49,7 @@ import java.lang.annotation.Target;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -87,6 +88,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Objects;
 
+import de.quarano.sormas.client.model.CaseDataDto;
+import de.quarano.sormas.client.model.PersonReferenceDto;
+
 /**
  * @author Oliver Drotbohm
  * @author Jens Kutzsche
@@ -112,6 +116,18 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	 */
 	@Override
 	public TrackedCaseSummary toSummary(TrackedCase trackedCase) {
+		return new TrackedCaseSummary(trackedCase, messages);
+	}
+	
+	public TrackedCaseSummary toSummary(CaseDataDto caseData) {
+		var person = caseData.getPerson();
+		var district = caseData.getDistrict();
+		OffsetDateTime creationDate = caseData.getCreationDate();
+		
+		var trackedPerson = new TrackedPerson(person.getFirstName(), person.getLastName());
+		var department = new Department(district.getCaption());
+		var trackedCase = new TrackedCase(trackedPerson, CaseType.INDEX, department);
+		
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
 

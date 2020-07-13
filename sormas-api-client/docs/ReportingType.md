@@ -1,0 +1,13 @@
+# ReportingType
+
+## Enum
+
+- `DOCTOR` (value: `"DOCTOR"`)
+- `FORWARDING` (value: `"FORWARDING"`)
+- `HOSPITAL_OR_STATIONARY_CARE` (value: `"HOSPITAL_OR_STATIONARY_CARE"`)
+- `COMMUNITY_FACILITY` (value: `"COMMUNITY_FACILITY"`)
+- `LABORATORY` (value: `"LABORATORY"`)
+- `OWN_DETERMINATION` (value: `"OWN_DETERMINATION"`)
+- `NOT_DETERMINABLE` (value: `"NOT_DETERMINABLE"`)
+- `NOT_RAISED` (value: `"NOT_RAISED"`)
+- `OTHER` (value: `"OTHER"`)
