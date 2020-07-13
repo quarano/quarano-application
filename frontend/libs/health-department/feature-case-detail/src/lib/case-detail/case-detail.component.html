@@ -1,7 +1,7 @@
-<mat-card class="form__card--small form__card--animated">
+<mat-card class="form__card--small form__card--animated" *ngIf="caseDetail$ | async as caseDetail">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title *ngIf="caseDetail$ | async as caseDetail; else newCase">
+    <mat-card-title *ngIf="caseDetail.caseId; else newCase">
       <span>
         {{ (type$ | async) === ClientType.Index ? 'Falldetails' : 'Kontaktperson' }} {{ caseDetail.firstName }}
         {{ caseDetail.lastName }}
@@ -29,8 +29,8 @@
       </mat-card-title>
     </ng-template>
   </mat-card-header>
-  <mat-card-content>
-    <div class="button-area" *ngIf="caseDetail$ | async as caseDetail">
+  <mat-card-content *ngIf="caseDetail$ | async as caseDetail">
+    <div class="button-area" *ngIf="caseDetail.caseId">
       <button
         #start_tracking_btn
         (click)="startTracking(caseDetail)"
@@ -62,29 +62,25 @@
         Fall abschließen
       </button>
     </div>
-    <mat-tab-group #tabs [selectedIndex]="tabIndex">
-      <mat-tab [label]="(type$$ | async) === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
+    <mat-tab-group #tabs [selectedIndex]="tabIndex" *ngIf="type$ | async as type">
+      <mat-tab [label]="type === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
         <p class="hint secondary-text-color">
           Pflichteingaben sind mit * markiert
         </p>
         <qro-client-edit
-          [caseDetail]="caseDetail$ | async"
+          [caseDetail]="caseDetail"
           (submittedValues)="saveCaseData($event)"
-          [type]="type$ | async"
+          [type]="type"
           (changedToIndex)="changeToIndexType()"
           [loading]="personalDataLoading"
         >
         </qro-client-edit>
       </mat-tab>
-      <mat-tab *ngIf="caseAction$ | async">
+      <mat-tab *ngIf="caseAction$ | async as caseAction">
         <ng-template mat-tab-label>
           <span
             *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
-            [matBadge]="
-              (
-                (caseAction$ | async).anomalies.health.length + (caseAction$ | async).anomalies.process.length
-              ).toString()
-            "
+            [matBadge]="(caseAction.anomalies.health.length + caseAction.anomalies.process.length).toString()"
             matBadgeOverlap="false"
             matBadgeSize="small"
             matBadgeColor="warn"
@@ -92,7 +88,7 @@
           >
           <ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
         </ng-template>
-        <qro-client-action [caseAction]="caseAction$ | async" [type]="type$ | async"></qro-client-action>
+        <qro-client-action [caseAction]="caseAction" [type]="type"></qro-client-action>
       </mat-tab>
       <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{ caseComments.length }})">
         <ng-template mat-tab-label>
@@ -127,7 +123,7 @@
         </ng-template>
         <qro-contact-list
           [contacts]="contacts"
-          [caseName]="(caseDetail$ | async).firstName + ' ' + (caseDetail$ | async).lastName"
+          [caseName]="caseDetail.firstName + ' ' + caseDetail.lastName"
         ></qro-contact-list>
       </mat-tab>
     </mat-tab-group>

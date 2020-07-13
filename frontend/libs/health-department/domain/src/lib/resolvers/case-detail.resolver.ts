@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { CaseDetailDto } from '../model/case-detail';
+import { CaseDetailDto, GetEmptyCaseDetail } from '../model/case-detail';
 import { HealthDepartmentService } from '../data-access/health-department.service';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class CaseDetailResolver implements Resolve<CaseDetailDto> {
         })
       );
     } else {
-      return of(null);
+      return of(GetEmptyCaseDetail());
     }
   }
 }

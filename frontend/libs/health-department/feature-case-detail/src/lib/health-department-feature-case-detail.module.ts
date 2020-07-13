@@ -33,6 +33,7 @@ const routes: Routes = [
   {
     path: ':type',
     component: CaseDetailComponent,
+    resolve: { case: CaseDetailResolver },
   },
 ];
 

@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -32,7 +32,7 @@ import { ClientType } from '@qro/auth/api';
 })
 export class CaseDetailComponent implements OnDestroy {
   caseId: string;
-  type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
+  private type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
   type$: Observable<ClientType> = this.type$$.asObservable();
   ClientType = ClientType;
   commentLoading = false;
@@ -64,11 +64,7 @@ export class CaseDetailComponent implements OnDestroy {
     private apiService: ApiService,
     private dialog: MatDialog
   ) {
-    this.subs.add(
-      this.route.params.subscribe((_) => {
-        this.initData();
-      })
-    );
+    this.initData();
   }
 
   initData(): void {

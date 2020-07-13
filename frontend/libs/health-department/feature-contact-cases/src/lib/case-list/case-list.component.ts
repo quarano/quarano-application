@@ -130,7 +130,6 @@ export class CaseListComponent implements OnInit, OnDestroy {
         return currentTerm + (obj as { [key: string]: any })[key] + '◬';
       }, '')
       .toLowerCase();
-    console.log(dataStr);
     const transformedFilter = filter.trim().toLowerCase();
 
     return dataStr.indexOf(transformedFilter) !== -1;

@@ -200,7 +200,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateFormGroup(caseDetailDto: CaseDetailDto) {
-    if (caseDetailDto && this.formGroup) {
+    if (caseDetailDto && caseDetailDto.caseId && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];
@@ -239,7 +239,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         submitData.caseId = this.caseDetail.caseId;
       }
       submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
-      console.log(submitData);
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
     }
   }

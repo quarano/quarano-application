@@ -40,3 +40,19 @@ export enum CaseStatus {
   InNachverfolgung = 'in Nachverfolgung',
   Abgeschlossen = 'abgeschlossen',
 }
+
+export function GetEmptyCaseDetail(): CaseDetailDto {
+  return {
+    firstName: null,
+    lastName: null,
+    quarantineEndDate: null,
+    quarantineStartDate: null,
+    dateOfBirth: null,
+    infected: null,
+    caseTypeLabel: null,
+    extReferenceNumber: null,
+    contactCount: null,
+    originCases: [],
+    _embedded: { originCases: [] },
+  };
+}

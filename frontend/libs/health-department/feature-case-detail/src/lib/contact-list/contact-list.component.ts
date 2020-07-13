@@ -33,7 +33,6 @@ export class ContactListComponent implements OnInit {
   }
 
   onSelect(event) {
-    console.log(event);
     const selectedItem = event?.selected[0] as RowViewModel;
     if (selectedItem?.caseId && selectedItem?.caseType) {
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
