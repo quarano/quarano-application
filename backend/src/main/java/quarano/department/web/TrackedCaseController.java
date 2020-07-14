@@ -68,18 +68,18 @@ class TrackedCaseController {
 	private final @NonNull SmartValidator validator;
 
 	@GetMapping(path = "/api/hd/cases")
-	RepresentationModel<?> getCases(@LoggedIn Department department, //
-			@RequestParam("q") Optional<String> query, //
+	RepresentationModel<?> getCases(@LoggedIn Department department,
+			@RequestParam("q") Optional<String> query,
 			@RequestParam("projection") Optional<String> projection) {
 
-		var summaries = cases.findFiltered(query, department.getId()) //
-				.map(projection.filter(it -> it.equals("select")) //
-						.<Function<TrackedCase, Object>> map(it -> representations::toSelect) //
-						.orElse(representations::toSummary)) //
+		var summaries = cases.findFiltered(query, department.getId())
+				.map(projection.filter(it -> it.equals("select"))
+						.<Function<TrackedCase, Object>> map(it -> representations::toSelect)
+						.orElse(representations::toSummary))
 				.toList();
 
-		return HalModelBuilder.emptyHalModel() //
-				.embed(summaries, TrackedCaseSummary.class) //
+		return HalModelBuilder.emptyHalModel()
+				.embed(summaries, TrackedCaseSummary.class)
 				.build();
 	}
 
@@ -115,8 +115,8 @@ class TrackedCaseController {
 
 			var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
 
-			return ResponseEntity //
-					.created(URI.create(fromMethodCall(location).toUriString())) //
+			return ResponseEntity
+					.created(URI.create(fromMethodCall(location).toUriString()))
 					.body(representations.toRepresentation(cases.save(trackedCase)));
 		});
 	}
@@ -130,17 +130,17 @@ class TrackedCaseController {
 	@GetMapping("/api/hd/cases/{identifier}")
 	HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
-		return ResponseEntity.of(cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
+		return ResponseEntity.of(cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
 				.map(representations::toRepresentation));
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}/questionnaire")
 	HttpEntity<?> getQuestionnaire(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
-		return ResponseEntity.of(cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
-				.map(TrackedCase::getQuestionnaire) //
+		return ResponseEntity.of(cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
+				.map(TrackedCase::getQuestionnaire)
 				.map(representations::toRepresentation));
 	}
 
@@ -148,22 +148,22 @@ class TrackedCaseController {
 	RepresentationModel<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn Department department) {
 
-		var contactRepresentations = cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
+		var contactRepresentations = cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
 				.stream()//
 				.flatMap(this::createSummaries)//
 				.collect(Collectors.toList());
 
-		return HalModelBuilder.halModel() //
-				.embed(contactRepresentations, TrackedCaseContactSummary.class) //
+		return HalModelBuilder.halModel()
+				.embed(contactRepresentations, TrackedCaseContactSummary.class)
 				.build();
 	}
 
 	// PUT Mapping for transformation into index case
 
 	@PutMapping("/api/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, //
-			@RequestBody TrackedCaseDto.Input payload, //
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
+			@RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
 
 		var existing = cases.findById(identifier).orElse(null);
@@ -183,9 +183,9 @@ class TrackedCaseController {
 	HttpEntity<?> concludeCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
-		return ResponseEntity.of(cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
-				.map(TrackedCase::conclude) //
+		return ResponseEntity.of(cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
+				.map(TrackedCase::conclude)
 				.map(cases::save));
 	}
 
@@ -193,8 +193,8 @@ class TrackedCaseController {
 	HttpEntity<?> postComment(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account,
 			@Valid @RequestBody CommentInput payload, Errors errors) {
 
-		var trackedCase = cases.findById(identifier) //
-				.filter(it -> it.belongsTo(account.getDepartmentId())) //
+		var trackedCase = cases.findById(identifier)
+				.filter(it -> it.belongsTo(account.getDepartmentId()))
 				.orElse(null);
 
 		if (trackedCase == null) {
@@ -213,17 +213,17 @@ class TrackedCaseController {
 	@GetMapping("/api/enrollments")
 	Stream<?> allEnrollments() {
 
-		return cases.findAll() //
-				.map(TrackedCase::getEnrollment) //
-				.map(EnrollmentDto::new) //
+		return cases.findAll()
+				.map(TrackedCase::getEnrollment)
+				.map(EnrollmentDto::new)
 				.stream();
 	}
 
 	@GetMapping("/api/enrollment")
 	HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
 
-		var map = cases.findByTrackedPerson(person) //
-				.map(TrackedCase::getEnrollment) //
+		var map = cases.findByTrackedPerson(person)
+				.map(TrackedCase::getEnrollment)
 				.map(EnrollmentDto::new);
 
 		return ResponseEntity.of(map);
@@ -239,25 +239,25 @@ class TrackedCaseController {
 
 		tracking.updateTrackedPersonDetails(dto, errors, user);
 
-		cases.findByTrackedPerson(user) //
-				.map(TrackedCase::submitEnrollmentDetails) //
+		cases.findByTrackedPerson(user)
+				.map(TrackedCase::submitEnrollmentDetails)
 				.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 
-		return ResponseEntity.ok() //
-				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+		return ResponseEntity.ok()
+				.header(HttpHeaders.LOCATION, getEnrollmentLink())
 				.build();
 	}
 
 	@GetMapping("/api/enrollment/questionnaire")
 	HttpEntity<?> showQuestionaire(@LoggedIn TrackedPerson person) {
 
-		var report = cases.findByTrackedPerson(person) //
-				.map(TrackedCase::getQuestionnaire) //
-				.map(it -> representations.toRepresentation(it)) //
+		var report = cases.findByTrackedPerson(person)
+				.map(TrackedCase::getQuestionnaire)
+				.map(it -> representations.toRepresentation(it))
 				.orElseGet(() -> new QuestionnaireDto());
 
-		return ResponseEntity.ok() //
-				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+		return ResponseEntity.ok()
+				.header(HttpHeaders.LOCATION, getEnrollmentLink())
 				.body(report);
 	}
 
@@ -265,12 +265,12 @@ class TrackedCaseController {
 	HttpEntity<?> addQuestionaire(@Validated @RequestBody QuestionnaireDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
-		var trackedCase = cases.findByTrackedPerson(person) //
+		var trackedCase = cases.findByTrackedPerson(person)
 				.orElseThrow(() -> new IllegalStateException("No case found for tracked person " + person.getId() + "!"));
 
 		if (!trackedCase.getEnrollment().isCompletedPersonalData()) {
 
-			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED) //
+			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
 					.body(accessor.getMessage("enrollment.detailsSubmissionRequired"));
 		}
 
@@ -285,7 +285,7 @@ class TrackedCaseController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		Questionnaire report = trackedCase.getQuestionnaire() == null //
+		Questionnaire report = trackedCase.getQuestionnaire() == null
 				? representations.from(dto)
 				: representations.from(dto, trackedCase.getQuestionnaire());
 
@@ -293,8 +293,8 @@ class TrackedCaseController {
 
 		cases.save(trackedCase);
 
-		return ResponseEntity.ok() //
-				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+		return ResponseEntity.ok()
+				.header(HttpHeaders.LOCATION, getEnrollmentLink())
 				.build();
 	}
 
@@ -302,28 +302,28 @@ class TrackedCaseController {
 	HttpEntity<?> completeEnrollment(@LoggedIn TrackedPerson person,
 			@RequestParam("withoutEncounters") boolean withoutEncounters) {
 
-		var completion = withoutEncounters //
-				? EnrollmentCompletion.WITHOUT_ENCOUNTERS //
+		var completion = withoutEncounters
+				? EnrollmentCompletion.WITHOUT_ENCOUNTERS
 				: EnrollmentCompletion.WITH_ENCOUNTERS;
 
-		cases.findByTrackedPerson(person) //
-				.map(it -> it.markEnrollmentCompleted(completion)) //
+		cases.findByTrackedPerson(person)
+				.map(it -> it.markEnrollmentCompleted(completion))
 				.map(cases::save);
 
-		return ResponseEntity.ok() //
-				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+		return ResponseEntity.ok()
+				.header(HttpHeaders.LOCATION, getEnrollmentLink())
 				.build();
 	}
 
 	@DeleteMapping("/api/enrollment/completion")
 	HttpEntity<?> reopenEnrollment(@LoggedIn TrackedPerson person) {
 
-		cases.findByTrackedPerson(person) //
-				.map(TrackedCase::reopenEnrollment) //
+		cases.findByTrackedPerson(person)
+				.map(TrackedCase::reopenEnrollment)
 				.map(cases::save);
 
-		return ResponseEntity.ok() //
-				.header(HttpHeaders.LOCATION, getEnrollmentLink()) //
+		return ResponseEntity.ok()
+				.header(HttpHeaders.LOCATION, getEnrollmentLink())
 				.build();
 	}
 

@@ -32,11 +32,11 @@ class DiaryEntryMappingIntegrationTests {
 	@Test
 	void rejectsInvalidContact() {
 
-		var source = new DiaryEntryInput() //
+		var source = new DiaryEntryInput()
 				.setContacts(List.of(UUID.randomUUID()));
 
-		assertThatExceptionOfType(MappingException.class) //
-				.isThrownBy(() -> mapper.map(source, DiaryEntry.class)) //
+		assertThatExceptionOfType(MappingException.class)
+				.isThrownBy(() -> mapper.map(source, DiaryEntry.class))
 				.satisfies(o_O -> {
 					assertThat(o_O.getCause()).isInstanceOfSatisfying(AggregateReferenceMappingException.class, cause -> {
 						assertThat(cause.getPath()).isEqualTo("contacts");

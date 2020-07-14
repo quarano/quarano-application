@@ -44,29 +44,29 @@ public class DepartmentDataInitializer implements DataInitializer {
 			log.info("Testdata: creating two health departmens");
 		}
 
-		departments.saveAll(List.of( //
-				new Department("GA Mannheim", DEPARTMENT_ID_DEP1) //
-						.setContacts(Set.of( //
-								new DepartmentContact() //
-										.setType(DepartmentContact.ContactType.INDEX) //
-										.setEmailAddress(EmailAddress.of("index-email@gamannheim.de")) //
-										.setPhoneNumber(PhoneNumber.of("0123456789")), //
-								new DepartmentContact() //
-										.setType(DepartmentContact.ContactType.CONTACT) //
-										.setEmailAddress(EmailAddress.of("contact-email@gamannheim.de")) //
-										.setPhoneNumber(PhoneNumber.of("00123456789"))) //
-						), //
-				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2) //
-						.setContacts(Set.of( //
-								new DepartmentContact() //
-										.setType(DepartmentContact.ContactType.INDEX) //
-										.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de")) //
-										.setPhoneNumber(PhoneNumber.of("0123456789")), //
-								new DepartmentContact() //
-										.setType(DepartmentContact.ContactType.CONTACT) //
-										.setEmailAddress(EmailAddress.of("contact-email@gadarmstadt.de")) //
-										.setPhoneNumber(PhoneNumber.of("00123456789"))) //
-						) //
+		departments.saveAll(List.of(
+				new Department("GA Mannheim", DEPARTMENT_ID_DEP1)
+						.setContacts(Set.of(
+								new DepartmentContact()
+										.setType(DepartmentContact.ContactType.INDEX)
+										.setEmailAddress(EmailAddress.of("index-email@gamannheim.de"))
+										.setPhoneNumber(PhoneNumber.of("0123456789")),
+								new DepartmentContact()
+										.setType(DepartmentContact.ContactType.CONTACT)
+										.setEmailAddress(EmailAddress.of("contact-email@gamannheim.de"))
+										.setPhoneNumber(PhoneNumber.of("00123456789")))
+						),
+				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2)
+						.setContacts(Set.of(
+								new DepartmentContact()
+										.setType(DepartmentContact.ContactType.INDEX)
+										.setEmailAddress(EmailAddress.of("index-email@gadarmstadt.de"))
+										.setPhoneNumber(PhoneNumber.of("0123456789")),
+								new DepartmentContact()
+										.setType(DepartmentContact.ContactType.CONTACT)
+										.setEmailAddress(EmailAddress.of("contact-email@gadarmstadt.de"))
+										.setPhoneNumber(PhoneNumber.of("00123456789")))
+						)
 		));
 	}
 }

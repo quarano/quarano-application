@@ -36,11 +36,11 @@ class CoreMappingConfiguration implements MappingCustomizer {
 	@Override
 	public void customize(ModelMapper mapper) {
 
-		new PersistentEntities(List.of(context)) //
-				.filter(it -> it.hasIdProperty()) //
-				.map(it -> it.getIdProperty()) //
-				.map(PersistentProperty::getType) //
-				.filter(it -> Identifier.class.isAssignableFrom(it)) //
+		new PersistentEntities(List.of(context))
+				.filter(it -> it.hasIdProperty())
+				.map(it -> it.getIdProperty())
+				.map(PersistentProperty::getType)
+				.filter(it -> Identifier.class.isAssignableFrom(it))
 				.forEach(it -> {
 					QuaranoIdentifierToPrimitivesConverter.getIdPrimitives().forEach(target -> {
 						mapper.addConverter((Converter) IdentifierToUuidOrStringConverter.INSTANCE, it, target);

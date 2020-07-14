@@ -32,8 +32,8 @@ class PrimitivesToQuaranoIdentifierConverter implements GenericConverter {
 	public Set<ConvertiblePair> getConvertibleTypes() {
 
 		return Set.of(//
-				new ConvertiblePair(String.class, Identifier.class), //
-				new ConvertiblePair(UUID.class, Identifier.class) //
+				new ConvertiblePair(String.class, Identifier.class),
+				new ConvertiblePair(UUID.class, Identifier.class)
 		);
 	}
 
@@ -48,8 +48,8 @@ class PrimitivesToQuaranoIdentifierConverter implements GenericConverter {
 			return null;
 		}
 
-		UUID uuid = UUID.class.equals(sourceType.getType()) //
-				? (UUID) source //
+		UUID uuid = UUID.class.equals(sourceType.getType())
+				? (UUID) source
 				: UUID.fromString(source.toString());
 
 		Method factoryMethod = CACHE.computeIfAbsent(targetType.getType(), it -> {

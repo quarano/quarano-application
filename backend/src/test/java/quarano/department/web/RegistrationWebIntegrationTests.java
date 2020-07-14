@@ -55,20 +55,22 @@ class RegistrationWebIntegrationTests {
 		var password = "myPassword";
 		var username = "testusername";
 
-		var registrationDto = RegistrationDto.builder() //
-				.username(username) //
-				.password(password) //
-				.passwordConfirm(password) //
-				.dateOfBirth(person.getDateOfBirth()) //
-				.clientCode(activation.getCode()) //
+		var registrationDto = RegistrationDto.builder()
+				.username(username)
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth())
+				.clientCode(activation.getCode())
 				.build();
 
 		// when
-		var response = mvc.perform(post("/api/registration") //
-				.header("Origin", "*").contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(registrationDto))) //
-				.andExpect(status().is2xxSuccessful()) //
-				.andReturn().getResponse();
+		var response = mvc.perform(post("/api/registration")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(registrationDto)))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn()
+				.getResponse();
 
 		// then check for token
 		var token = response.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
@@ -92,12 +94,13 @@ class RegistrationWebIntegrationTests {
 		var password = "myPassword";
 		var username = "testusername";
 
-		var payload = RegistrationDto.builder() //
-				.username(username) //
-				.password(password) //
-				.passwordConfirm(password) //
-				.dateOfBirth(activation.getPerson().getDateOfBirth()) //
-				.clientCode(UUID.randomUUID()) //
+		var payload = RegistrationDto.builder()
+				.username(username)
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(activation.getPerson()
+						.getDateOfBirth())
+				.clientCode(UUID.randomUUID())
 				.build();
 
 		// when
@@ -118,12 +121,12 @@ class RegistrationWebIntegrationTests {
 		var person = activation.getPerson();
 		var password = "myPassword";
 
-		var registrationDto = RegistrationDto.builder() //
-				.username("DemoAccount") //
-				.password(password) //
-				.passwordConfirm(password) //
-				.dateOfBirth(person.getDateOfBirth()) //
-				.clientCode(activation.getCode()) //
+		var registrationDto = RegistrationDto.builder()
+				.username("DemoAccount")
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth())
+				.clientCode(activation.getCode())
 				.build();
 
 		// when
@@ -144,9 +147,11 @@ class RegistrationWebIntegrationTests {
 		var harrietteCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/cases/{id}/registration", harrietteCase.getId())) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse().getContentAsString();
+		var response = mvc.perform(get("/api/hd/cases/{id}/registration", harrietteCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 
 		var document = JsonPath.parse(response);
 
@@ -157,11 +162,14 @@ class RegistrationWebIntegrationTests {
 	@WithQuaranoUser("agent2")
 	void startsTracking() throws Exception {
 
-		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
+		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1)
+				.orElseThrow();
 
-		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId())) //
-				.andExpect(status().isOk()) //
-				.andReturn().getResponse().getContentAsString();
+		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 
 		var document = JsonPath.parse(response);
 		var harry = harryCase.getTrackedPerson();
@@ -179,25 +187,29 @@ class RegistrationWebIntegrationTests {
 	@Test
 	void rejectsInvalidCharactersForStringFields() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
 		var password = "myPassword";
 
-		var registrationDto = RegistrationDto.builder() //
-				.username("Demo ! A/Ccount") //
-				.password(password) //
-				.passwordConfirm(password) //
-				.dateOfBirth(person.getDateOfBirth()) //
-				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+		var registrationDto = RegistrationDto.builder()
+				.username("Demo ! A/Ccount")
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth())
+				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId()
+						.toString()))
 				.build();
 
 		// when
-		var responseBody = mvc.perform(post("/api/registration") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(registrationDto))) //
-				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
+		var responseBody = mvc.perform(post("/api/registration")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(registrationDto)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 
 		var document = JsonPath.parse(responseBody);
 
@@ -212,31 +224,42 @@ class RegistrationWebIntegrationTests {
 
 		var code = ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON3_CANCELED;
 
-		mvc.perform(get("/client/checkcode/" + code).header("Origin", "*").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andReturn().getResponse().getContentAsString();
+		mvc.perform(get("/client/checkcode/" + code).header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 	}
 
 	@Test
 	@Disabled
 	void testCheckClientCodeWithoutCodeFailsWith400() throws Exception {
 
-		mvc.perform(get("/client/checkcode/").header("Origin", "*").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
+		mvc.perform(get("/client/checkcode/").header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 	}
 
 	@Test // CORE-220
 	public void registerAccountWithInvalidBirthDateFails() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
 		var password = "myPassword";
 
-		var payload = RegistrationDto.builder() //
-				.username("DemoAccount4711") //
-				.password(password) //
-				.passwordConfirm(password) //
-				.dateOfBirth(person.getDateOfBirth().plusDays(1)) //
-				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId().toString())) //
+		var payload = RegistrationDto.builder()
+				.username("DemoAccount4711")
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth()
+						.plusDays(1))
+				.clientCode(UUID.fromString(ActivationCodeDataInitializer.ACTIVATIONCODE_PERSON1.getId()
+						.toString()))
 				.build();
 
 		// when
@@ -252,13 +275,15 @@ class RegistrationWebIntegrationTests {
 
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
-		String resultDtoStr = mvc.perform(get("/api/user/me") //
-				.header("Origin", "*") //
-				.header("Authorization", "Bearer " + token) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
+		String resultDtoStr = mvc.perform(get("/api/user/me")
+				.header("Origin", "*")
+				.header("Authorization", "Bearer " + token)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 
 		var document = JsonPath.parse(resultDtoStr);
 
@@ -269,12 +294,13 @@ class RegistrationWebIntegrationTests {
 	@SuppressWarnings("null")
 	private String loginAndCheckSuccess(final String password, final String username) throws Exception {
 
-		var response = mvc.perform(post("/login") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(createLoginRequestBody(username, password))) //
-				.andExpect(status().is2xxSuccessful()) //
-				.andReturn().getResponse();
+		var response = mvc.perform(post("/login")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(createLoginRequestBody(username, password)))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn()
+				.getResponse();
 
 		var token = response.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
 
@@ -288,10 +314,10 @@ class RegistrationWebIntegrationTests {
 		// login with new account
 		var requestbody = createLoginRequestBody(username, password);
 
-		mvc.perform(post("/login") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(requestbody)) //
+		mvc.perform(post("/login")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestbody))
 				.andExpect(status().isUnauthorized());
 	}
 
@@ -301,18 +327,23 @@ class RegistrationWebIntegrationTests {
 
 	private String expectFailedRegistration(RegistrationDto payload) throws Exception {
 
-		return mvc.perform(post("/api/registration") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(payload))) //
-				.andExpect(status().isBadRequest()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
-				.andReturn().getResponse().getContentAsString();
+		return mvc.perform(post("/api/registration")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(payload)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
 	}
 
 	private PersonAndCode createActivation() {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
-		var activationCode = registration.initiateRegistration(cases.findByTrackedPerson(person).orElseThrow()).get();
+		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+		var activationCode = registration.initiateRegistration(cases.findByTrackedPerson(person)
+				.orElseThrow())
+				.get();
 
 		return new PersonAndCode(person, activationCode);
 	}

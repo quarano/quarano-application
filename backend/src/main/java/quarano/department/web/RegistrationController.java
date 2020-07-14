@@ -56,15 +56,15 @@ public class RegistrationController {
 
 		ErrorsDto dto = ErrorsDto.of(errors, messages);
 
-		return registration.createTrackedPersonAccount(details) //
-				.map(generator::generateTokenFor) //
-				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse) //
-				.recover(RegistrationException.class, it -> dto //
-						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage()) //
-						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage()) //
+		return registration.createTrackedPersonAccount(details)
+				.map(generator::generateTokenFor)
+				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
+				.recover(RegistrationException.class, it -> dto
+						.rejectField(it.getProblem().equals(Problem.INVALID_USERNAME), "username", it.getMessage())
+						.rejectField(it.getProblem().equals(Problem.INVALID_BIRTHDAY), "dateOfBirth", it.getMessage())
 						.toBadRequest())
-				.recover(ActivationCodeException.class, it -> dto //
-						.rejectField("clientCode", "Invalid", it.getMessage()) //
+				.recover(ActivationCodeException.class, it -> dto
+						.rejectField("clientCode", "Invalid", it.getMessage())
 						.toBadRequest())
 				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
 	}
@@ -79,21 +79,21 @@ public class RegistrationController {
 			return ResponseEntity.notFound().build();
 		}
 
-		return registration.initiateRegistration(trackedCase) //
-				.map(it -> representations.toRepresentation(it, trackedCase)) //
-				.fold(it -> ResponseEntity.badRequest().body(it.getMessage()), //
+		return registration.initiateRegistration(trackedCase)
+				.map(it -> representations.toRepresentation(it, trackedCase))
+				.fold(it -> ResponseEntity.badRequest().body(it.getMessage()),
 						it -> ResponseEntity.ok(it));
 	}
 
 	@GetMapping("/api/hd/cases/{id}/registration")
 	HttpEntity<?> getRegistrationDetails(@PathVariable TrackedCaseIdentifier id, @LoggedIn Account account) {
 
-		return cases.findById(id) //
-				.filter(it -> it.belongsTo(account.getDepartmentId())) //
+		return cases.findById(id)
+				.filter(it -> it.belongsTo(account.getDepartmentId()))
 				.map(it -> {
 
-					return registration.getPendingActivationCode(it.getTrackedPerson().getId()) //
-							.<HttpEntity<?>> map(code -> ResponseEntity.ok(representations.toRepresentation(code, it))) //
+					return registration.getPendingActivationCode(it.getTrackedPerson().getId())
+							.<HttpEntity<?>> map(code -> ResponseEntity.ok(representations.toRepresentation(code, it)))
 							.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(it)));
 
 				}).orElseGet(() -> ResponseEntity.notFound().build());
@@ -107,7 +107,7 @@ public class RegistrationController {
 	@GetMapping("api/registration/checkcode/{activationCode}")
 	public ResponseEntity<Boolean> doesClientexist(@PathVariable UUID activationCode) {
 
-		return ResponseEntity.ok(activationCodes.getValidCode(ActivationCodeIdentifier.of(activationCode)) //
+		return ResponseEntity.ok(activationCodes.getValidCode(ActivationCodeIdentifier.of(activationCode))
 				.isSuccess());
 	}
 

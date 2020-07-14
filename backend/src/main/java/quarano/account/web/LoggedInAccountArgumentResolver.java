@@ -62,9 +62,9 @@ class LoggedInAccountArgumentResolver implements HandlerMethodArgumentResolver, 
 	 */
 	@Override
 	@org.springframework.lang.NonNull
-	public Object resolveArgument(MethodParameter parameter, //
-			@Nullable ModelAndViewContainer mavContainer, //
-			NativeWebRequest webRequest, //
+	public Object resolveArgument(MethodParameter parameter,
+			@Nullable ModelAndViewContainer mavContainer,
+			NativeWebRequest webRequest,
 			@Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		Class<?> type = parameter.getParameterType();
@@ -95,7 +95,7 @@ class LoggedInAccountArgumentResolver implements HandlerMethodArgumentResolver, 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 
-		return parameter.hasParameterAnnotation(LoggedIn.class) //
+		return parameter.hasParameterAnnotation(LoggedIn.class)
 				&& ALL_TYPES.contains(parameter.getParameterType());
 	}
 

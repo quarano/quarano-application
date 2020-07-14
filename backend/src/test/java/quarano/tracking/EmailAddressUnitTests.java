@@ -21,7 +21,7 @@ class EmailAddressUnitTests {
 	@Test
 	void acceptsSourceWithCapitalLetters() {
 
-		assertThatCode(() -> EmailAddress.of("Foo@Bar.de")) //
+		assertThatCode(() -> EmailAddress.of("Foo@Bar.de"))
 				.doesNotThrowAnyException();
 	}
 }

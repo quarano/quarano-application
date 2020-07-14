@@ -16,8 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SymptomDto {
 
-	@Getter(onMethod = @__(@JsonProperty)) //
-	@Setter(onMethod = @__(@JsonIgnore)) //
+	@Getter(onMethod = @__(@JsonProperty))
+	@Setter(onMethod = @__(@JsonIgnore))
 	private UUID id;
 
 	private @Alphabetic	String name;

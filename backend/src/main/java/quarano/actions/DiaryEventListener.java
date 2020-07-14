@@ -49,7 +49,7 @@ class DiaryEventListener {
 		var slot = entry.getSlot();
 
 		// resolve missing entry item
-		items.findDiaryEntryMissingActionItemsFor(person, slot) //
+		items.findDiaryEntryMissingActionItemsFor(person, slot)
 				.resolveAutomatically(items::save);
 	}
 
@@ -68,13 +68,13 @@ class DiaryEventListener {
 			return;
 		}
 
-		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE) //
+		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(items::save);
 
 		// Body temperature exceeds reference
 		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
-			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE, //
-					entry.getBodyTemperature(), //
+			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
+					entry.getBodyTemperature(),
 					config.getTemperatureThreshold());
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
@@ -83,8 +83,8 @@ class DiaryEventListener {
 
 	private boolean determineWhetherEntryMostRecent(TrackedPersonIdentifier personId, Slot slot) {
 
-		return diaryManagement.findDiaryFor(personId) //
-				.filter(it -> it.getSlot().isAfter(slot)) //
+		return diaryManagement.findDiaryFor(personId)
+				.filter(it -> it.getSlot().isAfter(slot))
 				.isEmpty();
 	}
 

@@ -25,7 +25,7 @@ class ContactPersonDto {
 
 	private static final String INVALID_CONTACT_WAYS_KEY = "Invalid.contactWays";
 
-	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY))) //
+	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY)))
 	private ContactPersonIdentifier id;
 
 	private @Pattern(regexp = Strings.NAMES) String lastName, firstName;

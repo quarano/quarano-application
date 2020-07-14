@@ -33,8 +33,8 @@ public class DepartmentMappingConfiguration implements MappingCustomizer {
 
 		Stream.of(TrackedCaseDto.Input.class, TrackedCaseDto.Output.class).forEach(type -> {
 
-			mapper.typeMap(TrackedCase.class, (Class<TrackedCaseDto>) type) //
-					.setPreConverter(QuarantineMappingConverter.INSTANCE) //
+			mapper.typeMap(TrackedCase.class, (Class<TrackedCaseDto>) type)
+					.setPreConverter(QuarantineMappingConverter.INSTANCE)
 					.addMappings(it -> {
 						it.skip(TrackedCaseDto::setQuarantineStartDate);
 						it.skip(TrackedCaseDto::setQuarantineEndDate);
@@ -79,7 +79,7 @@ public class DepartmentMappingConfiguration implements MappingCustomizer {
 			var quarantine = source.getQuarantine();
 
 			if (quarantine != null) {
-				target.setQuarantineStartDate(quarantine.getFrom()) //
+				target.setQuarantineStartDate(quarantine.getFrom())
 						.setQuarantineEndDate(quarantine.getTo());
 			}
 
@@ -87,7 +87,7 @@ public class DepartmentMappingConfiguration implements MappingCustomizer {
 
 				var result = source.getTestResult();
 
-				target.setInfected(result.isInfected()) //
+				target.setInfected(result.isInfected())
 						.setTestDate(result.getTestDate());
 			}
 

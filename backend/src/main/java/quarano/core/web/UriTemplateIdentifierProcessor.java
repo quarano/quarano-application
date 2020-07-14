@@ -96,8 +96,8 @@ public class UriTemplateIdentifierProcessor implements IdentifierProcessor {
 
 		ExtractionConfiguration configuration = this.configuration.get(sourceType);
 
-		return configuration == null //
-				? identifier //
+		return configuration == null
+				? identifier
 				: configuration.uriCreator.apply(identifier);
 	}
 
@@ -116,7 +116,7 @@ public class UriTemplateIdentifierProcessor implements IdentifierProcessor {
 	 */
 	public boolean supports(Class<?> delimiter) {
 
-		return configuration.keySet().stream() //
+		return configuration.keySet().stream()
 				.anyMatch(delimiter::isAssignableFrom);
 	}
 

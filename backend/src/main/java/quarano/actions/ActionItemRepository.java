@@ -25,13 +25,13 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
 	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select i from ActionItem i" //
-			+ " where i.resolved = false" //
+	@Query("select i from ActionItem i"
+			+ " where i.resolved = false"
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select i from ActionItem i, TrackedCase t" //
-			+ " where i.resolved = false" //
+	@Query("select i from ActionItem i, TrackedCase t"
+			+ " where i.resolved = false"
 			+ " and t.trackedPerson.id = i.personIdentifier" + " and t.status <> 'CONCLUDED'"
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByActiveCaseByPersonIdentifier(TrackedPersonIdentifier identifier);
@@ -42,13 +42,13 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code and i.resolved = false")
 	ActionItems findUnresolvedByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
 
-	@Query("select i from DiaryEntryMissingActionItem i" //
-			+ " where i.slot = :slot" //
+	@Query("select i from DiaryEntryMissingActionItem i"
+			+ " where i.slot = :slot"
 			+ " and i.personIdentifier = :personIdentifier")
 	ActionItems findDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
 
-	@Query("select i from TrackedCaseActionItem i" //
-			+ " where i.personIdentifier = :personIdentifier" //
+	@Query("select i from TrackedCaseActionItem i"
+			+ " where i.personIdentifier = :personIdentifier"
 			+ "   and i.description.code = 'QUARANTINE_ENDING'")
 	ActionItems findQuarantineEndingActionItemsFor(TrackedPersonIdentifier personIdentifier);
 

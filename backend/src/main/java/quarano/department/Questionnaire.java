@@ -54,8 +54,8 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 	private @Setter(value = AccessLevel.NONE) Boolean hasContactToVulnerablePeople;
 	private String hasContactToVulnerablePeopleDescription;
 
-	public Questionnaire(SymptomInformation symptomInformation, //
-			@Nullable String hasPreExistingConditionsDescription, //
+	public Questionnaire(SymptomInformation symptomInformation,
+			@Nullable String hasPreExistingConditionsDescription,
 			@Nullable String belongToMedicalStaffDescription) {
 
 		this.id = QuestionnaireIdentifier.of(UUID.randomUUID());

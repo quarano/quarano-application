@@ -47,7 +47,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 	private @Setter(AccessLevel.NONE) DepartmentIdentifier departmentId;
 
-	@ManyToMany(fetch = FetchType.EAGER) //
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles = new ArrayList<>();
 
 	public Account(String username, EncryptedPassword password, String firstname, String lastname, EmailAddress email,
@@ -133,7 +133,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 		var candidates = List.of(roles);
 
-		return this.roles.stream() //
+		return this.roles.stream()
 				.map(Role::getRoleType).anyMatch(candidates::contains);
 	}
 

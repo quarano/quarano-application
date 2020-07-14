@@ -58,7 +58,7 @@ public class EncounterDto extends RepresentationModel<EncounterDto> {
 		var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
 		var encounterUri = on(TrackingController.class).getEncounter(encounter.getId(), person);
 
-		return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel()) //
+		return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
 				.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL));
 	}
 }

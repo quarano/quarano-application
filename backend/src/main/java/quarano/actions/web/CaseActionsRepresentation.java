@@ -41,11 +41,11 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 		CaseActionsRepresentation result = new CaseActionsRepresentation(trackedCase, items, messages);
 
 		@SuppressWarnings("null")
-		var uriString = fromMethodCall(on(ActionItemController.class) //
+		var uriString = fromMethodCall(on(ActionItemController.class)
 				.resolveActions(trackedCase.getId(), null, null, null)).toUriString();
 
-		return items.hasUnresolvedItemsForManualResolution() //
-				? result.add(Link.of(uriString, RESOLVE_REL)) //
+		return items.hasUnresolvedItemsForManualResolution()
+				? result.add(Link.of(uriString, RESOLVE_REL))
 				: result;
 	}
 
@@ -55,27 +55,27 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 
 	public List<Map<?, ?>> getComments() {
 
-		return trackedCase.getComments().stream() //
-				.sorted(Comment.BY_DATE_DESCENDING) //
-				.map(it -> Map.of("date", it.getDate(), "comment", it.getText())) //
+		return trackedCase.getComments().stream()
+				.sorted(Comment.BY_DATE_DESCENDING)
+				.map(it -> Map.of("date", it.getDate(), "comment", it.getText()))
 				.collect(Collectors.toList());
 	}
 
 	public Map<String, Object> getAnomalies() {
 
-		return Map.of("health", toDailyItems(items.getHealthItems(), false), //
-				"process", toDailyItems(items.getProcessItems(), false), //
+		return Map.of("health", toDailyItems(items.getHealthItems(), false),
+				"process", toDailyItems(items.getProcessItems(), false),
 				"resolved", toDailyItems(items.getResolvedItems(), true));
 	}
 
 	private List<DailyItems> toDailyItems(Streamable<ActionItem> items, boolean done) {
 
-		return items.stream() //
-				.collect(Collectors.groupingBy(it -> it.getMetadata().getLastModified().toLocalDate())) //
-				.entrySet() //
-				.stream() //
-				.map(it -> new DailyItems(it.getKey(), it.getValue(), messages)) //
-				.sorted(Comparator.comparing(DailyItems::getDate)) //
+		return items.stream()
+				.collect(Collectors.groupingBy(it -> it.getMetadata().getLastModified().toLocalDate()))
+				.entrySet()
+				.stream()
+				.map(it -> new DailyItems(it.getKey(), it.getValue(), messages))
+				.sorted(Comparator.comparing(DailyItems::getDate))
 				.collect(Collectors.toUnmodifiableList());
 	}
 
@@ -89,9 +89,9 @@ public class CaseActionsRepresentation extends RepresentationModel<CaseActionsRe
 		public DailyItems(LocalDate date, List<ActionItem> items, MessageSourceAccessor messages) {
 
 			this.date = date;
-			this.items = items.stream() //
-					.map(it -> ActionItemDto.of(it, messages)) //
-					.sorted(Comparator.comparing(ActionItemDto::getDate)) //
+			this.items = items.stream()
+					.map(it -> ActionItemDto.of(it, messages))
+					.sorted(Comparator.comparing(ActionItemDto::getDate))
 					.collect(Collectors.toUnmodifiableList());
 		}
 	}

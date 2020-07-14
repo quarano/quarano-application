@@ -35,7 +35,7 @@ class ActionItemRepositoryIntegrationTests {
 	void persistsDescriptionArguments() {
 
 		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var entry = diaries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person) //
+		var entry = diaries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person)
 				.setBodyTemperature(BodyTemperature.of(41.0f)));
 
 		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
@@ -55,13 +55,13 @@ class ActionItemRepositoryIntegrationTests {
 		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(repository::save);
 
-		assertThat(repository.findByTrackedPerson(person).stream()) //
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, true), Index.atIndex(0)) //
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(1)) //
+		assertThat(repository.findByTrackedPerson(person).stream())
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, true), Index.atIndex(0))
+				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(1))
 				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(2));
 
-		assertThat(repository.findUnresolvedByTrackedPerson(person).stream()) //
-				.hasSize(1) //
+		assertThat(repository.findUnresolvedByTrackedPerson(person).stream())
+				.hasSize(1)
 				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0));
 	}
 
@@ -77,7 +77,7 @@ class ActionItemRepositoryIntegrationTests {
 		 */
 		@Override
 		public boolean matches(ActionItem item) {
-			return item.getDescription().getCode().equals(descriptionCode) //
+			return item.getDescription().getCode().equals(descriptionCode)
 					&& item.isResolved() == resolved;
 		}
 	}

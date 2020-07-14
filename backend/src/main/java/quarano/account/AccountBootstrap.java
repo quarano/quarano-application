@@ -42,8 +42,8 @@ public class AccountBootstrap implements ApplicationRunner {
 
 			log.info("Found departments in database. Updating their contact information.");
 
-			departments.findByName(defaultDepartment.getName()) //
-					.map(department -> department.setContacts(defaultDepartment.getContacts())) //
+			departments.findByName(defaultDepartment.getName())
+					.map(department -> department.setContacts(defaultDepartment.getContacts()))
 					.ifPresent(departments::save);
 
 			return;
@@ -69,10 +69,10 @@ public class AccountBootstrap implements ApplicationRunner {
 
 		log.info("Creating default account (root, root).");
 
-		accounts.createStaffAccount("root", UnencryptedPassword.of("root"), //
-				defaults.getFirstname(), //
-				defaults.getLastname(), //
-				EmailAddress.of(defaults.getEmailAddress()), //
+		accounts.createStaffAccount("root", UnencryptedPassword.of("root"),
+				defaults.getFirstname(),
+				defaults.getLastname(),
+				EmailAddress.of(defaults.getEmailAddress()),
 				department.getId(), RoleType.ROLE_HD_ADMIN);
 
 	}

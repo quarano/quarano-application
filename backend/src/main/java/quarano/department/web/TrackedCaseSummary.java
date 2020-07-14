@@ -112,7 +112,7 @@ public class TrackedCaseSummary extends TrackedCaseStatusAware<TrackedCaseSummar
 			return null;
 		}
 
-		return Map.of("from", quarantine.getFrom().format(DateTimeFormatter.ISO_DATE), //
+		return Map.of("from", quarantine.getFrom().format(DateTimeFormatter.ISO_DATE),
 				"to", quarantine.getTo().format(DateTimeFormatter.ISO_DATE));
 	}
 }

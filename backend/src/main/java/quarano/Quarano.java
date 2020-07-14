@@ -61,7 +61,7 @@ public class Quarano {
 	EmailTemplates emailTemplates(ResourceLoader loader) {
 
 		var templates = Map.of(//
-				EmailTemplates.Keys.REGISTRATION_INDEX, "classpath:masterdata/templates/registration-index.txt", //
+				EmailTemplates.Keys.REGISTRATION_INDEX, "classpath:masterdata/templates/registration-index.txt",
 				EmailTemplates.Keys.REGISTRATION_CONTACT, "classpath:masterdata/templates/registration-contact.txt");
 
 		return new EmailTemplates(loader, templates);
@@ -78,15 +78,15 @@ public class Quarano {
 
 		Repositories repositories = new Repositories(context);
 
-		var module = new RepositoryMappingModule(repositories, conversionService) //
-				.exclude(Role.class); //
+		var module = new RepositoryMappingModule(repositories, conversionService)
+				.exclude(Role.class);
 
 		processors.forEach(module::register);
 
 		var mapper = new ModelMapper();
 		mapper.registerModule(module);
 
-		customizers.stream() //
+		customizers.stream()
 				.peek(it -> log.debug("Applying {} for model mapping.", it.getClass().getName()))
 				.forEach(it -> it.customize(mapper));
 

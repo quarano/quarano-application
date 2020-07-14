@@ -33,9 +33,9 @@ class AuthenticationControllerWebIntegrationTests {
 
 		cases.save(siggisCase.conclude());
 
-		mvc.perform(post("/api/login") //
-				.content(jackson.writeValueAsString(new AuthenticationRequest("secUser1", "secur1tyTest!"))) //
-				.contentType(MediaType.APPLICATION_JSON)) //
+		mvc.perform(post("/api/login")
+				.content(jackson.writeValueAsString(new AuthenticationRequest("secUser1", "secur1tyTest!")))
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isUnauthorized());
 	}
 
@@ -56,9 +56,9 @@ class AuthenticationControllerWebIntegrationTests {
 
 	private void assertSuccessfulLogin(String username, String password) throws Exception {
 
-		mvc.perform(post("/api/login") //
-				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password))) //
-				.contentType(MediaType.APPLICATION_JSON)) //
+		mvc.perform(post("/api/login")
+				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password)))
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
 	}
 }

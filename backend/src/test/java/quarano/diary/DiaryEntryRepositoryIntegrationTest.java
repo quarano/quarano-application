@@ -24,10 +24,10 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		var result = diaries.findMissingDiaryEntryPersons(List.of(now)).toList();
 
-		assertThat(result).containsExactlyInAnyOrder( //
-				TrackedPersonDataInitializer.createSandra().getId(), //
-				TrackedPersonDataInitializer.createNadine().getId(), //
-				TrackedPersonDataInitializer.createSiggi().getId(), //
+		assertThat(result).containsExactlyInAnyOrder(
+				TrackedPersonDataInitializer.createSandra().getId(),
+				TrackedPersonDataInitializer.createNadine().getId(),
+				TrackedPersonDataInitializer.createSiggi().getId(),
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
 
@@ -39,9 +39,9 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		var result = diaries.findMissingDiaryEntryPersons(List.of(now, previous)).toList();
 
-		assertThat(result).containsExactlyInAnyOrder( //
-				TrackedPersonDataInitializer.createSandra().getId(), //
-				TrackedPersonDataInitializer.createSiggi().getId(), //
+		assertThat(result).containsExactlyInAnyOrder(
+				TrackedPersonDataInitializer.createSandra().getId(),
+				TrackedPersonDataInitializer.createSiggi().getId(),
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
 }

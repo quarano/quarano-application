@@ -41,7 +41,7 @@ public class RegistrationManagement {
 		var departmentId = trackedCase.getDepartment().getId();
 		var personId = trackedCase.getTrackedPerson().getId();
 
-		return activationCodes.createActivationCode(personId, departmentId) //
+		return activationCodes.createActivationCode(personId, departmentId)
 				.andThen(() -> cases.save(trackedCase.markInRegistration()));
 	}
 
@@ -51,11 +51,11 @@ public class RegistrationManagement {
 
 	public Try<Account> createTrackedPersonAccount(RegistrationDetails details) {
 
-		return Try.success(details) //
+		return Try.success(details)
 				.filter(it -> isUsernameAvailable(it.getUsername()), RegistrationException::forInvalidUsername)
-				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply)) //
-				.flatMap(this::checkIdentity) //
-				.flatMap(this::applyTrackedPerson) //
+				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply))
+				.flatMap(this::checkIdentity)
+				.flatMap(this::applyTrackedPerson)
 				.map(this::toAccount);
 	}
 
@@ -65,8 +65,8 @@ public class RegistrationManagement {
 
 	private Try<RegistrationDetails> applyTrackedPerson(RegistrationDetails details) {
 
-		return trackedPeople.findById(details.getTrackedPersonId()) //
-				.map(person -> details.apply(person)) //
+		return trackedPeople.findById(details.getTrackedPersonId())
+				.map(person -> details.apply(person))
 				.orElseGet(() -> Try.failure(new RegistrationException("No tracked person found!")));
 	}
 
@@ -79,11 +79,11 @@ public class RegistrationManagement {
 	 */
 	private Try<RegistrationDetails> checkIdentity(RegistrationDetails details) {
 
-		return trackedPeople.findById(details.getTrackedPersonId()).map(Try::success) //
+		return trackedPeople.findById(details.getTrackedPersonId()).map(Try::success)
 				.orElseGet(() -> Try.failure(new RegistrationException(
 						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'")))
 				.filter(person -> person.hasBirthdayOf(details.getDateOfBirth()),
-						() -> RegistrationException.forInvalidBirthDay(details)) //
+						() -> RegistrationException.forInvalidBirthDay(details))
 				.map(__ -> details);
 	}
 
@@ -92,12 +92,12 @@ public class RegistrationManagement {
 		var account = accounts.createTrackedPersonAccount(details.getUsername(), details.getUnencryptedPassword(),
 				details.getFirstname(), details.getLastname(), details.getDepartmentId());
 
-		trackedPeople.findById(details.getTrackedPersonId()) //
-				.map(it -> it.markAccountRegistration(account)) //
+		trackedPeople.findById(details.getTrackedPersonId())
+				.map(it -> it.markAccountRegistration(account))
 				.map(trackedPeople::save);
 
-		cases.findByTrackedPerson(details.getTrackedPersonId()) //
-				.map(TrackedCase::markRegistrationCompleted) //
+		cases.findByTrackedPerson(details.getTrackedPersonId())
+				.map(TrackedCase::markRegistrationCompleted)
 				.map(cases::save);
 
 		return account;
@@ -114,12 +114,12 @@ public class RegistrationManagement {
 	Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname, String lastname,
 			DepartmentIdentifier departmentIdDep1, TrackedPersonIdentifier validTrackedPerson2IdDep1) {
 
-		var details = new RegistrationDetails() //
-				.setUsername(username) //
-				.setUnencryptedPassword(password) //
-				.setFirstname(firstname) //
-				.setLastname(lastname) //
-				.setDepartmentId(departmentIdDep1) //
+		var details = new RegistrationDetails()
+				.setUsername(username)
+				.setUnencryptedPassword(password)
+				.setFirstname(firstname)
+				.setLastname(lastname)
+				.setDepartmentId(departmentIdDep1)
 				.setTrackedPersonId(validTrackedPerson2IdDep1);
 
 		return toAccount(details);

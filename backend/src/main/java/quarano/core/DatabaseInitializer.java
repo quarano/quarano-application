@@ -46,10 +46,10 @@ public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 
 		var template = new JdbcTemplate(dataSource);
 
-		template.queryForList("select tablename from pg_tables;").stream() //
-				.map(it -> it.get("tablename").toString()) //
-				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_")) //
-				.peek(it -> log.info("Dropping database table " + it)) //
+		template.queryForList("select tablename from pg_tables;").stream()
+				.map(it -> it.get("tablename").toString())
+				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_"))
+				.peek(it -> log.info("Dropping database table " + it))
 				.forEach(it -> template.execute(String.format("DROP TABLE \"%s\" CASCADE;", it)));
 	}
 }

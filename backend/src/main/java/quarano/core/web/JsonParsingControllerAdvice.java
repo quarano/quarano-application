@@ -37,8 +37,8 @@ public class JsonParsingControllerAdvice {
 
 			Errors errors = new MapBindingResult(new HashMap<>(), "bean");
 
-			String path = invalidFormat.getPath().stream() //
-					.map(it -> it.getFieldName()) //
+			String path = invalidFormat.getPath().stream()
+					.map(it -> it.getFieldName())
 					.collect(Collectors.joining("."));
 
 			errors.rejectValue(path, "Invalid." + path);

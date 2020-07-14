@@ -18,21 +18,21 @@ class ActivationCodes implements Streamable<ActivationCode> {
 
 	boolean hasRedeemedCode() {
 
-		return codes.stream() //
+		return codes.stream()
 				.anyMatch(ActivationCode::isRedeemed);
 	}
 
 	ActivationCodes getCancellableCodes() {
 
-		return new ActivationCodes(codes.stream() //
-				.filter(ActivationCode::isWaitingForActivation) //
+		return new ActivationCodes(codes.stream()
+				.filter(ActivationCode::isWaitingForActivation)
 				.collect(Streamable.toStreamable()));
 	}
 
 	Optional<ActivationCode> getPendingActivationCode() {
 
-		return codes.stream() //
-				.filter(ActivationCode::isWaitingForActivation) //
+		return codes.stream()
+				.filter(ActivationCode::isWaitingForActivation)
 				.findFirst();
 	}
 
@@ -44,7 +44,7 @@ class ActivationCodes implements Streamable<ActivationCode> {
 	 */
 	ActivationCodes cancelAll(Consumer<ActivationCode> callback) {
 
-		codes.map(ActivationCode::cancel) //
+		codes.map(ActivationCode::cancel)
 				.forEach(it -> it.andThen(callback));
 
 		return this;

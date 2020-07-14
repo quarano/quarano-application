@@ -23,8 +23,8 @@ class EmptyStringDeserializer extends JsonDeserializer<String> {
 	@SuppressWarnings("null")
 	public String deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 
-		return jp.getCurrentToken() == JsonToken.VALUE_STRING && !StringUtils.hasText(jp.getText()) //
-				? null //
+		return jp.getCurrentToken() == JsonToken.VALUE_STRING && !StringUtils.hasText(jp.getText())
+				? null
 				: StringDeserializer.instance.deserialize(jp, ctxt).trim();
 	}
 }

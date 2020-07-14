@@ -41,8 +41,8 @@ public class QuaranoIdentifierToPrimitivesConverter implements GenericConverter 
 	@Override
 	public Set<ConvertiblePair> getConvertibleTypes() {
 
-		return getIdPrimitives() //
-				.map(it -> new ConvertiblePair(Identifier.class, it)) //
+		return getIdPrimitives()
+				.map(it -> new ConvertiblePair(Identifier.class, it))
 				.collect(Collectors.toUnmodifiableSet());
 	}
 
@@ -58,10 +58,10 @@ public class QuaranoIdentifierToPrimitivesConverter implements GenericConverter 
 		}
 
 		Field idField = CACHE.computeIfAbsent(source.getClass(), type -> {
-			return Arrays.stream(type.getDeclaredFields()) //
-					.filter(it -> !Modifier.isStatic(it.getModifiers())) //
-					.filter(it -> it.getType().equals(UUID.class)) //
-					.peek(ReflectionUtils::makeAccessible) //
+			return Arrays.stream(type.getDeclaredFields())
+					.filter(it -> !Modifier.isStatic(it.getModifiers()))
+					.filter(it -> it.getType().equals(UUID.class))
+					.peek(ReflectionUtils::makeAccessible)
 					.findFirst()
 					.orElseThrow(() -> new IllegalStateException("Unable to find UUID identifier field on " + type + "!"));
 		});

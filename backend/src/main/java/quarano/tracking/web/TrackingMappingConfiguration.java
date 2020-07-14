@@ -25,22 +25,22 @@ import org.springframework.stereotype.Component;
 @Order(10)
 public class TrackingMappingConfiguration implements MappingCustomizer {
 
-	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS //
+	private static final Converter<String, EmailAddress> STRING_TO_EMAIL_ADDRESS
 			= source -> EmailAddress.ofNullable(source.getSource());
 
-	private static final Converter<String, PhoneNumber> STRING_TO_PHONE_NUMBER //
+	private static final Converter<String, PhoneNumber> STRING_TO_PHONE_NUMBER
 			= source -> PhoneNumber.ofNullable(source.getSource());
 
-	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE //
+	private static final Converter<String, ZipCode> STRING_TO_ZIP_CODE
 			= source -> source.getSource() == null ? null : ZipCode.of(source.getSource());
 
-	private static final Converter<String, HouseNumber> STRING_TO_HOUSE_NUMBER //
+	private static final Converter<String, HouseNumber> STRING_TO_HOUSE_NUMBER
 			= source -> HouseNumber.of(source.getSource());
 
-	private static final Converter<Float, BodyTemperature> FLOAT_TO_BODY_TEMPERATURE //
+	private static final Converter<Float, BodyTemperature> FLOAT_TO_BODY_TEMPERATURE
 			= source -> source.getSource() == null ? null : BodyTemperature.of(source.getSource());
 
-	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
+	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT
 			= source -> source.getSource() == null ? null : source.getSource().getValue();
 
 	/*
@@ -67,11 +67,11 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 
 			var source = (ContactPersonDto) request.getSource();
 
-			return ContactWays.builder() //
-					.emailAddress(EmailAddress.ofNullable(source.getEmail())) //
-					.phoneNumber(PhoneNumber.ofNullable(source.getPhone())) //
-					.mobilePhoneNumber(PhoneNumber.ofNullable(source.getMobilePhone())) //
-					.identificationHint(source.getIdentificationHint()) //
+			return ContactWays.builder()
+					.emailAddress(EmailAddress.ofNullable(source.getEmail()))
+					.phoneNumber(PhoneNumber.ofNullable(source.getPhone()))
+					.mobilePhoneNumber(PhoneNumber.ofNullable(source.getMobilePhone()))
+					.identificationHint(source.getIdentificationHint())
 					.build();
 		});
 

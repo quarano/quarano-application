@@ -36,8 +36,8 @@ class DataInitializerInvoker implements ApplicationRunner {
 	@Override
 	public void run(@Nullable ApplicationArguments args) throws Exception {
 
-		initializers.stream() //
-				.peek(it -> log.info("Invoking " + it.getClass().getName())) //
+		initializers.stream()
+				.peek(it -> log.info("Invoking " + it.getClass().getName()))
 				.forEach(it -> {
 
 					it.preInitialize();

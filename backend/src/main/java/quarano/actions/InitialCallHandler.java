@@ -15,8 +15,8 @@ public class InitialCallHandler {
 	void handleInitialCallOpen(TrackedCase trackedCase) {
 
 		var id = trackedCase.getTrackedPerson().getId();
-		var descriptionCode = trackedCase.isIndexCase() //
-				? DescriptionCode.INITIAL_CALL_OPEN_INDEX //
+		var descriptionCode = trackedCase.isIndexCase()
+				? DescriptionCode.INITIAL_CALL_OPEN_INDEX
 				: DescriptionCode.INITIAL_CALL_OPEN_CONTACT;
 
 		if (!trackedCase.isInitialCallNeeded()) {

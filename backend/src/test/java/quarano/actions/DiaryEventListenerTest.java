@@ -53,7 +53,7 @@ class DiaryEventListenerTest {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var newerEntry = DiaryEntry.of(Slot.now(), person);
-		var entry = DiaryEntry.of(Slot.now().previous(), person) //
+		var entry = DiaryEntry.of(Slot.now().previous(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> of(newerEntry)));
@@ -67,7 +67,7 @@ class DiaryEventListenerTest {
 	void testOnDiaryEntryAddedWithExceedingTemperature() {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
-		var entry = DiaryEntry.of(Slot.now(), person) //
+		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
@@ -91,7 +91,7 @@ class DiaryEventListenerTest {
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 
 		// first update with exceeding temperature
-		var entry = DiaryEntry.of(Slot.now(), person) //
+		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
@@ -109,7 +109,7 @@ class DiaryEventListenerTest {
 		assertThat(item.getDescription().getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
 
 		// second update with exceeding temperature
-		entry = DiaryEntry.of(Slot.now(), person) //
+		entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(42F));
 
 		ActionItem actionItem = createMockedActionItem();
@@ -133,7 +133,7 @@ class DiaryEventListenerTest {
 	void testOnDiaryEntryAddedWithExceedingTemperatureResolved() {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
-		var entry = DiaryEntry.of(Slot.now(), person) //
+		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(39F));
 		var actionItem = createMockedActionItem();
 
@@ -152,8 +152,8 @@ class DiaryEventListenerTest {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var symptom = mock(Symptom.class);
-		var entry = DiaryEntry.of(Slot.now(), person) //
-				.setSymptoms(List.of(symptom)) //
+		var entry = DiaryEntry.of(Slot.now(), person)
+				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
 
 		when(symptom.isCharacteristic()).thenReturn(true);
@@ -177,8 +177,8 @@ class DiaryEventListenerTest {
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var symptom = mock(Symptom.class);
 		var actionItem = createMockedActionItem();
-		var diaryEntry = DiaryEntry.of(Slot.now(), person) //
-				.setSymptoms(List.of(symptom)) //
+		var diaryEntry = DiaryEntry.of(Slot.now(), person)
+				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
 
 		when(symptom.isCharacteristic()).thenReturn(true);
@@ -204,8 +204,8 @@ class DiaryEventListenerTest {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var symptom = mock(Symptom.class);
-		var entry = DiaryEntry.of(Slot.now().previous(), person) //
-				.setSymptoms(List.of(symptom)) //
+		var entry = DiaryEntry.of(Slot.now().previous(), person)
+				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
 		var actionItem = createMockedActionItem();
 
@@ -232,8 +232,8 @@ class DiaryEventListenerTest {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var symptom = mock(Symptom.class);
-		var entry = DiaryEntry.of(Slot.now(), person) //
-				.setSymptoms(List.of(symptom)) //
+		var entry = DiaryEntry.of(Slot.now(), person)
+				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
 
 		when(symptom.isCharacteristic()).thenReturn(true);
@@ -284,8 +284,8 @@ class DiaryEventListenerTest {
 
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var diaryEntry1 = DiaryEntry.of(Slot.now().previous(), person);
-		var diaryEntry2 = DiaryEntry.of(Slot.now(), person) //
-				.setSymptoms(List.of()) //
+		var diaryEntry2 = DiaryEntry.of(Slot.now(), person)
+				.setSymptoms(List.of())
 				.setBodyTemperature(BodyTemperature.of(36));
 		var actionItem = createMockedActionItem();
 

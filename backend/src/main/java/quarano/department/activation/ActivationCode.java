@@ -90,10 +90,10 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	 */
 	Try<ActivationCode> redeem() {
 
-		return Try.success(this) //
-				.filter(it -> !it.isExpired(), ActivationCodeException::expired) //
-				.filter(it -> it.isWaitingForActivation(), ActivationCodeException::usedOrCanceled) //
-				.onSuccess(it -> it.status = ActivationCodeStatus.REDEEMED); //
+		return Try.success(this)
+				.filter(it -> !it.isExpired(), ActivationCodeException::expired)
+				.filter(it -> it.isWaitingForActivation(), ActivationCodeException::usedOrCanceled)
+				.onSuccess(it -> it.status = ActivationCodeStatus.REDEEMED);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 			return result;
 		}
 
-		return result //
+		return result
 				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled)
 				.onSuccess(it -> it.status = ActivationCodeStatus.CANCELED);
 	}
@@ -143,8 +143,8 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	}
 
 	public enum ActivationCodeStatus {
-		WAITING_FOR_ACTIVATION, //
-		REDEEMED, //
-		CANCELED //
+		WAITING_FOR_ACTIVATION,
+		REDEEMED,
+		CANCELED
 	}
 }

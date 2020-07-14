@@ -22,10 +22,10 @@ class SpringSecurityAuthenticationManager implements AuthenticationManager {
 	@Override
 	public Optional<Account> getCurrentUser() {
 
-		return Optional.ofNullable(SecurityContextHolder.getContext() //
-				.getAuthentication()) //
-				.map(Authentication::getPrincipal) //
-				.filter(Account.class::isInstance) //
+		return Optional.ofNullable(SecurityContextHolder.getContext()
+				.getAuthentication())
+				.map(Authentication::getPrincipal)
+				.filter(Account.class::isInstance)
 				.map(Account.class::cast);
 	}
 }

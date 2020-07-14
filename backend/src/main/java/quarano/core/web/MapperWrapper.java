@@ -102,11 +102,11 @@ public class MapperWrapper {
 	private <T> Either<T, Errors> handle(MappingException o_O, Errors errors) {
 
 		o_O.getErrorMessages().stream()//
-				.map(ErrorMessage::getCause) //
+				.map(ErrorMessage::getCause)
 				.forEach(it -> {
 
 					if (AggregateReferenceMappingException.class.isInstance(it)) {
-						handle((AggregateReferenceMappingException) it, errors); //
+						handle((AggregateReferenceMappingException) it, errors);
 					} else {
 						handle((RuntimeException) it, errors);
 					}

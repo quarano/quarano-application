@@ -31,10 +31,10 @@ class SymptomControllerWebIntegrationTest {
 		payload.setId(UUID.randomUUID());
 		payload.setName("some invalid name 1231 __\\");
 
-		String response = mvc.perform(post("/api/symptoms") //
-				.content(mapper.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		String response = mvc.perform(post("/api/symptoms")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);

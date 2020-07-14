@@ -27,8 +27,8 @@ public interface QuaranoHttpHeaders {
 
 		Assert.hasText(token, "Token must not be null or empty!");
 
-		return ResponseEntity.noContent() //
-				.header(AUTH_TOKEN, token) //
+		return ResponseEntity.noContent()
+				.header(AUTH_TOKEN, token)
 				.build();
 	}
 }

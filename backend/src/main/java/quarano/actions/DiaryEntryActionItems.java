@@ -51,8 +51,8 @@ class DiaryEntryActionItems {
 		Assert.notNull(source, "Source action items must not be null!");
 		Assert.notNull(itemHandler, "Item handler must not be null!");
 
-		return new DiaryEntryActionItems(source //
-				.filter(DiaryEntryActionItem.class::isInstance) //
+		return new DiaryEntryActionItems(source
+				.filter(DiaryEntryActionItem.class::isInstance)
 				.map(DiaryEntryActionItem.class::cast), itemHandler);
 	}
 
@@ -70,7 +70,7 @@ class DiaryEntryActionItems {
 			Function<DiaryEntry, DiaryEntryActionItem> factory) {
 
 		// Resolve current entry
-		var currentEntry = items.filter(it -> it.getEntry().equals(entry)); //
+		var currentEntry = items.filter(it -> it.getEntry().equals(entry));
 
 		if (currentEntry.isEmpty()) {
 
@@ -78,14 +78,14 @@ class DiaryEntryActionItems {
 
 		} else {
 
-			items.map(ActionItem::resolve) //
+			items.map(ActionItem::resolve)
 					.forEach(itemHandler);
 
 			diary.get().stream()//
-					.sorted(Comparator.comparing(DiaryEntry::getSlot)) //
-					.filter(it -> it.getSymptoms().hasCharacteristicSymptom()) //
-					.findFirst() //
-					.map(factory::apply) //
+					.sorted(Comparator.comparing(DiaryEntry::getSlot))
+					.filter(it -> it.getSymptoms().hasCharacteristicSymptom())
+					.findFirst()
+					.map(factory::apply)
 					.ifPresent(itemHandler);
 		}
 
@@ -127,8 +127,8 @@ class DiaryEntryActionItems {
 		}
 
 		// Resolve all future entries
-		items.filter(it -> it.getEntry().isAfter(entry)) //
-				.map(ActionItem::resolve) //
+		items.filter(it -> it.getEntry().isAfter(entry))
+				.map(ActionItem::resolve)
 				.forEach(itemHandler);
 
 		// Create new one if the current entry is not already attached to an item

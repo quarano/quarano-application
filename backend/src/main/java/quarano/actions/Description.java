@@ -30,8 +30,8 @@ public class Description implements MessageSourceResolvable {
 
 	public static Description of(DescriptionCode code, Object... arguments) {
 
-		var collect = Arrays.stream(arguments) //
-				.map(Object::toString) //
+		var collect = Arrays.stream(arguments)
+				.map(Object::toString)
 				.collect(Collectors.joining("|"));
 
 		return new Description(code, collect);

@@ -103,8 +103,8 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void indicatesStartTrackingIfRequiredDataIsSet() throws Exception {
 
-		var payload = createMinimalIndexPayload() //
-				.setEmail("foo@bar.com") //
+		var payload = createMinimalIndexPayload()
+				.setEmail("foo@bar.com")
 				.setDateOfBirth(LocalDate.now().minusYears(25));
 
 		var response = issueCaseCreation(payload, CaseType.INDEX).getContentAsString();
@@ -123,9 +123,9 @@ class TrackedCaseControllerWebIntegrationTests {
 		LocalDate today = LocalDate.now();
 
 		// get the first case
-		var response = mvc.perform(get("/api/hd/cases") //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/cases")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -140,16 +140,16 @@ class TrackedCaseControllerWebIntegrationTests {
 		var payload = createMinimalIndexPayload().setQuarantineEndDate(quarantineEndDate)
 				.setQuarantineStartDate(quarantineStartDate);
 
-		mvc.perform(put("/api/hd/cases/{id}", trackedCaseId) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		mvc.perform(put("/api/hd/cases/{id}", trackedCaseId)
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		// fetch cases again and check if quarantine start and end dates are shown correctly
-		var readResponseAfterUpdate = mvc.perform(get("/api/hd/cases") //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var readResponseAfterUpdate = mvc.perform(get("/api/hd/cases")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var documentAfterUpdate = JsonPath.parse(readResponseAfterUpdate);
@@ -175,10 +175,10 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		String location = response.getHeader(HttpHeaders.LOCATION);
 
-		response = mvc.perform(put(location) //
-				.content(jackson.writeValueAsString(payload.setInfected(true))) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		response = mvc.perform(put(location)
+				.content(jackson.writeValueAsString(payload.setInfected(true)))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse();
 
 		var document = JsonPath.parse(response.getContentAsString());
@@ -240,8 +240,8 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void rejectCreationOfContactCaseWithPositiveTestResult() throws Exception {
 
-		var payload = createMinimalContactPayload() //
-				.setTestDate(LocalDate.now().minusDays(8)) //
+		var payload = createMinimalContactPayload()
+				.setTestDate(LocalDate.now().minusDays(8))
 				.setInfected(true);
 
 		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases?type=contact", payload);
@@ -252,13 +252,13 @@ class TrackedCaseControllerWebIntegrationTests {
 	@TestFactory
 	Stream<DynamicTest> rejectsIndexCaseCreationWithoutRequiredFields() throws Exception {
 
-		var source = Map.of("", Index.class, //
-				"type=index", Index.class, //
+		var source = Map.of("", Index.class,
+				"type=index", Index.class,
 				"type=contact", Default.class);
 
-		return DynamicTest.stream(source.entrySet().iterator(), //
+		return DynamicTest.stream(source.entrySet().iterator(),
 				it -> String.format("POST to /api/hd/cases%s rejects missing properties",
-						!it.getKey().isBlank() ? "?".concat(it.getKey()) : ""), //
+						!it.getKey().isBlank() ? "?".concat(it.getKey()) : ""),
 				test -> {
 
 					var baseUri = "/api/hd/cases";
@@ -266,7 +266,7 @@ class TrackedCaseControllerWebIntegrationTests {
 					var response = expectBadRequest(HttpMethod.POST, uri, new TrackedCaseDto());
 					var group = test.getValue() == Default.class ? null : test.getValue();
 
-					validator.getRequiredProperties(TrackedCaseDto.class, group) //
+					validator.getRequiredProperties(TrackedCaseDto.class, group)
 							.forEach(it -> assertThat(response.read("$." + it, String.class)).isNotNull());
 				});
 	}
@@ -275,15 +275,15 @@ class TrackedCaseControllerWebIntegrationTests {
 	void rejectsInvalidCharactersForStringFields() throws Exception {
 
 		var today = LocalDate.now();
-		var payload = new TrackedCaseDto() //
-				.setFirstName("Michael 123") //
-				.setLastName("Mustermann 123") //
-				.setTestDate(today) //
-				.setQuarantineStartDate(today) //
-				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod())) //
-				.setPhone("0123456789") //
-				.setCity("city 123") //
-				.setStreet("\\") //
+		var payload = new TrackedCaseDto()
+				.setFirstName("Michael 123")
+				.setLastName("Mustermann 123")
+				.setTestDate(today)
+				.setQuarantineStartDate(today)
+				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()))
+				.setPhone("0123456789")
+				.setCity("city 123")
+				.setStreet("\\")
 				.setExtReferenceNumber("ADF !").setHouseNumber("\\");
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
@@ -307,8 +307,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
 		@SuppressWarnings("null")
-		var payload = representations.toInputRepresentation(trackedCase) //
-				.setEmail(null) //
+		var payload = representations.toInputRepresentation(trackedCase)
+				.setEmail(null)
 				.setDateOfBirth(null);
 
 		var document = expectBadRequest(HttpMethod.PUT, "/api/hd/cases/" + trackedCase.getId(), payload);
@@ -319,16 +319,16 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void getAllCasesOrderedCorrectly() throws Exception {
 
-		var response = mvc.perform(get("/api/hd/cases") //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/cases")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
 
-		var lastNamesFromResponse = List.of( //
-				document.read("$._embedded.cases[0].lastName", String.class), //
-				document.read("$._embedded.cases[1].lastName", String.class), //
+		var lastNamesFromResponse = List.of(
+				document.read("$._embedded.cases[0].lastName", String.class),
+				document.read("$._embedded.cases[1].lastName", String.class),
 				document.read("$._embedded.cases[2].lastName", String.class));
 
 		var expectedList = new ArrayList<>(lastNamesFromResponse);
@@ -345,10 +345,10 @@ class TrackedCaseControllerWebIntegrationTests {
 		var payload = new CommentInput();
 		payload.setComment("Kommentar!");
 
-		var response = mvc.perform(post("/api/hd/cases/{id}/comments", trackedCase.getId()) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(post("/api/hd/cases/{id}/comments", trackedCase.getId())
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -396,9 +396,9 @@ class TrackedCaseControllerWebIntegrationTests {
 		var contactCase = createMinimalContactPayload();
 		contactCase.setEmail("");
 
-		mvc.perform(post("/api/hd/cases") //
-				.content(jackson.writeValueAsString(contactCase)) //
-				.contentType(MediaType.APPLICATION_JSON).param("type", "contact")) //
+		mvc.perform(post("/api/hd/cases")
+				.content(jackson.writeValueAsString(contactCase))
+				.contentType(MediaType.APPLICATION_JSON).param("type", "contact"))
 				.andExpect(status().isCreated());
 	}
 
@@ -439,7 +439,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@TestFactory
 	Stream<DynamicTest> creatingContactCasesOnlyWithCorrectQuarantineDates() {
 
-		return createQuarantineTests((payload, type) -> issueCaseCreation(payload, type), //
+		return createQuarantineTests((payload, type) -> issueCaseCreation(payload, type),
 				(payload, type) -> expectBadRequestOnCreation(payload, type));
 	}
 
@@ -461,25 +461,25 @@ class TrackedCaseControllerWebIntegrationTests {
 
 			var now = LocalDate.now();
 
-			var base = Stream.of(Fixture.of(now, null, it, failure), //
-					Fixture.of(null, now, it, failure), //
-					Fixture.of(now, now.minusDays(1), it, failure), //
-					Fixture.of(now.minusDays(1), now, it, success)); //
+			var base = Stream.of(Fixture.of(now, null, it, failure),
+					Fixture.of(null, now, it, failure),
+					Fixture.of(now, now.minusDays(1), it, failure),
+					Fixture.of(now.minusDays(1), now, it, success));
 
-			return it.equals(CaseType.INDEX) //
-					? Stream.concat(base, Stream.of(Fixture.of(null, null, it, failure))) //
+			return it.equals(CaseType.INDEX)
+					? Stream.concat(base, Stream.of(Fixture.of(null, null, it, failure)))
 					: base;
 
 		}).iterator();
 
-		return DynamicTest.stream(fixture, //
+		return DynamicTest.stream(fixture,
 				it -> {
 					return String.format("Case creation/update with quarantine (%s, %s) for type %s %s.", it.start, it.end,
 							it.type, it.consumer == success ? "succeeds" : "is rejected");
 				}, it -> {
 
-					var payload = it.type == CaseType.INDEX //
-							? createMinimalIndexPayload() //
+					var payload = it.type == CaseType.INDEX
+							? createMinimalIndexPayload()
 							: createMinimalContactPayload();
 
 					payload.setQuarantineStartDate(it.start);
@@ -494,14 +494,14 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 
-		var payload = representations.toInputRepresentation(trackedCase) //
-				.setFirstName("Max") //
+		var payload = representations.toInputRepresentation(trackedCase)
+				.setFirstName("Max")
 				.setLastName("Mustermann");
 
-		var response = mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId()) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId())
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -515,15 +515,15 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId())) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.QUESTIONNAIRE, response);
 		assertThat(link).isNotNull();
 
-		response = mvc.perform(get(link.getHref())) //
-				.andExpect(status().isOk()) //
+		response = mvc.perform(get(link.getHref()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -537,8 +537,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId())) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -547,8 +547,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.CONTACTS, response);
 		assertThat(link).isNotNull();
 
-		response = mvc.perform(get(link.getHref())) //
-				.andExpect(status().isOk()) //
+		response = mvc.perform(get(link.getHref()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		document = JsonPath.parse(response);
@@ -575,19 +575,19 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test // CORE-252
 	void filtersCasesIfQueryGiven() throws Exception {
 
-		String response = mvc.perform(get("/api/hd/cases?q={query}", "ert")) //
-				.andExpect(status().isOk()) //
+		String response = mvc.perform(get("/api/hd/cases?q={query}", "ert"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThat(JsonPath.parse(response).read("$._embedded.cases[*].lastName", String[].class)) //
+		assertThat(JsonPath.parse(response).read("$._embedded.cases[*].lastName", String[].class))
 				.containsExactly("Ebert", "Mertens", "Seufert");
 	}
 
 	@Test // CORE-252
 	void projectsCasesIfProjectionGiven() throws Exception {
 
-		String response = mvc.perform(get("/api/hd/cases?q={query}&projection={projection}", "ert", "select")) //
-				.andExpect(status().isOk()) //
+		String response = mvc.perform(get("/api/hd/cases?q={query}&projection={projection}", "ert", "select"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var firstCase = JsonPath.parse(response).read("$._embedded.cases[0]", Map.class);
@@ -605,18 +605,18 @@ class TrackedCaseControllerWebIntegrationTests {
 	void updatesOriginCasesCorrectly() throws Exception {
 
 		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
-		var contactCase = cases.findAll() //
-				.filter(it -> !it.getType().equals(CaseType.INDEX)) //
+		var contactCase = cases.findAll()
+				.filter(it -> !it.getType().equals(CaseType.INDEX))
 				.stream().findFirst().orElseThrow();
 
 		contactCase.addOriginCase(originCase);
 
 		TestUtils.fakeRequest(HttpMethod.GET, "/api/hd/cases", mvc.getDispatcherServlet().getWebApplicationContext());
 
-		var response = mvc.perform(put("/api/hd/cases/{id}", contactCase.getId()) //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(jackson.writeValueAsString(representations.toInputRepresentation(contactCase)))) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(put("/api/hd/cases/{id}", contactCase.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(jackson.writeValueAsString(representations.toInputRepresentation(contactCase))))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -633,17 +633,17 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
-		return JsonPath.parse(mvc.perform(request(method, uri) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		return JsonPath.parse(mvc.perform(request(method, uri)
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString());
 	}
 
 	private TrackedCaseDto createMinimalContactPayload() {
 
-		return new TrackedCaseDto() //
-				.setFirstName("Michael") //
+		return new TrackedCaseDto()
+				.setFirstName("Michael")
 				.setLastName("Mustermann");
 	}
 
@@ -651,10 +651,10 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var today = LocalDate.now();
 
-		return createMinimalContactPayload() //
-				.setPhone("0123456789") //
-				.setTestDate(today) //
-				.setQuarantineStartDate(today) //
+		return createMinimalContactPayload()
+				.setPhone("0123456789")
+				.setTestDate(today)
+				.setQuarantineStartDate(today)
 				.setQuarantineEndDate(today.plus(configuration.getQuarantinePeriod()));
 	}
 
@@ -662,12 +662,12 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(post("/api/hd/cases") //
-					.param("type", type == CaseType.INDEX ? "index" : "contact") //
-					.content(jackson.writeValueAsString(payload)) //
-					.contentType(MediaType.APPLICATION_JSON)) //
-					.andExpect(status().isCreated()) //
-					.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue()))) //
+			return mvc.perform(post("/api/hd/cases")
+					.param("type", type == CaseType.INDEX ? "index" : "contact")
+					.content(jackson.writeValueAsString(payload))
+					.contentType(MediaType.APPLICATION_JSON))
+					.andExpect(status().isCreated())
+					.andExpect(header().string(HttpHeaders.LOCATION, is(notNullValue())))
 					.andReturn().getResponse();
 
 		} catch (Exception e) {
@@ -679,11 +679,11 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(post("/api/hd/cases") //
-					.param("type", type == CaseType.INDEX ? "index" : "contact") //
-					.content(jackson.writeValueAsString(payload)) //
-					.contentType(MediaType.APPLICATION_JSON)) //
-					.andExpect(status().isBadRequest()) //
+			return mvc.perform(post("/api/hd/cases")
+					.param("type", type == CaseType.INDEX ? "index" : "contact")
+					.content(jackson.writeValueAsString(payload))
+					.contentType(MediaType.APPLICATION_JSON))
+					.andExpect(status().isBadRequest())
 					.andReturn().getResponse();
 
 		} catch (Exception e) {
@@ -695,11 +695,11 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(put("/api/hd/cases/{id}", caseId) //
-					.param("type", type == CaseType.INDEX ? "index" : "contact") //
-					.content(jackson.writeValueAsString(payload)) //
-					.contentType(MediaType.APPLICATION_JSON)) //
-					.andExpect(status().isOk()) //
+			return mvc.perform(put("/api/hd/cases/{id}", caseId)
+					.param("type", type == CaseType.INDEX ? "index" : "contact")
+					.content(jackson.writeValueAsString(payload))
+					.contentType(MediaType.APPLICATION_JSON))
+					.andExpect(status().isOk())
 					.andReturn().getResponse();
 
 		} catch (Exception e) {
@@ -710,20 +710,20 @@ class TrackedCaseControllerWebIntegrationTests {
 	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload, TrackedCaseIdentifier id)
 			throws Exception, JsonProcessingException {
 
-		return mvc.perform(put("/api/hd/cases/{id}", id) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		return mvc.perform(put("/api/hd/cases/{id}", id)
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse();
 	}
 
 	private MockHttpServletResponse expectBadRequestOnTransformationCall(TrackedCaseDto payload,
 			TrackedCaseIdentifier caseId) throws Exception, JsonProcessingException {
 
-		return mvc.perform(put("/api/hd/cases/{id}", caseId) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		return mvc.perform(put("/api/hd/cases/{id}", caseId)
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse();
 	}
 
@@ -732,10 +732,10 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(put("/api/hd/cases/{caseId}", caseId) //
-					.content(jackson.writeValueAsString(payload)) //
-					.contentType(MediaType.APPLICATION_JSON)) //
-					.andExpect(status().isBadRequest()) //
+			return mvc.perform(put("/api/hd/cases/{caseId}", caseId)
+					.content(jackson.writeValueAsString(payload))
+					.contentType(MediaType.APPLICATION_JSON))
+					.andExpect(status().isBadRequest())
 					.andReturn().getResponse();
 
 		} catch (Exception e) {
@@ -746,10 +746,10 @@ class TrackedCaseControllerWebIntegrationTests {
 	private static void assertMinimalIndexFieldsSet(DocumentContext document, TrackedCaseDto payload) {
 
 		assertMinimalContactFieldsSet(document, payload);
-		assertThat(document.read("$.quarantineStartDate", String.class)) //
-				.isNotNull() //
+		assertThat(document.read("$.quarantineStartDate", String.class))
+				.isNotNull()
 				.isEqualTo(payload.getQuarantineStartDate().toString());
-		assertThat(document.read("$.quarantineEndDate", String.class)) //
+		assertThat(document.read("$.quarantineEndDate", String.class))
 				.isEqualTo(payload.getQuarantineEndDate().toString());
 		assertThat(document.read("$.phone", String.class)).isEqualTo(payload.getPhone());
 		assertThat(document.read("$.testDate", String.class)).isEqualTo(payload.getTestDate().toString());

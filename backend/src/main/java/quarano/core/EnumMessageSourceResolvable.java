@@ -28,8 +28,8 @@ public class EnumMessageSourceResolvable implements MessageSourceResolvable {
 	@Override
 	public String[] getCodes() {
 
-		var name = value.name() //
-				.toLowerCase(Locale.US) //
+		var name = value.name()
+				.toLowerCase(Locale.US)
 				.replace("_", "-");
 
 		var type = value.getClass().getName().replace("$", ".");

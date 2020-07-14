@@ -99,8 +99,8 @@ class EnrollmentWebIntegrationTests {
 		assertThat(symptoms).containsExactlyElementsOf(
 				List.of("e5cea3b0-c8f4-4e03-a24e-89213f3f6637", "571a03cd-173c-4499-995c-d6a003e8c032"));
 	}
-	
-	
+
+
 	@Test // CORE-115
 	@WithQuaranoUser("DemoAccount")
 	public void completeQuestionaireWithSymptomsOfToday() throws Exception {
@@ -192,47 +192,47 @@ class EnrollmentWebIntegrationTests {
 
 		return questionnaire;
 	}
-	
+
 
 
 	private String performRequestToGetEnrollementState() throws UnsupportedEncodingException, Exception {
-		String result = mvc.perform(get("/api/enrollment")) //
-				.andExpect(status().isOk()) //
+		String result = mvc.perform(get("/api/enrollment"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		return result;
 	}
 
 	private String performRequestToGetQuestionnaire() throws UnsupportedEncodingException, Exception {
-		String result = mvc.perform(get("/api/enrollment/questionnaire")) //
-				.andExpect(status().isOk()) //
+		String result = mvc.perform(get("/api/enrollment/questionnaire"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		return result;
 	}
 
 	private void submitDetailsSuccessfully(TrackedPersonDto source)
 			throws UnsupportedEncodingException, Exception, JsonProcessingException {
-		mvc.perform(put("/api/enrollment/details") //
-				.content(jackson.writeValueAsString(source)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		mvc.perform(put("/api/enrollment/details")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 	}
 
 	private void submitQuestionnaireSuccessfully(QuestionnaireDto source)
 			throws UnsupportedEncodingException, Exception, JsonProcessingException {
-		mvc.perform(put("/api/enrollment/questionnaire") //
-				.content(jackson.writeValueAsString(source)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		mvc.perform(put("/api/enrollment/questionnaire")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 	}
 
 	private String submitQuestionnaireExpectBadRequest(QuestionnaireDto source)
 			throws UnsupportedEncodingException, Exception, JsonProcessingException {
-		return mvc.perform(put("/api/enrollment/questionnaire") //
-				.content(jackson.writeValueAsString(source)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		return mvc.perform(put("/api/enrollment/questionnaire")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 	}
 
@@ -253,18 +253,18 @@ class EnrollmentWebIntegrationTests {
 		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
 		var source = mapper.map(person, TrackedPersonDto.class);
 
-		source.setFirstName("Michael 123") //
-				.setLastName("Mustermann 123") //
-				.setPhone("0123456789") //
-				.setCity("city 123") //
-				.setStreet("\\") //
+		source.setFirstName("Michael 123")
+				.setLastName("Mustermann 123")
+				.setPhone("0123456789")
+				.setCity("city 123")
+				.setStreet("\\")
 				.setHouseNumber("@");
 
 		// When all enrollment details were submitted
-		var responseBody = mvc.perform(put("/api/enrollment/details") //
-				.content(jackson.writeValueAsString(source)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		var responseBody = mvc.perform(put("/api/enrollment/details")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(responseBody);

@@ -35,7 +35,7 @@ class TrackedPersonIntegrationTests {
 		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2;
 		var person = people.findById(personId).orElseThrow();
 
-		var contact = contacts.save(new ContactPerson("Max", "Mustermann", ContactWays.ofEmailAddress("max@mustermann.de")) //
+		var contact = contacts.save(new ContactPerson("Max", "Mustermann", ContactWays.ofEmailAddress("max@mustermann.de"))
 				.assignOwner(person));
 
 		person.reportContactWith(contact, LocalDate.now());
@@ -54,8 +54,8 @@ class TrackedPersonIntegrationTests {
 
 		people.save(person);
 
-		var expected = events.ofType(EncounterReported.class) //
-				.matching(it -> it.getPersonIdentifier().equals(person.getId())) //
+		var expected = events.ofType(EncounterReported.class)
+				.matching(it -> it.getPersonIdentifier().equals(person.getId()))
 				.matching(it -> it.isFirstEncounterWithTargetPerson());
 
 		assertThat(expected).hasSize(1);
@@ -73,13 +73,13 @@ class TrackedPersonIntegrationTests {
 
 		people.save(person);
 
-		var expectedEventsTotal = events.ofType(EncounterReported.class) //
-				.matching(it -> it.getPersonIdentifier().equals(person.getId())); //
+		var expectedEventsTotal = events.ofType(EncounterReported.class)
+				.matching(it -> it.getPersonIdentifier().equals(person.getId()));
 
 		assertThat(expectedEventsTotal).hasSize(2);
 
-		var expectedEventsFirstEncounter = events.ofType(EncounterReported.class) //
-				.matching(it -> it.getPersonIdentifier().equals(person.getId())) //
+		var expectedEventsFirstEncounter = events.ofType(EncounterReported.class)
+				.matching(it -> it.getPersonIdentifier().equals(person.getId()))
 				.matching(it -> it.isFirstEncounterWithTargetPerson());
 
 		assertThat(expectedEventsFirstEncounter).hasSize(1);

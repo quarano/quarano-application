@@ -38,8 +38,8 @@ class SymptomController {
 	@GetMapping("/api/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
 
-		return symptoms.findAll(BY_NAME_ASCENDING) //
-				.map(it -> modelMapper.map(it, SymptomDto.class)) //
+		return symptoms.findAll(BY_NAME_ASCENDING)
+				.map(it -> modelMapper.map(it, SymptomDto.class))
 				.stream();
 	}
 
@@ -71,12 +71,12 @@ class SymptomController {
 	@PostMapping("/api/allsymptoms")
 	public Stream<SymptomDto> addSymptoms(@Valid @RequestBody List<SymptomDto> symptomDtos) {
 
-		symptomDtos.stream() //
-				.map(x -> modelMapper.map(x, Symptom.class)) //
+		symptomDtos.stream()
+				.map(x -> modelMapper.map(x, Symptom.class))
 				.forEach(symptoms::save);
 
-		return symptoms.findAll() //
-				.map(x -> modelMapper.map(x, SymptomDto.class)) //
+		return symptoms.findAll()
+				.map(x -> modelMapper.map(x, SymptomDto.class))
 				.stream();
 	}
 }

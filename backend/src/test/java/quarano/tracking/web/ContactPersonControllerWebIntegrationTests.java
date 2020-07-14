@@ -35,7 +35,7 @@ class ContactPersonControllerWebIntegrationTests {
 	private final ObjectMapper mapper;
 	private final MessageSourceAccessor messages;
 
-	
+
 	@Test
 	void addContactPersonSuccess() throws Exception {
 
@@ -46,10 +46,10 @@ class ContactPersonControllerWebIntegrationTests {
 		payload.setEmail("test@testtest.de");
 		payload.setMobilePhone("0123910");
 
-		String response = mvc.perform(post("/api/contacts") //
-				.content(mapper.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isCreated()) //
+		String response = mvc.perform(post("/api/contacts")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -60,16 +60,16 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.email", String.class)).isEqualTo("test@testtest.de");
 		assertThat(document.read("$.mobilePhone", String.class)).isEqualTo("0123910");
 	}
-	
+
 	@Test
 	void rejectsMissingContactWays() throws Exception {
 
 		var payload = new ContactPersonDto();
 
-		String response = mvc.perform(post("/api/contacts") //
-				.content(mapper.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		String response = mvc.perform(post("/api/contacts")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -86,15 +86,15 @@ class ContactPersonControllerWebIntegrationTests {
 		var payload = new ContactPersonDto();
 		payload.setFirstName("Test121231 ")
 		.setLastName("TestN121231 ")
-		.setPhone("012356789A") //
-		.setCity("city 123") //
-		.setStreet("\\") //
+		.setPhone("012356789A")
+		.setCity("city 123")
+		.setStreet("\\")
 		.setHouseNumber("\\");
 
-		String response = mvc.perform(post("/api/contacts") //
-				.content(mapper.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isBadRequest()) //
+		String response = mvc.perform(post("/api/contacts")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -109,29 +109,29 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
-	
+
 
 	@TestFactory
 	Stream<DynamicTest> acceptsRequestIfOneContactWayIsGiven() {
 
-		var fields = Map.of("phone", "123456789", //
-				"mobilePhone", "123456789", //
-				"email", "michael@mustermann.de", //
+		var fields = Map.of("phone", "123456789",
+				"mobilePhone", "123456789",
+				"email", "michael@mustermann.de",
 				"identificationHint", "Fleischereifachverkäufer");
 
-		return DynamicTest.stream(fields.entrySet().iterator(), //
+		return DynamicTest.stream(fields.entrySet().iterator(),
 				entry -> {
 					return String.format("Accepts new contact if only %s is given", entry.getKey());
-				}, //
+				},
 				entry -> {
 
 					var payload = JsonPath.parse(mapper.writeValueAsString(new ContactPersonDto())).set("$." + entry.getKey(),
 							entry.getValue());
 
-					String response = mvc.perform(post("/api/contacts") //
-							.content(payload.jsonString()) //
-							.contentType(MediaType.APPLICATION_JSON)) //
-							.andExpect(status().isCreated()) //
+					String response = mvc.perform(post("/api/contacts")
+							.content(payload.jsonString())
+							.contentType(MediaType.APPLICATION_JSON))
+							.andExpect(status().isCreated())
 							.andReturn().getResponse().getContentAsString();
 
 					var document = JsonPath.parse(response);

@@ -44,8 +44,8 @@ public class QuestionnaireDto {
 		if (dayOfFirstSymptoms != null) {
 
 			if (null != this.symptoms) {
-				symptomsOfReport = this.symptoms.stream() //
-						.map(it -> symptoms.findById(it).get()) //
+				symptomsOfReport = this.symptoms.stream()
+						.map(it -> symptoms.findById(it).get())
 						.collect(Collectors.toList());
 			}
 
@@ -65,25 +65,25 @@ public class QuestionnaireDto {
 		}
 
 		if (hasSymptoms != null) {
-			report = hasSymptoms //
+			report = hasSymptoms
 					? report.withFirstSymptomsAt(dayOfFirstSymptoms, symptomsOfReport)
 					: report.withoutSymptoms();
 		}
 
 		if (hasPreExistingConditions != null) {
-			report = hasPreExistingConditions //
+			report = hasPreExistingConditions
 					? report.withPreExistingConditions(hasPreExistingConditionsDescription)
 					: report.withoutPreExistingConditions();
 		}
 
 		if (belongToMedicalStaff != null) {
-			report = belongToMedicalStaff //
+			report = belongToMedicalStaff
 					? report.withBelongToMedicalStaff(belongToMedicalStaffDescription)
 					: report.withoutBelongToMedicalStaff();
 		}
 
 		if (hasContactToVulnerablePeople != null) {
-			report = hasContactToVulnerablePeople //
+			report = hasContactToVulnerablePeople
 					? report.withContactToVulnerablePeople(hasContactToVulnerablePeopleDescription)
 					: report.withoutContactToVulnerablePeople();
 		}
@@ -93,21 +93,21 @@ public class QuestionnaireDto {
 
 	Errors validate(Errors errors) {
 
-		if (Boolean.TRUE.equals(hasPreExistingConditions) //
-				&& (hasPreExistingConditionsDescription == null //
+		if (Boolean.TRUE.equals(hasPreExistingConditions)
+				&& (hasPreExistingConditionsDescription == null
 						|| hasPreExistingConditionsDescription.isBlank())) {
 			errors.rejectValue("hasPreExistingConditionsDescription",
 					"NotNull.IntialReportDto.hasPreExistingConditionsDescription");
 		}
 
-		if (Boolean.TRUE.equals(belongToMedicalStaff) //
-				&& (belongToMedicalStaffDescription == null //
+		if (Boolean.TRUE.equals(belongToMedicalStaff)
+				&& (belongToMedicalStaffDescription == null
 						|| belongToMedicalStaffDescription.isBlank())) {
 			errors.rejectValue("belongToMedicalStaffDescription", "NotNull.IntialReportDto.belongToMedicalStaffDescription");
 		}
 
-		if (Boolean.TRUE.equals(hasContactToVulnerablePeople) //
-				&& (hasContactToVulnerablePeopleDescription == null //
+		if (Boolean.TRUE.equals(hasContactToVulnerablePeople)
+				&& (hasContactToVulnerablePeopleDescription == null
 						|| hasContactToVulnerablePeopleDescription.isBlank())) {
 			errors.rejectValue("hasContactToVulnerablePeopleDescription",
 					"NotNull.IntialReportDto.hasContactToVulnerablePeopleDescription");

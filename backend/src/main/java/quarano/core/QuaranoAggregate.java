@@ -23,8 +23,8 @@ import org.springframework.lang.NonNull;
 @MappedSuperclass
 @EqualsAndHashCode(of = "id", callSuper = false)
 @EntityListeners(AuditingEntityListener.class)
-public abstract class QuaranoAggregate<T extends QuaranoAggregate<T, ID>, ID extends Identifier> //
-		extends AbstractAggregateRoot<T> //
+public abstract class QuaranoAggregate<T extends QuaranoAggregate<T, ID>, ID extends Identifier>
+		extends AbstractAggregateRoot<T>
 		implements AggregateRoot<T, ID>, Persistable<ID> {
 
 	protected @Getter(onMethod = @__(@NonNull)) @EmbeddedId ID id;

@@ -88,23 +88,23 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 	}
 
 	public String getCaseId() {
-		return contactTrackedCase.map(TrackedCase::getId) //
-				.map(TrackedCaseIdentifier::toString) //
+		return contactTrackedCase.map(TrackedCase::getId)
+				.map(TrackedCaseIdentifier::toString)
 				.orElse(null);
 	}
 
 	public String getCaseType() {
 
-		return contactTrackedCase.map(TrackedCase::getType) //
-				.map(CaseType::getPrimaryCaseType) //
-				.map(CaseType::name) //
-				.map(it -> it.toLowerCase(Locale.US)) //
+		return contactTrackedCase.map(TrackedCase::getType)
+				.map(CaseType::getPrimaryCaseType)
+				.map(CaseType::name)
+				.map(it -> it.toLowerCase(Locale.US))
 				.orElse(null);
 	}
 
 	public String getCaseTypeLabel() {
 
-		return toResolvedEnum(contactTrackedCase.map(TrackedCase::getType) //
+		return toResolvedEnum(contactTrackedCase.map(TrackedCase::getType)
 				.map(CaseType::getPrimaryCaseType));
 	}
 
@@ -118,8 +118,8 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 
 	private String toResolvedEnum(Optional<Enum<?>> source, String defaultValue) {
 
-		return source.map(EnumMessageSourceResolvable::of) //
-				.map(messages::getMessage) //
+		return source.map(EnumMessageSourceResolvable::of)
+				.map(messages::getMessage)
 				.orElse(defaultValue);
 	}
 }

@@ -21,9 +21,9 @@ class JwtTokenCreationIntegrationTests {
 	@Test
 	void generatesTokenForDepartmentStaff() {
 
-		assertThat(accounts.findByUsername("agent1") //
-				.map(configuration::generateTokenFor) //
-				.map(configuration::createToken)) //
+		assertThat(accounts.findByUsername("agent1")
+				.map(configuration::generateTokenFor)
+				.map(configuration::createToken))
 						.hasValueSatisfying(it -> {
 							assertThat(it.getUsername()).isEqualTo("agent1");
 						});

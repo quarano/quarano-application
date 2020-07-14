@@ -25,12 +25,12 @@ public class DepartmentProperties {
 
 	Department getDefaultDepartment() {
 
-		return new Department(defaultDepartment.name) //
-				.setContacts(defaultDepartment.contacts.stream() //
-						.map(contact -> new DepartmentContact() //
-								.setType(ContactType.valueOf(contact.type)) //
-								.setEmailAddress(EmailAddress.ofNullable(contact.emailAddress)) //
-								.setPhoneNumber(PhoneNumber.of(contact.phoneNumber))) //
+		return new Department(defaultDepartment.name)
+				.setContacts(defaultDepartment.contacts.stream()
+						.map(contact -> new DepartmentContact()
+								.setType(ContactType.valueOf(contact.type))
+								.setEmailAddress(EmailAddress.ofNullable(contact.emailAddress))
+								.setPhoneNumber(PhoneNumber.of(contact.phoneNumber)))
 						.collect(Collectors.toUnmodifiableSet()));
 	}
 

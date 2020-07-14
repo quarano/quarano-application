@@ -54,7 +54,7 @@ class DiaryDataInitializer implements DataInitializer {
 		// ==================== SANDRA ==================
 		List<ContactPerson> contactsOfPerson3 = new ArrayList<>();
 
-		var contact1OfPerson3 = new ContactPerson("Lora", "Laurer", ContactWays.ofEmailAddress("lora@testtest.de")); //
+		var contact1OfPerson3 = new ContactPerson("Lora", "Laurer", ContactWays.ofEmailAddress("lora@testtest.de"));
 		contact1OfPerson3.assignOwner(sandra);
 		contactsOfPerson3.add(contact1OfPerson3);
 
@@ -67,7 +67,7 @@ class DiaryDataInitializer implements DataInitializer {
 		// generate diary entries for person 3
 		Slot sameSlotYesterday = Slot.now().previous().previous();
 
-		DiaryEntry entry1 = DiaryEntry.of(sameSlotYesterday, sandra) //
+		DiaryEntry entry1 = DiaryEntry.of(sameSlotYesterday, sandra)
 				.setContacts(contactsOfPerson3);
 		// add 'husten'
 		List<Symptom> symptomsE1 = new ArrayList<>();
@@ -78,8 +78,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry1);
 
-		DiaryEntry entry2 = DiaryEntry.of(sameSlotYesterday.previous(), sandra) //
-				.setContacts(contactsOfPerson3.subList(0, 0)) //
+		DiaryEntry entry2 = DiaryEntry.of(sameSlotYesterday.previous(), sandra)
+				.setContacts(contactsOfPerson3.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -91,8 +91,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry2);
 
-		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), sandra) //
-				.setContacts(contactsOfPerson3.subList(1, 2)) //
+		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), sandra)
+				.setContacts(contactsOfPerson3.subList(1, 2))
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -105,11 +105,11 @@ class DiaryDataInitializer implements DataInitializer {
 		// ==================== SIGGI ==================
 		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
 
-		var contactOfSiggi = new ContactPerson("Melanie", "Maurer", ContactWays.ofEmailAddress("malanie@testtest.de")); //
+		var contactOfSiggi = new ContactPerson("Melanie", "Maurer", ContactWays.ofEmailAddress("malanie@testtest.de"));
 		contactOfSiggi.assignOwner(siggi);
 		contactsOfSiggi.add(contactOfSiggi);
 
-		var contactOfSiggi2 = new ContactPerson("Dorothea", "Drogler", ContactWays.ofEmailAddress("doro@testtest.de")) //
+		var contactOfSiggi2 = new ContactPerson("Dorothea", "Drogler", ContactWays.ofEmailAddress("doro@testtest.de"))
 				.setIsHealthStaff(true);
 		contactOfSiggi2.assignOwner(siggi);
 		contactsOfSiggi.add(contactOfSiggi2);
@@ -119,7 +119,7 @@ class DiaryDataInitializer implements DataInitializer {
 		// generate diary entries for person 3
 		Slot sameSlotYesterdaySiggi = Slot.now().previous().previous();
 
-		DiaryEntry entry1Siggi = DiaryEntry.of(sameSlotYesterdaySiggi, siggi) //
+		DiaryEntry entry1Siggi = DiaryEntry.of(sameSlotYesterdaySiggi, siggi)
 				.setContacts(contactsOfSiggi);
 		// add 'husten'
 		List<Symptom> symptomsS1 = new ArrayList<>();
@@ -129,8 +129,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry1Siggi);
 
-		DiaryEntry entry2Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous(), siggi) //
-				.setContacts(contactsOfSiggi.subList(0, 0)) //
+		DiaryEntry entry2Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous(), siggi)
+				.setContacts(contactsOfSiggi.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -141,8 +141,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry2Siggi);
 
-		DiaryEntry entry3Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous().previous(), siggi) //
-				.setContacts(contactsOfSiggi.subList(1, 1)) //
+		DiaryEntry entry3Siggi = DiaryEntry.of(sameSlotYesterdaySiggi.previous().previous(), siggi)
+				.setContacts(contactsOfSiggi.subList(1, 1))
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -155,7 +155,7 @@ class DiaryDataInitializer implements DataInitializer {
 		// ==================== GUSTAV ==================
 		List<ContactPerson> contactsOfPerson4 = new ArrayList<>();
 
-		var contact1OfPerson4 = new ContactPerson("Bert", "Baum", ContactWays.ofEmailAddress("bertbaum@testtest.de")); //
+		var contact1OfPerson4 = new ContactPerson("Bert", "Baum", ContactWays.ofEmailAddress("bertbaum@testtest.de"));
 		contact1OfPerson4.assignOwner(gustav);
 		contactsOfPerson4.add(contact1OfPerson3);
 
@@ -178,8 +178,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry1G);
 
-		DiaryEntry entry2G = DiaryEntry.of(sameSlotYesterdayGustav.previous(), gustav) //
-				.setContacts(contactsOfPerson4.subList(0, 0)) //
+		DiaryEntry entry2G = DiaryEntry.of(sameSlotYesterdayGustav.previous(), gustav)
+				.setContacts(contactsOfPerson4.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -194,7 +194,7 @@ class DiaryDataInitializer implements DataInitializer {
 		List<ContactPerson> contactsOfPerson5 = new ArrayList<>();
 
 		var contact1OfPerson5 = new ContactPerson("Sonja", "Sortig",
-				ContactWays.ofEmailAddress("sonja.sortig@testtest.de")); //
+				ContactWays.ofEmailAddress("sonja.sortig@testtest.de"));
 		contact1OfPerson5.assignOwner(nadine);
 		contactsOfPerson5.add(contact1OfPerson5);
 
@@ -208,8 +208,8 @@ class DiaryDataInitializer implements DataInitializer {
 		// generate diary entries for person 3
 		Slot sameSlotYesterdayN = Slot.now().previous().previous();
 
-		DiaryEntry entry1N = DiaryEntry.of(sameSlotYesterdayN, nadine) //
-				.setContacts(contactsOfPerson5) //
+		DiaryEntry entry1N = DiaryEntry.of(sameSlotYesterdayN, nadine)
+				.setContacts(contactsOfPerson5)
 				.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		// add 'husten'
@@ -219,8 +219,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry1N);
 
-		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), nadine) //
-				.setContacts(contactsOfPerson5.subList(0, 0)) //
+		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), nadine)
+				.setContacts(contactsOfPerson5.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(35.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
@@ -233,8 +233,8 @@ class DiaryDataInitializer implements DataInitializer {
 
 		Slot samelastSlot = Slot.now().previous();
 
-		DiaryEntry entry3N = DiaryEntry.of(samelastSlot, nadine) //
-				.setContacts(contactsOfPerson5) //
+		DiaryEntry entry3N = DiaryEntry.of(samelastSlot, nadine)
+				.setContacts(contactsOfPerson5)
 				.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		// add 'husten'

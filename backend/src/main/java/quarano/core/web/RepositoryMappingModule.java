@@ -125,18 +125,18 @@ public class RepositoryMappingModule implements org.modelmapper.Module {
 					return handleNull(null, context);
 				}
 
-				Object identifier = registry.getPluginFor(destinationType) //
-						.map(it -> it.preProcessIdentifier(context.getSource(), destinationType)) //
+				Object identifier = registry.getPluginFor(destinationType)
+						.map(it -> it.preProcessIdentifier(context.getSource(), destinationType))
 						.orElseGet(context::getSource);
 
-				Object domainId = Set.of(UUID.class, String.class).contains(identifier.getClass()) //
-						? conversions.convert(identifier, information.getRequiredIdProperty().getType()) //
+				Object domainId = Set.of(UUID.class, String.class).contains(identifier.getClass())
+						? conversions.convert(identifier, information.getRequiredIdProperty().getType())
 						: context.getSource();
 
 				var invoker = invokerFactory.getInvokerFor(destinationType);
 
-				var result = Optional.ofNullable(domainId) //
-						.flatMap(it -> invoker.invokeFindById(it)) //
+				var result = Optional.ofNullable(domainId)
+						.flatMap(it -> invoker.invokeFindById(it))
 						.orElse(null);
 
 				return result == null ? handleNull(domainId, context) : result;
@@ -174,16 +174,16 @@ public class RepositoryMappingModule implements org.modelmapper.Module {
 				var sourceType = context.getSourceType();
 				var targetType = context.getDestinationType();
 
-				var id = repositories.getPersistentEntity(source.getClass()) //
-						.getIdentifierAccessor(source) //
+				var id = repositories.getPersistentEntity(source.getClass())
+						.getIdentifierAccessor(source)
 						.getRequiredIdentifier();
 
-				var processed = registry.getPluginFor(sourceType) //
-						.map(it -> it.postProcessIdentifier(id, sourceType)) //
+				var processed = registry.getPluginFor(sourceType)
+						.map(it -> it.postProcessIdentifier(id, sourceType))
 						.orElse(id);
 
-				return targetType.isInstance(processed) //
-						? processed //
+				return targetType.isInstance(processed)
+						? processed
 						: conversions.convert(processed, targetType);
 			}
 		};
@@ -201,8 +201,8 @@ public class RepositoryMappingModule implements org.modelmapper.Module {
 			idTypes.addAll(Set.of(UUID.class, String.class));
 			idTypes.add(domainIdType);
 
-			registry.getPluginFor(type) //
-					.map(IdentifierProcessor::getAdditionalIdentifierTypes) //
+			registry.getPluginFor(type)
+					.map(IdentifierProcessor::getAdditionalIdentifierTypes)
 					.ifPresent(idTypes::addAll);
 
 			idTypes.forEach(it -> {

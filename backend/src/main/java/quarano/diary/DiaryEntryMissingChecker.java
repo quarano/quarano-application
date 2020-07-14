@@ -45,8 +45,8 @@ public class DiaryEntryMissingChecker {
 
 		log.debug("Check missing diary entries for slots {}", slots);
 
-		diaries.findMissingDiaryEntryPersons(slots) //
-				.map(person -> DiaryEntryMissing.of(slots, person)) //
+		diaries.findMissingDiaryEntryPersons(slots)
+				.map(person -> DiaryEntryMissing.of(slots, person))
 				.forEach(publisher::publishEvent);
 	}
 }

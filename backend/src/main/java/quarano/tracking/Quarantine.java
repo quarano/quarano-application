@@ -22,10 +22,10 @@ public class Quarantine {
 
 	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
 
-	@Column(name = "quarantine_from") //
+	@Column(name = "quarantine_from")
 	private final LocalDate from;
 
-	@Column(name = "quarantine_to") //
+	@Column(name = "quarantine_to")
 	private final LocalDate to;
 
 	public boolean isOver() {

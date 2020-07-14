@@ -53,7 +53,7 @@ class QuarantineEndCheckerTest {
 			new TrackedCase(new TrackedPerson("Olaf", "Beispiel"),
 					CaseType.INDEX, DEPARTMENT).setQuarantine(createQuarantine(TWO_WEEKS_AGO));
 
-	private static final Streamable<TrackedCase> TRACKED_CASES = Streamable //
+	private static final Streamable<TrackedCase> TRACKED_CASES = Streamable
 			.of(IN_QUARANTINE, QUARANTINE_OVER, QUARANTINE_ENDS_TODAY);
 
 	private static final int ONCE = 1;
@@ -117,7 +117,7 @@ class QuarantineEndCheckerTest {
 	private void prepareExistingActionItems(TrackedCase... cases) {
 
 		(cases.length == 0 ? TRACKED_CASES : Streamable.of(cases)).forEach(it -> {
-			doReturn(ActionItems.of(createQuarantineEndedActionItem(it))) //
+			doReturn(ActionItems.of(createQuarantineEndedActionItem(it)))
 					.when(items).findQuarantineEndingActionItemsFor(it);
 		});
 	}

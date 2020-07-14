@@ -58,7 +58,7 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 	private String note;
 	private BodyTemperature bodyTemperature;
 
-	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) //
+	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
 	private TrackedPersonIdentifier trackedPersonId;
 
 	DiaryEntry(Slot slot, TrackedPersonIdentifier id) {

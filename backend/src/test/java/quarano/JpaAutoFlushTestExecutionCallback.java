@@ -24,8 +24,8 @@ class JpaAutoFlushTestExecutionCallback implements AfterTestExecutionCallback {
 
 		ApplicationContext applicationContext = SpringExtension.getApplicationContext(context);
 
-		applicationContext.getBeanProvider(EntityManager.class) //
-				.stream() //
+		applicationContext.getBeanProvider(EntityManager.class)
+				.stream()
 				.forEach(em -> em.flush());
 	}
 }

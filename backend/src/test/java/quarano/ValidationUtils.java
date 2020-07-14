@@ -32,7 +32,7 @@ public class ValidationUtils {
 
 	public Stream<String> getRequiredProperties(Class<?> type, @Nullable Class<?> group) {
 
-		return validator.getConstraintsForClass(type).getConstrainedProperties().stream() //
+		return validator.getConstraintsForClass(type).getConstrainedProperties().stream()
 				.filter(it -> it.getConstraintDescriptors().stream().anyMatch(descriptor -> {
 
 					var annotation = descriptor.getAnnotation();
@@ -45,7 +45,7 @@ public class ValidationUtils {
 
 					return group == null ? groups.isEmpty() : groups.contains(group);
 
-				})) //
+				}))
 				.map(PropertyDescriptor::getPropertyName);
 	}
 }

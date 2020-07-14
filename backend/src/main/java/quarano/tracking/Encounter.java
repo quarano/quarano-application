@@ -31,10 +31,10 @@ import org.springframework.util.Assert;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
-	@ManyToOne @JoinColumn(name = "contact_person_id") //
+	@ManyToOne @JoinColumn(name = "contact_person_id")
 	private final @Getter ContactPerson contact;
 
-	@Column(name = "encounter_date") //
+	@Column(name = "encounter_date")
 	private final @Getter LocalDate date;
 
 	private Encounter(ContactPerson contact, LocalDate date) {
@@ -65,7 +65,7 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 
 	public boolean isSameAs(Encounter that) {
 
-		return this.date.equals(that.date) //
+		return this.date.equals(that.date)
 				&& this.contact.equals(that.contact);
 	}
 

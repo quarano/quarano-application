@@ -45,8 +45,8 @@ class StaffAccountController {
 	private final @NonNull MessageSourceAccessor accessor;
 
 	@PostMapping("/api/hd/accounts")
-	HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload, //
-			Errors errors, //
+	HttpEntity<?> addStaffAccount(@Validated @RequestBody StaffAccountCreateInputDto payload,
+			Errors errors,
 			@LoggedIn Department department) {
 
 		// start validation manually because of required reference to account object from database
@@ -56,27 +56,27 @@ class StaffAccountController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, accessor));
 		}
 
-		var storedAccount = accounts.createStaffAccount(payload.getUsername(), //
-				UnencryptedPassword.of(payload.getPassword()), //
-				payload.getFirstName(), //
-				payload.getLastName(), //
-				EmailAddress.of(payload.getEmail()), //
-				department.getId(), //
-				payload.getRoles().stream() //
-						.map(it -> RoleType.valueOf(it)) //
+		var storedAccount = accounts.createStaffAccount(payload.getUsername(),
+				UnencryptedPassword.of(payload.getPassword()),
+				payload.getFirstName(),
+				payload.getLastName(),
+				EmailAddress.of(payload.getEmail()),
+				department.getId(),
+				payload.getRoles().stream()
+						.map(it -> RoleType.valueOf(it))
 						.collect(Collectors.toList()));
 
 		var location = on(StaffAccountController.class).getStaffAccount(storedAccount.getId(), storedAccount);
 
-		return ResponseEntity //
-				.created(URI.create(fromMethodCall(location).toUriString())) //
+		return ResponseEntity
+				.created(URI.create(fromMethodCall(location).toUriString()))
 				.body(representations.toSummary(storedAccount));
 	}
 
 	@PutMapping("/api/hd/accounts/{accountId}")
-	HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId, //
-			@Validated @RequestBody StaffAccountUpdateInputDto payload, //
-			Errors errors, //
+	HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId,
+			@Validated @RequestBody StaffAccountUpdateInputDto payload,
+			Errors errors,
 			@LoggedIn Department department) {
 
 		var existing = accounts.findById(accountId).orElse(null);
@@ -90,9 +90,9 @@ class StaffAccountController {
 
 		var errorsDto = ErrorsDto.of(errors, accessor);
 
-		return errorsDto.toBadRequestOrElse(() -> ResponseEntity.of(accounts.findById(accountId) //
-				.map(it -> representations.from(payload, it)) //
-				.map(accounts::saveStaffAccount) //
+		return errorsDto.toBadRequestOrElse(() -> ResponseEntity.of(accounts.findById(accountId)
+				.map(it -> representations.from(payload, it))
+				.map(accounts::saveStaffAccount)
 				.map(representations::toSummary)));
 	}
 
@@ -101,8 +101,8 @@ class StaffAccountController {
 
 		var departmentAccounts = accounts.findStaffAccountsFor(admin.getDepartmentId());
 
-		return departmentAccounts.stream() //
-				.map(it -> representations.toSummary(it)) //
+		return departmentAccounts.stream()
+				.map(it -> representations.toSummary(it))
 				.collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
 	}
 
@@ -111,21 +111,21 @@ class StaffAccountController {
 
 		var adminDepartmentId = admin.getDepartmentId();
 
-		return ResponseEntity.of(accounts.findById(accountId) //
-				.filter(it -> it.belongsTo(adminDepartmentId)) //
+		return ResponseEntity.of(accounts.findById(accountId)
+				.filter(it -> it.belongsTo(adminDepartmentId))
 				.map(it -> representations.toSummary(it)));
 	}
 
 	@DeleteMapping("/api/hd/accounts/{accountId}")
 	HttpEntity<?> deleteStaffAccounts(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
 
-		return accounts.findById(accountId) //
+		return accounts.findById(accountId)
 				.map(it -> {
 
 					accounts.deleteAccount(it.getId());
 
-					return ResponseEntity.ok() //
-							.contentType(MediaType.APPLICATION_JSON) //
+					return ResponseEntity.ok()
+							.contentType(MediaType.APPLICATION_JSON)
 							.build();
 
 				}).orElseGet(() -> {

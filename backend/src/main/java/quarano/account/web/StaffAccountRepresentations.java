@@ -77,7 +77,7 @@ class StaffAccountRepresentations {
 
 			var staffAccountController = on(StaffAccountController.class);
 
-			return super.getLinks().and(Links.of( //
+			return super.getLinks().and(Links.of(
 					Link.of(fromMethodCall(
 							staffAccountController.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null))
 									.toUriString(),

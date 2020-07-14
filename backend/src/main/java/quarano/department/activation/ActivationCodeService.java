@@ -34,11 +34,11 @@ public class ActivationCodeService {
 		Assert.notNull(personIdentifier, "TrackedPerson identifier must not be null!");
 		Assert.notNull(departmentIdentifier, "Department identifier must not be null!");
 
-		return Try.success(personIdentifier) //
-				.map(activationCodes::findByTrackedPersonId) //
-				.filter(it -> !it.hasRedeemedCode(), ActivationCodeException::activationConcluded) //
-				.map(it -> it.cancelAll(activationCodes::save)) //
-				.map(__ -> new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier)) //
+		return Try.success(personIdentifier)
+				.map(activationCodes::findByTrackedPersonId)
+				.filter(it -> !it.hasRedeemedCode(), ActivationCodeException::activationConcluded)
+				.map(it -> it.cancelAll(activationCodes::save))
+				.map(__ -> new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier))
 				.map(activationCodes::save);
 	}
 
@@ -49,8 +49,8 @@ public class ActivationCodeService {
 	 */
 	public Try<ActivationCode> redeemCode(ActivationCodeIdentifier identifier) {
 
-		return findCode(identifier) //
-				.flatMap(ActivationCode::redeem) //
+		return findCode(identifier)
+				.flatMap(ActivationCode::redeem)
 				.map(activationCodes::save);
 	}
 
@@ -65,8 +65,8 @@ public class ActivationCodeService {
 
 		Assert.notNull(identifier, "ActivationCode identifier must not be null!");
 
-		return findCode(identifier) //
-				.filter(ActivationCode::isNotExpired, ActivationCodeException::expired) //
+		return findCode(identifier)
+				.filter(ActivationCode::isNotExpired, ActivationCodeException::expired)
 				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled);
 	}
 
@@ -80,13 +80,13 @@ public class ActivationCodeService {
 
 		Assert.notNull(identifier, "TrackedPerson identifier must not be null!");
 
-		return activationCodes.findByTrackedPersonId(identifier) //
+		return activationCodes.findByTrackedPersonId(identifier)
 				.getPendingActivationCode();
 	}
 
 	private Try<ActivationCode> findCode(ActivationCodeIdentifier identifier) {
 
-		return Try.ofSupplier(() -> activationCodes.findById(identifier) //
+		return Try.ofSupplier(() -> activationCodes.findById(identifier)
 				.orElseThrow(() -> ActivationCodeException.notFound(identifier)));
 	}
 }

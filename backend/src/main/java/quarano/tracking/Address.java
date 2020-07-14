@@ -28,8 +28,8 @@ public class Address {
 
 	boolean isComplete() {
 
-		return StringUtils.hasText(street) //
-				&& StringUtils.hasText(city) //
+		return StringUtils.hasText(street)
+				&& StringUtils.hasText(city)
 				&& zipCode != null;
 	}
 
@@ -43,8 +43,8 @@ public class Address {
 		private final String value;
 
 		public static HouseNumber of(@Nullable String source) {
-			return source == null || source.isBlank() //
-					? HouseNumber.NONE //
+			return source == null || source.isBlank()
+					? HouseNumber.NONE
 					: new HouseNumber(source);
 		}
 

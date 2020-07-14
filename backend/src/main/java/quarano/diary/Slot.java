@@ -155,7 +155,7 @@ public class Slot implements Comparable<Slot> {
 
 	public boolean contains(LocalDateTime date) {
 
-		return this.date.equals(timeOfDay.toLocalDate(date)) //
+		return this.date.equals(timeOfDay.toLocalDate(date))
 				&& timeOfDay.contains(date.toLocalTime());
 	}
 
@@ -268,9 +268,9 @@ public class Slot implements Comparable<Slot> {
 
 		static TimeOfDay of(LocalTime reference) {
 
-			return Arrays.stream(values()) //
-					.filter(it -> it.contains(reference)) //
-					.findFirst() //
+			return Arrays.stream(values())
+					.filter(it -> it.contains(reference))
+					.findFirst()
 					.orElseThrow(() -> new IllegalStateException("Should not happen!"));
 		}
 	}

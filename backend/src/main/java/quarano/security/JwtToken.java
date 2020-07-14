@@ -21,8 +21,8 @@ class JwtToken {
 
 		List<String> roles = claims.get(JwtProperties.ROLE_CLAIM, List.class);
 
-		return roles.stream() //
-				.map(RoleType::valueOf) //
+		return roles.stream()
+				.map(RoleType::valueOf)
 				.collect(Collectors.toUnmodifiableList());
 	}
 

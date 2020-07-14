@@ -36,13 +36,13 @@ class DiaryControllerWebIntegrationTests {
 	void createsDiaryEntry() throws Exception {
 
 		var slot = Slot.now();
-		var payload = new DiaryEntryInput(slot) //
+		var payload = new DiaryEntryInput(slot)
 				.setBodyTemperature(42.0f);
 
-		var response = mvc.perform(post("/api/diary") //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isCreated()) //
+		var response = mvc.perform(post("/api/diary")
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
 				.andReturn().getResponse();
 
 		var location = response.getHeader(HttpHeaders.LOCATION);
@@ -54,7 +54,7 @@ class DiaryControllerWebIntegrationTests {
 		assertThat(document.read("$.slot.date", String.class)).isEqualTo(slot.getDate().toString());
 		assertThat(document.read("$.bodyTemperature", float.class)).isEqualTo(42.0f);
 
-		mvc.perform(get(location)) //
+		mvc.perform(get(location))
 				.andExpect(status().isOk());
 	}
 
@@ -62,17 +62,17 @@ class DiaryControllerWebIntegrationTests {
 	@WithQuaranoUser("test3")
 	void updatesDiaryEntry() throws Exception {
 
-		var entry = diaries.findDiaryFor(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2) //
+		var entry = diaries.findDiaryFor(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
 				.iterator().next();
 		var slot = entry.getSlot();
 
-		DiaryEntryInput payload = new DiaryEntryInput(slot) //
+		DiaryEntryInput payload = new DiaryEntryInput(slot)
 				.setBodyTemperature(42.0f);
 
-		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId()) //
-				.content(jackson.writeValueAsString(payload)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId())
+				.content(jackson.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);

@@ -38,8 +38,8 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 
 	private @Getter @Column(unique = true) String name;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) //
-	@JoinColumn(name = "department_id") //
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "department_id")
 	private @Getter Set<DepartmentContact> contacts = new HashSet<>();
 
 	public Department(String name) {
@@ -70,8 +70,8 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	}
 
 	public Optional<DepartmentContact> getContact(ContactType contactType) {
-		return getContacts().stream() //
-				.filter(contact -> contact.getType().equals(contactType)) //
+		return getContacts().stream()
+				.filter(contact -> contact.getType().equals(contactType))
 				.findFirst();
 	}
 

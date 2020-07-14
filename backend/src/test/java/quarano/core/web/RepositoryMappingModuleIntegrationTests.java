@@ -72,8 +72,8 @@ class RepositoryMappingModuleIntegrationTests {
 		var source = new Source();
 		source.symptom = INVALID_URI;
 
-		assertThatExceptionOfType(MappingException.class) //
-				.isThrownBy(() -> initMapper().map(source, Sink.class)) //
+		assertThatExceptionOfType(MappingException.class)
+				.isThrownBy(() -> initMapper().map(source, Sink.class))
 				.satisfies(it -> {
 					it.getErrorMessages().forEach(message -> {
 						assertThat(message.getCause()).isInstanceOf(AggregateReferenceMappingException.class);
@@ -119,7 +119,7 @@ class RepositoryMappingModuleIntegrationTests {
 	private ModelMapper initMapper(Consumer<RepositoryMappingModule> configurer) {
 
 		var module = new RepositoryMappingModule(new Repositories(context), conversions)
-				.register(new UriTemplateIdentifierProcessor() //
+				.register(new UriTemplateIdentifierProcessor()
 						.register(Symptom.class, new UriTemplate("/symptoms/{id}"), "id"));
 
 		configurer.accept(module);

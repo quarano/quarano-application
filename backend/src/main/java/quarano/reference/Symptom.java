@@ -24,7 +24,7 @@ import org.springframework.data.domain.Persistable;
 @Setter(value = AccessLevel.PACKAGE)
 public class Symptom implements Persistable<UUID> {
 
-	@Id @Column(name = "symptom_id") //
+	@Id @Column(name = "symptom_id")
 	private UUID id;
 	private @Transient boolean isNew = true;
 	private String name;

@@ -53,12 +53,12 @@ class JwtProperties implements TokenGenerator, JwtConfiguration {
 	@Override
 	public String generateTokenFor(Account account) {
 
-		return Jwts.builder() //
-				.setClaims(toClaims(account)) //
-				.setSubject(account.getUsername()) //
-				.setIssuedAt(new Date()) //
-				.setExpiration(getExpirationDate()) //
-				.signWith(SignatureAlgorithm.HS512, secret) //
+		return Jwts.builder()
+				.setClaims(toClaims(account))
+				.setSubject(account.getUsername())
+				.setIssuedAt(new Date())
+				.setExpiration(getExpirationDate())
+				.signWith(SignatureAlgorithm.HS512, secret)
 				.compact();
 	}
 
@@ -72,8 +72,8 @@ class JwtProperties implements TokenGenerator, JwtConfiguration {
 		var decoded = TextCodec.BASE64.decode(secret);
 		var key = new SecretKeySpec(decoded, SignatureAlgorithm.HS512.getJcaName());
 
-		return NimbusJwtDecoder.withSecretKey(key) //
-				.macAlgorithm(MacAlgorithm.HS512) //
+		return NimbusJwtDecoder.withSecretKey(key)
+				.macAlgorithm(MacAlgorithm.HS512)
 				.build();
 	}
 
@@ -98,9 +98,9 @@ class JwtProperties implements TokenGenerator, JwtConfiguration {
 
 	JwtToken createToken(String source) {
 
-		Claims claims = Jwts.parser() //
-				.setSigningKey(secret) //
-				.parseClaimsJws(source) //
+		Claims claims = Jwts.parser()
+				.setSigningKey(secret)
+				.parseClaimsJws(source)
 				.getBody();
 
 		return JwtToken.of(claims);
@@ -109,8 +109,8 @@ class JwtProperties implements TokenGenerator, JwtConfiguration {
 	private Map<String, Object> toClaims(Account account) {
 
 		var claims = new HashMap<String, Object>();
-		var roles = account.getRoles().stream() //
-				.map(Role::toString) //
+		var roles = account.getRoles().stream()
+				.map(Role::toString)
 				.collect(Collectors.toUnmodifiableList());
 
 		claims.put(ROLE_CLAIM, roles);

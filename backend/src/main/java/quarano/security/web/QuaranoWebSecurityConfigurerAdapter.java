@@ -42,10 +42,10 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	private static final String[] SWAGGER_UI_WHITELIST = {
 
 			// -- swagger ui
-			"/swagger-resources/**", //
-			"/swagger-ui.html", //
-			"/swagger-ui/**", //
-			"/v3/api-docs/**", //
+			"/swagger-resources/**",
+			"/swagger-ui.html",
+			"/swagger-ui/**",
+			"/v3/api-docs/**",
 			"/webjars/**" };
 
 	@Bean
@@ -56,11 +56,11 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-		Function<String, Account> accountSource = username -> accounts.findByUsername(username) //
+		Function<String, Account> accountSource = username -> accounts.findByUsername(username)
 				.orElseThrow(
 						() -> new UsernameNotFoundException(String.format("Couldn't find account for username %s!", username)));
 
-		httpSecurity.oauth2ResourceServer() //
+		httpSecurity.oauth2ResourceServer()
 				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter(accountSource));
 
 		httpSecurity.authorizeRequests(it -> {
@@ -68,14 +68,14 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
 			it.mvcMatchers("/api/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
-			it.mvcMatchers("/api/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN)); //
+			it.mvcMatchers("/api/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN));
 			it.mvcMatchers("/api/login").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
-			it.mvcMatchers("/api/registration/checkcode/**").permitAll(); //
-			it.mvcMatchers("/api/registration/checkusername/**").permitAll(); //
-			it.mvcMatchers("/api/user/**").authenticated(); //
-			it.mvcMatchers("/api/symptoms").authenticated(); //
-			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')"); //
+			it.mvcMatchers("/api/registration/checkcode/**").permitAll();
+			it.mvcMatchers("/api/registration/checkusername/**").permitAll();
+			it.mvcMatchers("/api/user/**").authenticated();
+			it.mvcMatchers("/api/symptoms").authenticated();
+			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')");
 		});
 
 		httpSecurity.csrf().disable().cors(it -> {
@@ -106,8 +106,8 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 	private static String hasAnyRole(RoleType... roleType) {
 
-		return Arrays.stream(roleType) //
-				.map(RoleType::name) //
+		return Arrays.stream(roleType)
+				.map(RoleType::name)
 				.collect(Collectors.joining("', '", "hasAnyRole('", "')"));
 	}
 }

@@ -17,7 +17,7 @@ class QuestionnaireDtoUnitTests {
 	void rejectsEmptyDayOfFirstSymptomsIfSymptomatic() {
 
 		var dto = new QuestionnaireDto()
-				.setHasSymptoms(true) //
+				.setHasSymptoms(true)
 				.setBelongToMedicalStaff(true)
 				.setHasPreExistingConditions(true);
 

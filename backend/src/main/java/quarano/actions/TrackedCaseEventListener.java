@@ -45,7 +45,7 @@ class TrackedCaseEventListener {
 	@EventListener
 	void on(CaseConcluded event) {
 
-		cases.findById(event.getCaseIdentifier()) //
+		cases.findById(event.getCaseIdentifier())
 				.ifPresent(it -> {
 
 					ActionItems openItems = items.findQuarantineEndingActionItemsFor(it);

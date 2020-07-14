@@ -107,7 +107,7 @@ class TrackedCaseEventListenerTests {
 	private static Encounter createEncounterWithMaxFor(TrackedPerson person, LocalDate date) {
 
 		var contactWays = ContactWays.ofEmailAddress("max@mustermann.de");
-		var contactPerson = new ContactPerson(MAX, MUSTERMANN, contactWays) //
+		var contactPerson = new ContactPerson(MAX, MUSTERMANN, contactWays)
 				.assignOwner(person);
 
 		return person.reportContactWith(contactPerson, date);
@@ -116,7 +116,7 @@ class TrackedCaseEventListenerTests {
 	private static Encounter createEncounterWithMoritzFor(TrackedPerson person, LocalDate date) {
 
 		var contactWays = ContactWays.ofEmailAddress("moritz@mustermann.de");
-		var contactPerson = new ContactPerson(MORITZ, MUSTERMANN, contactWays) //
+		var contactPerson = new ContactPerson(MORITZ, MUSTERMANN, contactWays)
 				.assignOwner(person);
 
 		return person.reportContactWith(contactPerson, date);
@@ -124,10 +124,10 @@ class TrackedCaseEventListenerTests {
 
 	private static TrackedCase createCaseFor(TrackedPerson person, CaseType type) {
 
-		return new TrackedCase(person, type, new Department(MANNHEIM)) //
-				.markInRegistration() //
-				.markRegistrationCompleted() //
-				.submitEnrollmentDetails() //
+		return new TrackedCase(person, type, new Department(MANNHEIM))
+				.markInRegistration()
+				.markRegistrationCompleted()
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
 }

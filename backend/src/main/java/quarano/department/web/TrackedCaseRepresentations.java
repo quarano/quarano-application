@@ -96,18 +96,18 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		var dto = toDtoRepresentation(trackedCase, TrackedCaseDto.Output.class);
 
-		List<Contact> contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase) //
-				.map(Contact::new) //
+		List<Contact> contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase)
+				.map(Contact::new)
 				.collect(Collectors.toList());
 
 		var details = new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
 
-		var originCases = trackedCase.getOriginCases().stream() //
-				.map(it -> toSelect(it)) //
+		var originCases = trackedCase.getOriginCases().stream()
+				.map(it -> toSelect(it))
 				.collect(Collectors.toUnmodifiableList());
 
-		return HalModelBuilder.halModelOf(details) //
-				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES) //
+		return HalModelBuilder.halModelOf(details)
+				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES)
 				.build();
 	}
 
@@ -161,8 +161,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		if (source.getHasSymptoms()) {
 
-			var result = source.getSymptoms().stream() //
-					.map(it -> symptoms.findById(it).get()) //
+			var result = source.getSymptoms().stream()
+					.map(it -> symptoms.findById(it).get())
 					.collect(Collectors.toList());
 
 			symptomsInfo = SymptomInformation.withSymptomsSince(source.getDayOfFirstSymptoms(), result);
@@ -205,7 +205,7 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 			var positiveTestResult = payload.getTestDate() != null && payload.isInfected();
 
-			Stream.of("infected", "testDate") //
+			Stream.of("infected", "testDate")
 					.forEach(it -> errors.rejectField(positiveTestResult, it, "ContactCase.infected"));
 
 		}
@@ -226,8 +226,8 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 			validationGroups.add(ValidationGroups.Index.class);
 		}
 
-		return errors //
-				.doWith(it -> validator.validate(payload, it, validationGroups.toArray())) //
+		return errors
+				.doWith(it -> validator.validate(payload, it, validationGroups.toArray()))
 				.doWith(it -> payload.validate(it, type));
 	}
 
@@ -338,11 +338,11 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 			var controller = on(TrackedCaseController.class);
 
-			add(trackedCase.getOriginCases().stream() //
+			add(trackedCase.getOriginCases().stream()
 					.map(it -> {
 
 						var href = fromMethodCall(controller.getCase(it.getId(), it.getDepartment())).toUriString();
-						return Link.of(href, TrackedCaseLinkRelations.ORIGIN_CASES); //
+						return Link.of(href, TrackedCaseLinkRelations.ORIGIN_CASES);
 
 					}).collect(Collectors.toUnmodifiableList()));
 		}
@@ -357,9 +357,9 @@ class TrackedCaseRepresentations implements ExternalTrackedCaseRepresentations {
 
 		public List<CommentRepresentation> getComments() {
 
-			return getTrackedCase().getComments().stream() //
-					.sorted(Comparator.comparing(Comment::getDate).reversed()) //
-					.map(CommentRepresentation::new) //
+			return getTrackedCase().getComments().stream()
+					.sorted(Comparator.comparing(Comment::getDate).reversed())
+					.map(CommentRepresentation::new)
 					.collect(Collectors.toUnmodifiableList());
 		}
 	}

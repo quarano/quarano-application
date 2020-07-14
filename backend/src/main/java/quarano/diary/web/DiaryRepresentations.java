@@ -77,7 +77,7 @@ class DiaryRepresentations {
 
 	Either<DiaryEntry, Errors> from(DiaryEntryInput input, DiaryEntry existing, Errors errors) {
 
-		return mapper.map(input, existing, errors) //
+		return mapper.map(input, existing, errors)
 				.peekLeft(DiaryEntry::markEdited);
 	}
 
@@ -124,7 +124,7 @@ class DiaryRepresentations {
 
 			var slot = entry.getSlot();
 
-			return Map.of("date", slot.getDate(), //
+			return Map.of("date", slot.getDate(),
 					"timeOfDay", slot.getTimeOfDay().name().toLowerCase(Locale.US));
 		}
 
@@ -137,13 +137,13 @@ class DiaryRepresentations {
 		}
 
 		public Stream<?> getContacts() {
-			return entry.getContacts().stream() //
+			return entry.getContacts().stream()
 					.map(ContactSummary::new);
 		}
 
 		public Stream<SymptomDto> getSymptoms() {
 
-			return entry.getSymptoms().stream() //
+			return entry.getSymptoms().stream()
 					.map(it -> mapper.map(it, SymptomDto.class));
 		}
 
@@ -207,10 +207,10 @@ class DiaryRepresentations {
 				var fields = new LinkedHashMap<>();
 				var config = DiaryRepresentations.this.configuration;
 
-				fields.put("date", date); //
+				fields.put("date", date);
 				fields.put("evening",
 						mapEntry(it.getEvening(), config.canBeCreated(Slot.eveningOf(date)) && eveningIsNotInTheFuture));
-				fields.put("morning", mapEntry(it.getMorning(), config.canBeCreated(Slot.morningOf(date)))); //
+				fields.put("morning", mapEntry(it.getMorning(), config.canBeCreated(Slot.morningOf(date))));
 
 				return fields;
 			}));
@@ -218,8 +218,8 @@ class DiaryRepresentations {
 
 		private Object mapEntry(Optional<DiaryEntry> entry, boolean allowCreation) {
 
-			return entry //
-					.<Object> map(it -> DiaryRepresentations.this.toSummaryRepresentation(it)) //
+			return entry
+					.<Object> map(it -> DiaryRepresentations.this.toSummaryRepresentation(it))
 					.orElseGet(() -> new NewDiaryEntryDto(allowCreation));
 		}
 

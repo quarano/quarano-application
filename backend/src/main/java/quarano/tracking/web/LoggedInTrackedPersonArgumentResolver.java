@@ -54,15 +54,15 @@ class LoggedInTrackedPersonArgumentResolver implements HandlerMethodArgumentReso
 	 */
 	@Override
 	@org.springframework.lang.NonNull
-	public Object resolveArgument(MethodParameter parameter, //
-			@Nullable ModelAndViewContainer mavContainer, //
-			NativeWebRequest webRequest, //
+	public Object resolveArgument(MethodParameter parameter,
+			@Nullable ModelAndViewContainer mavContainer,
+			NativeWebRequest webRequest,
 			@Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		Class<?> type = parameter.getParameterType();
 
-		return authenticationManager.getCurrentUser() //
-				.flatMap(repository::findByAccount) //
+		return authenticationManager.getCurrentUser()
+				.flatMap(repository::findByAccount)
 				.orElseThrow(
 						() -> new ServletRequestBindingException(String.format(USER_ACCOUNT_EXPECTED, type.getSimpleName())));
 	}
@@ -74,7 +74,7 @@ class LoggedInTrackedPersonArgumentResolver implements HandlerMethodArgumentReso
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 
-		return parameter.hasParameterAnnotation(LoggedIn.class) //
+		return parameter.hasParameterAnnotation(LoggedIn.class)
 				&& TrackedPerson.class.isAssignableFrom(parameter.getParameterType());
 	}
 

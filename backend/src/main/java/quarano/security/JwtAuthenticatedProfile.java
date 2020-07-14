@@ -32,9 +32,9 @@ class JwtAuthenticatedProfile extends AbstractAuthenticationToken {
 
 	private static Collection<? extends GrantedAuthority> toAuthorities(List<RoleType> roles) {
 
-		return roles.stream() //
-				.map(RoleType::getCode) //
-				.map(SimpleGrantedAuthority::new) //
+		return roles.stream()
+				.map(RoleType::getCode)
+				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toUnmodifiableList());
 	}
 

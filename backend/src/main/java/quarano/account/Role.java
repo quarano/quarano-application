@@ -22,11 +22,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Role {
 
-	@Id //
-	@Column(name = "role_id") //
+	@Id
+	@Column(name = "role_id")
 	private UUID id;
 
-	@Column(name = "role_name") //
+	@Column(name = "role_name")
 	private String name;
 
 	public Role(RoleType name) {

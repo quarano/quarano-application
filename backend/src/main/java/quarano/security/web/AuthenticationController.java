@@ -40,20 +40,20 @@ class AuthenticationController {
 
 		UnencryptedPassword password = UnencryptedPassword.of(request.getPassword());
 
-		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername())) //
+		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername()))
 				.filter(it -> accounts.matches(password, it.getPassword()),
-						() -> new AccessDeniedException("Authentication failed!")) //
+						() -> new AccessDeniedException("Authentication failed!"))
 				.filter(it -> {
 
-					return !it.isTrackedPerson() || people.findByAccount(it) //
-							.flatMap(cases::findByTrackedPerson) //
-							.filter(TrackedCase::isOpen) //
+					return !it.isTrackedPerson() || people.findByAccount(it)
+							.flatMap(cases::findByTrackedPerson)
+							.filter(TrackedCase::isOpen)
 							.isPresent();
 
-				}, () -> new AccessDeniedException("Case already closed!")) //
-				.map(generator::generateTokenFor) //
-				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse) //
-				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
+				}, () -> new AccessDeniedException("Case already closed!"))
+				.map(generator::generateTokenFor)
+				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
+				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
 				.get();
 	}
 

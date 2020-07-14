@@ -32,26 +32,26 @@ public class Diary implements Streamable<DiaryEntry> {
 
 	public Optional<DiaryEntry> getEntryFor(Encounter encounter) {
 
-		return enties.stream() //
-				.filter(it -> it.containsEncounterWith(encounter.getContact())) //
+		return enties.stream()
+				.filter(it -> it.containsEncounterWith(encounter.getContact()))
 				.findFirst();
 	}
 
 	public Optional<DiaryEntry> getEntryFor(DiaryEntryIdentifier identifier) {
 
-		return enties.stream() //
-				.filter(it -> it.hasId(identifier)) //
+		return enties.stream()
+				.filter(it -> it.hasId(identifier))
 				.findFirst();
 	}
 
 	public Stream<DiaryEntryDay> toEntryDays(LocalDate startDate) {
 
-		var byDate = enties.stream() //
+		var byDate = enties.stream()
 				.collect(groupingBy(DiaryEntry::getSlotDate));
 
-		return Stream.iterate(LocalDate.now(), //
-				it -> it.isAfter(startDate) || it.equals(startDate), //
-				it -> it.minusDays(1)) //
+		return Stream.iterate(LocalDate.now(),
+				it -> it.isAfter(startDate) || it.equals(startDate),
+				it -> it.minusDays(1))
 				.map(it -> {
 
 					var entries = byDate.get(it);
@@ -64,16 +64,16 @@ public class Diary implements Streamable<DiaryEntry> {
 
 	public boolean containsCurrentEntry() {
 
-		return enties.stream() //
+		return enties.stream()
 				.anyMatch(it -> it.hasSlot(Slot.now()));
 	}
 
 	public Optional<LocalDate> getDateOfFirstEncounterWith(ContactPerson contact) {
 
-		return enties.stream() //
-				.filter(it -> it.containsEncounterWith(contact)) //
-				.map(DiaryEntry::getSlotDate) //
-				.sorted() //
+		return enties.stream()
+				.filter(it -> it.containsEncounterWith(contact))
+				.map(DiaryEntry::getSlotDate)
+				.sorted()
 				.findFirst();
 	}
 
@@ -92,9 +92,9 @@ public class Diary implements Streamable<DiaryEntry> {
 			return Optional.empty();
 		}
 
-		return sources //
-				.stream() //
-				.filter(entry -> entry.hasSlot(slot)) //
+		return sources
+				.stream()
+				.filter(entry -> entry.hasSlot(slot))
 				.findFirst();
 	}
 

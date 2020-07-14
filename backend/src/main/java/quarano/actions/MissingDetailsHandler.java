@@ -16,8 +16,8 @@ class MissingDetailsHandler {
 	void handleTrackedCaseMissingDetails(TrackedCase trackedCase) {
 
 		var personId = trackedCase.getTrackedPerson().getId();
-		var descriptionCode = trackedCase.isIndexCase() //
-				? DescriptionCode.MISSING_DETAILS_INDEX //
+		var descriptionCode = trackedCase.isIndexCase()
+				? DescriptionCode.MISSING_DETAILS_INDEX
 				: DescriptionCode.MISSING_DETAILS_CONTACT;
 
 		if (!trackedCase.isInvestigationNeeded()) {

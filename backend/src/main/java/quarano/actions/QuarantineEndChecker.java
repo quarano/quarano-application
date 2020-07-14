@@ -23,12 +23,12 @@ class QuarantineEndChecker {
 	@Scheduled(cron = "0 8 * * * *")
 	void checkEndingQuarantinesPeriodically() {
 
-		trackedCases.findAll().stream() //
-				.filter(TrackedCase::isIndexCase) //
-				.filter(it -> it.isTracking()) //
-				.filter(it -> it.getQuarantine().isOver()) //
-				.filter(it -> items.findQuarantineEndingActionItemsFor(it).isEmpty()) //
-				.map(this::createQuarantineEndedActionItem) //
+		trackedCases.findAll().stream()
+				.filter(TrackedCase::isIndexCase)
+				.filter(it -> it.isTracking())
+				.filter(it -> it.getQuarantine().isOver())
+				.filter(it -> items.findQuarantineEndingActionItemsFor(it).isEmpty())
+				.map(this::createQuarantineEndedActionItem)
 				.forEach(items::save);
 	}
 

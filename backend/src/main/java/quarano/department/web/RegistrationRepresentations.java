@@ -61,10 +61,10 @@ class RegistrationRepresentations {
 
 		var controller = on(RegistrationController.class);
 
-		return trackedCase.isEligibleForTracking() //
+		return trackedCase.isEligibleForTracking()
 				? new RepresentationModel<>(
 						Link.of(fromMethodCall(controller.createRegistration(trackedCase.getId(), null)).toUriString(),
-								TrackedCaseLinkRelations.START_TRACKING)) //
+								TrackedCaseLinkRelations.START_TRACKING))
 				: RepresentationModel.of(null);
 	}
 
@@ -97,7 +97,7 @@ class RegistrationRepresentations {
 
 			var controller = on(RegistrationController.class);
 
-			return super.getLinks().and(Links.of( //
+			return super.getLinks().and(Links.of(
 					Link.of(fromMethodCall(controller.getRegistrationDetails(trackedCaseIdentifier, null)).toUriString(),
 							IanaLinkRelations.SELF),
 					Link.of(fromMethodCall(controller.createRegistration(trackedCaseIdentifier, null)).toUriString(),

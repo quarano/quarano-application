@@ -45,16 +45,16 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter EmailAddress emailAddress;
 	private @Getter @Setter PhoneNumber phoneNumber;
 
-	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
+	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber"))
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
 
-	@OneToOne @JoinColumn(name = "account_id") //
+	@OneToOne @JoinColumn(name = "account_id")
 	private Account account;
 
-	@OneToMany(cascade = CascadeType.ALL) //
-	@JoinColumn(name = "tracked_person_id") //
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id")
 	private List<Encounter> encounters;
 
 	public TrackedPerson(String firstName, String lastName) {
@@ -119,7 +119,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public Stream<ContactPerson> getContactPersons() {
 
-		return encounters.stream() //
+		return encounters.stream()
 				.map(Encounter::getContact);
 	}
 
@@ -141,13 +141,13 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 		var encounters = getEncounters();
 
-		return encounters.getEncounter(person, date) //
+		return encounters.getEncounter(person, date)
 				.orElseGet(() -> {
 
 					var encounter = Encounter.with(person, date);
 
-					registerEvent(!encounters.hasBeenInTouchWith(person) //
-							? EncounterReported.firstEncounter(encounter, id) //
+					registerEvent(!encounters.hasBeenInTouchWith(person)
+							? EncounterReported.firstEncounter(encounter, id)
 							: EncounterReported.subsequentEncounter(encounter, id));
 
 					this.encounters.add(encounter);
@@ -158,9 +158,9 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {
 
-		encounters.stream() //
-				.filter(it -> it.hasId(identifier)) //
-				.findFirst() //
+		encounters.stream()
+				.filter(it -> it.hasId(identifier))
+				.findFirst()
 				.ifPresent(encounters::remove);
 
 		return this;
@@ -168,10 +168,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public boolean isDetailsCompleted() {
 
-		return StringUtils.hasText(firstName) //
-				&& StringUtils.hasText(lastName) //
-				&& emailAddress != null //
-				&& address.isComplete() //
+		return StringUtils.hasText(firstName)
+				&& StringUtils.hasText(lastName)
+				&& emailAddress != null
+				&& address.isComplete()
 				&& dateOfBirth != null;
 	}
 

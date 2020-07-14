@@ -49,12 +49,12 @@ class TrackingEventListenerUnitTests {
 	void rejectsEncounterReportIfEnrollmentQuestionnaireIncomplete() {
 
 		var person = TrackedPersonDataInitializer.createTanja();
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
-				.markInRegistration() //
-				.markRegistrationCompleted() //
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()))
+				.markInRegistration()
+				.markRegistrationCompleted()
 				.submitEnrollmentDetails();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
-				ContactWays.ofEmailAddress("michaela@mustermann.de")) //
+				ContactWays.ofEmailAddress("michaela@mustermann.de"))
 						.setOwnerId(person.getId());
 
 		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
@@ -63,7 +63,7 @@ class TrackingEventListenerUnitTests {
 
 		assertThatExceptionOfType(EnrollmentException.class).isThrownBy(() -> listener.on(event));
 
-		trackedCase.submitEnrollmentDetails() //
+		trackedCase.submitEnrollmentDetails()
 				.submitQuestionnaire(new MinimalQuestionnaire());
 
 		assertThatCode(() -> listener.on(event)).doesNotThrowAnyException();
@@ -121,8 +121,8 @@ class TrackingEventListenerUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
 
-		encounter.getContact() //
-				.setIsHealthStaff(Boolean.TRUE) //
+		encounter.getContact()
+				.setIsHealthStaff(Boolean.TRUE)
 				.setIsSenior(Boolean.TRUE)//
 				.setHasPreExistingConditions(Boolean.TRUE);
 
@@ -147,8 +147,8 @@ class TrackingEventListenerUnitTests {
 
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
-		encounter.getContact() //
-				.setIsHealthStaff(null) //
+		encounter.getContact()
+				.setIsHealthStaff(null)
 				.setIsSenior(true);
 		var trackedCase = createIndexCaseFor(person);
 
@@ -173,9 +173,9 @@ class TrackingEventListenerUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var encounter = createFirstEncounterWithMichaelaFor(person);
 
-		encounter.getContact() //
-				.setIsHealthStaff(null) //
-				.setIsSenior(null) //
+		encounter.getContact()
+				.setIsHealthStaff(null)
+				.setIsSenior(null)
 				.setHasPreExistingConditions(true);
 
 		var trackedCase = createIndexCaseFor(person);
@@ -225,7 +225,7 @@ class TrackingEventListenerUnitTests {
 	private Encounter createFirstEncounterWithMichaelaFor(TrackedPerson person) {
 
 		var contactWays = ContactWays.ofEmailAddress("michaela@mustermann.de");
-		var contactPerson = new ContactPerson("Michaela", "Mustermann", contactWays) //
+		var contactPerson = new ContactPerson("Michaela", "Mustermann", contactWays)
 				.assignOwner(person);
 
 		return person.reportContactWith(contactPerson, LocalDate.now());
@@ -233,10 +233,10 @@ class TrackingEventListenerUnitTests {
 
 	private TrackedCase createIndexCaseFor(TrackedPerson person) {
 
-		return new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID())) //
-				.markInRegistration() //
-				.markRegistrationCompleted() //
-				.submitEnrollmentDetails() //
+		return new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()))
+				.markInRegistration()
+				.markRegistrationCompleted()
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
 }

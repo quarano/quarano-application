@@ -100,94 +100,94 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 		// CASE Markus
 		cases.save(new TrackedCase(person2, CaseType.INDEX, department1)
-				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))) //
+				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2))));
 
 		LocalDate start = LocalDate.now().minusWeeks(1);
 		LocalDate end = start.plusWeeks(4);
 
 		// CASE Sandra
-		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2, null) //
-				.setTestResult(TestResult.infected(start.minusDays(3))) //
-				.setQuarantine(Quarantine.of(start, end)) //
-				.submitEnrollmentDetails() //
+		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2, null)
+				.setTestResult(TestResult.infected(start.minusDays(3)))
+				.setQuarantine(Quarantine.of(start, end))
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
-						"Arbeite als Pfleger im Klinikum Mannheim") //
-								.withoutSymptoms() //
+						"Arbeite als Pfleger im Klinikum Mannheim")
+								.withoutSymptoms()
 								.withContactToVulnerablePeople("Arbeite in der Pflege")
-								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
-								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Gustav
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null) //
-				.setTestResult(TestResult.infected(startG.minusDays(1))) //
-				.setQuarantine(Quarantine.of(startG, endG)) //
-				.submitEnrollmentDetails() //
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null)
+				.setTestResult(TestResult.infected(startG.minusDays(1)))
+				.setQuarantine(Quarantine.of(startG, endG))
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
-						"Chirurg im Klinikum Ludwigshafen") //
+						"Chirurg im Klinikum Ludwigshafen")
 								.withContactToVulnerablePeople("Arbeite in der Pflege")
-								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
-								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Nadine
 		LocalDate startN = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endN = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1, null) //
-				.setTestResult(TestResult.infected(startN.minusDays(1))) //
-				.setQuarantine(Quarantine.of(startN, endN)) //
-				.submitEnrollmentDetails() //
+		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1, null)
+				.setTestResult(TestResult.infected(startN.minusDays(1)))
+				.setQuarantine(Quarantine.of(startN, endN))
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(
-						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Chirurg im Klinikum Ludwigshafen") //
+						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Chirurg im Klinikum Ludwigshafen")
 								.withContactToVulnerablePeople("Alterheim Totenruh")
-								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim") //
-								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival")) //
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Siggi
 
-		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null) //
-				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3))) //
-				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2))) //
-				.submitEnrollmentDetails() //
-				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt") //
-						.withoutContactToVulnerablePeople()) //
+		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null)
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3)))
+				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)))
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt")
+						.withoutContactToVulnerablePeople())
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
-		cases.save(new TrackedCase(harry, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(harry, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)));
 
-		cases.save(new TrackedCase(harriette, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(harriette, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)));
 
-		cases.save(new TrackedCase(sarah, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(sarah, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(4), LocalDate.now().plusWeeks(2).minusDays(4))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(5)));
 
-		cases.save(new TrackedCase(sonja, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(sonja, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(1), LocalDate.now().plusWeeks(2).minusDays(1))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)));
 
-		cases.save(new TrackedCase(steve, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(steve, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(8), LocalDate.now().plusWeeks(2).minusDays(8))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(9)));
 
-		cases.save(new TrackedCase(steffen, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(steffen, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(13), LocalDate.now().plusWeeks(2).minusDays(13))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(14)));
 
-		cases.save(new TrackedCase(samuel, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(samuel, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(5)));
 
-		cases.save(new TrackedCase(sunny, CaseType.INDEX, department1) //
+		cases.save(new TrackedCase(sunny, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(1), LocalDate.now().plusWeeks(2).minusDays(1))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(3)));
 

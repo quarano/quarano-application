@@ -36,7 +36,7 @@ public class TrackedCaseWebConfiguration {
 	@Bean
 	UriTemplateIdentifierProcessor trackedCaseProcessor() {
 
-		return new UriTemplateIdentifierProcessor() //
+		return new UriTemplateIdentifierProcessor()
 				.register(TrackedCase.class, new UriTemplate("/cases/{id}"), "id", (TrackedCaseIdentifier id) -> {
 					return fromMethodCall(on(TrackedCaseController.class).getCase(id, null)).toUriString();
 				});

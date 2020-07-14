@@ -25,9 +25,9 @@ public class BodyTemperature {
 
 	private static final Range<Float> VALID = Range.open(35.0f, 42.0f);
 
-	@Column(name = "temperature", precision = 5, scale = 3) //
+	@Column(name = "temperature", precision = 5, scale = 3)
 	private final BigDecimal value;
-	
+
 	public static BodyTemperature of(float value) {
 		return new BodyTemperature(BigDecimal.valueOf(value));
 	}

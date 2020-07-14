@@ -44,13 +44,13 @@ class ActionItemsControllerWebIntegrationTests {
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId())) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.anomalies.process[0].date", String.class)) //
+		assertThat(document.read("$.anomalies.process[0].date", String.class))
 				.isEqualTo(LocalDate.now().toString());
 	}
 
@@ -61,8 +61,8 @@ class ActionItemsControllerWebIntegrationTests {
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId())) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId()))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -83,10 +83,10 @@ class ActionItemsControllerWebIntegrationTests {
 		ActionsReviewed reviewed = new ActionsReviewed();
 		reviewed.setComment("Comment!");
 
-		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
-				.content(jackson.writeValueAsString(reviewed)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId())
+				.content(jackson.writeValueAsString(reviewed))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -101,20 +101,20 @@ class ActionItemsControllerWebIntegrationTests {
 	@WithQuaranoUser("agent3")
 	void resolvesAnomaliesManuallyDoesNotWorkForSystemAnomalies() throws Exception {
 
-		var actionsResponse = mvc.perform(get("/api/hd/actions")) //
-				.andExpect(status().isOk()) //
+		var actionsResponse = mvc.perform(get("/api/hd/actions"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var actionsDocument = JsonPath.parse(actionsResponse);
 		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
 
-		ActionsReviewed reviewed = new ActionsReviewed() //
+		ActionsReviewed reviewed = new ActionsReviewed()
 				.setComment("Comment!");
 
-		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", contactCaseId) //
-				.content(jackson.writeValueAsString(reviewed)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", contactCaseId)
+				.content(jackson.writeValueAsString(reviewed))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -139,14 +139,14 @@ class ActionItemsControllerWebIntegrationTests {
 		ActionsReviewed reviewed = new ActionsReviewed();
 		reviewed.setComment("Comment!");
 
-		mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId()) //
-				.content(jackson.writeValueAsString(reviewed)) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
+		mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId())
+				.content(jackson.writeValueAsString(reviewed))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		var response = mvc.perform(get("/api/hd/actions")) //
-				.andExpect(status().isOk()) //
+		var response = mvc.perform(get("/api/hd/actions"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
@@ -164,28 +164,28 @@ class ActionItemsControllerWebIntegrationTests {
 	@WithQuaranoUser("agent1")
 	void getActionsDoesNotReturnConcludedCases() throws Exception {
 
-		// get an active case with open actions 
-		var actionsResponse = mvc.perform(get("/api/hd/actions")) //
-				.andExpect(status().isOk()) //
+		// get an active case with open actions
+		var actionsResponse = mvc.perform(get("/api/hd/actions"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var actionsDocument = JsonPath.parse(actionsResponse);
 		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
-		
+
 		// conclude the case
 		TrackedCaseIdentifier caseIdentifier = TrackedCaseIdentifier.of(UUID.fromString(contactCaseId));
 		var trackedCase = cases.findById(caseIdentifier).get();
-		
+
 		trackedCase.conclude();
 		cases.save(trackedCase);
-		
+
 		// request list again
-		var actionsResponseAfterConclude = mvc.perform(get("/api/hd/actions")) //
-				.andExpect(status().isOk()) //
+		var actionsResponseAfterConclude = mvc.perform(get("/api/hd/actions"))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
-		
+
 		var cases = JsonPath.parse(actionsResponseAfterConclude).read("$..caseId", JSONArray.class);
-		
+
 		// check that case is not cntained anymore
 		assertThat(cases).doesNotContain(contactCaseId);
 

@@ -36,7 +36,7 @@ public class ActionItemsManagement {
 			trackedCase = cases.save(trackedCase.addComment(new Comment(comment, author)));
 		}
 
-		items.findByCase(trackedCase) //
+		items.findByCase(trackedCase)
 				.resolveManually(items::save);
 	}
 }

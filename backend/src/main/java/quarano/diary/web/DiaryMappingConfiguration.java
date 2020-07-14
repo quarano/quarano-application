@@ -43,7 +43,7 @@ class DiaryMappingConfiguration implements MappingCustomizer {
 
 		mapper.typeMap(DiaryEntryInput.class, DiaryEntry.class).addMappings(it -> {
 
-			it.with(request -> new ArrayList<>()) //
+			it.with(request -> new ArrayList<>())
 					.<List<Symptom>> map(DiaryEntryInput::getSymptoms, (target, v) -> target.setSymptoms(v));
 		});
 	}

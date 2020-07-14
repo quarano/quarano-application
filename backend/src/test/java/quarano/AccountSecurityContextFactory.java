@@ -28,8 +28,8 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 	@Override
 	public SecurityContext createSecurityContext(WithQuaranoUser annotation) {
 
-		return accounts.findByUsername(annotation.value()) //
-				.map(AccountAuthentication::new) //
+		return accounts.findByUsername(annotation.value())
+				.map(AccountAuthentication::new)
 				.map(it -> {
 
 					SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -48,9 +48,9 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 
 		public AccountAuthentication(Account account) {
 
-			super(account.getRoles().stream() //
-					.map(Role::toString) //
-					.map(SimpleGrantedAuthority::new) //
+			super(account.getRoles().stream()
+					.map(Role::toString)
+					.map(SimpleGrantedAuthority::new)
 					.collect(Collectors.toUnmodifiableList()));
 
 			this.account = account;

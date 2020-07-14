@@ -46,7 +46,7 @@ class CaseActionSummary {
 	public String getLastName() {
 		return summary.getLastName();
 	}
-	
+
 	public String getExtReferenceNumber() {
 		return trackedCase.getExtReferenceNumber();
 	}
@@ -118,11 +118,11 @@ class CaseActionSummary {
 
 	private List<DescriptionCode> getDescriptionCodes(ItemType type) {
 
-		return items.stream() //
-				.filter(it -> it.getType().equals(type)) //
-				.map(ActionItem::getDescription) //
-				.map(Description::getCode) //
-				.distinct() //
+		return items.stream()
+				.filter(it -> it.getType().equals(type))
+				.map(ActionItem::getDescription)
+				.map(Description::getCode)
+				.distinct()
 				.collect(Collectors.toUnmodifiableList());
 	}
 }

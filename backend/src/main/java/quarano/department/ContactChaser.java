@@ -31,9 +31,9 @@ public class ContactChaser {
 			return Stream.empty();
 		}
 
-		return contactCase.getOriginContacts().stream().distinct() //
-				.flatMap(it -> cases.findByTrackedPerson(it.getOwnerId()) //
-						.map(indexCase -> fromIndexCase(indexCase, it)) //
+		return contactCase.getOriginContacts().stream().distinct()
+				.flatMap(it -> cases.findByTrackedPerson(it.getOwnerId())
+						.map(indexCase -> fromIndexCase(indexCase, it))
 						.stream());
 	}
 
@@ -42,8 +42,8 @@ public class ContactChaser {
 
 		var trackedPerson = indexCase.getTrackedPerson();
 		var encounters = trackedPerson.getEncounters();
-		var encounterDate = encounters.getDateOfFirstEncounterWith(contactPerson) //
-				.or(() -> diaries.findDiaryFor(trackedPerson).getDateOfFirstEncounterWith(contactPerson)) //
+		var encounterDate = encounters.getDateOfFirstEncounterWith(contactPerson)
+				.or(() -> diaries.findDiaryFor(trackedPerson).getDateOfFirstEncounterWith(contactPerson))
 				.orElse(null);
 
 		return new Contact(indexCase, contactPerson, encounterDate);

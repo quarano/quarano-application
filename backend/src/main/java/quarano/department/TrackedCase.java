@@ -42,41 +42,41 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL }) //
-	@JoinColumn(name = "tracked_person_id") //
+	@OneToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "tracked_person_id")
 	private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false) //
+	@ManyToOne @JoinColumn(name = "department_id", nullable = false)
 	private Department department;
 
 	private @Getter TestResult testResult;
 
-	@Setter(AccessLevel.NONE) //
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //
-	@JoinColumn(name = "questionnaire_id") //
+	@Setter(AccessLevel.NONE)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "questionnaire_id")
 	private @Getter Questionnaire questionnaire;
 
-	@Setter(AccessLevel.NONE) //
+	@Setter(AccessLevel.NONE)
 	private Enrollment enrollment = new Enrollment();
-	@Column(name = "case_type") //
-	@Enumerated(EnumType.STRING) //
+	@Column(name = "case_type")
+	@Enumerated(EnumType.STRING)
 	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
 
 	private @Getter @Setter String extReferenceNumber;
 
-	@OneToMany(cascade = { CascadeType.ALL }) //
+	@OneToMany(cascade = { CascadeType.ALL })
 	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL }) //
-	@JoinColumn(name = "tracked_case_id") //
+	@OneToMany(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "tracked_case_id")
 	private @Getter List<Comment> comments = new ArrayList<>();
 
-	@Column(nullable = false) //
-	@Enumerated(EnumType.STRING) //
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	private @Getter Status status;
 
-	@OneToMany //
+	@OneToMany
 	private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(ContactPerson contactPerson, Department department) {
@@ -180,7 +180,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public boolean isInvestigationNeeded() {
 		return !isConcluded() && (trackedPerson.getPhoneNumber() == null && trackedPerson.getMobilePhoneNumber() == null
-				|| trackedPerson.getEmailAddress() == null //
+				|| trackedPerson.getEmailAddress() == null
 				|| trackedPerson.getDateOfBirth() == null);
 	}
 

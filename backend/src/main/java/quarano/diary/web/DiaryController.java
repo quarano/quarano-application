@@ -58,9 +58,9 @@ public class DiaryController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
 
-		return representations.from(payload, person, errors) //
-				.mapLeft(it -> diaries.updateDiaryEntry(it)) //
-				.fold(entry -> handle(entry, person), //
+		return representations.from(payload, person, errors)
+				.mapLeft(it -> diaries.updateDiaryEntry(it))
+				.fold(entry -> handle(entry, person),
 						error -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
 
@@ -68,20 +68,20 @@ public class DiaryController {
 	public ResponseEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
 			@LoggedIn TrackedPerson person) {
 
-		var dto = diaries.findDiaryFor(person) //
-				.getEntryFor(identifier) //
+		var dto = diaries.findDiaryFor(person)
+				.getEntryFor(identifier)
 				.map(it -> representations.toRepresentation(it));
 
 		return ResponseEntity.of(dto);
 	}
 
 	@PutMapping("/api/diary/{identifier}")
-	HttpEntity<?> updateDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, //
-			@Valid @RequestBody DiaryEntryInput payload, Errors errors, //
+	HttpEntity<?> updateDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
+			@Valid @RequestBody DiaryEntryInput payload, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
-		var entry = diaries.findDiaryFor(person) //
-				.getEntryFor(identifier) //
+		var entry = diaries.findDiaryFor(person)
+				.getEntryFor(identifier)
 				.orElse(null);
 
 		if (entry == null) {
@@ -92,10 +92,10 @@ public class DiaryController {
 			return ErrorsDto.of(errors, messages).toBadRequest();
 		}
 
-		return representations.from(payload, entry, errors) //
-				.mapLeft(it -> diaries.updateDiaryEntry(it)) //
-				.mapLeft(representations::toRepresentation) //
-				.<HttpEntity<?>> fold(ResponseEntity.ok()::body, //
+		return representations.from(payload, entry, errors)
+				.mapLeft(it -> diaries.updateDiaryEntry(it))
+				.mapLeft(representations::toRepresentation)
+				.<HttpEntity<?>> fold(ResponseEntity.ok()::body,
 						__ -> ErrorsDto.of(errors, messages).toBadRequest());
 	}
 
@@ -103,7 +103,7 @@ public class DiaryController {
 
 		var handlerMethod = fromMethodCall(on(DiaryController.class).getDiaryEntry(entry.getId(), person));
 
-		return ResponseEntity.created(handlerMethod.build().toUri()) //
+		return ResponseEntity.created(handlerMethod.build().toUri())
 				.body(representations.toRepresentation(entry));
 	}
 }

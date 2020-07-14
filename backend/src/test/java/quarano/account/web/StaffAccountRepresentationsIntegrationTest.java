@@ -31,11 +31,11 @@ class StaffAccountRepresentationsIntegrationTest {
 
 		var username = "agent1";
 		var agent1 = accounts.findByUsername(username).get();
-		var source = StaffAccountRepresentations.StaffAccountUpdateInputDto.of() //
-				.setFirstName("Max") //
-				.setLastName("Mustermann") //
-				.setEmail("max.mustermann@acme.com") //
-				.setUsername("agent0815") //
+		var source = StaffAccountRepresentations.StaffAccountUpdateInputDto.of()
+				.setFirstName("Max")
+				.setLastName("Mustermann")
+				.setEmail("max.mustermann@acme.com")
+				.setUsername("agent0815")
 				.setRoles(List.of(RoleType.ROLE_HD_ADMIN.getCode()));
 
 		Account mappedAccount = representations.from(source, agent1);

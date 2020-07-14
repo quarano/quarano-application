@@ -35,10 +35,10 @@ class TrackedCaseUnitTests {
 
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
-		return new TrackedCase(person, CaseType.INDEX, department) //
-				.markInRegistration() //
-				.markRegistrationCompleted() //
-				.submitEnrollmentDetails() //
+		return new TrackedCase(person, CaseType.INDEX, department)
+				.markInRegistration()
+				.markRegistrationCompleted()
+				.submitEnrollmentDetails()
 				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
 
@@ -59,7 +59,7 @@ class TrackedCaseUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
-		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
+		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS))
 				.doesNotThrowAnyException();
 		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 	}
@@ -73,7 +73,7 @@ class TrackedCaseUnitTests {
 		var contact = new ContactPerson("Michaela", "Mustermann", ContactWays.ofEmailAddress("michaela@mustermann.de"));
 		person.reportContactWith(contact, now());
 
-		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS)) //
+		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITH_ENCOUNTERS))
 				.doesNotThrowAnyException();
 		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 	}
@@ -84,7 +84,7 @@ class TrackedCaseUnitTests {
 		var person = TrackedPersonDataInitializer.createTanja();
 		var trackedCase = prepareTrackedCaseForCompletion(person);
 
-		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)) //
+		assertThatCode(() -> trackedCase.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS))
 				.doesNotThrowAnyException();
 		assertThat(trackedCase.isEnrollmentCompleted()).isTrue();
 
@@ -99,11 +99,11 @@ class TrackedCaseUnitTests {
 		var person = TrackedPersonDataInitializer.createMarkus();
 		var department = new Department("Musterstadt", UUID.randomUUID());
 
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, department) //
-				.markInRegistration() //
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, department)
+				.markInRegistration()
 				.markRegistrationCompleted();
 
-		assertThatExceptionOfType(EnrollmentException.class) //
+		assertThatExceptionOfType(EnrollmentException.class)
 				.isThrownBy(() -> trackedCase.submitQuestionnaire(new MinimalQuestionnaire()));
 	}
 
@@ -130,30 +130,30 @@ class TrackedCaseUnitTests {
 	private static Stream<Arguments> initialCallSource() {
 
 		return Stream.of(//
-				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(now()) //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123901")), true), //
-				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(now()) //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setMobilePhoneNumber(PhoneNumber.of("0123901")), true), //
-				arguments(Status.TRACKING, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(now()) //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901")), true),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setMobilePhoneNumber(PhoneNumber.of("0123901")), true),
+				arguments(Status.TRACKING, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
 						.setPhoneNumber(PhoneNumber.of("0123901")), false),
-				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(null) //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123901")), false), //
-				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(now()) //
-						.setEmailAddress(null) //
-						.setPhoneNumber(PhoneNumber.of("0123901")), false), //
-				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName") //
-						.setDateOfBirth(now()) //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setPhoneNumber(null) //
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(null)
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901")), false),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(null)
+						.setPhoneNumber(PhoneNumber.of("0123901")), false),
+				arguments(Status.OPEN, new TrackedPerson("firstName", "lastName")
+						.setDateOfBirth(now())
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(null)
 						.setMobilePhoneNumber(null), false));
 	}
 
@@ -178,22 +178,22 @@ class TrackedCaseUnitTests {
 
 	private static Stream<Arguments> missingDetailsSource() {
 
-		return Stream.of( //
+		return Stream.of(
 				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName"), true),
-				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName")
+						.setEmailAddress(EmailAddress.of("test@test.de"))
 						.setDateOfBirth(now()), true),
-				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
-						.setPhoneNumber(PhoneNumber.of("0123901")) //
-						.setMobilePhoneNumber(PhoneNumber.of("0123901293")) //
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName")
+						.setPhoneNumber(PhoneNumber.of("0123901"))
+						.setMobilePhoneNumber(PhoneNumber.of("0123901293"))
 						.setDateOfBirth(now()), true),
-				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123901")) //
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName")
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901"))
 						.setMobilePhoneNumber(PhoneNumber.of("0123901293")), true),
-				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName") //
-						.setEmailAddress(EmailAddress.of("test@test.de")) //
-						.setPhoneNumber(PhoneNumber.of("0123901")) //
+				arguments(Status.REGISTERED, new TrackedPerson("firstName", "lastName")
+						.setEmailAddress(EmailAddress.of("test@test.de"))
+						.setPhoneNumber(PhoneNumber.of("0123901"))
 						.setMobilePhoneNumber(PhoneNumber.of("0123901293")).setDateOfBirth(now()), false),
 				arguments(Status.CONCLUDED, new TrackedPerson("firstName", "lastName"), false));
 	}

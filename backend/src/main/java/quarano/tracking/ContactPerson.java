@@ -43,7 +43,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private String firstName, lastName;
 	private @Setter(AccessLevel.NONE) EmailAddress emailAddress;
 
-	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
+	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber"))
 	private @Setter(AccessLevel.NONE) PhoneNumber mobilePhoneNumber;
 	private @Setter(AccessLevel.NONE) PhoneNumber phoneNumber;
 	private Address address;
@@ -56,8 +56,8 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Getter @Setter Boolean isSenior;
 	private @Getter @Setter Boolean hasPreExistingConditions;
 
-	@Column(nullable = false) //
-	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id")) //
+	@Column(nullable = false)
+	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
 	private TrackedPersonIdentifier ownerId;
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {

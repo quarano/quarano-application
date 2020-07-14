@@ -25,21 +25,21 @@ public class Encounters implements Streamable<Encounter> {
 
 	public boolean hasBeenInTouchWith(ContactPerson person) {
 
-		return encounters.stream() //
+		return encounters.stream()
 				.anyMatch(it -> it.getContact().equals(person));
 	}
 
 	public Optional<Encounter> getEncounter(ContactPerson person, LocalDate date) {
 
-		return encounters.stream() //
-				.filter(it -> it.happenedOn(date)) //
-				.filter(it -> it.isEncounterWith(person)) //
+		return encounters.stream()
+				.filter(it -> it.happenedOn(date))
+				.filter(it -> it.isEncounterWith(person))
 				.findFirst();
 	}
 
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
-		return encounters.stream() //
-				.filter(it -> it.hasId(id)) //
+		return encounters.stream()
+				.filter(it -> it.hasId(id))
 				.findFirst();
 	}
 
@@ -49,15 +49,15 @@ public class Encounters implements Streamable<Encounter> {
 
 	public Optional<LocalDate> getDateOfFirstEncounterWith(ContactPerson contact) {
 
-		return encounters.stream() //
-				.filter(it -> it.isEncounterWith(contact)) //
-				.sorted(Comparator.comparing(Encounter::getDate)) //
-				.findFirst() //
+		return encounters.stream()
+				.filter(it -> it.isEncounterWith(contact))
+				.sorted(Comparator.comparing(Encounter::getDate))
+				.findFirst()
 				.map(Encounter::getDate);
 	}
 
 	public Map<ContactPerson, List<Encounter>> getEncountersGroupedByContactPerson() {
-		return encounters.stream() //
+		return encounters.stream()
 				.collect(Collectors.groupingBy(Encounter::getContact));
 	}
 

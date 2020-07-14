@@ -47,8 +47,8 @@ public class ContactPersonController {
 	@GetMapping
 	Stream<ContactPersonDto> allContacts(@LoggedIn TrackedPerson person) {
 
-		return contacts.findByOwnerId(person.getId()) //
-				.map(it -> mapper.map(it, ContactPersonDto.class)) //
+		return contacts.findByOwnerId(person.getId())
+				.map(it -> mapper.map(it, ContactPersonDto.class))
 				.stream();
 	}
 
@@ -72,17 +72,17 @@ public class ContactPersonController {
 	@GetMapping("/{identifier}")
 	public HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
 
-		var dto = contacts.findById(identifier) //
-				.filter(it -> it.belongsTo(person)) //
+		var dto = contacts.findById(identifier)
+				.filter(it -> it.belongsTo(person))
 				.map(it -> mapper.map(it, ContactPersonDto.class));
 
 		return ResponseEntity.of(dto);
 	}
 
 	@PutMapping("/{identifier}")
-	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person, //
-			@PathVariable ContactPersonIdentifier identifier, //
-			@Valid @RequestBody ContactPersonDto payload, //
+	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person,
+			@PathVariable ContactPersonIdentifier identifier,
+			@Valid @RequestBody ContactPersonDto payload,
 			Errors errors) {
 
 		// Cross-field validation
@@ -92,10 +92,10 @@ public class ContactPersonController {
 			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
 		}
 
-		return ResponseEntity.of(contacts.findById(identifier) //
-				.filter(it -> it.belongsTo(person)) //
-				.map(it -> mapper.map(payload, it)) //
-				.map(contacts::save) //
+		return ResponseEntity.of(contacts.findById(identifier)
+				.filter(it -> it.belongsTo(person))
+				.map(it -> mapper.map(payload, it))
+				.map(contacts::save)
 				.map(it -> mapper.map(it, ContactPersonDto.class)));
 	}
 }

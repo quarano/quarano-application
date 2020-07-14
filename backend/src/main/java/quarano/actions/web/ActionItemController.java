@@ -42,11 +42,11 @@ public class ActionItemController {
 	private final @NonNull ExternalTrackedCaseRepresentations trackedCaseRepresentations;
 
 	@GetMapping("/api/hd/actions/{identifier}")
-	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier, //
+	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
-		var trackedCase = cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
+		var trackedCase = cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
 				.orElse(null);
 
 		if (trackedCase == null) {
@@ -59,13 +59,13 @@ public class ActionItemController {
 	}
 
 	@PutMapping("/api/hd/actions/{identifier}/resolve")
-	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier, //
-			@Valid @RequestBody ActionsReviewed payload, //
-			Errors errors, //
+	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier,
+			@Valid @RequestBody ActionsReviewed payload,
+			Errors errors,
 			@LoggedIn DepartmentIdentifier department) {
 
-		TrackedCase trackedCase = cases.findById(identifier) //
-				.filter(it -> it.belongsTo(department)) //
+		TrackedCase trackedCase = cases.findById(identifier)
+				.filter(it -> it.belongsTo(department))
 				.orElse(null);
 
 		if (trackedCase == null) {
@@ -84,15 +84,15 @@ public class ActionItemController {
 	@GetMapping("/api/hd/actions")
 	Stream<?> getActions(@LoggedIn Department department) {
 
-		return cases.findByDepartmentId(department.getId()) //
+		return cases.findByDepartmentId(department.getId())
 				.map(trackedCase -> {
 
 					var summary = trackedCaseRepresentations.toSummary(trackedCase);
 
 					return new CaseActionSummary(trackedCase, items.findUnresolvedByActiveCase(trackedCase), summary);
 
-				}) //
-				.stream() //
+				})
+				.stream()
 				.filter(CaseActionSummary::hasUnresolvedItems)
 				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());
 	}

@@ -70,12 +70,12 @@ class UserControllerWebIntegrationTests {
 
 	private String performGet(String token) throws Exception {
 		// check if token is valid for authentication
-		String resultDtoStr = mvc.perform(get("/api/user/me") //
-				.header("Origin", "*") //
-				.header("Authorization", "Bearer " + token) //
-				.contentType(MediaType.APPLICATION_JSON)) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
+		String resultDtoStr = mvc.perform(get("/api/user/me")
+				.header("Origin", "*")
+				.header("Authorization", "Bearer " + token)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse().getContentAsString();
 		return resultDtoStr;
 	}
@@ -94,9 +94,9 @@ class UserControllerWebIntegrationTests {
 	void testThatPreflightRequestsGetNotBlocked() throws Exception {
 
 		// check if token is valid for authentication
-		mvc.perform(options("/client/me") //
-				.header("Origin", "*") //
-				.header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, HttpMethod.OPTIONS)) //
+		mvc.perform(options("/client/me")
+				.header("Origin", "*")
+				.header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, HttpMethod.OPTIONS))
 				.andExpect(status().isOk());
 	}
 
@@ -107,10 +107,10 @@ class UserControllerWebIntegrationTests {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword(PASSWORD, newPassword, newPassword);
 
-		mvc.perform(put("/api/user/me/password") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(payload)) //
-				.header("Authorization", "Bearer " + token)) //
+		mvc.perform(put("/api/user/me/password")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(payload))
+				.header("Authorization", "Bearer " + token))
 				.andExpect(status().isOk());
 
 		expectLoginRejectedFor(USERNAME, PASSWORD);
@@ -127,10 +127,10 @@ class UserControllerWebIntegrationTests {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword(password, newPassword, newPassword);
 
-		mvc.perform(put("/api/user/me/password") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(payload)) //
-				.header("Authorization", "Bearer " + token)) //
+		mvc.perform(put("/api/user/me/password")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(payload))
+				.header("Authorization", "Bearer " + token))
 				.andExpect(status().isOk());
 
 		expectLoginRejectedFor(username, password);
@@ -143,8 +143,8 @@ class UserControllerWebIntegrationTests {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword("invalid", newPassword, newPassword);
 
-		String result = issuePasswordChange(payload) //
-				.andExpect(status().isBadRequest()) //
+		String result = issuePasswordChange(payload)
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(result);
@@ -158,8 +158,8 @@ class UserControllerWebIntegrationTests {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword(USERNAME, newPassword, newPassword + "!");
 
-		String result = issuePasswordChange(payload) //
-				.andExpect(status().isBadRequest()) //
+		String result = issuePasswordChange(payload)
+				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(result);
@@ -170,21 +170,21 @@ class UserControllerWebIntegrationTests {
 
 	private String login(String username, String password) throws Exception {
 
-		return mvc.perform(post("/login") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(createLoginRequestBody(username, password))) //
-				.andExpect(status().is2xxSuccessful()) //
-				.andReturn().getResponse() //
+		return mvc.perform(post("/login")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(createLoginRequestBody(username, password)))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn().getResponse()
 				.getHeader(QuaranoHttpHeaders.AUTH_TOKEN);
 	}
 
 	private void expectLoginRejectedFor(String username, String password) throws Exception {
 
-		mvc.perform(post("/login") //
-				.header("Origin", "*") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(createLoginRequestBody(username, password))) //
+		mvc.perform(post("/login")
+				.header("Origin", "*")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(createLoginRequestBody(username, password)))
 				.andExpect(status().isUnauthorized());
 	}
 
@@ -192,9 +192,9 @@ class UserControllerWebIntegrationTests {
 
 		var token = login(USERNAME, PASSWORD);
 
-		return mvc.perform(put("/api/user/me/password") //
-				.contentType(MediaType.APPLICATION_JSON) //
-				.content(mapper.writeValueAsString(payload)) //
+		return mvc.perform(put("/api/user/me/password")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token));
 	}
 

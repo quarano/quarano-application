@@ -77,7 +77,7 @@ public class TrackingEventListener {
 		if (!caseOfContactInitializer.isIndexCase()) {
 			return;
 		}
-			
+
 		cases.save(TrackedCase.of(contactPerson, caseOfContactInitializer.getDepartment()));
 
 		log.info("Created automatic contact case from contact " + contactPerson.getId());
@@ -85,7 +85,7 @@ public class TrackingEventListener {
 
 	private TrackedCase findTrackedCaseFor(TrackedPersonIdentifier identifier) {
 
-		return cases.findByTrackedPerson(identifier) //
+		return cases.findByTrackedPerson(identifier)
 				.orElseThrow(() -> new IllegalStateException("No tracked case found for tracked person " + identifier + "!"));
 	}
 }

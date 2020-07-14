@@ -47,10 +47,10 @@ public interface TrackedCaseRepository
 		var $person = $case.trackedPerson;
 		var builder = new BooleanBuilder();
 
-		var predicate = query.map(it -> builder.and($person.firstName.containsIgnoreCase(it) //
-				.or($person.lastName.containsIgnoreCase(it)))) //
-				.orElseGet(() -> builder) //
-				.and($case.department.id.eq(id)); //
+		var predicate = query.map(it -> builder.and($person.firstName.containsIgnoreCase(it)
+				.or($person.lastName.containsIgnoreCase(it))))
+				.orElseGet(() -> builder)
+				.and($case.department.id.eq(id));
 
 		return Streamable.of(findAll(predicate, new OrderSpecifier<>(Order.ASC, $person.lastName)));
 	}

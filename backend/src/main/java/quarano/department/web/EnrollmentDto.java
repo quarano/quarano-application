@@ -30,22 +30,22 @@ public class EnrollmentDto {
 
 		if (enrollment.isComplete()) {
 			return Map.of(//
-					"details", Map.of("href", detailsUri), //
-					"questionnaire", Map.of("href", questionnareUri), //
-					"encounters", Map.of("href", encountersUri), //
+					"details", Map.of("href", detailsUri),
+					"questionnaire", Map.of("href", questionnareUri),
+					"encounters", Map.of("href", encountersUri),
 					"reopen", Map.of("href", reopenUri));
 		}
 
 		if (enrollment.isCompletedQuestionnaire()) {
 			return Map.of(//
-					"details", Map.of("href", detailsUri), //
-					"questionnaire", Map.of("href", questionnareUri), //
+					"details", Map.of("href", detailsUri),
+					"questionnaire", Map.of("href", questionnareUri),
 					"next", Map.of("href", encountersUri));
 		}
 
 		if (enrollment.isCompletedPersonalData()) {
 			return Map.of(//
-					"details", Map.of("href", detailsUri), //
+					"details", Map.of("href", detailsUri),
 					"next", Map.of("href", questionnareUri));
 		}
 

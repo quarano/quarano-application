@@ -26,7 +26,7 @@ public class DiaryManagement {
 	@Transactional
 	public DiaryEntry updateDiaryEntry(DiaryEntry entry) {
 
-		var person = persons.findById(entry.getTrackedPersonId()) //
+		var person = persons.findById(entry.getTrackedPersonId())
 				.orElseThrow(() -> new IllegalStateException("No tracked person found for id " + entry.getTrackedPersonId()));
 
 		var date = entry.getSlotDate();

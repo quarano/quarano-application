@@ -38,10 +38,10 @@ public class PhoneNumber {
 			throw new IllegalArgumentException(String.format("%s is not a valid phone number!", number));
 		}
 
-		return new PhoneNumber(number.replaceAll("\\s", "") //
-				.replace("(0)", "") //
-				.replaceAll(REMOVABLE_CHARACTERS_SET, "") //
-				.replace("+", "00") //
+		return new PhoneNumber(number.replaceAll("\\s", "")
+				.replace("(0)", "")
+				.replaceAll(REMOVABLE_CHARACTERS_SET, "")
+				.replace("+", "00")
 				.replaceAll("^0049", "0"));
 	}
 

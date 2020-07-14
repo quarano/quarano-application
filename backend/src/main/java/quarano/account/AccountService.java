@@ -110,8 +110,8 @@ public class AccountService {
 	}
 
 	public List<Account> findStaffAccountsFor(DepartmentIdentifier departmentId) {
-		return accounts.findAccountsFor(departmentId) //
-				.filter(it -> hasDepartmentRoles(it)) //
+		return accounts.findAccountsFor(departmentId)
+				.filter(it -> hasDepartmentRoles(it))
 				.collect(Collectors.toList());
 	}
 
@@ -122,9 +122,9 @@ public class AccountService {
 	 * @return
 	 */
 	private boolean hasDepartmentRoles(Account account) {
-		return account.getRoles().stream() //
-				.filter(it -> it.getRoleType().isDepartmentRole()) //
-				.findFirst() //
+		return account.getRoles().stream()
+				.filter(it -> it.getRoleType().isDepartmentRole())
+				.findFirst()
 				.isPresent();
 	}
 
