@@ -10,7 +10,6 @@ import quarano.account.Password.UnencryptedPassword;
 import quarano.core.EmailAddress;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +29,7 @@ public class AccountService {
 	private final @NonNull PasswordEncoder passwordEncoder;
 	private final @NonNull AccountRepository accounts;
 	private final @NonNull RoleRepository roles;
+	private final @NonNull AuthenticationManager authentication;
 
 	/**
 	 * creates a new account, encrypts the password and stores it
@@ -46,8 +46,7 @@ public class AccountService {
 	public Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname,
 			String lastname, DepartmentIdentifier departmentId) {
 
-		var role = roles.findByName(RoleType.ROLE_USER.toString());
-
+		var role = roles.findByType(RoleType.ROLE_USER);
 		var account = accounts.save(new Account(username, encrypt(password), firstname, lastname, departmentId, role));
 
 		return account;
@@ -56,12 +55,12 @@ public class AccountService {
 	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname,
 			EmailAddress email, DepartmentIdentifier departmentId, List<RoleType> roleTypes) {
 
-		var encryptedPassword = EncryptedPassword.of(passwordEncoder.encode(password.asString()));
-		encryptedPassword.setExpiryDate(LocalDateTime.now());
+		var roleList = roleTypes.stream()
+				.map(it -> roles.findByType(it))
+				.collect(Collectors.toList());
 
-		var roleList = roleTypes.stream().map(it -> roles.findByName(it.toString())).collect(Collectors.toList());
 		var account = accounts
-				.save(new Account(username, encryptedPassword, firstname, lastname, email, departmentId, roleList));
+				.save(new Account(username, encrypt(password), firstname, lastname, email, departmentId, roleList));
 
 		log.info("Created staff account for " + username);
 
@@ -79,11 +78,7 @@ public class AccountService {
 
 	public Account createStaffAccount(String username, UnencryptedPassword password, String firstname, String lastname,
 			EmailAddress email, DepartmentIdentifier departmentId, RoleType roleType) {
-
-		List<RoleType> roles = new ArrayList<>();
-		roles.add(roleType);
-		return createStaffAccount(username, password, firstname, lastname, email, departmentId, roles);
-
+		return createStaffAccount(username, password, firstname, lastname, email, departmentId, List.of(roleType));
 	}
 
 	public boolean isValidUsername(String candidate) {
@@ -100,35 +95,23 @@ public class AccountService {
 	}
 
 	public boolean isUsernameAvailable(String userName) {
-		return accounts.findByUsername(userName).isEmpty();
+		return accounts.findByUsername(userName)
+				.isEmpty();
 	}
 
 	public boolean matches(@Nullable UnencryptedPassword candidate, EncryptedPassword existing) {
 
 		Assert.notNull(existing, "Existing password must not be null!");
 
-		return Optional.ofNullable(candidate).//
-				map(c -> passwordEncoder.matches(c.asString(), existing.asString())).//
-				orElse(false);
+		return Optional.ofNullable(candidate)
+				.map(c -> passwordEncoder.matches(c.asString(), existing.asString()))
+				.orElse(false);
 	}
 
 	public List<Account> findStaffAccountsFor(DepartmentIdentifier departmentId) {
 		return accounts.findAccountsFor(departmentId)
 				.filter(it -> hasDepartmentRoles(it))
 				.collect(Collectors.toList());
-	}
-
-	/**
-	 * Check if the account has at least one role that is a department-role
-	 *
-	 * @param account
-	 * @return
-	 */
-	private boolean hasDepartmentRoles(Account account) {
-		return account.getRoles().stream()
-				.filter(it -> it.getRoleType().isDepartmentRole())
-				.findFirst()
-				.isPresent();
 	}
 
 	public Optional<Account> findById(AccountIdentifier accountId) {
@@ -150,29 +133,82 @@ public class AccountService {
 	 * @return the account with the new password applied.
 	 */
 	public Account changePassword(UnencryptedPassword password, Account account) {
-		return accounts.save(account.setPassword(encrypt(password)));
+
+		if (account.isTrackedPerson() && !isPasswordChangeBySamePerson(account)) {
+			throw new IllegalArgumentException("Tracked people can only change their passwords themselves!");
+		}
+
+		log.debug("Reset password for account {}.", account.getUsername());
+
+		return accounts.save(account.setPassword(encrypt(password, account)));
 	}
 
 	/**
-	 * Resets the password of the given staff account {@link Account} to the given {@link UnencryptedPassword} one-time
-	 * password.
+	 * Check if the account has at least one role that is a department-role
+	 *
+	 * @param account
+	 * @return
+	 */
+	private boolean hasDepartmentRoles(Account account) {
+
+		return account.getRoles()
+				.stream()
+				.filter(it -> it.getRoleType().isDepartmentRole())
+				.findFirst()
+				.isPresent();
+	}
+
+	private boolean isPasswordChangeBySamePerson(Account account) {
+		return authentication.getCurrentUser().map(account::equals).orElse(false);
+	}
+
+	/**
+	 * Creates a {@link EncryptedPassword} that's only expired if the current user is an admin.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @return will never be {@literal null}.
+	 */
+	private EncryptedPassword encrypt(UnencryptedPassword password) {
+		return encrypt(password, authentication.getCurrentUser().map(Account::isAdmin).orElse(false));
+	}
+
+	/**
+	 * Creates an {@link EncryptedPassword} for the given {@link UnencryptedPassword}. The expiry settings will be derived
+	 * from the given target {@link Account} the password is to be encrypted for. This will be the case if it's not
+	 * someone changing their own password but only if an admin changes the password for someone else.
 	 *
 	 * @param password must not be {@literal null}.
 	 * @param account must not be {@literal null}.
-	 * @return the account with the new password applied.
+	 * @return will never be {@literal null}.
 	 */
-	public Account resetStaffAccountPassword(UnencryptedPassword password, Account account) {
-		Assert.isTrue(!account.isTrackedPerson(), "Password reset allowed for staff accounts only.");
+	private EncryptedPassword encrypt(UnencryptedPassword password, Account account) {
 
-		log.info("Reset password for staff account " + account.getUsername());
+		Assert.notNull(password, "Password must not be null!");
+		Assert.notNull(account, "Account must not be null!");
 
-		var encryptedPassword = encrypt(password);
-		encryptedPassword.setExpiryDate(LocalDateTime.now());
+		var expire = authentication.getCurrentUser()
+				.filter(it -> !account.equals(it))
+				.map(Account::isAdmin)
+				.orElse(false);
 
-		return accounts.save(account.setPassword(encryptedPassword));
+		return encrypt(password, expire);
 	}
 
-	private EncryptedPassword encrypt(UnencryptedPassword password) {
-		return EncryptedPassword.of(passwordEncoder.encode(password.asString()));
+	/**
+	 * Encrypts the given {@link UnencryptedPassword} and marks it as expired if needed.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @param expirePassword whether to mark the encrypted password as expired.
+	 * @return will never be {@literal null}.
+	 */
+	private EncryptedPassword encrypt(UnencryptedPassword password, boolean expirePassword) {
+
+		Assert.notNull(password, "Password must not be null!");
+
+		var encoded = passwordEncoder.encode(password.asString());
+
+		return expirePassword
+				? EncryptedPassword.of(encoded, LocalDateTime.now())
+				: EncryptedPassword.of(encoded);
 	}
 }

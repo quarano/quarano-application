@@ -91,7 +91,6 @@ class StaffAccountRepresentations {
 
 	@Data
 	@Getter(onMethod = @__(@Nullable))
-	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountCreateInputDto {
 
 		private @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;
@@ -114,7 +113,6 @@ class StaffAccountRepresentations {
 
 	@Getter
 	@Setter
-	@RequiredArgsConstructor(staticName = "of")
 	static class StaffAccountUpdateInputDto {
 
 		private @Pattern(regexp = Strings.NAMES) @NotBlank String firstName, lastName;

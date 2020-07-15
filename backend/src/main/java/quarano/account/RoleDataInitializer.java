@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class RoleDataInitializer implements DataInitializer {
 
-	private final @NonNull RoleRepository roleRepository;
+	private final @NonNull RoleRepository roles;
 
 	/*
 	 * (non-Javadoc)
@@ -30,15 +30,11 @@ class RoleDataInitializer implements DataInitializer {
 
 		for (RoleType type : RoleType.values()) {
 
-			var role = roleRepository.findByName(type.getCode());
+			roles.findByName(type.getCode()).orElseGet(() -> {
 
-			if (role != null) {
-				continue;
-			}
-
-			log.info("Adding missing role " + type);
-
-			roleRepository.save(new Role(type));
+				log.info("Adding missing role " + type);
+				return roles.save(new Role(type));
+			});
 		}
 	}
 }

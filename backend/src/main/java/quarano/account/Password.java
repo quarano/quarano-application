@@ -17,18 +17,16 @@ package quarano.account;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * @author Oliver Gierke
@@ -44,23 +42,49 @@ public abstract class Password {
 
 	@Embeddable
 	@EqualsAndHashCode(callSuper = false)
-	@RequiredArgsConstructor(staticName = "of", access = AccessLevel.PACKAGE)
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE, onConstructor = @__(@Deprecated))
 	public static class EncryptedPassword extends Password {
 
 		private final @Column(name = "password") String value;
-		private @Getter @Setter LocalDateTime expiryDate;
+		private final @Nullable LocalDateTime expiryDate;
+
+		/**
+		 * Creates a new {@link EncryptedPassword} from the given value and no expiry date. I.e. the password will never
+		 * indicate it's expired.
+		 *
+		 * @param value must not be {@literal null} or empty.
+		 * @return will never be {@literal null}.
+		 */
+		static EncryptedPassword of(String value) {
+
+			Assert.hasText(value, "Password must not be null or empty!");
+
+			return new EncryptedPassword(value, null);
+		}
+
+		/**
+		 * Creates a new {@link EncryptedPassword} with the given value and expiry date.
+		 *
+		 * @param value must not be {@literal null} or empty.
+		 * @param expiryDate must not be {@literal null}.
+		 * @return will never be {@literal null}.
+		 */
+		static EncryptedPassword of(String value, LocalDateTime expiryDate) {
+
+			Assert.hasText(value, "Password must not be null or empty!");
+			Assert.notNull(expiryDate, "Expiry date must not be null!");
+
+			return new EncryptedPassword(value, expiryDate);
+		}
 
 		public boolean isExpired() {
-			if (expiryDate == null) {
-					return false;
-			}
-			return expiryDate.isBefore(LocalDateTime.now());
+			return expiryDate != null && expiryDate.isBefore(LocalDateTime.now());
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * @see org.salespointframework.useraccount.Password#asString()
+		 * @see quarano.account.Password#asString()
 		 */
 		@Override
 		String asString() {
@@ -69,7 +93,7 @@ public abstract class Password {
 
 		/*
 		 * (non-Javadoc)
-		 * @see org.salespointframework.useraccount.Password#toString()
+		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString() {
@@ -114,7 +138,7 @@ public abstract class Password {
 
 		/*
 		 * (non-Javadoc)
-		 * @see org.salespointframework.useraccount.Password#asString()
+		 * @see quarano.account.Password#asString()
 		 */
 		@Override
 		String asString() {
@@ -123,7 +147,7 @@ public abstract class Password {
 
 		/*
 		 * (non-Javadoc)
-		 * @see org.salespointframework.useraccount.Password#toString()
+		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString() {

@@ -8,6 +8,7 @@ import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.RoleRepository;
 import quarano.account.RoleType;
+import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 import quarano.core.EmailAddress;
 
 import java.util.List;
@@ -31,7 +32,7 @@ class StaffAccountRepresentationsIntegrationTest {
 
 		var username = "agent1";
 		var agent1 = accounts.findByUsername(username).get();
-		var source = StaffAccountRepresentations.StaffAccountUpdateInputDto.of()
+		var source = new StaffAccountUpdateInputDto()
 				.setFirstName("Max")
 				.setLastName("Mustermann")
 				.setEmail("max.mustermann@acme.com")
