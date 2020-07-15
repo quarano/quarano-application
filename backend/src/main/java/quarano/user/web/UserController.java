@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
+
+	public static final LinkRelation CHANGE_PASSWORD = LinkRelation.of("change-password");
 
 	private final @NonNull TrackedPersonRepository trackedPersonRepository;
 	private final @NonNull DepartmentRepository departments;

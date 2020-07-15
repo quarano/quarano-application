@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
  * Create some dummy accounts for test and development
  *
  * @author Patrick Otto
+ * @author Oliver Drotbohm
+ * @author Jan Stamer
  */
 @Component
 @Order(500)
@@ -29,73 +31,63 @@ class AccountDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		log.warn("Test data: creating 14 accounts");
+		log.warn("Test data: creating test accounts…");
 
 		// account for GA user
-		accounts.changePassword(UnencryptedPassword.of("admin"),
-				accounts.createStaffAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster",
-						EmailAddress.of("muster@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_ADMIN));
+		accounts.createStaffAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster",
+				EmailAddress.of("muster@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_ADMIN);
 
-		accounts.changePassword(UnencryptedPassword.of("agent1"),
-				accounts.createStaffAccount("agent1", UnencryptedPassword.of("agent1"), "Horst", "Hallig",
-						EmailAddress.of("hallig@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("agent1", UnencryptedPassword.of("agent1"), "Horst", "Hallig",
+				EmailAddress.of("hallig@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("agent2"),
-				accounts.createStaffAccount("agent2", UnencryptedPassword.of("agent2"), "Bettina", "Boot",
-						EmailAddress.of("boot@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("agent2", UnencryptedPassword.of("agent2"), "Bettina", "Boot",
+				EmailAddress.of("boot@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("agent3"),
-				accounts.createStaffAccount("agent3", UnencryptedPassword.of("agent3"), "Heike", "Hirsch",
-						EmailAddress.of("hirsch@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("agent3", UnencryptedPassword.of("agent3"), "Heike", "Hirsch",
+				EmailAddress.of("hirsch@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
+				RoleType.ROLE_HD_CASE_AGENT);
 
 		accounts.createStaffAccount("agent4", UnencryptedPassword.of("agent4"), "Karlotta", "Kirsche",
 				EmailAddress.of("kirsche@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP2,
 				RoleType.ROLE_HD_CASE_AGENT);
 
 		// accounts for security tests
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secGama1", UnencryptedPassword.of("secur1tyTest!"), "Maja", "Menzel",
-						EmailAddress.of("menzel@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		var securityTestPassword = UnencryptedPassword.of("secur1tyTest!");
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secGama2", UnencryptedPassword.of("secur1tyTest!"), "Toni", "Tüpper",
-						EmailAddress.of("tuepper@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("secGama1", securityTestPassword, "Maja", "Menzel",
+				EmailAddress.of("menzel@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secGama3", UnencryptedPassword.of("secur1tyTest!"), "Lars", "Lüppel",
-						EmailAddress.of("lueppel@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("secGama2", securityTestPassword, "Toni", "Tüpper",
+				EmailAddress.of("tuepper@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secGama4", UnencryptedPassword.of("secur1tyTest!"), "Bernd", "Böttcher",
-						EmailAddress.of("boettcher@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_CASE_AGENT));
+		accounts.createStaffAccount("secGama3", securityTestPassword, "Lars", "Lüppel",
+				EmailAddress.of("lueppel@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secAdmin1", UnencryptedPassword.of("secur1tyTest!"), "Alfons", "Adminus",
-						EmailAddress.of("adminus@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_ADMIN));
+		accounts.createStaffAccount("secGama4", securityTestPassword, "Bernd", "Böttcher",
+				EmailAddress.of("boettcher@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_CASE_AGENT);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secAdmin2", UnencryptedPassword.of("secur1tyTest!"), "Ariana", "Admina",
-						EmailAddress.of("admina@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_ADMIN));
+		accounts.createStaffAccount("secAdmin1", securityTestPassword, "Alfons", "Adminus",
+				EmailAddress.of("adminus@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_ADMIN);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secAdmin3", UnencryptedPassword.of("secur1tyTest!"), "Alber", "Admino",
-						EmailAddress.of("admino@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_ADMIN));
+		accounts.createStaffAccount("secAdmin2", securityTestPassword, "Ariana", "Admina",
+				EmailAddress.of("admina@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_ADMIN);
 
-		accounts.changePassword(UnencryptedPassword.of("secur1tyTest!"),
-				accounts.createStaffAccount("secAdmin4", UnencryptedPassword.of("secur1tyTest!"), "Agatha", "Adminiki",
-						EmailAddress.of("adminki@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
-						RoleType.ROLE_HD_ADMIN));
+		accounts.createStaffAccount("secAdmin3", securityTestPassword, "Alber", "Admino",
+				EmailAddress.of("admino@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_ADMIN);
+
+		accounts.createStaffAccount("secAdmin4", securityTestPassword, "Agatha", "Adminiki",
+				EmailAddress.of("adminki@department1.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+				RoleType.ROLE_HD_ADMIN);
 
 		// user accounts
 		accounts.createTrackedPersonAccount("user1", UnencryptedPassword.of("user1"), "Daniel", "Dilemma",

@@ -1,14 +1,14 @@
 package quarano.security.web;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static quarano.core.web.QuaranoHttpHeaders.*;
+
 import io.vavr.control.Try;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
@@ -16,10 +16,14 @@ import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.user.web.UserController;
 
 import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import quarano.user.web.UserController;
-
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
-import static quarano.core.web.QuaranoHttpHeaders.*;
 
 @RestController
 @RequestMapping
@@ -68,24 +68,25 @@ class AuthenticationController {
 					}
 
 					return toTokenResponse(token);
-				}) //
+				})
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage())) //
 				.get();
-	}
-
-	private Map<String, Object> createBodyWithChangePasswordLink() {
-		var userController = on(UserController.class);
-
-		var linkToChangePassword = Link.of(fromMethodCall(userController.putPassword(null, null, null)).toUriString(),
-				IanaLinkRelations.NEXT); //
-
-		return Map.of("_links", Links.of(linkToChangePassword));
 	}
 
 	private Account lookupAccountFor(String username) {
 
 		return accounts.findByUsername(username.trim())
 				.orElseThrow(() -> new EmptyResultDataAccessException("No user found based on this token", 1));
+	}
+
+	@SuppressWarnings("null")
+	private static Map<String, Object> createBodyWithChangePasswordLink() {
+
+		var target = fromMethodCall(on(UserController.class).putPassword(null, null, null)).toUriString();
+		var links = Links.of(Link.of(target, IanaLinkRelations.NEXT))
+				.and(Link.of(target, UserController.CHANGE_PASSWORD));
+
+		return Map.of("_links", links);
 	}
 
 	private static HttpEntity<?> toUnauthorized(String message) {

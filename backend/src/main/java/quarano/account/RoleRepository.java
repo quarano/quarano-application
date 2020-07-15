@@ -1,15 +1,19 @@
 package quarano.account;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 public interface RoleRepository extends CrudRepository<Role, Integer> {
 
-	@Nullable
-	Role findByName(String roleName);
+	Optional<Role> findByName(String roleName);
 
-	@Nullable
 	default Role findByType(RoleType roleType) {
-		return this.findByName(roleType.getCode());
+
+		Assert.notNull(roleType, "Role type must not be null!");
+
+		return findByName(roleType.getCode())
+				.orElseThrow(() -> new IllegalStateException("Did not find a role instance for type " + roleType + "!"));
 	}
 }

@@ -23,10 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AccountBootstrap implements ApplicationRunner {
 
-	private final DepartmentRepository departments;
-	private final AccountService accounts;
-	private final DepartmentProperties configuration;
-	private final @NonNull RoleRepository roleRepository;
+	private final @NonNull DepartmentRepository departments;
+	private final @NonNull AccountService accounts;
+	private final @NonNull DepartmentProperties configuration;
+	private final @NonNull RoleRepository roles;
 
 	/*
 	 * (non-Javadoc)
@@ -54,25 +54,25 @@ public class AccountBootstrap implements ApplicationRunner {
 		var department = departments.save(defaultDepartment);
 		var defaults = configuration.getDefaultAccount();
 
-		// create initial roles
+		// Create initial roles
 		for (RoleType type : RoleType.values()) {
 
-			var role = roleRepository.findByName(type.getCode());
+			roles.findByName(type.getCode()).orElseGet(() -> {
 
-			if (role != null) {
-				continue;
-			}
-			log.info("Creating initial role " + type.getCode());
-
-			roleRepository.save(new Role(type));
+				log.info("Adding initial role " + type);
+				return roles.save(new Role(type));
+			});
 		}
 
 		log.info("Creating default account (root, root).");
 
-		accounts.changePassword(UnencryptedPassword.of("root"), accounts.createStaffAccount("root", UnencryptedPassword.of("root"),
+		var password = UnencryptedPassword.of("root");
+		var account = accounts.createStaffAccount("root", password,
 				defaults.getFirstname(),
 				defaults.getLastname(),
 				EmailAddress.of(defaults.getEmailAddress()),
-				department.getId(), RoleType.ROLE_HD_ADMIN));
+				department.getId(), RoleType.ROLE_HD_ADMIN);
+
+		accounts.changePassword(password, account);
 	}
 }

@@ -26,7 +26,7 @@ class StaffAccountMappingConfiguration implements MappingCustomizer {
 	@Override
 	public void customize(ModelMapper mapper) {
 
-		mapper.addConverter(context -> roles.findByName(context.getSource()), String.class, Role.class);
+		mapper.addConverter(context -> roles.findByName(context.getSource()).orElse(null), String.class, Role.class);
 		mapper.addConverter(context -> context.getSource().getRoleType().getCode(), Role.class, String.class);
 	}
 }
