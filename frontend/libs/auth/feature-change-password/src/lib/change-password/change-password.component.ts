@@ -4,9 +4,10 @@ import { AuthService, UserService } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'qro-change-password',
@@ -19,14 +20,24 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
   errorGenerator = ValidationErrorGenerator;
+  /**
+   * Need to inject the Dialog stuff this way,
+   * otherwise a component can't be used as a dialog and as usual component at the same time
+   */
+  private dialogRef = null;
+  private dialogData;
 
   constructor(
     private userService: UserService,
     private snackbarService: SnackbarService,
     private router: Router,
     private authService: AuthService,
-    private badRequestService: BadRequestService
-  ) {}
+    private badRequestService: BadRequestService,
+    private injector: Injector
+  ) {
+    this.dialogRef = this.injector.get(MatDialogRef, null);
+    this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
+  }
 
   ngOnInit() {
     this.createForm();
@@ -60,7 +71,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           .subscribe(
             () => {
               this.snackbarService.success('Ihr Passwort wurde geändert');
-              this.router.navigate(['/general/welcome']);
+              if (this.dialogData.mode === 'initialPasswordChange') {
+                this.dialogRef.close('success');
+              } else {
+                this.router.navigate(['/general/welcome']);
+              }
             },
             (error) => {
               this.badRequestService.handleBadRequestError(error, this.formGroup);
