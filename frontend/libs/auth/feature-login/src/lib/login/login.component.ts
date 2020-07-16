@@ -47,10 +47,10 @@ export class LoginComponent implements OnInit {
     this.userService
       .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
       .subscribe(
-        (_) => {
+        (resData) => {
           this.snackbarService.success('Willkommen bei quarano');
           if (this.userService.isHealthDepartmentUser) {
-            if (this.checkIfPasswordChangeNeeded(_)) {
+            if (this.checkIfPasswordChangeNeeded(resData)) {
               this.openPasswordChangeDialog();
             } else {
               this.router.navigate(['/health-department/index-cases/case-list']);
@@ -74,10 +74,10 @@ export class LoginComponent implements OnInit {
    * Checks whether in the _links object there is only one element and if so, if it is
    * referreing to the password page, then the user needs to change his
    * initial password
-   * @param Response the data received from the backend from the login api Call
+   * @param response the data received from the backend from the login api Call
    */
-  checkIfPasswordChangeNeeded(Response: HttpResponse<any>): boolean {
-    const resBody = Response.body;
+  checkIfPasswordChangeNeeded(response: HttpResponse<any>): boolean {
+    const resBody = response.body;
     if (resBody && resBody._links && resBody._links.length > 0) {
       const changeNeeded = !!resBody._links.find((link) => link.rel === 'change-password');
       return changeNeeded;

@@ -7,8 +7,9 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '@qro/auth/domain';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-describe('LoginComponent', () => {
+fdescribe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
@@ -23,6 +24,8 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       providers: [
         { provide: UserService, useValue: userService },
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialog, useValue: {} },
         {
           provide: SnackbarService,
           useValue: {
