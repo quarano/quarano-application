@@ -16,6 +16,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
@@ -74,7 +75,7 @@ public class TrackedCaseController {
 		var summaries = cases.findFiltered(query, type, department.getId())
 				.map(projection.filter(it -> it.equals("select"))
 						.<Function<TrackedCase, Object>> map(it -> representations::toSelect)
-						.orElse(representations::toSummary))
+						.orElse(representations::toSummaryWithOriginCases))
 				.toList();
 
 		return HalModelBuilder.emptyHalModel()

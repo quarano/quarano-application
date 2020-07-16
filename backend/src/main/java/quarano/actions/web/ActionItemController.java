@@ -16,10 +16,12 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 
 import java.util.Comparator;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -67,13 +69,19 @@ class ActionItemController {
 	}
 
 	@GetMapping("/api/hd/actions")
-	Stream<?> getActions(@LoggedIn Department department) {
+	RepresentationModel<?> getActions(@LoggedIn Department department) {
 
-		return cases.findByDepartmentId(department.getId())
+		var actionRepresentations = cases.findByDepartmentId(department.getId())
 				.map(it -> representations.toSummary(it, items.findUnresolvedByActiveCase(it)))
 				.stream()
 				.filter(CaseActionSummary::hasUnresolvedItems)
-				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed());
+				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed())
+				.map(representations::toSummaryWithOriginCases)
+				.collect(Collectors.toUnmodifiableList());
+
+		return HalModelBuilder.emptyHalModel()
+				.embed(actionRepresentations, CaseActionSummary.class)
+				.build();
 	}
 
 	private CaseActionsRepresentation toRepresentation(TrackedCase trackedCase) {

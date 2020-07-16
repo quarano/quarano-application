@@ -10,13 +10,16 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.actions.DescriptionCode;
 import quarano.actions.web.ActionRepresentations.ActionsReviewed;
+import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 /**
  * @author Oliver Drotbohm
@@ -104,12 +108,12 @@ class ActionItemsControllerWebIntegrationTests {
 	@WithQuaranoUser("agent3")
 	void resolvesAnomaliesManuallyDoesNotWorkForSystemAnomalies() throws Exception {
 
-		var actionsResponse = mvc.perform(get("/api/hd/actions"))
+		var actionsResponse = mvc.perform(get("/api/hd/actions").accept("application/json"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var actionsDocument = JsonPath.parse(actionsResponse);
-		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
+		var contactCaseId = actionsDocument.read("$._embedded.actions[1].caseId", String.class);
 
 		ActionsReviewed reviewed = new ActionsReviewed()
 				.setComment("Comment!");
@@ -154,12 +158,12 @@ class ActionItemsControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$", JSONArray.class)).hasSize(2);
-		assertThat(document.read("$[0].healthSummary", JSONArray.class)).isEqualTo(List.of());
-		assertThat(document.read("$[0].processSummary", JSONArray.class))
+		assertThat(document.read("$._embedded.actions", JSONArray.class)).hasSize(2);
+		assertThat(document.read("$._embedded.actions[0].healthSummary", JSONArray.class)).isEqualTo(List.of());
+		assertThat(document.read("$._embedded.actions[0].processSummary", JSONArray.class))
 				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
-		assertThat(document.read("$[1].healthSummary", JSONArray.class)).isEqualTo(List.of());
-		assertThat(document.read("$[1].processSummary", JSONArray.class))
+		assertThat(document.read("$._embedded.actions[1].healthSummary", JSONArray.class)).isEqualTo(List.of());
+		assertThat(document.read("$._embedded.actions[1].processSummary", JSONArray.class))
 				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
 	}
 
@@ -168,12 +172,12 @@ class ActionItemsControllerWebIntegrationTests {
 	void getActionsDoesNotReturnConcludedCases() throws Exception {
 
 		// get an active case with open actions
-		var actionsResponse = mvc.perform(get("/api/hd/actions"))
+		var actionsResponse = mvc.perform(get("/api/hd/actions").accept("application/json"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var actionsDocument = JsonPath.parse(actionsResponse);
-		var contactCaseId = actionsDocument.read("$[1].caseId", String.class);
+		var contactCaseId = actionsDocument.read("$._embedded.actions[1].caseId", String.class);
 
 		// conclude the case
 		cases.findById(TrackedCaseIdentifier.of(UUID.fromString(contactCaseId)))
@@ -191,5 +195,40 @@ class ActionItemsControllerWebIntegrationTests {
 
 		// check that case is not contained anymore
 		assertThat(cases).doesNotContain(contactCaseId);
+	}
+
+	@Test // CORE-331
+	@WithQuaranoUser("agent1")
+	void getOriginCasesOfContactsCorrectly() throws Exception {
+
+		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SIGGI).orElseThrow();
+		var contactCase = cases.findAll()
+				.filter(it -> !it.getType().equals(CaseType.INDEX))
+				.filter(it -> it.getOriginCases().contains(originCase))
+				.stream().findFirst().orElseThrow();
+
+		var response = mvc.perform(get("/api/hd/actions")
+				.accept("application/hal+json"))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> document.read("$.originCases"));
+
+		List<Map<String, Object>> contact = document
+				.read("$._embedded.actions[?(@.caseId == '" + contactCase.getId() + "')]");
+		var contactDoc = JsonPath.parse(contact.get(0));
+
+		assertThat(contactDoc.read("$._embedded.originCases[0].firstName", String.class))
+				.isEqualTo(originCase.getTrackedPerson().getFirstName());
+		assertThat(contactDoc.read("$._embedded.originCases[0].lastName", String.class))
+				.isEqualTo(originCase.getTrackedPerson().getLastName());
+		String embeddedOriginCaseLink = contactDoc.read("$._embedded.originCases[0]._links.self.href", String.class);
+		assertThat(embeddedOriginCaseLink).contains(originCase.getId().toString());
+
+		String originCaseLink = contactDoc.read("$._links.originCases.href", String.class);
+		assertThat(originCaseLink).contains(originCase.getId().toString());
+		assertThat(originCaseLink).isEqualTo(embeddedOriginCaseLink);
 	}
 }
