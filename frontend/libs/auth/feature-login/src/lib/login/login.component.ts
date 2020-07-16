@@ -1,3 +1,5 @@
+import { ChangePasswordComponent } from '../../../../feature-change-password/src/lib/change-password/change-password.component';
+import { HttpResponse } from '@angular/common/http';
 import { ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -6,6 +8,7 @@ import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'qro-login',
@@ -21,7 +24,12 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, Validators.required),
   });
 
-  constructor(private userService: UserService, private snackbarService: SnackbarService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private snackbarService: SnackbarService,
+    private router: Router,
+    private matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.userService.isLoggedIn$
@@ -42,7 +50,11 @@ export class LoginComponent implements OnInit {
         (_) => {
           this.snackbarService.success('Willkommen bei quarano');
           if (this.userService.isHealthDepartmentUser) {
-            this.router.navigate(['/health-department/index-cases/case-list']);
+            if (this.checkIfPasswordChangeNeeded(_)) {
+              this.openPasswordChangeDialog();
+            } else {
+              this.router.navigate(['/health-department/index-cases/case-list']);
+            }
           } else {
             this.router.navigate(['/client/diary/diary-list']);
           }
@@ -56,6 +68,36 @@ export class LoginComponent implements OnInit {
         }
       )
       .add(() => (this.loading = false));
+  }
+
+  /**
+   * Checks whether in the _links object there is only one element and if so, if it is
+   * referreing to the password page, then the user needs to change his
+   * initial password
+   * @param Response the data received from the backend from the login api Call
+   */
+  checkIfPasswordChangeNeeded(Response: HttpResponse<any>): boolean {
+    const resBody = Response.body;
+    if (resBody && resBody._links && resBody._links.length > 0) {
+      const changeNeeded = !!resBody._links.find((link) => link.rel === 'change-password');
+      return changeNeeded;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Opens the Change Password Component with a Material Dialog and routes the user afterwards if the password change was successful
+   */
+  openPasswordChangeDialog(): void {
+    this.matDialog
+      .open(ChangePasswordComponent, { disableClose: true, data: { mode: 'initialPasswordChange' } })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result === 'success') {
+          this.router.navigate(['/health-department/index-cases/case-list']);
+        }
+      });
   }
 
   trimValue(input: MatInput) {
