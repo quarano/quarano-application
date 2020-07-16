@@ -38,7 +38,6 @@ import java.lang.annotation.Target;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -55,12 +54,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.Relation;
-import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -100,6 +96,27 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
 
+	@Override
+	public TrackedCaseSelect toSelect(TrackedCase trackedCase) {
+		return TrackedCaseSelect.of(trackedCase);
+	}
+
+	public RepresentationModel<?> toSummaryWithOriginCases(TrackedCase trackedCase) {
+
+		var trackedCaseSummary = toSummary(trackedCase);
+		var halModelBuilder = HalModelBuilder.halModelOf(trackedCaseSummary);
+		var originCases = trackedCase.getOriginCases()
+				.stream()
+				.map(this::toSelect)
+				.collect(Collectors.toUnmodifiableList());
+
+		if (!originCases.isEmpty()) {
+			halModelBuilder.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES);
+		}
+
+		return halModelBuilder.build();
+	}
+
 	public EnrollmentDto toRepresentation(Enrollment enrollment) {
 		return new EnrollmentDto(enrollment);
 	}
@@ -130,10 +147,6 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return HalModelBuilder.halModelOf(enriched)
 				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES)
 				.build();
-	}
-
-	TrackedCaseSelect toSelect(TrackedCase trackedCase) {
-		return TrackedCaseSelect.of(trackedCase);
 	}
 
 	TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
@@ -374,13 +387,6 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
 			this.additionalProperty = new HashMap<>();
-
-			var controller = on(TrackedCaseController.class);
-
-			add(trackedCase.getOriginCases().stream()
-					.map(it -> MvcLink.of(controller.getCase(it.getId(), it.getDepartment()),
-							TrackedCaseLinkRelations.ORIGIN_CASES))
-					.collect(Collectors.toUnmodifiableList()));
 		}
 
 		public String getCaseId() {
@@ -477,48 +483,6 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		interface Index {}
 
 		interface Contact {}
-	}
-
-	/**
-	 * Trimmed down representation to be used from selection dialogues that basically need a link to a case by the
-	 * person's name.
-	 *
-	 * @author Oliver Drotbohm
-	 */
-	@Relation(collectionRelation = "cases")
-	@RequiredArgsConstructor(staticName = "of")
-	static class TrackedCaseSelect extends RepresentationModel<TrackedCaseSelect> {
-
-		private final TrackedCase trackedCase;
-
-		public String getFirstName() {
-			return trackedCase.getTrackedPerson().getFirstName();
-		}
-
-		public String getLastName() {
-			return trackedCase.getTrackedPerson().getLastName();
-		}
-
-		public String getDateOfBirth() {
-
-			var dateOfBirth = trackedCase.getTrackedPerson().getDateOfBirth();
-
-			return dateOfBirth == null ? null : dateOfBirth.format(DateTimeFormatter.ISO_DATE);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.springframework.hateoas.RepresentationModel#getLinks()
-		 */
-		@Override
-		public Links getLinks() {
-
-			var id = trackedCase.getId();
-			var department = trackedCase.getDepartment();
-
-			return super.getLinks()
-					.and(MvcLink.of(on(TrackedCaseController.class).getCase(id, department), IanaLinkRelations.SELF));
-		}
 	}
 
 	@RequiredArgsConstructor

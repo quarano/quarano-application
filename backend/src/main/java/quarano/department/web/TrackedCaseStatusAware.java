@@ -9,6 +9,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.Status;
 
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -50,6 +51,9 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 				.andIf(trackedCase.isEligibleForTracking(), () -> MvcLink.of(uri, START_TRACKING))
 				.andIf(trackedCase.hasQuestionnaire(),
 						() -> MvcLink.of(controller.getQuestionnaire(caseId, null), QUESTIONNAIRE));
+				.and(trackedCase.getOriginCases().stream()
+						.map(it -> MvcLink.of(controller.getCase(it.getId(), it.getDepartment()), ORIGIN_CASES))
+						.collect(Collectors.toUnmodifiableList()));
 	}
 
 	public String getStatus() {

@@ -703,6 +703,40 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$._links.anomalies.href", String.class)).isNotBlank();
 	}
 
+	@Test // CORE-331
+	void getOriginCasesOfContactsCorrectly() throws Exception {
+
+		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SIGGI).orElseThrow();
+		var contactCase = cases.findAll()
+				.filter(it -> !it.getType().equals(CaseType.INDEX))
+				.filter(it -> it.getOriginCases().contains(originCase))
+				.stream().findFirst().orElseThrow();
+
+		var response = mvc.perform(get("/api/hd/cases")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThatExceptionOfType(PathNotFoundException.class).isThrownBy(() -> document.read("$.originCases"));
+
+		List<Map<String, Object>> contact = document
+				.read("$._embedded.cases[?(@.caseId == '" + contactCase.getId() + "')]");
+		var contactDoc = JsonPath.parse(contact.get(0));
+
+		assertThat(contactDoc.read("$._embedded.originCases[0].firstName", String.class))
+				.isEqualTo(originCase.getTrackedPerson().getFirstName());
+		assertThat(contactDoc.read("$._embedded.originCases[0].lastName", String.class))
+				.isEqualTo(originCase.getTrackedPerson().getLastName());
+		String embeddedOriginCaseLink = contactDoc.read("$._embedded.originCases[0]._links.self.href", String.class);
+		assertThat(embeddedOriginCaseLink).contains(originCase.getId().toString());
+
+		String originCaseLink = contactDoc.read("$._links.originCases.href", String.class);
+		assertThat(originCaseLink).contains(originCase.getId().toString());
+		assertThat(originCaseLink).isEqualTo(embeddedOriginCaseLink);
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri)
