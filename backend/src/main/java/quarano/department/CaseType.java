@@ -1,5 +1,7 @@
 package quarano.department;
 
+import java.util.Set;
+
 /**
  * @author Patrick Otto
  * @author Oliver Drotbohm
@@ -26,7 +28,7 @@ public enum CaseType {
 	 * A contact case for someone at high risk.
 	 */
 	CONTACT_VULNERABLE;
-	
+
 	public CaseType getPrimaryCaseType() {
 
 		switch (this) {
@@ -36,6 +38,17 @@ public enum CaseType {
 				return CaseType.CONTACT;
 			default:
 				return CaseType.INDEX;
+		}
+	}
+
+	public Set<CaseType> getAllTypes() {
+
+		switch (this) {
+			case CONTACT:
+				return Set.of(CONTACT, CONTACT_MEDICAL, CONTACT_VULNERABLE);
+
+			default:
+				return Set.of(this);
 		}
 	}
 }

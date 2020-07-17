@@ -70,9 +70,10 @@ class TrackedCaseController {
 	@GetMapping(path = "/api/hd/cases")
 	RepresentationModel<?> getCases(@LoggedIn Department department,
 			@RequestParam("q") Optional<String> query,
-			@RequestParam("projection") Optional<String> projection) {
+			@RequestParam("projection") Optional<String> projection,
+			@RequestParam("type") Optional<String> type) {
 
-		var summaries = cases.findFiltered(query, department.getId())
+		var summaries = cases.findFiltered(query, type, department.getId())
 				.map(projection.filter(it -> it.equals("select"))
 						.<Function<TrackedCase, Object>> map(it -> representations::toSelect)
 						.orElse(representations::toSummary))

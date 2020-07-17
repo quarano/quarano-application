@@ -631,6 +631,21 @@ class TrackedCaseControllerWebIntegrationTests {
 		});
 	}
 
+	@Test // CORE-346
+	void returnsOnlyIndexCasesIfFiltered() throws Exception {
+
+		var result = mvc.perform(get("/api/hd/cases")
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("type", "index"))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$._embedded.cases[*].caseType", JSONArray.class))
+				.allMatch("index"::equals);
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri)
