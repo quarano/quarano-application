@@ -15,13 +15,11 @@ export class IndexCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=index`).pipe(
       share(),
       map((result) => {
         if (result?._embedded?.cases) {
-          return result._embedded.cases
-            .filter((r: any) => r.caseType === ClientType.Index)
-            .map((item: any) => this.mapCaseListItem(item));
+          return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
         } else {
           return [];
         }
@@ -31,7 +29,7 @@ export class IndexCaseService {
 
   searchCases(searchTerm: string): Observable<CaseSearchItem[]> {
     return this.httpClient
-      .get<any>(`${this.apiUrl}/api/hd/cases?q=${searchTerm}&projection=select`)
+      .get<any>(`${this.apiUrl}/api/hd/cases?type=index&q=${searchTerm}&projection=select`)
       .pipe(map((res) => res?._embedded?.cases));
   }
 

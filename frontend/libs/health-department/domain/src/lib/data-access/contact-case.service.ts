@@ -14,13 +14,11 @@ export class ContactCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=contact`).pipe(
       share(),
       map((result) => {
         if (result?._embedded?.cases) {
-          return result._embedded.cases
-            .filter((r: any) => r.caseType === ClientType.Contact)
-            .map((item: any) => this.mapCaseListItem(item));
+          return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
         } else {
           return [];
         }
