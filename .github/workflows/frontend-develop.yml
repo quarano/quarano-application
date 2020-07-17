@@ -41,7 +41,7 @@ jobs:
 
       - name: Set up CF CLI
         if: success()
-        uses: jvalkeal/setup-cf-cli-action@master
+        uses: jvalkeal/setup-cf-cli@v0
         with:
           version: 6.51.0
 
