@@ -27,6 +27,7 @@ import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -148,31 +149,37 @@ class TrackedCaseController {
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}/diary")
-	RepresentationModel<?> getDiaryOfCase(@PathVariable TrackedCaseIdentifier identifier) {
+	HttpEntity<?> getDiaryOfCase(@PathVariable TrackedCaseIdentifier identifier,
+			@LoggedIn DepartmentIdentifier departmentIdentifier) {
 
-		var diaryEntryRepresentations = cases.findById(identifier)
-				.stream()
-				.flatMap(this::createDiaryEntrySummaries)
-				.collect(Collectors.toList());
+		TrackedCase trackedCase = cases.findById(identifier)
+				.filter(it -> it.belongsTo(departmentIdentifier))
+				.orElse(null);
 
-		return HalModelBuilder.halModel()
-				.embed(diaryEntryRepresentations, TrackedCaseDiaryEntrySummary.class)
-				.build();
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok(HalModelBuilder.halModel()
+				.embed(createDiaryEntrySummaries(trackedCase), TrackedCaseDiaryEntrySummary.class)
+				.build());
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}/contacts")
-	RepresentationModel<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier,
-			@LoggedIn Department department) {
+	HttpEntity<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier,
+			@LoggedIn DepartmentIdentifier department) {
 
-		var contactRepresentations = cases.findById(identifier)
+		TrackedCase trackedCase = cases.findById(identifier)
 				.filter(it -> it.belongsTo(department))
-				.stream()//
-				.flatMap(this::createContactSummaries)//
-				.collect(Collectors.toList());
+				.orElse(null);
 
-		return HalModelBuilder.halModel()
-				.embed(contactRepresentations, TrackedCaseContactSummary.class)
-				.build();
+		if (trackedCase == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok(HalModelBuilder.halModel()
+				.embed(createContactSummaries(trackedCase), TrackedCaseContactSummary.class)
+				.build());
 	}
 
 	// PUT Mapping for transformation into index case
@@ -343,20 +350,20 @@ class TrackedCaseController {
 				.build();
 	}
 
-	private Stream<TrackedCaseContactSummary> createContactSummaries(TrackedCase trackedCase) {
+	private Collection<TrackedCaseContactSummary> createContactSummaries(TrackedCase trackedCase) {
 
 		var encounters = trackedCase.getTrackedPerson().getEncounters();
 
 		return encounters.getContactDatesGroupedByContactPerson().entrySet().stream()//
-				.map(it -> representations.toContactSummary(it.getKey(), it.getValue()));
+				.map(it -> representations.toContactSummary(it.getKey(), it.getValue())) //
+				.collect(Collectors.toUnmodifiableList());
 	}
 
-	private Stream<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
+	private Collection<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
 
-		var diary = diaries.findDiaryFor(trackedCase.getTrackedPerson());
-
-		return diary.stream()
-				.map(representations::toDiaryEntrySummary);
+		return diaries.findDiaryFor(trackedCase.getTrackedPerson()).stream()
+				.map(representations::toDiaryEntrySummary)
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@SuppressWarnings("null")

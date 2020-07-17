@@ -17,7 +17,6 @@ package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.EnumMessageSourceResolvable;
@@ -27,9 +26,11 @@ import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.diary.DiaryEntry;
 import quarano.diary.Slot;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.util.TestUtils;
+
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -40,8 +41,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-
-import java.util.UUID;
 
 /**
  * @author Oliver Drotbohm
@@ -100,10 +99,10 @@ class TrackedCaseRepresentationIntegrationTests {
 		assertThat(document.read("$.originCases", String.class)).isNull();
 	}
 
-	@Test
+	@Test // CORE-120, CORE-344
 	void mapsDiaryEntryToDiaryEntrySummary() {
 
-		var source = DiaryEntry.of(Slot.now(), TrackedPerson.TrackedPersonIdentifier.of(UUID.randomUUID()))
+		var source = DiaryEntry.of(Slot.now(), TrackedPersonIdentifier.of(UUID.randomUUID()))
 				.setBodyTemperature(BodyTemperature.of(40.0f));
 
 		var result = representations.toDiaryEntrySummary(source);

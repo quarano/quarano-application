@@ -575,14 +575,14 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test // CORE-120
 	void exposesDiaryForCase() throws Exception {
 
-		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1)
-				.orElseThrow();
+		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
 		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.DIARY, response);
+
 		assertThat(link).isNotNull();
 
 		response = mvc.perform(get(link.getHref()))
@@ -600,16 +600,16 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		DocumentContext diaryEntry = JsonPath.parse(diaryEntries.get(0));
 
-		List<Map<String, Object>> symptoms = diaryEntry.read("$.symptoms", List.class);
-		assertThat(symptoms).hasSize(2);
-		symptoms.forEach(symptom -> {
-			assertThat(symptom.get("id")).isNotNull();
-			assertThat(symptom.get("name")).isNotNull();
-			assertThat(symptom.get("characteristic")).isNotNull();
-		});
-		assertThat(diaryEntry.read("$.contacts", List.class)).isEmpty();
+		assertThat(diaryEntry.read("$.contacts", Object[].class)).isEmpty();
 		assertThat(diaryEntry.read("$.bodyTemperature", Float.class)).isEqualTo(37.8f);
 		assertThat(diaryEntry.read("$.reportedAt", String.class)).isNotNull();
+		assertThat((List<Map<String, Object>>) diaryEntry.read("$.symptoms", List.class))
+				.hasSize(2)
+				.allSatisfy(symptom -> {
+					assertThat(symptom.get("id")).isNotNull();
+					assertThat(symptom.get("name")).isNotNull();
+					assertThat(symptom.get("characteristic")).isNotNull();
+				});
 	}
 
 	@Test // CORE-252
