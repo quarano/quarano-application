@@ -7,6 +7,8 @@ import org.springframework.hateoas.LinkRelation;
  */
 public class TrackedCaseLinkRelations {
 
+	public static final LinkRelation SELF = LinkRelation.of("self");
+
 	public static final LinkRelation START_TRACKING = LinkRelation.of("start-tracking");
 	public static final LinkRelation CONCLUDE = LinkRelation.of("conclude");
 	public static final LinkRelation RENEW = LinkRelation.of("renew");

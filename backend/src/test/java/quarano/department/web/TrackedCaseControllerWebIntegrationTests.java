@@ -531,6 +531,19 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.belongToMedicalStaffDescription", String.class)).isNotNull();
 	}
 
+	@Test // CORE-354
+	void exposesSelfLink() throws Exception {
+
+		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
+
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var link = discoverer.findRequiredLinkWithRel(SELF, response);
+		assertThat(link).isNotNull();
+	}
+
 	@Test // CORE-119
 	@SuppressWarnings("unchecked")
 	void exposesContactsForCase() throws Exception {

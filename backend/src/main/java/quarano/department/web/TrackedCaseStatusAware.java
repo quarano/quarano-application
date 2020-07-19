@@ -37,7 +37,10 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 
 		var controller = on(TrackedCaseController.class);
 
-		var links = Links.of(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
+		var links = Links.of(Link.of(fromMethodCall(controller.getCase(trackedCase.getId(), null)).toUriString(),
+				TrackedCaseLinkRelations.SELF));
+
+		links = links.and(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
 				TrackedCaseLinkRelations.CONCLUDE));
 
 		links = links.and(Link.of(fromMethodCall(controller.getContactsOfCase(trackedCase.getId(), null)).toUriString(),
