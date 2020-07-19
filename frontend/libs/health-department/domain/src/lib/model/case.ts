@@ -13,7 +13,7 @@ export interface CaseDto extends HalResponse {
   email?: string;
   phone?: string;
   enrollmentCompleted?: boolean;
-  caseType?: ClientType;
+  caseType?: CaseType;
   medicalStaff?: boolean;
   caseId?: string;
   caseTypeLabel: string;

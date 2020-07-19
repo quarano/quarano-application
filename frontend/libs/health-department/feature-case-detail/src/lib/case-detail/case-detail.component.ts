@@ -1,5 +1,4 @@
 import {
-  CaseDetailDto,
   CaseActionDto,
   ContactDto,
   CaseCommentDto,
@@ -46,7 +45,7 @@ export class CaseDetailComponent implements OnDestroy {
   caseComments$: Observable<CaseCommentDto[]>;
   symptoms$: Observable<SymptomDto[]>;
 
-  updatedDetail$$: Subject<CaseDetailDto> = new Subject<CaseDetailDto>();
+  updatedDetail$$: Subject<CaseDto> = new Subject<CaseDto>();
   trackingStart$$: Subject<StartTracking> = new Subject<StartTracking>();
   questionnaire$$: Subject<QuestionnaireDto> = new Subject<QuestionnaireDto>();
   contacts$$: Subject<ContactListItemDto[]> = new Subject<ContactListItemDto[]>();
@@ -160,7 +159,7 @@ export class CaseDetailComponent implements OnDestroy {
     return this.caseAction$.pipe(map((a) => a.anomalies.health.length + a.anomalies.process.length > 0));
   }
 
-  getStartTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
+  getStartTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {
     if (caseDetail.status === CaseStatus.Abgeschlossen) {
       return 'Der Fall ist bereits abgeschlossen worden';
     }
@@ -180,7 +179,7 @@ export class CaseDetailComponent implements OnDestroy {
     return 'Um die Nachverfolgung zu starten müssen zunächst folgende Daten erfasst werden: Vorname, Nachname, Geburtsdatum, eine Telefonnummer sowie die Emailadresse';
   }
 
-  getAnalogTrackingTitle(caseDetail: CaseDetailDto, buttonIsDisabled: boolean): string {
+  getAnalogTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {
     if (!buttonIsDisabled) {
       return 'Hiermit stoppen Sie die systemseitige Nachverfolgung des Falles und geben an, dass Sie den Fall manuell weiter verfolgen möchten';
     }
@@ -215,7 +214,7 @@ export class CaseDetailComponent implements OnDestroy {
     return `/health-department/${this.type$$.value}-cases/case-list`;
   }
 
-  startTracking(caseDetail: CaseDetailDto) {
+  startTracking(caseDetail: CaseDto) {
     this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking').subscribe((data) => {
       this.trackingStart$$.next(data);
       this.updatedDetail$$.next({ ...cloneDeep(caseDetail), _links: data._links });
@@ -257,7 +256,7 @@ export class CaseDetailComponent implements OnDestroy {
   closeCase(halResponse: HalResponse) {
     this.subs.sink = this.apiService
       .deleteApiCall<any>(halResponse, 'conclude')
-      .pipe(switchMap(() => this.healthDepartmentService.getCase(this.caseId)))
+      .pipe(switchMap(() => this.entityService.getByKey(this.caseId)))
       .subscribe((data) => {
         this.snackbarService.success('Fall abgeschlossen.');
         this.updatedDetail$$.next(data);

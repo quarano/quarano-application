@@ -1,11 +1,10 @@
-import { ClientType } from '@qro/auth/api';
 import { CaseDto } from '../model/case';
 import { CASE_FEATURE_KEY } from './case-entity.service';
 import { Injectable, Inject } from '@angular/core';
 import { DefaultDataService, HttpUrlGenerator, QueryParams } from '@ngrx/data';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Update } from '@ngrx/entity';
 

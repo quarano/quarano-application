@@ -3,7 +3,6 @@ import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseListItemDto } from '../model/case-list-item';
 import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
 
