@@ -108,9 +108,12 @@ export class ActionListComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.caseId], {
-      queryParams: { tab: 1 },
-    });
+    this.router.navigate([
+      '/health-department/case-detail',
+      event?.selected[0]?.type,
+      event?.selected[0]?.caseId,
+      'actions',
+    ]);
   }
 
   onAlertFilterChanged(selectedValues: string[]) {
