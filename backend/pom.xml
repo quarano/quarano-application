@@ -74,12 +74,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-apt</artifactId>
@@ -202,9 +202,9 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Development-only dependencies -->
-		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -232,7 +232,7 @@
 					<offline>true</offline>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>
