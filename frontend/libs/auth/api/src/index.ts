@@ -1,4 +1,5 @@
 export {
+  AuthDomainModule,
   ClientDto,
   HealthDepartmentDto,
   AuthService,

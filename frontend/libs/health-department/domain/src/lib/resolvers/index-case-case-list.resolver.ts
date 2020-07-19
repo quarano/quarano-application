@@ -1,14 +1,22 @@
+import { IndexCaseEntityService } from './../data-access/index-case-entity.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { IndexCaseService } from '../data-access/index-case.service';
-import { CaseListItemDto } from '../model/case-list-item';
+import { tap, filter, first } from 'rxjs/operators';
 
 @Injectable()
-export class IndexCaseCaseListResolver implements Resolve<CaseListItemDto[]> {
-  constructor(private apiService: IndexCaseService) {}
+export class IndexCaseCaseListResolver implements Resolve<boolean> {
+  constructor(private entityService: IndexCaseEntityService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<CaseListItemDto[]> {
-    return this.apiService.getCaseList();
+  resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
+    return this.entityService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.entityService.getAll();
+        }
+      }),
+      filter((loaded) => !!loaded),
+      first()
+    );
   }
 }

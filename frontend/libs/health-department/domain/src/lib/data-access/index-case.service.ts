@@ -14,19 +14,6 @@ import { ActionListItemDto } from '../model/action-list-item';
 export class IndexCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
-  getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=index`).pipe(
-      share(),
-      map((result) => {
-        if (result?._embedded?.cases) {
-          return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
-        } else {
-          return [];
-        }
-      })
-    );
-  }
-
   searchCases(searchTerm: string): Observable<CaseSearchItem[]> {
     return this.httpClient
       .get<any>(`${this.apiUrl}/api/hd/cases?type=index&q=${searchTerm}&projection=select`)
@@ -38,27 +25,6 @@ export class IndexCaseService {
       share(),
       map((result) => result.filter((r) => r.caseType === ClientType.Index).map((item) => this.mapActionListItem(item)))
     );
-  }
-
-  private mapCaseListItem(item: any): CaseListItemDto {
-    return {
-      dateOfBirth: item.dateOfBirth ? new Date(item.dateOfBirth) : null,
-      status: item.status,
-      email: item.email,
-      phone: item.primaryPhoneNumber,
-      firstName: item.firstName,
-      lastName: item.lastName,
-      medicalStaff: item.medicalStaff,
-      enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
-      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
-      caseType: item.caseType,
-      zipCode: item.zipCode,
-      caseId: item.caseId,
-      caseTypeLabel: item.caseTypeLabel,
-      createdAt: item.createdAt ? new Date(item.createdAt) : null,
-      extReferenceNumber: item.extReferenceNumber,
-    };
   }
 
   private mapActionListItem(item: any): ActionListItemDto {

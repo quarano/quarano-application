@@ -33,7 +33,7 @@ const routes: Routes = [
         path: 'case-list',
         pathMatch: 'full',
         component: CaseListComponent,
-        resolve: { cases: IndexCaseCaseListResolver },
+        resolve: { casesLoaded: IndexCaseCaseListResolver },
       },
     ],
   },
