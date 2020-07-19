@@ -1,8 +1,9 @@
 import { HalResponse } from '@qro/shared/util-data-access';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { CaseCommentDto } from './case-comment';
 import { ContactDto } from './contact';
 import { CaseSearchItem } from './case-search-item';
+import * as _ from 'lodash';
 
 export interface CaseDto extends HalResponse {
   dateOfBirth?: Date;
@@ -47,7 +48,7 @@ export enum CaseStatus {
   Abgeschlossen = 'abgeschlossen',
 }
 
-export function GetEmptyCase(): CaseDto {
+export function getEmptyCase(): CaseDto {
   return {
     firstName: null,
     lastName: null,
@@ -61,4 +62,12 @@ export function GetEmptyCase(): CaseDto {
     originCases: [],
     _embedded: { originCases: [] },
   };
+}
+
+export function sortByLastName(a: { lastName: string }, b: { lastName: string }): number {
+  return a.lastName.localeCompare(b.lastName);
+}
+
+export function caseTypeFilter(entities: { caseType: CaseType }[], search: string) {
+  return entities.filter((e) => -1 < e.caseType.indexOf(search));
 }

@@ -5,12 +5,12 @@ import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';
 import { DateFunctions } from '@qro/shared/util-date';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 class ActionRowViewModel {
   lastName: string;
   firstName: string;
-  type: ClientType;
+  type: CaseType;
   dateOfBirth: string;
   email: string;
   phone: string;

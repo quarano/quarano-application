@@ -8,6 +8,7 @@ import {
   CaseStatus,
   ContactListItemDto,
   CaseDto,
+  CaseEntityService,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +25,7 @@ import { SymptomDto } from '@qro/shared/util-symptom';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseDetailResult } from '../edit/edit.component';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-case-detail',
@@ -33,9 +34,9 @@ import { ClientType } from '@qro/auth/api';
 })
 export class CaseDetailComponent implements OnDestroy {
   caseId: string;
-  private type$$: BehaviorSubject<ClientType> = new BehaviorSubject<ClientType>(null);
-  type$: Observable<ClientType> = this.type$$.asObservable();
-  ClientType = ClientType;
+  private type$$: BehaviorSubject<CaseType> = new BehaviorSubject<CaseType>(null);
+  type$: Observable<CaseType> = this.type$$.asObservable();
+  ClientType = CaseType;
   commentLoading = false;
   personalDataLoading = false;
 
@@ -63,7 +64,8 @@ export class CaseDetailComponent implements OnDestroy {
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private apiService: ApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private entityService: CaseEntityService
   ) {
     this.initData();
   }
@@ -83,7 +85,7 @@ export class CaseDetailComponent implements OnDestroy {
       this.caseId = this.route.snapshot.paramMap.get('id');
     }
     if (this.route.snapshot.paramMap.has('type')) {
-      this.type$$.next(this.route.snapshot.paramMap.get('type') as ClientType);
+      this.type$$.next(this.route.snapshot.paramMap.get('type') as CaseType);
     }
 
     this.caseIndexContacts$ = combineLatest([
@@ -91,7 +93,7 @@ export class CaseDetailComponent implements OnDestroy {
       this.type$,
     ]).pipe(
       map(([indexContacts, clientType]) => {
-        if (clientType === ClientType.Contact) {
+        if (clientType === CaseType.Contact) {
           return indexContacts;
         }
         return undefined;
@@ -192,9 +194,9 @@ export class CaseDetailComponent implements OnDestroy {
     this.personalDataLoading = true;
 
     if (!result.caseDetail.caseId) {
-      this.caseDetail$ = this.healthDepartmentService.createCase(result.caseDetail, this.type$$.value);
+      this.caseDetail$ = this.entityService.add(result.caseDetail);
     } else {
-      this.caseDetail$ = this.healthDepartmentService.updateCase(result.caseDetail);
+      this.caseDetail$ = this.entityService.update(result.caseDetail);
     }
 
     this.subs.sink = this.caseDetail$
@@ -263,7 +265,7 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   changeToIndexType() {
-    this.type$$.next(ClientType.Index);
+    this.type$$.next(CaseType.Index);
   }
 
   onChangeTypeKeyPressed(): void {

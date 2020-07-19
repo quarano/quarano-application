@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseListItemDto } from '../model/case-list-item';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
 
 @Injectable({
@@ -29,11 +29,10 @@ export class ContactCaseService {
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
       shareReplay(),
-      map((result) => {
+      map((result) =>{
         if (result?._embedded?.actions) {
           return result._embedded.actions
-            .filter((r) => r.caseType === ClientType.Contact)
-            .map((item) => this.mapActionListItem(item));
+            .filter((r) => r.caseType === CaseType.Contact).map((item) => this.mapActionListItem(item));
         } else {
           return [];
         }

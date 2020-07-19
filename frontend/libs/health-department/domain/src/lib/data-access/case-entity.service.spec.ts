@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { IndexCaseEntityService } from './index-case-entity.service';
+import { CaseEntityService } from './case-entity.service';
 
 describe('Service: IndexCaseEntity', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [IndexCaseEntityService],
+      providers: [CaseEntityService],
     });
   });
 
-  it('should ...', inject([IndexCaseEntityService], (service: IndexCaseEntityService) => {
+  it('should ...', inject([CaseEntityService], (service: CaseEntityService) => {
     expect(service).toBeTruthy();
   }));
 });

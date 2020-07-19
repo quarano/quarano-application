@@ -24,12 +24,12 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto, IndexCaseService, CaseListItemDto, CaseSearchItem } from '@qro/health-department/domain';
-import { ClientType } from '@qro/auth/api';
+import { IndexCaseService, CaseListItemDto, CaseSearchItem, CaseDto } from '@qro/health-department/domain';
+import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
 export interface CaseDetailResult {
-  caseDetail: CaseDetailDto;
+  caseDetail: CaseDto;
   closeAfterSave: boolean;
 }
 
@@ -40,19 +40,19 @@ export interface CaseDetailResult {
 })
 export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
-  ClientType = ClientType;
+  ClientType = CaseType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
   selectableIndexCases: CaseSearchItem[] = [];
 
   get isIndexCase() {
-    return this.type === ClientType.Index;
+    return this.type === CaseType.Index;
   }
 
   @Input()
-  caseDetail: CaseDetailDto;
+  caseDetail: CaseDto;
   @Input()
-  type: ClientType;
+  type: CaseType;
   @Input() loading: boolean;
   @Output()
   changedToIndex = new EventEmitter<boolean>();
@@ -146,7 +146,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     this.setValidators();
     this.subs.add(
       this.formGroup.get('infected').valueChanges.subscribe((value) => {
-        if (value && this.type === ClientType.Contact) {
+        if (value && this.type === CaseType.Contact) {
           this.onTestDateAdded();
         }
       })
@@ -199,7 +199,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     input.value = input.value?.trim();
   }
 
-  updateFormGroup(caseDetailDto: CaseDetailDto) {
+  updateFormGroup(caseDetailDto: CaseDto) {
     if (caseDetailDto && caseDetailDto.caseId && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
@@ -229,7 +229,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   submitForm(form: NgForm, closeAfterSave: boolean) {
     if (this.formGroup.valid) {
-      const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
+      const submitData: CaseDto = { ...this.formGroup.getRawValue() };
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
           submitData[key] = submitData[key].toDate();
@@ -238,6 +238,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       if (this.caseDetail?.caseId) {
         submitData.caseId = this.caseDetail.caseId;
       }
+      submitData.caseType = this.type;
       submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
       this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
     }

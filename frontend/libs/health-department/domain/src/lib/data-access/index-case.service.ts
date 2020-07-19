@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseListItemDto } from '../model/case-list-item';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
+import { CaseListItemDto } from '../model/case-list-item';
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +40,7 @@ export class IndexCaseService {
       map((result) => {
         if (result?._embedded?.actions) {
           return result._embedded.actions
-            .filter((r) => r.caseType === ClientType.Index)
+            .filter((r) => r.caseType === CaseType.Index)
             .map((item) => this.mapActionListItem(item));
         } else {
           return [];

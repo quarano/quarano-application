@@ -1,12 +1,12 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { IndexCaseEntityService } from '../data-access/index-case-entity.service';
+import { CaseEntityService } from '../data-access/case-entity.service';
 import { tap, filter, first } from 'rxjs/operators';
 
 @Injectable()
 export class ContactCaseCaseListResolver implements Resolve<boolean> {
-  constructor(private entityService: IndexCaseEntityService) {}
+  constructor(private entityService: CaseEntityService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.entityService.loaded$.pipe(
@@ -16,6 +16,7 @@ export class ContactCaseCaseListResolver implements Resolve<boolean> {
         }
       }),
       filter((loaded) => !!loaded),
+      tap((loaded) => this.entityService.setFilter('contact')),
       first()
     );
   }
