@@ -8,5 +8,5 @@ export {
   IRole,
   roleNames,
   roles,
-  ClientType,
+  CaseType,
 } from '@qro/auth/domain';

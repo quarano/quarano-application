@@ -4,8 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseListItemDto } from '../model/case-list-item';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
 
 @Injectable({
@@ -23,7 +22,7 @@ export class IndexCaseService {
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),
-      map((result) => result.filter((r) => r.caseType === ClientType.Index).map((item) => this.mapActionListItem(item)))
+      map((result) => result.filter((r) => r.caseType === CaseType.Index).map((item) => this.mapActionListItem(item)))
     );
   }
 

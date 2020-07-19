@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-client-action',
@@ -16,7 +16,7 @@ import { ClientType } from '@qro/auth/api';
 })
 export class ActionComponent implements OnInit {
   @Input() caseAction: CaseActionDto;
-  @Input() type: ClientType;
+  @Input() type: CaseType;
   formGroup: FormGroup;
   errorGenerator = ValidationErrorGenerator;
 

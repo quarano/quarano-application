@@ -1,18 +1,18 @@
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
-import { CaseDto, IndexCaseEntityService } from '@qro/health-department/domain';
+import { CaseDto, CaseEntityService } from '@qro/health-department/domain';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { map, tap } from 'rxjs/operators';
 
 class CaseRowViewModel {
   lastName: string;
   firstName: string;
-  type: ClientType;
+  type: CaseType;
   typeName: string;
   dateOfBirth: Date;
   createdAt: string;
@@ -57,13 +57,13 @@ export class CaseListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private entityService: IndexCaseEntityService, private router: Router) {}
+  constructor(private entityService: CaseEntityService, private router: Router) {}
 
   ngOnInit(): void {
     this.loading = true;
 
-    this.cases$ = this.entityService.entities$.pipe(
-      map((dtos) => dtos.map((dto) => this.getRowData(dto))),
+    this.cases$ = this.entityService.filteredEntities$.pipe(
+      map((dtos) => dtos.filter((dto) => dto.caseType === CaseType.Contact).map((dto) => this.getRowData(dto))),
       tap((cases) => (this.filteredData = [...cases])),
       tap((cases) => (this.loading = false))
     );

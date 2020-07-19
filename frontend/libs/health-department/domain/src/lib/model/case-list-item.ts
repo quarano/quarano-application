@@ -1,5 +1,5 @@
 import { HalResponse } from '@qro/shared/util-data-access';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 export interface CaseListItemDto extends HalResponse {
   dateOfBirth: Date;
@@ -9,7 +9,7 @@ export interface CaseListItemDto extends HalResponse {
   email: string;
   phone: string;
   enrollmentCompleted: boolean;
-  caseType: ClientType;
+  caseType: CaseType;
   medicalStaff?: boolean;
   quarantineEnd: Date;
   quarantineStart: Date;
