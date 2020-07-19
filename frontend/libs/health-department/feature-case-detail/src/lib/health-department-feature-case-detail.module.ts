@@ -27,8 +27,45 @@ const routes: Routes = [
   {
     path: ':type/:id',
     component: CaseDetailComponent,
-    resolve: { case: CaseDetailResolver, actions: ReportCaseActionsResolver, symptoms: SymptomsResolver },
+    resolve: { case: CaseDetailResolver },
     runGuardsAndResolvers: 'always',
+    children: [
+      {
+        path: '',
+        redirectTo: 'edit',
+        pathMatch: 'full',
+      },
+      {
+        path: 'edit',
+        component: EditComponent,
+      },
+      {
+        path: 'actions',
+        component: ActionComponent,
+        resolve: { actions: ReportCaseActionsResolver },
+      },
+      {
+        path: 'comments',
+        component: CommentsComponent,
+      },
+      {
+        path: 'questionnaire',
+        component: QuestionnaireComponent,
+        resolve: { symptoms: SymptomsResolver },
+      },
+      {
+        path: 'index-case-data',
+        component: IndexContactsComponent,
+      },
+      {
+        path: 'contacts',
+        component: ContactListComponent,
+      },
+      {
+        path: 'email',
+        component: MailComponent,
+      },
+    ],
   },
   {
     path: ':type',

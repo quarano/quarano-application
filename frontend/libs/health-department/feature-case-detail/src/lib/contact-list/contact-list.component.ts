@@ -1,7 +1,10 @@
+import { ApiService } from '@qro/shared/util-data-access';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { ContactListItemDto } from '@qro/health-department/domain';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 interface RowViewModel {
   firstName: string;
@@ -21,15 +24,30 @@ interface RowViewModel {
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements OnInit {
-  @Input() contacts: ContactListItemDto[];
-  @Input() caseName: string;
+  caseName$: Observable<string>;
+  rows$: Observable<RowViewModel[]>;
 
-  rows: RowViewModel[] = [];
-
-  constructor(private router: Router, private snackbarService: SnackbarService) {}
+  constructor(
+    private router: Router,
+    private snackbarService: SnackbarService,
+    private route: ActivatedRoute,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
-    this.rows = this.contacts?.map((c) => this.getRowData(c));
+    const caseDetail$ = this.route.parent.data.pipe(map((data) => data.case));
+
+    this.caseName$ = caseDetail$.pipe(map((detail) => `${detail.firstName} ${detail.lastName}`));
+
+    this.rows$ = caseDetail$.pipe(
+      switchMap((detail) => {
+        if (detail._links.hasOwnProperty('contacts')) {
+          return this.apiService
+            .getApiCall<any>(detail, 'contacts')
+            .pipe(map((result) => result?._embedded?.contacts?.map((c) => this.getRowData(c))));
+        }
+      })
+    );
   }
 
   onSelect(event) {

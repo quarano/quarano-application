@@ -9,7 +9,7 @@ export class ReportCaseActionsResolver implements Resolve<CaseActionDto> {
   constructor(private healthDepartmentService: HealthDepartmentService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CaseActionDto> {
-    const id = route.paramMap.get('id');
+    const id = route.parent.paramMap.get('id');
 
     if (id) {
       return this.healthDepartmentService.getCaseActions(id);

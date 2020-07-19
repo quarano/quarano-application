@@ -10,7 +10,7 @@
       <span class="type"
         >{{ caseDetail.caseTypeLabel }}
         <button
-          (click)="onChangeTypeKeyPressed()"
+          (click)="onChangeTypeKeyPressed(caseDetail.caseId)"
           *ngIf="(type$ | async) === ClientType.Contact"
           mat-icon-button
           matTooltip="Zum Indexfall machen"
@@ -62,7 +62,88 @@
         Fall abschließen
       </button>
     </div>
-    <mat-tab-group #tabs [selectedIndex]="tabIndex" *ngIf="type$ | async as type">
+    <nav mat-tab-nav-bar>
+      <a
+        *ngIf="type$ | async as type"
+        mat-tab-link
+        [routerLink]="['edit']"
+        routerLinkActive
+        #rledit="routerLinkActive"
+        [active]="rledit.isActive"
+      >
+        {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
+      </a>
+      <!-- ToDo: Action Count aus casedto auslesen sobald verfügbar -->
+      <a
+        mat-tab-link
+        [routerLink]="['actions']"
+        routerLinkActive
+        #rlactions="routerLinkActive"
+        [active]="rlactions.isActive"
+      >
+        <span
+          *ngIf="true; else has_no_open_anomalies"
+          matBadge="?"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+          >Aktionen</span
+        ><ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
+      </a>
+      <a
+        *ngIf="caseDetail.comments"
+        mat-tab-link
+        [routerLink]="['comments']"
+        routerLinkActive
+        #rlcomments="routerLinkActive"
+        [active]="rlcomments.isActive"
+      >
+        Kommentare ({{ caseDetail.comments.length }})
+      </a>
+      <a
+        *ngIf="caseDetail.indexContacts.length > 0"
+        mat-tab-link
+        [routerLink]="['index-case-data']"
+        routerLinkActive
+        #rlindexcontacts="routerLinkActive"
+        [active]="rlindexcontacts.isActive"
+      >
+        Angaben Indexfall
+      </a>
+      <a
+        *ngIf="caseDetail?._links?.hasOwnProperty('renew')"
+        mat-tab-link
+        [routerLink]="['email']"
+        routerLinkActive
+        #rlemail="routerLinkActive"
+        [active]="rlemail.isActive"
+      >
+        E-Mail Vorlage
+      </a>
+      <a
+        *ngIf="caseDetail._links.hasOwnProperty('questionnaire')"
+        mat-tab-link
+        [routerLink]="['questionnaire']"
+        routerLinkActive
+        #rlquestionnaire="routerLinkActive"
+        [active]="rlquestionnaire.isActive"
+      >
+        Fragebogen
+      </a>
+      <a
+        *ngIf="caseDetail?._links?.hasOwnProperty('contacts')"
+        mat-tab-link
+        [routerLink]="['contacts']"
+        routerLinkActive
+        #rlcontacts="routerLinkActive"
+        [active]="rlcontacts.isActive"
+      >
+        Kontakte <span class="comment-cnt">?</span>
+        <!-- ToDo: Anzahl Kontakte angeben sobald in casedto verfügbar -->
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+    <!-- <mat-tab-group #tabs [selectedIndex]="tabIndex" *ngIf="type$ | async as type">
       <mat-tab [label]="type === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
         <p class="hint secondary-text-color">
           Pflichteingaben sind mit * markiert
@@ -126,6 +207,6 @@
           [caseName]="caseDetail.firstName + ' ' + caseDetail.lastName"
         ></qro-contact-list>
       </mat-tab>
-    </mat-tab-group>
+    </mat-tab-group> -->
   </mat-card-content>
 </mat-card>
