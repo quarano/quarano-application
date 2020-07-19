@@ -24,7 +24,7 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { IndexCaseService, CaseListItemDto, CaseSearchItem, CaseDto } from '@qro/health-department/domain';
+import { IndexCaseService, CaseSearchItem, CaseDto } from '@qro/health-department/domain';
 import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
@@ -177,7 +177,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  showIndexCaseItem(item: CaseListItemDto): string {
+  showIndexCaseItem(item: CaseDto): string {
     if (!item) return '';
     return `${item.firstName} ${item.lastName} (${
       item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
