@@ -1,4 +1,4 @@
-export * from './lib/auth-domain.module';
+export { AuthDomainModule } from './lib/auth-domain.module';
 export * from './lib/model/change-password';
 export * from './lib/data-access/auth.service';
 export * from './lib/data-access/user.service';

@@ -2,17 +2,17 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { CaseDetailDto, GetEmptyCaseDetail } from '../model/case-detail';
-import { HealthDepartmentService } from '../data-access/health-department.service';
+import { CaseDto, GetEmptyCase } from '../model/case';
+import { IndexCaseEntityService } from '../data-access/index-case-entity.service';
 
 @Injectable()
-export class CaseDetailResolver implements Resolve<CaseDetailDto> {
-  constructor(private healthDepartmentService: HealthDepartmentService) {}
+export class CaseDetailResolver implements Resolve<CaseDto> {
+  constructor(private entityService: IndexCaseEntityService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<CaseDetailDto> {
+  resolve(route: ActivatedRouteSnapshot): Observable<CaseDto> {
     const id = route.paramMap.get('id');
     if (id) {
-      return this.healthDepartmentService.getCase(id).pipe(
+      return this.entityService.getByKey(id).pipe(
         map((detail) => {
           if (!detail.caseId) {
             detail.caseId = id;
@@ -22,7 +22,7 @@ export class CaseDetailResolver implements Resolve<CaseDetailDto> {
         })
       );
     } else {
-      return of(GetEmptyCaseDetail());
+      return of(GetEmptyCase());
     }
   }
 }

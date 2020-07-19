@@ -1,12 +1,13 @@
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
-import { CaseListItemDto } from '@qro/health-department/domain';
+import { CaseDto, IndexCaseEntityService } from '@qro/health-department/domain';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { ClientType } from '@qro/auth/api';
+import { map, tap } from 'rxjs/operators';
 
 class CaseRowViewModel {
   lastName: string;
@@ -29,7 +30,7 @@ class CaseRowViewModel {
 })
 export class CaseListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
-  cases: CaseRowViewModel[] = [];
+  cases$: Observable<CaseRowViewModel[]>;
   loading = false;
   selectionType = SelectionType.single;
   @ViewChild(DatatableComponent) table: DatatableComponent;
@@ -57,19 +58,15 @@ export class CaseListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private entityService: IndexCaseEntityService, private router: Router) {}
 
   ngOnInit(): void {
     this.loading = true;
-    this.subs.add(
-      this.route.data.subscribe(
-        (data) => {
-          this.cases = data.cases.map((c) => this.getRowData(c));
-          this.filteredData = [...this.cases];
-          this.loading = false;
-        },
-        () => (this.loading = false)
-      )
+
+    this.cases$ = this.entityService.entities$.pipe(
+      map((dtos) => dtos.map((dto) => this.getRowData(dto))),
+      tap((cases) => (this.filteredData = [...cases])),
+      tap((cases) => (this.loading = false))
     );
   }
 
@@ -84,7 +81,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     return endDate < this.dateTimeNow;
   }
 
-  getRowData(c: CaseListItemDto): CaseRowViewModel {
+  getRowData(c: CaseDto): CaseRowViewModel {
     return {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
@@ -92,7 +89,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       typeName: c.caseTypeLabel,
       dateOfBirth: c.dateOfBirth,
       createdAt: c.createdAt ? DateFunctions.toCustomLocaleDateString(c.createdAt) : '-',
-      quarantineEnd: c.quarantineEnd,
+      quarantineEnd: c.quarantineEndDate,
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
@@ -112,9 +109,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
     return DateFunctions.toCustomLocaleDateString(quarantineEnd);
   }
 
-  updateFilter(event) {
+  updateFilter(event, cases: CaseRowViewModel[]) {
     this.filter = event.target.value;
-    this.filteredData = !this.filter ? this.cases : this.cases.filter((obj) => this.filterPredicate(obj, this.filter));
+    this.filteredData = !this.filter ? cases : cases.filter((obj) => this.filterPredicate(obj, this.filter));
     this.table.offset = 0;
   }
 

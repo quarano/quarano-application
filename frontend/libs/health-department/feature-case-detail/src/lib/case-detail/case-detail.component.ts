@@ -7,12 +7,13 @@ import {
   HealthDepartmentService,
   CaseStatus,
   ContactListItemDto,
+  CaseDto,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -38,7 +39,7 @@ export class CaseDetailComponent implements OnDestroy {
   commentLoading = false;
   personalDataLoading = false;
 
-  caseDetail$: Observable<CaseDetailDto>;
+  caseDetail$: Observable<CaseDto>;
   caseAction$: Observable<CaseActionDto>;
   caseIndexContacts$: Observable<ContactDto[]>;
   caseComments$: Observable<CaseCommentDto[]>;
