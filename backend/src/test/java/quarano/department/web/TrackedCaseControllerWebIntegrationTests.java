@@ -814,5 +814,6 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(payload.getFirstName());
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(payload.getLastName());
+		assertThat(document.read("$._links.self.href", String.class)).isNotBlank();
 	}
 }

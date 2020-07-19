@@ -10,7 +10,9 @@ import quarano.department.TrackedCase.Status;
 import java.util.function.Supplier;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -35,34 +37,27 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 	@SuppressWarnings("null")
 	public static Links getDefaultLinks(TrackedCase trackedCase) {
 
+		var caseId = trackedCase.getId();
 		var controller = on(TrackedCaseController.class);
 
-		var links = Links.of(Link.of(fromMethodCall(controller.concludeCase(trackedCase.getId(), null)).toUriString(),
-				TrackedCaseLinkRelations.CONCLUDE));
+		var links = Links.of(toLink(controller.concludeCase(caseId, null), TrackedCaseLinkRelations.CONCLUDE))
+				.and(toLink(controller.getContactsOfCase(caseId, null), TrackedCaseLinkRelations.CONTACTS))
+				.and(toLink(controller.getDiaryOfCase(caseId, null), TrackedCaseLinkRelations.DIARY))
+				.and(toLink(controller.getCase(caseId, null), IanaLinkRelations.SELF));
 
-		links = links.and(Link.of(fromMethodCall(controller.getContactsOfCase(trackedCase.getId(), null)).toUriString(),
-				TrackedCaseLinkRelations.CONTACTS));
-
-		links = links.and(Link.of(fromMethodCall(controller.getDiaryOfCase(trackedCase.getId(), null)).toUriString(),
-				TrackedCaseLinkRelations.DIARY));
-
-		Supplier<String> uri = () -> fromMethodCall(
-				on(RegistrationController.class).createRegistration(trackedCase.getId(), null)).toUriString();
+		Supplier<Object> uri = () -> on(RegistrationController.class).createRegistration(caseId, null);
 
 		if (trackedCase.getStatus().equals(Status.IN_REGISTRATION)) {
-			links = links.and(Link.of(uri.get(), TrackedCaseLinkRelations.RENEW));
+			links = links.and(toLink(uri, TrackedCaseLinkRelations.RENEW));
 		}
 
 		// No account yet? Offer creation.
 		if (trackedCase.isEligibleForTracking()) {
-			links = links.and(Link.of(uri.get(), TrackedCaseLinkRelations.START_TRACKING));
+			links = links.and(toLink(uri, TrackedCaseLinkRelations.START_TRACKING));
 		}
 
 		if (trackedCase.getQuestionnaire() != null) {
-
-			var href = fromMethodCall(controller.getQuestionnaire(trackedCase.getId(), null)).toUriString();
-
-			links = links.and(Link.of(href, TrackedCaseLinkRelations.QUESTIONNAIRE));
+			links = links.and(toLink(controller.getQuestionnaire(caseId, null), TrackedCaseLinkRelations.QUESTIONNAIRE));
 		}
 
 		return links;
@@ -70,5 +65,13 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 
 	public String getStatus() {
 		return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getStatus()));
+	}
+
+	private static Link toLink(Object invocation, LinkRelation relation) {
+		return toLink(() -> invocation, relation);
+	}
+
+	private static Link toLink(Supplier<Object> invocation, LinkRelation relation) {
+		return Link.of(fromMethodCall(invocation.get()).toUriString(), relation);
 	}
 }
