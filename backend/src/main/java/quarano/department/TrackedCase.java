@@ -289,6 +289,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return testResult != null;
 	}
 
+	public boolean hasQuestionnaire() {
+		return questionnaire != null;
+	}
+
 	/**
 	 * @return
 	 */
