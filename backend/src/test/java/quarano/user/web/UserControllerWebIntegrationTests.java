@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
+import quarano.AbstractDocumentation;
+import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.core.web.QuaranoHttpHeaders;
 import quarano.user.web.UserController.NewPassword;
@@ -12,11 +14,12 @@ import quarano.user.web.UserController.NewPassword;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
@@ -24,14 +27,13 @@ import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-class UserControllerWebIntegrationTests {
+class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 	private final String USERNAME = "DemoAccount";
 	private final String PASSWORD = "DemoPassword";
 	private final String AGENT_USERNAME = "agent1";
 	private final String AGENT_PASSWORD = "agent1";
 
-	private final MockMvc mvc;
 	private final ObjectMapper mapper;
 
 	@Test
@@ -75,7 +77,7 @@ class UserControllerWebIntegrationTests {
 				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(content().contentTypeCompatibleWith(MediaTypes.HAL_JSON))
 				.andReturn().getResponse().getContentAsString();
 		return resultDtoStr;
 	}
@@ -168,6 +170,16 @@ class UserControllerWebIntegrationTests {
 		assertThat(document.read("$.passwordConfirm", String.class)).isNotNull();
 	}
 
+	@Test
+	void changesPassword() throws Exception {
+
+		var newPassword = PASSWORD + "!";
+
+		issuePasswordChange(new NewPassword(PASSWORD, newPassword, newPassword))
+				.andDo(documentPasswordChange())
+				.andExpect(status().is2xxSuccessful());
+	}
+
 	private String login(String username, String password) throws Exception {
 
 		return mvc.perform(post("/login")
@@ -200,5 +212,9 @@ class UserControllerWebIntegrationTests {
 
 	private String createLoginRequestBody(String username, String password) throws Exception {
 		return mapper.writeValueAsString(Map.of("username", username, "password", password));
+	}
+
+	private static ResultHandler documentPasswordChange() {
+		return DocumentationFlow.of("password-expired").document("change-password");
 	}
 }

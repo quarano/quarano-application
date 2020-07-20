@@ -16,6 +16,7 @@ import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.UserName;
 import quarano.core.web.MapperWrapper;
+import quarano.core.web.QuaranoHttpHeaders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.hateoas.server.mvc.MvcLink;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -41,10 +44,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Component
 @RequiredArgsConstructor
-class StaffAccountRepresentations {
+class StaffAccountRepresentations implements AccountRepresentations {
 
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull RoleRepository roles;
+	private final @NonNull TokenGenerator generator;
 
 	StaffAccountSummaryDto toSummary(Account account) {
 		return mapper.map(account, new StaffAccountSummaryDto().setAccountId(account.getId().toString()));
@@ -52,6 +56,18 @@ class StaffAccountRepresentations {
 
 	Account from(StaffAccountUpdateInputDto payload, Account existing) {
 		return mapper.map(payload, existing);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.account.web.AccountRepresentations#toTokenResponse(quarano.account.Account)
+	 */
+	@Override
+	public HttpEntity<?> toTokenResponse(Account account) {
+
+		return ResponseEntity.ok()
+				.header(QuaranoHttpHeaders.AUTH_TOKEN, generator.generateTokenFor(account))
+				.body(new AccountRepresentation(account));
 	}
 
 	@Relation(collectionRelation = "accounts")

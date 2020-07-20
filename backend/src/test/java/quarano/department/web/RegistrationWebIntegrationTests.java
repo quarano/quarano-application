@@ -46,7 +46,7 @@ class RegistrationWebIntegrationTests {
 	private final RegistrationManagement registration;
 
 	@Test
-	public void registerNewAccountForClientSuccess() throws Exception {
+	void registerNewAccountForClientSuccess() throws Exception {
 
 		// Given
 		var activation = createActivation();
@@ -88,7 +88,7 @@ class RegistrationWebIntegrationTests {
 	}
 
 	@Test
-	public void registerNewAccountWithInvalidActivationCodeFails() throws Exception {
+	void registerNewAccountWithInvalidActivationCodeFails() throws Exception {
 
 		var activation = createActivation();
 		var password = "myPassword";
@@ -115,7 +115,7 @@ class RegistrationWebIntegrationTests {
 	}
 
 	@Test
-	public void registerAccountWithExistingUsernameFails() throws Exception {
+	void registerAccountWithExistingUsernameFails() throws Exception {
 
 		var activation = createActivation();
 		var person = activation.getPerson();
@@ -279,7 +279,7 @@ class RegistrationWebIntegrationTests {
 				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(content().contentTypeCompatibleWith(MediaType.parseMediaType("application/*+json")))
 				.andReturn()
 				.getResponse()
 				.getContentAsString();

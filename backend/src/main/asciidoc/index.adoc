@@ -1,68 +1,8 @@
 = Quarano: Reference documentation
-:moduliths-docs: ../../../target/moduliths-docs
+:doctype: book
 
-== Business modules
+include::intro.adoc[]
 
-=== Overview
-plantuml::{moduliths-docs}/components.uml[,,svg,title="Quarano component overview"]
+include::api.adoc[]
 
-[[modules.core]]
-=== Core
-
-Contains fundamental abstractions used from all other business modules:
-
-* Base interfaces to demarcate Domain-Driven Design building blocks based on https://github.com/odrotbohm/jddd[jDDD].
-* Fundamental domain abstractions like an email address or phone number.
-* The `DataInitializer` abstraction to easily populate the application with demo data based on the abstractions provided by the individual modules.
-* Common infrastructure support (auditing metadata, access to email templates, resource bundle based enum i18n etc).
-
-include::{moduliths-docs}/module-core.adoc[]
-
-[[modules.accounts]]
-=== Accounts
-
-Types to abstract parties interacting with the system: accounts that have roles assigned to them belonging to a department.
-A thin layer on top of Spring Security to provide injectable access to the currently authenticated `Account`.
-
-include::{moduliths-docs}/module-account.adoc[]
-
-[[modules.department]]
-=== Department
-
-Abstractions for a `TrackedCase` potentially related to a <<modules.tracking, `TrackedPerson`>>.
-Also contains the abstraction of the <<modules.accounts, `Account`>> registration and parts of the enrollment process.
-
-include::{moduliths-docs}/module-department.adoc[]
-
-[[modules.tracking]]
-=== Tracking
-
-Abstractions for the `TrackedPerson` associated with a `TrackedCase`, their ``Encounter``s with ``ContactPerson``s.
-
-include::{moduliths-docs}/module-tracking.adoc[]
-
-[[modules.diary]]
-=== Diary
-
-Everything related to the medical diary a <<modules.tracking, `TrackedPerson`>> has to maintain.
-
-include::{moduliths-docs}/module-diary.adoc[]
-
-=== Actions
-
-Abstractions to capture anomalies detected in the life cycle of a <<modules.department, `TrackedCase`>>.
-Can be either be related to the process of tracking (e.g. missing diary entries) or related to the medical situation of a <<modules.tracking, `TrackedPerson`>>.
-
-include::{moduliths-docs}/module-actions.adoc[]
-
-=== Security
-
-Implementation of JWT based security for the system, the expose of certain configuration properties related to that.
-
-include::{moduliths-docs}/module-security.adoc[]
-
-=== Reference
-
-Contains reference data like an abstraction of symptoms.
-
-include::{moduliths-docs}/module-reference.adoc[]
+include::developer.adoc[]

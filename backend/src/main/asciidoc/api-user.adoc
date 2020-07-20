@@ -1,0 +1,19 @@
+= The user API
+
+[[user.enrollment]]
+== User enrollment
+
+== The enrollment resource
+
+If a user logs in an has not completed the tracking enrollment, a link relation named `enrollment` is contained in the response.
+The link can be followed to obtain information about the state of the enrollment.
+
+Depending on the state of the enrollment, the following link relations will be available in the response:
+
+* `details` -- Access or submit personal details.
+* `questionnaire` -- Access or submit the initial questionnaire.
+* `encounters` -- Access or submit original encounters.
+* `next` -- Available as long as the enrollment is not completed.
+
+
+== Tracking diary entries

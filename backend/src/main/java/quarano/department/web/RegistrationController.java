@@ -3,14 +3,13 @@ package quarano.department.web;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
+import quarano.account.web.AccountRepresentations;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.core.web.MappedPayloads.MappedErrors;
-import quarano.core.web.QuaranoHttpHeaders;
 import quarano.department.RegistrationException;
 import quarano.department.RegistrationException.Problem;
 import quarano.department.RegistrationManagement;
-import quarano.department.TokenGenerator;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
@@ -39,7 +38,7 @@ public class RegistrationController {
 	private final @NonNull RegistrationManagement registration;
 	private final @NonNull ActivationCodeService activationCodes;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull TokenGenerator generator;
+	private final @NonNull AccountRepresentations accountRepresentations;
 
 	private final @NonNull RegistrationRepresentations representations;
 
@@ -101,8 +100,7 @@ public class RegistrationController {
 	private HttpEntity<?> doRegisterClient(RegistrationDto payload, MappedErrors errors) {
 
 		return registration.createTrackedPersonAccount(representations.from(payload))
-				.map(generator::generateTokenFor)
-				.<HttpEntity<?>> map(QuaranoHttpHeaders::toTokenResponse)
+				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(RegistrationException.class, it -> recover(it, errors))
 				.recover(ActivationCodeException.class, it -> recover(it, errors))
 				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));

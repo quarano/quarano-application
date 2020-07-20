@@ -1,6 +1,8 @@
 package quarano.department.web;
 
+import static org.springframework.hateoas.IanaLinkRelations.*;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.Data;
 import lombok.Getter;
@@ -54,9 +56,12 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.Links.MergeMode;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -67,7 +72,6 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
@@ -488,45 +492,28 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	}
 
 	@RequiredArgsConstructor
-	public static class EnrollmentDto {
+	public static class EnrollmentDto extends RepresentationModel<EnrollmentDto> {
 
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) Enrollment enrollment;
 
-		@JsonProperty("_links")
+		@Override
 		@SuppressWarnings("null")
-		public Map<String, Object> getLinks() {
+		public Links getLinks() {
 
 			var caseController = on(TrackedCaseController.class);
 			var trackingController = on(TrackingController.class);
 
-			var questionnareUri = fromMethodCall(caseController.addQuestionaire(null, null, null)).toUriString();
-			var detailsUri = fromMethodCall(trackingController.enrollmentOverview(null)).toUriString();
-			var encountersUri = fromMethodCall(trackingController.getEncounters(null)).toUriString();
-			var reopenUri = fromMethodCall(caseController.reopenEnrollment(null)).toUriString();
+			var enrollmentLink = MvcLink.of(caseController.enrollment(null), SELF);
+			var questionnareLink = MvcLink.of(caseController.addQuestionaire(null, null, null), QUESTIONNAIRE);
+			var reopenLink = MvcLink.of(caseController.reopenEnrollment(null), REOPEN);
+			var detailsLink = MvcLink.of(trackingController.enrollmentOverview(null), DETAILS);
+			var encountersLink = MvcLink.of(trackingController.getEncounters(null), ENCOUNTERS);
 
-			if (enrollment.isComplete()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri),
-						"questionnaire", Map.of("href", questionnareUri),
-						"encounters", Map.of("href", encountersUri),
-						"reopen", Map.of("href", reopenUri));
-			}
-
-			if (enrollment.isCompletedQuestionnaire()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri),
-						"questionnaire", Map.of("href", questionnareUri),
-						"next", Map.of("href", encountersUri));
-			}
-
-			if (enrollment.isCompletedPersonalData()) {
-				return Map.of(//
-						"details", Map.of("href", detailsUri),
-						"next", Map.of("href", questionnareUri));
-			}
-
-			return Map.of(//
-					"next", Map.of("href", detailsUri));
+			return Links.NONE.and(enrollmentLink, detailsLink)
+					.andIf(enrollment.isComplete(), questionnareLink, encountersLink, reopenLink)
+					.andIf(enrollment.isCompletedQuestionnaire(), questionnareLink, encountersLink, encountersLink.withRel(NEXT))
+					.andIf(enrollment.isCompletedPersonalData(), questionnareLink, questionnareLink.withRel(NEXT))
+					.merge(MergeMode.SKIP_BY_REL, detailsLink.withRel(NEXT));
 		}
 	}
 }

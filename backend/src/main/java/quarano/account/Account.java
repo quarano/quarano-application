@@ -120,6 +120,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		return hasAnyRole(RoleType.ROLE_USER);
 	}
 
+	public boolean isCaseAgent() {
+		return hasAnyRole(RoleType.ROLE_HD_CASE_AGENT);
+	}
+
 	/**
 	 * Determines if a user has any kind of admin role
 	 *

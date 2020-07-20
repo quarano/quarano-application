@@ -1,0 +1,34 @@
+= The case agent API
+:snippets: ../../../target/generated-snippets
+
+[[agent.cases]]
+== Managing cases
+
+[[agent.anomalies]]
+== Working with anomalies
+
+A case agent will find a `anomalies` link in the response.
+It can be followed to get an overview of all cases ordered by a priority calculated from the anomalies recorded for those cases.
+
+include::{snippets}/anomalies/access-anomalies/curl-request.adoc[]
+include::{snippets}/anomalies/access-anomalies/response-body.adoc[]
+
+== Response structure
+
+include::{snippets}/anomalies/access-anomalies/auto-response-fields.adoc[]
+
+== Accessing an anomaly
+
+include::{snippets}/anomalies/access-anomaly/curl-request.adoc[]
+include::{snippets}/anomalies/access-anomaly/response-body.adoc[]
+
+=== Response structure
+
+include::{snippets}/anomalies/access-anomaly/auto-response-fields.adoc[]
+
+=== Available actions
+
+include::{snippets}/anomalies/access-anomaly/links.adoc[]
+
+[[agent.anomalies.resolve]]
+== Resolving an anomaly

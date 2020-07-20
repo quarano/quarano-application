@@ -1,7 +1,6 @@
 package quarano.diary;
 
 import lombok.Value;
-import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;

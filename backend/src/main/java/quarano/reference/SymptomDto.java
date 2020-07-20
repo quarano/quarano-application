@@ -1,7 +1,5 @@
 package quarano.reference;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -10,6 +8,9 @@ import lombok.Setter;
 import quarano.core.validation.Alphabetic;
 
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @NoArgsConstructor
