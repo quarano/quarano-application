@@ -79,8 +79,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@OneToMany
 	private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
-	public static TrackedCase of(ContactPerson contactPerson, Department department) {
+	public static TrackedCase of(CaseSource source) {
 
+		var contactPerson = source.getPerson();
 		var person = new TrackedPerson(contactPerson);
 		var caseType = CaseType.CONTACT;
 
@@ -91,7 +92,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 			caseType = CaseType.CONTACT_VULNERABLE;
 		}
 
-		return new TrackedCase(person, caseType, department, contactPerson);
+		var originCase = source.getTrackedCase();
+
+		return new TrackedCase(person, caseType, originCase.getDepartment(), contactPerson)
+				.addOriginCase(originCase);
 	}
 
 	@SuppressWarnings("unused")

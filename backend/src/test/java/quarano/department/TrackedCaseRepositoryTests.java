@@ -18,7 +18,7 @@ import org.springframework.data.util.Streamable;
  */
 @RequiredArgsConstructor
 @QuaranoIntegrationTest
-public class TrackedCaseRepositoryTests {
+class TrackedCaseRepositoryTests {
 
 	private final TrackedCaseRepository cases;
 

@@ -76,8 +76,11 @@ class TrackedCaseEventListenerTests {
 
 		verify(cases, times(2)).save(captor.capture());
 
-		assertThat(captor.getAllValues()).hasSize(2)//
-				.extracting(FIRST_NAME, LAST_NAME, DEPARTMENT_NAME)//
+		var createdCases = captor.getAllValues();
+
+		assertThat(createdCases).hasSize(2)
+				.allMatch(it -> it.getOriginCases().contains(trackedCase))
+				.extracting(FIRST_NAME, LAST_NAME, DEPARTMENT_NAME)
 				.containsOnly(tuple(MAX, MUSTERMANN, MANNHEIM), tuple(MORITZ, MUSTERMANN, MANNHEIM));
 	}
 
@@ -97,10 +100,10 @@ class TrackedCaseEventListenerTests {
 		listener.on(CaseConvertedToIndex.of(trackedCase));
 
 		verify(cases, times(1)).save(captor.capture());
-		verify(cases, times(3)).existsByOriginContacts(encounter.getContact());
+		verify(cases, times(1)).existsByOriginContacts(encounter.getContact());
 
-		assertThat(captor.getAllValues()).hasSize(1)//
-				.extracting(FIRST_NAME, LAST_NAME, DEPARTMENT_NAME)//
+		assertThat(captor.getAllValues()).hasSize(1)
+				.extracting(FIRST_NAME, LAST_NAME, DEPARTMENT_NAME)
 				.containsOnly(tuple(MAX, MUSTERMANN, MANNHEIM));
 	}
 

@@ -73,12 +73,13 @@ public class TrackingEventListener {
 		var caseOfContactInitializer = findTrackedCaseFor(trackedPersonId);
 
 		// Only contacts of index-cases shall be converted to new cases automatically
-
 		if (!caseOfContactInitializer.isIndexCase()) {
 			return;
 		}
 
-		cases.save(TrackedCase.of(contactPerson, caseOfContactInitializer.getDepartment()));
+		var source = CaseSource.of(contactPerson, caseOfContactInitializer);
+
+		cases.save(TrackedCase.of(source));
 
 		log.info("Created automatic contact case from contact " + contactPerson.getId());
 	}
