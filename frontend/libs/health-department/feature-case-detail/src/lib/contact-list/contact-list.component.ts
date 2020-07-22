@@ -2,9 +2,9 @@ import { ApiService } from '@qro/shared/util-data-access';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
-import { ContactListItemDto } from '@qro/health-department/domain';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { ContactListItemDto, CaseEntityService } from '@qro/health-department/domain';
+import { Observable, combineLatest } from 'rxjs';
+import { map, switchMap, shareReplay } from 'rxjs/operators';
 
 interface RowViewModel {
   firstName: string;
@@ -31,11 +31,20 @@ export class ContactListComponent implements OnInit {
     private router: Router,
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private entityService: CaseEntityService
   ) {}
 
   ngOnInit() {
-    const caseDetail$ = this.route.parent.data.pipe(map((data) => data.case));
+    const caseDetail$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1)
+    );
 
     this.caseName$ = caseDetail$.pipe(map((detail) => `${detail.firstName} ${detail.lastName}`));
 

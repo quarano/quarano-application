@@ -8,8 +8,8 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable, Subject, combineLatest } from 'rxjs';
+import { filter, map, switchMap, shareReplay } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -46,13 +46,16 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   initData(): void {
-    this.caseDetail$ = merge(this.route.data.pipe(map((data) => data.case)), this.updatedDetail$$).pipe(
-      map((data) => data)
+    this.caseDetail$ = combineLatest([
+      this.route.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1)
     );
 
-    if (this.route.snapshot.paramMap.has('id')) {
-      this.caseId = this.route.snapshot.paramMap.get('id');
-    }
     if (this.route.snapshot.paramMap.has('type')) {
       this.type$$.next(this.route.snapshot.paramMap.get('type') as CaseType);
     }

@@ -98,7 +98,7 @@
         #rlcomments="routerLinkActive"
         [active]="rlcomments.isActive"
       >
-        Kommentare ({{ caseDetail.comments.length }})
+        Kommentare <span class="comment-cnt">{{ caseDetail.comments.length }}</span>
       </a>
       <a
         *ngIf="caseDetail.indexContacts.length > 0"

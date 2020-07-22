@@ -251,7 +251,7 @@
       <qro-button
         data-cy="client-submit-button"
         [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading"
+        [loading]="loading$ | async"
       >
         Speichern
       </qro-button>
@@ -259,7 +259,7 @@
         style="margin-left: 8px;"
         type="button"
         [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading"
+        [loading]="loading$ | async"
         (buttonClicked)="submitForm(editForm, true)"
       >
         Speichern und schließen

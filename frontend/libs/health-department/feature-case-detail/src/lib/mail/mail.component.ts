@@ -2,10 +2,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { Component, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subject, Observable, of } from 'rxjs';
+import { Subject, Observable, of, combineLatest } from 'rxjs';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { StartTracking } from '@qro/health-department/domain';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { StartTracking, CaseEntityService } from '@qro/health-department/domain';
+import { map, switchMap, tap, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-client-mail',
@@ -24,14 +24,22 @@ export class MailComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private snackbarService: SnackbarService,
     private apiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private entityService: CaseEntityService
   ) {}
 
   ngOnInit(): void {
-    this.tracking$ = this.route.parent.data.pipe(
+    this.tracking$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1),
       switchMap((data) => {
-        if (data.case?._links?.hasOwnProperty('renew')) {
-          return this.apiService.getApiCall<StartTracking>(data.case, 'renew');
+        if (data?._links?.hasOwnProperty('renew')) {
+          return this.apiService.getApiCall<StartTracking>(data, 'renew');
         }
         return of(null);
       })
