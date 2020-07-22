@@ -84,6 +84,6 @@ export class ActionComponent implements OnInit {
   }
 
   get returnLink() {
-    return `/health-department/${this.type}-cases/action-list`;
+    return `/health-department/${this.caseType}-cases/action-list`;
   }
 }

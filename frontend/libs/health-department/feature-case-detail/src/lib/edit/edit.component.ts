@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { distinctUntilChanged, map, tap, switchMap, filter } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap, filter, shareReplay } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
@@ -7,9 +7,9 @@ import {
   ValidationErrorGenerator,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -42,7 +42,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   caseDetail$: Observable<CaseDto>;
-  loading: boolean;
+  loading$: Observable<boolean>;
 
   formGroup: FormGroup;
   @ViewChild('editForm') editFormElement: NgForm;
@@ -59,8 +59,14 @@ export class EditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createFormGroup();
 
-    this.caseDetail$ = this.route.parent.data.pipe(
-      map((data) => data.case as CaseDto),
+    this.caseDetail$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1),
       tap((data) => this.updateFormGroup(data)),
       tap((data) => this.type$$.next(data.caseType))
     );
@@ -83,6 +89,8 @@ export class EditComponent implements OnInit, OnDestroy {
         this.setValidators();
         // this.triggerErrorMessages();
       });
+
+    this.loading$ = this.entityService.loading$;
   }
 
   ngOnDestroy(): void {
@@ -233,24 +241,21 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   saveCaseData(result: CaseDto, closeAfterSave: boolean) {
-    this.loading = true;
-
     if (!result.caseId) {
       this.caseDetail$ = this.entityService.add(result);
     } else {
       this.caseDetail$ = this.entityService.update(result);
     }
 
-    this.subs.sink = this.caseDetail$
-      .subscribe((res) => {
-        this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-        if (closeAfterSave) {
-          this.router.navigate([this.returnLink]);
-        } else {
-          this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${res.caseId}`]);
-        }
-      })
-      .add(() => (this.loading = false));
+    this.subs.sink = this.caseDetail$.subscribe((res) => {
+      this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
+      if (closeAfterSave) {
+        this.router.navigate([this.returnLink]);
+      } else {
+        this.formGroup.markAsPristine();
+        this.formGroup.markAsUntouched();
+      }
+    });
   }
 
   get returnLink() {
