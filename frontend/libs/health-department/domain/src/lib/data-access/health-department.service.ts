@@ -1,3 +1,4 @@
+import { CaseDto } from './../model/case';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
