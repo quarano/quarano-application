@@ -1,3 +1,4 @@
+import { CaseDto } from './../model/case';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -21,8 +22,8 @@ export class HealthDepartmentService {
     return this.httpClient.put(link.href, { comment });
   }
 
-  addComment(caseId: string, comment: string): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/api/hd/cases/${caseId}/comments`, { comment });
+  addComment(caseId: string, comment: string): Observable<CaseDto> {
+    return this.httpClient.post<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseId}/comments`, { comment });
   }
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {

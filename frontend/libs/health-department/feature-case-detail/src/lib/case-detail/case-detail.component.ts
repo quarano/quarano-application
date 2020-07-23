@@ -29,8 +29,6 @@ export class CaseDetailComponent implements OnDestroy {
   type$: Observable<CaseType> = this.type$$.asObservable();
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
-
-  updatedDetail$$: Subject<CaseDto> = new Subject<CaseDto>();
   private subs = new SubSink();
 
   constructor(
@@ -97,8 +95,7 @@ export class CaseDetailComponent implements OnDestroy {
 
   startTracking(caseDetail: CaseDto) {
     this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking').subscribe((data) => {
-      this.updatedDetail$$.next({ ...cloneDeep(caseDetail), _links: data._links });
-
+      this.entityService.updateOneInCache({ ...cloneDeep(caseDetail), _links: data._links });
       this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDetail.caseId}/email`]);
     });
   }
@@ -121,7 +118,7 @@ export class CaseDetailComponent implements OnDestroy {
       .pipe(switchMap(() => this.entityService.getByKey(this.caseId)))
       .subscribe((data) => {
         this.snackbarService.success('Fall abgeschlossen.');
-        this.updatedDetail$$.next(data);
+        this.entityService.updateOneInCache(data);
       });
   }
 
