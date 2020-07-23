@@ -1,8 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, Input, OnInit } from '@angular/core';
-import { ContactDto } from '@qro/health-department/domain';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ContactDto, CaseEntityService } from '@qro/health-department/domain';
+import { Observable, combineLatest } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-client-index-contacts',
@@ -12,9 +12,17 @@ import { map } from 'rxjs/operators';
 export class IndexContactsComponent implements OnInit {
   caseIndexContacts$: Observable<ContactDto[]>;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private entityService: CaseEntityService) {}
 
   ngOnInit(): void {
-    this.caseIndexContacts$ = this.route.parent.data.pipe(map((data) => data.case.indexContacts));
+    this.caseIndexContacts$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id].indexContacts;
+      }),
+      shareReplay(1)
+    );
   }
 }
