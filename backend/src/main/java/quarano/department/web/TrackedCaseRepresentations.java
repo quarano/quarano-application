@@ -361,7 +361,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
-			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfEncounters();
+			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfUniqueContacts();
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
 

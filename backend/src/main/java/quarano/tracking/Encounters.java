@@ -72,6 +72,10 @@ public class Encounters implements Streamable<Encounter> {
 	}
 
 	public long getNumberOfEncounters() {
+		return encounters.size();
+	}
+
+	public long getNumberOfUniqueContacts() {
 		return encounters.stream().map(Encounter::getContact).distinct().count();
 	}
 
