@@ -52,6 +52,7 @@ class ActionItemsControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
+		assertThat(document.read("$._links.case.href", String.class)).isNotBlank();
 		assertThat(document.read("$.anomalies.process[0].date", String.class))
 				.isEqualTo(LocalDate.now().toString());
 	}

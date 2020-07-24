@@ -1,6 +1,7 @@
 package quarano.actions.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -17,6 +18,7 @@ import quarano.department.Comment;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.web.ExternalTrackedCaseRepresentations;
+import quarano.department.web.TrackedCaseController;
 import quarano.department.web.TrackedCaseSummary;
 import quarano.diary.DiaryEntry;
 import quarano.diary.web.DiaryController;
@@ -31,9 +33,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.util.Streamable;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -124,18 +126,18 @@ class ActionRepresentations {
 		private final ActionItems items;
 		private final MessageSourceAccessor messages;
 
+		@SuppressWarnings("null")
 		public static CaseActionsRepresentation of(TrackedCase trackedCase, ActionItems items,
 				MessageSourceAccessor messages) {
 
-			CaseActionsRepresentation result = new CaseActionsRepresentation(trackedCase, items, messages);
+			var trackedCaseController = on(TrackedCaseController.class);
+			var actionItemController = on(ActionItemController.class);
 
-			@SuppressWarnings("null")
-			var uriString = fromMethodCall(on(ActionItemController.class)
-					.resolveActions(trackedCase.getId(), null, null, null)).toUriString();
-
-			return items.hasUnresolvedItemsForManualResolution()
-					? result.add(Link.of(uriString, RESOLVE_REL))
-					: result;
+			return new CaseActionsRepresentation(trackedCase, items, messages)
+					.add(MvcLink.of(trackedCaseController.getCase(trackedCase.getId(), trackedCase.getDepartment()), CASE))
+					.addIf(items.hasUnresolvedItemsForManualResolution(),
+							() -> MvcLink.of(actionItemController.resolveActions(trackedCase.getId(), null, null, null),
+									RESOLVE_REL));
 		}
 
 		public TrackedCaseIdentifier getCaseId() {

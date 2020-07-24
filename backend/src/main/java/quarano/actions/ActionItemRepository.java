@@ -4,6 +4,7 @@ import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
 import quarano.department.TrackedCase;
 import quarano.diary.Slot;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +30,17 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 			+ " where i.resolved = false"
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	/**
+	 * Returns the number of unresolved {@link ActionItem}s for the {@link TrackedPerson} with the given identifier.
+	 *
+	 * @param identifier must not be {@literal null}.
+	 * @return
+	 */
+	@Query("select count(i) from ActionItem i"
+			+ " where i.resolved = false"
+			+ " and i.personIdentifier = :identifier")
+	long countUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i, TrackedCase t"
 			+ " where i.resolved = false"

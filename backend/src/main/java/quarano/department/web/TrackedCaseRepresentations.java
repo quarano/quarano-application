@@ -41,8 +41,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,11 +63,14 @@ import org.springframework.hateoas.server.core.Relation;
 import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
@@ -83,6 +88,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ContactChaser contactChaser;
+
+	private final @NonNull List<TrackedCaseDetailsEnricher> enrichers;
 
 	/*
 	 * (non-Javadoc)
@@ -108,18 +115,19 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	RepresentationModel<?> toRepresentation(TrackedCase trackedCase) {
 
 		var dto = toDtoRepresentation(trackedCase, TrackedCaseDto.Output.class);
-
-		List<Contact> contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase)
+		var contactToIndexCases = contactChaser.findIndexContactsFor(trackedCase)
 				.map(Contact::new)
 				.collect(Collectors.toList());
 
 		var details = new TrackedCaseDetails(trackedCase, dto, messages, contactToIndexCases);
+		var enriched = enrichers.stream()
+				.reduce(details, (it, enricher) -> enricher.enrich(it), (l, r) -> r);
 
 		var originCases = trackedCase.getOriginCases().stream()
 				.map(it -> toSelect(it))
 				.collect(Collectors.toUnmodifiableList());
 
-		return HalModelBuilder.halModelOf(details)
+		return HalModelBuilder.halModelOf(enriched)
 				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES)
 				.build();
 	}
@@ -346,13 +354,14 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	}
 
 	@Relation(collectionRelation = "cases")
-	static class TrackedCaseDetails extends TrackedCaseStatusAware<TrackedCaseDetails> {
+	public static class TrackedCaseDetails extends TrackedCaseStatusAware<TrackedCaseDetails> {
 
-		private final TrackedCase trackedCase;
+		private final @Getter(onMethod = @__(@JsonIgnore)) TrackedCase trackedCase;
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 		private final @Getter List<Contact> indexContacts;
 		private final @Getter long contactCount;
+		private final @Getter(onMethod = @__(@JsonAnyGetter)) Map<String, Object> additionalProperty;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
 				List<Contact> indexContacts) {
@@ -364,6 +373,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfUniqueContacts();
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
+			this.additionalProperty = new HashMap<>();
 
 			var controller = on(TrackedCaseController.class);
 
@@ -387,6 +397,23 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					.sorted(Comparator.comparing(Comment::getDate).reversed())
 					.map(CommentRepresentation::new)
 					.collect(Collectors.toUnmodifiableList());
+		}
+
+		/**
+		 * Registers the given function to create additional properties of the representation.
+		 *
+		 * @param property must not be {@literal null} or empty.
+		 * @param function must not be {@literal null}.
+		 * @return
+		 */
+		public TrackedCaseDetails withAdditionalProperty(String property, Function<TrackedCase, Object> function) {
+
+			Assert.notNull(property, "Property must not be null or empty!");
+			Assert.notNull(function, "Function must not be null!");
+
+			this.additionalProperty.put(property, function.apply(trackedCase));
+
+			return this;
 		}
 	}
 

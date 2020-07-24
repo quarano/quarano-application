@@ -688,6 +688,21 @@ class TrackedCaseControllerWebIntegrationTests {
 				.allMatch("index"::equals);
 	}
 
+	@Test // CORE-357
+	@WithQuaranoUser("admin")
+	void exposesNumberOfOpenAnomalies() throws Exception {
+
+		var result = mvc.perform(get("/api/hd/cases/{id}", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.openAnomaliesCount", long.class)).isEqualTo(2);
+		assertThat(document.read("$._links.anomalies.href", String.class)).isNotBlank();
+	}
+
 	private ReadContext expectBadRequest(HttpMethod method, String uri, Object payload) throws Exception {
 
 		return JsonPath.parse(mvc.perform(request(method, uri)

@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-class TrackedCaseController {
+public class TrackedCaseController {
 
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
@@ -126,7 +126,7 @@ class TrackedCaseController {
 	}
 
 	@GetMapping("/api/hd/cases/{identifier}")
-	HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
+	public HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
 		return ResponseEntity.of(cases.findById(identifier)
 				.filter(it -> it.belongsTo(department))

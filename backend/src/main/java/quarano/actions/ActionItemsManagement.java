@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -38,5 +39,18 @@ public class ActionItemsManagement {
 
 		items.findByCase(trackedCase)
 				.resolveManually(items::save);
+	}
+
+	/**
+	 * Returns the number of unresolved {@link ActionItem}s for the given {@link TrackedCase}.
+	 *
+	 * @param trackedCase must not be {@literal null}.
+	 * @return
+	 */
+	public long getNumberOfOpenItems(TrackedCase trackedCase) {
+
+		Assert.notNull(trackedCase, "TrackedCase must not be null!");
+
+		return items.countUnresolvedByTrackedPerson(trackedCase.getTrackedPerson().getId());
 	}
 }
