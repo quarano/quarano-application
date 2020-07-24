@@ -24,7 +24,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
@@ -70,7 +69,8 @@ public class Quarano {
 
 		var templates = Map.of(//
 				EmailTemplates.Keys.REGISTRATION_INDEX, "classpath:masterdata/templates/registration-index.txt",
-				EmailTemplates.Keys.REGISTRATION_CONTACT, "classpath:masterdata/templates/registration-contact.txt");
+				EmailTemplates.Keys.REGISTRATION_CONTACT, "classpath:masterdata/templates/registration-contact.txt",
+				EmailTemplates.Keys.NEW_CONTACT_CASE, "classpath:masterdata/templates/new-contact-case.txt");
 
 		return new EmailTemplates(loader, templates);
 	}
@@ -193,7 +193,6 @@ public class Quarano {
 
 	@Configuration
 	@EnableScheduling
-	@Profile("!integrationtest")
 	static class SchedulingProperties {
 
 	}
