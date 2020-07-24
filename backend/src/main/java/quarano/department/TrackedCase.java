@@ -22,7 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -42,42 +52,32 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_person_id")
-	private TrackedPerson trackedPerson;
+	@OneToOne(cascade = { CascadeType.ALL }) @JoinColumn(name = "tracked_person_id") private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false)
-	private Department department;
+	@ManyToOne @JoinColumn(name = "department_id", nullable = false) private Department department;
 
 	private @Getter TestResult testResult;
 
-	@Setter(AccessLevel.NONE)
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "questionnaire_id")
-	private @Getter Questionnaire questionnaire;
+	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL,
+			orphanRemoval = true) @JoinColumn(name = "questionnaire_id") private @Getter Questionnaire questionnaire;
 
-	@Setter(AccessLevel.NONE)
-	private Enrollment enrollment = new Enrollment();
-	@Column(name = "case_type")
-	@Enumerated(EnumType.STRING)
-	private @Getter @Setter CaseType type = CaseType.INDEX;
+	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
+	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
 
 	private @Getter @Setter String extReferenceNumber;
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_case_id")
-	private @Getter List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) @JoinColumn(
+			name = "tracked_case_id") private @Getter List<Comment> comments = new ArrayList<>();
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private @Getter Status status;
+	@Column(nullable = false) @Enumerated(EnumType.STRING) private @Getter Status status;
 
-	@OneToMany
-	private @Getter List<TrackedCase> originCases = new ArrayList<>();
+	@Column(
+			nullable = true) @Enumerated(EnumType.STRING) private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENTED;
+
+	@OneToMany private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(CaseSource source) {
 
@@ -345,6 +345,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	TrackedCase markNewContactCaseMailCantSented() {
+
+		this.newContactCaseMailStatus = MailStatus.SENTED;
+
+		return this;
+	}
+
+	TrackedCase markNewContactCaseMailCantSent() {
+
+		this.newContactCaseMailStatus = MailStatus.CANT_SENT;
+
+		return this;
+	}
+
 	private void assertStatus(Status status, String message, Object... args) {
 
 		if (!this.status.equals(status)) {
@@ -365,6 +379,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		TRACKING,
 
 		CONCLUDED;
+	}
+
+	public enum MailStatus {
+
+		NOT_SENTED,
+
+		CANT_SENT,
+
+		SENTED
 	}
 
 	@Value(staticConstructor = "of")
