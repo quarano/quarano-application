@@ -352,7 +352,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 		private final @Getter List<Contact> indexContacts;
-		private final @Getter int contactCount;
+		private final @Getter long contactCount;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
 				List<Contact> indexContacts) {

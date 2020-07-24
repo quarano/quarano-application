@@ -71,8 +71,8 @@ public class Encounters implements Streamable<Encounter> {
 		return contactDatesGroupedByContactPerson;
 	}
 
-	public int getNumberOfEncounters() {
-		return encounters.size();
+	public long getNumberOfEncounters() {
+		return encounters.stream().map(Encounter::getContact).distinct().count();
 	}
 
 	/*
