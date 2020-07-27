@@ -159,6 +159,14 @@ class ActionRepresentations {
 					"resolved", toDailyItems(items.getResolvedItems(), true));
 		}
 
+		public long getNumberOfUnresolvedAnomalies() {
+			return items.getUnresolvedItems().stream().count();
+		}
+
+		public long getNumberOfResolvedAnomalies() {
+			return items.getResolvedItems().stream().count();
+		}
+
 		private List<DailyItems> toDailyItems(Streamable<ActionItem> items, boolean done) {
 
 			return items.stream()
