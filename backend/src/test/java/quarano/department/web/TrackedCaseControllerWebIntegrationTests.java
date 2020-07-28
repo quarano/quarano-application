@@ -669,7 +669,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$._embedded.originCases[0]._links.self.href", String.class)).isNotNull();
 
 		assertThat(cases.findById(contactCase.getId())).hasValueSatisfying(it -> {
-			assertThat(it.getOriginCases()).contains(originCase);
+			assertThat(it.originatesFrom(originCase)).isTrue();
 		});
 	}
 
@@ -709,7 +709,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SIGGI).orElseThrow();
 		var contactCase = cases.findAll()
 				.filter(it -> !it.getType().equals(CaseType.INDEX))
-				.filter(it -> it.getOriginCases().contains(originCase))
+				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
 		var response = mvc.perform(get("/api/hd/cases")

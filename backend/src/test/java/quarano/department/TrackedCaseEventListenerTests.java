@@ -79,7 +79,7 @@ class TrackedCaseEventListenerTests {
 		var createdCases = captor.getAllValues();
 
 		assertThat(createdCases).hasSize(2)
-				.allMatch(it -> it.getOriginCases().contains(trackedCase))
+				.allMatch(it -> it.originatesFrom(trackedCase))
 				.extracting(FIRST_NAME, LAST_NAME, DEPARTMENT_NAME)
 				.containsOnly(tuple(MAX, MUSTERMANN, MANNHEIM), tuple(MORITZ, MUSTERMANN, MANNHEIM));
 	}

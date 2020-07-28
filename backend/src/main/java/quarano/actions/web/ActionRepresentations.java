@@ -73,18 +73,14 @@ class ActionRepresentations {
 
 	public RepresentationModel<?> toSummaryWithOriginCases(CaseActionSummary caseActionSummary) {
 
-		var halModelBuilder = HalModelBuilder.halModelOf(caseActionSummary);
 		var originCases = caseActionSummary.getTrackedCase()
 				.getOriginCases()
 				.stream()
-				.map(trackedCaseRepresentations::toSelect)
-				.collect(Collectors.toUnmodifiableList());
+				.map(trackedCaseRepresentations::toSelect);
 
-		if (!originCases.isEmpty()) {
-			halModelBuilder.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES);
-		}
-
-		return halModelBuilder.build();
+		return HalModelBuilder.halModelOf(caseActionSummary)
+				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES)
+				.build();
 	}
 
 	@RequiredArgsConstructor(staticName = "of")

@@ -204,7 +204,7 @@ class ActionItemsControllerWebIntegrationTests {
 		var originCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SIGGI).orElseThrow();
 		var contactCase = cases.findAll()
 				.filter(it -> !it.getType().equals(CaseType.INDEX))
-				.filter(it -> it.getOriginCases().contains(originCase))
+				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
 		var response = mvc.perform(get("/api/hd/actions")
