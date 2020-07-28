@@ -152,6 +152,19 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	/**
+	 * Returns whether the current {@link TrackedCase} originates from the given one.
+	 *
+	 * @param other must not be {@literal null}.
+	 * @return
+	 */
+	public boolean originatesFrom(TrackedCase other) {
+
+		Assert.notNull(other, "Other TrackedCase must not be null!");
+
+		return originCases.contains(other);
+	}
+
 	public boolean isEligibleForTracking() {
 		return status.equals(Status.OPEN) && trackedPerson.isEligibleForTracking();
 	}

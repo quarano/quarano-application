@@ -16,7 +16,6 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -76,8 +75,7 @@ class ActionItemController {
 				.stream()
 				.filter(CaseActionSummary::hasUnresolvedItems)
 				.sorted(Comparator.comparing(CaseActionSummary::getPriority).reversed())
-				.map(representations::toSummaryWithOriginCases)
-				.collect(Collectors.toUnmodifiableList());
+				.map(representations::toSummaryWithOriginCases);
 
 		return HalModelBuilder.emptyHalModel()
 				.embed(actionRepresentations, CaseActionSummary.class)

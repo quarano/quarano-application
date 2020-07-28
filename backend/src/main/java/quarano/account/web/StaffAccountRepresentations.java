@@ -75,12 +75,11 @@ class StaffAccountRepresentations {
 		public Links getLinks() {
 
 			var controller = on(StaffAccountController.class);
+			var identifier = AccountIdentifier.of(UUID.fromString(accountId));
 
 			return super.getLinks()
-					.and(MvcLink.of(controller.getStaffAccount(AccountIdentifier.of(UUID.fromString(accountId)), null),
-							IanaLinkRelations.SELF))
-					.and(MvcLink.of(controller.deleteStaffAccounts(AccountIdentifier.of(UUID.fromString(accountId)), null),
-							StaffAccountLinkRelations.DELETE));
+					.and(MvcLink.of(controller.getStaffAccount(identifier, null), IanaLinkRelations.SELF))
+					.and(MvcLink.of(controller.deleteStaffAccounts(identifier, null), StaffAccountLinkRelations.DELETE));
 		}
 	}
 

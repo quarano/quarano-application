@@ -96,6 +96,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return new TrackedCaseSummary(trackedCase, messages);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.department.web.ExternalTrackedCaseRepresentations#toSelect(quarano.department.TrackedCase)
+	 */
 	@Override
 	public TrackedCaseSelect toSelect(TrackedCase trackedCase) {
 		return TrackedCaseSelect.of(trackedCase);
@@ -105,8 +109,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 		var trackedCaseSummary = toSummary(trackedCase);
 		var halModelBuilder = HalModelBuilder.halModelOf(trackedCaseSummary);
-		var originCases = trackedCase.getOriginCases()
-				.stream()
+		var originCases = trackedCase.getOriginCases().stream()
 				.map(this::toSelect)
 				.collect(Collectors.toUnmodifiableList());
 
@@ -141,8 +144,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 				.reduce(details, (it, enricher) -> enricher.enrich(it), (l, r) -> r);
 
 		var originCases = trackedCase.getOriginCases().stream()
-				.map(it -> toSelect(it))
-				.collect(Collectors.toUnmodifiableList());
+				.map(it -> toSelect(it));
 
 		return HalModelBuilder.halModelOf(enriched)
 				.embed(originCases, TrackedCaseLinkRelations.ORIGIN_CASES)
