@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1335px;">
   <div style="display: flex; justify-content: space-between;">
     <div style="display: flex;">
       <button
@@ -24,7 +24,7 @@
     #table
     data-cy="case-data-table"
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1335px;"
     [count]="cases.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -43,7 +43,7 @@
     <ngx-datatable-column
       prop="status"
       name="Status"
-      width="290"
+      width="300"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -58,7 +58,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="160"
     ></ngx-datatable-column>
 
     <ngx-datatable-column
@@ -68,14 +68,14 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="160"
     >
     </ngx-datatable-column>
 
     <ngx-datatable-column
       prop="dateOfBirth"
       name="Geburtsdatum"
-      width="120"
+      width="140"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -104,7 +104,7 @@
     <ngx-datatable-column
       prop="zipCode"
       name="PLZ"
-      width="100"
+      width="115"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -119,11 +119,11 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="140"
+      width="200"
     >
     </ngx-datatable-column>
 
-    <ngx-datatable-column prop="email" name="E-Mail" width="80" [sortable]="false">
+    <ngx-datatable-column prop="email" name="E-Mail" width="120" [sortable]="false">
       <ng-template let-value="value" ngx-datatable-cell-template>
         <button
           *ngIf="value"

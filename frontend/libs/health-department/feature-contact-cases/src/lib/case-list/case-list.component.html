@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1335px;">
   <div style="display: flex; justify-content: space-between;">
     <div style="display: flex;">
       <button
@@ -24,7 +24,7 @@
     #table
     data-cy="case-data-table"
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1335px;"
     [count]="cases.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -43,7 +43,7 @@
     <ngx-datatable-column
       prop="status"
       name="Status"
-      width="210"
+      width="180"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -58,7 +58,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="130"
+      width="150"
     ></ngx-datatable-column>
 
     <ngx-datatable-column
@@ -68,14 +68,14 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="130"
+      width="150"
     >
     </ngx-datatable-column>
 
     <ngx-datatable-column
       prop="dateOfBirth"
       name="Geburtsdatum"
-      width="130"
+      width="140"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -89,7 +89,7 @@
     <ngx-datatable-column
       prop="typeName"
       name="Typ"
-      width="110"
+      width="140"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -117,7 +117,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="120"
+      width="140"
     >
     </ngx-datatable-column>
 
@@ -128,8 +128,17 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="140"
+      width="150"
     >
     </ngx-datatable-column>
+
+    <ngx-datatable-column
+      prop="originCases"
+      name="Ursprungsfälle"
+      [resizeable]="true"
+      [sortable]="true"
+      [canAutoResize]="true"
+      width="200"
+    ></ngx-datatable-column>
   </ngx-datatable>
 </div>

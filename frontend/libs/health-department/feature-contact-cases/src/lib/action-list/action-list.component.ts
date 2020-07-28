@@ -19,6 +19,7 @@ export class ActionRowViewModel {
   alerts: string[];
   caseId: string;
   createdAt: string;
+  originCases: string;
 }
 
 @Component({
@@ -88,6 +89,7 @@ export class ActionListComponent implements OnInit, OnDestroy {
       alerts: action.alerts || [],
       caseId: action.caseId,
       createdAt: action.createdAt ? DateFunctions.toCustomLocaleDateString(action.createdAt) : '-',
+      originCases: action.originCases.map((c) => `${c.firstName} ${c.lastName}`).join(', '),
     };
   }
 

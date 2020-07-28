@@ -19,6 +19,7 @@ class CaseRowViewModel {
   caseId: string;
   status: string;
   extReferenceNumber: string;
+  originCases: string;
 }
 
 @Component({
@@ -95,6 +96,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
+      originCases: c.originCases.map((c) => `${c.firstName} ${c.lastName}`).join(', '),
     };
   }
 

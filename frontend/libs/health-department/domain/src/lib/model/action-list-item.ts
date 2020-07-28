@@ -1,6 +1,7 @@
-import { SelfLink } from '@qro/shared/util-data-access';
+import { Link } from '@qro/shared/util-data-access';
 import { Alert } from '../enums/alert';
 import { ClientType } from '@qro/auth/api';
+import { CaseSearchItem } from './case-search-item';
 
 export interface ActionListItemDto {
   name: string;
@@ -19,5 +20,6 @@ export interface ActionListItemDto {
   caseTypeLabel: string;
   createdAt: Date;
   extReferenceNumber: string;
-  _links: SelfLink;
+  _links: { self: Link; originCases?: Link };
+  originCases?: CaseSearchItem[];
 }

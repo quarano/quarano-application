@@ -34,9 +34,17 @@ export class IndexCaseService {
   }
 
   getActionList(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),
-      map((result) => result.filter((r) => r.caseType === ClientType.Index).map((item) => this.mapActionListItem(item)))
+      map((result) => {
+        if (result?._embedded?.actions) {
+          return result._embedded.actions
+            .filter((r) => r.caseType === ClientType.Index)
+            .map((item) => this.mapActionListItem(item));
+        } else {
+          return [];
+        }
+      })
     );
   }
 
@@ -58,6 +66,7 @@ export class IndexCaseService {
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
       extReferenceNumber: item.extReferenceNumber,
+      originCases: item._embedded?.originCases || [],
     };
   }
 
@@ -80,6 +89,7 @@ export class IndexCaseService {
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
       extReferenceNumber: item.extReferenceNumber,
+      originCases: item._embedded?.originCases || [],
     };
   }
 }
