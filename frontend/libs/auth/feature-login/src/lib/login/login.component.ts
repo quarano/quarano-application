@@ -1,4 +1,3 @@
-import { ChangePasswordComponent } from '../../../../feature-change-password/src/lib/change-password/change-password.component';
 import { HttpResponse } from '@angular/common/http';
 import { ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { Component, OnInit } from '@angular/core';
@@ -8,6 +7,7 @@ import { filter, take } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { ChangePasswordComponent } from '@qro/auth/feature-change-password';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({

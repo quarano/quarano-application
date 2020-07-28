@@ -159,7 +159,7 @@
       "tags": ["scope:shared", "type:ui"]
     },
     "auth-feature-change-password": {
-      "tags": ["scope:general", "type:feature"]
+      "tags": ["scope:general", "type:ui"]
     },
     "auth-feature-login": {
       "tags": ["scope:general", "type:feature"]
