@@ -27,11 +27,17 @@ export class ContactCaseService {
   }
 
   getActionList(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any[]>(`${this.apiUrl}/api/hd/actions`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
       share(),
-      map((result) =>
-        result.filter((r) => r.caseType === ClientType.Contact).map((item) => this.mapActionListItem(item))
-      )
+      map((result) => {
+        if (result?._embedded?.actions) {
+          return result._embedded.actions
+            .filter((r) => r.caseType === ClientType.Contact)
+            .map((item) => this.mapActionListItem(item));
+        } else {
+          return [];
+        }
+      })
     );
   }
 
@@ -53,6 +59,7 @@ export class ContactCaseService {
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
       extReferenceNumber: item.extReferenceNumber,
+      originCases: item._embedded?.originCases || [],
     };
   }
 
@@ -70,6 +77,7 @@ export class ContactCaseService {
       quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
       quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       _links: item._links,
+      originCases: item._embedded?.originCases || [],
       alerts: item.healthSummary.concat(item.processSummary),
       status: item.status,
       caseTypeLabel: item.caseTypeLabel,
