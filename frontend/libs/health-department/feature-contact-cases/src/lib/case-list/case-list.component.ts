@@ -96,7 +96,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
-      originCases: c.originCases.map((c) => `${c.firstName} ${c.lastName}`).join(', '),
+      originCases: c.originCases.map((originCase) => `${originCase.firstName} ${originCase.lastName}`).join(', '),
     };
   }
 
