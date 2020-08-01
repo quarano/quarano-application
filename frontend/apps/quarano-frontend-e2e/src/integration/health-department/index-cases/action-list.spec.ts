@@ -3,7 +3,7 @@
 describe('health-department index cases action-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/hd/actions' /*, 'fixture:get-api-hd-cases.json'*/).as('allactions');
+    cy.route('GET', '/api/hd/actions').as('allactions');
 
     cy.loginAgent();
     cy.get('[data-cy="action-list"]').should('exist');
