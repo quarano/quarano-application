@@ -19,6 +19,7 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
+import { tap, finalize, take } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-basic-data',
@@ -258,18 +259,22 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.subs.add(
         this.enrollmentService
           .updateQuestionnaire(this.secondFormGroup.value)
+          .pipe(
+            take(1),
+            tap((result) => (this.firstQuery = this.secondFormGroup.value)),
+            finalize(() => {
+              this.secondFormLoading = false;
+            })
+          )
           .subscribe(
-            () => {
-              this.firstQuery = this.secondFormGroup.value;
+            (result) => {
               this.snackbarService.success('Fragebogen erfolgreich gespeichert');
-
               this.stepper.next();
             },
             (error) => {
               this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
             }
           )
-          .add(() => (this.secondFormLoading = false))
       );
     }
   }
@@ -281,8 +286,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     let day = new Date(this.today);
     this.datesForRetrospectiveContacts = [];
 
-    const firstSymptomsDay = new Date(Date.parse(this.firstQuery.dayOfFirstSymptoms) || this.today);
-    const firstDay = DateFunctions.addDays(firstSymptomsDay, -2);
+    let firstDay: Date;
+    if (!this.secondFormGroup.value.dayOfFirstSymptoms) {
+      firstDay = DateFunctions.addDays(this.today, -7);
+    } else {
+      const firstSymptomsDay = new Date(Date.parse(this.secondFormGroup.value.dayOfFirstSymptoms));
+      if (!firstSymptomsDay || firstSymptomsDay > DateFunctions.addDays(this.today, -5)) {
+        firstDay = DateFunctions.addDays(this.today, -7);
+      } else {
+        firstDay = DateFunctions.addDays(firstSymptomsDay, -2);
+      }
+    }
+
     while (DateFunctions.getDateWithoutTime(day) >= DateFunctions.getDateWithoutTime(firstDay)) {
       this.datesForRetrospectiveContacts.push(day);
       this.thirdFormGroup.addControl(
