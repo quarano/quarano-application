@@ -1,15 +1,15 @@
 import {
-  StartTracking,
-  HealthDepartmentService,
-  CaseStatus,
   CaseDto,
   CaseEntityService,
+  CaseStatus,
+  HealthDepartmentService,
+  StartTracking,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, merge, Observable, Subject, combineLatest } from 'rxjs';
-import { filter, map, switchMap, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -54,9 +54,9 @@ export class CaseDetailComponent implements OnDestroy {
       shareReplay(1)
     );
 
-    if (this.route.snapshot.paramMap.has('type')) {
-      this.type$$.next(this.route.snapshot.paramMap.get('type') as CaseType);
-    }
+    this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
+      this.type$$.next(paramMap.get('type') as CaseType);
+    });
   }
 
   getStartTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {
