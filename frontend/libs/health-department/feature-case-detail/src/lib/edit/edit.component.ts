@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { distinctUntilChanged, map, tap, filter, shareReplay } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
@@ -9,13 +9,13 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { IndexCaseService, CaseSearchItem, CaseDto, CaseEntityService } from '@qro/health-department/domain';
+import { CaseDto, CaseEntityService, CaseSearchItem, IndexCaseService } from '@qro/health-department/domain';
 import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
@@ -59,6 +59,14 @@ export class EditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createFormGroup();
 
+    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
+      if (type === 'index') {
+        this.type$$.next(CaseType.Index);
+      } else if (type === 'contact') {
+        this.type$$.next(CaseType.Contact);
+      }
+    });
+
     this.caseDetail$ = combineLatest([
       this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
       this.entityService.entityMap$,
@@ -68,7 +76,9 @@ export class EditComponent implements OnInit, OnDestroy {
       }),
       shareReplay(1),
       tap((data) => this.updateFormGroup(data)),
-      tap((data) => this.type$$.next(data.caseType))
+      filter(() => !!this.formGroup),
+      tap(() => this.setValidators()),
+      tap((data) => (data.infected === false && this.isIndexCase ? this.triggerErrorMessages() : undefined))
     );
 
     this.subs.add(
@@ -81,14 +91,6 @@ export class EditComponent implements OnInit, OnDestroy {
           }
         })
     );
-
-    this.type$$
-      .asObservable()
-      .pipe(filter((type) => !!this.formGroup))
-      .subscribe((type) => {
-        this.setValidators();
-        // this.triggerErrorMessages();
-      });
 
     this.loading$ = this.entityService.loading$;
   }
@@ -212,19 +214,19 @@ export class EditComponent implements OnInit, OnDestroy {
     }
   }
 
-  // private triggerErrorMessages() {
-  //   this.snackbarService.confirm(
-  //     'Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken'
-  //   );
-  //   this.formGroup.markAsDirty();
-  //   this.formGroup.markAllAsTouched();
-  //   Object.keys(this.formGroup.controls).forEach((key) => {
-  //     this.formGroup.controls[key].markAsDirty();
-  //     this.formGroup.controls[key].updateValueAndValidity();
-  //   });
-  //   this.formGroup.updateValueAndValidity();
-  //   setTimeout(() => this.editFormElement.ngSubmit.emit(), 0); // prevent premature submit
-  // }
+  private triggerErrorMessages() {
+    this.snackbarService.confirm(
+      'Um den Vorgang abzuschließen, bitte alle Pflichtfelder ausfüllen und auf "Speichern" klicken'
+    );
+    this.formGroup.markAsDirty();
+    this.formGroup.markAllAsTouched();
+    Object.keys(this.formGroup.controls).forEach((key) => {
+      this.formGroup.controls[key].markAsDirty();
+      this.formGroup.controls[key].updateValueAndValidity();
+    });
+    this.formGroup.updateValueAndValidity();
+    setTimeout(() => this.editFormElement.ngSubmit.emit(), 0); // prevent premature submit
+  }
 
   submitForm(form: NgForm, closeAfterSave: boolean) {
     if (this.formGroup.valid) {
@@ -247,7 +249,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this.caseDetail$ = this.entityService.update(result);
     }
 
-    this.subs.sink = this.caseDetail$.subscribe((res) => {
+    this.subs.sink = this.caseDetail$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       if (closeAfterSave) {
         this.router.navigate([this.returnLink]);
