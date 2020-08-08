@@ -51,5 +51,21 @@ public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_"))
 				.peek(it -> log.info("Dropping database table " + it))
 				.forEach(it -> template.execute(String.format("DROP TABLE \"%s\" CASCADE;", it)));
+
+		// https://github.com/yugabyte/yugabyte-db/issues/1822
+		log.info("Initializing flyway history table by our own");
+		var flywayTable = "CREATE TABLE \"public\".\"flyway_schema_history\" (" +
+				"\"installed_rank\" INT NOT NULL primary key," +
+				"\"version\" VARCHAR(50)," +
+				"\"description\" VARCHAR(200) NOT NULL," +
+				"\"type\" VARCHAR(20) NOT NULL," +
+				"\"script\" VARCHAR(1000) NOT NULL," +
+				"\"checksum\" INTEGER," +
+				"\"installed_by\" VARCHAR(100) NOT NULL," +
+				"\"installed_on\" TIMESTAMP NOT NULL DEFAULT now()," +
+				"\"execution_time\" INTEGER NOT NULL," +
+				"\"success\" BOOLEAN NOT NULL" +
+				")";
+		template.execute(flywayTable);
 	}
 }
