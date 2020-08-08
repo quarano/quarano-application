@@ -52,32 +52,48 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL }) @JoinColumn(name = "tracked_person_id") private TrackedPerson trackedPerson;
+	@OneToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "tracked_person_id")
+	private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false) private Department department;
+	@ManyToOne
+	@JoinColumn(name = "department_id", nullable = false)
+	private Department department;
 
 	private @Getter TestResult testResult;
 
-	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL,
-			orphanRemoval = true) @JoinColumn(name = "questionnaire_id") private @Getter Questionnaire questionnaire;
+	@Setter(AccessLevel.NONE)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "questionnaire_id")
+	private @Getter Questionnaire questionnaire;
 
-	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
-	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
+	@Setter(AccessLevel.NONE)
+	private Enrollment enrollment = new Enrollment();
+
+	@Column(name = "case_type")
+	@Enumerated(EnumType.STRING)
+	private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
 
 	private @Getter @Setter String extReferenceNumber;
 
-	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL })
+	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL }) @JoinColumn(
-			name = "tracked_case_id") private @Getter List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "tracked_case_id")
+	private @Getter List<Comment> comments = new ArrayList<>();
 
-	@Column(nullable = false) @Enumerated(EnumType.STRING) private @Getter Status status;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private @Getter Status status;
 
-	@Column(
-			nullable = true) @Enumerated(EnumType.STRING) private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENTED;
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENTED;
 
-	@OneToMany private @Getter List<TrackedCase> originCases = new ArrayList<>();
+	@OneToMany
+	private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(CaseSource source) {
 
