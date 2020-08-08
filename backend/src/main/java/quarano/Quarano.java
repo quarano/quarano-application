@@ -70,7 +70,8 @@ public class Quarano {
 		var templates = Map.of(//
 				EmailTemplates.Keys.REGISTRATION_INDEX, "classpath:masterdata/templates/registration-index.txt",
 				EmailTemplates.Keys.REGISTRATION_CONTACT, "classpath:masterdata/templates/registration-contact.txt",
-				EmailTemplates.Keys.NEW_CONTACT_CASE, "classpath:masterdata/templates/new-contact-case.txt");
+				EmailTemplates.Keys.NEW_CONTACT_CASE, "classpath:masterdata/templates/new-contact-case.txt",
+				EmailTemplates.Keys.DIARY_REMINDER, "classpath:masterdata/templates/diary-reminder.txt");
 
 		return new EmailTemplates(loader, templates);
 	}

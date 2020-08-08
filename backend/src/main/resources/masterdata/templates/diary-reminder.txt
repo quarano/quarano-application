@@ -1,0 +1,18 @@
+Sehr geehrte/geehrter Frau/Herr {lastName},
+
+
+bitte denken Sie an Ihren regelmäßigen Tagebucheintrag in der Quarano-Anwendung.
+Uns fehlt noch der {slot}.
+
+https://{host}
+
+Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-
+Hotline der Stadt Mannheim unter der Telefonnummer 
+0621-293 2253.
+
+• Montag bis Freitag von 9:00 – 17:00 Uhr
+• Samstags sowie an Sonn- und Feiertagen von 9:00 – 14:00 Uhr 
+
+Wir bedanken uns für Ihre Mitarbeit.
+
+Ihr Gesundheitsamt Mannheim
