@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
- * This is an <code>ApplicationRunner</code> to register the end of the initial phase
+ * This is an <code>ApplicationRunner</code> to register the end of the initial phase. This is an event listener of
+ * CaseCreated events. On an event this processor sends an automatic information mail about the contact to a COVID-19
+ * case to the person of the new contact case.
  * 
  * @author Jens Kutzsche
  */
@@ -47,7 +49,7 @@ class MailForNewContactCaseProcessor implements ApplicationRunner {
 	@TransactionalEventListener
 	void on(CaseCreated event) {
 
-		if (!initializationFinished) {
+		if (!initializationFinished || !event.getTrackedCase().isContactCase()) {
 			return;
 		}
 
