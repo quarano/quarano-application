@@ -34,8 +34,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm run build-stage
-      - run: npm run prepare-deployment
+      - run: npm run build-internal-dev-otc
+      - run: npm run prepare-deployment-otc
       - run: npm run ci-test
       - run: npm run lint
 
@@ -49,12 +49,12 @@ jobs:
         if: success()
         run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
         env:
-          CF_API: ${{ secrets.CF_API }}
-          CF_ORG: ${{ secrets.CF_ORG }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API: ${{ secrets.CF_OTC_API }}
+          CF_ORG: ${{ secrets.CF_OTC_ORG }}
+          CF_SPACE: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
+          CF_USERNAME: ${{ secrets.CF_OTC_BUILD_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
 
       - name: Deploy Frontend STAGE
         if: success()
-        run: cf push quarano-frontend-dev -f ../manifest.yml
+        run: cf push internal-dev-frontend -f ../manifest-otc.yml
