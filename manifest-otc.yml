@@ -26,6 +26,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      TZ: Europe/Berlin
     instances: 1
     memory: 1G
     routes:
@@ -61,6 +62,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      TZ: Europe/Berlin
     instances: 1
     memory: 1G
     routes:
@@ -111,6 +113,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: develop
+      TZ: Europe/Berlin
     instances: 1
     memory: 1G
     routes:
@@ -147,6 +150,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      TZ: Europe/Berlin
     instances: 1
     memory: 1G
     routes:
