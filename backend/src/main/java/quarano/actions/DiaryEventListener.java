@@ -4,12 +4,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.actions.ActionItem.ItemType;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
 import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryEntry.DiaryEntryAdded;
 import quarano.diary.DiaryEntry.DiaryEntryUpdated;
 import quarano.diary.DiaryEntryMissing;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
+import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.context.event.EventListener;
@@ -23,14 +26,20 @@ class DiaryEventListener {
 	private final @NonNull AnomaliesProperties config;
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull DiaryManagement diaryManagement;
+	private final @NonNull TrackedCaseRepository cases;
+
 
 	@EventListener
 	void on(DiaryEntryAdded event) {
 
 		var entry = event.getEntry();
 
-		handleDiaryEntryForBodyTemprature(entry);
-		handleDiaryEntryForCharacteristicSymptoms(entry);
+		boolean isContactCase = cases.findByTrackedPerson(entry.getTrackedPersonId())
+				.map(TrackedCase::isContactCase)
+				.orElse(Boolean.TRUE);
+
+		handleDiaryEntryForBodyTemprature(entry, isContactCase);
+		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
 		resolveMissingItemsActionItem(entry);
 	}
 
@@ -39,8 +48,12 @@ class DiaryEventListener {
 
 		var entry = event.getEntry();
 
-		handleDiaryEntryForBodyTemprature(entry);
-		handleDiaryEntryForCharacteristicSymptoms(entry);
+		boolean isContactCase = cases.findByTrackedPerson(entry.getTrackedPersonId())
+				.map(TrackedCase::isContactCase)
+				.orElse(Boolean.TRUE);
+
+		handleDiaryEntryForBodyTemprature(entry, isContactCase);
+		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
 	}
 
 	void resolveMissingItemsActionItem(DiaryEntry entry) {
@@ -55,12 +68,13 @@ class DiaryEventListener {
 
 	/**
 	 * Only does something if the entry with the most current slot is edited. First resolves all existing action items for
-	 * temperature. If handles an added or updated diary entry with to high temperature a new action item is added. There
+	 * temperature. If handles an added or updated diary entry with too high temperature a new action item is added. There
 	 * is no update of existing items.
 	 *
 	 * @param entry
+	 * @param isContactCase true if person is contact of an indexed case, false otherwise
 	 */
-	void handleDiaryEntryForBodyTemprature(DiaryEntry entry) {
+	void handleDiaryEntryForBodyTemprature(DiaryEntry entry, boolean isContactCase) {
 
 		var person = entry.getTrackedPersonId();
 
@@ -70,12 +84,14 @@ class DiaryEventListener {
 
 		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(items::save);
+		BodyTemperature temperatureThreshold = config.getTemperatureThreshold();
+		BodyTemperature bodyTemperature = entry.getBodyTemperature();
 
 		// Body temperature exceeds reference
-		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
+		if (isContactCase || bodyTemperature.exceeds(temperatureThreshold)) {
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
-					entry.getBodyTemperature(),
-					config.getTemperatureThreshold());
+					bodyTemperature,
+					temperatureThreshold);
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
 		}
@@ -88,7 +104,15 @@ class DiaryEventListener {
 				.isEmpty();
 	}
 
-	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry) {
+	/**
+	 * manage the list of characteristic symptoms - the resulting action depends
+	 * @param entry
+	 * @param isContactCase true if person is contact of an indexed case, false otherwise
+	 */
+	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry, boolean isContactCase) {
+		if (!isContactCase) {
+			return;
+		}
 
 		var person = entry.getTrackedPersonId();
 		var actionItems = DiaryEntryActionItems
