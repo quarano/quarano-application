@@ -49,6 +49,7 @@ export class CaseDetailComponent implements OnDestroy {
       this.entityService.entityMap$,
     ]).pipe(
       map(([id, entityMap]) => {
+        this.caseId = id;
         return entityMap[id];
       }),
       shareReplay(1)
