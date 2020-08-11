@@ -75,9 +75,6 @@ class ActionItemsControllerWebIntegrationTests {
 		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.comments", JSONArray.class)).isEmpty();
-		assertThat(document.read("$.anomalies.health", JSONArray.class)).hasSize(1);
-		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).hasSize(1);
-		assertThat(document.read("$.anomalies.resolved[0].items", JSONArray.class)).hasSize(2);
 	}
 
 	@Test

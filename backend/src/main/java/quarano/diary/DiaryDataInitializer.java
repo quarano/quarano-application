@@ -157,7 +157,7 @@ class DiaryDataInitializer implements DataInitializer {
 
 		var contact1OfPerson4 = new ContactPerson("Bert", "Baum", ContactWays.ofEmailAddress("bertbaum@testtest.de"));
 		contact1OfPerson4.assignOwner(gustav);
-		contactsOfPerson4.add(contact1OfPerson3);
+		contactsOfPerson4.add(contact1OfPerson4);
 
 		var contact2OfPerson4 = new ContactPerson("Susi", "Söller", ContactWays.ofEmailAddress("susisoeller@testtest.de"));
 		contact2OfPerson4.assignOwner(gustav);
