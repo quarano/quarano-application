@@ -62,9 +62,6 @@ public interface TrackedCaseRepository
 	@Query("select c from TrackedCase c where c.trackedPerson.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select c from TrackedCase c join fetch c.department d join fetch d.contacts where c.trackedPerson.id = :identifier")
-	Optional<TrackedCase> findCaseWithDepartmentAndContactsByTrackedPerson(TrackedPersonIdentifier identifier);
-
 	/**
 	 * Returns whether a {@link TrackedCase} exists that's associated with the given {@link ContactPerson}.
 	 *

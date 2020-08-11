@@ -64,7 +64,8 @@ class MailForNewContactCaseProcessor implements ApplicationRunner {
 		Supplier<Try<Map<String, Object>>> activationPlaceholders = () -> registration.initiateRegistration(trackedCase)
 				.map(it -> Map.of("activationCode", it.getId().toString()));
 
-		var processedCase = emailSender.sendMail(trackedCase, subject, textTemplate, activationPlaceholders)
+		var processedCase = emailSender
+				.sendMail(new TrackedCaseEmailData(trackedCase, subject, textTemplate, activationPlaceholders))
 				.onSuccess(it -> log.info("Contact case creation mail sended to {{}; {}; Case-ID {}}", logArgs))
 				.onFailure(e -> log.info("Can't send contact case creation mail to {{}; {}; Case-ID {}}", logArgs))
 				.onFailure(e -> log.info("Exception", e))
