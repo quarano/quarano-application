@@ -61,7 +61,7 @@ class DiaryEventListenerTest {
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.of(newerEntry)));
 
-		listener.handleDiaryEntryForBodyTemprature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
 
 		verify(items, times(0)).save(itemCaptor.capture());
 	}
@@ -78,7 +78,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemprature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -106,7 +106,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemprature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -126,7 +126,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemprature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
 
 		verify(actionItem, times(1)).resolve();
 		itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
@@ -152,7 +152,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemprature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
 
 		verify(actionItem, times(1)).resolve();
 		verify(items, times(1)).save(actionItem);

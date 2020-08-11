@@ -38,7 +38,7 @@ class DiaryEventListener {
 				.map(TrackedCase::isContactCase)
 				.orElse(Boolean.TRUE);
 
-		handleDiaryEntryForBodyTemprature(entry, isContactCase);
+		handleDiaryEntryForBodyTemperature(entry, isContactCase);
 		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
 		resolveMissingItemsActionItem(entry);
 	}
@@ -52,7 +52,7 @@ class DiaryEventListener {
 				.map(TrackedCase::isContactCase)
 				.orElse(Boolean.TRUE);
 
-		handleDiaryEntryForBodyTemprature(entry, isContactCase);
+		handleDiaryEntryForBodyTemperature(entry, isContactCase);
 		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
 	}
 
@@ -74,7 +74,7 @@ class DiaryEventListener {
 	 * @param entry
 	 * @param isContactCase true if person is contact of an indexed case, false otherwise
 	 */
-	void handleDiaryEntryForBodyTemprature(DiaryEntry entry, boolean isContactCase) {
+	void handleDiaryEntryForBodyTemperature(DiaryEntry entry, boolean isContactCase) {
 
 		var person = entry.getTrackedPersonId();
 
@@ -88,7 +88,7 @@ class DiaryEventListener {
 		BodyTemperature bodyTemperature = entry.getBodyTemperature();
 
 		// Body temperature exceeds reference
-		if (isContactCase || bodyTemperature.exceeds(temperatureThreshold)) {
+		if (isContactCase && bodyTemperature.exceeds(temperatureThreshold)) {
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
 					bodyTemperature,
 					temperatureThreshold);
