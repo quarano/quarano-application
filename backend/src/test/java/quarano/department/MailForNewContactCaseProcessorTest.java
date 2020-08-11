@@ -18,14 +18,12 @@ import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
 
 @QuaranoIntegrationTest
-@ActiveProfiles({ "junit", "integrationtest" })
 class MailForNewContactCaseProcessorTest {
 
 	static final int PORT_OFFSET = 3100;
