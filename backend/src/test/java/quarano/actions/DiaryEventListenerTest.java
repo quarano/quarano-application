@@ -133,6 +133,7 @@ class DiaryEventListenerTest {
 		verify(items, times(3)).save(itemCaptor.capture());
 
 		item = itemCaptor.getValue();
+        description = item.getDescription();
 
 		assertThat(item.getType()).isEqualTo(ActionItem.ItemType.MEDICAL_INCIDENT);
 		assertThat(description.getArguments()).isEqualTo(new Object[] { "42,0°C", "41,0°C" });
