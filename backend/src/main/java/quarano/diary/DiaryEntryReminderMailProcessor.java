@@ -1,14 +1,16 @@
 package quarano.diary;
 
 import io.vavr.control.Try;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.account.DepartmentRepository;
 import quarano.core.EmailSender;
 import quarano.core.EmailTemplates.Keys;
 import quarano.core.EnumMessageSourceResolvable;
-import quarano.department.TrackedCase;
-import quarano.department.TrackedCaseRepository;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -18,7 +20,6 @@ import java.util.function.Supplier;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.util.Streamable;
-import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,8 @@ public class DiaryEntryReminderMailProcessor {
 
 	private final @NonNull DiaryManagement diaries;
 	private final @NonNull EmailSender emailSender;
-	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull TrackedPersonRepository persons;
+	private final @NonNull DepartmentRepository departments;
 	private final @NonNull MessageSourceAccessor messages;
 
 	@Scheduled(cron = "0 10 12,23 * * *")
@@ -47,7 +49,7 @@ public class DiaryEntryReminderMailProcessor {
 		var slot = Slot.now().previous();
 
 		collectPersonsMissingEntry(slot)
-				.flatMap(it2 -> cases.findCaseWithDepartmentAndContactsByTrackedPerson(it2).stream())
+				.flatMap(it2 -> persons.findById(it2).stream())
 				.forEach(it -> sendReminderMail(it, slot));
 	}
 
@@ -58,23 +60,29 @@ public class DiaryEntryReminderMailProcessor {
 		return diaries.findMissingDiaryEntryPersons(List.of(slot));
 	}
 
-	void sendReminderMail(TrackedCase trackedCase, Slot slot) {
+	void sendReminderMail(TrackedPerson trackedPerson, Slot slot) {
 
-		var trackedPerson = trackedCase.getTrackedPerson();
+		var department = trackedPerson.getAccount()
+				.flatMap(it -> departments.findDepartmentAndContactsById(it.getDepartmentId()));
+
+		if (department.isEmpty()) {
+			return;
+		}
+
 		var subject = messages.getMessage("DiaryEntryReminderMail.subject");
 		var textTemplate = Keys.DIARY_REMINDER;
 		var slotTranslated = messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
 				new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) });
 		var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
-				trackedCase.getId().toString() };
+				trackedPerson.getId().toString() };
 
 		Supplier<Try<Map<String, Object>>> placeholders = () -> Try
 				.success(Map.<String, Object> of("slot", slotTranslated));
 
 		emailSender
-				.sendMail(trackedCase, subject, textTemplate, placeholders)
-				.onSuccess(it -> log.debug("Reminder mail sended to {{}; {}; Case-ID {}}", logArgs))
-				.onFailure(e -> log.debug("Can't send reminder mail to {{}; {}; Case-ID {}}", logArgs))
+				.sendMail(new TrackedPersonEmailData(trackedPerson, department.get(), subject, textTemplate, placeholders))
+				.onSuccess(it -> log.debug("Reminder mail sended to {{}; {}; Person-ID {}}", logArgs))
+				.onFailure(e -> log.debug("Can't send reminder mail to {{}; {}; Person-ID {}}", logArgs))
 				.onFailure(e -> log.debug("Exception", e));
 	}
 }
