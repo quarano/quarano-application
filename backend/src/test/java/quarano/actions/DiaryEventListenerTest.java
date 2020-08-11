@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import quarano.QuaranoUnitTest;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.diary.Diary;
 import quarano.diary.DiaryEntry;
@@ -16,6 +17,7 @@ import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -336,6 +338,31 @@ class DiaryEventListenerTest {
 		assertThat(itemCaptor.getAllValues()).hasSize(1);
 		assertThat(itemCaptor.getValue().getSlot()).isEqualTo(slots.get(0));
 		assertThat(itemCaptor.getValue().getDescription().getCode()).isEqualTo(DescriptionCode.DIARY_ENTRY_MISSING);
+	}
+
+	@Test
+	void testNoActionItemForIndexPerson() {
+
+		var now = Slot.now();
+		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
+		var entry = mock(DiaryEntry.class);
+		var event = DiaryEntry.DiaryEntryAdded.of(entry);
+		var trackedCase = mock(TrackedCase.class);
+
+		when(entry.getTrackedPersonId()).thenReturn(person);
+		when(entry.getSlot()).thenReturn(now);
+		when(entry.getBodyTemperature()).thenReturn(BodyTemperature.of(42.0f)); // body temp well above conf threshold
+		when(cases.findByTrackedPerson(person)).thenReturn(Optional.of(trackedCase));
+		when(trackedCase.isContactCase()).thenReturn(false);
+		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
+		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
+				.thenReturn(ActionItems.empty());
+		when(items.findDiaryEntryMissingActionItemsFor(person, now)).thenReturn(ActionItems.empty());
+
+
+		listener.on(event);
+
+		verify(items, times(0)).save(itemCaptor.capture());
 	}
 
 	private static DiaryEntryActionItem createMockedActionItem() {
