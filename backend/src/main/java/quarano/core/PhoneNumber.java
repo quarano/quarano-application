@@ -46,6 +46,7 @@ public class PhoneNumber {
 	}
 
 	@Nullable
+	@SuppressWarnings("null")
 	public static PhoneNumber ofNullable(@Nullable String number) {
 		return StringUtils.hasText(number) ? of(number) : null;
 	}

@@ -11,8 +11,13 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+/**
+ * @author Oliver Drotbohm
+ */
+@Transactional
 @Component
 @RequiredArgsConstructor
 public class ActivationCodeService {
@@ -46,6 +51,7 @@ public class ActivationCodeService {
 	 * Checks if a code is valid and marks it as redeemed.
 	 *
 	 * @param identifier
+	 * @return will never be {@literal null}.
 	 */
 	public Try<ActivationCode> redeemCode(ActivationCodeIdentifier identifier) {
 
@@ -55,11 +61,23 @@ public class ActivationCodeService {
 	}
 
 	/**
-	 * Returns the activationCode object if the activation exists and is still valid. Otherwise a specific exception is
-	 * thrown.
+	 * Cancels the {@link ActivationCode} with the given identifier.
 	 *
 	 * @param identifier must not be {@literal null}.
-	 * @return
+	 * @return the cancelled {@link ActivationCode}, will never be {@literal null}.
+	 */
+	public Try<ActivationCode> cancelCode(ActivationCodeIdentifier identifier) {
+
+		return findCode(identifier)
+				.flatMap(ActivationCode::cancel)
+				.map(activationCodes::save);
+	}
+
+	/**
+	 * Returns the {@link ActivationCode} if the activation exists and is still valid.
+	 *
+	 * @param identifier must not be {@literal null}.
+	 * @return the valid {@link ActivationCode}, will never be {@literal null}.
 	 */
 	public Try<ActivationCode> getValidCode(ActivationCodeIdentifier identifier) {
 
@@ -71,10 +89,11 @@ public class ActivationCodeService {
 	}
 
 	/**
-	 * Returns the pending {@link ActivationCode} for the {@link TrackedPerson} identified by the given id if available.
+	 * Returns the pending {@link ActivationCode} for the {@link TrackedPerson} identified by the given
+	 * {@link TrackedPersonIdentifier} if available.
 	 *
 	 * @param identifier must not be {@literal null}.
-	 * @return
+	 * @return will never be {@literal null}.
 	 */
 	public Optional<ActivationCode> getPendingActivationCode(TrackedPersonIdentifier identifier) {
 

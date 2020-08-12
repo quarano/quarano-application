@@ -1,70 +1,65 @@
 package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCase.MailStatus;
+import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
-import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
-import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
-import com.icegreen.greenmail.util.ServerSetup;
 
+@RequiredArgsConstructor
 @QuaranoIntegrationTest
-class MailForNewContactCaseProcessorTest {
+class MailForNewContactCaseEventListenerTests {
 
-	static final int PORT_OFFSET = 3100;
+	final EmailSendingEvents events;
+	final TrackedPersonRepository persons;
+	final DepartmentRepository departments;
+	final GreenMail greenMail;
 
-	static final ServerSetup setup = new ServerSetup(PORT_OFFSET + ServerSetup.PORT_SMTPS, null,
-			ServerSetup.PROTOCOL_SMTPS);
-	@RegisterExtension
-	static final GreenMailExtension greenMail = new GreenMailExtension(ServerSetup.verbose(new ServerSetup[] { setup }));
+	@BeforeEach
+	void setUp() throws Exception {
+		greenMail.purgeEmailFromAllMailboxes();
+	}
 
-	@Inject
-	MailForNewContactCaseProcessor mailProcessor;
-
-	@Inject
-	TrackedPersonRepository persons;
-	@Inject
-	DepartmentRepository departments;
-
-	@Test
+	@Test // CORE-61
 	void sendMailCorrect() throws MessagingException {
 
 		var trackedCase = trackedCase();
 
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENTED);
+		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
 
-		this.mailProcessor.on(CaseCreated.of(trackedCase));
+		events.on(CaseCreated.of(trackedCase));
 
 		// wait for max 5s for 1 email to arrive
-		assertTrue(greenMail.waitForIncomingEmail(1), "email not sented");
+		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
 
 		Message[] messages = greenMail.getReceivedMessages();
 		assertThat(messages).hasSize(1);
 
 		Message message = messages[0];
+
 		assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
 		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
 				.contains("/client/enrollment/landing/contact/");
 		assertThat(message.getRecipients(RecipientType.TO)[0].toString())
 				.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
 		assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
-
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENTED);
+		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
 	}
 
 	@Test
@@ -73,16 +68,16 @@ class MailForNewContactCaseProcessorTest {
 		var trackedCase = trackedCase();
 		trackedCase.getTrackedPerson().setEmailAddress(null);
 
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENTED);
+		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
 
-		this.mailProcessor.on(CaseCreated.of(trackedCase));
+		events.on(CaseCreated.of(trackedCase));
 
 		// wait for email
-		assertFalse(greenMail.waitForIncomingEmail(1), "not email should sent");
+		assertThat(greenMail.waitForIncomingEmail(1)).isFalse();
 
 		Message[] messages = greenMail.getReceivedMessages();
-		assertThat(messages).hasSize(0);
 
+		assertThat(messages).hasSize(0);
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.CANT_SENT);
 	}
 

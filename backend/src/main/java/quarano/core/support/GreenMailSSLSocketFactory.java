@@ -1,4 +1,4 @@
-package quarano.core;
+package quarano.core.support;
 
 import java.io.IOException;
 import java.net.InetAddress;

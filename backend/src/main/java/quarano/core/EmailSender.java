@@ -1,35 +1,35 @@
 package quarano.core;
 
-import static org.apache.commons.lang3.StringUtils.*;
-
-import io.vavr.control.Option;
 import io.vavr.control.Try;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.core.EmailTemplates.Keys;
+import quarano.core.EmailTemplates.Key;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
- * Generic email sender for Quarano that uses the templates of <code>EmailTemplates</code> as body. The data for a email
- * are given with an instance of <code>EmailData</code>.
+ * Generic email sender for Quarano that uses the templates of {@link EmailTemplates} as body. The data for a email are
+ * given with an instance of <code>EmailData</code>.
  * <p>
  * The EmailSender uses <strong>lastName = <code>getToLastName()</code> und host = {host from configuration}</strong> as
  * default placeholders with the template.
  * </p>
- * 
+ *
  * @author Jens Kutzsche
+ * @author Oliver Drotbohm
  */
 @Service
 @RequiredArgsConstructor
@@ -39,147 +39,123 @@ public class EmailSender {
 	private final @NonNull EmailTemplates templates;
 	private final @NonNull CoreProperties configuration;
 
-	public Try<Void> testConnection() {
-		return Try.run(() -> emailSender.testConnection());
-	}
+	/**
+	 * Verifies the connection to the actual email server.
+	 *
+	 * @return an {@link Object} to represent the server information, will never be {@literal null}.
+	 */
+	public Try<Object> testConnection() {
 
-	public Try<Void> sendMail(EmailData emailData) {
+		return Try.success(emailSender) //
+				.filter(it -> it.getHost() != null, () -> new IllegalStateException("No email server host configured!"))
+				.andThenTry(JavaMailSenderImpl::testConnection)
+				.map(it -> new Object() {
 
-		return testConnection()
-				.flatMap(x -> createMail(emailData))
-				.flatMap(this::sendMail);
-	}
-
-	private Try<SimpleMailMessage> createMail(EmailData emailData) {
-
-		if (emailData.getFrom().isEmpty()) {
-			return Try.failure(new IllegalArgumentException("Email address of department is missing!"));
-		} else if (emailData.getTo().isEmpty()) {
-			return Try.failure(new IllegalArgumentException("Email address of recipient is missing!"));
-		} else {
-
-			return emailData.getPlaceholders().get()
-					.map(it -> getMailTemplateFor(emailData, it))
-					.map(text -> createMail(emailData.getFrom().get(), emailData.getTo().get(), emailData.getSubject(), text));
-		}
-	}
-
-	private String getMailTemplateFor(EmailData emailData, Map<String, Object> additionPlaceholders) {
-
-		Map<String, Object> placeholders = new HashMap<>();
-
-		placeholders.put("lastName", defaultString(emailData.getToLastName()));
-		placeholders.put("host", configuration.getHost());
-
-		placeholders.putAll(additionPlaceholders);
-
-		return templates.getTemplate(emailData.getTemplate(), placeholders);
-	}
-
-	private SimpleMailMessage createMail(String from, String to, String subject, String text) {
-
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(from);
-		message.setTo(to);
-		message.setSubject(subject);
-		message.setText(text);
-		message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-
-		return message;
-	}
-
-	private Try<Void> sendMail(SimpleMailMessage mail) {
-		return Try.runRunnable(() -> emailSender.send(mail));
+					@Override
+					@SuppressWarnings("null")
+					public String toString() {
+						return it.getHost().concat(":") + it.getPort();
+					}
+				});
 	}
 
 	/**
-	 * The data for a email.
-	 * 
-	 * @author Jens Kutzsche
+	 * Sends the given {@link TemplatedEmail}.
+	 *
+	 * @param email must not be {@literal null}.
+	 * @return
 	 */
-	public static interface EmailData {
+	public Try<Void> sendMail(TemplatedEmail email) {
 
-		static final String ADRESS_FORMAT = "%s <%s>";
+		Assert.notNull(email, "Email must not be null!");
 
-		/**
-		 * @return The complete FROM string (... <...@...>) for the email or <code>Empty</code> if there no address
-		 *         (<code>getFromEmailAddress()</code> is Null or blank).
-		 */
-		default Option<String> getFrom() {
-
-			var address = getFromEmailAddress();
-
-			if (address == null) {
-				return Option.none();
-			}
-
-			return Option.of(String.format(ADRESS_FORMAT, defaultString(getFromFullName()), address));
-		}
-
-		/**
-		 * @return The complete TO string (... <...@...>) for the email or <code>Empty</code> if there no address
-		 *         (<code>getToEmailAddress()</code> is Null or blank).
-		 */
-		default Option<String> getTo() {
-
-			var address = getToEmailAddress();
-
-			if (address == null) {
-				return Option.none();
-			}
-
-			return Option.of(String.format(ADRESS_FORMAT, defaultString(getToFullName()), address));
-		}
-
-		/**
-		 * @return The last name of the recipient. This will used for default a placeholder of the template.
-		 */
-		String getToLastName();
-
-		/**
-		 * @return The email address of the recipient.
-		 */
-		EmailAddress getToEmailAddress();
-
-		/**
-		 * @return The full name of the recipient.
-		 */
-		String getToFullName();
-
-		/**
-		 * @return The email address of the sender.
-		 */
-		EmailAddress getFromEmailAddress();
-
-		/**
-		 * @return The full name of the sender.
-		 */
-		String getFromFullName();
-
-		/**
-		 * @return The key of the template which should be used for the body.
-		 */
-		Keys getTemplate();
-
-		/**
-		 * @return The email subject.
-		 */
-		String getSubject();
-
-		/**
-		 * lastName and host are default placeholders (see also <code>EmailSender</code>).
-		 * 
-		 * @return The supplier of the placeholders used in template. The supplier will used lazy and can signal an error
-		 *         with returns a <code>Try.Failure</code>.
-		 */
-		Supplier<Try<Map<String, Object>>> getPlaceholders();
+		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration)));
 	}
 
-	@AllArgsConstructor
-	public static abstract class BasicEmailData implements EmailData {
+	/**
+	 * An email to be composed from {@link EmailTemplates} and {@link CoreProperties}. Custom implementations usually
+	 * extend {@link AbstractTemplatedEmail}.
+	 *
+	 * @author Jens Kutzsche
+	 * @author Oliver Drotbohm
+	 * @see AbstractTemplatedEmail
+	 */
+	public interface TemplatedEmail {
 
-		private @Getter String subject;
-		private @Getter Keys template;
-		private @Getter Supplier<Try<Map<String, Object>>> placeholders;
+		/**
+		 * Composes a {@link SimpleMailMessage} using the given {@link EmailTemplates} and {@link CoreProperties}.
+		 *
+		 * @param templates must not be {@literal null}.
+		 * @param configuration must not be {@literal null}.
+		 * @return
+		 */
+		SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration);
+	}
+
+	/**
+	 * Convenient base class to compose emails from a template defined by a {@link Key} and placeholders to expand the
+	 * template with. Sender and Receiver are abstracted to be composed separately and handed into the instance.
+	 *
+	 * @author Jens Kutzsche
+	 * @author Oliver Drotbohm
+	 */
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static abstract class AbstractTemplatedEmail implements TemplatedEmail {
+
+		private final @Getter Sender from;
+		private final @Getter Recipient to;
+		private final @Getter String subject;
+		private final Key template;
+		private final Map<String, ? extends Object> placeholders;
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.EmailSender.TemplatedEmail#toMailMessage(quarano.core.EmailTemplates, quarano.core.CoreProperties)
+		 */
+		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration) {
+
+			var message = new SimpleMailMessage();
+			message.setFrom(from.toInternetAddress());
+			message.setTo(to.toInternetAddress());
+			message.setSubject(subject);
+			message.setText(getBody(templates, configuration));
+			message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+
+			return message;
+		}
+
+		private String getBody(EmailTemplates templates, CoreProperties configuration) {
+
+			var placeholders = new HashMap<String, Object>();
+			var toLastName = to.getLastName();
+
+			placeholders.put("lastName", StringUtils.hasText(toLastName) ? toLastName : "");
+			placeholders.put("host", configuration.getHost());
+			placeholders.putAll(this.placeholders);
+
+			return templates.expandTemplate(template, placeholders);
+		}
+
+		private interface InternetAdressSource {
+
+			static final String ADRESS_FORMAT = "%s <%s>";
+
+			String getFullName();
+
+			EmailAddress getEmailAddress();
+
+			default String toInternetAddress() {
+
+				var fullName = StringUtils.hasText(getFullName()) ? getFullName() : "";
+
+				return String.format(ADRESS_FORMAT, fullName, getEmailAddress());
+			}
+		}
+
+		public interface Sender extends InternetAdressSource {}
+
+		public interface Recipient extends InternetAdressSource {
+			String getLastName();
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package quarano.department;
 
+import quarano.account.DepartmentContact.ContactType;
+
 import java.util.Set;
 
 /**
@@ -38,6 +40,18 @@ public enum CaseType {
 				return CaseType.CONTACT;
 			default:
 				return CaseType.INDEX;
+		}
+	}
+
+	public ContactType toContactType() {
+
+		switch (getPrimaryCaseType()) {
+			case INDEX:
+				return ContactType.INDEX;
+			case CONTACT:
+				return ContactType.CONTACT;
+			default:
+				throw new IllegalStateException("Unexpected case type!");
 		}
 	}
 
