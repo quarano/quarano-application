@@ -7,11 +7,14 @@ import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
 import quarano.core.web.RepositoryMappingModule;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
@@ -34,9 +38,13 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -96,6 +104,57 @@ public class Quarano {
 	@Bean
 	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
 		return new MessageSourceAccessor(source);
+	}
+
+	/**
+	 * {@link BeanPostProcessor} to make sure package protected methods annotate with {@code Transactional}. We tweak the
+	 * {@code publicMethodsOnly} flag inside {@link AnnotationTransactionAttributeSource} to {@literal false}.
+	 *
+	 * @author Oliver Drotbohm
+	 */
+	@Component
+	private static final class PackageProtectedTransactionMethodsProcessor implements BeanPostProcessor, PriorityOrdered {
+
+		private static final Field PUBLIC_METHODS_ONLY_FIELD;
+
+		static {
+
+			PUBLIC_METHODS_ONLY_FIELD = ReflectionUtils.findField(AnnotationTransactionAttributeSource.class,
+					"publicMethodsOnly");
+
+			if (PUBLIC_METHODS_ONLY_FIELD == null) {
+				throw new IllegalStateException(
+						"Could not find publicMethodsOnly field on AnnotationTransactionAttributeSource!");
+			}
+
+			ReflectionUtils.makeAccessible(PUBLIC_METHODS_ONLY_FIELD);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
+		 */
+		@Nullable
+		@Override
+		public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+
+			if (!AnnotationTransactionAttributeSource.class.isInstance(bean)) {
+				return bean;
+			}
+
+			ReflectionUtils.setField(PUBLIC_METHODS_ONLY_FIELD, bean, false);
+
+			return bean;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.springframework.core.Ordered#getOrder()
+		 */
+		@Override
+		public int getOrder() {
+			return 100;
+		}
 	}
 
 	/**
