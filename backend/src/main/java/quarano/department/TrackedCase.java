@@ -22,17 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.jddd.core.types.Identifier;
 import org.jddd.event.types.DomainEvent;
@@ -90,7 +80,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
-	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENTED;
+	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
 
 	@OneToMany
 	private @Getter List<TrackedCase> originCases = new ArrayList<>();
@@ -321,7 +311,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public boolean hasTestResult() {
 		return testResult != null;
 	}
-	
+
 	public boolean hasQuestionnaire() {
 		return questionnaire != null;
 	}
@@ -332,7 +322,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.TRACKED_MANUALLY;
 		this.registerEvent(CaseStatusUpdated.of(this));
-		
+
 		return this;
 	}
 
@@ -361,9 +351,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
-	TrackedCase markNewContactCaseMailCantSented() {
+	TrackedCase markNewContactCaseMailSent() {
 
-		this.newContactCaseMailStatus = MailStatus.SENTED;
+		this.newContactCaseMailStatus = MailStatus.SENT;
 
 		return this;
 	}
@@ -399,11 +389,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public enum MailStatus {
 
-		NOT_SENTED,
+		NOT_SENT,
 
 		CANT_SENT,
 
-		SENTED
+		SENT
 	}
 
 	@Value(staticConstructor = "of")

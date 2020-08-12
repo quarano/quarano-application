@@ -50,7 +50,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 			.thenComparing(TrackedPerson::getFirstName, nullsLast(String::compareToIgnoreCase));
 
 	private @Getter @Setter String firstName, lastName;
-	private @Getter @Setter EmailAddress emailAddress;
+	private @Getter(onMethod = @__(@Nullable)) @Setter(onMethod = @__(@Nullable)) EmailAddress emailAddress;
 	private @Getter @Setter PhoneNumber phoneNumber;
 
 	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber"))
@@ -58,7 +58,8 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
 
-	@OneToOne @JoinColumn(name = "account_id")
+	@OneToOne
+	@JoinColumn(name = "account_id")
 	private Account account;
 
 	@OneToMany(cascade = CascadeType.ALL)

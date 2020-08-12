@@ -1,6 +1,5 @@
-package quarano.core;
+package quarano.core.support;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
@@ -11,18 +10,17 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.SocketUtils;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
-import com.icegreen.greenmail.util.ServerSetupTest;
 
 /**
  * <p>
@@ -35,33 +33,24 @@ import com.icegreen.greenmail.util.ServerSetupTest;
  * from which the mails can be retrieved. You can also see this in the log outputs. Username and password are the mail
  * address.
  * </p>
- * 
+ *
  * @author Jens Kutzsche
  */
 @Slf4j
-@Service()
-@RequiredArgsConstructor
-@Order(10)
-@Profile("!prod & !junit")
-public class EmailServerMock implements ApplicationRunner {
+@Service
+@Profile({ "integrationtest" })
+class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, DisposableBean {
 
 	private static final int DELETE_AFTER_SECONDS = 600;
 
+	private final Integer smtpPort;
 	private GreenMail greenMail;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	GreenMailEmailServer(MailProperties properties) {
 
-		greenMail = new GreenMail(ServerSetup.verbose(ServerSetupTest.SMTPS_IMAPS));
-		greenMail.start();
-	}
+		this.smtpPort = SocketUtils.findAvailableTcpPort();
 
-	@EventListener
-	public void on(ContextClosedEvent event) {
-
-		if (greenMail != null) {
-			greenMail.stop();
-		}
+		properties.setPort(smtpPort);
 	}
 
 	@Scheduled(fixedDelay = 15000)
@@ -74,9 +63,65 @@ public class EmailServerMock implements ApplicationRunner {
 
 			Arrays.stream(messages)
 					.filter(it -> deleteOldMessages(it, deleteThreshold))
-					.filter(EmailServerMock::isMailNew)
-					.peek(EmailServerMock::markSeen)
-					.forEach(EmailServerMock::logMessage);
+					.filter(GreenMailEmailServer::isMailNew)
+					.peek(GreenMailEmailServer::markSeen)
+					.forEach(GreenMailEmailServer::logMessage);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.FactoryBean#getObjectType()
+	 */
+	@Override
+	public Class<?> getObjectType() {
+		return GreenMail.class;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.FactoryBean#getObject()
+	 */
+	@Override
+	public GreenMail getObject() throws Exception {
+		return greenMail;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception {
+
+		var imapPort = SocketUtils.findAvailableTcpPort();
+
+		var smtp = new ServerSetup(smtpPort, null, ServerSetup.PROTOCOL_SMTPS);
+		var imap = new ServerSetup(imapPort, null, ServerSetup.PROTOCOL_IMAPS);
+
+		greenMail = new GreenMail(ServerSetup.verbose(new ServerSetup[] { smtp, imap }));
+
+		log.info("Starting GreenMail mail server on localhost:{}/{}…", smtpPort, imapPort);
+
+		greenMail.start();
+
+		log.info("GreenMail mail server started successfully!");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.DisposableBean#destroy()
+	 */
+	@Override
+	public void destroy() {
+
+		if (greenMail != null) {
+
+			log.info("Stopped GreenMail mail server…");
+
+			greenMail.stop();
+
+			log.info("GreenMail mail server stopped successfully!");
 		}
 	}
 
