@@ -232,7 +232,7 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- Documentation -->
 
 		<dependency>
@@ -242,7 +242,7 @@
 			<type>zip</type>
 			<optional>true</optional>
 		</dependency>
-		
+
 
 	</dependencies>
 
@@ -267,7 +267,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -339,7 +339,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Use Spring documentation resources -->
 
 			<plugin>
