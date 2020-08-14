@@ -261,6 +261,13 @@
 			<artifactId>greenmail</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- For XML projection of RKI PLZTool data -->
+		<dependency>
+			<groupId>org.xmlbeam</groupId>
+			<artifactId>xmlprojector</artifactId>
+			<version>1.4.17</version>
+		</dependency>
 
 		<!-- Development-only dependencies -->
 
