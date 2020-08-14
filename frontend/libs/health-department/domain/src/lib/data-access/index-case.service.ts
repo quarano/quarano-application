@@ -1,5 +1,5 @@
 import { CaseSearchItem } from './../model/case-search-item';
-import { share, map } from 'rxjs/operators';
+import { share, map, shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Injectable, Inject } from '@angular/core';
@@ -16,7 +16,7 @@ export class IndexCaseService {
 
   getCaseList(): Observable<CaseListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=index`).pipe(
-      share(),
+      shareReplay(),
       map((result) => {
         if (result?._embedded?.cases) {
           return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
@@ -28,14 +28,15 @@ export class IndexCaseService {
   }
 
   searchCases(searchTerm: string): Observable<CaseSearchItem[]> {
-    return this.httpClient
-      .get<any>(`${this.apiUrl}/api/hd/cases?type=index&q=${searchTerm}&projection=select`)
-      .pipe(map((res) => res?._embedded?.cases));
+    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=index&q=${searchTerm}&projection=select`).pipe(
+      shareReplay(),
+      map((res) => res?._embedded?.cases)
+    );
   }
 
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
-      share(),
+      shareReplay(),
       map((result) => {
         if (result?._embedded?.actions) {
           return result._embedded.actions
