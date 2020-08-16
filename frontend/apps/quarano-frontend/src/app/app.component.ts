@@ -1,6 +1,5 @@
 import { SubSink } from 'subsink';
 import { LanguageService } from '@qro/shared/util-translation';
-import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubSink } from 'subsink';
 import { LanguageService } from '@qro/shared/util-translation';
