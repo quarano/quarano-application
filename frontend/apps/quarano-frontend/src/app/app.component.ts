@@ -1,5 +1,6 @@
 import { SubSink } from 'subsink';
 import { LanguageService } from '@qro/shared/util-translation';
+import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubSink } from 'subsink';
 import { LanguageService } from '@qro/shared/util-translation';
@@ -16,7 +17,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public progressBarActive = false;
   private subs = new SubSink();
 
-  constructor(private progressBarService: ProgressBarService, private languageService: LanguageService) {}
+  constructor(
+    private progressBarService: ProgressBarService,
+    private translate: TranslateService,
+    private languageService: LanguageService
+  ) {}
 
   ngOnInit(): void {
     this.subs.add(
