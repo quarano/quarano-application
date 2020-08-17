@@ -1,5 +1,4 @@
 import { HalResponse } from '@qro/shared/util-data-access';
-import { CaseStatus } from './case-detail';
 
 export interface ContactListItemDto extends HalResponse {
   contactDates: Date[];

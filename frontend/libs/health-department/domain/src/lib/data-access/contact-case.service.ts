@@ -5,6 +5,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
+import { CaseDto } from '../..';
 
 @Injectable({
   providedIn: 'root',
@@ -12,26 +13,14 @@ import { ActionListItemDto } from '../model/action-list-item';
 export class ContactCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
-  getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=contact`).pipe(
-      shareReplay(),
-      map((result) => {
-        if (result?._embedded?.cases) {
-          return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
-        } else {
-          return [];
-        }
-      })
-    );
-  }
-
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
       shareReplay(),
-      map((result) =>{
+      map((result) => {
         if (result?._embedded?.actions) {
           return result._embedded.actions
-            .filter((r) => r.caseType === CaseType.Contact).map((item) => this.mapActionListItem(item));
+            .filter((r) => r.caseType === CaseType.Contact)
+            .map((item) => this.mapActionListItem(item));
         } else {
           return [];
         }
@@ -39,7 +28,7 @@ export class ContactCaseService {
     );
   }
 
-  private mapCaseListItem(item: any): CaseListItemDto {
+  private mapCaseListItem(item: any): CaseDto {
     return {
       dateOfBirth: item.dateOfBirth ? new Date(item.dateOfBirth) : null,
       status: item.status,
@@ -49,8 +38,8 @@ export class ContactCaseService {
       lastName: item.lastName,
       medicalStaff: item.medicalStaff,
       enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
-      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
+      quarantineEndDate: item.quarantine?.to ? new Date(item.quarantine.to) : null,
+      quarantineStartDate: item.quarantine?.from ? new Date(item.quarantine.from) : null,
       caseType: item.caseType,
       zipCode: item.zipCode,
       caseId: item.caseId,

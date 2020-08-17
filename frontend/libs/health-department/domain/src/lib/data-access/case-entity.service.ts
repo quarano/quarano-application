@@ -1,6 +1,6 @@
-import { CaseDto } from '../model/case';
 import { Injectable } from '@angular/core';
-import { EntityCollectionServiceElementsFactory, EntityCollectionServiceBase } from '@ngrx/data';
+import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
+import { CaseDto } from '../..';
 
 export const CASE_FEATURE_KEY = 'Case';
 

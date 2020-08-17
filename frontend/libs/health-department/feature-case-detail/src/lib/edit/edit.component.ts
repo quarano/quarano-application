@@ -31,7 +31,6 @@ export interface CaseDetailResult {
 })
 export class EditComponent implements OnInit, OnDestroy {
   private subs: SubSink = new SubSink();
-  ClientType = CaseType;
   today = new Date();
   errorGenerator = ValidationErrorGenerator;
   selectableIndexCases: CaseSearchItem[] = [];

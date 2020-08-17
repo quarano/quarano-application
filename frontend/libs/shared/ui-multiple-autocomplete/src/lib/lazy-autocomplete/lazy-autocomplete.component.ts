@@ -2,7 +2,7 @@ import { HalResponse } from '@qro/shared/util-data-access';
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { filter, startWith, takeUntil, distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, startWith, takeUntil, tap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -25,12 +25,13 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
       this._filter(this.searchTerm);
     }
   }
+
   @Input() displayWith: ((value: HalResponse) => string) | null;
   @Output() removed = new EventEmitter<HalResponse>();
   @Output() added = new EventEmitter<HalResponse>();
   @Output() itemNotFound = new EventEmitter<string>();
   @Output() completeMethod: EventEmitter<string> = new EventEmitter();
-  selectedItems: HalResponse[] = [];
+  selectedItems = [];
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
@@ -38,6 +39,7 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
   destroy$: Subject<void> = new Subject<void>();
   filteredList$$: BehaviorSubject<HalResponse[]> = new BehaviorSubject<HalResponse[]>([]);
   private searchTerm = '';
+  items = [];
 
   ngOnInit() {
     this.filteredList$$.next(this.selectableItems);
@@ -52,7 +54,7 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
         data.forEach((value) => this.added.emit(value));
       });
 
-    this.selectedItems = this.control.value;
+    this.initializePreselctedItems();
 
     this.inputControl.valueChanges
       .pipe(
@@ -70,10 +72,11 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
       });
   }
 
-  clearInput(): void {
-    // fixme: best to do this only via formControl ! ..... :(
-    this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
-    this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
+  private initializePreselctedItems(): void {
+    const preselected = this.control.value;
+    if (preselected instanceof Array) {
+      preselected.forEach((item) => this.selectedItems.push(item));
+    }
   }
 
   ngOnDestroy(): void {
@@ -103,16 +106,18 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   private _filter(searchTerm: string) {
-    let arrayToReturn = this.prefilteredList.filter(
-      (item) => !this.selectedItems.find((i) => i._links.self.href === item._links.self.href)
-    );
+    if (this.displayWith) {
+      let arrayToReturn = this.prefilteredList.filter(
+        (item) => !this.selectedItems.find((i) => i._links.self.href === item._links.self.href)
+      );
 
-    if (!searchTerm) {
-      this.filteredList$$.next(this.prefilteredList);
+      if (!searchTerm) {
+        this.filteredList$$.next(this.prefilteredList);
+      }
+      const filterValue = searchTerm.toLowerCase();
+      arrayToReturn = arrayToReturn.filter((item) => this.displayWith(item).toLowerCase().indexOf(filterValue) === 0);
+      this.filteredList$$.next(arrayToReturn);
     }
-    const filterValue = searchTerm.toLowerCase();
-    arrayToReturn = arrayToReturn.filter((item) => this.displayWith(item).toLowerCase().indexOf(filterValue) === 0);
-    this.filteredList$$.next(arrayToReturn);
   }
 
   get disabled(): boolean {
@@ -122,6 +127,7 @@ export class LazyAutocompleteComponent implements OnInit, OnDestroy {
   selected(event: MatAutocompleteSelectedEvent): void {
     const selectedValue = event.option.value;
     this.selectedItems.push(selectedValue);
+    this.selectedItems.concat([selectedValue]);
     this.input.nativeElement.value = '';
     this.inputControl.setValue(null);
     this.setFormControlValue();

@@ -2,7 +2,7 @@ import { ApiService } from '@qro/shared/util-data-access';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
-import { ContactListItemDto, CaseEntityService } from '@qro/health-department/domain';
+import { CaseEntityService, ContactListItemDto } from '@qro/health-department/domain';
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
 
