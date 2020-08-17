@@ -1,6 +1,7 @@
 import { ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import { routerReducer } from '@ngrx/router-store';
+import { AuthActions } from '@qro/auth/api';
 
 // tslint:disable-next-line: no-empty-interface
 export interface AppState {}
@@ -18,4 +19,12 @@ export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [logger] : [];
+export function logoutMetaReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  return (state, action) => {
+    return reducer(action.type === AuthActions.logout.type ? {} : state, action);
+  };
+}
+
+export const metaReducers: MetaReducer<AppState>[] = !environment.production
+  ? [logger, logoutMetaReducer]
+  : [logoutMetaReducer];

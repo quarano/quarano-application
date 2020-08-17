@@ -1,3 +1,5 @@
+import { AuthActions } from '@qro/auth/api';
+import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -14,7 +16,8 @@ export class UserService {
   constructor(
     private authService: AuthService,
     private snackbarService: SnackbarService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private store: Store
   ) {}
 
   public get user$(): Observable<UserDto> {
@@ -58,6 +61,7 @@ export class UserService {
   public logout() {
     this.snackbarService.message('Sie wurden abgemeldet');
     this.tokenService.unsetToken();
+    this.store.dispatch(AuthActions.logout());
   }
 
   public roleMatch(roleNames: string[]): boolean {
