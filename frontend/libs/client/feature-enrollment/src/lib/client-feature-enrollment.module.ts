@@ -6,7 +6,13 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { BasicDataComponent } from './basic-data/basic-data.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
-import { MyClientDataResolver, ClientDomainModule, MyFirstQueryResolver, EncountersResolver } from '@qro/client/domain';
+import {
+  MyClientDataResolver,
+  ClientDomainModule,
+  MyFirstQueryResolver,
+  EncountersResolver,
+  EnrollmentStatusResolver,
+} from '@qro/client/domain';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -28,10 +34,12 @@ const routes: Routes = [
       firstQuery: MyFirstQueryResolver,
       clientData: MyClientDataResolver,
       encounters: EncountersResolver,
+      enrollmentStatusLoaded: EnrollmentStatusResolver,
     },
   },
   {
     path: 'landing',
+    resolve: { enrollmentStatusLoaded: EnrollmentStatusResolver },
     children: [
       { path: '', pathMatch: 'full', component: LandingComponent },
       { path: ':usertype/:clientcode', component: LandingComponent },
@@ -39,6 +47,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
+    resolve: { enrollmentStatusLoaded: EnrollmentStatusResolver },
     children: [
       { path: '', component: RegisterComponent, pathMatch: 'full' },
       { path: ':clientcode', component: RegisterComponent },
