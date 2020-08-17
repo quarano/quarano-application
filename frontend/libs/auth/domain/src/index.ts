@@ -9,4 +9,5 @@ export * from './lib/model/role';
 export * from './lib/model/health-department';
 export * from './lib/model/client';
 export * from './lib/enums/client-type';
+export * from './lib/store/auth-store.service';
 export * from './lib/store/action-types';

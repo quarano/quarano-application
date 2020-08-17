@@ -13,7 +13,7 @@ import { ClientStore } from '@qro/client/api';
 })
 export class HeaderRightComponent {
   public healthDepartment$: Observable<HealthDepartmentDto> = this.healthDepartmentService.healthDepartment$;
-  public currentUserName$ = this.userService.currentUserName$;
+  public currentUserName$ = this.userService.nameOfCurrentUser$;
 
   constructor(
     public userService: UserService,
