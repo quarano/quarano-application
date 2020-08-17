@@ -1,4 +1,3 @@
-import { AuthActions } from '@qro/auth/api';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -8,6 +7,7 @@ import { TokenService } from './token.service';
 import { UserDto } from '../model/user';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
+import { AuthActions } from '../store/action-types';
 
 @Injectable({
   providedIn: 'root',

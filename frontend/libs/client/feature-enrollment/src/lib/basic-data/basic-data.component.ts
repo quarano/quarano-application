@@ -82,10 +82,10 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subs.add(
       this.clientStore.enrollmentStatus$.subscribe((status) => {
         if (status.completedPersonalData) {
-          this.stepper.next();
+          this.stepper?.next();
         }
         if (status.completedQuestionnaire) {
-          this.stepper.next();
+          this.stepper?.next();
         }
       })
     );

@@ -31,7 +31,7 @@ export class ClientStore {
           this.loadEnrollmentStatus();
         }
       }),
-      filter(([status]) => !!status),
+      filter(([status, loaded]) => !!loaded),
       map(([s]) => s),
       first()
     );

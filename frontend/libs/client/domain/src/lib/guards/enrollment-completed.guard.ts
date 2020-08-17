@@ -23,7 +23,6 @@ export class EnrollmentCompletedGuard implements CanActivate {
       return of(false);
     }
     return this.clientStore.getEnrollmentStatus().pipe(
-      tap((status) => status),
       map((status) => {
         if (status?.complete) {
           return true;
