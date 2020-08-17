@@ -1,4 +1,4 @@
-import { EnrollmentCompletedGuard } from '@qro/client/domain';
+import { EnrollmentCompletedGuard, ClientStoreModule } from '@qro/client/domain';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -32,6 +32,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes), ClientStoreModule],
 })
 export class ClientShellModule {}

@@ -1,5 +1,5 @@
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
-import { MyClientDataResolver, ClientDomainModule } from '@qro/client/domain';
+import { MyClientDataResolver, ClientDomainModule, EnrollmentStatusResolver } from '@qro/client/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { Routes, RouterModule } from '@angular/router';
@@ -14,6 +14,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       clientData: MyClientDataResolver,
+      enrollmentStatusLoaded: EnrollmentStatusResolver,
     },
   },
 ];

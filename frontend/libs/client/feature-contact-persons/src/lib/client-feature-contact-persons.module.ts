@@ -4,7 +4,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ContactPersonComponent } from './contact-person/contact-person.component';
-import { ContactPersonResolver, ContactPersonsResolver, ClientDomainModule } from '@qro/client/domain';
+import {
+  ContactPersonResolver,
+  ContactPersonsResolver,
+  ClientDomainModule,
+  EnrollmentStatusResolver,
+} from '@qro/client/domain';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
@@ -20,7 +25,7 @@ const routes: Routes = [
   {
     path: 'contact-person-list',
     component: ContactPersonsComponent,
-    resolve: { contacts: ContactPersonsResolver },
+    resolve: { contacts: ContactPersonsResolver, enrollmentStatusLoaded: EnrollmentStatusResolver },
   },
   {
     path: 'contact-person-detail',
@@ -28,13 +33,13 @@ const routes: Routes = [
       {
         path: 'edit/:id',
         component: ContactPersonComponent,
-        resolve: { contactPerson: ContactPersonResolver },
+        resolve: { contactPerson: ContactPersonResolver, enrollmentStatusLoaded: EnrollmentStatusResolver },
         canDeactivate: [PreventUnsavedChangesGuard],
       },
       {
         path: 'new',
         component: ContactPersonComponent,
-        resolve: { contactPerson: ContactPersonResolver },
+        resolve: { contactPerson: ContactPersonResolver, enrollmentStatusLoaded: EnrollmentStatusResolver },
         canDeactivate: [PreventUnsavedChangesGuard],
       },
     ],

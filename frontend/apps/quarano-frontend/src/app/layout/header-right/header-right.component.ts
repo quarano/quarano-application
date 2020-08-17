@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { HealthDepartmentService } from '@qro/health-department/api';
 import { HealthDepartmentDto, UserService } from '@qro/auth/api';
-import { EnrollmentService } from '@qro/client/api';
+import { ClientStore } from '@qro/client/api';
 
 @Component({
   selector: 'qro-header-right',
@@ -18,7 +18,7 @@ export class HeaderRightComponent {
   constructor(
     public userService: UserService,
     private healthDepartmentService: HealthDepartmentService,
-    public enrollmentService: EnrollmentService,
+    public clientStore: ClientStore,
     private matDialog: MatDialog
   ) {}
 
