@@ -15,8 +15,6 @@ import org.springframework.data.util.Streamable;
 import org.springframework.util.Assert;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -56,7 +54,7 @@ public interface TrackedCaseRepository
 				.and(applyCaseType(type))
 				.and($case.department.id.eq(id));
 
-		return Streamable.of(findAll(predicate, new OrderSpecifier<>(Order.ASC, $person.lastName)));
+		return Streamable.of(findAll(predicate, $person.lastName.asc(), $person.firstName.asc()));
 	}
 
 	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
