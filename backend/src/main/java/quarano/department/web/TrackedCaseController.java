@@ -28,6 +28,7 @@ import quarano.tracking.web.TrackingController;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -73,10 +74,12 @@ public class TrackedCaseController {
 			@RequestParam("type") Optional<String> type) {
 
 		var summaries = cases.findFiltered(query, type, department.getId())
+				.stream()
+				.sorted(Comparator.comparing(TrackedCase::getTrackedPerson))
 				.map(projection.filter(it -> it.equals("select"))
 						.<Function<TrackedCase, Object>> map(it -> representations::toSelect)
 						.orElse(representations::toSummaryWithOriginCases))
-				.toList();
+				.collect(Collectors.toList());
 
 		return HalModelBuilder.emptyHalModel()
 				.embed(summaries, TrackedCaseSummary.class)

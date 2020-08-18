@@ -1,5 +1,7 @@
 package quarano.tracking;
 
+import static java.util.Comparator.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,6 +20,7 @@ import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +42,12 @@ import org.springframework.util.StringUtils;
 @Table(name = "tracked_people")
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier> {
+public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPersonIdentifier>
+		implements Comparable<TrackedPerson> {
+
+	private static final Comparator<TrackedPerson> COMPARATOR = Comparator
+			.comparing(TrackedPerson::getLastName, nullsLast(String::compareToIgnoreCase))
+			.thenComparing(TrackedPerson::getFirstName, nullsLast(String::compareToIgnoreCase));
 
 	private @Getter @Setter String firstName, lastName;
 	private @Getter @Setter EmailAddress emailAddress;
@@ -173,6 +181,11 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				&& emailAddress != null
 				&& address.isComplete()
 				&& dateOfBirth != null;
+	}
+
+	@Override
+	public int compareTo(TrackedPerson o) {
+		return COMPARATOR.compare(this, o);
 	}
 
 	@Value
