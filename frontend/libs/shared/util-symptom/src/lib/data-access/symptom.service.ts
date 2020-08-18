@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SymptomDto } from '../model/symptom';
-import { share } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,6 @@ export class SymptomService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getSymptoms(): Observable<SymptomDto[]> {
-    return this.httpClient.get<SymptomDto[]>(`${this.apiUrl}/api/symptoms`).pipe(share());
+    return this.httpClient.get<SymptomDto[]>(`${this.apiUrl}/api/symptoms`).pipe(shareReplay());
   }
 }

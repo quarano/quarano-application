@@ -6,9 +6,9 @@ import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.actions.ActionItemRepository;
 import quarano.actions.ActionItemsManagement;
-import quarano.actions.web.ActionRepresentations.ActionsReviewed;
-import quarano.actions.web.ActionRepresentations.CaseActionSummary;
-import quarano.actions.web.ActionRepresentations.CaseActionsRepresentation;
+import quarano.actions.web.AnomaliesRepresentations.ActionsReviewed;
+import quarano.actions.web.AnomaliesRepresentations.CaseActionSummary;
+import quarano.actions.web.AnomaliesRepresentations.CaseActionsRepresentation;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.TrackedCase;
@@ -35,15 +35,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-class ActionItemController {
+public class AnomaliesController {
 
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull ActionItemsManagement actionItems;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull ActionRepresentations representations;
+	private final @NonNull AnomaliesRepresentations representations;
 
 	@GetMapping("/api/hd/actions/{identifier}")
-	HttpEntity<?> allActions(@PathVariable TrackedCaseIdentifier identifier,
+	HttpEntity<CaseActionsRepresentation> getAnomalies(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
 		return ResponseEntity.of(cases.findById(identifier)
@@ -64,11 +64,11 @@ class ActionItemController {
 				.notFoundIf(trackedCase == null)
 				.map(ActionsReviewed::getComment)
 				.peek(it -> actionItems.resolveItemsFor(trackedCase, it))
-				.concludeIfValid(__ -> allActions(identifier, department));
+				.concludeIfValid(__ -> getAnomalies(identifier, department));
 	}
 
 	@GetMapping("/api/hd/actions")
-	RepresentationModel<?> getActions(@LoggedIn Department department) {
+	public RepresentationModel<?> getAllCasesByAnomalies(@LoggedIn Department department) {
 
 		var actionRepresentations = cases.findByDepartmentId(department.getId())
 				.map(it -> representations.toSummary(it, items.findUnresolvedByActiveCase(it)))

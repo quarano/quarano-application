@@ -151,7 +151,15 @@ class StaffAccountController {
 	@Value
 	static class NewPassword {
 
-		@NotBlank String password, passwordConfirm;
+		/**
+		 * The new password to set.
+		 */
+		@NotBlank String password;
+
+		/**
+		 * The new password repeated for verification.
+		 */
+		@NotBlank String passwordConfirm;
 
 		NewPassword validate(Errors errors) {
 

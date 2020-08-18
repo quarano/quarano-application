@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * A JUnit 5 callback to make sure, JPA {@link EntityManager}s contained in the application are flushed for each test
@@ -21,6 +22,10 @@ class JpaAutoFlushTestExecutionCallback implements AfterTestExecutionCallback {
 	 */
 	@Override
 	public void afterTestExecution(ExtensionContext context) throws Exception {
+
+		if (!TransactionSynchronizationManager.isActualTransactionActive()) {
+			return;
+		}
 
 		ApplicationContext applicationContext = SpringExtension.getApplicationContext(context);
 

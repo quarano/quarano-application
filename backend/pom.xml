@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.2.RELEASE</version>
+		<version>2.3.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
@@ -21,7 +21,8 @@
 		<docker.build.userid>1001</docker.build.userid>
 		<jddd.version>0.1.0</jddd.version>
 		<moduliths.version>1.0.0.RC4</moduliths.version>
-		<spring-hateoas.version>1.2.0-SNAPSHOT</spring-hateoas.version>
+		<spring-hateoas.version>1.2.0-M1</spring-hateoas.version>
+		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
 	<profiles>
@@ -194,6 +195,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>capital.scalable</groupId>
+			<artifactId>spring-auto-restdocs-core</artifactId>
+			<version>2.0.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.3.4</version>
@@ -221,10 +233,52 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Documentation -->
+
+		<dependency>
+			<groupId>io.spring.docresources</groupId>
+			<artifactId>spring-doc-resources</artifactId>
+			<version>0.1.0.RELEASE</version>
+			<type>zip</type>
+			<optional>true</optional>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-docs-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/docs/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>*Test.java</include>
+						<include>*Tests.java</include>
+						<include>*Documentation.java</include>
+					</includes>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
@@ -286,6 +340,55 @@
 				</configuration>
 			</plugin>
 
+			<!-- Use Spring documentation resources -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-doc-resources</id>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<includeGroupIds>io.spring.docresources</includeGroupIds>
+							<includeArtifactIds>spring-doc-resources</includeArtifactIds>
+							<includeTypes>zip</includeTypes>
+							<excludeTransitive>true</excludeTransitive>
+							<outputDirectory>${refdocs.dir}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>generate-javadoc-json</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>javadoc-no-fork</goal>
+						</goals>
+						<configuration>
+							<doclet>capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet</doclet>
+							<docletArtifact>
+								<groupId>capital.scalable</groupId>
+								<artifactId>spring-auto-restdocs-json-doclet</artifactId>
+								<version>2.0.8</version>
+							</docletArtifact>
+							<destDir>generated-javadoc-json</destDir>
+							<reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+							<useStandardDocletOptions>false</useStandardDocletOptions>
+							<show>package</show>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
 				<artifactId>asciidoctor-maven-plugin</artifactId>
@@ -321,15 +424,26 @@
 					<backend>html5</backend>
 					<sourceHighlighter>highlight.js</sourceHighlighter>
 					<resources>
+						<!-- Copy our own resources first to make sure they trump the others -->
 						<resource>
 							<directory>src/main/asciidoc</directory>
 						</resource>
+						<resource>
+							<directory>${refdocs.dir}</directory>
+						</resource>
 					</resources>
 					<attributes>
+						<docinfo>shared</docinfo>
+						<docinfodir>${refdocs.dir}</docinfodir>
+						<highlightjsdir>js/highlight</highlightjsdir>
+						<highlightjs-theme>atom-one-dark-reasonable</highlightjs-theme>
 						<icons>font</icons>
 						<linkcss>true</linkcss>
 						<numbered>true</numbered>
 						<sectanchors>true</sectanchors>
+						<snippets>${project.build.directory}/generated-snippets</snippets>
+						<stylesdir>css/</stylesdir>
+						<stylesheet>quarano.css</stylesheet>
 						<toc>left</toc>
 						<version>${project.version}</version>
 					</attributes>

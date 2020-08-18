@@ -8,16 +8,26 @@ import quarano.account.Account;
 import quarano.department.web.TrackedCaseRepresentations.EnrollmentDto;
 import quarano.tracking.web.TrackedPersonDto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDto extends RepresentationModel<UserDto> {
 
 	private String username;
 	private DepartmentDto healthDepartment;
 	private TrackedPersonDto client;
+
+	/**
+	 * The user's first name.
+	 */
 	private String firstName;
+
+	/**
+	 * The user's last name.
+	 */
 	private String lastName;
 	private EnrollmentDto enrollment;
 

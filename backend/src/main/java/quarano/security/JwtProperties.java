@@ -7,7 +7,7 @@ import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Role;
-import quarano.department.TokenGenerator;
+import quarano.account.web.TokenGenerator;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

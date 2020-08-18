@@ -1,0 +1,218 @@
+[[developer]]
+= Developing the Quarano backend
+:moduliths-docs: ../../../target/moduliths-docs
+
+[[modules]]
+== Business modules
+
+=== Overview
+plantuml::{moduliths-docs}/components.uml[,,svg,title="Quarano component overview"]
+
+[[modules.core]]
+=== Core
+
+Contains fundamental abstractions used from all other business modules:
+
+* Base interfaces to demarcate Domain-Driven Design building blocks based on https://github.com/odrotbohm/jddd[jDDD].
+* Fundamental domain abstractions like an email address or phone number.
+* The `DataInitializer` abstraction to easily populate the application with demo data based on the abstractions provided by the individual modules.
+* Common infrastructure support (auditing metadata, access to email templates, resource bundle based enum i18n etc).
+
+include::{moduliths-docs}/module-core.adoc[]
+
+[[modules.accounts]]
+=== Accounts
+
+Types to abstract parties interacting with the system: accounts that have roles assigned to them belonging to a department.
+A thin layer on top of Spring Security to provide injectable access to the currently authenticated `Account`.
+
+include::{moduliths-docs}/module-account.adoc[]
+
+[[modules.department]]
+=== Department
+
+Abstractions for a `TrackedCase` potentially related to a <<modules.tracking, `TrackedPerson`>>.
+Also contains the abstraction of the <<modules.accounts, `Account`>> registration and parts of the enrollment process.
+
+include::{moduliths-docs}/module-department.adoc[]
+
+[[modules.tracking]]
+=== Tracking
+
+Abstractions for the `TrackedPerson` associated with a `TrackedCase`, their ``Encounter``s with ``ContactPerson``s.
+
+include::{moduliths-docs}/module-tracking.adoc[]
+
+[[modules.diary]]
+=== Diary
+
+Everything related to the medical diary a <<modules.tracking, `TrackedPerson`>> has to maintain.
+
+include::{moduliths-docs}/module-diary.adoc[]
+
+=== Actions
+
+Abstractions to capture anomalies detected in the life cycle of a <<modules.department, `TrackedCase`>>.
+Can be either be related to the process of tracking (e.g. missing diary entries) or related to the medical situation of a <<modules.tracking, `TrackedPerson`>>.
+
+include::{moduliths-docs}/module-actions.adoc[]
+
+=== Security
+
+Implementation of JWT based security for the system, the expose of certain configuration properties related to that.
+
+include::{moduliths-docs}/module-security.adoc[]
+
+=== Reference
+
+Contains reference data like an abstraction of symptoms.
+
+include::{moduliths-docs}/module-reference.adoc[]
+
+== Technical structure
+
+=== Implementing business logic
+
+* Technical dependencies have to follow the structure declared and described in <<modules>>.
+* Prefer dedicated state transitions on the aggregates and publish domain events via `registerEvent(…)`, especially if components upstream have to be notified.
+* In thos upstream components, use ``@EventListener``s to trigger state transitions on other aggregates.
+
+=== Implementing controllers
+
+* Web components kept in separate `web` module sub-package
+* JSON mapping via Jackson onto DTOs
+* Mapping to domain types via `ModelMapper` API
+** Spring Data integration to map UUIDs to domain identifiers and aggregates
+** Use mapping customization to keep domain model strong. I.e. prefer those customizations over unenforced constraints in the domain model.
+* Encapsulated in `…Representations` abstraction
+** `….from(…)` methods to convert DTOs into domain types
+** `….toRepresenation(…)` methods to convert domain types into DTOs
+* Validation via JSR-330 and custom `validate(…)` methods on the DTO
+
+==== Typical flow
+
+1. Accept Jackson mapped payload
+2. Use `MappedPayload` API to setup processing pipeline
+3. Map incoming payload to domain types
+4. Invoke domain services and repositories
+5. Map results to DTOs
+
+=== Documenting the REST API
+
+* Use `@QuaranoWebIntegrationTest`, extend `AbstractDocumentation` and use the `MockMvc` instance provided by the superclass.
+* In the request pipeline, call `andDo(…)` and create a `ResultHandler` and set up the aspects to document with that.
+* Integrate the snippets generated as you see fit in any of the Asciidoctor API documents.
+* Prefer reusing already existing tests. If none are suitable, create a separate one in `src/docs/java`.
+* Equip DTOs with Javadoc and JSR-330 annotations if possible as that information will automatically make it into the auto-generated documentation snippets.
+
+== Developing the backend
+
+=== Code formatting
+
+There's a code formatter for Eclipse available file://../../../../infrastructure/eclipse-code-formatter.xml[here].
+Some additional settings that are not contained in the formatter:
+
+==== Import order
+
+* static imports, wild card used from the first declaration
+* `*` - all unmatched imports
+* `java.…`
+* `javax.–`
+* `org.…`
+* `com.…`
+
+==== Blank lines
+
+Use blank lines to group pieces of code logically: variable initializations go together, followed by the method invocations that use those variables.
+There's no hard rule here.
+It's just nice to be able to identify different steps in the execution order.
+
+For blocks (if clauses, methods) we start with a blank line if the subsequent code is longer than a single line:
+
+[source, java]
+----
+void someLongMethod() {
+
+  // First statement
+  // Second statement
+}
+
+VS.
+
+void someOneLineMethod() {
+  // Single-line statement
+}
+----
+
+Symmetric blocks usually also use a blank line on the end to clearly separate the blocks' content from the outer instruction.
+Again, the single line rule applies, here, too.
+
+[source, java]
+----
+if (…) {
+  // Single line instruction
+} else {
+  // Single line instruction
+}
+
+but
+
+if (…) {
+
+  // Multi-line instruction
+  // Multi-line instruction
+
+} else {
+
+  // Multi-line instruction
+  // Multi-line instruction
+}
+----
+
+The intermediate lines surrounding the `…} else {…` make it easier to see where the block flips.
+
+In general, for if-else-clauses, prefer the ternary expression (`condition ? if-true : if-false`) over an if block.
+That creates incentives to rather extract the statements to be executed in either and make the overall expression readable.
+If the overall expression gets so long it would line break, it's nice to read if the three parts are each brought onto a single line:
+
+[source, java]
+----
+Object someMethod(…) {
+
+  return condition
+    ? if-true-do-this
+    : else-do-that;
+}
+----
+
+==== Organizing methods
+
+For a consistent discovery experience, a class is organized as follows:
+
+1. `static final` fields in descending visibility (public ones first)
+2. `private final` fields
+3. `private` fields
+4. Constructors in descending visibility
+5. Static factory methods
+6. Methods to be implemented due to interface declarations
+7. Self-declared methods in descending visibility. Methods overridden from super types folded into the visibility group but last. E.g. `equals(…)`/`hashCode()` would follow self-declared `public` methods but precede self-declared package-private and private ones.
+8. `private static` methods
+9. Nested classes
+
+Methods that do not use any of the class' fields should be declared static to make obvious that they're not related to the state of the class.
+That's particularly helpful to potentially identify methods that could live on the parameter types instead or a dedicated value object assembling some of the parameters in case there's an abstraction implicitly hidden in the code.
+
+In unit test classes, there's no need to qualify the fields used to keep the class under test or mocks with visibility modifiers as they don't make a practical difference anyway.
+The class under test usually goes first followed by fields for mocks needed etc.
+
+==== Lombok
+
+The project uses Lombok to reduce the cognitive overhead of boilerplate accessor methods, constructors etc.
+While this is convenient, make sure you always use the Lombok means that match what you intend to achieve precisely.
+It might be tempting to just declare `@Data` on a domain class but just like blindly letting an IDE generate that code one time, that might generate just too much code with unintended side effects.
+Also, always double check the visibility of the generated artifacts.
+Setters should usually go package protected at best, factory methods should be preferred over public constructors etc.
+
+==== Further IDE settings
+
+The code base generally assumes Eclipse's Save Actions for organized imports and formatting to be applied.

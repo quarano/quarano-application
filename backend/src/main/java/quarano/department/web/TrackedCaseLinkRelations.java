@@ -14,7 +14,14 @@ public class TrackedCaseLinkRelations {
 	public static final LinkRelation RENEW = LinkRelation.of("renew");
 
 	public static final LinkRelation QUESTIONNAIRE = LinkRelation.of("questionnaire");
+	public static final LinkRelation CASES = LinkRelation.of("cases");
 	public static final LinkRelation CONTACTS = LinkRelation.of("contacts");
 	public static final LinkRelation ORIGIN_CASES = LinkRelation.of("originCases");
 	public static final LinkRelation DIARY = LinkRelation.of("diary");
+
+	public static final LinkRelation ENROLLMENT = LinkRelation.of("enrollment");
+
+	static final LinkRelation DETAILS = LinkRelation.of("details");
+	static final LinkRelation ENCOUNTERS = LinkRelation.of("encounters");
+	static final LinkRelation REOPEN = LinkRelation.of("reopen");
 }

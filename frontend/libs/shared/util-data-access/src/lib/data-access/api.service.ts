@@ -1,3 +1,4 @@
+import { shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { HalResponse } from '../model/hal-response';
@@ -17,7 +18,7 @@ export class ApiService {
       if (Array.isArray(halResponse._links[key])) {
         url = halResponse._links[key][0].href;
       }
-      return this.httpClient.get<T>(url);
+      return this.httpClient.get<T>(url).pipe(shareReplay());
     }
     return of();
   }
@@ -28,7 +29,7 @@ export class ApiService {
       if (Array.isArray(halResponse._links[key])) {
         url = halResponse._links[key][0].href;
       }
-      return this.httpClient.put<T>(url, body);
+      return this.httpClient.put<T>(url, body).pipe(shareReplay());
     }
     return of();
   }
@@ -39,12 +40,12 @@ export class ApiService {
       if (Array.isArray(halResponse._links[key])) {
         url = halResponse._links[key][0].href;
       }
-      return this.httpClient.delete<T>(url);
+      return this.httpClient.delete<T>(url).pipe(shareReplay());
     }
     return of();
   }
 
   delete(deleteLink: DeleteLink) {
-    return this.httpClient.delete(deleteLink.delete.href);
+    return this.httpClient.delete(deleteLink.delete.href).pipe(shareReplay());
   }
 }

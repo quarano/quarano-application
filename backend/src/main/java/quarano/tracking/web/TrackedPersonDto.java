@@ -24,11 +24,20 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class TrackedPersonDto {
 
-	private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName, lastName;
+	private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName;
+	private @Pattern(regexp = Strings.NAMES) @NotEmpty String lastName;
 	private @Pattern(regexp = Strings.STREET) String street;
 	private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
 	private @Pattern(regexp = Strings.CITY) @NotEmpty String city;
+
+	/**
+	 * The zip code of the city the person lives in.
+	 */
 	private @Pattern(regexp = ZipCode.PATTERN) @NotEmpty String zipCode;
+
+	/**
+	 * A mobile phone number.
+	 */
 	private @Pattern(regexp = PhoneNumber.PATTERN) String mobilePhone;
 	private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
 	private @NotEmpty @Email String email;

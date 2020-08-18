@@ -67,7 +67,7 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 
 	@GetMapping(path = "/api/hd/cases")
-	RepresentationModel<?> getCases(@LoggedIn Department department,
+	public RepresentationModel<?> getCases(@LoggedIn Department department,
 			@RequestParam("q") Optional<String> query,
 			@RequestParam("projection") Optional<String> projection,
 			@RequestParam("type") Optional<String> type) {
@@ -231,7 +231,7 @@ public class TrackedCaseController {
 	}
 
 	@GetMapping("/api/enrollment")
-	HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
+	public HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
 
 		var map = cases.findByTrackedPerson(person)
 				.map(TrackedCase::getEnrollment)

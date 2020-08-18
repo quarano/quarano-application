@@ -1,4 +1,4 @@
-import { share, map } from 'rxjs/operators';
+import { share, map, shareReplay } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
@@ -15,7 +15,7 @@ export class ContactCaseService {
 
   getCaseList(): Observable<CaseListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=contact`).pipe(
-      share(),
+      shareReplay(),
       map((result) => {
         if (result?._embedded?.cases) {
           return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
@@ -28,7 +28,7 @@ export class ContactCaseService {
 
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
-      share(),
+      shareReplay(),
       map((result) => {
         if (result?._embedded?.actions) {
           return result._embedded.actions
