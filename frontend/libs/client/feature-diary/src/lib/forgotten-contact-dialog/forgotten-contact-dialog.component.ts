@@ -5,10 +5,11 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
 import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-forgotten-contact-dialog',
@@ -27,7 +28,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
     private formBuilder: FormBuilder,
     private enrollmentService: EnrollmentService,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private badRequestService: BadRequestService,
     private dialogService: ContactDialogService,
     @Inject(MAT_DIALOG_DATA)
@@ -60,9 +61,15 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
       this.subs.add(
         this.enrollmentService
           .createEncounters(day, this.formGroup.controls.contactIds.value)
+          .pipe(
+            switchMap((entries) =>
+              this.snackbarService.success('FORGOTTEN_CONTACT_DIALOG.RETROSPEKTIVE_KONTAKTE_GESPEICHERT', {
+                value: entries.length.toString(),
+              })
+            )
+          )
           .subscribe(
-            (entries) => {
-              this.snackbarService.success(`${entries.length} retrospektive Kontakte erfolgreich gespeichert`);
+            () => {
               this.matDialogRef.close();
             },
             (error) => {

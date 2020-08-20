@@ -2,7 +2,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +18,14 @@ export class TranslatedSnackbarService {
     return this.translate.get(messageKey).pipe(map((result: string) => this.snackbar.open(result, 'Ok', config)));
   }
 
-  success(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {
+  success(messageKey: string, params?: { value: string }): Observable<MatSnackBarRef<SimpleSnackBar>> {
     const config = new MatSnackBarConfig();
     config.panelClass = ['background-green'];
     config.duration = this.duration;
-    return this.translate.get(messageKey).pipe(map((result: string) => this.snackbar.open(result, null, config)));
+    return this.translate.get(messageKey, params).pipe(
+      tap((result) => console.log(result)),
+      map((result: string) => this.snackbar.open(result, null, config))
+    );
   }
 
   error(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {

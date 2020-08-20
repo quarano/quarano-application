@@ -76,6 +76,17 @@
     "JETZT_NACHTRAGEN": "Jetzt nachtragen",
     "KONTAKT_NACHTRAGEN": "Kontakt nachtragen"
   },
+  "FORGOTTEN_CONTACT_DIALOG": {
+    "ABBRECHEN": "Abbrechen",
+    "HIER_FEHLENDEN_KONTAKT_ANLEGEN": "Hier fehlenden Kontakt anlegen",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "SPEICHERN": "Speichern",
+    "TAG_DES_KONTAKTS": "Tag des Kontakts",
+    "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen",
+    "RETROSPEKTIVE_KONTAKTE_GESPEICHERT": "{{value}} retrospektive Kontakte erfolgreich gespeichert"
+  },
   "LOGIN": {
     "ANMELDEN": "Anmelden",
     "BENUTZERNAME": "Benutzername",
