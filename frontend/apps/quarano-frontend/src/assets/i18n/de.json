@@ -71,6 +71,11 @@
     "ZUGRIFF_VERWEIGERT": "Zugriff verweigert",
     "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
   },
+  "FORGOTTEN_CONTACT_BANNER": {
+    "FALLS_SIE_WÄHREND_DER_ANFÄNGLICHEN_DATENEINGABE": "Falls Sie während der anfänglichen Dateneingabe den Kontakt zu einer Person vergessen haben, können Sie diesen hier nachtragen. Dies bezieht sich lediglich auf Kontakte in der Zeit bevor Sie mit der elektronischen Erfassung Ihrer täglichen Einträge begonnen haben.",
+    "JETZT_NACHTRAGEN": "Jetzt nachtragen",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen"
+  },
   "LOGIN": {
     "ANMELDEN": "Anmelden",
     "BENUTZERNAME": "Benutzername",
