@@ -1,5 +1,6 @@
 package quarano.department;
 
+import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.department.activation.ActivationCode;
 import quarano.department.activation.ActivationCodeService;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -55,12 +57,26 @@ public class RegistrationManagement {
 				.filter(it -> isUsernameAvailable(it.getUsername()), RegistrationException::forInvalidUsername)
 				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply))
 				.flatMap(this::checkIdentity)
+				.flatMap(this::setDateOfBirthToTrackedPerson)
 				.flatMap(this::applyTrackedPerson)
 				.map(this::toAccount);
 	}
 
 	public boolean isUsernameAvailable(String userName) {
 		return accounts.isUsernameAvailable(userName);
+	}
+
+	private Try<RegistrationDetails> setDateOfBirthToTrackedPerson(RegistrationDetails details) {
+
+		return Option.ofOptional(trackedPeople.findById(details.getTrackedPersonId()))
+				.toTry(() -> new RegistrationException("No tracked person found!"))
+				.map(person -> {
+					if (person.getDateOfBirth() == null) {
+						person.setDateOfBirth(details.getDateOfBirth());
+						trackedPeople.save(person);
+					}
+					return details;
+				});
 	}
 
 	private Try<RegistrationDetails> applyTrackedPerson(RegistrationDetails details) {
@@ -79,12 +95,18 @@ public class RegistrationManagement {
 	 */
 	private Try<RegistrationDetails> checkIdentity(RegistrationDetails details) {
 
-		return trackedPeople.findById(details.getTrackedPersonId()).map(Try::success)
-				.orElseGet(() -> Try.failure(new RegistrationException(
-						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'")))
-				.filter(person -> person.hasBirthdayOf(details.getDateOfBirth()),
+		return Option.ofOptional(trackedPeople.findById(details.getTrackedPersonId()))
+				.toTry(() -> new RegistrationException(
+						"No tracked person found that belongs to activation code '" + details.getActivationCodeLiteral() + "'"))
+				.filter(person -> checkBirthday(details, person),
 						() -> RegistrationException.forInvalidBirthDay(details))
 				.map(__ -> details);
+	}
+
+	private boolean checkBirthday(RegistrationDetails details, TrackedPerson person) {
+		return person.getDateOfBirth() != null
+				? person.hasBirthdayOf(details.getDateOfBirth())
+				: true;
 	}
 
 	private Account toAccount(RegistrationDetails details) {
