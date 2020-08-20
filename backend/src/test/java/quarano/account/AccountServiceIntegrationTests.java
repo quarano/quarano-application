@@ -30,18 +30,17 @@ class AccountServiceIntegrationTests {
 	}
 
 	@Test
-	void testFindStaffAccountsDeliversOnlySatff() {
+	void testFindStaffAccountsDeliversOnlyStaff() {
 
 		var departmentId = DepartmentDataInitializer.DEPARTMENT_ID_DEP1;
-		var referenceAdminAccount = accounts.findByUsername("admin");
-		var referenceAgentAccount = accounts.findByUsername("agent1");
+		var referenceAdminAccount = accounts.findByUsername("admin").get();
+		var referenceAgentAccount = accounts.findByUsername("agent1").get();
 
 		var accounts = service.findStaffAccountsFor(departmentId);
 
 		assertThat(accounts).allMatch(it -> hasAtLeastOneDepartmentRole(it));
 		assertThat(accounts.size() > 0);
-		assertThat(accounts).containsOnlyOnce(referenceAdminAccount.get());
-		assertThat(accounts).containsOnlyOnce(referenceAgentAccount.get());
+		assertThat(accounts).containsOnlyOnce(referenceAdminAccount, referenceAgentAccount);
 	}
 
 	@Test // CORE-231
@@ -100,13 +99,14 @@ class AccountServiceIntegrationTests {
 
 	@Test // CORE-231
 	@WithQuaranoUser("admin")
-	void adminCreatingAnAccountResultsInExpiredPassword() {
+	void adminCreatingAnAccountResultsInExpiredPassword() throws InterruptedException {
 
 		var account = accounts.findByUsername("admin").orElseThrow();
 
 		var result = service.createStaffAccount("username", UnencryptedPassword.of("password"), "Michael", "Mustermann",
 				EmailAddress.of("michael@mustermann.de"), account.getDepartmentId(), RoleType.ROLE_HD_CASE_AGENT);
-
+		// short wait helps to make comparison "now" vs "just moments before" more reliable
+		Thread.sleep(10);
 		assertThat(result.getPassword().isExpired()).isTrue();
 	}
 
