@@ -1,5 +1,4 @@
 {
-  "ABENDS": "ABENDS",
   "CHANGE_PASSWORD": {
     "BISHERIGES_PASSWORT": "Bisheriges Passwort",
     "NEUES_PASSWORT": "Neues Passwort",
@@ -48,6 +47,14 @@
     "EINTRAG_ANSEHEN": "Eintrag ansehen",
     "EINTRAG_BEARBEITEN": "Eintrag bearbeiten"
   },
+  "DIARY_ENTRY_WARNING": {
+    "ABENDS": "Abends",
+    "EINTRAG_FEHLT_NOCH": "Eintrag fehlt noch - bitte nachtragen!",
+    "EINTRAG_NACHTRAGEN": "Eintrag nachtragen",
+    "KEIN_EINTRAG_VORHANDEN": "Kein Eintrag vorhanden",
+    "LEIDER_HABEN_SIE_AN_DEISEM_TAG_VERPASST": "Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends Ihren Gesundheitszustand sowie Ihre Kontakte zu erfassen",
+    "MORGENS": "Morning"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
@@ -68,6 +75,5 @@
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
-  },
-  "MORGENS": "MORGENS"
+  }
 }
