@@ -10,6 +10,11 @@
     "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
     "USERNAME": "Benutzername"
   },
+  "CONTACT_PERSONS": {
+    "ANONYME_KONTAKTPERSON": "Anonyme Kontaktperson",
+    "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
+    "NOCH_KEINE_EINTRÄGE_VORHANDEN": "Noch keine Einträge vorhanden"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",

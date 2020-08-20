@@ -1,7 +1,9 @@
+import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContactPersonDto } from '@qro/client/domain';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'qro-contact-persons',
@@ -12,7 +14,7 @@ export class ContactPersonsComponent implements OnInit {
   contacts: ContactPersonDto[] = [];
   private subs = new SubSink();
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private translate: TranslateService) {}
 
   ngOnInit() {
     this.subs.add(
@@ -22,15 +24,18 @@ export class ContactPersonsComponent implements OnInit {
     );
   }
 
-  getName(contact: ContactPersonDto): string {
-    let name = 'anonymer Kontakt';
+  getName(contact: ContactPersonDto): Observable<string> {
+    let name: string;
     if (contact.firstName && contact.lastName) {
-      name = `${contact.firstName || ''} ${contact.lastName || ''}`;
+      name = `${contact.firstName} ${contact.lastName}`;
     } else if (contact.firstName) {
       name = contact.firstName;
     } else if (contact.lastName) {
       name = contact.lastName;
     }
-    return name;
+    if (name) {
+      return of(name);
+    }
+    return this.translate.get('CONTACT_PERSONS.ANONYME_KONTAKTPERSON');
   }
 }
