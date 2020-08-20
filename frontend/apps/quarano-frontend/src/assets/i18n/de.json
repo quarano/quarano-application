@@ -1,4 +1,5 @@
 {
+  "ABENDS": "ABENDS",
   "CHANGE_PASSWORD": {
     "BISHERIGES_PASSWORT": "Bisheriges Passwort",
     "NEUES_PASSWORT": "Neues Passwort",
@@ -24,6 +25,25 @@
     "MORGENS": "Morgens",
     "SYMPTOMTAGEBUCH": "Symptomtagebuch"
   },
+  "DIARY_ENTRY": {
+    "ABBRECHEN": "Abbrechen",
+    "ABENDS": "abends",
+    "BITTE_GEBEN_SIE_IHRE_KÖRPERTEMPERATUR_EIN": "Bitte geben Sie Ihre Körpertemperatur ein",
+    "DIESER_EINTRAG_KANN_NICHT_MENR_BEARBEITET_WERDEN": "Dieser Eintrag kann nicht mehr bearbeitet werden",
+    "HIER_FEHLENDEN_KONTAKT_EINGEBEN": "Hier fehlenden Kontakt anlegen",
+    "KÖRPERTEMPERATUR_IN": "Körpertemperatur in",
+    "KONTAKTE_SEIT_LETZTEM_EINTRAG": "Kontakte mit anderen Menschen seit letztem Eintrag",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "KRANKHEITSSPEZIFISCHE_SYMPTOME": "Krankheitsspezifische Symptome",
+    "MORGENS": "morgens",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "SONSTIGE_SYMPTOME": "Sonstige Symptome",
+    "SPEICHERN": "Speichern",
+    "TAGEBUCH_EINTRAG_ANLEGEN_FÜR_DEN": "Tagebuch-Eintrag anlegen für den",
+    "TAGEBUCH_EINTRAG_BEARBEITEN_FÜR_DEN": "Tagebuch-Eintrag bearbeiten für den",
+    "TAGEBUCH_EINTRAG_AKTUALISIERT": "Tagebuch-Eintrag erfolgreich aktualisiert",
+    "TAGEBUCH_EINTRAG_ANGELEGT": "Tagebuch-Eintrag erfolgreich angelegt"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
@@ -44,5 +64,6 @@
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
-  }
+  },
+  "MORGENS": "MORGENS"
 }

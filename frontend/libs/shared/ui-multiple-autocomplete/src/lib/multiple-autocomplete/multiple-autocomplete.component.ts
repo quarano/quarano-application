@@ -29,7 +29,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
 
   ngOnInit() {
-    this.filteredList$$.next(this.selectableItems);
+    this.filteredList$$.next(this.disabled ? [] : this.selectableItems);
     this.control.valueChanges
       .pipe(
         takeUntil(this.destroy$),
@@ -97,6 +97,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
+    if (this.disabled) {
+      return;
+    }
     const selectedValue = event.option.value;
     this.selectedItemIds.push(selectedValue);
     this.input.nativeElement.value = '';
