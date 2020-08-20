@@ -15,6 +15,15 @@
     "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
     "NOCH_KEINE_EINTRÄGE_VORHANDEN": "Noch keine Einträge vorhanden"
   },
+  "DIARY": {
+    "ABENDS": "Abends",
+    "ALLE_ERFORDERLICHEN_EINTRÄGE_ABGESCHLOSSEN": "Sie haben bereits alle erforderlichen Einträge abgeschlossen",
+    "DATENEINGABE_KONTAKT_VERGESSEN": "Falls Sie während der anfänglichen Dateneingabe den Kontakt zu einer Person vergessen haben, können Sie diesen hier nachtragen. Dies bezieht sich lediglich auf Kontakte in der Zeit bevor Sie mit der elektronischen Erfassung Ihrer täglichen Einträge begonnen haben",
+    "DATUM": "Datum",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
+    "MORGENS": "Morgens",
+    "SYMPTOMTAGEBUCH": "Symptomtagebuch"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
