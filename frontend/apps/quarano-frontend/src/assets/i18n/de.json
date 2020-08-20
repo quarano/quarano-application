@@ -59,6 +59,12 @@
     "ABENDS": "Abends",
     "MORGENS": "Morgens"
   },
+  "DIARY_TODAY_LIST_ITEM": {
+    "ABENDS": "Abends",
+    "ERST_AB_17_UHR": "Hier kann erst ab 17 Uhr ein Eintrag erfolgen",
+    "JETZT_EINTRAGEN": "Jetzt eintragen",
+    "MORGENS": "Morgens"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
