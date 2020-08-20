@@ -24,14 +24,18 @@ import com.icegreen.greenmail.util.ServerSetup;
 
 /**
  * <p>
- * Starts a SMTPS-Server. Use the following properties to use this with Spring Mail:
- * <code>spring.mail.host=127.0.0.1 spring.mail.port=3465 spring.mail.properties.mail.smtp.socketFactory.class = quarano.core.GreenMailSSLSocketFactory</code>
+ * Starts a SMTPS-Server with a random port. Use the following properties to use this with Spring Mail:
+ * <code>spring.mail.host=127.0.0.1 spring.mail.port={will be set automatically} spring.mail.properties.mail.smtp.socketFactory.class = quarano.core.GreenMailSSLSocketFactory</code>
  * </p>
  * <p>
- * This starts also an IMAPS-Server. You can use it with an e-mail program to view the received e-mails:
- * <code>host=127.0.0.1 port=3993</code> For each new e-mail address of the received mails, a new account is created
- * from which the mails can be retrieved. You can also see this in the log outputs. Username and password are the mail
- * address.
+ * This starts also an IMAPS-Server with port 3993 if this available or a random port. You can use it with an e-mail
+ * program to view the received e-mails:
+ * <code>host=127.0.0.1 port={3993 or random - you will find in the log outputs}</code>. For each new e-mail address of
+ * the received mails, a new account is created from which the mails can be retrieved. Username and password are the
+ * mail address. You can also see this in the log outputs.
+ * </p>
+ * <p>
+ * for every received mail the basic data (from, to, date and subject) are logged.
  * </p>
  *
  * @author Jens Kutzsche
@@ -94,14 +98,19 @@ class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 
-		var imapPort = SocketUtils.findAvailableTcpPort();
+		int imapPort;
+		try {
+			imapPort = SocketUtils.findAvailableTcpPort(3993, 3993);
+		} catch (Exception e) {
+			imapPort = SocketUtils.findAvailableTcpPort();
+		}
 
 		var smtp = new ServerSetup(smtpPort, null, ServerSetup.PROTOCOL_SMTPS);
 		var imap = new ServerSetup(imapPort, null, ServerSetup.PROTOCOL_IMAPS);
 
 		greenMail = new GreenMail(ServerSetup.verbose(new ServerSetup[] { smtp, imap }));
 
-		log.info("Starting GreenMail mail server on localhost:{}/{}…", smtpPort, imapPort);
+		log.info("Starting GreenMail mail server on localhost:{} (SMPTS)/{} (IMAPS)…", smtpPort, imapPort);
 
 		greenMail.start();
 
