@@ -7,7 +7,21 @@
     "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
     "PASSWORT_ÄNDERN": "Passwort ändern",
     "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
-    "USERNAME": "Benutzername",
-    "PASSWORT_WURDE_GEÄNDERT": "Ihr Passwort wurde erfolgreich geändert"
+    "USERNAME": "Benutzername"
+  },
+  "LOGIN": {
+    "ANMELDEN": "Anmelden",
+    "BENUTZERNAME": "Benutzername",
+    "LOGIN": "Login",
+    "MIT_DEM_CODE": "mit dem Code, den Sie von Ihrer zuständigen Behörde erhalten haben",
+    "NOCH_KEIN_KONTO": "Noch kein Konto?",
+    "PASSWORT": "Passwort",
+    "REGISTRIEREN": "Registrieren",
+    "REGISTRIEREN_SIE_SICH": "Registrieren Sie sich",
+    "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
+    "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
+    "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano",
+    "FALL_BEREITS_GESCHLOSSEN": "Ihr Fall ist bereits geschlossen",
+    "BENUTZERNAME_ODER_PASSWORT_FALSCH": "Benutzername oder Passwort falsch"
   }
 }

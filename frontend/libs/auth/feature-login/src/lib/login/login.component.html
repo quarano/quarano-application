@@ -1,36 +1,38 @@
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <mat-card-title>
-      <h1>Noch kein Konto?</h1>
+      <h1>{{ 'LOGIN.NOCH_KEIN_KONTO' | translate }}</h1>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <p>
-      Sie haben noch kein Benutzerkonto?
-      <a [routerLink]="['/client/enrollment/register']">Registrieren Sie sich</a> mit dem Code, den Sie von Ihrer
-      zuständigen Behörde erhalten haben.
+      {{ 'LOGIN.SIE_HABEN_NOCH_KEIN_BENUTZERKONTO' | translate }}
+      <a [routerLink]="['/client/enrollment/register']">{{ 'LOGIN.REGISTRIEREN_SIE_SICH' | translate }}</a>
+      {{ 'LOGIN.MIT_DEM_CODE' | translate }}
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button mat-raised-button id="registerBtn" [routerLink]="['/client/enrollment/register']">Registrieren</a>
+    <a mat-button mat-raised-button id="registerBtn" [routerLink]="['/client/enrollment/register']">{{
+      'LOGIN.REGISTRIEREN' | translate
+    }}</a>
   </mat-card-actions>
 </mat-card>
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <mat-card-title>
-      <h1>Login</h1>
+      <h1>{{ 'LOGIN.LOGIN' | translate }}</h1>
     </mat-card-title>
   </mat-card-header>
   <form [formGroup]="loginFormGroup" (ngSubmit)="submitForm()">
     <mat-card-content>
-      <p>Wenn Sie bereits ein Benutzerkonto haben, können Sie sich anmelden:</p>
+      <p>{{ 'LOGIN.WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN' | translate }}:</p>
       <mat-form-field appearance="outline" class="form__input--full-width">
-        <mat-label>Benutzername</mat-label>
+        <mat-label>{{ 'LOGIN.BENUTZERNAME' | translate }}</mat-label>
         <input
           matInput
           formControlName="username"
           id="username"
-          placeholder="Benutzername"
+          [placeholder]="'LOGIN.BENUTZERNAME' | translate"
           #username_input
           required
           (blur)="trimValue(username_input)"
@@ -40,14 +42,14 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="form__input--full-width">
-        <mat-label>Passwort</mat-label>
+        <mat-label>{{ 'LOGIN.PASSWORT' | translate }}</mat-label>
         <input
           matInput
           formControlName="password"
           id="password"
           type="password"
           required
-          placeholder="Passwort"
+          [placeholder]="'LOGIN.PASSWORT' | translate"
           #password_input
           (blur)="trimValue(password_input)"
         />
@@ -58,7 +60,7 @@
     </mat-card-content>
     <mat-card-actions>
       <qro-button id="submitBtn" [disabled]="loginFormGroup.invalid" [loading]="loading">
-        Login
+        {{ 'LOGIN.ANMELDEN' | translate }}
       </qro-button>
     </mat-card-actions>
   </form>
