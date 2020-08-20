@@ -55,6 +55,10 @@
     "LEIDER_HABEN_SIE_AN_DEISEM_TAG_VERPASST": "Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends Ihren Gesundheitszustand sowie Ihre Kontakte zu erfassen",
     "MORGENS": "Morning"
   },
+  "DIARY_LIST_ITEM": {
+    "ABENDS": "Abends",
+    "MORGENS": "Morgens"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
