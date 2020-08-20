@@ -31,18 +31,22 @@
     "BITTE_GEBEN_SIE_IHRE_KÖRPERTEMPERATUR_EIN": "Bitte geben Sie Ihre Körpertemperatur ein",
     "DIESER_EINTRAG_KANN_NICHT_MENR_BEARBEITET_WERDEN": "Dieser Eintrag kann nicht mehr bearbeitet werden",
     "HIER_FEHLENDEN_KONTAKT_EINGEBEN": "Hier fehlenden Kontakt anlegen",
-    "KÖRPERTEMPERATUR_IN": "Körpertemperatur in",
     "KONTAKTE_SEIT_LETZTEM_EINTRAG": "Kontakte mit anderen Menschen seit letztem Eintrag",
     "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
     "KRANKHEITSSPEZIFISCHE_SYMPTOME": "Krankheitsspezifische Symptome",
+    "KÖRPERTEMPERATUR_IN": "Körpertemperatur in",
     "MORGENS": "morgens",
     "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
     "SONSTIGE_SYMPTOME": "Sonstige Symptome",
     "SPEICHERN": "Speichern",
-    "TAGEBUCH_EINTRAG_ANLEGEN_FÜR_DEN": "Tagebuch-Eintrag anlegen für den",
-    "TAGEBUCH_EINTRAG_BEARBEITEN_FÜR_DEN": "Tagebuch-Eintrag bearbeiten für den",
     "TAGEBUCH_EINTRAG_AKTUALISIERT": "Tagebuch-Eintrag erfolgreich aktualisiert",
-    "TAGEBUCH_EINTRAG_ANGELEGT": "Tagebuch-Eintrag erfolgreich angelegt"
+    "TAGEBUCH_EINTRAG_ANGELEGT": "Tagebuch-Eintrag erfolgreich angelegt",
+    "TAGEBUCH_EINTRAG_ANLEGEN_FÜR_DEN": "Tagebuch-Eintrag anlegen für den",
+    "TAGEBUCH_EINTRAG_BEARBEITEN_FÜR_DEN": "Tagebuch-Eintrag bearbeiten für den"
+  },
+  "DIARY_ENTRY_SUCCESS": {
+    "EINTRAG_ANSEHEN": "Eintrag ansehen",
+    "EINTRAG_BEARBEITEN": "Eintrag bearbeiten"
   },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
