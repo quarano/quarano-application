@@ -31,7 +31,7 @@ public class RegistrationDetails {
 
 	public Try<RegistrationDetails> apply(TrackedPerson person) {
 
-		if (!person.hasBirthdayOf(dateOfBirth)) {
+		if (person.getDateOfBirth() != null && !person.hasBirthdayOf(dateOfBirth)) {
 			return Try.failure(new RegistrationException("Given date of birth does not match date of birth of case"));
 		}
 
