@@ -71,7 +71,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void rendersAnomaly() throws Exception {
 
-		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2)
 				.orElseThrow();
 
 		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId()))
@@ -81,6 +81,9 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.comments", JSONArray.class)).isEmpty();
+		assertThat(document.read("$.anomalies.health", JSONArray.class)).hasSize(1);
+		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).hasSize(1);
+		assertThat(document.read("$.anomalies.resolved[0].items", JSONArray.class)).hasSize(2);
 	}
 
 	@Test
@@ -117,7 +120,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.andReturn().getResponse().getContentAsString();
 
 		var actionsDocument = JsonPath.parse(actionsResponse);
-		var contactCaseId = actionsDocument.read("$._embedded.actions[1].caseId", String.class);
+		var contactCaseId = actionsDocument.read("$._embedded.actions[2].caseId", String.class);
 
 		ActionsReviewed reviewed = new ActionsReviewed()
 				.setComment("Comment!");
@@ -144,9 +147,8 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void obtainsUnresolvedActions() throws Exception {
 
-		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
-				.orElseThrow();
 
+		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 		var reviewed = new ActionsReviewed().setComment("Comment!");
 
 		mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId())
@@ -162,12 +164,12 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var document = JsonPath.parse(response);
 		var anomalies = JsonPath.parse(document.read("$._embedded.actions", JSONArray.class));
 
-		assertThat(anomalies.read("$", JSONArray.class)).hasSize(2);
-		assertThat(anomalies.read("$[0].healthSummary", JSONArray.class)).isEqualTo(List.of());
-		assertThat(anomalies.read("$[0].processSummary", JSONArray.class))
-				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
+		assertThat(anomalies.read("$", JSONArray.class)).hasSize(3);
 		assertThat(anomalies.read("$[1].healthSummary", JSONArray.class)).isEqualTo(List.of());
 		assertThat(anomalies.read("$[1].processSummary", JSONArray.class))
+				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
+		assertThat(anomalies.read("$[2].healthSummary", JSONArray.class)).isEqualTo(List.of());
+		assertThat(anomalies.read("$[2].processSummary", JSONArray.class))
 				.isEqualTo(List.of(DescriptionCode.MISSING_DETAILS_CONTACT.name()));
 	}
 

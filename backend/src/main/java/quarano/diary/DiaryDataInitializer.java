@@ -43,6 +43,7 @@ class DiaryDataInitializer implements DataInitializer {
 
 		// get existing people that have already been initialized
 		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
 		var gustav = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
 		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
@@ -243,5 +244,36 @@ class DiaryDataInitializer implements DataInitializer {
 		entry3N.setSymptoms(symptomsE3N);
 
 		entries.updateDiaryEntry(entry3N);
+
+		// ==================== JESSICA =================
+		List<ContactPerson> contactsOfJessica = new ArrayList<>();
+		contacts.saveAll(contactsOfJessica);
+
+		// generate diary entries for jessica
+		DiaryEntry diary1 = DiaryEntry.of(sameSlotYesterday, jessica)
+				.setContacts(contactsOfJessica);
+		// add 'husten'
+		diary1.setSymptoms(symptomsE1);
+		diary1.setBodyTemperature(BodyTemperature.of(37.5f));
+
+		entries.updateDiaryEntry(diary1);
+
+		DiaryEntry diary2 = DiaryEntry.of(sameSlotYesterday.previous(), jessica)
+				.setContacts(contactsOfJessica.subList(0, 0))
+				.setBodyTemperature(BodyTemperature.of(37.8f));
+
+		// add 'husten' and 'Nackenschmerzen'
+		diary2.setSymptoms(symptomsE2);
+
+		entries.updateDiaryEntry(diary2);
+
+		DiaryEntry diary3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), jessica)
+				//.setContacts(contactsOfJessica.subList(1, 2))
+				.setBodyTemperature(BodyTemperature.of(39.7f));
+
+		// add 'husten' and 'Nackenschmerzen'
+		diary3.setSymptoms(symptomsE3);
+
+		entries.updateDiaryEntry(diary3);
 	}
 }

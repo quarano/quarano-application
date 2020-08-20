@@ -1,20 +1,8 @@
 package quarano.actions;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
-import quarano.QuaranoUnitTest;
-import quarano.department.TrackedCase;
-import quarano.department.TrackedCaseRepository;
-import quarano.diary.Diary;
-import quarano.diary.DiaryEntry;
-import quarano.diary.DiaryEntryMissing;
-import quarano.diary.DiaryManagement;
-import quarano.diary.Slot;
-import quarano.reference.Symptom;
-import quarano.tracking.BodyTemperature;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +14,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.springframework.data.util.Streamable;
+
+import quarano.QuaranoUnitTest;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
+import quarano.diary.*;
+import quarano.reference.Symptom;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 /**
  * @author Oliver Drotbohm
@@ -41,7 +37,7 @@ class DiaryEventListenerTest {
 
 	@Captor ArgumentCaptor<DiaryEntryActionItem> itemCaptor;
 
-	private DiaryEventListener listener;
+	DiaryEventListener listener;
 
 	@BeforeEach
 	void setup() {
@@ -59,11 +55,10 @@ class DiaryEventListenerTest {
 		var newerEntry = DiaryEntry.of(Slot.now(), person);
 		var entry = DiaryEntry.of(Slot.now().previous(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
-		var isContactPerson = true;
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.of(newerEntry)));
 
-		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(items, times(0)).save(itemCaptor.capture());
 	}
@@ -74,13 +69,13 @@ class DiaryEventListenerTest {
 		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
-		var isContactPerson = true;
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry);
+		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -102,13 +97,12 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
-		var isContactPerson = true;
-
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry);
+		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -128,7 +122,8 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry);
+		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(actionItem, times(1)).resolve();
 		itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
@@ -149,13 +144,13 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(39F));
 		var actionItem = createMockedActionItem();
-		var isContactPerson = true;
 
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.of(entry)));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemperature(entry, isContactPerson);
+		listener.handleDiaryEntryForBodyTemperature(entry);
+		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(actionItem, times(1)).resolve();
 		verify(items, times(1)).save(actionItem);
@@ -169,13 +164,12 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
-		var isContactPerson = true;
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForCharacteristicSymptoms(entry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -195,7 +189,6 @@ class DiaryEventListenerTest {
 		var diaryEntry = DiaryEntry.of(Slot.now(), person)
 				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
-		var isContactPerson = true;
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 
@@ -203,14 +196,14 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.of(actionItem));
 		when(actionItem.getEntry()).thenReturn(diaryEntry);
 
-		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry);
 
 		verify(items, times(0)).save(any());
 
 		// Addes newer slot
 		when(actionItem.getEntry()).thenReturn(DiaryEntry.of(Slot.now().previous(), person));
 
-		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry);
 
 		verify(items, times(0)).save(any());
 	}
@@ -224,7 +217,6 @@ class DiaryEventListenerTest {
 				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
 		var actionItem = createMockedActionItem();
-		var isContactPerson = true;
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(actionItem.getEntry()).thenReturn(DiaryEntry.of(Slot.now(), person));
@@ -232,13 +224,13 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.of(actionItem));
 
 		// Updates older slot
-		listener.handleDiaryEntryForCharacteristicSymptoms(entry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(entry);
 
 		verify(items, times(2)).save(itemCaptor.capture());
 		assertThat(itemCaptor.getAllValues()).contains(actionItem);
 
 		// Adds older slot
-		listener.handleDiaryEntryForCharacteristicSymptoms(entry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(entry);
 
 		verify(items, times(4)).save(itemCaptor.capture());
 		assertThat(itemCaptor.getAllValues()).contains(actionItem);
@@ -252,20 +244,19 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setSymptoms(List.of(symptom))
 				.setBodyTemperature(BodyTemperature.of(36));
-		var isContactPerson = true;
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.empty());
 
 		// Updates older slot
-		listener.handleDiaryEntryForCharacteristicSymptoms(entry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 		assertThat(itemCaptor.getValue().getEntry()).isEqualTo(entry);
 
 		// Adds older slot
-		listener.handleDiaryEntryForCharacteristicSymptoms(entry, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(entry);
 
 		verify(items, times(2)).save(itemCaptor.capture());
 		assertThat(itemCaptor.getValue().getEntry()).isEqualTo(entry);
@@ -281,7 +272,6 @@ class DiaryEventListenerTest {
 		var diaryEntry1 = DiaryEntry.of(Slot.now().previous().previous(), person)//
 				.setBodyTemperature(BodyTemperature.of(36));
 		var actionItem = createMockedActionItem();
-		var isContactPerson = true;
 
 		when(symptom.isCharacteristic()).thenReturn(true);
 		when(actionItem.getEntry()).thenReturn(diaryEntry1);
@@ -289,7 +279,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry1, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry1);
 
 		verify(items, times(2)).save(itemCaptor.capture());
 		List<DiaryEntryActionItem> allValues = itemCaptor.getAllValues();
@@ -307,13 +297,12 @@ class DiaryEventListenerTest {
 				.setSymptoms(List.of())
 				.setBodyTemperature(BodyTemperature.of(36));
 		var actionItem = createMockedActionItem();
-		var isContactPerson = true;
 
 		when(actionItem.getEntry()).thenReturn(diaryEntry1);
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry2, isContactPerson);
+		listener.handleDiaryEntryForCharacteristicSymptoms(diaryEntry2);
 
 		verify(items, times(0)).save(any());
 	}
@@ -350,10 +339,10 @@ class DiaryEventListenerTest {
 		var trackedCase = mock(TrackedCase.class);
 
 		when(entry.getTrackedPersonId()).thenReturn(person);
-		when(entry.getSlot()).thenReturn(now);
-		when(entry.getBodyTemperature()).thenReturn(BodyTemperature.of(42.0f)); // body temp well above conf threshold
+		lenient().when(entry.getSlot()).thenReturn(now);
+		lenient().when(entry.getBodyTemperature()).thenReturn(BodyTemperature.of(42.0f)); // body temp well above conf threshold
 		when(cases.findByTrackedPerson(person)).thenReturn(Optional.of(trackedCase));
-		when(trackedCase.isContactCase()).thenReturn(false);
+		when(trackedCase.isIndexCase()).thenReturn(true);
 		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());

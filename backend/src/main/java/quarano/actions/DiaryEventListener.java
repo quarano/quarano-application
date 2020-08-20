@@ -1,5 +1,8 @@
 package quarano.actions;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +15,7 @@ import quarano.diary.DiaryEntry.DiaryEntryUpdated;
 import quarano.diary.DiaryEntryMissing;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
-import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -34,12 +33,11 @@ class DiaryEventListener {
 
 		var entry = event.getEntry();
 
-		boolean isContactCase = cases.findByTrackedPerson(entry.getTrackedPersonId())
-				.map(TrackedCase::isContactCase)
-				.orElse(Boolean.TRUE);
-
-		handleDiaryEntryForBodyTemperature(entry, isContactCase);
-		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
+		handleDiaryEntryForBodyTemperature(entry);
+		if (!isIndexCase(entry)) {
+			handleDiaryEntryForCharacteristicSymptoms(entry);
+			saveDiaryEntryIfTemperatureOverThreshold(entry);
+		}
 		resolveMissingItemsActionItem(entry);
 	}
 
@@ -48,12 +46,17 @@ class DiaryEventListener {
 
 		var entry = event.getEntry();
 
-		boolean isContactCase = cases.findByTrackedPerson(entry.getTrackedPersonId())
-				.map(TrackedCase::isContactCase)
-				.orElse(Boolean.TRUE);
+		handleDiaryEntryForBodyTemperature(entry);
+		if (!isIndexCase(entry)) {
+			handleDiaryEntryForCharacteristicSymptoms(entry);
+			saveDiaryEntryIfTemperatureOverThreshold(entry);
+		}
+	}
 
-		handleDiaryEntryForBodyTemperature(entry, isContactCase);
-		handleDiaryEntryForCharacteristicSymptoms(entry, isContactCase);
+	private boolean isIndexCase(DiaryEntry entry) {
+		return cases.findByTrackedPerson(entry.getTrackedPersonId())
+				.map(TrackedCase::isIndexCase)
+				.orElse(Boolean.FALSE);
 	}
 
 	void resolveMissingItemsActionItem(DiaryEntry entry) {
@@ -72,9 +75,8 @@ class DiaryEventListener {
 	 * is no update of existing items.
 	 *
 	 * @param entry
-	 * @param isContactCase true if person is contact of an indexed case, false otherwise
 	 */
-	void handleDiaryEntryForBodyTemperature(DiaryEntry entry, boolean isContactCase) {
+	void handleDiaryEntryForBodyTemperature(DiaryEntry entry) {
 
 		var person = entry.getTrackedPersonId();
 
@@ -84,11 +86,16 @@ class DiaryEventListener {
 
 		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(items::save);
-		BodyTemperature temperatureThreshold = config.getTemperatureThreshold();
-		BodyTemperature bodyTemperature = entry.getBodyTemperature();
+	}
+
+	void saveDiaryEntryIfTemperatureOverThreshold(DiaryEntry entry) {
+
+		var person = entry.getTrackedPersonId();
+		var temperatureThreshold = config.getTemperatureThreshold();
+		var bodyTemperature = entry.getBodyTemperature();
 
 		// Body temperature exceeds reference
-		if (isContactCase && bodyTemperature.exceeds(temperatureThreshold)) {
+		if (bodyTemperature.exceeds(temperatureThreshold)) {
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
 					bodyTemperature,
 					temperatureThreshold);
@@ -107,12 +114,8 @@ class DiaryEventListener {
 	/**
 	 * manage the list of characteristic symptoms - the resulting action depends
 	 * @param entry
-	 * @param isContactCase true if person is contact of an indexed case, false otherwise
 	 */
-	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry, boolean isContactCase) {
-		if (!isContactCase) {
-			return;
-		}
+	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry) {
 
 		var person = entry.getTrackedPersonId();
 		var actionItems = DiaryEntryActionItems
