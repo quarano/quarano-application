@@ -22,7 +22,7 @@
 		<jddd.version>0.1.0</jddd.version>
 		<moduliths.version>1.0.0.RC4</moduliths.version>
 		<spring-hateoas.version>1.2.0-M1</spring-hateoas.version>
-		<greenmail.version>1.6.0-SNAPSHOT</greenmail.version>
+		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
@@ -47,7 +47,6 @@
 				<dependency>
 					<groupId>com.icegreen</groupId>
 					<artifactId>greenmail</artifactId>
-					<version>${greenmail.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -260,7 +259,6 @@
 		<dependency>
 			<groupId>com.icegreen</groupId>
 			<artifactId>greenmail</artifactId>
-			<version>${greenmail.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
