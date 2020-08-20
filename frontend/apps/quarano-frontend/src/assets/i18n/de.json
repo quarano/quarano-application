@@ -1,5 +1,13 @@
 {
   "CHANGE_PASSWORD": {
-    "PASSWORT_ÄNDERN": "Passwort ändern"
+    "BISHERIGES_PASSWORT": "Bisheriges Passwort",
+    "NEUES_PASSWORT": "Neues Passwort",
+    "NEUES_PASSWORT_BESTÄTIGEN": "Neues Passwort bestätigen",
+    "PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
+    "PASSWORT_ÄNDERN": "Passwort ändern",
+    "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
+    "USERNAME": "Benutzername",
+    "PASSWORT_WURDE_GEÄNDERT": "Ihr Passwort wurde erfolgreich geändert"
   }
 }

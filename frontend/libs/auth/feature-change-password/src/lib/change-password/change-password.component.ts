@@ -4,11 +4,12 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { AuthService, UserService, AuthStore } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { SubSink } from 'subsink';
-import { SnackbarService } from '@qro/shared/util-snackbar';
-import { Component, OnInit, OnDestroy, Inject, Injector } from '@angular/core';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-change-password',
@@ -29,8 +30,9 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   private dialogData;
 
   constructor(
+    private userService: UserService,
+    private snackbarService: TranslatedSnackbarService,
     private authStore: AuthStore,
-    private snackbarService: SnackbarService,
     private router: Router,
     private authService: AuthService,
     private badRequestService: BadRequestService,
@@ -70,10 +72,10 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.subs.add(
         this.authService
           .changePassword(this.formGroup.value)
+          .pipe(switchMap(() => this.snackbarService.success('CHANGE_PASSWORD.PASSWORT_WURDE_GEÄNDERT')))
           .subscribe(
             () => {
-              this.snackbarService.success('Ihr Passwort wurde geändert');
-              if (this.dialogData.mode === 'initialPasswordChange') {
+              if (this.dialogData?.mode === 'initialPasswordChange') {
                 this.dialogRef.close('success');
               } else {
                 this.router.navigate(['/general/welcome']);
