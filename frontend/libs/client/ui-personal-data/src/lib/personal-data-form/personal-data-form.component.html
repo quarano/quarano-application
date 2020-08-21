@@ -1,11 +1,11 @@
 <div [formGroup]="formGroup">
   <fieldset class="mb-3">
-    <legend>Person</legend>
+    <legend>{{ 'PERSONAL_DATA_FORM.PERSON' | translate }}</legend>
     <mat-form-field class="half-width">
       <input
         required
         matInput
-        placeholder="Vorname"
+        [placeholder]="'PERSONAL_DATA_FORM.VORNAME' | translate"
         formControlName="firstName"
         type="text"
         #first_name_input
@@ -19,7 +19,7 @@
       <input
         matInput
         required
-        placeholder="Nachname"
+        [placeholder]="'PERSONAL_DATA_FORM.NACHNAME' | translate"
         formControlName="lastName"
         type="text"
         #last_name_input
@@ -30,7 +30,7 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <mat-label>Geburtsdatum</mat-label>
+      <mat-label>{{ 'PERSONAL_DATA_FORM.GEBURTSDATUM' | translate }}</mat-label>
       <input
         matInput
         required
@@ -48,20 +48,20 @@
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">
-    <legend>Kontaktmöglichkeiten</legend>
+    <legend>{{ 'PERSONAL_DATA_FORM.KONTAKTMÖGLICHKEITEN' | translate }}</legend>
     <mat-error
       *ngIf="
         formGroup.getError('phoneMissing') &&
         (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
       "
     >
-      Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
+      {{ 'PERSONAL_DATA_FORM.MINDESTENS_EINE_TELEFONNUMMER' | translate }}</mat-error
     >
     <mat-form-field class="full-width">
       <input
         matInput
         required
-        placeholder="E-Mail"
+        [placeholder]="'PERSONAL_DATA_FORM.E_MAIL' | translate"
         formControlName="email"
         type="email"
         #email_input
@@ -76,7 +76,7 @@
         matInput
         maxlength="17"
         minlength="5"
-        placeholder="Telefonnummer (Festnetz)"
+        [placeholder]="'PERSONAL_DATA_FORM.TELEFONNUMMER_FESTNETZ' | translate"
         formControlName="phone"
         type="phone"
         #phone_input
@@ -91,7 +91,7 @@
         matInput
         maxlength="17"
         minlength="5"
-        placeholder="Telefonnummer (mobil)"
+        [placeholder]="'PERSONAL_DATA_FORM.TELEFONNUMMER_MOBIL' | translate"
         formControlName="mobilePhone"
         type="phone"
         #mobile_phone_input
@@ -103,12 +103,12 @@
     </mat-form-field>
   </fieldset>
   <fieldset class="mb-3">
-    <legend>Adresse</legend>
+    <legend>{{ 'PERSONAL_DATA_FORM.ADRESSE' | translate }}</legend>
     <mat-form-field style="width: 70%;" data-cy="street-input">
       <input
         matInput
         required
-        placeholder="Straße"
+        [placeholder]="'PERSONAL_DATA_FORM.STRASSE' | translate"
         formControlName="street"
         type="text"
         #street_input
@@ -121,7 +121,7 @@
     <mat-form-field style="width: 30%;" data-cy="house-number-input">
       <input
         matInput
-        placeholder="Hausnummer"
+        [placeholder]="'PERSONAL_DATA_FORM.HAUSNUMMER' | translate"
         maxlength="6"
         formControlName="houseNumber"
         type="text"
@@ -136,7 +136,7 @@
       <input
         matInput
         required
-        placeholder="Postleitzahl"
+        [placeholder]="'PERSONAL_DATA_FORM.POSTLEITZAHL' | translate"
         formControlName="zipCode"
         type="text"
         #zip_code_input
@@ -150,7 +150,7 @@
       <input
         matInput
         required
-        placeholder="Ort"
+        [placeholder]="'PERSONAL_DATA_FORM.ORT' | translate"
         formControlName="city"
         type="text"
         #city_input

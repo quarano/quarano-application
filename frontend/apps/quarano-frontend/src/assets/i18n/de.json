@@ -40,10 +40,10 @@
     "USERNAME": "Benutzername"
   },
   "CONTACT_DIALOG": {
-    "MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN": "Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. Möchten Sie die Kontaktperson jetzt anlegen?",
-    "NEUE_KONTAKTPERSON": "Neue Kontaktperson",
     "ABBRECHEN": "Abbrechen",
-    "KONTAKT_ANLEGEN": "Kontakt anlegen"
+    "KONTAKT_ANLEGEN": "Kontakt anlegen",
+    "MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN": "Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. Möchten Sie die Kontaktperson jetzt anlegen?",
+    "NEUE_KONTAKTPERSON": "Neue Kontaktperson"
   },
   "CONTACT_PERSONS": {
     "ANONYME_KONTAKTPERSON": "Anonyme Kontaktperson",
@@ -63,6 +63,8 @@
     "HINWEISE_ZUR_IDENTIFIKATION": "Hinweise zur Identifikation",
     "JA": "Ja",
     "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "KONTAKTPERSON_AKTUALISIERT": "Kontaktperson erfolgreich aktualisiert",
+    "KONTAKTPERSON_ANGELEGT": "Kontaktperson erfolgreich angelegt",
     "KONTAKTPERSON_BEARBEITEN": "Kontaktperson bearbeiten",
     "MEDIZINISCHES_UMFELD": "Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf",
     "MINDESTENS_EINE_KONTAKTMÖGLICHKEIT": "Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen Hinweis zur Identifikation ein",
@@ -80,9 +82,7 @@
     "TELEFONNUMMER_MOBIL": "Telefonnummer (mobil)",
     "VORNAME": "Vorname",
     "WEITERE_KOMMENTARE_ODER_HINWEISE": "Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben",
-    "ÜBER_60": "Die Kontaktperson ist über 60 Jahre alt",
-    "KONTAKTPERSON_ANGELEGT": "Kontaktperson erfolgreich angelegt",
-    "KONTAKTPERSON_AKTUALISIERT": "Kontaktperson erfolgreich aktualisiert"
+    "ÜBER_60": "Die Kontaktperson ist über 60 Jahre alt"
   },
   "DATA_PROTECTION_DIALOG": {
     "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
@@ -213,6 +213,22 @@
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
+  },
+  "PERSONAL_DATA_FORM": {
+    "ADRESSE": "Adresse",
+    "E_MAIL": "E-Mail-Adresse",
+    "GEBURTSDATUM": "Geburtsdatum",
+    "HAUSNUMMER": "Hausnummer",
+    "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "MINDESTENS_EINE_TELEFONNUMMER": "Bitte geben Sie mindestens eine Telefonnummer ein",
+    "NACHNAME": "Nachname",
+    "ORT": "Ort",
+    "PERSON": "Person",
+    "POSTLEITZAHL": "Postleitzahl",
+    "STRASSE": "Straße",
+    "TELEFONNUMMER_FESTNETZ": "Telefonnummer (Festnetz)",
+    "TELEFONNUMMER_MOBIL": "Telefonnummer (mobil)",
+    "VORNAME": "Vorname"
   },
   "PROFILE": {
     "ABBRECHEN": "Abbrechen",
