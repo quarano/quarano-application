@@ -173,5 +173,21 @@
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
+  },
+  "REGISTER": {
+    "ANMELDECODE": "Anmeldecode",
+    "BENUTZERNAME": "Benutzername",
+    "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
+    "GEBURTSDATUM": "Geburtsdatum",
+    "HIERMIT_AKZEPTIERE_ICH_DIE": "Hiermit akzeptiere ich die",
+    "PASSWORT": "Passwort",
+    "PASSWORT_BESTÄTIGEN": "Passwort bestätigen",
+    "PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
+    "REGISTRIEREN": "Registrieren",
+    "SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN": "Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt.",
+    "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren.",
+    "BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN": "Bitte alle Pflichtfelder ausfüllen",
+    "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet"
   }
 }

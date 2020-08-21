@@ -1,21 +1,20 @@
 <mat-card class="form__card--small form__card--animated">
   <mat-card-header>
     <mat-card-title>
-      <h1>Registrieren</h1>
+      <h1>{{ 'REGISTER.REGISTRIEREN' | translate }}</h1>
     </mat-card-title>
   </mat-card-header>
   <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
     <mat-card-content>
       <p>
-        Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich
-        hier registrieren.
+        {{ 'REGISTER.WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE' | translate }}
       </p>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-client-code">
-        <mat-label>Anmeldecode</mat-label>
+        <mat-label>{{ 'REGISTER.ANMELDECODE' | translate }}</mat-label>
         <input
           matInput
           formControlName="clientCode"
-          placeholder="Anmeldecode"
+          [placeholder]="'REGISTER.ANMELDECODE' | translate"
           id="client-code"
           #client_code_input
           (blur)="trimValue(client_code_input)"
@@ -25,11 +24,11 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-username">
-        <mat-label>Benutzername</mat-label>
+        <mat-label>{{ 'REGISTER.BENUTZERNAME' | translate }}</mat-label>
         <input
           matInput
           formControlName="username"
-          placeholder="Benutzername"
+          [placeholder]="'REGISTER.BENUTZERNAME' | translate"
           id="username"
           (change)="changeUsername()"
           #username_input
@@ -40,11 +39,11 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password">
-        <mat-label>Passwort</mat-label>
+        <mat-label>{{ 'REGISTER.PASSWORT' | translate }}</mat-label>
         <input
           matInput
           formControlName="password"
-          placeholder="Passwort"
+          [placeholder]="'REGISTER.PASSWORT' | translate"
           id="password"
           type="password"
           #password_input
@@ -54,15 +53,15 @@
           {{ errorGenerator.getErrorMessage(registrationForm.controls.password, error) }}
         </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
-          Das Passwort darf nicht den Benutzernamen beinhalten.
+          {{ 'REGISTER.PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN' | translate }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password-confirm">
-        <mat-label>Passwort bestätigen</mat-label>
+        <mat-label>{{ 'REGISTER.PASSWORT_BESTÄTIGEN' | translate }}</mat-label>
         <input
           matInput
           formControlName="passwordConfirm"
-          placeholder="Passwort bestätigen"
+          [placeholder]="'REGISTER.PASSWORT_BESTÄTIGEN' | translate"
           id="password-confirm"
           type="password"
           #password_confirm_input
@@ -73,11 +72,11 @@
           {{ errorGenerator.getErrorMessage(registrationForm.controls.passwordConfirm, error) }}
         </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
-          Das Passwort und die Bestätigung müssen übereinstimmen.
+          {{ 'REGISTER.PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN' | translate }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">
-        <mat-label>Geburtsdatum</mat-label>
+        <mat-label>{{ 'REGISTER.GEBURTSDATUM' | translate }}</mat-label>
         <input
           matInput
           formControlName="dateOfBirth"
@@ -94,14 +93,14 @@
       </mat-form-field>
       <div class="data-protection-wrapper">
         <mat-checkbox formControlName="dataProtectionConfirmed" data-cy="input-privacy-policy"
-          >Hiermit akzeptiere ich die
+          >{{ 'REGISTER.HIERMIT_AKZEPTIERE_ICH_DIE' | translate }}
           <button type="button" class="p-0" id="data-protection-btn" mat-button (click)="openDataProtection()">
-            Datenschutzerklärung
+            {{ 'REGISTER.DATENSCHUTZERKLÄRUNG' | translate }}
           </button></mat-checkbox
         >
         <mat-icon
           style="cursor: pointer; opacity: 0.8;"
-          matTooltip="Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt."
+          [matTooltip]="'REGISTER.SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN' | translate"
           matTooltipPosition="after"
           class="ml-1 text-muted"
         >
@@ -111,7 +110,7 @@
     </mat-card-content>
     <mat-card-actions>
       <qro-button data-cy="registration-submit-button" [disabled]="registrationForm.invalid" [loading]="loading">
-        Registrieren
+        {{ 'REGISTER.REGISTRIEREN' | translate }}
       </qro-button>
     </mat-card-actions>
   </form>
