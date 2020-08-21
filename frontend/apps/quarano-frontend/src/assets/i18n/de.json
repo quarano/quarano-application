@@ -138,6 +138,11 @@
     "JETZT_EINTRAGEN": "Jetzt eintragen",
     "MORGENS": "Morgens"
   },
+  "FOOTER": {
+    "AGB": "AGB",
+    "DATENSCHUTZ": "Datenschutz",
+    "IMPRESSUM": "Impressum"
+  },
   "FORBIDDEN": {
     "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
     "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
@@ -159,6 +164,16 @@
     "SPEICHERN": "Speichern",
     "TAG_DES_KONTAKTS": "Tag des Kontakts",
     "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen"
+  },
+  "HEADER_LEFT": {
+    "KONTAKTPERSONEN": "Kontaktpersonen",
+    "TAGEBUCH": "Tagebuch"
+  },
+  "HEADER_RIGHT": {
+    "ABMELDEN": "Abmelden",
+    "BENUTZERPROFIL": "Benutzerprofil",
+    "KONTAKT_ZUM_AMT": "Kontakt zum Amt",
+    "PASSWORT_ÄNDERN": "Passwort ändern"
   },
   "INITIAL_QUESTIONNAIRE_FORM": {
     "BEHANDELNDEN_HAUSARZT": "Bitte geben Sie Ihren behandelnden Hausarzt an",

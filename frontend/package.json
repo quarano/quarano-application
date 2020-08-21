@@ -43,7 +43,7 @@
     "help": "nx help",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "i18n:init": "ngx-translate-extract --input ./apps/quarano-frontend/src ./libs --output ./apps/quarano-frontend/src/assets/i18n/template.json --key-as-default-value --replace --format namespaced-json --key-as-default-value",
-    "i18n:extract": "ngx-translate-extract --input ./apps/my-center/src ./libs --output ./apps/quarano-frontend/src/assets/i18n/template.json ./apps/quarano-frontend/src/assets/i18n/en.json ./apps/quarano-frontend/src/assets/i18n/de.json ./apps/quarano-frontend/src/assets/i18n/tr.json --sort --format namespaced-json --key-as-default-value"
+    "i18n:extract": "ngx-translate-extract --input ./apps/quarano-frontend/src ./libs --output ./apps/quarano-frontend/src/assets/i18n/template.json ./apps/quarano-frontend/src/assets/i18n/en.json ./apps/quarano-frontend/src/assets/i18n/de.json ./apps/quarano-frontend/src/assets/i18n/tr.json --sort --format namespaced-json --key-as-default-value"
   },
   "husky": {
     "hooks": {
