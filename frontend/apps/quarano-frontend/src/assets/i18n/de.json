@@ -44,6 +44,40 @@
     "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
     "NOCH_KEINE_EINTRÄGE_VORHANDEN": "Noch keine Einträge vorhanden"
   },
+  "CONTACT_PERSON_FORM": {
+    "ABBRECHEN": "Abbrechen",
+    "ADRESSE": "Adresse",
+    "BEKANNTE_VORERKRANKUNGEN": "Die Kontaktperson hat bekannte Vorerkrankungen",
+    "BITTE_GEBEN_SIE_UNS_WEITERE_HINWEISE": "Bitte geben Sie uns weitere Hinweise, wie wir die Person ermitteln könnten (z. B. Mitarbeiter von Bäckerei 'Müller', Taxifahrer, Mitarbeiter im Pflegeheim oder Krankenhaus 'Klinikum Mannheim' und bitte auch dazugehörige Telefonnummern oder Kontaktwege wie z. B. Nummer des Pflegeheims, etc) damit wir den Kontakt schnellstmöglich ermitteln können",
+    "DAS_WEISS_ICH_NICHT": "Das weiß ich nicht",
+    "E_MAIL": "E-Mail-Adresse",
+    "FOLGENDE_AUSSAGEN_ÜBER_KONTAKTPERSON": "Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson",
+    "FOLGENDE_VORERKRANKUNGEN": "In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)",
+    "HAUSNUMMER": "Hausnummer",
+    "HINWEISE_ZUR_IDENTIFIKATION": "Hinweise zur Identifikation",
+    "JA": "Ja",
+    "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "KONTAKTPERSON_BEARBEITEN": "Kontaktperson bearbeiten",
+    "MEDIZINISCHES_UMFELD": "Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf",
+    "MINDESTENS_EINE_KONTAKTMÖGLICHKEIT": "Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen Hinweis zur Identifikation ein",
+    "NACHNAME": "Nachname",
+    "NEIN": "Nein",
+    "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
+    "ORT": "Ort",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "POSTLEITZAHL": "Postleitzahl",
+    "RISIKOEINSCHÄTZUNG": "Risikoeinschätzung",
+    "SONSTIGE_BEMERKUNGEN": "Sonstige Bemerkungen",
+    "SPEICHERN": "Speichern",
+    "STRASSE": "Straße",
+    "TELEFONNUMMER_FESTNETZ": "Telefonnummer (Festnetz)",
+    "TELEFONNUMMER_MOBIL": "Telefonnummer (mobil)",
+    "VORNAME": "Vorname",
+    "WEITERE_KOMMENTARE_ODER_HINWEISE": "Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben",
+    "ÜBER_60": "Die Kontaktperson ist über 60 Jahre alt",
+    "KONTAKTPERSON_ANGELEGT": "Kontaktperson erfolgreich angelegt",
+    "KONTAKTPERSON_AKTUALISIERT": "Kontaktperson erfolgreich aktualisiert"
+  },
   "DATA_PROTECTION_DIALOG": {
     "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
     "SCHLIESSEN": "Schließen"
@@ -176,10 +210,10 @@
   },
   "PROFILE": {
     "ABBRECHEN": "Abbrechen",
+    "PERSÖNLICHE_DATEN_AKTUALISIERT": "Persönliche Daten erfolgreich aktualisiert",
     "PERSÖNLICHE_DATEN_BEARBEITEN": "Persönliche Daten bearbeiten",
     "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
-    "SPEICHERN": "Speichern",
-    "PERSÖNLICHE_DATEN_AKTUALISIERT": "Persönliche Daten erfolgreich aktualisiert"
+    "SPEICHERN": "Speichern"
   },
   "REGISTER": {
     "ANMELDECODE": "Anmeldecode",
