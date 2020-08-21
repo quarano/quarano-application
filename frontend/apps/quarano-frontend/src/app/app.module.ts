@@ -44,10 +44,6 @@ const NGRX = [
       strictActionImmutability: true,
     },
   }),
-  StoreDevtoolsModule.instrument({
-    maxAge: 25,
-    logOnly: environment.production,
-  }),
   EffectsModule.forRoot([]),
   EntityDataModule.forRoot({}),
   StoreRouterConnectingModule.forRoot({
@@ -55,6 +51,10 @@ const NGRX = [
     routerState: RouterState.Minimal,
   }),
   ClientStoreModule.forRoot(),
+  StoreDevtoolsModule.instrument({
+    maxAge: 25,
+    logOnly: environment.production,
+  }),
 ];
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
