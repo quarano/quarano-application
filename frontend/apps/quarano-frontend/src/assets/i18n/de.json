@@ -137,6 +137,28 @@
     "WIE_UND_ZU_WEM_KONTAKT": "Wie und zu wem haben Sie Kontakt?",
     "WO_ARBEITEN_SIE": "Wo arbeiten Sie?"
   },
+  "LANDING": {
+    "AKUT_ÄRZTLICHE_BEHANDLUNG": "Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.",
+    "BEI_FRAGEN": "Bei Fragen scheuen Sie sich bitte nicht, uns zu kontaktieren. Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer",
+    "BEI_FRAGEN_ALS_KONTAKTPERSON": "Bei Fragen, die Sie als Kontaktperson im Speziellen betreffen, wenden Sie sich bitte an die Hotline für Kontaktpersonen unter der Telefonnummer",
+    "DEM_ONLINE_DOKUMENTATIONSTOOL": "dem Online-Dokumentationstool Ihrer Gesundheitsbehörde!",
+    "DIESER_LINK": "Dieser Link ist nur für Sie persönlich gültig. Wenn mehrere betroffene Personen im selben Haushalt leben, ist es wichtig, dass sich jede Person mit einem eigenen Zugangslink vom Gesundheitsamt jeweils einen eigenen Benutzer anlegt. So können alle Einträge immer richtig zugeordnet werden.",
+    "HERZLICH_WILLKOMMEN_BEI": "Herzlich Willkommen bei",
+    "IHRE_STAMMDATEN_AKTUALISIEREN": "Ihre Stammdaten aktualisieren",
+    "IHRE_STAMMDATEN_SIND_NUR_EINMAL_EINZUGEBEN": "Ihre Stammdaten sind nur einmal einzugeben, Kontaktpersonen und mögliche Krankheitszeichen sind zweimal täglich einzugeben.",
+    "IHR_GESUNDHEITSAMT": "Ihr Gesundheitsamt Mannheim",
+    "INFOS_ZUR_NUTZUNG": "Infos zur Nutzung",
+    "INFOS_ZUR_REGISTRIERUNG": "Infos zur Registrierung",
+    "KONTAKTPERSONEN_ANGEBEN": "Kontaktpersonen angeben",
+    "MIT_DER_ANWENDUNG_KÖNNEN_SIE": "Mit der Anwendung können Sie",
+    "MONTAG_BIS_FREITAG": "Montag bis Freitag",
+    "MÖGLICHE_KRANKHEITSZEICHEN_PROTOKOLLIEREN": "Mögliche Krankheitszeichen protokollieren",
+    "REGISTRIEREN_SIE_SICH": "Registrieren Sie sich mit einem Benutzernamen und einem frei wählbaren Passwort. Danach melden Sie sich mit diesen Nutzerdaten an und können quarano nutzen",
+    "SAMSTAGS": "Samstags sowie an Sonn- und Feiertagen",
+    "SIE_HABEN_VOM_GESUNDHEITSAMT": "Sie haben vom Gesundheitsamt Mannheim einen personalisierten Registrierungs-Link erhalten. In den folgenden Seiten melden Sie sich bitte an und nutzen die Anwendung. Mit der Nutzung dieser Anwendung unterstützen Sie das Gesundheitsamt und tragen dazu bei, dass schneller agiert werden kann.",
+    "WEITER": "Weiter",
+    "WICHTIG": "Wichtig"
+  },
   "LOGIN": {
     "ANMELDEN": "Anmelden",
     "BENUTZERNAME": "Benutzername",
