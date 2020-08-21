@@ -1,4 +1,33 @@
 {
+  "BASIC_DATA": {
+    "ERFASSUNG_ABSCHLIESSEN": "Erfassung abschließen",
+    "HIER_FEHLENDEN_KONTAKT_ANLEGEN": "Hier fehlenden Kontakt anlegen",
+    "INITIALER_FRAGEBOGEN": "Initialer Fragebogen",
+    "KONTAKTE_MIT_ANDEREN_MENSCHEN_AM": "Kontakte mit anderen Menschen am",
+    "KONTAKTPERSONEN": "Kontaktpersonen",
+    "KONTAKTPERSONEN_DER_KATEGORIE_I": "Kontaktpersonen der Kategorie I mit engem Kontakt ('höheres' Infektionsrisiko)",
+    "KONTAKTPERSONEN_SIND_PERSONEN": "Kontaktpersonen sind Personen mit einem unten definierten Kontakt zu einem bestätigten Fall von COVID-19 ab dem 7. Tag vor Auftreten der ersten Symptome des Falles. Das Ende der infektiösen Periode ist momentan nicht sicher anzugeben.",
+    "KONTAKTPERSONEN_VOM": "Kontaktpersonen vom",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "MEDIZINISCHES_PERSONAL": "Medizinisches Personal mit Kontakt zum bestätigten COVID-19-Fall im Rahmen von Pflege oder medizinischer Untersuchung (≤ 2m), ohne verwendete Schutzausrüstung.",
+    "PERSONEN_DIE_AEROSOLBILDENDEN_MASSNAHMEN": "Personen, die aerosolbildenden Maßnahmen ausgesetzt sind",
+    "PERSONEN_MIT_DIREKTEM_KONTAKT": "Personen mit direktem Kontakt zu Sekreten oder Körperflüssigkeiten, insbesondere zu respiratorischen Sekreten eines bestätigten COVID-19-Falls, wie z. B. Küssen, Kontakt zu Erbrochenem, Mund-zu-Mund Beatmung, Anhusten, Anniesen, etc.",
+    "PERSONEN_MIT_KUMULATIV": "Personen mit kumulativ mindestens 15-minütigem Gesichts- ('face-to-face') Kontakt, z. B. im Rahmen eines Gesprächs. Dazu gehören z. B. Personen aus Lebensgemeinschaften im selben Haushalt.",
+    "PERSÖNLICHE_DATEN": "Persönliche Daten",
+    "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
+    "UMGANG_MIT_KONTAKTPERSONEN": "Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle",
+    "WEITER": "Weiter",
+    "ZURÜCK": "Zurück",
+    "PERSÖNLICHE_DATEN_GESPEICHERT": "Persönliche Daten erfolgreich gespeichert",
+    "FRAGEBOGEN_GESPEICHERT": "Fragebogen erfolgreich gespeichert",
+    "KONTAKT_GESPEICHERT": "Kontakt erfolgreich gespeichert",
+    "KONTAKT_ENTFERNT": "Kontakt erfolgreich entfernt",
+    "ABBRECHEN": "Abbrechen",
+    "OK": "OK",
+    "KEINE_RELEVANTEN_KONTAKTE": "Keine relevanten Kontakte?",
+    "SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST": "Sie haben noch keinen retrospektiven Kontakt erfasst. Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten.",
+    "REGISTRIERUNG_ABGESCHLOSSEN": "Die Registrierung wurde erfolgreich abgeschlossen"
+  },
   "CHANGE_PASSWORD": {
     "BISHERIGES_PASSWORT": "Bisheriges Passwort",
     "NEUES_PASSWORT": "Neues Passwort",
@@ -82,10 +111,10 @@
     "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
     "KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
     "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "RETROSPEKTIVE_KONTAKTE_GESPEICHERT": "{{value}} retrospektive Kontakte erfolgreich gespeichert",
     "SPEICHERN": "Speichern",
     "TAG_DES_KONTAKTS": "Tag des Kontakts",
-    "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen",
-    "RETROSPEKTIVE_KONTAKTE_GESPEICHERT": "{{value}} retrospektive Kontakte erfolgreich gespeichert"
+    "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen"
   },
   "LOGIN": {
     "ANMELDEN": "Anmelden",

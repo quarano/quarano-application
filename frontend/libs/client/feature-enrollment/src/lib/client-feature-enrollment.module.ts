@@ -16,6 +16,7 @@ import { LandingComponent } from './landing/landing.component';
 import { RegisterComponent } from './register/register.component';
 import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 
 const routes: Routes = [
   {
@@ -60,6 +61,7 @@ const routes: Routes = [
     ClientDomainModule,
     SharedUiDataProtectionModule,
     RouterModule.forChild(routes),
+    SharedUtilTranslationModule,
   ],
   declarations: [
     DataProtectionDialogComponent,
