@@ -120,6 +120,23 @@
     "TAG_DES_KONTAKTS": "Tag des Kontakts",
     "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen"
   },
+  "INITIAL_QUESTIONAIRE_FORM": {
+    "BEHANDELNDEN_HAUSARZT": "Bitte geben Sie Ihren behandelnden Hausarzt an",
+    "CHARAKTERISTISCHE_SYMPTOME": "Als Covid-19 charakterische Symptome zählen",
+    "HABEN_SIE_BEREITS": "Haben Sie bereits Covid-19 charakteristische Symptome festgestellt?",
+    "IN_DIESEM_FALL_SIND_DAS": "In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)",
+    "JA": "Ja",
+    "KONTAKT_ZU_RISIKOPERSONEN": "Haben Sie Kontakt zu Risikopersonen?",
+    "MEDIZINISCHES_UMFELD": "Arbeiten Sie im medizinischen Umfeld oder in der Pflege?",
+    "NEIN": "Nein",
+    "ORT_DER_ANSTECKUNG": "Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung",
+    "VORERKRANKUNGEN": "Haben Sie eine oder mehrere relevante Vorerkrankungen?",
+    "WANN_HABEN_SIE_DIE_ERSTEN_SYMPTOME": "Wann haben Sie die ersten Symptome festgestellt?",
+    "WELCHE_SYMPTOME": "Welche Symptome haben Sie bei sich festgestellt?",
+    "WELCHE_VORERKRANKUNGEN": "Welche Vorerkrankungen haben Sie?",
+    "WIE_UND_ZU_WEM_KONTAKT": "Wie und zu wem haben Sie Kontakt?",
+    "WO_ARBEITEN_SIE": "Wo arbeiten Sie?"
+  },
   "LOGIN": {
     "ANMELDEN": "Anmelden",
     "BENUTZERNAME": "Benutzername",
