@@ -39,6 +39,12 @@
     "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
     "USERNAME": "Benutzername"
   },
+  "CONTACT_DIALOG": {
+    "MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN": "Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. Möchten Sie die Kontaktperson jetzt anlegen?",
+    "NEUE_KONTAKTPERSON": "Neue Kontaktperson",
+    "ABBRECHEN": "Abbrechen",
+    "KONTAKT_ANLEGEN": "Kontakt anlegen"
+  },
   "CONTACT_PERSONS": {
     "ANONYME_KONTAKTPERSON": "Anonyme Kontaktperson",
     "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
