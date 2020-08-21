@@ -28,10 +28,10 @@
     <ng-template matStepLabel>{{ 'BASIC_DATA.INITIALER_FRAGEBOGEN' | translate }}</ng-template>
     <p>{{ 'BASIC_DATA.PFLICHTFELDER_SIND_MARKIERT' | translate }}</p>
     <form [formGroup]="secondFormGroup" id="second-form">
-      <qro-initial-questionaire-form
+      <qro-initial-questionnaire-form
         [symptoms]="symptoms"
         [formGroup]="secondFormGroup"
-      ></qro-initial-questionaire-form>
+      ></qro-initial-questionnaire-form>
       <div class="mt-3">
         <button mat-raised-button matStepperPrevious>
           <mat-icon>arrow_back</mat-icon>{{ 'BASIC_DATA.ZURÜCK' | translate }}

@@ -13,11 +13,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'qro-initial-questionaire-form',
-  templateUrl: './initial-questionaire-form.component.html',
-  styleUrls: ['./initial-questionaire-form.component.scss'],
+  selector: 'qro-initial-questionnaire-form',
+  templateUrl: './initial-questionnaire-form.component.html',
+  styleUrls: ['./initial-questionnaire-form.component.scss'],
 })
-export class InitialQuestionaireFormComponent implements OnInit {
+export class InitialQuestionnaireFormComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   @Input()
@@ -35,7 +35,7 @@ export class InitialQuestionaireFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.symptomTooltip$ = this.translate
-      .get('INITIAL_QUESTIONAIRE_FORM.CHARAKTERISTISCHE_SYMPTOME')
+      .get('INITIAL_QUESTIONNAIRE_FORM.CHARAKTERISTISCHE_SYMPTOME')
       .pipe(map((res) => `${res}: ${this.symptoms?.map((s) => s.name).join(', ')}`));
     this.toggleAdditionalFieldValitations('hasSymptoms', 'dayOfFirstSymptoms', null, [Validators.required]);
     this.toggleAdditionalFieldValitations('hasSymptoms', 'symptoms', [], [ArrayValidator.minLengthArray(1)]);

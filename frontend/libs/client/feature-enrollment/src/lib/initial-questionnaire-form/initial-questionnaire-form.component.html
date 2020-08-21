@@ -1,7 +1,7 @@
 <div class="questionaire-form-container" [formGroup]="formGroup">
   <div class="bool-question">
     <mat-label style="display: flex;"
-      >{{ 'INITIAL_QUESTIONAIRE_FORM.HABEN_SIE_BEREITS' | translate }} *
+      >{{ 'INITIAL_QUESTIONNAIRE_FORM.HABEN_SIE_BEREITS' | translate }} *
       <mat-icon class="ml-1" style="cursor: pointer;" [matTooltip]="symptomTooltip$ | async">info</mat-icon></mat-label
     >
     <mat-radio-group
@@ -11,15 +11,15 @@
       formControlName="hasSymptoms"
     >
       <mat-radio-button class="example-radio-button" [value]="true">{{
-        'INITIAL_QUESTIONAIRE_FORM.JA' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.JA' | translate
       }}</mat-radio-button>
       <mat-radio-button class="example-radio-button" [value]="false" data-cy="has-no-symptoms-option">{{
-        'INITIAL_QUESTIONAIRE_FORM.NEIN' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.NEIN' | translate
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.WANN_HABEN_SIE_DIE_ERSTEN_SYMPTOME' | translate }} *</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WANN_HABEN_SIE_DIE_ERSTEN_SYMPTOME' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input
         matInput
@@ -36,7 +36,7 @@
     </mat-form-field>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasSymptoms').value">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.WELCHE_SYMPTOME' | translate }} *</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WELCHE_SYMPTOME' | translate }} *</mat-label>
     <qro-multiple-autocomplete
       class="full-width"
       [control]="this.formGroup.controls.symptoms"
@@ -49,7 +49,7 @@
     </mat-error>
   </div>
   <div class="question">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.BEHANDELNDEN_HAUSARZT' | translate }}</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.BEHANDELNDEN_HAUSARZT' | translate }}</mat-label>
     <mat-form-field class="full-width">
       <input matInput formControlName="familyDoctor" />
       <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.familyDoctor)">
@@ -58,7 +58,7 @@
     </mat-form-field>
   </div>
   <div class="question">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.ORT_DER_ANSTECKUNG' | translate }}</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.ORT_DER_ANSTECKUNG' | translate }}</mat-label>
     <mat-form-field class="full-width">
       <input matInput formControlName="guessedOriginOfInfection" />
       <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.guessedOriginOfInfection)">
@@ -68,25 +68,25 @@
   </div>
   <div class="bool-question">
     <mat-label style="display: flex;">
-      {{ 'INITIAL_QUESTIONAIRE_FORM.VORERKRANKUNGEN' | translate }} *
+      {{ 'INITIAL_QUESTIONNAIRE_FORM.VORERKRANKUNGEN' | translate }} *
       <mat-icon
         class="ml-1"
         style="cursor: pointer;"
-        [matTooltip]="'INITIAL_QUESTIONAIRE_FORM.IN_DIESEM_FALL_SIND_DAS' | translate"
+        [matTooltip]="'INITIAL_QUESTIONNAIRE_FORM.IN_DIESEM_FALL_SIND_DAS' | translate"
         >info</mat-icon
       >
     </mat-label>
     <mat-radio-group required formControlName="hasPreExistingConditions">
       <mat-radio-button class="example-radio-button" [value]="true">{{
-        'INITIAL_QUESTIONAIRE_FORM.JA' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.JA' | translate
       }}</mat-radio-button>
       <mat-radio-button class="example-radio-button" [value]="false" data-cy="has-no-pre-existion-conditions-option">{{
-        'INITIAL_QUESTIONAIRE_FORM.NEIN' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.NEIN' | translate
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasPreExistingConditions').value">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.WELCHE_VORERKRANKUNGEN' | translate }} *</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WELCHE_VORERKRANKUNGEN' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input matInput required formControlName="hasPreExistingConditionsDescription" />
       <mat-error
@@ -97,18 +97,18 @@
     </mat-form-field>
   </div>
   <div class="bool-question">
-    <mat-label> {{ 'INITIAL_QUESTIONAIRE_FORM.MEDIZINISCHES_UMFELD' | translate }} * </mat-label>
+    <mat-label> {{ 'INITIAL_QUESTIONNAIRE_FORM.MEDIZINISCHES_UMFELD' | translate }} * </mat-label>
     <mat-radio-group required formControlName="belongToMedicalStaff">
       <mat-radio-button class="example-radio-button" [value]="true">{{
-        'INITIAL_QUESTIONAIRE_FORM.JA' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.JA' | translate
       }}</mat-radio-button>
       <mat-radio-button class="example-radio-button" [value]="false" data-cy="no-medical-staff-option">{{
-        'INITIAL_QUESTIONAIRE_FORM.NEIN' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.NEIN' | translate
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('belongToMedicalStaff').value">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.WO_ARBEITEN_SIE' | translate }} *</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WO_ARBEITEN_SIE' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input matInput required formControlName="belongToMedicalStaffDescription" /><mat-error
         *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.belongToMedicalStaffDescription)"
@@ -118,18 +118,18 @@
     </mat-form-field>
   </div>
   <div class="bool-question">
-    <mat-label> {{ 'INITIAL_QUESTIONAIRE_FORM.KONTAKT_ZU_RISIKOPERSONEN' | translate }} * </mat-label>
+    <mat-label> {{ 'INITIAL_QUESTIONNAIRE_FORM.KONTAKT_ZU_RISIKOPERSONEN' | translate }} * </mat-label>
     <mat-radio-group required formControlName="hasContactToVulnerablePeople">
       <mat-radio-button class="example-radio-button" [value]="true">{{
-        'INITIAL_QUESTIONAIRE_FORM.JA' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.JA' | translate
       }}</mat-radio-button>
       <mat-radio-button class="example-radio-button" [value]="false" data-cy="no-contact-option">{{
-        'INITIAL_QUESTIONAIRE_FORM.NEIN' | translate
+        'INITIAL_QUESTIONNAIRE_FORM.NEIN' | translate
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
   <div class="question sub-question" *ngIf="formGroup.get('hasContactToVulnerablePeople').value">
-    <mat-label>{{ 'INITIAL_QUESTIONAIRE_FORM.WIE_UND_ZU_WEM_KONTAKT' | translate }} *</mat-label>
+    <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WIE_UND_ZU_WEM_KONTAKT' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input matInput required formControlName="hasContactToVulnerablePeopleDescription" /><mat-error
         *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.hasContactToVulnerablePeopleDescription)"

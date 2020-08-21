@@ -1,22 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InitialQuestionaireFormComponent } from './initial-questionaire-form.component';
+import { InitialQuestionnaireFormComponent } from './initial-questionnaire-form.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('InitialQuestionaireFormComponent', () => {
-  let component: InitialQuestionaireFormComponent;
-  let fixture: ComponentFixture<InitialQuestionaireFormComponent>;
+  let component: InitialQuestionnaireFormComponent;
+  let fixture: ComponentFixture<InitialQuestionnaireFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InitialQuestionaireFormComponent],
+      declarations: [InitialQuestionnaireFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InitialQuestionaireFormComponent);
+    fixture = TestBed.createComponent(InitialQuestionnaireFormComponent);
     component = fixture.componentInstance;
 
     component.formGroup = new FormGroup({
