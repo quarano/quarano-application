@@ -67,7 +67,6 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_SUNNY = TrackedCaseIdentifier
 			.of(UUID.fromString("cbb52d97-fb3e-45a1-b7a3-d2cb5d9c65a2"));
-
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -77,9 +76,10 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 		var person1 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
 		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
-		var person3 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
 		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
 		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
 		var harriette = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1).orElseThrow();
 
@@ -107,7 +107,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate end = start.plusWeeks(4);
 
 		// CASE Sandra
-		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, person3, CaseType.INDEX, department2, null)
+		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, sandra, CaseType.INDEX, department2, null)
 				.setTestResult(TestResult.infected(start.minusDays(3)))
 				.setQuarantine(Quarantine.of(start, end))
 				.submitEnrollmentDetails()
@@ -119,11 +119,14 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
+		// CASE Jessica
+		cases.save(new TrackedCase(jessica, CaseType.CONTACT, department2));
+
 		// CASE Gustav
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null)
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.CONTACT, department1, null)
 				.setTestResult(TestResult.infected(startG.minusDays(1)))
 				.setQuarantine(Quarantine.of(startG, endG))
 				.submitEnrollmentDetails()
