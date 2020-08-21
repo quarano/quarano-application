@@ -10,6 +10,9 @@ export const reducers: ActionReducerMap<AppState> = {
   router: routerReducer,
 };
 
+/*
+ * Feel free to comment the console.log in for debugging purposes
+ */
 export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
     // console.log('state before: ', state);
