@@ -41,7 +41,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			.of(UUID.fromString("c53bb0c9-a007-43e6-851a-e5e711920d3c"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
-
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP2 = TrackedPersonIdentifier
+			.of(UUID.fromString("ee35d200-e221-11ea-87d0-0242ac130003"));
 	// Persons for security
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("4bcb1da9-1e03-4ca0-9da1-f86d80aaa1ab"));
@@ -99,6 +100,13 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		return new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP2, "Sandra", "Schubert",
 				EmailAddress.of("sandra.schubert@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1))
 						.setAddress(new Address("Wingertstraße", HouseNumber.of("71"), "Mannheim", ZipCode.of("68199")));
+	}
+
+	public static TrackedPerson createJessica() {
+
+		return new TrackedPerson(VALID_TRACKED_PERSON4_ID_DEP2, "Jessica", "Wagner",
+				EmailAddress.of("jessica.wagner@testtest.de"), PhoneNumber.of("0621222256"), LocalDate.of(1989, 1, 1))
+				.setAddress(new Address("Wingertstraße", HouseNumber.of("70"), "Mannheim", ZipCode.of("68199")));
 	}
 
 	/**
@@ -243,6 +251,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createGustav());
 		trackedPeople.save(createNadine());
 		trackedPeople.save(createSandra());
+		trackedPeople.save(createJessica());
 		trackedPeople.save(createHarry());
 		trackedPeople.save(createHarriette());
 		trackedPeople.save(createSiggi());
