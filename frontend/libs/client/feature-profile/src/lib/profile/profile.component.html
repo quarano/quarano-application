@@ -2,18 +2,18 @@
   <mat-card class="form__card--small form__card--animated">
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
-      <mat-card-title>Persönliche Daten bearbeiten</mat-card-title>
-      <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
+      <mat-card-title>{{ 'PROFILE.PERSÖNLICHE_DATEN_BEARBEITEN' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'PROFILE.PFLICHTEINGABEN_SIND_MARKIERT' | translate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <qro-personal-data-form [formGroup]="formGroup" class="personal-data-form"></qro-personal-data-form>
     </mat-card-content>
     <mat-card-actions>
       <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid || formGroup.pristine">
-        Speichern
+        {{ 'PROFILE.SPEICHERN' | translate }}
       </button>
       <button type="button" mat-raised-button color="secondary" [routerLink]="['/client/diary/diary-list']">
-        Abbrechen
+        {{ 'PROFILE.ABBRECHEN' | translate }}
       </button>
     </mat-card-actions>
   </mat-card>

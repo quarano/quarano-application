@@ -174,9 +174,17 @@
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
   },
+  "PROFILE": {
+    "ABBRECHEN": "Abbrechen",
+    "PERSÖNLICHE_DATEN_BEARBEITEN": "Persönliche Daten bearbeiten",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "SPEICHERN": "Speichern",
+    "PERSÖNLICHE_DATEN_AKTUALISIERT": "Persönliche Daten erfolgreich aktualisiert"
+  },
   "REGISTER": {
     "ANMELDECODE": "Anmeldecode",
     "BENUTZERNAME": "Benutzername",
+    "BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN": "Bitte alle Pflichtfelder ausfüllen",
     "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
     "GEBURTSDATUM": "Geburtsdatum",
     "HIERMIT_AKZEPTIERE_ICH_DIE": "Hiermit akzeptiere ich die",
@@ -185,9 +193,8 @@
     "PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
     "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
     "REGISTRIEREN": "Registrieren",
+    "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet",
     "SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN": "Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt.",
-    "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren.",
-    "BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN": "Bitte alle Pflichtfelder ausfüllen",
-    "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet"
+    "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren."
   }
 }

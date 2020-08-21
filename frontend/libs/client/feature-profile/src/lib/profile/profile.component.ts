@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs/operators';
 import { ClientService } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
@@ -5,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Moment } from 'moment';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { ClientDto } from '@qro/auth/api';
 
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private router: Router,
     private badRequestService: BadRequestService,
     private clientService: ClientService
@@ -108,16 +109,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   modifyProfile() {
     this.subs.add(
-      this.clientService.updatePersonalDetails(this.client).subscribe(
-        (_) => {
-          this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-          this.formGroup.markAsPristine();
-          this.router.navigate(['/']);
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-        }
-      )
+      this.clientService
+        .updatePersonalDetails(this.client)
+        .pipe(switchMap((_) => this.snackbarService.success('PROFILE.PERSÖNLICHE_DATEN_AKTUALISIERT')))
+        .subscribe(
+          (_) => {
+            this.formGroup.markAsPristine();
+            this.router.navigate(['/']);
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+          }
+        )
     );
   }
 }
