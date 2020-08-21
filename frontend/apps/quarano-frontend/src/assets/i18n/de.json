@@ -139,9 +139,9 @@
     "MORGENS": "Morgens"
   },
   "ERROR": {
-    "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen",
+    "KEINE_VERBINDUNG_ZUR_API": "Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal",
     "SERVERFEHLER": "Server Fehler - Für weitere Informationen siehe Konsole",
-    "KEINE_VERBINDUNG_ZUR_API": "Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal"
+    "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen"
   },
   "FOOTER": {
     "AGB": "AGB",
@@ -233,6 +233,12 @@
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
+  },
+  "NOT_FOUND": {
+    "DA_IST_ETWAS_SCHIEFGELAUFEN": "Da ist etwas schief gelaufen",
+    "DEFAULT_MESSAGE": "Leider konnten wir die angeforderte Ressource nicht finden",
+    "SEITE_NICHT_GEFUNDEN": "Seite nicht gefunden",
+    "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
   },
   "PERSONAL_DATA_FORM": {
     "ADRESSE": "Adresse",

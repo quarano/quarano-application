@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { RouterModule } from '@angular/router';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
@@ -6,7 +7,7 @@ import { NotFoundComponent } from './/not-found/not-found.component';
 import { ErrorInterceptorProvider } from './interceptors/error.interceptor';
 
 @NgModule({
-  imports: [CommonModule, SharedUiMaterialModule, RouterModule],
+  imports: [CommonModule, SharedUiMaterialModule, RouterModule, SharedUtilTranslationModule],
   declarations: [NotFoundComponent],
   exports: [NotFoundComponent],
   providers: [ErrorInterceptorProvider],
