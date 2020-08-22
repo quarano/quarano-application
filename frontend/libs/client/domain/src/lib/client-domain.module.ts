@@ -19,7 +19,6 @@ import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
     EncountersResolver,
     ContactPersonsResolver,
     ContactPersonResolver,
-    EnrollmentStatusResolver,
   ],
 })
 export class ClientDomainModule {}

@@ -6,6 +6,7 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
+import { AuthStore } from '../store/auth-store.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class UserService {
     private authService: AuthService,
     private snackbarService: SnackbarService,
     private tokenService: TokenService,
-    private authStore: AuthStore
+    private authStore: AuthStore,
+    private store: Store
   ) {}
 
   public get isLoggedIn$(): Observable<boolean> {
@@ -55,7 +57,7 @@ export class UserService {
           this.store.dispatch(createAction('[Enrollment Status] Load')());
         }
       }),
-tap((res) => this.authStore.login())
+      tap((res) => this.authStore.login())
     );
   }
 
