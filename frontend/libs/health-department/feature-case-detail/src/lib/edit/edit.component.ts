@@ -179,7 +179,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   showIndexCaseItem(item: CaseListItemDto): string {
     if (!item) return '';
-    return `${item.firstName} ${item.lastName} (${
+    return `${item.lastName}, ${item.firstName} (${
       item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
     })`;
   }
