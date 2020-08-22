@@ -1,6 +1,6 @@
 <div class="container" *ngIf="userService.isLoggedIn$ | async">
   <ng-container *ngIf="!userService.isHealthDepartmentUser">
-    <ng-container *ngIf="(enrollmentService.getEnrollmentStatus() | async)?.complete">
+    <ng-container *ngIf="(clientStore.enrollmentStatus$ | async)?.complete">
       <button
         *ngIf="healthDepartment$ | async as healthDepartment"
         mat-stroked-button
@@ -18,9 +18,7 @@
     <mat-icon style="color: white;">arrow_drop_down</mat-icon>
   </button>
   <mat-menu #profilemenu="matMenu">
-    <ng-container
-      *ngIf="!userService.isHealthDepartmentUser && (enrollmentService.getEnrollmentStatus() | async)?.complete"
-    >
+    <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
       <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
         <mat-icon>person</mat-icon> Benutzerprofil
       </button>

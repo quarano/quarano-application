@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { EnrollmentService } from '@qro/client/api';
+import { EnrollmentService } from '@qro/client/domain';
 
 describe('ForgottenContactDialogComponent', () => {
   let component: ForgottenContactDialogComponent;

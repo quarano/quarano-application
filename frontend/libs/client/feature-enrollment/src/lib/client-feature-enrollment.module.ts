@@ -15,10 +15,7 @@ import { InitialQuestionaireFormComponent } from './initial-questionaire-form/in
 import { LandingComponent } from './landing/landing.component';
 import { RegisterComponent } from './register/register.component';
 import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
-import {
-  ClientUiContactPersonDetailModule,
-  MultipleContactAutocompleteComponent,
-} from '@qro/client/ui-contact-person-detail';
+import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
 
 const routes: Routes = [
   {

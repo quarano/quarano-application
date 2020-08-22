@@ -1,5 +1,5 @@
 <mat-horizontal-stepper
-  *ngIf="enrollmentStatus$$ | async as enrollmentStatus"
+  *ngIf="clientStore.enrollmentStatus$ | async as enrollmentStatus"
   [linear]="true"
   #stepper
   style="position: relative;"

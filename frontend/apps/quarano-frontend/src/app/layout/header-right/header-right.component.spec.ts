@@ -6,7 +6,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserService } from '@qro/auth/api';
 import { HealthDepartmentService } from '@qro/health-department/api';
-import { EnrollmentService } from '@qro/client/api';
+import { ClientStore } from '@qro/client/api';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
@@ -25,7 +25,7 @@ describe('HeaderRightComponent', () => {
         { provide: UserService, useValue: userService },
         { provide: MatDialog, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
-        { provide: EnrollmentService, useValue: {} },
+        { provide: ClientStore, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

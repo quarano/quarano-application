@@ -1,4 +1,5 @@
 export * from './lib/client-domain.module';
+export * from './lib/client-store.module';
 export * from './lib/model/encounter';
 export * from './lib/resolvers/my-client-data.resolver';
 export * from './lib/data-access/client.service';
@@ -16,3 +17,4 @@ export * from './lib/resolvers/contact-persons.resolver';
 export * from './lib/model/contact-person';
 export * from './lib/data-access/contact-person.service';
 export * from './lib/resolvers/contact-person.resolver';
+export * from './lib/store/client-store.service';

@@ -8,4 +8,5 @@ export {
   roleNames,
   roles,
   ClientType,
+  AuthActions,
 } from '@qro/auth/domain';
