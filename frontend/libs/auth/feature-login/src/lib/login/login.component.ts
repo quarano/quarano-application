@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (resData) => {
           this.snackbarService.success('Willkommen bei quarano');
+
           if (this.userService.isHealthDepartmentUser) {
             if (this.checkIfPasswordChangeNeeded(resData)) {
               this.openPasswordChangeDialog();

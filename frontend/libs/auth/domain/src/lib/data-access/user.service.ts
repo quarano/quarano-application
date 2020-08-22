@@ -1,3 +1,4 @@
+import { Store, createAction } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -6,6 +7,7 @@ import { TokenService } from './token.service';
 import { UserDto } from '../model/user';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
+import { AuthActions } from '../store/action-types';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,8 @@ export class UserService {
   constructor(
     private authService: AuthService,
     private snackbarService: SnackbarService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private store: Store
   ) {}
 
   public get user$(): Observable<UserDto> {
@@ -50,14 +53,21 @@ export class UserService {
   }
 
   public login(username: string, password: string): Observable<any> {
-    return this.authService
-      .login(username, password)
-      .pipe(tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))));
+    return this.authService.login(username, password).pipe(
+      tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+      tap((res) => {
+        if (!this.isHealthDepartmentUser) {
+          // Cannot use ClientActions due to circular dependency
+          this.store.dispatch(createAction('[Enrollment Status] Load')());
+        }
+      })
+    );
   }
 
   public logout() {
     this.snackbarService.message('Sie wurden abgemeldet');
     this.tokenService.unsetToken();
+    this.store.dispatch(AuthActions.logout());
   }
 
   public roleMatch(roleNames: string[]): boolean {

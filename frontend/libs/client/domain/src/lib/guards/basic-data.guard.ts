@@ -1,17 +1,17 @@
+import { ClientStore } from './../store/client-store.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '@qro/auth/api';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { EnrollmentService } from '../services/enrollment.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BasicDataGuard implements CanActivate {
   constructor(
-    private enrollmentService: EnrollmentService,
+    private clientStore: ClientStore,
     private userService: UserService,
     private router: Router,
     private snackbarService: SnackbarService
@@ -25,8 +25,7 @@ export class BasicDataGuard implements CanActivate {
       this.router.navigate(['/auth/forbidden']);
       return false;
     }
-
-    return this.enrollmentService.getEnrollmentStatus().pipe(
+    return this.clientStore.enrollmentStatus$.pipe(
       map((status) => {
         if (status?.complete) {
           this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
