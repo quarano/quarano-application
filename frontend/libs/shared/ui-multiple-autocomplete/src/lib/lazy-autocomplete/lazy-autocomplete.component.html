@@ -18,7 +18,6 @@
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       [matChipInputAddOnBlur]="true"
-      [matTooltip]="filteredList$$.value.length === 0 ? 'Es gibt keine weiteren Auswahlmöglichkeiten' : null"
       (blur)="checkInputForData()"
       #trigger="matAutocompleteTrigger"
     />
