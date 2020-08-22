@@ -18,4 +18,3 @@ export * from './lib/model/contact-person';
 export * from './lib/data-access/contact-person.service';
 export * from './lib/resolvers/contact-person.resolver';
 export * from './lib/store/client-store.service';
-export * from './lib/resolvers/enrollment-status.resolver';

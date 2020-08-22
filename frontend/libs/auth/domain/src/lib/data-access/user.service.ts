@@ -1,4 +1,4 @@
-import { Store } from '@ngrx/store';
+import { Store, createAction } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -53,9 +53,15 @@ export class UserService {
   }
 
   public login(username: string, password: string): Observable<any> {
-    return this.authService
-      .login(username, password)
-      .pipe(tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))));
+    return this.authService.login(username, password).pipe(
+      tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+      tap((res) => {
+        if (!this.isHealthDepartmentUser) {
+          // Cannot use ClientActions due to circular dependency
+          this.store.dispatch(createAction('[Enrollment Status] Load')());
+        }
+      })
+    );
   }
 
   public logout() {

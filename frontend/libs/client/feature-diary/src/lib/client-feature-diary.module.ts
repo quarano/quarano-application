@@ -2,7 +2,7 @@ import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './diary/diary.component';
-import { DiaryResolver, DiaryDetailResolver, ClientDomainModule, EnrollmentStatusResolver } from '@qro/client/domain';
+import { DiaryResolver, DiaryDetailResolver, ClientDomainModule } from '@qro/client/domain';
 import { DiaryEntryComponent } from './diary-entry/diary-entry.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { ContactPersonsResolver } from '@qro/client/domain';
@@ -29,7 +29,7 @@ const routes: Routes = [
   {
     path: 'diary-list',
     component: DiaryComponent,
-    resolve: { diary: DiaryResolver, enrollmentStatusLoaded: EnrollmentStatusResolver },
+    resolve: { diary: DiaryResolver },
   },
   {
     path: 'diary-detail',
@@ -41,7 +41,6 @@ const routes: Routes = [
           diaryEntry: DiaryDetailResolver,
           symptoms: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
-          enrollmentStatusLoaded: EnrollmentStatusResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],
       },
@@ -52,7 +51,6 @@ const routes: Routes = [
           diaryEntry: DiaryDetailResolver,
           symptoms: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
-          enrollmentStatusLoaded: EnrollmentStatusResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],
       },

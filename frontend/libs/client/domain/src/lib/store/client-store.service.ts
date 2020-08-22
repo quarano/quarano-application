@@ -24,19 +24,6 @@ export class ClientStore {
     this._isLoaded$ = this.store.pipe(select(ClientSelectors.isEnrollmentStatusLoaded));
   }
 
-  public getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return combineLatest([this.enrollmentStatus$, this.isLoaded$]).pipe(
-      tap(([status, loaded]) => {
-        if (!loaded) {
-          this.loadEnrollmentStatus();
-        }
-      }),
-      filter(([status, loaded]) => !!loaded),
-      map(([s]) => s),
-      first()
-    );
-  }
-
   public loadEnrollmentStatus() {
     this.store.dispatch(ClientActions.loadEnrollmentStatus());
   }

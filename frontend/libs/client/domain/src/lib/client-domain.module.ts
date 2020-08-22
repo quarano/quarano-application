@@ -1,4 +1,3 @@
-import { EnrollmentStatusResolver } from './resolvers/enrollment-status.resolver';
 import { ClientStoreModule } from './client-store.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -20,7 +19,6 @@ import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
     EncountersResolver,
     ContactPersonsResolver,
     ContactPersonResolver,
-    EnrollmentStatusResolver,
   ],
 })
 export class ClientDomainModule {}
