@@ -4,6 +4,7 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
 import { AuthService } from './auth.service';
 import { TestBed, inject } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('UserService', () => {
   beforeEach(() => {
@@ -23,6 +24,7 @@ describe('UserService', () => {
         { provide: SnackbarService, useValue: snackbarService },
         { provide: AuthStore, useValue: {} },
         { provide: TokenService, useValue: tokenService },
+        provideMockStore({}),
       ],
     });
   });
