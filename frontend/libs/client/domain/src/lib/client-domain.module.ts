@@ -1,3 +1,4 @@
+import { ClientStoreModule } from './client-store.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MyClientDataResolver } from './resolvers/my-client-data.resolver';
@@ -9,7 +10,7 @@ import { ContactPersonResolver } from './resolvers/contact-person.resolver';
 import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, ClientStoreModule],
   providers: [
     MyClientDataResolver,
     DiaryDetailResolver,

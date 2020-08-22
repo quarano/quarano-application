@@ -1,4 +1,4 @@
-import { ClientService, EncounterEntry } from '@qro/client/domain';
+import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -29,13 +29,6 @@ import { tap, finalize, take } from 'rxjs/operators';
 export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
-  enrollmentStatus$$ = new BehaviorSubject<EnrollmentStatusDto>({
-    completedContactRetro: null,
-    completedPersonalData: null,
-    completedQuestionnaire: null,
-    complete: null,
-  });
 
   @ViewChild('stepper')
   stepper: MatHorizontalStepper;
@@ -69,7 +62,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
     private clientService: ClientService,
-    private dialogService: ContactDialogService
+    private dialogService: ContactDialogService,
+    public clientStore: ClientStore
   ) {}
 
   ngOnInit() {
@@ -86,13 +80,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
 
     this.subs.add(
-      this.enrollmentService.loadEnrollmentStatus().subscribe((status) => {
-        this.enrollmentStatus$$.next(status);
+      this.clientStore.enrollmentStatus$.subscribe((status) => {
         if (status.completedPersonalData) {
-          this.stepper.next();
+          this.stepper?.next();
         }
         if (status.completedQuestionnaire) {
-          this.stepper.next();
+          this.stepper?.next();
         }
       })
     );
@@ -179,23 +172,24 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.firstFormLoading = true;
       const value = this.firstFormGroup.value;
       value.dateOfBirth = this.dateOfBirth;
-      this.clientService
-        .updatePersonalDetails(value)
-        .subscribe(
-          (result) => {
-            this.enrollmentStatus$$.next(result);
-            if (result.completedPersonalData) {
-              this.client = value;
-              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
-              this.stepper.next();
+      this.subs.add(
+        this.clientService
+          .updatePersonalDetails(value)
+          .subscribe(
+            (result) => {
+              if (result.completedPersonalData) {
+                this.client = value;
+                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+                this.stepper.next();
+              }
+              this.firstFormLoading = false;
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
             }
-            this.firstFormLoading = false;
-          },
-          (error) => {
-            this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
-          }
-        )
-        .add(() => (this.firstFormLoading = false));
+          )
+          .add(() => (this.firstFormLoading = false))
+      );
     }
   }
 
@@ -328,22 +322,26 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.enrollmentService
-      .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
-      .subscribe((encounter) => {
-        this.encounters.push(encounter);
-        this.snackbarService.success('Kontakt erfolgreich gespeichert');
-      });
+    this.subs.add(
+      this.enrollmentService
+        .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
+        .subscribe((encounter) => {
+          this.encounters.push(encounter);
+          this.snackbarService.success('Kontakt erfolgreich gespeichert');
+        })
+    );
   }
 
   onContactRemoved(date: Date, id: string) {
     const encounterToRemove = this.encounters.find(
       (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
     );
-    this.enrollmentService.deleteEncounter(encounterToRemove.encounter).subscribe((_) => {
-      this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
-      this.snackbarService.success('Kontakt erfolgreich entfernt');
-    });
+    this.subs.add(
+      this.enrollmentService.deleteEncounter(encounterToRemove.encounter).subscribe((_) => {
+        this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
+        this.snackbarService.success('Kontakt erfolgreich entfernt');
+      })
+    );
   }
 
   hasRetrospectiveContacts(): boolean {
@@ -370,29 +368,32 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         },
       });
 
-      dialogRef
-        .afterClosed()
-        .subscribe((result) => {
-          if (result) {
-            this.completeEnrollment(true);
-          }
-        })
-        .add(() => (this.thirdFormLoading = false));
+      this.subs.add(
+        dialogRef
+          .afterClosed()
+          .subscribe((result) => {
+            if (result) {
+              this.completeEnrollment(true);
+            }
+          })
+          .add(() => (this.thirdFormLoading = false))
+      );
     } else {
       this.completeEnrollment(false);
     }
   }
 
   private completeEnrollment(withoutEncounters: boolean) {
-    this.enrollmentService
-      .completeEnrollment(withoutEncounters)
-      .subscribe((result) => {
-        this.enrollmentStatus$$.next(result);
-        if (result.completedContactRetro) {
-          this.snackbarService.success('Die Registrierung wurde abgeschlossen');
-          this.router.navigate(['/client/diary/diary-list']);
-        }
-      })
-      .add(() => (this.thirdFormLoading = false));
+    this.clientStore.completeEnrollment(withoutEncounters);
+    this.subs.add(
+      this.clientStore.enrollmentStatus$
+        .subscribe((result) => {
+          if (result.completedContactRetro) {
+            this.snackbarService.success('Die Registrierung wurde abgeschlossen');
+            this.router.navigate(['/client/diary/diary-list']);
+          }
+        })
+        .add(() => (this.thirdFormLoading = false))
+    );
   }
 }
