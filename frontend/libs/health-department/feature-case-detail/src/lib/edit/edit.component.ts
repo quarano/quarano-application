@@ -59,11 +59,13 @@ export class EditComponent implements OnInit, OnDestroy {
     this.createFormGroup();
 
     this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      if (type === 'index') {
+      console.log(type);
+      if (type === CaseType.Index) {
         this.type$$.next(CaseType.Index);
-      } else if (type === 'contact') {
+      } else if (type === CaseType.Contact) {
         this.type$$.next(CaseType.Contact);
       }
+      console.log(this.isIndexCase);
     });
 
     this.caseDetail$ = combineLatest([
@@ -99,6 +101,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   createFormGroup() {
+    console.log(this.isIndexCase);
     this.formGroup = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
@@ -133,7 +136,7 @@ export class EditComponent implements OnInit, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
+      infected: new FormControl(),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
@@ -186,7 +189,6 @@ export class EditComponent implements OnInit, OnDestroy {
   setValidators() {
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
-      this.formGroup.get('infected').disable();
       this.formGroup.get('infected').setValue(true);
     } else {
       this.formGroup.clearValidators();

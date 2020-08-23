@@ -67,9 +67,12 @@
             {{ errorGenerator.getErrorMessage(formGroup.controls.testDate, error) }}
           </mat-error>
         </mat-form-field>
-        <div class="half-width form-field form-field-radio" *ngIf="formGroup.controls.testDate.value">
+        <div
+          class="half-width form-field form-field-radio"
+          *ngIf="formGroup.controls.testDate.value || formGroup.get('infected').value"
+        >
           <label class="example-margin">Covid-19 Test:</label>
-          <mat-radio-group formControlName="infected">
+          <mat-radio-group [disabled]="isIndexCase" [value]="isIndexCase" formControlName="infected">
             <mat-radio-button class="example-margin" [value]="true">Positiv</mat-radio-button>
             <mat-radio-button class="example-margin" [value]="false">Negativ</mat-radio-button>
           </mat-radio-group>
@@ -109,8 +112,7 @@
           {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineEndDate, error) }}
         </mat-error>
       </mat-form-field>
-    </fieldset>
-    <fieldset class="mb-3">
+
       <legend>Ursprungsfälle</legend>
       <qro-lazy-autocomplete
         (completeMethod)="onIndexCaseSearch($event)"

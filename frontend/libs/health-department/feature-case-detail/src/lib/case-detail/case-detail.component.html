@@ -88,7 +88,10 @@
           matBadgeSize="small"
           matBadgeColor="warn"
           >Aktionen</span
-        ><ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
+        >
+        <ng-template #has_no_open_anomalies>
+          <span>Aktionen</span>
+        </ng-template>
       </a>
       <a
         *ngIf="caseDetail.comments"
@@ -98,7 +101,14 @@
         #rlcomments="routerLinkActive"
         [active]="rlcomments.isActive"
       >
-        Kommentare <span class="comment-cnt">{{ caseDetail.comments.length }}</span>
+        <span
+          matBadge="{{ caseDetail.comments.length }}"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="info"
+        >
+          Kommentare
+        </span>
       </a>
       <a
         *ngIf="caseDetail.indexContacts.length > 0"
@@ -138,75 +148,16 @@
         #rlcontacts="routerLinkActive"
         [active]="rlcontacts.isActive"
       >
-        Kontakte <span class="comment-cnt">?</span>
-        <!-- ToDo: Anzahl Kontakte angeben sobald in casedto verfügbar -->
+        <span
+          matBadge="{{ caseDetail.contactCount }}"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="info"
+        >
+          Kontakte
+        </span>
       </a>
     </nav>
     <router-outlet></router-outlet>
-    <!-- <mat-tab-group #tabs [selectedIndex]="tabIndex" *ngIf="type$ | async as type">
-      <mat-tab [label]="type === ClientType.Index ? 'Falldaten' : 'Stammdaten'">
-        <p class="hint secondary-text-color">
-          Pflichteingaben sind mit * markiert
-        </p>
-        <qro-client-edit
-          [caseDetail]="caseDetail"
-          (submittedValues)="saveCaseData($event)"
-          [type]="type"
-          (changedToIndex)="changeToIndexType()"
-          [loading]="personalDataLoading"
-        >
-        </qro-client-edit>
-      </mat-tab>
-      <mat-tab *ngIf="caseAction$ | async as caseAction">
-        <ng-template mat-tab-label>
-          <span
-            *ngIf="hasOpenAnomalies() | async; else has_no_open_anomalies"
-            [matBadge]="(caseAction.anomalies.health.length + caseAction.anomalies.process.length).toString()"
-            matBadgeOverlap="false"
-            matBadgeSize="small"
-            matBadgeColor="warn"
-            >Aktionen</span
-          >
-          <ng-template #has_no_open_anomalies><span>Aktionen</span></ng-template>
-        </ng-template>
-        <qro-client-action [caseAction]="caseAction" [type]="type"></qro-client-action>
-      </mat-tab>
-      <mat-tab *ngIf="caseComments$ | async as caseComments" label="Kommentare ({{ caseComments.length }})">
-        <ng-template mat-tab-label>
-          Kommentare
-          <span class="comment-cnt">{{ caseComments.length }}</span>
-        </ng-template>
-        <qro-client-comments
-          [comments]="caseComments"
-          [loading]="commentLoading"
-          (newComment)="addComment($event)"
-        ></qro-client-comments>
-      </mat-tab>
-      <mat-tab *ngIf="caseIndexContacts$ | async as caseIndexContacts">
-        <ng-template mat-tab-label>
-          Angaben Indexfall
-        </ng-template>
-        <qro-client-index-contacts [contacts]="caseIndexContacts"></qro-client-index-contacts>
-      </mat-tab>
-      <mat-tab *ngIf="trackingStart$$ | async as tracking" label="E-Mail Vorlage">
-        <qro-client-mail [tracking]="tracking" (renewTrackingCode)="renewTracking(tracking)"></qro-client-mail>
-      </mat-tab>
-      <mat-tab *ngIf="questionnaire$$ | async as questionnaire" label="Fragebogen">
-        <qro-client-questionnaire
-          [questionnaire]="questionnaire"
-          [symptoms]="symptoms$ | async"
-        ></qro-client-questionnaire>
-      </mat-tab>
-      <mat-tab *ngIf="contacts$$ | async as contacts" label="Kontakte ({{ contacts.length }})">
-        <ng-template mat-tab-label>
-          Kontakte
-          <span class="comment-cnt">{{ contacts.length }}</span>
-        </ng-template>
-        <qro-contact-list
-          [contacts]="contacts"
-          [caseName]="caseDetail.firstName + ' ' + caseDetail.lastName"
-        ></qro-contact-list>
-      </mat-tab>
-    </mat-tab-group> -->
   </mat-card-content>
 </mat-card>

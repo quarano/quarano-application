@@ -64,10 +64,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.cases$ = this.entityService.filteredEntities$.pipe(
-      tap((cases) => console.log(cases)),
-      map((dtos) => dtos.filter((dto) => dto.caseType === CaseType.Contact).map((dto) => this.getRowData(dto))),
+      map((dtos) => dtos.map((dto) => this.getRowData(dto))),
       tap((cases) => (this.filteredData = [...cases])),
-      tap((cases) => (this.loading = false))
+      tap(() => (this.loading = false))
     );
   }
 
@@ -94,7 +93,6 @@ export class CaseListComponent implements OnInit, OnDestroy {
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
-      // todo check ob das mit BE übereinstimmt
       originCases: c?._embedded?.originCases
         ?.map((originCase) => `${originCase?.firstName} ${originCase?.lastName}`)
         ?.join(', '),

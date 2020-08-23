@@ -63,7 +63,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.cases$ = this.entityService.filteredEntities$.pipe(
-      map((dtos) => dtos.filter((dto) => dto.caseType === CaseType.Index).map((dto) => this.getRowData(dto))),
+      map((dtos) => dtos.map((dto) => this.getRowData(dto))),
       tap((cases) => (this.filteredData = [...cases])),
       tap((cases) => (this.loading = false))
     );

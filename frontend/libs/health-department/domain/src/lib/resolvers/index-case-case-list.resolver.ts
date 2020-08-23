@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { tap, filter, first } from 'rxjs/operators';
+import { CaseType } from '@qro/auth/domain';
 
 @Injectable()
 export class IndexCaseCaseListResolver implements Resolve<boolean> {
@@ -16,7 +17,7 @@ export class IndexCaseCaseListResolver implements Resolve<boolean> {
         }
       }),
       filter((loaded) => !!loaded),
-      tap((loaded) => this.entityService.setFilter('index')),
+      tap((loaded) => this.entityService.setFilter(CaseType.Index)),
       first()
     );
   }

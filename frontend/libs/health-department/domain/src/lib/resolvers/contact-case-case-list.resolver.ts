@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { CaseEntityService } from '../data-access/case-entity.service';
 import { tap, filter, first } from 'rxjs/operators';
+import { CaseType } from '@qro/auth/domain';
 
 @Injectable()
 export class ContactCaseCaseListResolver implements Resolve<boolean> {
@@ -16,7 +17,7 @@ export class ContactCaseCaseListResolver implements Resolve<boolean> {
         }
       }),
       filter((loaded) => !!loaded),
-      tap((loaded) => this.entityService.setFilter('contact')),
+      tap((loaded) => this.entityService.setFilter(CaseType.Contact)),
       first()
     );
   }
