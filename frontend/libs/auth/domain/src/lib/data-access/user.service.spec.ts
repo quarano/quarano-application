@@ -1,10 +1,10 @@
+import { AuthStore } from './../store/auth-store.service';
 import { UserService } from './user.service';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
 import { AuthService } from './auth.service';
-import { provideMockStore } from '@ngrx/store/testing';
 import { TestBed, inject } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('UserService', () => {
   beforeEach(() => {
@@ -17,13 +17,14 @@ describe('UserService', () => {
     const tokenService: TokenService = {
       unsetToken: () => {},
     } as any;
-    const store = provideMockStore({});
+
     TestBed.configureTestingModule({
       providers: [
         { provide: AuthService, useValue: authService },
         { provide: SnackbarService, useValue: snackbarService },
-        { provide: Store, useValue: store },
+        { provide: AuthStore, useValue: {} },
         { provide: TokenService, useValue: tokenService },
+        provideMockStore({}),
       ],
     });
   });

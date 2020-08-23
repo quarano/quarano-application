@@ -4,10 +4,9 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
-import { UserDto } from '../model/user';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
-import { AuthActions } from '../store/action-types';
+import { AuthStore } from '../store/auth-store.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +16,9 @@ export class UserService {
     private authService: AuthService,
     private snackbarService: SnackbarService,
     private tokenService: TokenService,
+    private authStore: AuthStore,
     private store: Store
   ) {}
-
-  public get user$(): Observable<UserDto> {
-    return this.authService.getMe().pipe(distinctUntilChanged());
-  }
 
   public get isLoggedIn$(): Observable<boolean> {
     return this.tokenService.token$.pipe(
@@ -31,8 +27,8 @@ export class UserService {
     );
   }
 
-  public get currentUserName$(): Observable<string> {
-    return this.user$.pipe(
+  public get nameOfCurrentUser$(): Observable<string> {
+    return this.authStore.user$.pipe(
       map((user) => {
         if (user) {
           if (this.isHealthDepartmentUser) {
@@ -60,14 +56,15 @@ export class UserService {
           // Cannot use ClientActions due to circular dependency
           this.store.dispatch(createAction('[Enrollment Status] Load')());
         }
-      })
+      }),
+      tap((res) => this.authStore.login())
     );
   }
 
   public logout() {
     this.snackbarService.message('Sie wurden abgemeldet');
     this.tokenService.unsetToken();
-    this.store.dispatch(AuthActions.logout());
+    this.authStore.logout();
   }
 
   public roleMatch(roleNames: string[]): boolean {
