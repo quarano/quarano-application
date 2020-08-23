@@ -237,6 +237,9 @@
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
     "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
   },
+  "MULTIPLE_AUTOCOMPLETE": {
+    "KEINE_WEITEREN_AUSWAHLMÖGLICHKEITEN": "Es gibt keine weiteren Auswahlmöglichkeiten"
+  },
   "NOT_FOUND": {
     "DA_IST_ETWAS_SCHIEFGELAUFEN": "Da ist etwas schief gelaufen",
     "DEFAULT_MESSAGE": "Leider konnten wir die angeforderte Ressource nicht finden",
