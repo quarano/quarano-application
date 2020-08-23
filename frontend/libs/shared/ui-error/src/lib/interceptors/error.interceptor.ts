@@ -7,7 +7,7 @@ import {
   HttpErrorResponse,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
@@ -28,17 +28,15 @@ export interface IBadRequestError {
   providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private snackbarService: TranslatedSnackbarService, private router: Router) {}
+  constructor(private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
-            return this.snackbarService.message('ERROR.ZUNÄCHST_EINLOGGEN').pipe(
-              tap((res) => this.router.navigate(['/auth/login'])),
-              switchMap((res) => throwError(error))
-            );
+            this.router.navigate(['/auth/login']);
+            return throwError(error);
           }
 
           if (error.status === HttpStatusCode.forbidden.valueOf()) {
@@ -48,10 +46,12 @@ export class ErrorInterceptor implements HttpInterceptor {
 
           if (error.status === HttpStatusCode.internalServerError.valueOf()) {
             // ToDo: Message ggf. anpassen, wenn wir ein Ticketsystem oder eine Supporthotline haben
-            return this.snackbarService.error('ERROR.SERVERFEHLER').pipe(
-              tap((res) => console.error(error)),
-              switchMap((res) => throwError(error))
-            );
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: encodeURIComponent('ERROR.SERVERFEHLER'),
+              },
+            });
+            return of(null);
           }
 
           const applicationError = error.headers.get('Application-Error');
@@ -61,9 +61,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (error.status === 0) {
-            return this.snackbarService
-              .error('ERROR.KEINE_VERBINDUNG_ZUR_API')
-              .pipe(switchMap((res) => throwError(error)));
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: encodeURIComponent('ERROR.KEINE_VERBINDUNG_ZUR_API'),
+              },
+            });
+            return of(null);
           }
 
           const serverError = error.error;

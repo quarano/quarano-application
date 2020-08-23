@@ -139,9 +139,12 @@
     "MORGENS": "Morgens"
   },
   "ERROR": {
+    "DA_IST_ETWAS_SCHIEFGELAUFEN": "Da ist etwas schiefgelaufen",
+    "EIN_FEHLER_IST_AUFGETRETEN": "Ein Fehler ist aufgetreten",
     "KEINE_VERBINDUNG_ZUR_API": "Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal",
     "SERVERFEHLER": "Server Fehler - Für weitere Informationen siehe Konsole",
-    "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen"
+    "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen",
+    "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
   },
   "FOOTER": {
     "AGB": "AGB",
