@@ -100,7 +100,7 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
       if (abstractControl instanceof FormGroup) {
         this.markControlsWithTruthyValueAsTouched(abstractControl);
       } else if (abstractControl.value) {
-          abstractControl.markAsTouched();
+        abstractControl.markAsTouched();
       }
     });
   }
