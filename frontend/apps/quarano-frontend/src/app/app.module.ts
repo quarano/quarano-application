@@ -30,7 +30,7 @@ registerLocaleData(localeDe, 'de');
 
 const SUB_MODULES = [
   SharedUiErrorModule,
-  AuthDomainModule,
+  AuthDomainModule.forRoot(),
   SharedUiAsideModule,
   SharedUtilDateModule,
   SharedUiMaterialModule,

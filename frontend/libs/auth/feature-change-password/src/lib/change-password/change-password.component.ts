@@ -1,6 +1,7 @@
+import { Store } from '@ngrx/store';
 import { ValidationErrorGenerator, PasswordValidator, ConfirmValidPasswordMatcher } from '@qro/shared/util-forms';
 import { BadRequestService } from '@qro/shared/ui-error';
-import { AuthService, UserService } from '@qro/auth/domain';
+import { AuthService, UserService, AuthStore } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -28,12 +29,13 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   private dialogData;
 
   constructor(
-    private userService: UserService,
+    private authStore: AuthStore,
     private snackbarService: SnackbarService,
     private router: Router,
     private authService: AuthService,
     private badRequestService: BadRequestService,
-    private injector: Injector
+    private injector: Injector,
+    private store: Store
   ) {
     this.dialogRef = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
@@ -41,7 +43,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.createForm();
-    this.subs.add(this.userService.user$.subscribe((user) => this.formGroup.controls.username.setValue(user.username)));
+    this.subs.add(this.authStore.user$.subscribe((user) => this.formGroup.controls.username.setValue(user.username)));
   }
 
   ngOnDestroy() {
