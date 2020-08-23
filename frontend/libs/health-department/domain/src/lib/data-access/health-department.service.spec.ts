@@ -1,4 +1,4 @@
-import { UserService } from '@qro/auth/api';
+import { UserService, AuthStore } from '@qro/auth/api';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed, inject } from '@angular/core/testing';
 import { HealthDepartmentService } from './health-department.service';
@@ -9,7 +9,12 @@ describe('Service: HealthDepartment', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [HealthDepartmentService, { provide: API_URL, useValue: '' }, { provide: UserService, useValue: {} }],
+      providers: [
+        HealthDepartmentService,
+        { provide: API_URL, useValue: '' },
+        { provide: UserService, useValue: {} },
+        { provide: AuthStore, useValue: {} },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     });
   });

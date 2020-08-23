@@ -25,8 +25,4 @@ export class AuthService {
       .post(`${this.apiUrl}/login`, { username, password }, { observe: 'response' })
       .pipe(shareReplay());
   }
-
-  getMe(): Observable<UserDto> {
-    return this.httpClient.get<UserDto>(`${this.apiUrl}/api/user/me`).pipe(shareReplay());
-  }
 }

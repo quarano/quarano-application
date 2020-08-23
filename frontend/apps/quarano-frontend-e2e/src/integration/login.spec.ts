@@ -22,7 +22,7 @@ describe('login', () => {
 
       login('test3', 'test123');
 
-      cy.wait('@login').its('status').should('eq', 204);
+      cy.wait('@login').its('status').should('eq', 200);
       cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
 
       cy.url().should('include', '/client/diary/diary-list');
@@ -43,7 +43,7 @@ describe('login', () => {
     it('should successful login to agent page', () => {
       login('agent1', 'agent1');
 
-      cy.wait('@login').its('status').should('eq', 204);
+      cy.wait('@login').its('status').should('eq', 200);
       cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
 
       cy.wait(5);
