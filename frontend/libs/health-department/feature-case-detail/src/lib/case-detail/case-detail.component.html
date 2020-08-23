@@ -101,14 +101,7 @@
         #rlcomments="routerLinkActive"
         [active]="rlcomments.isActive"
       >
-        <span
-          matBadge="{{ caseDetail.comments.length }}"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="info"
-        >
-          Kommentare
-        </span>
+        Kommentare <span class="info-badge">{{ caseDetail.comments.length }}</span>
       </a>
       <a
         *ngIf="caseDetail.indexContacts.length > 0"
@@ -148,14 +141,7 @@
         #rlcontacts="routerLinkActive"
         [active]="rlcontacts.isActive"
       >
-        <span
-          matBadge="{{ caseDetail.contactCount }}"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="info"
-        >
-          Kontakte
-        </span>
+        Kontakte <span class="info-badge">{{ caseDetail.contactCount }}</span>
       </a>
     </nav>
     <router-outlet></router-outlet>
