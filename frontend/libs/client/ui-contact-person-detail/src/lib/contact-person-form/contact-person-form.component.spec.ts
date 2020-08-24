@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactPersonFormComponent } from './contact-person-form.component';
-import {FormBuilder} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContactPersonService, ContactPersonDto } from '@qro/client/domain';
@@ -35,7 +35,7 @@ describe('ContactPersonFormComponent', () => {
   it('should mark fields with truthy initial value as touched', () => {
     component.contactPerson = {
       firstName: 'Test',
-      lastName: 'Meiser1'
+      lastName: 'Meiser1',
     } as ContactPersonDto;
     component.ngOnInit();
 
@@ -46,7 +46,7 @@ describe('ContactPersonFormComponent', () => {
   it('should not mark fields with empty initial value as touched', () => {
     component.contactPerson = {
       firstName: 'Test',
-      lastName: 'Meiser1'
+      lastName: 'Meiser1',
     } as ContactPersonDto;
     component.ngOnInit();
 
@@ -60,7 +60,7 @@ describe('ContactPersonFormComponent', () => {
   it('should validate fields with initial value', () => {
     component.contactPerson = {
       firstName: 'Test',
-      lastName: 'Meiser1'
+      lastName: 'Meiser1',
     } as ContactPersonDto;
     component.ngOnInit();
 
