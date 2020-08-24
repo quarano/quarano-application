@@ -1,7 +1,9 @@
+import { TranslateService } from '@ngx-translate/core';
+import { Store, createAction } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
@@ -13,9 +15,10 @@ import { AuthStore } from '../store/auth-store.service';
 export class UserService {
   constructor(
     private authService: AuthService,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private tokenService: TokenService,
-    private authStore: AuthStore
+    private authStore: AuthStore,
+    private translate: TranslateService
   ) {}
 
   public get isLoggedIn$(): Observable<boolean> {
@@ -27,15 +30,14 @@ export class UserService {
 
   public get nameOfCurrentUser$(): Observable<string> {
     return this.authStore.user$.pipe(
-      map((user) => {
+      withLatestFrom(this.translate.get('USER.GESUNDHEITSAMT_UNBEKANNT')),
+      map(([user, translatedText]) => {
         if (user) {
           if (this.isHealthDepartmentUser) {
             if (user.firstName && user.lastName) {
-              return `${user.firstName} ${user.lastName} (${
-                user.healthDepartment?.name || 'Gesundheitsamt unbekannt'
-              })`;
+              return `${user.firstName} ${user.lastName} (${user.healthDepartment?.name || translatedText})`;
             }
-            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+            return `${user.username} (${user.healthDepartment?.name || translatedText})`;
           } else if (user.client?.firstName || user.client?.lastName) {
             return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
           }
@@ -54,7 +56,7 @@ export class UserService {
   }
 
   public logout() {
-    this.snackbarService.message('Sie wurden abgemeldet');
+    this.snackbarService.message('USER.SIE_WURDEN_ABGEMELDET').subscribe();
     this.tokenService.unsetToken();
     this.authStore.logout();
   }

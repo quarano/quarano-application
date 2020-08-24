@@ -71,8 +71,8 @@
         <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.passwordConfirm)">
           {{ errorGenerator.getErrorMessage(registrationForm.controls.passwordConfirm, error) }}
         </mat-error>
-        <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')">
-          {{ 'REGISTER.PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN' | translate }}
+        <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')"
+          >{{ 'REGISTER.PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN' | translate }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">

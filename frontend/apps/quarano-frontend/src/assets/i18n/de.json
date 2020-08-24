@@ -284,5 +284,9 @@
     "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet",
     "SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN": "Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt.",
     "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren."
+  },
+  "USER": {
+    "SIE_WURDEN_ABGEMELDET": "Sie wurden abgemeldet",
+    "GESUNDHEITSAMT_UNBEKANNT": "Gesundheitsamt unbekannt"
   }
 }

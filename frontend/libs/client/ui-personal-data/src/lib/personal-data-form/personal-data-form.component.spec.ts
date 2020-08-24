@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -11,6 +12,7 @@ describe('PersonalDataFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [PersonalDataFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

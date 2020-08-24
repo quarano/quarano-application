@@ -1,8 +1,9 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EnrollmentService } from '@qro/client/domain';
 
@@ -12,6 +13,7 @@ describe('ForgottenContactDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [ForgottenContactDialogComponent],
       providers: [
         FormBuilder,
@@ -24,7 +26,7 @@ describe('ForgottenContactDialogComponent', () => {
           },
         },
         {
-          provide: SnackbarService,
+          provide: TranslatedSnackbarService,
           useValue: {
             success: () => {},
           },

@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InitialQuestionnaireFormComponent } from './initial-questionnaire-form.component';
@@ -10,6 +11,7 @@ describe('InitialQuestionaireFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [InitialQuestionnaireFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

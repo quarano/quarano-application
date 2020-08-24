@@ -1,7 +1,8 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactPersonFormComponent } from './contact-person-form.component';
 import { FormBuilder } from '@angular/forms';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContactPersonService, ContactPersonDto } from '@qro/client/domain';
 
@@ -11,11 +12,12 @@ describe('ContactPersonFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [ContactPersonFormComponent],
       providers: [
         FormBuilder,
         { provide: ContactPersonService, useValue: {} },
-        { provide: SnackbarService, useValue: {} },
+        { provide: TranslatedSnackbarService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

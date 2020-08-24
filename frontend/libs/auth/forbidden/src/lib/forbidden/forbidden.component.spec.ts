@@ -1,7 +1,8 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ForbiddenComponent} from './forbidden.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ForbiddenComponent } from './forbidden.component';
 
 describe('ForbiddenComponent', () => {
   let component: ForbiddenComponent;
@@ -9,10 +10,10 @@ describe('ForbiddenComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [ForbiddenComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
