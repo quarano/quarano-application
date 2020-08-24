@@ -31,4 +31,17 @@ export class ClientStore {
   public completeEnrollment(withoutEncounters: boolean) {
     this.store.dispatch(ClientActions.completeEnrollment({ withoutEncounters }));
   }
+
+  public getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
+    return combineLatest([this.enrollmentStatus$, this.isLoaded$]).pipe(
+      tap(([status, loaded]) => {
+        if (!loaded) {
+          this.loadEnrollmentStatus();
+        }
+      }),
+      filter(([status, loaded]) => !!loaded),
+      map(([s]) => s),
+      first()
+    );
+  }
 }

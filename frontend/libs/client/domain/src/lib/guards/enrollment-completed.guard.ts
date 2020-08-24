@@ -22,7 +22,7 @@ export class EnrollmentCompletedGuard implements CanActivate {
       this.router.navigate(['/auth/forbidden']);
       return of(false);
     }
-    return this.clientStore.enrollmentStatus$.pipe(
+    return this.clientStore.getEnrollmentStatus().pipe(
       map((status) => {
         if (status?.complete) {
           return true;
