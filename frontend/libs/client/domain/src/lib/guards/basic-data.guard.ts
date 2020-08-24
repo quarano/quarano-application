@@ -25,7 +25,7 @@ export class BasicDataGuard implements CanActivate {
       this.router.navigate(['/auth/forbidden']);
       return false;
     }
-    return this.clientStore.enrollmentStatus$.pipe(
+    return this.clientStore.getEnrollmentStatus().pipe(
       map((status) => {
         if (status?.complete) {
           this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
