@@ -51,12 +51,6 @@ export class UserService {
   public login(username: string, password: string): Observable<any> {
     return this.authService.login(username, password).pipe(
       tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
-      tap((res) => {
-        if (!this.isHealthDepartmentUser) {
-          // Cannot use ClientActions due to circular dependency
-          this.store.dispatch(createAction('[Enrollment Status] Load')());
-        }
-      }),
       tap((res) => this.authStore.login())
     );
   }
