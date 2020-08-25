@@ -38,10 +38,13 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       .subscribe((data: string[]) => {
         this.selectedItemIds = data;
         this.control.markAsDirty();
-        data.forEach((value) => this.added.emit(value));
       });
 
-    this.selectedItemIds = this.control.value;
+    if (this.control.value && Array.isArray(this.control.value)) {
+      this.selectedItemIds = this.control.value;
+    } else {
+      console.error('This value is not an Array', this.control.value);
+    }
 
     this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
       if (typeof searchTerm === 'string') {

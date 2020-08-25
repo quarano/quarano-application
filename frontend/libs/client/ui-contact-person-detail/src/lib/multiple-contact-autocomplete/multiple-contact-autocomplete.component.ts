@@ -44,6 +44,6 @@ export class MultipleContactAutocompleteComponent {
   }
 
   emitRemoved(event: any) {
-    this.itemNotFound.emit(event);
+    this.removed.emit(event);
   }
 }

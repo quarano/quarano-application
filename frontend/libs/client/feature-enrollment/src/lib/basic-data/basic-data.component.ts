@@ -114,6 +114,10 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.checkAndSendQuestionaire();
     }
 
+    if (event.previouslySelectedIndex === 2 && event.selectedIndex === 1) {
+      this.secondFormLoading = false;
+    }
+
     if (event.selectedIndex === 2) {
       this.buildThirdForm();
     }
@@ -243,7 +247,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   checkAndSendQuestionaire() {
     if (this.secondFormGroup.valid) {
-      this.secondFormLoading = true;
       const questionaireData: QuestionnaireDto = { ...this.secondFormGroup.value };
 
       if (this.secondFormGroup.get('symptoms').value) {
@@ -261,12 +264,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
             })
           )
           .subscribe(
-            (result) => {
+            () => {
+              this.secondFormLoading = true;
+              this.firstQuery = this.secondFormGroup.value;
               this.snackbarService.success('Fragebogen erfolgreich gespeichert');
               this.stepper.next();
             },
             (error) => {
+              this.secondFormLoading = false;
               this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
+            },
+            () => {
+              this.secondFormLoading = false;
             }
           )
       );
@@ -304,7 +313,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  openContactDialog(dateString: string) {
+  openContactDialog(dateString: string, date?: Date) {
     this.subs.add(
       this.dialogService
         .openContactPersonDialog()
@@ -312,6 +321,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         .subscribe((createdContact: ContactPersonDto | null) => {
           if (createdContact) {
             this.contactPersons.push(createdContact);
+            this.onContactAdded(date, createdContact.id);
             this.thirdFormGroup.controls[dateString].patchValue([
               ...this.thirdFormGroup.controls[dateString].value,
               createdContact.id,

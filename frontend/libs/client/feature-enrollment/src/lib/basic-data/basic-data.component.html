@@ -8,6 +8,10 @@
   <ng-template matStepperIcon="edit">
     <mat-icon>check</mat-icon>
   </ng-template>
+
+  <!--
+############ FIRST (1) STEP ############
+-->
   <mat-step [stepControl]="firstFormGroup" #firstStep [hasError]="firstFormGroup.invalid">
     <ng-template matStepLabel>Persönliche Daten</ng-template>
     <p>Pflichtfelder sind mit * markiert</p>
@@ -24,6 +28,11 @@
       </div>
     </form>
   </mat-step>
+
+  <!--
+############ SECOND (2) STEP ############
+-->
+
   <mat-step #secondStep [stepControl]="secondFormGroup" [hasError]="secondFormGroup.invalid">
     <ng-template matStepLabel>Initialer Fragebogen</ng-template>
     <p>Pflichtfelder sind mit * markiert</p>
@@ -46,6 +55,9 @@
       </div>
     </form>
   </mat-step>
+  <!--
+############ THIRD (3) STEP ############
+-->
   <mat-step #thirdStep [stepControl]="thirdFormGroup">
     <ng-template matStepLabel>Kontaktpersonen</ng-template>
     <div class="info-text">
@@ -95,7 +107,7 @@
             mat-button
             color="primary"
             type="button"
-            (click)="openContactDialog(date.toLocaleDateString('de'))"
+            (click)="openContactDialog(date.toLocaleDateString('de'), date)"
             class="p-2 mr-0"
             style="line-height: normal;"
           >
