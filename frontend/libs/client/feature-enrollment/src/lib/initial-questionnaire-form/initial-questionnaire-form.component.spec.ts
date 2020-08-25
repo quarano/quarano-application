@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { InitialQuestionnaireFormComponent } from './initial-questionnaire-form.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('InitialQuestionaireFormComponent', () => {
   let component: InitialQuestionnaireFormComponent;
@@ -13,6 +14,7 @@ describe('InitialQuestionaireFormComponent', () => {
     TestBed.configureTestingModule({
       imports: [TranslateTestingModule],
       declarations: [InitialQuestionnaireFormComponent],
+      providers: [{ provide: ValidationErrorService, userValue: {} }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

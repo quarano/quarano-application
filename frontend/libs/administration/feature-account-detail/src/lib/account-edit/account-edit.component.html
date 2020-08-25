@@ -21,8 +21,8 @@
           #first_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width">
@@ -35,8 +35,8 @@
           #last_name_input
           (blur)="trimValue(last_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
@@ -49,8 +49,8 @@
           #email_input
           (blur)="trimValue(email_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width">
@@ -64,8 +64,8 @@
           #username_input
           (blur)="trimValue(username_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.username)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.username, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.username)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.username, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" *ngIf="isNew">
@@ -80,8 +80,8 @@
           #password_input
           (blur)="trimValue(password_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.password)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.password, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.password)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.password, error) | async }}
         </mat-error>
         <mat-error *ngIf="formGroup.hasError('passwordIncludesUsername')">
           Das Passwort darf nicht den Benutzernamen beinhalten.
@@ -100,8 +100,8 @@
           (blur)="trimValue(password_confirm_input)"
           [errorStateMatcher]="confirmValidParentMatcher"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.passwordConfirm)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.passwordConfirm, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.passwordConfirm)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.passwordConfirm, error) | async }}
         </mat-error>
         <mat-error *ngIf="formGroup.hasError('passwordConfirmWrong')"
           >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
@@ -112,8 +112,8 @@
         <mat-select formControlName="roles" multiple>
           <mat-option *ngFor="let role of roles" [value]="role.name">{{ role.displayName }}</mat-option>
         </mat-select>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.roles)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.roles, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.roles)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.roles, error) | async }}
         </mat-error>
       </mat-form-field>
     </mat-card-content>

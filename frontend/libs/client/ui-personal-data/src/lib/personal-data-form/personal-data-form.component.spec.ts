@@ -1,5 +1,5 @@
 import { TranslateTestingModule } from '@qro/shared/util-translation';
-import { TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS, ValidationErrorService } from '@qro/shared/util-forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonalDataFormComponent } from './personal-data-form.component';
@@ -14,6 +14,7 @@ describe('PersonalDataFormComponent', () => {
     TestBed.configureTestingModule({
       imports: [TranslateTestingModule],
       declarations: [PersonalDataFormComponent],
+      providers: [{ provide: ValidationErrorService, userValue: {} }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

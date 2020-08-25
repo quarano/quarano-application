@@ -19,8 +19,8 @@
           #client_code_input
           (blur)="trimValue(client_code_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.clientCode)">
-          {{ errorGenerator.getErrorMessage(registrationForm.controls.clientCode, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.clientCode)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.clientCode, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-username">
@@ -34,8 +34,8 @@
           #username_input
           (blur)="trimValue(username_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.username)">
-          {{ errorGenerator.getErrorMessage(registrationForm.controls.username, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.username)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.username, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password">
@@ -49,8 +49,8 @@
           #password_input
           (blur)="trimValue(password_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.password)">
-          {{ errorGenerator.getErrorMessage(registrationForm.controls.password, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.password)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.password, error) | async }}
         </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
           {{ 'REGISTER.PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN' | translate }}
@@ -68,8 +68,8 @@
           (blur)="trimValue(password_confirm_input)"
           [errorStateMatcher]="confirmValidParentMatcher"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.passwordConfirm)">
-          {{ errorGenerator.getErrorMessage(registrationForm.controls.passwordConfirm, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.passwordConfirm)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.passwordConfirm, error) | async }}
         </mat-error>
         <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')"
           >{{ 'REGISTER.PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN' | translate }}
@@ -87,8 +87,8 @@
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(registrationForm.controls.dateOfBirth)">
-          {{ errorGenerator.getErrorMessage(registrationForm.controls.dateOfBirth, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.dateOfBirth)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.dateOfBirth, error) | async }}
         </mat-error>
       </mat-form-field>
       <div class="data-protection-wrapper">

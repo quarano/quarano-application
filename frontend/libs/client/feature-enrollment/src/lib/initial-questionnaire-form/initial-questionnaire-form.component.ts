@@ -1,6 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import {
-  ValidationErrorGenerator,
+  ValidationErrorService,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
   ArrayValidator,
@@ -27,11 +27,10 @@ export class InitialQuestionnaireFormComponent implements OnInit {
   symptoms: SymptomDto[];
 
   subs = new SubSink();
-  errorGenerator = ValidationErrorGenerator;
 
   symptomTooltip$: Observable<string>;
 
-  constructor(private translate: TranslateService) {}
+  constructor(private translate: TranslateService, public validationErrorService: ValidationErrorService) {}
 
   ngOnInit(): void {
     this.symptomTooltip$ = this.translate

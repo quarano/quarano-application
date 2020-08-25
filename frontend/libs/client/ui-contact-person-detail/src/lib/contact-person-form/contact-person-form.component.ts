@@ -1,6 +1,6 @@
 import { switchMap, map } from 'rxjs/operators';
 import { BadRequestService } from '@qro/shared/ui-error';
-import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
+import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
@@ -23,13 +23,13 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   showIdentificationHintField = false;
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,
     private contactPersonService: ContactPersonService,
     private snackbarService: TranslatedSnackbarService,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit() {

@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '@qro/auth/domain';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 fdescribe('LoginComponent', () => {
   let component: LoginComponent;
@@ -27,6 +28,7 @@ fdescribe('LoginComponent', () => {
         { provide: UserService, useValue: userService },
         { provide: MatDialogRef, useValue: {} },
         { provide: MatDialog, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
         {
           provide: TranslatedSnackbarService,
           useValue: {

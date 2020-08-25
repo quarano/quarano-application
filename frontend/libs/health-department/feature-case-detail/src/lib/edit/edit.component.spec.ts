@@ -6,6 +6,7 @@ import { EditComponent } from './edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SnackbarService } from '@qro/shared/util-snackbar';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('EditComponent', () => {
   let component: EditComponent;
@@ -19,6 +20,7 @@ describe('EditComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: SnackbarService, useValue: {} },
         { provide: IndexCaseService, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

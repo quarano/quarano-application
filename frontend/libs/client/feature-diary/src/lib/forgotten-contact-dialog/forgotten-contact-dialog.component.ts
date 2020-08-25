@@ -7,7 +7,7 @@ import { Moment } from 'moment';
 import { EncounterEntry, EnrollmentService } from '@qro/client/domain';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ContactPersonDto } from '@qro/client/domain';
-import { ArrayValidator, ValidationErrorGenerator } from '@qro/shared/util-forms';
+import { ArrayValidator, ValidationErrorService } from '@qro/shared/util-forms';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -22,7 +22,6 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   private subs = new SubSink();
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private matDialogRef: MatDialogRef<ForgottenContactDialogComponent>,
@@ -31,6 +30,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     private snackbarService: TranslatedSnackbarService,
     private badRequestService: BadRequestService,
     private dialogService: ContactDialogService,
+    public validationErrorService: ValidationErrorService,
     @Inject(MAT_DIALOG_DATA)
     public data: { contactPersons: ContactPersonDto[] }
   ) {}

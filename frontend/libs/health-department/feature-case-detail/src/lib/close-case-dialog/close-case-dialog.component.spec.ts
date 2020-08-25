@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CloseCaseDialogComponent } from './close-case-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('CloseCaseDialogComponent', () => {
   let component: CloseCaseDialogComponent;
@@ -14,6 +15,7 @@ describe('CloseCaseDialogComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

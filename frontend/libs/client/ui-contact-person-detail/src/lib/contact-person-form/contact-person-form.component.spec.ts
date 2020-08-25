@@ -5,6 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContactPersonService, ContactPersonDto } from '@qro/client/domain';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('ContactPersonFormComponent', () => {
   let component: ContactPersonFormComponent;
@@ -18,6 +19,7 @@ describe('ContactPersonFormComponent', () => {
         FormBuilder,
         { provide: ContactPersonService, useValue: {} },
         { provide: TranslatedSnackbarService, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

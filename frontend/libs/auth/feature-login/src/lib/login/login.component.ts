@@ -1,6 +1,6 @@
 import { SubSink } from 'subsink';
 import { HttpResponse } from '@angular/common/http';
-import { ValidationErrorGenerator } from '@qro/shared/util-forms';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
   private subs = new SubSink();
 
   public loginFormGroup = new FormGroup({
@@ -30,7 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private snackbarService: TranslatedSnackbarService,
     private router: Router,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit(): void {

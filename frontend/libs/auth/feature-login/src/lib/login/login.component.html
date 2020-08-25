@@ -37,8 +37,8 @@
           required
           (blur)="trimValue(username_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(loginFormGroup.controls.username)">
-          {{ errorGenerator.getErrorMessage(loginFormGroup.controls.username, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(loginFormGroup.controls.username)">
+          {{ validationErrorService.getErrorMessage(loginFormGroup.controls.username, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="form__input--full-width">
@@ -53,8 +53,8 @@
           #password_input
           (blur)="trimValue(password_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(loginFormGroup.controls.password)">
-          {{ errorGenerator.getErrorMessage(loginFormGroup.controls.password, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(loginFormGroup.controls.password)">
+          {{ validationErrorService.getErrorMessage(loginFormGroup.controls.password, error) | async }}
         </mat-error>
       </mat-form-field>
     </mat-card-content>

@@ -10,8 +10,8 @@
       <input matInput required [max]="today" [matDatepicker]="picker" formControlName="day" name="dayControl" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.day)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.day, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.day)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.day, error) | async }}
       </mat-error>
     </mat-form-field>
 

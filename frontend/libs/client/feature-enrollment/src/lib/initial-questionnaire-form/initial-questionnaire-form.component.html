@@ -30,8 +30,8 @@
       />
       <mat-datepicker-toggle matSuffix [for]="firstSymptomsDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #firstSymptomsDatePicker></mat-datepicker>
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.dayOfFirstSymptoms)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.dayOfFirstSymptoms, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.dayOfFirstSymptoms)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.dayOfFirstSymptoms, error) | async }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -44,16 +44,16 @@
       [nameProperties]="['name']"
       name="characteristicSymptoms"
     ></qro-multiple-autocomplete>
-    <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.symptoms)">
-      {{ errorGenerator.getErrorMessage(formGroup.controls.symptoms, error) }}
+    <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.symptoms)">
+      {{ validationErrorService.getErrorMessage(formGroup.controls.symptoms, error) | async }}
     </mat-error>
   </div>
   <div class="question">
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.BEHANDELNDEN_HAUSARZT' | translate }}</mat-label>
     <mat-form-field class="full-width">
       <input matInput formControlName="familyDoctor" />
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.familyDoctor)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.familyDoctor, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.familyDoctor)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.familyDoctor, error) | async }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -61,8 +61,8 @@
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.ORT_DER_ANSTECKUNG' | translate }}</mat-label>
     <mat-form-field class="full-width">
       <input matInput formControlName="guessedOriginOfInfection" />
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.guessedOriginOfInfection)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.guessedOriginOfInfection, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.guessedOriginOfInfection)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.guessedOriginOfInfection, error) | async }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -90,9 +90,13 @@
     <mat-form-field class="full-width">
       <input matInput required formControlName="hasPreExistingConditionsDescription" />
       <mat-error
-        *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.hasPreExistingConditionsDescription)"
+        *ngFor="
+          let error of validationErrorService.getErrorKeys(formGroup.controls.hasPreExistingConditionsDescription)
+        "
       >
-        {{ errorGenerator.getErrorMessage(formGroup.controls.hasPreExistingConditionsDescription, error) }}
+        {{
+          validationErrorService.getErrorMessage(formGroup.controls.hasPreExistingConditionsDescription, error) | async
+        }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -111,9 +115,9 @@
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WO_ARBEITEN_SIE' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input matInput required formControlName="belongToMedicalStaffDescription" /><mat-error
-        *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.belongToMedicalStaffDescription)"
+        *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.belongToMedicalStaffDescription)"
       >
-        {{ errorGenerator.getErrorMessage(formGroup.controls.belongToMedicalStaffDescription, error) }}
+        {{ validationErrorService.getErrorMessage(formGroup.controls.belongToMedicalStaffDescription, error) | async }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -132,9 +136,14 @@
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.WIE_UND_ZU_WEM_KONTAKT' | translate }} *</mat-label>
     <mat-form-field class="full-width">
       <input matInput required formControlName="hasContactToVulnerablePeopleDescription" /><mat-error
-        *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.hasContactToVulnerablePeopleDescription)"
+        *ngFor="
+          let error of validationErrorService.getErrorKeys(formGroup.controls.hasContactToVulnerablePeopleDescription)
+        "
       >
-        {{ errorGenerator.getErrorMessage(formGroup.controls.hasContactToVulnerablePeopleDescription, error) }}
+        {{
+          validationErrorService.getErrorMessage(formGroup.controls.hasContactToVulnerablePeopleDescription, error)
+            | async
+        }}
       </mat-error>
     </mat-form-field>
   </div>

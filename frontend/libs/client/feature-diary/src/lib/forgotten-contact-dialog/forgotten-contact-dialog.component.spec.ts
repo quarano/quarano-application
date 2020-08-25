@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EnrollmentService } from '@qro/client/domain';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('ForgottenContactDialogComponent', () => {
   let component: ForgottenContactDialogComponent;
@@ -19,6 +20,7 @@ describe('ForgottenContactDialogComponent', () => {
         FormBuilder,
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
         {
           provide: EnrollmentService,
           useValue: {

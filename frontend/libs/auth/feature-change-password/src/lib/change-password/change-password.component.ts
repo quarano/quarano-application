@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { ValidationErrorGenerator, PasswordValidator, ConfirmValidPasswordMatcher } from '@qro/shared/util-forms';
+import { PasswordValidator, ConfirmValidPasswordMatcher, ValidationErrorService } from '@qro/shared/util-forms';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { AuthService, UserService, AuthStore } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
@@ -21,7 +21,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
-  errorGenerator = ValidationErrorGenerator;
   /**
    * Need to inject the Dialog stuff this way,
    * otherwise a component can't be used as a dialog and as usual component at the same time
@@ -30,14 +29,13 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   private dialogData;
 
   constructor(
-    private userService: UserService,
     private snackbarService: TranslatedSnackbarService,
     private authStore: AuthStore,
     private router: Router,
     private authService: AuthService,
     private badRequestService: BadRequestService,
     private injector: Injector,
-    private store: Store
+    public validationErrorService: ValidationErrorService
   ) {
     this.dialogRef = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);

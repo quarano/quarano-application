@@ -2,7 +2,7 @@ import { SubSink } from 'subsink';
 import { AuthService } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/ui-error';
 import {
-  ValidationErrorGenerator,
+  ValidationErrorService,
   ConfirmValidPasswordMatcher,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
@@ -27,7 +27,6 @@ import { TokenService, AuthStore } from '@qro/auth/domain';
 export class RegisterComponent implements OnInit, OnDestroy {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
   private subs = new SubSink();
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
@@ -62,6 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private badRequestService: BadRequestService,
     private authService: AuthService,
     private tokenService: TokenService,
+    public validationErrorService: ValidationErrorService
     private authStore: AuthStore
   ) {}
 

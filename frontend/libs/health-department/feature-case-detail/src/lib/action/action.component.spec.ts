@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { HealthDepartmentService } from '@qro/health-department/domain';
 import { CaseActionDto } from '@qro/health-department/domain';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('ActionComponent', () => {
   let component: ActionComponent;
@@ -21,6 +22,7 @@ describe('ActionComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: SnackbarService, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

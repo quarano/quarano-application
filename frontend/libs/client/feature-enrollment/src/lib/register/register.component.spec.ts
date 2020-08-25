@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EnrollmentService } from '@qro/client/domain';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -22,6 +23,7 @@ describe('RegisterComponent', () => {
       providers: [
         { provide: EnrollmentService, useValue: {} },
         { provide: AuthService, useValue: {} },
+        { provide: ValidationErrorService, userValue: {} },
         { provide: AuthStore, useValue: {} },
         { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
         {
