@@ -1,5 +1,4 @@
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
-import { BadRequestService } from './../../../../../shared/ui-error/src/lib/services/bad-request.service';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog.component';
@@ -9,6 +8,7 @@ import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EnrollmentService } from '@qro/client/domain';
 import { ValidationErrorService } from '@qro/shared/util-forms';
+import { BadRequestService } from '@qro/shared/ui-error';
 
 describe('ForgottenContactDialogComponent', () => {
   let component: ForgottenContactDialogComponent;
