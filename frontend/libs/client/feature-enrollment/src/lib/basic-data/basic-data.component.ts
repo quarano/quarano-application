@@ -3,18 +3,25 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { BehaviorSubject } from 'rxjs';
 import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
-import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
@@ -26,7 +33,7 @@ import { tap, finalize, take, switchMap, map } from 'rxjs/operators';
   templateUrl: './basic-data.component.html',
   styleUrls: ['./basic-data.component.scss'],
 })
-export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
@@ -78,9 +85,15 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.buildForms();
       })
     );
+  }
 
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
     this.subs.add(
-      this.clientStore.enrollmentStatus$.subscribe((status) => {
+      this.clientStore.enrollmentStatus$.pipe(take(1)).subscribe((status) => {
         if (status.completedPersonalData) {
           this.stepper?.next();
         }
@@ -89,10 +102,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       })
     );
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -172,26 +181,28 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.firstFormLoading = true;
       const value = this.firstFormGroup.value;
       value.dateOfBirth = this.dateOfBirth;
-      this.subs.add(this.clientService
-        .updatePersonalDetails(value)
-        .pipe(
-          switchMap((result) =>
-            this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(map((res) => result))
+      this.subs.add(
+        this.clientService
+          .updatePersonalDetails(value)
+          .pipe(
+            switchMap((result) =>
+              this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(map((res) => result))
+            )
           )
-        )
-        .subscribe(
-          (result) => {
-            if (result.completedPersonalData) {
-              this.client = value;
-              this.stepper.next();
+          .subscribe(
+            (result) => {
+              if (result.completedPersonalData) {
+                this.client = value;
+                this.stepper.next();
+              }
+              this.firstFormLoading = false;
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
             }
-            this.firstFormLoading = false;
-          },
-          (error) => {
-            this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
-          }
-        )
-        .add(() => (this.firstFormLoading = false)));
+          )
+          .add(() => (this.firstFormLoading = false))
+      );
     }
   }
 
@@ -324,28 +335,32 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onContactAdded(date: Date, id: string) {
-    this.subs.add(this.enrollmentService
-      .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
-      .pipe(
-        switchMap((encounter) =>
-          this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
+    this.subs.add(
+      this.enrollmentService
+        .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
+        .pipe(
+          switchMap((encounter) =>
+            this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
+          )
         )
-      )
-      .subscribe((encounter) => {
-        this.encounters.push(encounter);
-      }));
+        .subscribe((encounter) => {
+          this.encounters.push(encounter);
+        })
+    );
   }
 
   onContactRemoved(date: Date, id: string) {
     const encounterToRemove = this.encounters.find(
       (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
     );
-    this.subs.add(this.enrollmentService
-      .deleteEncounter(encounterToRemove.encounter)
-      .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
-      .subscribe((_) => {
-        this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
-      }));
+    this.subs.add(
+      this.enrollmentService
+        .deleteEncounter(encounterToRemove.encounter)
+        .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
+        .subscribe((_) => {
+          this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
+        })
+    );
   }
 
   hasRetrospectiveContacts(): boolean {
@@ -389,11 +404,11 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.clientStore.completeEnrollment(withoutEncounters);
     this.subs.add(
       this.clientStore.enrollmentStatus$
-.pipe(
-        switchMap((result) =>
-          this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').pipe(map((res) => result))
+        .pipe(
+          switchMap((result) =>
+            this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').pipe(map((res) => result))
+          )
         )
-      )
         .subscribe((result) => {
           if (result.completedContactRetro) {
             this.router.navigate(['/client/diary/diary-list']);
