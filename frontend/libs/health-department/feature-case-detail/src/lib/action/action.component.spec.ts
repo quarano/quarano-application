@@ -1,3 +1,4 @@
+import { BadRequestService } from '@qro/shared/ui-error';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActionComponent } from './action.component';
@@ -23,6 +24,7 @@ describe('ActionComponent', () => {
         { provide: SnackbarService, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
         { provide: ValidationErrorService, userValue: {} },
+        { provide: BadRequestService, userValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
