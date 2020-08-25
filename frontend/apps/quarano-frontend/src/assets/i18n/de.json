@@ -1,4 +1,7 @@
 {
+  "BAD_REQUEST": {
+    "UNGÜLTIGE_WERTE": "Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt"
+  },
   "BASIC_DATA": {
     "ABBRECHEN": "Abbrechen",
     "ERFASSUNG_ABSCHLIESSEN": "Erfassung abschließen",

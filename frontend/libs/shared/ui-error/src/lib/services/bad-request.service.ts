@@ -1,12 +1,12 @@
 import { FormGroup } from '@angular/forms';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BadRequestService {
-  constructor(private snackbar: SnackbarService) {}
+  constructor(private snackbar: TranslatedSnackbarService) {}
 
   public handleBadRequestError(error: any, form: FormGroup) {
     let handled = false;
@@ -19,7 +19,7 @@ export class BadRequestService {
         }
       });
       if (!handled) {
-        this.snackbar.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt');
+        this.snackbar.error('BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
         console.log(requestErrors);
       }
     }
