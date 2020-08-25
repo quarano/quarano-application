@@ -1,3 +1,5 @@
+import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DiaryEntryComponent } from './diary-entry.component';
@@ -23,6 +25,8 @@ describe('DiaryEntryComponent', () => {
         { provide: DiaryService, useValue: { createDiaryEntry: () => {} } },
         { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
         { provide: MatDialog, useValue: {} },
+        { provide: ContactDialogService, useValue: {} },
+        { provide: BadRequestService, useValue: {} },
         {
           provide: ActivatedRoute,
           useValue: {

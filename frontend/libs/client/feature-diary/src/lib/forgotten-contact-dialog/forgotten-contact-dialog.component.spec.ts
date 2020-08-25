@@ -1,3 +1,5 @@
+import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
+import { BadRequestService } from './../../../../../shared/ui-error/src/lib/services/bad-request.service';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgottenContactDialogComponent } from './forgotten-contact-dialog.component';
@@ -20,7 +22,7 @@ describe('ForgottenContactDialogComponent', () => {
         FormBuilder,
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
         {
           provide: EnrollmentService,
           useValue: {
@@ -34,6 +36,8 @@ describe('ForgottenContactDialogComponent', () => {
           },
         },
         { provide: MatDialog, useValue: {} },
+        { provide: BadRequestService, useValue: {} },
+        { provide: ContactDialogService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

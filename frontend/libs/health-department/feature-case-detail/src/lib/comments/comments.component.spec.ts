@@ -11,7 +11,7 @@ describe('CommentsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CommentsComponent],
-      providers: [{ provide: ValidationErrorService, userValue: {} }],
+      providers: [{ provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

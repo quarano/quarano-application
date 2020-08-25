@@ -1,3 +1,5 @@
+import { TokenService } from '@qro/auth/domain';
+import { BadRequestService } from '@qro/shared/ui-error';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { AuthStore } from '@qro/auth/domain';
 import { AuthService } from '@qro/auth/api';
@@ -23,7 +25,9 @@ describe('RegisterComponent', () => {
       providers: [
         { provide: EnrollmentService, useValue: {} },
         { provide: AuthService, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: BadRequestService, useValue: {} },
+        { provide: TokenService, useValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
         { provide: AuthStore, useValue: {} },
         { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
         {

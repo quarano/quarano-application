@@ -1,3 +1,4 @@
+import { BadRequestService } from '@qro/shared/ui-error';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactPersonFormComponent } from './contact-person-form.component';
@@ -19,7 +20,8 @@ describe('ContactPersonFormComponent', () => {
         FormBuilder,
         { provide: ContactPersonService, useValue: {} },
         { provide: TranslatedSnackbarService, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
+        { provide: BadRequestService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

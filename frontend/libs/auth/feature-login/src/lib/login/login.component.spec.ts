@@ -28,7 +28,7 @@ fdescribe('LoginComponent', () => {
         { provide: UserService, useValue: userService },
         { provide: MatDialogRef, useValue: {} },
         { provide: MatDialog, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
         {
           provide: TranslatedSnackbarService,
           useValue: {

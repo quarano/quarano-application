@@ -20,7 +20,7 @@ describe('EditComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: SnackbarService, useValue: {} },
         { provide: IndexCaseService, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

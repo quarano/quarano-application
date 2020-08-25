@@ -14,7 +14,7 @@ describe('InitialQuestionaireFormComponent', () => {
     TestBed.configureTestingModule({
       imports: [TranslateTestingModule],
       declarations: [InitialQuestionnaireFormComponent],
-      providers: [{ provide: ValidationErrorService, userValue: {} }],
+      providers: [{ provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

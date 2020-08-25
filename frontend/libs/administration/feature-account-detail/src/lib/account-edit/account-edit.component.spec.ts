@@ -23,7 +23,7 @@ describe('AccountEditComponent', () => {
         { provide: AccountService, useValue: {} },
         { provide: AuthService, useValue: {} },
         { provide: SnackbarService, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
         {
           provide: ActivatedRoute,
           useValue: {

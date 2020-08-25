@@ -14,7 +14,7 @@ describe('PersonalDataFormComponent', () => {
     TestBed.configureTestingModule({
       imports: [TranslateTestingModule],
       declarations: [PersonalDataFormComponent],
-      providers: [{ provide: ValidationErrorService, userValue: {} }],
+      providers: [{ provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

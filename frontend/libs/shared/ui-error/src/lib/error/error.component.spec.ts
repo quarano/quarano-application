@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ErrorComponent } from './error.component';
+import { of } from 'rxjs';
 
 describe('ErrorComponent', () => {
   let component: ErrorComponent;
@@ -14,7 +15,7 @@ describe('ErrorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TranslateTestingModule],
-      providers: [{ provide: ActivatedRoute, useValue: {} }],
+      providers: [{ provide: ActivatedRoute, useValue: { queryParamMap: of({}) } }],
       declarations: [ErrorComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

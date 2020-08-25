@@ -15,7 +15,7 @@ describe('CloseCaseDialogComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
-        { provide: ValidationErrorService, userValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
