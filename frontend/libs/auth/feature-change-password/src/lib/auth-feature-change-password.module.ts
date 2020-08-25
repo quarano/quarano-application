@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { NgModule } from '@angular/core';
@@ -20,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         component: ChangePasswordComponent,
       },
     ]),
+    SharedUtilTranslationModule,
   ],
   declarations: [ChangePasswordComponent],
   exports: [ChangePasswordComponent],
