@@ -15,11 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public progressBarActive = false;
   private subs = new SubSink();
 
-  constructor(
-    private progressBarService: ProgressBarService,
-    private translate: TranslateService,
-    private languageService: LanguageService
-  ) {}
+  constructor(private progressBarService: ProgressBarService, private languageService: LanguageService) {}
 
   ngOnInit(): void {
     this.subs.add(
