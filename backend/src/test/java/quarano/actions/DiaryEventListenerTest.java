@@ -75,7 +75,6 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.empty());
 
 		listener.handleDiaryEntryForBodyTemperature(entry);
-		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -102,7 +101,6 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.empty());
 
 		listener.handleDiaryEntryForBodyTemperature(entry);
-		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
@@ -123,7 +121,6 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.of(actionItem));
 
 		listener.handleDiaryEntryForBodyTemperature(entry);
-		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(actionItem, times(1)).resolve();
 		itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
@@ -150,7 +147,6 @@ class DiaryEventListenerTest {
 				.thenReturn(ActionItems.of(actionItem));
 
 		listener.handleDiaryEntryForBodyTemperature(entry);
-		listener.saveDiaryEntryIfTemperatureOverThreshold(entry);
 
 		verify(actionItem, times(1)).resolve();
 		verify(items, times(1)).save(actionItem);
@@ -343,11 +339,7 @@ class DiaryEventListenerTest {
 		lenient().when(entry.getBodyTemperature()).thenReturn(BodyTemperature.of(42.0f)); // body temp well above conf threshold
 		when(cases.findByTrackedPerson(person)).thenReturn(Optional.of(trackedCase));
 		when(trackedCase.isIndexCase()).thenReturn(true);
-		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
-		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
-				.thenReturn(ActionItems.empty());
 		when(items.findDiaryEntryMissingActionItemsFor(person, now)).thenReturn(ActionItems.empty());
-
 
 		listener.on(event);
 
