@@ -33,10 +33,9 @@ class DiaryEventListener {
 
 		var entry = event.getEntry();
 
-		handleDiaryEntryForBodyTemperature(entry);
 		if (!isIndexCase(entry)) {
+			handleDiaryEntryForBodyTemperature(entry);
 			handleDiaryEntryForCharacteristicSymptoms(entry);
-			saveDiaryEntryIfTemperatureOverThreshold(entry);
 		}
 		resolveMissingItemsActionItem(entry);
 	}
@@ -46,10 +45,9 @@ class DiaryEventListener {
 
 		var entry = event.getEntry();
 
-		handleDiaryEntryForBodyTemperature(entry);
 		if (!isIndexCase(entry)) {
+			handleDiaryEntryForBodyTemperature(entry);
 			handleDiaryEntryForCharacteristicSymptoms(entry);
-			saveDiaryEntryIfTemperatureOverThreshold(entry);
 		}
 	}
 
@@ -86,19 +84,12 @@ class DiaryEventListener {
 
 		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(items::save);
-	}
-
-	void saveDiaryEntryIfTemperatureOverThreshold(DiaryEntry entry) {
-
-		var person = entry.getTrackedPersonId();
-		var temperatureThreshold = config.getTemperatureThreshold();
-		var bodyTemperature = entry.getBodyTemperature();
 
 		// Body temperature exceeds reference
-		if (bodyTemperature.exceeds(temperatureThreshold)) {
+		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
-					bodyTemperature,
-					temperatureThreshold);
+					entry.getBodyTemperature(),
+					config.getTemperatureThreshold());
 
 			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
 		}

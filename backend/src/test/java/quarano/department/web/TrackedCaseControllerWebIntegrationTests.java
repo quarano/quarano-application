@@ -622,7 +622,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString();
 
 		assertThat(JsonPath.parse(response).read("$._embedded.cases[*].lastName", String[].class))
-				.containsExactly("Ebert", "Mertens", "Seufert");
+				.containsExactly("Baum", "Ebert", "Mertens", "Seufert");
 	}
 
 	@Test // CORE-252
@@ -635,9 +635,9 @@ class TrackedCaseControllerWebIntegrationTests {
 		var firstCase = JsonPath.parse(response).read("$._embedded.cases[0]", Map.class);
 
 		// Contains required fields
-		assertThat(firstCase.get("firstName")).isEqualTo("Nadine");
-		assertThat(firstCase.get("lastName")).isEqualTo("Ebert");
-		assertThat(firstCase.get("dateOfBirth")).isEqualTo("1980-01-01");
+		assertThat(firstCase.get("firstName")).isEqualTo("Bert");
+		assertThat(firstCase.get("lastName")).isEqualTo("Baum");
+		assertThat(firstCase.get("dateOfBirth")).isNull();
 
 		// Contains self link
 		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.SELF, JsonPath.parse(firstCase).jsonString())).isPresent();
@@ -699,8 +699,8 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(result);
 
-		assertThat(document.read("$.openAnomaliesCount", long.class)).isEqualTo(2);
 		assertThat(document.read("$._links.anomalies.href", String.class)).isNotBlank();
+		assertThat(document.read("$.openAnomaliesCount", long.class)).isEqualTo(1);
 	}
 
 	@Test // CORE-331

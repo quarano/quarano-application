@@ -126,7 +126,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.CONTACT, department1, null)
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null)
 				.setTestResult(TestResult.infected(startG.minusDays(1)))
 				.setQuarantine(Quarantine.of(startG, endG))
 				.submitEnrollmentDetails()
