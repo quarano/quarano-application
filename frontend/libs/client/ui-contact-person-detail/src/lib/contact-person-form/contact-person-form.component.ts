@@ -90,6 +90,19 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     if (this.contactPerson.identificationHint) {
       this.showIdentificationHintField = true;
     }
+    // mark all controls with initial value as touched to trigger validation of these values
+    this.markControlsWithTruthyValueAsTouched(this.formGroup);
+  }
+
+  private markControlsWithTruthyValueAsTouched(group: FormGroup): void {
+    Object.keys(group.controls).forEach((key: string) => {
+      const abstractControl = group.get(key);
+      if (abstractControl instanceof FormGroup) {
+        this.markControlsWithTruthyValueAsTouched(abstractControl);
+      } else if (abstractControl.value) {
+        abstractControl.markAsTouched();
+      }
+    });
   }
 
   trimValue(input: MatInput) {
