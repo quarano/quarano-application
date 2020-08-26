@@ -31,4 +31,40 @@ describe('ContactPersonFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should mark fields with truthy initial value as touched', () => {
+    component.contactPerson = {
+      firstName: 'Test',
+      lastName: 'Meiser1',
+    } as ContactPersonDto;
+    component.ngOnInit();
+
+    expect(component.formGroup.controls.firstName.touched).toBeTruthy();
+    expect(component.formGroup.controls.lastName.touched).toBeTruthy();
+  });
+
+  it('should not mark fields with empty initial value as touched', () => {
+    component.contactPerson = {
+      firstName: 'Test',
+      lastName: 'Meiser1',
+    } as ContactPersonDto;
+    component.ngOnInit();
+
+    Object.keys(component.formGroup.controls).forEach((key: string) => {
+      if (key !== 'firstName' && key !== 'lastName') {
+        expect(component.formGroup.get(key).touched).toBeFalsy();
+      }
+    });
+  });
+
+  it('should validate fields with initial value', () => {
+    component.contactPerson = {
+      firstName: 'Test',
+      lastName: 'Meiser1',
+    } as ContactPersonDto;
+    component.ngOnInit();
+
+    expect(component.formGroup.controls.firstName.valid).toBeTruthy();
+    expect(component.formGroup.controls.lastName.valid).toBeFalsy();
+  });
 });
