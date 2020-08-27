@@ -43,7 +43,7 @@
     <ngx-datatable-column
       prop="status"
       name="Status"
-      width="180"
+      width="170"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -100,7 +100,7 @@
     <ngx-datatable-column
       prop="quarantineEnd"
       name="Quarantäne bis"
-      width="140"
+      width="130"
       [resizeable]="true"
       [sortable]="true"
       [draggable]="true"
@@ -117,7 +117,7 @@
       [sortable]="true"
       [draggable]="true"
       [canAutoResize]="true"
-      width="140"
+      width="130"
     >
     </ngx-datatable-column>
 
@@ -132,13 +132,19 @@
     >
     </ngx-datatable-column>
 
+    <!-- no width set for this column to adapt column width to fixed table width -->
     <ngx-datatable-column
       prop="originCases"
       name="Ursprungsfälle"
       [resizeable]="true"
       [sortable]="true"
       [canAutoResize]="true"
-      width="200"
-    ></ngx-datatable-column>
+      cellClass="break-words"
+    >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <!-- guarantees word break for very long names -->
+        <span class="break-words">{{ value }}</span>
+      </ng-template>
+    </ngx-datatable-column>
   </ngx-datatable>
 </div>
