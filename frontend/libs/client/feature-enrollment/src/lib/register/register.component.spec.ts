@@ -1,3 +1,4 @@
+import { AuthStore } from '@qro/auth/domain';
 import { AuthService } from '@qro/auth/api';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -20,6 +21,7 @@ describe('RegisterComponent', () => {
       providers: [
         { provide: EnrollmentService, useValue: {} },
         { provide: AuthService, useValue: {} },
+        { provide: AuthStore, useValue: {} },
         { provide: SnackbarService, useValue: { warning: () => {}, success: () => {} } },
         {
           provide: ActivatedRoute,
