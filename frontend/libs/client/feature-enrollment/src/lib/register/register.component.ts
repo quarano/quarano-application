@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private badRequestService: BadRequestService,
     private authService: AuthService,
     private tokenService: TokenService,
-    public validationErrorService: ValidationErrorService
+    public validationErrorService: ValidationErrorService,
     private authStore: AuthStore
   ) {}
 
@@ -116,10 +116,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.enrollmentService
         .registerClient(register)
-            .pipe(
-                tap((res) => this.authStore.login()),
-                tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
-                switchMap((res) => this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH').pipe(map((r) => res)))
+        .pipe(
+          tap((res) => this.authStore.login()),
+          tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+          switchMap((res) => this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH').pipe(map((r) => res)))
         )
         .subscribe(
           (res) => {
