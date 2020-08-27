@@ -16,7 +16,7 @@ import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { RegisterDto, EnrollmentService } from '@qro/client/domain';
 import { DataProtectionDialogComponent } from '../data-protection-dialog/data-protection-dialog.component';
-import { TokenService } from '@qro/auth/domain';
+import { TokenService, AuthStore } from '@qro/auth/domain';
 
 @Component({
   selector: 'qro-register',
@@ -59,7 +59,8 @@ export class RegisterComponent implements OnInit {
     private dialog: MatDialog,
     private badRequestService: BadRequestService,
     private authService: AuthService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private authStore: AuthStore
   ) {}
 
   ngOnInit(): void {
@@ -108,9 +109,12 @@ export class RegisterComponent implements OnInit {
 
     this.enrollmentService
       .registerClient(register)
+      .pipe(
+        tap((res) => this.authStore.login()),
+        tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token')))
+      )
       .subscribe(
         (res) => {
-          this.tokenService.setToken(res.headers.get('X-Auth-Token'));
           this.router.navigate(['/client/diary/diary-list']);
           this.snackbarService.success(`Die Registrierung war erfolgreich. Sie werden automatisch angemeldet.`);
         },

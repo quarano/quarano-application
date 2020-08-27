@@ -1,4 +1,3 @@
-import { Store, createAction } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -16,8 +15,7 @@ export class UserService {
     private authService: AuthService,
     private snackbarService: SnackbarService,
     private tokenService: TokenService,
-    private authStore: AuthStore,
-    private store: Store
+    private authStore: AuthStore
   ) {}
 
   public get isLoggedIn$(): Observable<boolean> {
