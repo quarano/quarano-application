@@ -1,5 +1,5 @@
 import { BadRequestService } from '@qro/shared/ui-error';
-import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
+import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Input } from '@angular/core';
@@ -18,7 +18,6 @@ export class ActionComponent implements OnInit {
   @Input() caseAction: CaseActionDto;
   @Input() type: ClientType;
   formGroup: FormGroup;
-  errorGenerator = ValidationErrorGenerator;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,7 +25,8 @@ export class ActionComponent implements OnInit {
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
     private router: Router,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit() {

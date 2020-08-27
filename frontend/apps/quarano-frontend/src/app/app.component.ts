@@ -1,5 +1,6 @@
 import { SubSink } from 'subsink';
 import { LanguageService } from '@qro/shared/util-translation';
+import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { delay } from 'rxjs/operators';
 import { ProgressBarService } from '@qro/shared/util-progress-bar';

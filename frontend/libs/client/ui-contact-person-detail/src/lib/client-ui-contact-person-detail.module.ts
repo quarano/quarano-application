@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
@@ -18,6 +19,7 @@ import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-auto
     SharedUiAlertModule,
     SharedUiButtonModule,
     SharedUiMultipleAutocompleteModule,
+    SharedUtilTranslationModule,
   ],
   declarations: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
   exports: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],

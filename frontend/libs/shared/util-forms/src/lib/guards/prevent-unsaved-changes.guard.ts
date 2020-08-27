@@ -3,7 +3,7 @@ import { CanDeactivate } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 
 export interface DeactivatableComponent {
   canDeactivate: () => boolean | Observable<boolean>;
@@ -20,13 +20,12 @@ export class PreventUnsavedChangesGuard implements CanDeactivate<DeactivatableCo
   }
 
   confirmProceeding(): Observable<boolean> {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    const dialogRef = this.dialog.open(TranslatedConfirmationDialogComponent, {
       data: {
-        title: 'Fortfahren?',
-        abortButtonText: 'Abbrechen',
-        confirmButtonText: 'ok',
-        text:
-          'Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen.',
+        title: 'PREVENT_UNSAVED_CHANGES.FORTFAHREN',
+        abortButtonText: 'PREVENT_UNSAVED_CHANGES.ABBRECHEN',
+        confirmButtonText: 'PREVENT_UNSAVED_CHANGES.OK',
+        text: 'PREVENT_UNSAVED_CHANGES.SIND_SIE_SICHER',
       },
     });
 

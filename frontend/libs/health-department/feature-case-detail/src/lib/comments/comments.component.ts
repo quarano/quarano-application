@@ -1,4 +1,4 @@
-import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
+import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -10,7 +10,6 @@ import { CaseCommentDto } from '@qro/health-department/domain';
   styleUrls: ['./comments.component.scss'],
 })
 export class CommentsComponent {
-  errorGenerator = ValidationErrorGenerator;
   @Input()
   comments: CaseCommentDto[];
   @Input() loading: boolean;
@@ -24,6 +23,8 @@ export class CommentsComponent {
       TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
     ]),
   });
+
+  constructor(public validationErrorService: ValidationErrorService) {}
 
   submitComment() {
     if (this.formGroup.valid) {

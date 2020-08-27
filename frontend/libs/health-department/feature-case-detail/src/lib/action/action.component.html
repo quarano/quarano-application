@@ -60,8 +60,8 @@
         formControlName="comment"
         placeholder="Bemerkung"
       ></textarea>
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.comment)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.comment, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.comment)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.comment, error) | async }}
       </mat-error>
     </mat-form-field>
     <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">

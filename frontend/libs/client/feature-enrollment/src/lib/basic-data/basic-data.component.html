@@ -9,8 +9,8 @@
     <mat-icon>check</mat-icon>
   </ng-template>
   <mat-step [stepControl]="firstFormGroup" #firstStep [hasError]="firstFormGroup.invalid">
-    <ng-template matStepLabel>Persönliche Daten</ng-template>
-    <p>Pflichtfelder sind mit * markiert</p>
+    <ng-template matStepLabel>{{ 'BASIC_DATA.PERSÖNLICHE_DATEN' | translate }}</ng-template>
+    <p>{{ 'BASIC_DATA.PFLICHTFELDER_SIND_MARKIERT' | translate }}</p>
     <form [formGroup]="firstFormGroup">
       <qro-personal-data-form [formGroup]="firstFormGroup" class="personal-data-form"></qro-personal-data-form>
       <div class="mt-3">
@@ -19,21 +19,23 @@
           (buttonClicked)="checkAndSendFirstForm()"
           [loading]="firstFormLoading"
           data-cy="first-step-button"
-          ><mat-icon>arrow_forward</mat-icon> Weiter</qro-button
+          ><mat-icon>arrow_forward</mat-icon> {{ 'BASIC_DATA.WEITER' | translate }}</qro-button
         >
       </div>
     </form>
   </mat-step>
   <mat-step #secondStep [stepControl]="secondFormGroup" [hasError]="secondFormGroup.invalid">
-    <ng-template matStepLabel>Initialer Fragebogen</ng-template>
-    <p>Pflichtfelder sind mit * markiert</p>
+    <ng-template matStepLabel>{{ 'BASIC_DATA.INITIALER_FRAGEBOGEN' | translate }}</ng-template>
+    <p>{{ 'BASIC_DATA.PFLICHTFELDER_SIND_MARKIERT' | translate }}</p>
     <form [formGroup]="secondFormGroup" id="second-form">
-      <qro-initial-questionaire-form
+      <qro-initial-questionnaire-form
         [symptoms]="symptoms"
         [formGroup]="secondFormGroup"
-      ></qro-initial-questionaire-form>
+      ></qro-initial-questionnaire-form>
       <div class="mt-3">
-        <button mat-raised-button matStepperPrevious><mat-icon>arrow_back</mat-icon>Zurück</button>
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>{{ 'BASIC_DATA.ZURÜCK' | translate }}
+        </button>
         <qro-button
           class="ml-3"
           [disabled]="secondStep.hasError"
@@ -41,56 +43,52 @@
           [loading]="secondFormLoading"
           data-cy="second-step-button"
         >
-          <mat-icon>arrow_forward</mat-icon>Weiter
+          <mat-icon>arrow_forward</mat-icon> {{ 'BASIC_DATA.WEITER' | translate }}
         </qro-button>
       </div>
     </form>
   </mat-step>
   <mat-step #thirdStep [stepControl]="thirdFormGroup">
-    <ng-template matStepLabel>Kontaktpersonen</ng-template>
+    <ng-template matStepLabel>{{ 'BASIC_DATA.KONTAKTPERSONEN' | translate }}</ng-template>
     <div class="info-text">
-      <h2>Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle</h2>
+      <h2>{{ 'BASIC_DATA.UMGANG_MIT_KONTAKTPERSONEN' | translate }}</h2>
       <p>
-        Kontaktpersonen sind Personen mit einem unten definierten Kontakt zu einem bestätigten Fall von COVID-19 ab dem
-        2. Tag vor Auftreten der ersten Symptome des Falles. Das Ende der infektiösen Periode ist momentan nicht sicher
-        anzugeben.
+        {{ 'BASIC_DATA.KONTAKTPERSONEN_SIND_PERSONEN' | translate }}
       </p>
     </div>
     <div class="info-text">
       <h2>
-        Kontaktpersonen der Kategorie I mit engem Kontakt ("höheres" Infektionsrisiko)
+        {{ 'BASIC_DATA.KONTAKTPERSONEN_DER_KATEGORIE_I' | translate }}
       </h2>
       <ul>
         <li>
-          Personen mit kumulativ mindestens 15-minütigem Gesichts- ("face-to-face") Kontakt, z. B. im Rahmen eines
-          Gesprächs. Dazu gehören z. B. Personen aus Lebensgemeinschaften im selben Haushalt.
+          {{ 'BASIC_DATA.PERSONEN_MIT_KUMULATIV' | translate }}
         </li>
         <li>
-          Personen mit direktem Kontakt zu Sekreten oder Körperflüssigkeiten, insbesondere zu respiratorischen Sekreten
-          eines bestätigten COVID-19-Falls, wie z. B. Küssen, Kontakt zu Erbrochenem, Mund-zu-Mund Beatmung, Anhusten,
-          Anniesen, etc.
+          {{ 'BASIC_DATA.PERSONEN_MIT_DIREKTEM_KONTAKT' | translate }}
         </li>
-        <li>Personen, die aerosolbildenden Maßnahmen ausgesetzt sind</li>
+        <li>{{ 'BASIC_DATA.PERSONEN_DIE_AEROSOLBILDENDEN_MASSNAHMEN' | translate }}</li>
         <li>
-          Medizinisches Personal mit Kontakt zum bestätigten COVID-19-Fall im Rahmen von Pflege oder medizinischer
-          Untersuchung (≤ 2m), ohne verwendete Schutzausrüstung.
+          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL' | translate }}
         </li>
       </ul>
     </div>
     <form [formGroup]="thirdFormGroup">
       <fieldset *ngFor="let date of datesForRetrospectiveContacts">
-        <legend>Kontaktpersonen vom {{ date | date: 'dd.MM.y' }}</legend>
+        <legend>{{ 'BASIC_DATA.KONTAKTPERSONEN_VOM' | translate }} {{ date | date: 'dd.MM.y' }}</legend>
 
         <qro-multiple-contact-autocomplete
           [control]="this.thirdFormGroup.controls[date.toLocaleDateString('de')]"
           [selectableItems]="contactPersons"
-          [placeholder]="'Kontakte mit anderen Menschen am ' + date.toLocaleDateString('de')"
+          [placeholder]="
+            ('BASIC_DATA.KONTAKTE_MIT_ANDEREN_MENSCHEN_AM' | translate) + ' ' + date.toLocaleDateString('de')
+          "
           [nameProperties]="['firstName', 'lastName']"
           (added)="onContactAdded(date, $event)"
           (removed)="onContactRemoved(date, $event)"
         ></qro-multiple-contact-autocomplete>
         <div style="display: flex; flex-direction: row; align-items: center;">
-          <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+          <span class="text-muted">{{ 'BASIC_DATA.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
           <button
             mat-button
             color="primary"
@@ -99,12 +97,14 @@
             class="p-2 mr-0"
             style="line-height: normal;"
           >
-            Hier fehlenden Kontakt anlegen
+            {{ 'BASIC_DATA.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
           </button>
         </div>
       </fieldset>
       <div class="mt-3">
-        <button mat-raised-button matStepperPrevious><mat-icon>arrow_back</mat-icon>Zurück</button>
+        <button mat-raised-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon> {{ 'BASIC_DATA.ZURÜCK' | translate }}
+        </button>
         <qro-button
           class="ml-3"
           (buttonClicked)="onComplete()"
@@ -112,7 +112,7 @@
           [loading]="thirdFormLoading"
           data-cy="third-step-button"
         >
-          <mat-icon>check</mat-icon>Erfassung abschließen
+          <mat-icon>check</mat-icon> {{ 'BASIC_DATA.ERFASSUNG_ABSCHLIESSEN' | translate }}
         </qro-button>
       </div>
     </form>

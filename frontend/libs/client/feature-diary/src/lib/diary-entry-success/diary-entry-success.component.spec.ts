@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DiaryEntrySuccessComponent } from './diary-entry-success.component';
@@ -9,6 +10,7 @@ describe('DiaryEntrySuccessComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [DiaryEntrySuccessComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

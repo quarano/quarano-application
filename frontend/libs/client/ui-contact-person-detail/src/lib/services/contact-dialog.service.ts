@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { ContactPersonDialogComponent } from '..//contact-person-dialog/contact-person-dialog.component';
@@ -69,14 +69,12 @@ export class ContactDialogService {
 
   private openConfirmDialog() {
     const dialogData: ConfirmDialogData = {
-      text:
-        'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
-        'Möchte Sie die Kontaktperson jetzt anlegen?',
-      title: 'Neue Kontaktperson',
-      abortButtonText: 'Abbrechen',
-      confirmButtonText: 'Kontakt anlegen',
+      text: 'CONTACT_DIALOG.MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN',
+      title: 'CONTACT_DIALOG.NEUE_KONTAKTPERSON',
+      abortButtonText: 'CONTACT_DIALOG.ABBRECHEN',
+      confirmButtonText: 'CONTACT_DIALOG.KONTAKT_ANLEGEN',
     };
 
-    return this.dialog.open(ConfirmationDialogComponent, { data: dialogData });
+    return this.dialog.open(TranslatedConfirmationDialogComponent, { data: dialogData });
   }
 }

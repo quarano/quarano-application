@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -14,7 +15,7 @@ describe('HeaderLeftComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [HeaderLeftComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, TranslateTestingModule],
       providers: [
         { provide: UserService, useValue: { isLoggedIn$: of() } },
         { provide: ClientStore, useValue: {} },

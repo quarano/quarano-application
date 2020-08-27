@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DiaryTodayListItemComponent } from './diary-today-list-item.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -9,6 +10,7 @@ describe('DiaryTodayListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [DiaryTodayListItemComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

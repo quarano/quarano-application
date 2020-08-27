@@ -1,5 +1,331 @@
 {
+  "BAD_REQUEST": {
+    "UNGÜLTIGE_WERTE": "Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt"
+  },
+  "BASIC_DATA": {
+    "ABBRECHEN": "Abbrechen",
+    "ERFASSUNG_ABSCHLIESSEN": "Erfassung abschließen",
+    "FRAGEBOGEN_GESPEICHERT": "Fragebogen erfolgreich gespeichert",
+    "HIER_FEHLENDEN_KONTAKT_ANLEGEN": "Hier fehlenden Kontakt anlegen",
+    "INITIALER_FRAGEBOGEN": "Initialer Fragebogen",
+    "KEINE_RELEVANTEN_KONTAKTE": "Keine relevanten Kontakte?",
+    "KONTAKTE_MIT_ANDEREN_MENSCHEN_AM": "Kontakte mit anderen Menschen am",
+    "KONTAKTPERSONEN": "Kontaktpersonen",
+    "KONTAKTPERSONEN_DER_KATEGORIE_I": "Kontaktpersonen der Kategorie I mit engem Kontakt ('höheres' Infektionsrisiko)",
+    "KONTAKTPERSONEN_SIND_PERSONEN": "Kontaktpersonen sind Personen mit einem unten definierten Kontakt zu einem bestätigten Fall von COVID-19 ab dem 7. Tag vor Auftreten der ersten Symptome des Falles. Das Ende der infektiösen Periode ist momentan nicht sicher anzugeben.",
+    "KONTAKTPERSONEN_VOM": "Kontaktpersonen vom",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "KONTAKT_ENTFERNT": "Kontakt erfolgreich entfernt",
+    "KONTAKT_GESPEICHERT": "Kontakt erfolgreich gespeichert",
+    "MEDIZINISCHES_PERSONAL": "Medizinisches Personal mit Kontakt zum bestätigten COVID-19-Fall im Rahmen von Pflege oder medizinischer Untersuchung (≤ 2m), ohne verwendete Schutzausrüstung.",
+    "OK": "OK",
+    "PERSONEN_DIE_AEROSOLBILDENDEN_MASSNAHMEN": "Personen, die aerosolbildenden Maßnahmen ausgesetzt sind",
+    "PERSONEN_MIT_DIREKTEM_KONTAKT": "Personen mit direktem Kontakt zu Sekreten oder Körperflüssigkeiten, insbesondere zu respiratorischen Sekreten eines bestätigten COVID-19-Falls, wie z. B. Küssen, Kontakt zu Erbrochenem, Mund-zu-Mund Beatmung, Anhusten, Anniesen, etc.",
+    "PERSONEN_MIT_KUMULATIV": "Personen mit kumulativ mindestens 15-minütigem Gesichts- ('face-to-face') Kontakt, z. B. im Rahmen eines Gesprächs. Dazu gehören z. B. Personen aus Lebensgemeinschaften im selben Haushalt.",
+    "PERSÖNLICHE_DATEN": "Persönliche Daten",
+    "PERSÖNLICHE_DATEN_GESPEICHERT": "Persönliche Daten erfolgreich gespeichert",
+    "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
+    "REGISTRIERUNG_ABGESCHLOSSEN": "Die Registrierung wurde erfolgreich abgeschlossen",
+    "SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST": "Sie haben noch keinen retrospektiven Kontakt erfasst. Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten.",
+    "UMGANG_MIT_KONTAKTPERSONEN": "Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle",
+    "WEITER": "Weiter",
+    "ZURÜCK": "Zurück"
+  },
   "CHANGE_PASSWORD": {
+    "BISHERIGES_PASSWORT": "Bisheriges Passwort",
+    "NEUES_PASSWORT": "Neues Passwort",
+    "NEUES_PASSWORT_BESTÄTIGEN": "Neues Passwort bestätigen",
+    "PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
+    "PASSWORT_WURDE_GEÄNDERT": "Ihr Passwort wurde erfolgreich geändert",
+    "PASSWORT_ÄNDERN": "Passwort ändern",
+    "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
+    "USERNAME": "Benutzername"
+  },
+  "CONTACT_DIALOG": {
+    "ABBRECHEN": "Abbrechen",
+    "KONTAKT_ANLEGEN": "Kontakt anlegen",
+    "MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN": "Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. Möchten Sie die Kontaktperson jetzt anlegen?",
+    "NEUE_KONTAKTPERSON": "Neue Kontaktperson"
+  },
+  "CONTACT_PERSONS": {
+    "ANONYME_KONTAKTPERSON": "Anonyme Kontaktperson",
+    "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
+    "NOCH_KEINE_EINTRÄGE_VORHANDEN": "Noch keine Einträge vorhanden"
+  },
+  "CONTACT_PERSON_FORM": {
+    "ABBRECHEN": "Abbrechen",
+    "ADRESSE": "Adresse",
+    "BEKANNTE_VORERKRANKUNGEN": "Die Kontaktperson hat bekannte Vorerkrankungen",
+    "BITTE_GEBEN_SIE_UNS_WEITERE_HINWEISE": "Bitte geben Sie uns weitere Hinweise, wie wir die Person ermitteln könnten (z. B. Mitarbeiter von Bäckerei 'Müller', Taxifahrer, Mitarbeiter im Pflegeheim oder Krankenhaus 'Klinikum Mannheim' und bitte auch dazugehörige Telefonnummern oder Kontaktwege wie z. B. Nummer des Pflegeheims, etc) damit wir den Kontakt schnellstmöglich ermitteln können",
+    "DAS_WEISS_ICH_NICHT": "Das weiß ich nicht",
+    "E_MAIL": "E-Mail-Adresse",
+    "FOLGENDE_AUSSAGEN_ÜBER_KONTAKTPERSON": "Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson",
+    "FOLGENDE_VORERKRANKUNGEN": "In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)",
+    "HAUSNUMMER": "Hausnummer",
+    "HINWEISE_ZUR_IDENTIFIKATION": "Hinweise zur Identifikation",
+    "JA": "Ja",
+    "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "KONTAKTPERSON_AKTUALISIERT": "Kontaktperson erfolgreich aktualisiert",
+    "KONTAKTPERSON_ANGELEGT": "Kontaktperson erfolgreich angelegt",
+    "KONTAKTPERSON_BEARBEITEN": "Kontaktperson bearbeiten",
+    "MEDIZINISCHES_UMFELD": "Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf",
+    "MINDESTENS_EINE_KONTAKTMÖGLICHKEIT": "Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen Hinweis zur Identifikation ein",
+    "NACHNAME": "Nachname",
+    "NEIN": "Nein",
+    "NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
+    "ORT": "Ort",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "POSTLEITZAHL": "Postleitzahl",
+    "RISIKOEINSCHÄTZUNG": "Risikoeinschätzung",
+    "SONSTIGE_BEMERKUNGEN": "Sonstige Bemerkungen",
+    "SPEICHERN": "Speichern",
+    "STRASSE": "Straße",
+    "TELEFONNUMMER_FESTNETZ": "Telefonnummer (Festnetz)",
+    "TELEFONNUMMER_MOBIL": "Telefonnummer (mobil)",
+    "VORNAME": "Vorname",
+    "WEITERE_KOMMENTARE_ODER_HINWEISE": "Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben",
+    "ÜBER_60": "Die Kontaktperson ist über 60 Jahre alt"
+  },
+  "DATA_PROTECTION_DIALOG": {
+    "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
+    "SCHLIESSEN": "Schließen"
+  },
+  "DIARY": {
+    "ABENDS": "Abends",
+    "ALLE_ERFORDERLICHEN_EINTRÄGE_ABGESCHLOSSEN": "Sie haben bereits alle erforderlichen Einträge abgeschlossen",
+    "DATENEINGABE_KONTAKT_VERGESSEN": "Falls Sie während der anfänglichen Dateneingabe den Kontakt zu einer Person vergessen haben, können Sie diesen hier nachtragen. Dies bezieht sich lediglich auf Kontakte in der Zeit bevor Sie mit der elektronischen Erfassung Ihrer täglichen Einträge begonnen haben",
+    "DATUM": "Datum",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
+    "MORGENS": "Morgens",
+    "SYMPTOMTAGEBUCH": "Symptomtagebuch"
+  },
+  "DIARY_ENTRY": {
+    "ABBRECHEN": "Abbrechen",
+    "ABENDS": "abends",
+    "BITTE_GEBEN_SIE_IHRE_KÖRPERTEMPERATUR_EIN": "Bitte geben Sie Ihre Körpertemperatur ein",
+    "DIESER_EINTRAG_KANN_NICHT_MENR_BEARBEITET_WERDEN": "Dieser Eintrag kann nicht mehr bearbeitet werden",
+    "HIER_FEHLENDEN_KONTAKT_EINGEBEN": "Hier fehlenden Kontakt anlegen",
+    "KONTAKTE_SEIT_LETZTEM_EINTRAG": "Kontakte mit anderen Menschen seit letztem Eintrag",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "KRANKHEITSSPEZIFISCHE_SYMPTOME": "Krankheitsspezifische Symptome",
+    "KÖRPERTEMPERATUR_IN": "Körpertemperatur in",
+    "MORGENS": "morgens",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "SONSTIGE_SYMPTOME": "Sonstige Symptome",
+    "SPEICHERN": "Speichern",
+    "TAGEBUCH_EINTRAG_AKTUALISIERT": "Tagebuch-Eintrag erfolgreich aktualisiert",
+    "TAGEBUCH_EINTRAG_ANGELEGT": "Tagebuch-Eintrag erfolgreich angelegt",
+    "TAGEBUCH_EINTRAG_ANLEGEN_FÜR_DEN": "Tagebuch-Eintrag anlegen für den",
+    "TAGEBUCH_EINTRAG_BEARBEITEN_FÜR_DEN": "Tagebuch-Eintrag bearbeiten für den"
+  },
+  "DIARY_ENTRY_SUCCESS": {
+    "EINTRAG_ANSEHEN": "Eintrag ansehen",
+    "EINTRAG_BEARBEITEN": "Eintrag bearbeiten"
+  },
+  "DIARY_ENTRY_WARNING": {
+    "ABENDS": "Abends",
+    "EINTRAG_FEHLT_NOCH": "Eintrag fehlt noch - bitte nachtragen!",
+    "EINTRAG_NACHTRAGEN": "Eintrag nachtragen",
+    "KEIN_EINTRAG_VORHANDEN": "Kein Eintrag vorhanden",
+    "LEIDER_HABEN_SIE_AN_DEISEM_TAG_VERPASST": "Leider haben Sie an diesem Tag verpasst einen Eintrag vorzunehmen. Sie können Einträge nur für einen begrenzten Zeitraum nachtragen, da die Daten bereits vom Gesundheitsamt ausgewertet werden. Bitte achten Sie darauf jeden Tag morgens und abends Ihren Gesundheitszustand sowie Ihre Kontakte zu erfassen",
+    "MORGENS": "Morning"
+  },
+  "DIARY_LIST_ITEM": {
+    "ABENDS": "Abends",
+    "MORGENS": "Morgens"
+  },
+  "DIARY_TODAY_LIST_ITEM": {
+    "ABENDS": "Abends",
+    "ERST_AB_17_UHR": "Hier kann erst ab 17 Uhr ein Eintrag erfolgen",
+    "JETZT_EINTRAGEN": "Jetzt eintragen",
+    "MORGENS": "Morgens"
+  },
+  "ERROR": {
+    "DA_IST_ETWAS_SCHIEFGELAUFEN": "Da ist etwas schiefgelaufen",
+    "EIN_FEHLER_IST_AUFGETRETEN": "Ein Fehler ist aufgetreten",
+    "KEINE_VERBINDUNG_ZUR_API": "Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal",
+    "SERVERFEHLER": "Server Fehler - Für weitere Informationen siehe Konsole",
+    "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen",
+    "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
+  },
+  "FOOTER": {
+    "AGB": "AGB",
+    "DATENSCHUTZ": "Datenschutz",
+    "IMPRESSUM": "Impressum"
+  },
+  "FORBIDDEN": {
+    "DA_IST_ETWAS_SCHIEF_GELAUFEN": "Da ist etwas schief gelaufen",
+    "SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN": "Sie haben nicht die erforderlichen Berechtigungen für diese Aktion",
+    "ZUGRIFF_VERWEIGERT": "Zugriff verweigert",
+    "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
+  },
+  "FORGOTTEN_CONTACT_BANNER": {
+    "FALLS_SIE_WÄHREND_DER_ANFÄNGLICHEN_DATENEINGABE": "Falls Sie während der anfänglichen Dateneingabe den Kontakt zu einer Person vergessen haben, können Sie diesen hier nachtragen. Dies bezieht sich lediglich auf Kontakte in der Zeit bevor Sie mit der elektronischen Erfassung Ihrer täglichen Einträge begonnen haben.",
+    "JETZT_NACHTRAGEN": "Jetzt nachtragen",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen"
+  },
+  "FORGOTTEN_CONTACT_DIALOG": {
+    "ABBRECHEN": "Abbrechen",
+    "HIER_FEHLENDEN_KONTAKT_ANLEGEN": "Hier fehlenden Kontakt anlegen",
+    "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
+    "KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "RETROSPEKTIVE_KONTAKTE_GESPEICHERT": "{{value}} retrospektive Kontakte erfolgreich gespeichert",
+    "SPEICHERN": "Speichern",
+    "TAG_DES_KONTAKTS": "Tag des Kontakts",
+    "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen"
+  },
+  "HEADER_LEFT": {
+    "KONTAKTPERSONEN": "Kontaktpersonen",
+    "TAGEBUCH": "Tagebuch"
+  },
+  "HEADER_RIGHT": {
+    "ABMELDEN": "Abmelden",
+    "BENUTZERPROFIL": "Benutzerprofil",
+    "KONTAKT_ZUM_AMT": "Kontakt zum Amt",
     "PASSWORT_ÄNDERN": "Passwort ändern"
+  },
+  "INITIAL_QUESTIONNAIRE_FORM": {
+    "BEHANDELNDEN_HAUSARZT": "Bitte geben Sie Ihren behandelnden Hausarzt an",
+    "CHARAKTERISTISCHE_SYMPTOME": "Als Covid-19 charakterische Symptome zählen",
+    "HABEN_SIE_BEREITS": "Haben Sie bereits Covid-19 charakteristische Symptome festgestellt?",
+    "IN_DIESEM_FALL_SIND_DAS": "In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)",
+    "JA": "Ja",
+    "KONTAKT_ZU_RISIKOPERSONEN": "Haben Sie Kontakt zu Risikopersonen?",
+    "MEDIZINISCHES_UMFELD": "Arbeiten Sie im medizinischen Umfeld oder in der Pflege?",
+    "NEIN": "Nein",
+    "ORT_DER_ANSTECKUNG": "Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung",
+    "VORERKRANKUNGEN": "Haben Sie eine oder mehrere relevante Vorerkrankungen?",
+    "WANN_HABEN_SIE_DIE_ERSTEN_SYMPTOME": "Wann haben Sie die ersten Symptome festgestellt?",
+    "WELCHE_SYMPTOME": "Welche Symptome haben Sie bei sich festgestellt?",
+    "WELCHE_VORERKRANKUNGEN": "Welche Vorerkrankungen haben Sie?",
+    "WIE_UND_ZU_WEM_KONTAKT": "Wie und zu wem haben Sie Kontakt?",
+    "WO_ARBEITEN_SIE": "Wo arbeiten Sie?"
+  },
+  "LANDING": {
+    "AKUT_ÄRZTLICHE_BEHANDLUNG": "Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.",
+    "BEI_FRAGEN": "Bei Fragen scheuen Sie sich bitte nicht, uns zu kontaktieren. Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer",
+    "BEI_FRAGEN_ALS_KONTAKTPERSON": "Bei Fragen, die Sie als Kontaktperson im Speziellen betreffen, wenden Sie sich bitte an die Hotline für Kontaktpersonen unter der Telefonnummer",
+    "DEM_ONLINE_DOKUMENTATIONSTOOL": "dem Online-Dokumentationstool Ihrer Gesundheitsbehörde!",
+    "DIESER_LINK": "Dieser Link ist nur für Sie persönlich gültig. Wenn mehrere betroffene Personen im selben Haushalt leben, ist es wichtig, dass sich jede Person mit einem eigenen Zugangslink vom Gesundheitsamt jeweils einen eigenen Benutzer anlegt. So können alle Einträge immer richtig zugeordnet werden.",
+    "HERZLICH_WILLKOMMEN_BEI": "Herzlich Willkommen bei",
+    "IHRE_STAMMDATEN_AKTUALISIEREN": "Ihre Stammdaten aktualisieren",
+    "IHRE_STAMMDATEN_SIND_NUR_EINMAL_EINZUGEBEN": "Ihre Stammdaten sind nur einmal einzugeben, Kontaktpersonen und mögliche Krankheitszeichen sind zweimal täglich einzugeben.",
+    "IHR_GESUNDHEITSAMT": "Ihr Gesundheitsamt Mannheim",
+    "INFOS_ZUR_NUTZUNG": "Infos zur Nutzung",
+    "INFOS_ZUR_REGISTRIERUNG": "Infos zur Registrierung",
+    "KONTAKTPERSONEN_ANGEBEN": "Kontaktpersonen angeben",
+    "MIT_DER_ANWENDUNG_KÖNNEN_SIE": "Mit der Anwendung können Sie",
+    "MONTAG_BIS_FREITAG": "Montag bis Freitag",
+    "MÖGLICHE_KRANKHEITSZEICHEN_PROTOKOLLIEREN": "Mögliche Krankheitszeichen protokollieren",
+    "REGISTRIEREN_SIE_SICH": "Registrieren Sie sich mit einem Benutzernamen und einem frei wählbaren Passwort. Danach melden Sie sich mit diesen Nutzerdaten an und können quarano nutzen",
+    "SAMSTAGS": "Samstags sowie an Sonn- und Feiertagen",
+    "SIE_HABEN_VOM_GESUNDHEITSAMT": "Sie haben vom Gesundheitsamt Mannheim einen personalisierten Registrierungs-Link erhalten. In den folgenden Seiten melden Sie sich bitte an und nutzen die Anwendung. Mit der Nutzung dieser Anwendung unterstützen Sie das Gesundheitsamt und tragen dazu bei, dass schneller agiert werden kann.",
+    "WEITER": "Weiter",
+    "WICHTIG": "Wichtig"
+  },
+  "LOGIN": {
+    "ANMELDEN": "Anmelden",
+    "BENUTZERNAME": "Benutzername",
+    "BENUTZERNAME_ODER_PASSWORT_FALSCH": "Benutzername oder Passwort falsch",
+    "FALL_BEREITS_GESCHLOSSEN": "Ihr Fall ist bereits geschlossen",
+    "LOGIN": "Login",
+    "MIT_DEM_CODE": "mit dem Code, den Sie von Ihrer zuständigen Behörde erhalten haben",
+    "NOCH_KEIN_KONTO": "Noch kein Konto?",
+    "PASSWORT": "Passwort",
+    "REGISTRIEREN": "Registrieren",
+    "REGISTRIEREN_SIE_SICH": "Registrieren Sie sich",
+    "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "Sie haben noch kein Benutzerkonto?",
+    "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "Wenn Sie bereits ein Benutzerkonto haben, können Sie sich hier anmelden",
+    "WILLKOMMEN_BEI_QUARANO": "Willkommen bei quarano"
+  },
+  "MULTIPLE_AUTOCOMPLETE": {
+    "KEINE_WEITEREN_AUSWAHLMÖGLICHKEITEN": "Es gibt keine weiteren Auswahlmöglichkeiten"
+  },
+  "NOT_FOUND": {
+    "DA_IST_ETWAS_SCHIEFGELAUFEN": "Da ist etwas schief gelaufen",
+    "DEFAULT_MESSAGE": "Leider konnten wir die angeforderte Ressource nicht finden",
+    "SEITE_NICHT_GEFUNDEN": "Seite nicht gefunden",
+    "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
+  },
+  "PERSONAL_DATA_FORM": {
+    "ADRESSE": "Adresse",
+    "E_MAIL": "E-Mail-Adresse",
+    "GEBURTSDATUM": "Geburtsdatum",
+    "HAUSNUMMER": "Hausnummer",
+    "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "MINDESTENS_EINE_TELEFONNUMMER": "Bitte geben Sie mindestens eine Telefonnummer ein",
+    "NACHNAME": "Nachname",
+    "ORT": "Ort",
+    "PERSON": "Person",
+    "POSTLEITZAHL": "Postleitzahl",
+    "STRASSE": "Straße",
+    "TELEFONNUMMER_FESTNETZ": "Telefonnummer (Festnetz)",
+    "TELEFONNUMMER_MOBIL": "Telefonnummer (mobil)",
+    "VORNAME": "Vorname"
+  },
+  "PREVENT_UNSAVED_CHANGES": {
+    "FORTFAHREN": "Fortfahren?",
+    "ABBRECHEN": "Abbrechen",
+    "OK": "OK",
+    "SIND_SIE_SICHER": "Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen"
+  },
+  "PROFILE": {
+    "ABBRECHEN": "Abbrechen",
+    "PERSÖNLICHE_DATEN_AKTUALISIERT": "Persönliche Daten erfolgreich aktualisiert",
+    "PERSÖNLICHE_DATEN_BEARBEITEN": "Persönliche Daten bearbeiten",
+    "PFLICHTEINGABEN_SIND_MARKIERT": "Pflichteingaben sind mit * markiert",
+    "SPEICHERN": "Speichern"
+  },
+  "REGISTER": {
+    "ANMELDECODE": "Anmeldecode",
+    "BENUTZERNAME": "Benutzername",
+    "BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN": "Bitte alle Pflichtfelder ausfüllen",
+    "DATENSCHUTZERKLÄRUNG": "Datenschutzerklärung",
+    "GEBURTSDATUM": "Geburtsdatum",
+    "HIERMIT_AKZEPTIERE_ICH_DIE": "Hiermit akzeptiere ich die",
+    "PASSWORT": "Passwort",
+    "PASSWORT_BESTÄTIGEN": "Passwort bestätigen",
+    "PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
+    "REGISTRIEREN": "Registrieren",
+    "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet",
+    "SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN": "Sie können sich nur für quarano registrieren, wenn Sie der Datenschutzerklärung zustimmen. Andernfalls wenden Sie sich bitte umgehend an Ihr zuständiges Gesundheitsamt.",
+    "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren."
+  },
+  "USER": {
+    "SIE_WURDEN_ABGEMELDET": "Sie wurden abgemeldet",
+    "GESUNDHEITSAMT_UNBEKANNT": "Gesundheitsamt unbekannt"
+  },
+  "VALIDATION": {
+    "CODE_INVALID": "Der eingegebene Code ist ungültig",
+    "USERNAME_INVALID": "Der angegebene Benutzername kann nicht verwendet werden",
+    "PASSWORD_CONFIRM_WRONG": "Das Passwort und die Bestätigung müssen übereinstimmen",
+    "PASSWORD_INCLUDES_USERNAME": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "NON_WORD_CHAR": "Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >",
+    "DIGIT": "Dieses Feld muss mindestens eine Zahl enthalten",
+    "UPPERCASE": "Dieses Feld muss mindestens einen Großbuchstaben enthalten",
+    "MAT_DATEPICKER_PARSE": "Bitte geben Sie ein gültiges Datum ein",
+    "MIN_LENGTH_ARRAY": "Bitte wählen Sie mindestens ein Element",
+    "REQUIRED": "Bitte füllen Sie dieses Pflichtfeld aus",
+    "INTEGER_UNSIGNED": "Dieses Feld darf nur Ziffern enthalten",
+    "ALPHANUMERIC": "Dieses Feld darf nur Buchstaben und Zahlen enthalten",
+    "ALPHABETIC": "Dieses Feld darf nur Buchstaben enthalten",
+    "TEXTUAL": "Dieses Feld darf nur Zahlen, Buchstaben, Satzzeichen und Zeilenumbrüche enthalten",
+    "UUID": "Bitte geben Sie eine gültige UUID ein",
+    "ZIP": "Bitte geben Sie eine gültige Postleitzahl aus 5 Ziffern an",
+    "STREET": "Bitte geben Sie eine gültige Straße an. Diese darf Buchstaben, Zahlen, Leerzeichen, Punkte und Bindestriche enthalten",
+    "HOUSE_NUMBER": "Bitte geben Sie eine gültige Hausnummer an. Diese darf maximal 15 Zeichen lang sein und nur aus Buchstaben, Zahlen, Punkten, Binde- und Schrägstrichen bestehen",
+    "NAME": "Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt",
+    "USERNAME": "Bitte geben Sie einen gültigen Benutzernamen ein! Dieser kann Buchstaben, Zahlen, Binde- oder Unterstriche enthalten",
+    "PHONE_NUMBER": "Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten",
+    "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse an",
+    "CITY": "Bitte geben Sie eine gültige Stadt an. Diese kann Buchstaben und folgende Zeichen enthalten: . - ( ) /",
+    "EXT_REFERENCE_NUMBER": "Die eingegebene Vorgangsnummer enthält nicht erlaubte Zeichen. Vorgangsnummern dürfen nur aus Zahlen, Buchstaben, Binde- und Unterstrichen bestehen",
+    "MINLENGTH": "Dieses Feld erfordert eine Eingabe von mindestens {{value}} Zeichen",
+    "MAXLENGTH": "Dieses Feld darf maximal {{value}} Zeichen enthalten",
+    "MAT_DATEPICKER_MAX": "Das größte zulässige Datum ist der {{value}}",
+    "MAT_DATEPICKER_MIN": "Das kleinste zulässige Datum ist der {{value}}"
   }
 }

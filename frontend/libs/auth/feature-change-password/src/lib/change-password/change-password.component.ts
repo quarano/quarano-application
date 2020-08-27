@@ -1,14 +1,15 @@
 import { Store } from '@ngrx/store';
-import { ValidationErrorGenerator, PasswordValidator, ConfirmValidPasswordMatcher } from '@qro/shared/util-forms';
+import { PasswordValidator, ConfirmValidPasswordMatcher, ValidationErrorService } from '@qro/shared/util-forms';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { AuthService, UserService, AuthStore } from '@qro/auth/domain';
 import { MatInput } from '@angular/material/input';
 import { SubSink } from 'subsink';
-import { SnackbarService } from '@qro/shared/util-snackbar';
-import { Component, OnInit, OnDestroy, Inject, Injector } from '@angular/core';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-change-password',
@@ -20,7 +21,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   private subs = new SubSink();
-  errorGenerator = ValidationErrorGenerator;
   /**
    * Need to inject the Dialog stuff this way,
    * otherwise a component can't be used as a dialog and as usual component at the same time
@@ -29,13 +29,13 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   private dialogData;
 
   constructor(
+    private snackbarService: TranslatedSnackbarService,
     private authStore: AuthStore,
-    private snackbarService: SnackbarService,
     private router: Router,
     private authService: AuthService,
     private badRequestService: BadRequestService,
     private injector: Injector,
-    private store: Store
+    public validationErrorService: ValidationErrorService
   ) {
     this.dialogRef = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
@@ -70,10 +70,10 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.subs.add(
         this.authService
           .changePassword(this.formGroup.value)
+          .pipe(switchMap(() => this.snackbarService.success('CHANGE_PASSWORD.PASSWORT_WURDE_GEÄNDERT')))
           .subscribe(
             () => {
-              this.snackbarService.success('Ihr Passwort wurde geändert');
-              if (this.dialogData.mode === 'initialPasswordChange') {
+              if (this.dialogData?.mode === 'initialPasswordChange') {
                 this.dialogRef.close('success');
               } else {
                 this.router.navigate(['/general/welcome']);

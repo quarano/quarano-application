@@ -142,7 +142,7 @@ describe('registration form', () => {
               $input.hasClass('mat-form-field-invalid');
               cy.get('[data-cy="input-password-confirm"] mat-error')
                 .should('exist')
-                .and('contain.text', 'Das Passwort und die Bestätigung müssen übereinstimmen.');
+                .and('contain.text', 'Das Passwort und die Bestätigung müssen übereinstimmen');
             });
         });
       });

@@ -1,3 +1,5 @@
+import { BadRequestService } from '@qro/shared/ui-error';
+import { ValidationErrorService } from '@qro/shared/util-forms';
 import { AccountService } from '@qro/administration/domain';
 import { FormBuilder } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -22,6 +24,8 @@ describe('AccountEditComponent', () => {
         { provide: AccountService, useValue: {} },
         { provide: AuthService, useValue: {} },
         { provide: SnackbarService, useValue: {} },
+        { provide: BadRequestService, useValue: {} },
+        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
         {
           provide: ActivatedRoute,
           useValue: {

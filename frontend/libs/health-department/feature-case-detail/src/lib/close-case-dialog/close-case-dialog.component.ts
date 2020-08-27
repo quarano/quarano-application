@@ -1,4 +1,4 @@
-import { ValidationErrorGenerator, TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
+import { ValidationErrorService, TrimmedPatternValidator, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -9,7 +9,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./close-case-dialog.component.scss'],
 })
 export class CloseCaseDialogComponent {
-  errorGenerator = ValidationErrorGenerator;
   commentGroup = new FormGroup({
     comment: new FormControl('', [
       Validators.required,
@@ -23,7 +22,8 @@ export class CloseCaseDialogComponent {
       text: string;
       title: string;
     },
-    private matDialogRef: MatDialogRef<CloseCaseDialogComponent>
+    private matDialogRef: MatDialogRef<CloseCaseDialogComponent>,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   public confirm() {

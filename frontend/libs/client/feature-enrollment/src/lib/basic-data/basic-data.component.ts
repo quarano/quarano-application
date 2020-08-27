@@ -3,30 +3,37 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { BehaviorSubject } from 'rxjs';
 import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
-import { tap, finalize, take } from 'rxjs/operators';
+import { tap, finalize, take, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-basic-data',
   templateUrl: './basic-data.component.html',
   styleUrls: ['./basic-data.component.scss'],
 })
-export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
@@ -56,7 +63,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private enrollmentService: EnrollmentService,
     private router: Router,
     private changeDetect: ChangeDetectorRef,
@@ -73,14 +80,20 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.firstQuery = data.firstQuery;
         this.client = data.clientData;
         this.encounters = data.encounters;
-        this.symptoms = data.symptoms.filter((symptom) => symptom.characteristic);
+        this.symptoms = data.symptoms.filter((symptom: SymptomDto) => symptom.characteristic);
 
         this.buildForms();
       })
     );
+  }
 
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
     this.subs.add(
-      this.clientStore.enrollmentStatus$.subscribe((status) => {
+      this.clientStore.enrollmentStatus$.pipe(take(1)).subscribe((status) => {
         if (status.completedPersonalData) {
           this.stepper?.next();
         }
@@ -89,10 +102,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       })
     );
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -175,11 +184,15 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.subs.add(
         this.clientService
           .updatePersonalDetails(value)
+          .pipe(
+            switchMap((result) =>
+              this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(map((res) => result))
+            )
+          )
           .subscribe(
             (result) => {
               if (result.completedPersonalData) {
                 this.client = value;
-                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
                 this.stepper.next();
               }
               this.firstFormLoading = false;
@@ -256,13 +269,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           .pipe(
             take(1),
             tap((result) => (this.firstQuery = this.secondFormGroup.value)),
+            switchMap((result) => this.snackbarService.success('BASIC_DATA.FRAGEBOGEN_GESPEICHERT')),
             finalize(() => {
               this.secondFormLoading = false;
             })
           )
           .subscribe(
             (result) => {
-              this.snackbarService.success('Fragebogen erfolgreich gespeichert');
               this.stepper.next();
             },
             (error) => {
@@ -325,9 +338,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subs.add(
       this.enrollmentService
         .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
+        .pipe(
+          switchMap((encounter) =>
+            this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
+          )
+        )
         .subscribe((encounter) => {
           this.encounters.push(encounter);
-          this.snackbarService.success('Kontakt erfolgreich gespeichert');
         })
     );
   }
@@ -337,10 +354,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
     );
     this.subs.add(
-      this.enrollmentService.deleteEncounter(encounterToRemove.encounter).subscribe((_) => {
-        this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
-        this.snackbarService.success('Kontakt erfolgreich entfernt');
-      })
+      this.enrollmentService
+        .deleteEncounter(encounterToRemove.encounter)
+        .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
+        .subscribe((_) => {
+          this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
+        })
     );
   }
 
@@ -357,14 +376,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      const dialogRef = this.dialog.open(TranslatedConfirmationDialogComponent, {
         data: {
-          abortButtonText: 'Abbrechen',
-          confirmButtonText: 'ok',
-          title: 'Keine relevanten Kontakte?',
-          text:
-            'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
-            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
+          abortButtonText: 'BASIC_DATA.ABBRECHEN',
+          confirmButtonText: 'BASIC_DATA.OK',
+          title: 'BASIC_DATA.KEINE_RELEVANTEN_KONTAKTE',
+          text: 'BASIC_DATA.SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST',
         },
       });
 
@@ -387,9 +404,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.clientStore.completeEnrollment(withoutEncounters);
     this.subs.add(
       this.clientStore.enrollmentStatus$
+        .pipe(
+          switchMap((result) =>
+            this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').pipe(map((res) => result))
+          )
+        )
         .subscribe((result) => {
           if (result.completedContactRetro) {
-            this.snackbarService.success('Die Registrierung wurde abgeschlossen');
             this.router.navigate(['/client/diary/diary-list']);
           }
         })

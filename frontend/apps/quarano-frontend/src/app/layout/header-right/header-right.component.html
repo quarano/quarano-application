@@ -8,7 +8,7 @@
         class="contact-button"
         (click)="showContact(healthDepartment)"
       >
-        Kontakt zum Amt
+        {{ 'HEADER_RIGHT.KONTAKT_ZUM_AMT' | translate }}
       </button>
     </ng-container>
   </ng-container>
@@ -20,14 +20,14 @@
   <mat-menu #profilemenu="matMenu">
     <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
       <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
-        <mat-icon>person</mat-icon> Benutzerprofil
+        <mat-icon>person</mat-icon> {{ 'HEADER_RIGHT.BENUTZERPROFIL' | translate }}
       </button>
     </ng-container>
     <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
-      <mat-icon>vpn_key</mat-icon> Passwort ändern
+      <mat-icon>vpn_key</mat-icon> {{ 'HEADER_RIGHT.PASSWORT_ÄNDERN' | translate }}
     </button>
     <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon> Abmelden
+      <mat-icon>exit_to_app</mat-icon> {{ 'HEADER_RIGHT.ABMELDEN' | translate }}
     </button>
   </mat-menu>
 </div>

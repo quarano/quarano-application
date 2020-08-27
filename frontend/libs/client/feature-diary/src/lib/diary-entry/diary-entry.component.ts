@@ -1,3 +1,5 @@
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { DateFunctions } from '@qro/shared/util-date';
 import { SubSink } from 'subsink';
@@ -6,11 +8,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { ContactPersonDto, DiaryEntryDto, DiaryEntryModifyDto, DiaryService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { DeactivatableComponent } from '@qro/shared/util-forms';
 
 @Component({
@@ -47,12 +48,12 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private diaryService: DiaryService,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private router: Router,
-    private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private badRequestService: BadRequestService,
-    private dialogService: ContactDialogService
+    private dialogService: ContactDialogService,
+    private translate: TranslateService
   ) {}
 
   ngOnDestroy(): void {
@@ -65,8 +66,12 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(
       this.route.data.subscribe((data) => {
         this.diaryEntry = data.diaryEntry;
+        // Fieber rausfiltern, da dies bereits über die Körpertemperatur abgefrühstückt wird
         this.setSymptoms(data.symptoms.filter((symptom) => symptom.id !== 'db723876-e051-4ccf-9c52-794190694666'));
         this.contactPersons = data.contactPersons;
+        if (!this.isNew) {
+          this.slot = this.diaryEntry.slot.timeOfDay;
+        }
       })
     );
     this.buildForm();
@@ -130,18 +135,17 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     }
   }
 
-  getTitle(): string {
+  getTitle(): Observable<string> {
+    const slotKey = 'DIARY_ENTRY.' + (this.slot === 'morning' ? 'MORGENS' : 'ABENDS');
     if (this.isNew) {
-      return (
-        `Tagebuch-Eintrag anlegen für den ` +
-        `${DateFunctions.toCustomLocaleDateString(new Date(this.date))} ` +
-        `(${this.slot === 'morning' ? 'morgens' : 'abends'})`
+      return this.translate.get('DIARY_ENTRY.TAGEBUCH_EINTRAG_ANLEGEN_FÜR_DEN').pipe(
+        map((result) => `${result} ${DateFunctions.toCustomLocaleDateString(new Date(this.date))}`),
+        switchMap((result) => this.translate.get(slotKey).pipe(map((res) => `${result} ${res}`)))
       );
     } else {
-      return (
-        `Tagebuch-Eintrag bearbeiten für den ` +
-        `${DateFunctions.toCustomLocaleDateString(new Date(this.diaryEntry.slot.date))} ` +
-        `(${this.diaryEntry.slot.timeOfDay === 'morning' ? 'morgens' : 'abends'})`
+      return this.translate.get('DIARY_ENTRY.TAGEBUCH_EINTRAG_BEARBEITEN_FÜR_DEN').pipe(
+        map((result) => `${result} ${DateFunctions.toCustomLocaleDateString(new Date(this.diaryEntry.slot.date))}`),
+        switchMap((result) => this.translate.get(slotKey).pipe(map((res) => `${result} ${res}`)))
       );
     }
   }
@@ -152,9 +156,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(
       this.diaryService
         .createDiaryEntry(diaryEntry)
+        .pipe(switchMap(() => this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_ANGELEGT')))
         .subscribe(
           (_) => {
-            this.snackbarService.success('Tagebuch-Eintrag erfolgreich angelegt');
             this.formGroup.markAsPristine();
             this.router.navigate(['/client/diary/diary-list']);
           },
@@ -172,9 +176,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(
       this.diaryService
         .modifyDiaryEntry(diaryEntry)
+        .pipe(switchMap(() => this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_AKTUALISIERT')))
         .subscribe(
           (_) => {
-            this.snackbarService.success('Tagebuch-Eintrag erfolgreich aktualisiert');
             this.formGroup.markAsPristine();
             this.router.navigate(['/client/diary/diary-list']);
           },
