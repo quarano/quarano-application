@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -8,6 +9,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
   imports: [
     CommonModule,
     SharedUiMaterialModule,
+    SharedUtilTranslationModule,
     RouterModule.forChild([
       {
         path: '',

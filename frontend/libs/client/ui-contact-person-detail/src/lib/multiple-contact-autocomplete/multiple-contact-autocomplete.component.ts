@@ -8,7 +8,7 @@ import { ContactDialogService } from '../services/contact-dialog.service';
 @Component({
   selector: 'qro-multiple-contact-autocomplete',
   templateUrl: './multiple-contact-autocomplete.component.html',
-  styleUrls: ['./multiple-contact-autocomplete.component.css'],
+  styleUrls: ['./multiple-contact-autocomplete.component.scss'],
 })
 export class MultipleContactAutocompleteComponent {
   @Input() nameProperties: string[];

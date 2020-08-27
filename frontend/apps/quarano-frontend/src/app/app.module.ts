@@ -90,6 +90,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     FormsModule,
     HttpClientModule,
     ...SUB_MODULES,
+    ...NGX_TRANSLATE,
     ...NGRX,
     ...NGX_TRANSLATE,
   ],

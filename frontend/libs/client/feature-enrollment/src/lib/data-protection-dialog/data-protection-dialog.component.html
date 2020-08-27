@@ -2,13 +2,13 @@
   <button mat-dialog-close mat-icon-button>
     <mat-icon>close</mat-icon>
   </button>
-  <h1 mat-dialog-title>Datenschutzerklärung</h1>
+  <h1 mat-dialog-title>{{ 'DATA_PROTECTION_DIALOG.DATENSCHUTZERKLÄRUNG' | translate }}</h1>
 </div>
 <mat-dialog-content>
   <qro-data-protection></qro-data-protection>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>
-    Schließen
+    {{ 'DATA_PROTECTION_DIALOG.SCHLIESSEN' | translate }}
   </button>
 </mat-dialog-actions>

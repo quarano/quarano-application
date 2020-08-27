@@ -1,13 +1,13 @@
 <mat-card>
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title>Da ist etwas schief gelaufen...</mat-card-title>
-    <mat-card-subtitle>Seite nicht gefunden</mat-card-subtitle>
+    <mat-card-title>{{ 'NOT_FOUND.DA_IST_ETWAS_SCHIEFGELAUFEN' | translate }}...</mat-card-title>
+    <mat-card-subtitle>{{ 'NOT_FOUND.SEITE_NICHT_GEFUNDEN' | translate }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <h2>{{ message }}</h2>
+    <h2>{{ message$ | async }}</h2>
     <button mat-button color="primary" [routerLink]="['/']" type="button">
-      Zurück zur Startseite
+      {{ 'NOT_FOUND.ZURÜCK_ZUR_STARTSEITE' | translate }}
     </button>
   </mat-card-content>
 </mat-card>

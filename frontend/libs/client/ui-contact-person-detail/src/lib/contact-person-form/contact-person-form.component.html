@@ -2,51 +2,55 @@
   <mat-card class="form__card--small form__card--animated">
     <mat-card-header>
       <div mat-card-avatar class="header-image"></div>
-      <mat-card-title>{{ isNew ? 'Neue Kontaktperson anlegen' : 'Kontaktperson bearbeiten' }}</mat-card-title>
-      <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
+      <mat-card-title>{{
+        isNew
+          ? ('CONTACT_PERSON_FORM.NEUE_KONTAKTPERSON_ANLEGEN' | translate)
+          : ('CONTACT_PERSON_FORM.KONTAKTPERSON_BEARBEITEN' | translate)
+      }}</mat-card-title>
+      <mat-card-subtitle>{{ 'CONTACT_PERSON_FORM.PFLICHTEINGABEN_SIND_MARKIERT' | translate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <mat-form-field class="half-width">
         <input
           matInput
-          placeholder="Vorname"
+          [placeholder]="'CONTACT_PERSON_FORM.VORNAME' | translate"
           formControlName="firstName"
           type="text"
           #first_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width">
         <input
           matInput
-          placeholder="Nachname"
+          [placeholder]="'CONTACT_PERSON_FORM.NACHNAME' | translate"
           formControlName="lastName"
           type="text"
           #last_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
         </mat-error>
       </mat-form-field>
       <fieldset class="mb-3">
-        <legend>Kontaktmöglichkeiten *</legend>
+        <legend>{{ 'CONTACT_PERSON_FORM.KONTAKTMÖGLICHKEITEN' | translate }} *</legend>
         <mat-form-field class="full-width">
           <input
             matInput
             maxlength="17"
             minlength="5"
-            placeholder="Telefonnummer (Festnetz)"
+            [placeholder]="'CONTACT_PERSON_FORM.TELEFONNUMMER_FESTNETZ' | translate"
             formControlName="phone"
             type="phone"
             #phone_input
             (blur)="trimValue(phone_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.phone)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.phone, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.phone)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.phone, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -54,151 +58,149 @@
             matInput
             maxlength="17"
             minlength="5"
-            placeholder="Telefonnummer (mobil)"
+            [placeholder]="'CONTACT_PERSON_FORM.TELEFONNUMMER_MOBIL' | translate"
             formControlName="mobilePhone"
             type="phone"
             #mobile_phone_input
             (blur)="trimValue(mobile_phone_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.mobilePhone)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.mobilePhone)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.mobilePhone, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input
             matInput
-            placeholder="E-Mail"
+            [placeholder]="'CONTACT_PERSON_FORM.E_MAIL' | translate"
             formControlName="email"
             type="email"
             #email_input
             (blur)="trimValue(email_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" [class]="showIdentificationHintField ? '' : 'display-none'">
-          <mat-label>Hinweise zur Identifikation</mat-label>
+          <mat-label>{{ 'CONTACT_PERSON_FORM.HINWEISE_ZUR_IDENTIFIKATION' | translate }}</mat-label>
           <textarea
             [mat-autosize]="true"
             [matAutosizeMinRows]="8"
             matInput
             formControlName="identificationHint"
-            placeholder="Bitte geben Sie uns weitere Hinweise, wie wir die Person ermitteln könnten (z. B. Mitarbeiter von Bäckerei 'Müller', Taxifahrer, Mitarbeiter im Pflegeheim oder Krankenhaus 'Klinikum Mannheim' und bitte auch dazugehörige Telefonnummern oder Kontaktwege wie z. B. Nummer des Pflegeheims, etc) damit wir den Kontakt schnellstmöglich ermitteln können"
+            [placeholder]="'CONTACT_PERSON_FORM.BITTE_GEBEN_SIE_UNS_WEITERE_HINWEISE' | translate"
           ></textarea>
-          <mat-error
-            >Bitte geben Sie mindestens eine Kontaktmöglichkeit oder einen Hinweis zur Identifikation ein</mat-error
-          >
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.identificationHint)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.identificationHint, error) }}
+          <mat-error>{{ 'CONTACT_PERSON_FORM.MINDESTENS_EINE_KONTAKTMÖGLICHKEIT' | translate }}</mat-error>
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.identificationHint)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.identificationHint, error) | async }}
           </mat-error>
         </mat-form-field>
       </fieldset>
       <fieldset class="mb-3">
-        <legend>Adresse</legend>
+        <legend>{{ 'CONTACT_PERSON_FORM.ADRESSE' | translate }}</legend>
         <mat-form-field style="width: 70%;">
           <input
             matInput
-            placeholder="Straße"
+            [placeholder]="'CONTACT_PERSON_FORM.STRASSE' | translate"
             formControlName="street"
             type="text"
             #street_input
             (blur)="trimValue(street_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.street)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.street)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
           <input
             matInput
-            placeholder="Hausnummer"
+            [placeholder]="'CONTACT_PERSON_FORM.HAUSNUMMER' | translate"
             maxlength="6"
             formControlName="houseNumber"
             type="text"
             #house_number_input
             (blur)="trimValue(house_number_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.houseNumber)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.houseNumber)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%;">
           <input
             matInput
-            placeholder="Postleitzahl"
+            [placeholder]="'CONTACT_PERSON_FORM.POSTLEITZAHL' | translate"
             formControlName="zipCode"
             type="text"
             #zip_code_input
             (blur)="trimValue(zip_code_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.zipCode)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 70%;">
           <input
             matInput
-            placeholder="Ort"
+            [placeholder]="'CONTACT_PERSON_FORM.ORT' | translate"
             formControlName="city"
             type="text"
             #city_input
             (blur)="trimValue(city_input)"
           />
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.city)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.city)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.city, error) | async }}
           </mat-error>
         </mat-form-field>
       </fieldset>
       <fieldset class="mb-3">
-        <legend>Risikoeinschätzung</legend>
-        <qro-alert message="Bitte beantworten Sie abschließend noch folgende Aussagen über die Kontaktperson">
-        </qro-alert>
+        <legend>{{ 'CONTACT_PERSON_FORM.RISIKOEINSCHÄTZUNG' | translate }}</legend>
+        <qro-alert [message]="'CONTACT_PERSON_FORM.FOLGENDE_AUSSAGEN_ÜBER_KONTAKTPERSON' | translate"> </qro-alert>
         <div style="display: flex; flex-direction: column;">
           <div class="risk-question">
-            <mat-label id="example-radio-group-label"
-              >Die Kontaktperson arbeitet im medizinischen Umfeld oder in einem Pflegeberuf</mat-label
-            >
+            <mat-label id="example-radio-group-label">{{
+              'CONTACT_PERSON_FORM.MEDIZINISCHES_UMFELD' | translate
+            }}</mat-label>
             <mat-radio-group
               aria-labelledby="example-radio-group-label"
               class="example-radio-group"
               formControlName="isHealthStaff"
             >
               <mat-radio-button class="example-radio-button" [value]="true">
-                Ja
+                {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="false">
-                Nein
+                {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="null">
-                Das weiß ich nicht
+                {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="risk-question">
-            <mat-label id="example-radio-group-label">Die Kontaktperson ist über 60 Jahre alt</mat-label>
+            <mat-label id="example-radio-group-label">{{ 'CONTACT_PERSON_FORM.ÜBER_60' | translate }}</mat-label>
             <mat-radio-group
               aria-labelledby="example-radio-group-label"
               class="example-radio-group"
               formControlName="isSenior"
             >
               <mat-radio-button class="example-radio-button" [value]="true">
-                Ja
+                {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="false">
-                Nein
+                {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="null">
-                Das weiß ich nicht
+                {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="risk-question">
             <mat-label id="example-radio-group-label" style="display: flex; align-items: center;"
-              >Die Kontaktperson hat bekannte Vorerkrankungen<mat-icon
+              >{{ 'CONTACT_PERSON_FORM.BEKANNTE_VORERKRANKUNGEN' | translate
+              }}<mat-icon
                 class="ml-1"
                 style="cursor: pointer;"
-                matTooltip="In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem Immunsystem (inkl. HIV/AIDS)"
+                [matTooltip]="'CONTACT_PERSON_FORM.FOLGENDE_VORERKRANKUNGEN' | translate"
               >
                 info</mat-icon
               ></mat-label
@@ -210,43 +212,41 @@
               formControlName="hasPreExistingConditions"
             >
               <mat-radio-button class="example-radio-button" [value]="true">
-                Ja
+                {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="false">
-                Nein
+                {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
               <mat-radio-button class="example-radio-button" [value]="null">
-                Das weiß ich nicht
+                {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
         </div>
       </fieldset>
       <mat-form-field class="full-width">
-        <mat-label>Sonstige Bemerkungen</mat-label>
+        <mat-label>{{ 'CONTACT_PERSON_FORM.SONSTIGE_BEMERKUNGEN' | translate }}</mat-label>
         <textarea
           [mat-autosize]="true"
           [matAutosizeMinRows]="4"
           matInput
           formControlName="remark"
-          placeholder="Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben"
+          [placeholder]="'CONTACT_PERSON_FORM.WEITERE_KOMMENTARE_ODER_HINWEISE' | translate"
         ></textarea>
         <mat-hint align="start"
-          ><strong
-            >Hier haben Sie die Möglichkeit weitere Kommentare oder Hinweise für das Gesundheitsamt anzugeben</strong
-          >
+          ><strong>{{ 'CONTACT_PERSON_FORM.WEITERE_KOMMENTARE_ODER_HINWEISE' | translate }}</strong>
         </mat-hint>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.remark)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.remark, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.remark)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.remark, error) | async }}
         </mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
       <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
-        Speichern
+        {{ 'CONTACT_PERSON_FORM.SPEICHERN' | translate }}
       </qro-button>
       <button type="button" mat-raised-button color="secondary" (click)="cancel()">
-        Abbrechen
+        {{ 'CONTACT_PERSON_FORM.ABBRECHEN' | translate }}
       </button>
     </mat-card-actions>
   </mat-card>

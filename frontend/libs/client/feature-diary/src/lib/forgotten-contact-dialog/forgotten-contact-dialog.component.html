@@ -1,30 +1,30 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmitted()">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title>Kontakt nachtragen</mat-card-title>
-    <mat-card-subtitle>Pflichteingaben sind mit * markiert</mat-card-subtitle>
+    <mat-card-title>{{ 'FORGOTTEN_CONTACT_DIALOG.KONTAKT_NACHTRAGEN' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'FORGOTTEN_CONTACT_DIALOG.PFLICHTEINGABEN_SIND_MARKIERT' | translate }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <mat-form-field class="full-width mb-3">
-      <mat-label>Tag des Kontakts</mat-label>
+      <mat-label>{{ 'FORGOTTEN_CONTACT_DIALOG.TAG_DES_KONTAKTS' | translate }}</mat-label>
       <input matInput required [max]="today" [matDatepicker]="picker" formControlName="day" name="dayControl" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.day)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.day, error) }}
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.day)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.day, error) | async }}
       </mat-error>
     </mat-form-field>
 
     <qro-multiple-contact-autocomplete
       [control]="formGroup.controls.contactIds"
       [selectableItems]="data.contactPersons"
-      placeholder="Wählen Sie die Kontaktpersonen *"
+      [placeholder]="('FORGOTTEN_CONTACT_DIALOG.WÄHLEN_SIE_DIE_KONTAKTPERSONEN' | translate) + '*'"
       [nameProperties]="['firstName', 'lastName']"
     >
     </qro-multiple-contact-autocomplete>
 
     <div style="display: flex; flex-direction: row; align-items: center;">
-      <span class="text-muted">Kontaktperson fehlt in der Liste ?</span>
+      <span class="text-muted">{{ 'FORGOTTEN_CONTACT_DIALOG.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
       <button
         mat-button
         color="primary"
@@ -33,16 +33,16 @@
         class="p-2 mr-0"
         style="line-height: normal;"
       >
-        Hier fehlenden Kontakt anlegen
+        {{ 'FORGOTTEN_CONTACT_DIALOG.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
       </button>
     </div>
   </mat-card-content>
   <mat-card-actions>
     <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
-      Speichern
+      {{ 'FORGOTTEN_CONTACT_DIALOG.SPEICHERN' | translate }}
     </qro-button>
     <button type="button" mat-raised-button color="secondary" (click)="cancel()">
-      Abbrechen
+      {{ 'FORGOTTEN_CONTACT_DIALOG.ABBRECHEN' | translate }}
     </button></mat-card-actions
   >
 </form>

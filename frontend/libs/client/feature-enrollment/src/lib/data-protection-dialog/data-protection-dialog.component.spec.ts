@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { MatDialogRef } from '@angular/material/dialog';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -10,6 +11,7 @@ describe('DataProtectionDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [DataProtectionDialogComponent],
       providers: [{ provide: MatDialogRef, useValue: {} }],
       schemas: [NO_ERRORS_SCHEMA],

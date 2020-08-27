@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { UserService } from '@qro/auth/api';
 import { HealthDepartmentService } from '@qro/health-department/api';
 import { ClientStore } from '@qro/client/api';
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
@@ -19,7 +20,7 @@ describe('HeaderRightComponent', () => {
     userService.isLoggedIn$ = of();
 
     TestBed.configureTestingModule({
-      imports: [MatMenuModule],
+      imports: [MatMenuModule, TranslateTestingModule],
       declarations: [HeaderRightComponent],
       providers: [
         { provide: UserService, useValue: userService },

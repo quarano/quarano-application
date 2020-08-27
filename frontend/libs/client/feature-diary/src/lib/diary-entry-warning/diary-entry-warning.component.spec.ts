@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -10,6 +11,7 @@ describe('DiaryEntryWarningComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [DiaryEntryWarningComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

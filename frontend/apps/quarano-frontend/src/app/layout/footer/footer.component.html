@@ -1,8 +1,8 @@
 <div class="container">
   <div class="link-wrapper">
-    <a [routerLink]="['/general/terms']">AGB</a>
-    <a [routerLink]="['/general/data-protection']">Datenschutz</a>
-    <a [routerLink]="['/general/imprint']">Impressum</a>
+    <a [routerLink]="['/general/terms']">{{ 'FOOTER.AGB' | translate }}</a>
+    <a [routerLink]="['/general/data-protection']">{{ 'FOOTER.DATENSCHUTZ' | translate }}</a>
+    <a [routerLink]="['/general/imprint']">{{ 'FOOTER.IMPRESSUM' | translate }}</a>
   </div>
 
   <div class="anchor-wrapper" *ngFor="let item of pictureUris | keyvalue">

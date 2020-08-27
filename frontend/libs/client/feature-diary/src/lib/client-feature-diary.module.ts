@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -71,6 +72,7 @@ const routes: Routes = [
     SharedUtilSymptomModule,
     ClientDomainModule,
     ClientUiContactPersonDetailModule,
+    SharedUtilTranslationModule,
   ],
   declarations: [
     DiaryComponent,

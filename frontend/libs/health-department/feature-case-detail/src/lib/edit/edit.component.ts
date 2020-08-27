@@ -3,7 +3,7 @@ import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  ValidationErrorGenerator,
+  ValidationErrorService,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -42,7 +42,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   private subs: SubSink = new SubSink();
   ClientType = ClientType;
   today = new Date();
-  errorGenerator = ValidationErrorGenerator;
   selectableIndexCases: CaseSearchItem[] = [];
 
   get isIndexCase() {
@@ -66,7 +65,8 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    public indexCaseService: IndexCaseService
+    public indexCaseService: IndexCaseService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit(): void {

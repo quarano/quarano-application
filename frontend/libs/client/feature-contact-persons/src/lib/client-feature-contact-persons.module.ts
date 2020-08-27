@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { NgModule } from '@angular/core';
@@ -53,6 +54,7 @@ const routes: Routes = [
     ClientUiContactPersonDetailModule,
     ClientDomainModule,
     RouterModule.forChild(routes),
+    SharedUtilTranslationModule,
   ],
 })
 export class ClientFeatureContactPersonsModule {}

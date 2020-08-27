@@ -11,11 +11,12 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { ContactPersonsResolver } from '@qro/client/domain';
-import { InitialQuestionaireFormComponent } from './initial-questionaire-form/initial-questionaire-form.component';
+import { InitialQuestionnaireFormComponent } from './initial-questionnaire-form/initial-questionnaire-form.component';
 import { LandingComponent } from './landing/landing.component';
 import { RegisterComponent } from './register/register.component';
 import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 
 const routes: Routes = [
   {
@@ -60,11 +61,12 @@ const routes: Routes = [
     ClientDomainModule,
     SharedUiDataProtectionModule,
     RouterModule.forChild(routes),
+    SharedUtilTranslationModule,
   ],
   declarations: [
     DataProtectionDialogComponent,
     BasicDataComponent,
-    InitialQuestionaireFormComponent,
+    InitialQuestionnaireFormComponent,
     LandingComponent,
     RegisterComponent,
   ],
