@@ -1,26 +1,41 @@
+import { withLatest, filter, withLatestFrom, map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { HdContactComponent } from '@qro/client/api';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { HealthDepartmentService } from '@qro/health-department/api';
 import { HealthDepartmentDto, UserService } from '@qro/auth/api';
 import { ClientStore } from '@qro/client/api';
+import { ILanguageConfig, LanguageSelectors } from '@qro/shared/util-translation';
 
 @Component({
   selector: 'qro-header-right',
   templateUrl: './header-right.component.html',
   styleUrls: ['./header-right.component.scss'],
 })
-export class HeaderRightComponent {
+export class HeaderRightComponent implements OnInit {
   public healthDepartment$: Observable<HealthDepartmentDto> = this.healthDepartmentService.healthDepartment$;
   public currentUserName$ = this.userService.nameOfCurrentUser$;
+  selectedLanguage$: Observable<ILanguageConfig>;
+  languages$: Observable<ILanguageConfig[]>;
 
   constructor(
     public userService: UserService,
     private healthDepartmentService: HealthDepartmentService,
     public clientStore: ClientStore,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private store: Store
   ) {}
+
+  ngOnInit(): void {
+    this.selectedLanguage$ = this.store.pipe(select(LanguageSelectors.selectedLanguage));
+    this.languages$ = this.store.pipe(
+      select(LanguageSelectors.supportedLanguages),
+      withLatestFrom(this.selectedLanguage$),
+      map(([langs, selectedLang]) => langs.filter((l) => l.key !== selectedLang.key))
+    );
+  }
 
   logout() {
     this.userService.logout();

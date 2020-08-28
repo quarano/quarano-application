@@ -26,6 +26,23 @@
     <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
       <mat-icon>vpn_key</mat-icon> {{ 'HEADER_RIGHT.PASSWORT_ÄNDERN' | translate }}
     </button>
+    <ng-container *ngIf="!userService.isHealthDepartmentUser">
+      <mat-expansion-panel [expanded]="true" class="language-panel" [hideToggle]="true" [disabled]="true">
+        <mat-expansion-panel-header *ngIf="selectedLanguage$ | async as selectedLanguage">
+          <mat-panel-title>
+            <i [class]="'fa-fw flag:' + selectedLanguage.flagIconKey"></i>
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ selectedLanguage.name }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <ul class="language-list">
+          <li *ngFor="let lang of languages$ | async">
+            <i [class]="'fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </ng-container>
     <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
       <mat-icon>exit_to_app</mat-icon> {{ 'HEADER_RIGHT.ABMELDEN' | translate }}
     </button>
