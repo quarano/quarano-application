@@ -1,6 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
@@ -28,8 +28,7 @@ export class UserService {
   }
 
   public get nameOfCurrentUser$(): Observable<string> {
-    return this.authStore.user$.pipe(
-      withLatestFrom(this.translate.get('USER.GESUNDHEITSAMT_UNBEKANNT')),
+    return combineLatest([this.authStore.user$, this.translate.get('USER.GESUNDHEITSAMT_UNBEKANNT')]).pipe(
       map(([user, translatedText]) => {
         if (user) {
           if (this.isHealthDepartmentUser) {
