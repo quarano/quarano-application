@@ -36,7 +36,6 @@ export class HeaderRightComponent implements OnInit {
       this.store.pipe(select(LanguageSelectors.supportedLanguages)),
     ]).pipe(
       map(([selectedLang, langs]) => {
-        console.log(langs, selectedLang);
         return langs.filter((l) => l.key !== selectedLang.key);
       })
     );
