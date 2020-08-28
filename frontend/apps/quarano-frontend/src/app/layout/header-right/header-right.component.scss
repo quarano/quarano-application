@@ -26,38 +26,9 @@ span {
   font-size: large;
 }
 
-::ng-deep {
-  mat-expansion-panel.language-panel {
-    .mat-expansion-panel-header {
-      color: inherit;
-    }
-
-    div.mat-expansion-panel-body {
-      padding: 0 !important;
-
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-        li {
-          height: 50px;
-          cursor: pointer;
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-
-          i {
-            margin-left: 10px;
-          }
-
-          &:hover {
-            background: rgba(0, 0, 0, 0.04);
-          }
-        }
-      }
-    }
-  }
+.language-icon {
+  margin-right: 19px;
+  vertical-align: middle;
 }
 
 @media all and (max-width: $break-sm) {

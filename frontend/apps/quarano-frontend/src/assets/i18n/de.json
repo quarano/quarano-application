@@ -176,6 +176,16 @@
     "TAG_DES_KONTAKTS": "Tag des Kontakts",
     "WÄHLEN_SIE_DIE_KONTAKTPERSONEN": "Wählen Sie die Kontaktpersonen"
   },
+  "HD_CONTACT": {
+    "EMAIL": "E-Mail",
+    "KONTAKTMÖGLICHKEITEN": "Kontaktmöglichkeiten",
+    "SCHLIESSEN": "Schließen",
+    "SIE_BENÖTIGEN_INFORMATIONEN": "Sie benötigen weitere Informationen oder möchten uns aus anderen Gründen kontaktieren?",
+    "TELEFONNUMMER": "Telefonnummer",
+    "WENN_SIE_AKUT_ÄRZTLICHE_BEHANDLUNG_BENÖTIGEN": "Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.",
+    "WICHTIGER_HINWEIS": "Wichtiger Hinweis",
+    "ÜBER_FOLGENDE_MÖGLICHKEITEN": "Über folgende Möglichkeiten können Sie ihr zuständiges Gesundheitsamt erreichen"
+  },
   "HEADER_LEFT": {
     "KONTAKTPERSONEN": "Kontaktpersonen",
     "TAGEBUCH": "Tagebuch"
@@ -266,8 +276,8 @@
     "VORNAME": "Vorname"
   },
   "PREVENT_UNSAVED_CHANGES": {
-    "FORTFAHREN": "Fortfahren?",
     "ABBRECHEN": "Abbrechen",
+    "FORTFAHREN": "Fortfahren?",
     "OK": "OK",
     "SIND_SIE_SICHER": "Sind Sie sicher, dass Sie fortfahren möchten? Alle ungespeicherten Änderungen werden dabei verloren gehen"
   },
@@ -295,37 +305,37 @@
     "WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE": "Wenn Sie von Ihrer zuständigen Behörde benachrichtigt wurde, um Ihre Symptome online zu melden, können Sie sich hier registrieren."
   },
   "USER": {
-    "SIE_WURDEN_ABGEMELDET": "Sie wurden abgemeldet",
-    "GESUNDHEITSAMT_UNBEKANNT": "Gesundheitsamt unbekannt"
+    "GESUNDHEITSAMT_UNBEKANNT": "Gesundheitsamt unbekannt",
+    "SIE_WURDEN_ABGEMELDET": "Sie wurden abgemeldet"
   },
   "VALIDATION": {
+    "ALPHABETIC": "Dieses Feld darf nur Buchstaben enthalten",
+    "ALPHANUMERIC": "Dieses Feld darf nur Buchstaben und Zahlen enthalten",
+    "CITY": "Bitte geben Sie eine gültige Stadt an. Diese kann Buchstaben und folgende Zeichen enthalten: . - ( ) /",
     "CODE_INVALID": "Der eingegebene Code ist ungültig",
-    "USERNAME_INVALID": "Der angegebene Benutzername kann nicht verwendet werden",
+    "DIGIT": "Dieses Feld muss mindestens eine Zahl enthalten",
+    "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse an",
+    "EXT_REFERENCE_NUMBER": "Die eingegebene Vorgangsnummer enthält nicht erlaubte Zeichen. Vorgangsnummern dürfen nur aus Zahlen, Buchstaben, Binde- und Unterstrichen bestehen",
+    "HOUSE_NUMBER": "Bitte geben Sie eine gültige Hausnummer an. Diese darf maximal 15 Zeichen lang sein und nur aus Buchstaben, Zahlen, Punkten, Binde- und Schrägstrichen bestehen",
+    "INTEGER_UNSIGNED": "Dieses Feld darf nur Ziffern enthalten",
+    "MAT_DATEPICKER_MAX": "Das größte zulässige Datum ist der {{value}}",
+    "MAT_DATEPICKER_MIN": "Das kleinste zulässige Datum ist der {{value}}",
+    "MAT_DATEPICKER_PARSE": "Bitte geben Sie ein gültiges Datum ein",
+    "MAXLENGTH": "Dieses Feld darf maximal {{value}} Zeichen enthalten",
+    "MINLENGTH": "Dieses Feld erfordert eine Eingabe von mindestens {{value}} Zeichen",
+    "MIN_LENGTH_ARRAY": "Bitte wählen Sie mindestens ein Element",
+    "NAME": "Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt",
+    "NON_WORD_CHAR": "Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >",
     "PASSWORD_CONFIRM_WRONG": "Das Passwort und die Bestätigung müssen übereinstimmen",
     "PASSWORD_INCLUDES_USERNAME": "Das Passwort darf nicht den Benutzernamen beinhalten",
-    "NON_WORD_CHAR": "Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >",
-    "DIGIT": "Dieses Feld muss mindestens eine Zahl enthalten",
-    "UPPERCASE": "Dieses Feld muss mindestens einen Großbuchstaben enthalten",
-    "MAT_DATEPICKER_PARSE": "Bitte geben Sie ein gültiges Datum ein",
-    "MIN_LENGTH_ARRAY": "Bitte wählen Sie mindestens ein Element",
-    "REQUIRED": "Bitte füllen Sie dieses Pflichtfeld aus",
-    "INTEGER_UNSIGNED": "Dieses Feld darf nur Ziffern enthalten",
-    "ALPHANUMERIC": "Dieses Feld darf nur Buchstaben und Zahlen enthalten",
-    "ALPHABETIC": "Dieses Feld darf nur Buchstaben enthalten",
-    "TEXTUAL": "Dieses Feld darf nur Zahlen, Buchstaben, Satzzeichen und Zeilenumbrüche enthalten",
-    "UUID": "Bitte geben Sie eine gültige UUID ein",
-    "ZIP": "Bitte geben Sie eine gültige Postleitzahl aus 5 Ziffern an",
-    "STREET": "Bitte geben Sie eine gültige Straße an. Diese darf Buchstaben, Zahlen, Leerzeichen, Punkte und Bindestriche enthalten",
-    "HOUSE_NUMBER": "Bitte geben Sie eine gültige Hausnummer an. Diese darf maximal 15 Zeichen lang sein und nur aus Buchstaben, Zahlen, Punkten, Binde- und Schrägstrichen bestehen",
-    "NAME": "Bitte geben Sie einen gültigen Namen ein. Es sind nur Buchstaben, Leerzeichen und Bindestriche erlaubt",
-    "USERNAME": "Bitte geben Sie einen gültigen Benutzernamen ein! Dieser kann Buchstaben, Zahlen, Binde- oder Unterstriche enthalten",
     "PHONE_NUMBER": "Bitte geben Sie eine gültige Telefonnummer an! Diese kann Zahlen, +, -, Klammern oder Leerzeichen enthalten",
-    "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse an",
-    "CITY": "Bitte geben Sie eine gültige Stadt an. Diese kann Buchstaben und folgende Zeichen enthalten: . - ( ) /",
-    "EXT_REFERENCE_NUMBER": "Die eingegebene Vorgangsnummer enthält nicht erlaubte Zeichen. Vorgangsnummern dürfen nur aus Zahlen, Buchstaben, Binde- und Unterstrichen bestehen",
-    "MINLENGTH": "Dieses Feld erfordert eine Eingabe von mindestens {{value}} Zeichen",
-    "MAXLENGTH": "Dieses Feld darf maximal {{value}} Zeichen enthalten",
-    "MAT_DATEPICKER_MAX": "Das größte zulässige Datum ist der {{value}}",
-    "MAT_DATEPICKER_MIN": "Das kleinste zulässige Datum ist der {{value}}"
+    "REQUIRED": "Bitte füllen Sie dieses Pflichtfeld aus",
+    "STREET": "Bitte geben Sie eine gültige Straße an. Diese darf Buchstaben, Zahlen, Leerzeichen, Punkte und Bindestriche enthalten",
+    "TEXTUAL": "Dieses Feld darf nur Zahlen, Buchstaben, Satzzeichen und Zeilenumbrüche enthalten",
+    "UPPERCASE": "Dieses Feld muss mindestens einen Großbuchstaben enthalten",
+    "USERNAME": "Bitte geben Sie einen gültigen Benutzernamen ein! Dieser kann Buchstaben, Zahlen, Binde- oder Unterstriche enthalten",
+    "USERNAME_INVALID": "Der angegebene Benutzername kann nicht verwendet werden",
+    "UUID": "Bitte geben Sie eine gültige UUID ein",
+    "ZIP": "Bitte geben Sie eine gültige Postleitzahl aus 5 Ziffern an"
   }
 }
