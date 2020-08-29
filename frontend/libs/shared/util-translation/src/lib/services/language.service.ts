@@ -29,11 +29,13 @@ export class LanguageService {
       switchMap((languages) => {
         return this.store.pipe(
           select(LanguageSelectors.selectedLanguage),
+          take(1),
           map((selectedLanguage) => {
-            if (selectedLanguage) {
-              return selectedLanguage;
+            let lang = selectedLanguage;
+
+            if (!lang) {
+              lang = languages.find((l) => l.key === this.translate.getBrowserLang());
             }
-            let lang = languages.find((l) => l.key === this.translate.getBrowserLang());
             if (!lang) {
               lang = languages.find((l) => l.isDefaultLanguage);
             }

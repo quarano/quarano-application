@@ -25,6 +25,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
+              "./node_modules/country-flag-icons/3x2/flags.css",
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",

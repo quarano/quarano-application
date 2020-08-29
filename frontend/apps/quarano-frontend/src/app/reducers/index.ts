@@ -24,7 +24,7 @@ export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
 
 export function logoutMetaReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
-    return reducer(action.type === AuthActions.logout.type ? {} : state, action);
+    return reducer(action.type === AuthActions.logout.type ? { language: { ...state.language } } : state, action);
   };
 }
 
