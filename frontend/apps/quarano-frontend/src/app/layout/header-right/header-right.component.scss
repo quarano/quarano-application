@@ -26,6 +26,11 @@ span {
   font-size: large;
 }
 
+.language-icon {
+  margin-right: 19px;
+  vertical-align: middle;
+}
+
 @media all and (max-width: $break-sm) {
   .container {
     flex-direction: column;

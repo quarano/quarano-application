@@ -3,18 +3,18 @@
     "key": "de",
     "flagIconKey": "DE",
     "isDefaultLanguage": true,
-    "translationKey": "DEUTSCH"
+    "name": "Deutsch"
   },
   {
     "key": "en",
     "flagIconKey": "GB",
     "isDefaultLanguage": false,
-    "translationKey": "ENGLISCH"
+    "name": "English"
   },
   {
     "key": "tr",
     "flagIconKey": "TR",
     "isDefaultLanguage": false,
-    "translationKey": "TÜRKISCH"
+    "name": "Türkçe"
   }
 ]

@@ -22,10 +22,9 @@ export class TranslatedSnackbarService {
     const config = new MatSnackBarConfig();
     config.panelClass = ['background-green'];
     config.duration = this.duration;
-    return this.translate.get(messageKey, params).pipe(
-      tap((result) => console.log(result)),
-      map((result: string) => this.snackbar.open(result, null, config))
-    );
+    return this.translate
+      .get(messageKey, params)
+      .pipe(map((result: string) => this.snackbar.open(result, null, config)));
   }
 
   error(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {

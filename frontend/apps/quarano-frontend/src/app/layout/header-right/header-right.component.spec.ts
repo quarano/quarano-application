@@ -1,3 +1,4 @@
+import { provideMockStore } from '@ngrx/store/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderRightComponent } from './header-right.component';
 import { of } from 'rxjs';
@@ -27,6 +28,7 @@ describe('HeaderRightComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
         { provide: ClientStore, useValue: {} },
+        provideMockStore({}),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
