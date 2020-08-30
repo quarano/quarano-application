@@ -59,13 +59,11 @@ export class EditComponent implements OnInit, OnDestroy {
     this.createFormGroup();
 
     this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      console.log(type);
       if (type === CaseType.Index) {
         this.type$$.next(CaseType.Index);
       } else if (type === CaseType.Contact) {
         this.type$$.next(CaseType.Contact);
       }
-      console.log(this.isIndexCase);
     });
 
     this.caseDetail$ = combineLatest([
@@ -101,7 +99,6 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   createFormGroup() {
-    console.log(this.isIndexCase);
     this.formGroup = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,

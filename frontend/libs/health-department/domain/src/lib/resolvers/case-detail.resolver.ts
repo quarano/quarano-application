@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CaseDto, getEmptyCase } from '../model/case';
 import { CaseEntityService } from '../data-access/case-entity.service';
 
@@ -14,6 +14,7 @@ export class CaseDetailResolver implements Resolve<CaseDto> {
     if (id) {
       return this.entityService.getByKey(id).pipe(
         map((detail) => {
+          console.log(detail);
           if (!detail.caseId) {
             detail.caseId = id;
           }

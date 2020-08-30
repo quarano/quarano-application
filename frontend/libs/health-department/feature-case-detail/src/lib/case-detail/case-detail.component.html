@@ -8,9 +8,9 @@
         <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
       <span class="type"
-        >{{ caseDetail.caseTypeLabel }}
+        >{{ caseLabel$ | async }}
         <button
-          (click)="onChangeTypeKeyPressed(caseDetail.caseId)"
+          (click)="onChangeTypeKeyPressed()"
           *ngIf="(type$ | async) === ClientType.Contact"
           mat-icon-button
           matTooltip="Zum Indexfall machen"

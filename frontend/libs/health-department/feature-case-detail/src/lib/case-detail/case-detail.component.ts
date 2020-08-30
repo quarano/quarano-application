@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -27,6 +27,7 @@ export class CaseDetailComponent implements OnDestroy {
   caseId: string;
   private type$$: BehaviorSubject<CaseType> = new BehaviorSubject<CaseType>(null);
   type$: Observable<CaseType> = this.type$$.asObservable();
+  caseLabel$: Observable<string>;
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
   private subs = new SubSink();
@@ -41,6 +42,20 @@ export class CaseDetailComponent implements OnDestroy {
     private router: Router
   ) {
     this.initData();
+    this.setCaseLabel();
+  }
+
+  private setCaseLabel() {
+    this.caseLabel$ = this.type$.pipe(
+      map((type: CaseType) => {
+        if (type === CaseType.Index) {
+          return 'Index';
+        }
+        if (type === CaseType.Contact) {
+          return 'Kontakt';
+        }
+      })
+    );
   }
 
   initData(): void {
@@ -123,7 +138,11 @@ export class CaseDetailComponent implements OnDestroy {
       });
   }
 
-  onChangeTypeKeyPressed(caseId: string): void {
+  changeToIndexType() {
+    this.type$$.next(CaseType.Index);
+  }
+
+  onChangeTypeKeyPressed(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         abortButtonText: 'Abbrechen',
@@ -136,7 +155,8 @@ export class CaseDetailComponent implements OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.router.navigate([`/health-department/case-detail/index/${caseId}`]);
+        this.changeToIndexType();
+        this.router.navigate([`/health-department/case-detail/index/${this.caseId}`]);
       }
     });
   }
