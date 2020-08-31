@@ -1,5 +1,19 @@
 package quarano.account;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,19 +27,6 @@ import quarano.core.EmailAddress;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import org.jddd.core.types.Identifier;
 
 /**
  * An account of a user. Can be connected to a {@link TrackedPerson} by the {@link TrackedPersonIdentifier} or can be a
@@ -103,7 +104,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	/**
 	 * Adds a role to the roles list of the user if is not already included
 	 *
-	 * @param roletype
+	 * @param role
 	 */
 	public Account add(Role role) {
 
@@ -149,6 +150,7 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 		private static final long serialVersionUID = 7871473225101042167L;
 
+		@Column(name = "account_id")
 		final UUID accountId;
 
 		/*

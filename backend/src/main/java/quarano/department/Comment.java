@@ -1,5 +1,20 @@
 package quarano.department;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+import org.springframework.util.Assert;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,18 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.core.QuaranoEntity;
 import quarano.department.Comment.CommentIdentifier;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.UUID;
-
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.jddd.core.types.Identifier;
-import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -32,6 +35,10 @@ import org.springframework.util.Assert;
 public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> implements Comparable<Comment> {
 
 	public static final Comparator<Comment> BY_DATE_DESCENDING = Comparator.comparing(Comment::getDate);
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_case_id", referencedColumnName="tracked_case_id", insertable = false, updatable = false)
+	private TrackedCase trackedCase;
 
 	private LocalDateTime date;
 	private String text, author;

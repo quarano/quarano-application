@@ -1,5 +1,6 @@
 package quarano.actions;
 
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,9 @@ import quarano.diary.DiaryEntry.DiaryEntryUpdated;
 import quarano.diary.DiaryEntryMissing;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonRepository;
 
 @Component
 @Slf4j
@@ -26,6 +29,7 @@ class DiaryEventListener {
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull DiaryManagement diaryManagement;
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull TrackedPersonRepository persons;
 
 
 	@EventListener
@@ -76,22 +80,25 @@ class DiaryEventListener {
 	 */
 	void handleDiaryEntryForBodyTemperature(DiaryEntry entry) {
 
-		var person = entry.getTrackedPersonId();
+		var person = entry.getTrackedPerson();
 
-		if (!determineWhetherEntryMostRecent(person, entry.getSlot())) {
+		if (!determineWhetherEntryMostRecent(person.getId(), entry.getSlot())) {
 			return;
 		}
 
-		items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
+		items.findUnresolvedByDescriptionCode(person.getId(), DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(items::save);
 
 		// Body temperature exceeds reference
 		if (entry.getBodyTemperature().exceeds(config.getTemperatureThreshold())) {
+
+			var trackedCase = person.getTrackedCases().get(0);
+			Assert.notNull(trackedCase, "No tracked case for person found");
 			Description description = Description.of(DescriptionCode.INCREASED_TEMPERATURE,
 					entry.getBodyTemperature(),
 					config.getTemperatureThreshold());
 
-			items.save(new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT, description));
+			items.save(new DiaryEntryActionItem(person, trackedCase, entry, ItemType.MEDICAL_INCIDENT, description));
 		}
 	}
 
@@ -108,21 +115,22 @@ class DiaryEventListener {
 	 */
 	void handleDiaryEntryForCharacteristicSymptoms(DiaryEntry entry) {
 
-		var person = entry.getTrackedPersonId();
+		var person = entry.getTrackedPerson();
+		var trackedCase = person.getTrackedCases().get(0);
 		var actionItems = DiaryEntryActionItems
-				.of(items.findUnresolvedByDescriptionCode(person, DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM), items::save);
+				.of(items.findUnresolvedByDescriptionCode(person.getId(), DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM), items::save);
 
 		// Characteristic symptom reported
 		if (entry.getSymptoms().hasCharacteristicSymptom()) {
-			actionItems.adjustFirstCharacteristicSymptomTo(entry, it -> createItem(person, it));
+			actionItems.adjustFirstCharacteristicSymptomTo(entry, it -> createItem(person, trackedCase, it));
 		} else {
 			actionItems.removeFirstCharacteristicSymptomFrom(entry, () -> diaryManagement.findDiaryFor(person),
-					it -> createItem(person, it));
+					it -> createItem(person, trackedCase, it));
 		}
 	}
 
-	private DiaryEntryActionItem createItem(TrackedPersonIdentifier person, DiaryEntry entry) {
-		return new DiaryEntryActionItem(person, entry, ItemType.MEDICAL_INCIDENT,
+	private DiaryEntryActionItem createItem(TrackedPerson person, TrackedCase trackedCase, DiaryEntry entry) {
+		return new DiaryEntryActionItem(person, trackedCase, entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM));
 	}
 
@@ -130,10 +138,14 @@ class DiaryEventListener {
 	void on(DiaryEntryMissing diaryEntryMissing) {
 
 		log.debug("Caught diaryEntryMissing Event {}. Save it as DiaryEntryMissingActionItem", diaryEntryMissing);
-
-		diaryEntryMissing.getMissingSlots().stream()
-				.map(slot -> new DiaryEntryMissingActionItem(diaryEntryMissing.getTrackedPersonIdentifier(), slot))
-				.filter(item -> items.findDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()).isEmpty())
-				.forEach(items::save);
+		persons.findById(diaryEntryMissing.getTrackedPersonIdentifier()).ifPresent(person -> {
+			var trackedCase = person.getTrackedCases().get(0);
+			Assert.notNull(trackedCase, "tracked person must have a tracked case association");
+			diaryEntryMissing.getMissingSlots().stream()
+					.map(slot -> new DiaryEntryMissingActionItem(person, trackedCase, slot))
+					.filter(
+							item -> items.findDiaryEntryMissingActionItemsFor(item.getPersonIdentifier(), item.getSlot()).isEmpty())
+					.forEach(items::save);
+		});
 	}
 }

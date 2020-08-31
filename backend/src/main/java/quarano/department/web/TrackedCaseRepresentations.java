@@ -27,9 +27,7 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
+import quarano.tracking.*;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 

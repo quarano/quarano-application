@@ -1,5 +1,20 @@
 package quarano.actions;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,19 +22,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoAggregate;
+import quarano.department.TrackedCase;
+import quarano.diary.DiaryEntry;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-import org.jddd.core.types.Identifier;
 
 /**
  * @author Oliver Drotbohm
@@ -32,17 +38,34 @@ import org.jddd.core.types.Identifier;
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItemIdentifier> {
 
+	private @Getter TrackedCase.TrackedCaseIdentifier caseIdentifier;
 	private TrackedPersonIdentifier personIdentifier;
+
 	private @Column(name = "item_type") @Enumerated(value = EnumType.STRING) ItemType type;
 	private Description description;
 	private boolean resolved;
 
-	protected ActionItem(TrackedPersonIdentifier person, ItemType type, Description description) {
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_case_id", referencedColumnName="tracked_case_id", insertable = false, updatable = false)
+	private TrackedCase trackedCase;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id", referencedColumnName="tracked_person_id", insertable = false, updatable = false)
+	private TrackedPerson trackedPerson;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "entry_diary_entry_id", referencedColumnName="diary_entry_id", insertable = false, updatable = false)
+	private DiaryEntry diaryEntry;
+
+	protected ActionItem(TrackedPerson person, TrackedCase trackedCase, ItemType type, Description description) {
 
 		this.id = ActionItemIdentifier.of(UUID.randomUUID());
-		this.personIdentifier = person;
+		this.personIdentifier = person.getId();
+		this.trackedPerson = person;
 		this.type = type;
 		this.description = description;
+		this.trackedCase = trackedCase;
+		this.caseIdentifier = trackedCase.getId();
 	}
 
 	public boolean isUnresolved() {
@@ -98,6 +121,7 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 
 		private static final long serialVersionUID = 7871473225101042167L;
 
+		@Column(name = "action_item_id")
 		final UUID actionItemId;
 	}
 }

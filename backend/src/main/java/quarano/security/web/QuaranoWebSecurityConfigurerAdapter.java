@@ -83,6 +83,11 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 		//this will allow frames with same origin which is much more safe
 		httpSecurity.headers().frameOptions().sameOrigin();
 
+		// this will ignore only h2-console csrf, spring security 4+
+		httpSecurity.csrf().ignoringAntMatchers("/h2-console/**");
+		//this will allow frames with same origin which is much more safe
+		httpSecurity.headers().frameOptions().sameOrigin();
+
 		httpSecurity.csrf().disable().cors(it -> {
 			it.configurationSource(corsConfigurationSource());
 		});

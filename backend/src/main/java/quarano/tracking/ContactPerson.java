@@ -1,5 +1,24 @@
 package quarano.tracking;
 
+import java.io.Serializable;
+import java.util.*;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,22 +30,10 @@ import lombok.Value;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
+import quarano.department.TrackedCase;
+import quarano.diary.DiaryEntry;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
 
 /**
  * @author Oliver Drotbohm
@@ -55,10 +62,21 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Getter @Setter Boolean isHealthStaff;
 	private @Getter @Setter Boolean isSenior;
 	private @Getter @Setter Boolean hasPreExistingConditions;
+	private @ManyToMany(mappedBy = "contacts") List<DiaryEntry> diaries = new ArrayList<>();
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id", referencedColumnName="tracked_person_id", updatable = false, insertable = false)
+	private TrackedPerson trackedPerson;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="contact")
+	private  @Getter @Setter List<Encounter> encounters = new ArrayList<>();
 
 	@Column(nullable = false)
 	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
 	private TrackedPersonIdentifier ownerId;
+
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "originContacts")
+	private @Getter @Setter List<TrackedCase> trackedCases = new ArrayList<>();
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
 
@@ -78,7 +96,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	public ContactPerson assignOwner(TrackedPerson person) {
 
 		this.ownerId = person.getId();
-
+		this.trackedPerson = person;
 		return this;
 	}
 
@@ -134,6 +152,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 		private static final long serialVersionUID = -8869631517068092437L;
 
+		@Column(name = "contact_person_id")
 		final UUID contactPersonId;
 
 		/*

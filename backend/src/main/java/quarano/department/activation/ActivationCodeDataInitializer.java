@@ -85,6 +85,14 @@ public class ActivationCodeDataInitializer implements DataInitializer {
 			TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1, DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
 			ActivationCodeIdentifier.of(UUID.fromString("a25b9eb0-82bc-4ffc-a37f-fa7a8d20cbc8")));
 
+	public static final ActivationCode ACTIVATIONCODE_JOEL = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
+			TrackedPersonDataInitializer.INDEX_PERSON_DELETE1_DEP1, DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+			ActivationCodeIdentifier.of(UUID.fromString("5d5ed52a-ec66-11ea-adc1-0242ac120002")));
+
+	public static final ActivationCode ACTIVATIONCODE_CARLOS = new ActivationCode(LocalDateTime.of(2025, 10, 10, 0, 0),
+			TrackedPersonDataInitializer.CONTACT_PERSON_DELETE1_DEP1, DepartmentDataInitializer.DEPARTMENT_ID_DEP1,
+			ActivationCodeIdentifier.of(UUID.fromString("5d5edc1e-ec66-11ea-adc1-0242ac120002")));
+
 	private static List<ActivationCode> CODES = new ArrayList<>();
 
 	static {
@@ -102,6 +110,8 @@ public class ActivationCodeDataInitializer implements DataInitializer {
 		CODES.add(ACTIVATIONCODE_SEC6_OPEN);
 		CODES.add(ACTIVATIONCODE_SEC7_OPEN);
 		CODES.add(ACTIVATIONCODE_SEC8_OPEN);
+		CODES.add(ACTIVATIONCODE_JOEL);
+		CODES.add(ACTIVATIONCODE_CARLOS);
 	}
 
 	/*

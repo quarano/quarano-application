@@ -1,23 +1,16 @@
 package quarano.diary;
 
+import java.util.*;
+
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.core.DataInitializer;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
-import quarano.tracking.BodyTemperature;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.ContactWays;
-import quarano.tracking.TrackedPersonDataInitializer;
-import quarano.tracking.TrackedPersonRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+import quarano.tracking.*;
 
 /**
  * @author Oliver Drotbohm
@@ -48,58 +41,54 @@ class DiaryDataInitializer implements DataInitializer {
 		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
+		var joel = trackedPeople.findById(TrackedPersonDataInitializer.INDEX_PERSON_DELETE1_DEP1).orElseThrow();
+		var carlos = trackedPeople.findById(TrackedPersonDataInitializer.CONTACT_PERSON_DELETE1_DEP1).orElseThrow();
+
 		log.info("Start creating diary and contacts for test persons");
 
 		// generate 2 contacts for Person 3
 
 		// ==================== SANDRA ==================
-		List<ContactPerson> contactsOfPerson3 = new ArrayList<>();
+		List<ContactPerson> contactsOfSandra = new ArrayList<>();
 
-		var contact1OfPerson3 = new ContactPerson("Lora", "Laurer", ContactWays.ofEmailAddress("lora@testtest.de"));
-		contact1OfPerson3.assignOwner(sandra);
-		contactsOfPerson3.add(contact1OfPerson3);
+		var contact1OfSandra = new ContactPerson("Lora", "Laurer", ContactWays.ofEmailAddress("lora@testtest.de"));
+		contact1OfSandra.assignOwner(sandra);
+		contactsOfSandra.add(contact1OfSandra);
 
-		var contact2OfPerson3 = new ContactPerson("Harry", "Huber", ContactWays.ofEmailAddress("harry@testtest.de"));
-		contact2OfPerson3.assignOwner(sandra);
-		contactsOfPerson3.add(contact2OfPerson3);
+		var contact2OfSandra = new ContactPerson("Harry", "Huber", ContactWays.ofEmailAddress("harry@testtest.de"));
+		contact2OfSandra.assignOwner(sandra);
+		contactsOfSandra.add(contact2OfSandra);
 
-		contacts.saveAll(contactsOfPerson3);
+		contacts.saveAll(contactsOfSandra);
 
 		// generate diary entries for person 3
 		Slot sameSlotYesterday = Slot.now().previous().previous();
 
 		DiaryEntry entry1 = DiaryEntry.of(sameSlotYesterday, sandra)
-				.setContacts(contactsOfPerson3);
+				.setContacts(contactsOfSandra);
 		// add 'husten'
-		List<Symptom> symptomsE1 = new ArrayList<>();
 		Symptom cough = symptoms.findById(UUID.fromString("e5cea3b0-c8f4-4e03-a24e-89213f3f6637")).orElse(null);
-		symptomsE1.add(cough);
-		entry1.setSymptoms(symptomsE1);
+		entry1.setSymptoms(List.of(cough));
 		entry1.setBodyTemperature(BodyTemperature.of(37.5f));
 
 		entries.updateDiaryEntry(entry1);
 
 		DiaryEntry entry2 = DiaryEntry.of(sameSlotYesterday.previous(), sandra)
-				.setContacts(contactsOfPerson3.subList(0, 0))
+				.setContacts(contactsOfSandra.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsE2 = new ArrayList<>();
 		Symptom neckProblems = symptoms.findById(UUID.fromString("571a03cd-173c-4499-995c-d6a003e8c032")).orElse(null);
-		symptomsE2.add(neckProblems);
-		symptomsE2.add(cough);
-		entry2.setSymptoms(symptomsE2);
+		entry2.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(entry2);
 
 		DiaryEntry entry3 = DiaryEntry.of(sameSlotYesterday.previous().previous(), sandra)
-				.setContacts(contactsOfPerson3.subList(1, 2))
+				.setContacts(contactsOfSandra.subList(1, 2))
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsE3 = new ArrayList<>();
-		symptomsE3.add(cough);
-		entry3.setSymptoms(symptomsE3);
+		entry3.setSymptoms(List.of(cough));
 
 		entries.updateDiaryEntry(entry3);
 
@@ -123,9 +112,7 @@ class DiaryDataInitializer implements DataInitializer {
 		DiaryEntry entry1Siggi = DiaryEntry.of(sameSlotYesterdaySiggi, siggi)
 				.setContacts(contactsOfSiggi);
 		// add 'husten'
-		List<Symptom> symptomsS1 = new ArrayList<>();
-		symptomsS1.add(cough);
-		entry1Siggi.setSymptoms(symptomsS1);
+		entry1Siggi.setSymptoms(List.of(cough));
 		entry1Siggi.setBodyTemperature(BodyTemperature.of(38.5f));
 
 		entries.updateDiaryEntry(entry1Siggi);
@@ -135,10 +122,7 @@ class DiaryDataInitializer implements DataInitializer {
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsS2 = new ArrayList<>();
-		symptomsS2.add(neckProblems);
-		symptomsS2.add(cough);
-		entry2Siggi.setSymptoms(symptomsS2);
+		entry2Siggi.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(entry2Siggi);
 
@@ -147,101 +131,87 @@ class DiaryDataInitializer implements DataInitializer {
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsS3 = new ArrayList<>();
-		symptomsE3.add(cough);
-		entry3Siggi.setSymptoms(symptomsS3);
+		entry3Siggi.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(entry3Siggi);
 
 		// ==================== GUSTAV ==================
-		List<ContactPerson> contactsOfPerson4 = new ArrayList<>();
+		List<ContactPerson> contactsOfGustav = new ArrayList<>();
 
 		var contact1OfPerson4 = new ContactPerson("Bert", "Baum", ContactWays.ofEmailAddress("bertbaum@testtest.de"));
 		contact1OfPerson4.assignOwner(gustav);
-		contactsOfPerson4.add(contact1OfPerson4);
+		contactsOfGustav.add(contact1OfPerson4);
 
 		var contact2OfPerson4 = new ContactPerson("Susi", "Söller", ContactWays.ofEmailAddress("susisoeller@testtest.de"));
 		contact2OfPerson4.assignOwner(gustav);
-		contactsOfPerson4.add(contact2OfPerson4);
+		contactsOfGustav.add(contact2OfPerson4);
 
-		contacts.saveAll(contactsOfPerson4);
+		contacts.saveAll(contactsOfGustav);
 
 		// generate diary entries for person 3
 		Slot sameSlotYesterdayGustav = Slot.now().previous().previous();
 
 		DiaryEntry entry1G = DiaryEntry.of(sameSlotYesterdayGustav, gustav);
-		entry1G.setContacts(contactsOfPerson4);
+		entry1G.setContacts(contactsOfGustav);
 		// add 'husten'
-		List<Symptom> symptomsE1G = new ArrayList<>();
-		symptomsE1G.add(cough);
-		entry1G.setSymptoms(symptomsE1G);
+		entry1G.setSymptoms(List.of(cough));
 		entry1G.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		entries.updateDiaryEntry(entry1G);
 
 		DiaryEntry entry2G = DiaryEntry.of(sameSlotYesterdayGustav.previous(), gustav)
-				.setContacts(contactsOfPerson4.subList(0, 0))
+				.setContacts(contactsOfGustav.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsE2G = new ArrayList<>();
-		symptomsE2G.add(neckProblems);
-		symptomsE2G.add(cough);
-		entry2G.setSymptoms(symptomsE2G);
+		entry2G.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(entry2G);
 
 		// ==================== NADINE ==================
-		List<ContactPerson> contactsOfPerson5 = new ArrayList<>();
+		List<ContactPerson> contactsOfNadine = new ArrayList<>();
 
 		var contact1OfPerson5 = new ContactPerson("Sonja", "Sortig",
 				ContactWays.ofEmailAddress("sonja.sortig@testtest.de"));
 		contact1OfPerson5.assignOwner(nadine);
-		contactsOfPerson5.add(contact1OfPerson5);
+		contactsOfNadine.add(contact1OfPerson5);
 
 		var contact2OfPerson5 = new ContactPerson("Manuel", "Mertens",
 				ContactWays.ofEmailAddress("manuelmertens@testtest.de"));
 		contact2OfPerson5.assignOwner(nadine);
-		contactsOfPerson5.add(contact2OfPerson5);
+		contactsOfNadine.add(contact2OfPerson5);
 
-		contacts.saveAll(contactsOfPerson5);
+		contacts.saveAll(contactsOfNadine);
 
 		// generate diary entries for person 3
 		Slot sameSlotYesterdayN = Slot.now().previous().previous();
 
 		DiaryEntry entry1N = DiaryEntry.of(sameSlotYesterdayN, nadine)
-				.setContacts(contactsOfPerson5)
+				.setContacts(contactsOfNadine)
 				.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		// add 'husten'
-		List<Symptom> symptomsE1N = new ArrayList<>();
-		symptomsE1G.add(cough);
-		entry1N.setSymptoms(symptomsE1N);
+		entry1N.setSymptoms(List.of(cough));
 
 		entries.updateDiaryEntry(entry1N);
 
 		DiaryEntry entry2N = DiaryEntry.of(sameSlotYesterdayN.previous(), nadine)
-				.setContacts(contactsOfPerson5.subList(0, 0))
+				.setContacts(contactsOfNadine.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(35.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		List<Symptom> symptomsE2N = new ArrayList<>();
-		symptomsE2N.add(neckProblems);
-		symptomsE2N.add(cough);
-		entry2N.setSymptoms(symptomsE2N);
+		entry2N.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(entry2N);
 
 		Slot samelastSlot = Slot.now().previous();
 
 		DiaryEntry entry3N = DiaryEntry.of(samelastSlot, nadine)
-				.setContacts(contactsOfPerson5)
+				.setContacts(contactsOfNadine)
 				.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		// add 'husten'
-		List<Symptom> symptomsE3N = new ArrayList<>();
-		symptomsE3N.add(cough);
-		entry3N.setSymptoms(symptomsE3N);
+		entry3N.setSymptoms(List.of(cough));
 
 		entries.updateDiaryEntry(entry3N);
 
@@ -253,17 +223,16 @@ class DiaryDataInitializer implements DataInitializer {
 		DiaryEntry diary1 = DiaryEntry.of(sameSlotYesterday, jessica)
 				.setContacts(contactsOfJessica);
 		// add 'husten'
-		diary1.setSymptoms(symptomsE1);
+		diary1.setSymptoms(List.of(cough));
 		diary1.setBodyTemperature(BodyTemperature.of(37.5f));
 
 		entries.updateDiaryEntry(diary1);
-
 		DiaryEntry diary2 = DiaryEntry.of(sameSlotYesterday.previous(), jessica)
 				.setContacts(contactsOfJessica.subList(0, 0))
 				.setBodyTemperature(BodyTemperature.of(37.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		diary2.setSymptoms(symptomsE2);
+		diary2.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(diary2);
 
@@ -272,8 +241,71 @@ class DiaryDataInitializer implements DataInitializer {
 				.setBodyTemperature(BodyTemperature.of(39.7f));
 
 		// add 'husten' and 'Nackenschmerzen'
-		diary3.setSymptoms(symptomsE3);
+		diary3.setSymptoms(List.of(neckProblems, cough));
 
 		entries.updateDiaryEntry(diary3);
+
+		// ==================== JOEL ==================
+		List<ContactPerson> contactsOfJoel = new ArrayList<>();
+
+		var contact1OfJoel = new ContactPerson("Marta", "Fabiani", ContactWays.ofEmailAddress("marta.fabiani@testtest.de"));
+		contact1OfJoel.assignOwner(joel);
+		contactsOfJoel.add(contact1OfJoel);
+
+		var contact2OfJoel = new ContactPerson("Francesca", "Fabiani", ContactWays.ofEmailAddress("francesca.fabiani@testtest.de"));
+		contact2OfJoel.assignOwner(joel);
+		contactsOfJoel.add(contact2OfJoel);
+
+		contacts.saveAll(contactsOfJoel);
+
+		// generate diary entries for Joel
+		Slot sameSlotYesterdayJoel = Slot.now().previous().previous();
+
+		DiaryEntry entry1J = DiaryEntry.of(sameSlotYesterdayJoel, joel)
+				.setContacts(contactsOfJoel)
+				.setSymptoms(List.of(cough))
+				.setBodyTemperature(BodyTemperature.of(36.5f));
+
+		entries.updateDiaryEntry(entry1J);
+
+		DiaryEntry entry2J = DiaryEntry.of(sameSlotYesterdayJoel.previous(), joel)
+				.setContacts(contactsOfJoel.subList(0, 0))
+				.setBodyTemperature(BodyTemperature.of(37.8f))
+				.setSymptoms(List.of(neckProblems, cough));
+
+		entries.updateDiaryEntry(entry2J);
+
+		// ==================== CARLOS ==================
+		List<ContactPerson> contactsOfCarlos = new ArrayList<>();
+
+		var contact1OfCarlos = new ContactPerson("Heribert", "Dorn", ContactWays.ofEmailAddress("heribert.dorn@testtest.de"));
+		contact1OfCarlos.assignOwner(carlos);
+		contactsOfCarlos.add(contact1OfCarlos);
+
+		var contact2OfCarlos = new ContactPerson("Katharina", "Dorn", ContactWays.ofEmailAddress("katharina.dorn@testtest.de"));
+		contact2OfCarlos.assignOwner(carlos);
+		contactsOfCarlos.add(contact2OfCarlos);
+
+		contacts.saveAll(contactsOfCarlos);
+
+		// generate diary entries for person 3
+		Slot sameSlotYesterdayCarlos = Slot.now().previous().previous();
+
+		DiaryEntry entry1C = DiaryEntry.of(sameSlotYesterdayCarlos, carlos);
+		entry1C.setContacts(contactsOfCarlos);
+		// add 'husten'
+		entry1C.setSymptoms(List.of(cough));
+		entry1C.setBodyTemperature(BodyTemperature.of(36.5f));
+
+		entries.updateDiaryEntry(entry1C);
+
+		DiaryEntry entry2C = DiaryEntry.of(sameSlotYesterdayCarlos.previous(), carlos)
+				.setContacts(contactsOfCarlos.subList(0, 0))
+				.setBodyTemperature(BodyTemperature.of(37.8f));
+
+		// add 'husten' and 'Nackenschmerzen'
+		entry2C.setSymptoms(List.of(neckProblems, cough));
+
+		entries.updateDiaryEntry(entry2C);
 	}
 }

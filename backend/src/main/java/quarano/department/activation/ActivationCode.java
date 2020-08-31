@@ -1,5 +1,21 @@
 package quarano.department.activation;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+
 import io.vavr.control.Try;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -11,19 +27,8 @@ import quarano.account.Account;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-import org.jddd.core.types.Identifier;
 
 /**
  * @author Patrick Otto
@@ -43,6 +48,9 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	private @Getter @Enumerated(EnumType.STRING) ActivationCodeStatus status;
 	private @Getter int activationTries;
 	private @Getter DepartmentIdentifier departmentId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id", referencedColumnName="tracked_person_id", insertable = false, updatable = false)
+	private TrackedPerson trackedPerson;
 
 	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId,
 			DepartmentIdentifier departmentId) {
@@ -134,6 +142,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	public static class ActivationCodeIdentifier implements Identifier, Serializable {
 		private static final long serialVersionUID = 7871473225101042167L;
 
+		@Column(name = "activation_code_id")
 		final UUID activationCodeId;
 
 		@Override

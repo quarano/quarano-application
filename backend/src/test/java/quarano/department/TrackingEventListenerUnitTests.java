@@ -55,7 +55,7 @@ class TrackingEventListenerUnitTests {
 				.submitEnrollmentDetails();
 		var contactPerson = new ContactPerson("Michaela", "Mustermann",
 				ContactWays.ofEmailAddress("michaela@mustermann.de"))
-						.setOwnerId(person.getId());
+						.assignOwner(person);
 
 		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
 
@@ -212,7 +212,7 @@ class TrackingEventListenerUnitTests {
 
 		var origins = argumentCaptor.getValue().getOriginContacts();
 		assertThat(origins.size() == 1);
-		assertThat(origins.get(0).equals(encounter.getContact()));
+		assertThat(origins.iterator().next().equals(encounter.getContact()));
 	}
 
 	private void assertIdentityOfMichaela(TrackedCase capturedArgument) {

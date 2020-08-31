@@ -39,7 +39,7 @@ class ActionItemRepositoryIntegrationTests {
 		var entry = diaries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person)
 				.setBodyTemperature(BodyTemperature.of(41.0f)));
 
-		var item = new DiaryEntryActionItem(person.getId(), entry, ItemType.MEDICAL_INCIDENT,
+		var item = new DiaryEntryActionItem(person, person.getTrackedCases().get(0), entry, ItemType.MEDICAL_INCIDENT,
 				Description.of(DescriptionCode.INCREASED_TEMPERATURE, BodyTemperature.of(36.0f), BodyTemperature.of(40.0f)));
 
 		item = repository.save(item);
@@ -52,14 +52,15 @@ class ActionItemRepositoryIntegrationTests {
 	@Test // CORE-162
 	void testFindUnresolvedByPerson() {
 
-		var person = VALID_TRACKED_PERSON4_ID_DEP1;
-		repository.findByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE)
+		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
+
+		repository.findByDescriptionCode(person.getId(), DescriptionCode.INCREASED_TEMPERATURE)
 				.resolveAutomatically(repository::save);
 
 		assertThat(repository.findByTrackedPerson(person).stream())
 				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(0));
 
-		assertThat(repository.findUnresolvedByTrackedPerson(person).stream())
+		assertThat(repository.findUnresolvedByTrackedPerson(person.getId()).stream())
 				.hasSize(0);
 	}
 

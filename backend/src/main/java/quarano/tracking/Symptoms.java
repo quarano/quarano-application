@@ -1,12 +1,14 @@
 package quarano.tracking;
 
-import lombok.RequiredArgsConstructor;
-import quarano.reference.Symptom;
-
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.util.Streamable;
+
+import lombok.RequiredArgsConstructor;
+import quarano.reference.Symptom;
 
 /**
  * @author Oliver Drotbohm

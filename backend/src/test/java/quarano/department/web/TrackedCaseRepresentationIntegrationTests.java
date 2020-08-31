@@ -15,20 +15,10 @@
  */
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import lombok.RequiredArgsConstructor;
-import quarano.QuaranoIntegrationTest;
-import quarano.core.EnumMessageSourceResolvable;
-import quarano.department.CaseType;
-import quarano.department.TrackedCaseRepository;
-import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
-import quarano.diary.DiaryEntry;
-import quarano.diary.Slot;
-import quarano.tracking.BodyTemperature;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.TrackedPersonDataInitializer;
-import quarano.util.TestUtils;
 
 import java.util.UUID;
 
@@ -41,6 +31,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+
+import lombok.RequiredArgsConstructor;
+import quarano.QuaranoIntegrationTest;
+import quarano.core.EnumMessageSourceResolvable;
+import quarano.department.CaseType;
+import quarano.department.TrackedCaseRepository;
+import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
+import quarano.diary.DiaryEntry;
+import quarano.diary.Slot;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
+import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.util.TestUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -102,7 +106,7 @@ class TrackedCaseRepresentationIntegrationTests {
 	@Test // CORE-120, CORE-344
 	void mapsDiaryEntryToDiaryEntrySummary() {
 
-		var source = DiaryEntry.of(Slot.now(), TrackedPersonIdentifier.of(UUID.randomUUID()))
+		var source = DiaryEntry.of(Slot.now(), mockPerson())
 				.setBodyTemperature(BodyTemperature.of(40.0f));
 
 		var result = representations.toDiaryEntrySummary(source);
@@ -117,5 +121,12 @@ class TrackedCaseRepresentationIntegrationTests {
 			assertThat(it.getName()).isNotBlank();
 			assertThat(it.isCharacteristic()).isNotNull();
 		});
+	}
+
+	private static TrackedPerson mockPerson() {
+		TrackedPersonIdentifier identifier = TrackedPersonIdentifier.of(UUID.randomUUID());
+		TrackedPerson mocked = mock(TrackedPerson.class);
+		when(mocked.getId()).thenReturn(identifier);
+		return mocked;
 	}
 }

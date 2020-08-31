@@ -78,6 +78,12 @@ class RegistrationDataInitializer implements DataInitializer {
 
 		registration.createTrackedPersonAccount("secUser4", UnencryptedPassword.of("secur1tyTest!"), "Samuel", "Soller",
 				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.VALID_TRACKED_SEC4_ID_DEP1);
+
+		registration.createTrackedPersonAccount("jfc", UnencryptedPassword.of("test123"), "Joel", "Fabiani",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.INDEX_PERSON_DELETE1_DEP1);
+
+		registration.createTrackedPersonAccount("cdc", UnencryptedPassword.of("test123"), "Carlos", "Dorn",
+				DepartmentDataInitializer.DEPARTMENT_ID_DEP1, TrackedPersonDataInitializer.CONTACT_PERSON_DELETE1_DEP1);
 	}
 
 	/*

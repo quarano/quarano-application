@@ -10,11 +10,7 @@ import quarano.account.DepartmentContact.ContactType;
 import quarano.core.QuaranoAggregate;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -83,6 +79,7 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 
 		private static final long serialVersionUID = 7871473225101042167L;
 
+		@Column(name = "department_id")
 		final UUID departmentId;
 
 		@Override

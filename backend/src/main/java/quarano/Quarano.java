@@ -1,6 +1,7 @@
 package quarano;
 
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import quarano.account.Role;
 import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
@@ -22,6 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -175,5 +177,9 @@ public class Quarano {
 
 	@Configuration
 	@EnableScheduling
-	static class SchedulingProperties {}
+	@Profile("!integrationtest")
+	@EnableSchedulerLock(defaultLockAtMostFor = "PT2M")
+	static class SchedulingProperties {
+
+	}
 }

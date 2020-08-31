@@ -84,7 +84,7 @@ public class AnomaliesController {
 
 	private CaseActionsRepresentation toRepresentation(TrackedCase trackedCase) {
 
-		var id = trackedCase.getTrackedPerson().getId();
+		var id = trackedCase.getTrackedPerson();
 		var actionItems = items.findByTrackedPerson(id);
 
 		return representations.toRepresentation(trackedCase, actionItems);

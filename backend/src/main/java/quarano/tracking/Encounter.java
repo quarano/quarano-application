@@ -1,26 +1,17 @@
 package quarano.tracking;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import quarano.core.QuaranoEntity;
-import quarano.tracking.Encounter.EncounterIdentifier;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import lombok.*;
 import org.jddd.core.types.Identifier;
 import org.springframework.util.Assert;
+
+import quarano.core.QuaranoEntity;
+import quarano.tracking.Encounter.EncounterIdentifier;
 
 /**
  * @author Oliver Drotbohm
@@ -31,8 +22,13 @@ import org.springframework.util.Assert;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
-	@ManyToOne @JoinColumn(name = "contact_person_id")
+	@ManyToOne
+	@JoinColumn(name = "contact_person_id")
 	private final @Getter ContactPerson contact;
+
+	@ManyToOne
+	@JoinColumn(name = "tracked_person_id")
+	private @Getter TrackedPerson trackedPerson;
 
 	@Column(name = "encounter_date")
 	private final @Getter LocalDate date;
@@ -40,11 +36,13 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 	private Encounter(ContactPerson contact, LocalDate date) {
 
 		Assert.notNull(contact, "ContactPerson must not be null!");
+		Assert.notNull(contact.getTrackedPerson(), "ContactPerson must have valid link to tracked person!");
 		Assert.notNull(date, "Date must not be null!");
 
 		this.id = EncounterIdentifier.of(UUID.randomUUID());
 		this.contact = contact;
 		this.date = date;
+		this.trackedPerson = contact.getTrackedPerson();
 	}
 
 	public static Encounter with(ContactPerson person, LocalDate date) {
@@ -74,7 +72,10 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 	public static class EncounterIdentifier implements Identifier, Serializable {
+
 		private static final long serialVersionUID = -5998761917714158567L;
+		//@EmbeddedId
+		@Column(name = "encounter_id")
 		private final UUID encounterId;
 	}
 }

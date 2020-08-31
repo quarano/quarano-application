@@ -1,5 +1,6 @@
 package quarano.actions;
 
+import org.springframework.data.util.Streamable;
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
 import quarano.department.TrackedCase;
@@ -16,15 +17,17 @@ import org.springframework.data.jpa.repository.Query;
 public interface ActionItemRepository extends QuaranoRepository<ActionItem, ActionItemIdentifier> {
 
 	default ActionItems findByCase(TrackedCase trackedCase) {
-		return findByTrackedPerson(trackedCase.getTrackedPerson().getId());
+		return findByTrackedPerson(trackedCase.getTrackedPerson());
 	}
 
 	default ActionItems findUnresolvedByActiveCase(TrackedCase trackedCase) {
 		return findUnresolvedByActiveCaseByPersonIdentifier(trackedCase.getTrackedPerson().getId());
 	}
 
-	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
-	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
+	default ActionItems findByTrackedPerson(TrackedPerson person)
+	{
+		return ActionItems.of(Streamable.of(person.getActionItems()));
+	}
 
 	@Query("select i from ActionItem i"
 			+ " where i.resolved = false"

@@ -11,9 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import quarano.account.Account;
+import quarano.actions.ActionItem;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
+import quarano.department.TrackedCase;
+import quarano.department.activation.ActivationCode;
+import quarano.diary.DiaryEntry;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -65,9 +69,23 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@JoinColumn(name = "account_id")
 	private Account account;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tracked_person_id")
-	private List<Encounter> encounters;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson")
+	private List<Encounter> encounters = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson")
+	private @Getter @Setter List<DiaryEntry> diaries = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson")
+	private @Getter @Setter List<ActivationCode> codes = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson")
+	private @Getter @Setter List<ActionItem> actionItems = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson")
+	private @Getter @Setter List<ContactPerson> contacts = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trackedPerson", orphanRemoval = true)
+	private @Getter @Setter List<TrackedCase> trackedCases = new ArrayList<>();
 
 	public TrackedPerson(String firstName, String lastName) {
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);
@@ -82,7 +100,6 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this.emailAddress = emailAddress;
 		this.phoneNumber = phoneNumber;
 		this.dateOfBirth = dateOfBirth;
-		this.encounters = new ArrayList<>();
 	}
 
 	public TrackedPerson(ContactPerson contact) {
@@ -155,15 +172,13 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 		return encounters.getEncounter(person, date)
 				.orElseGet(() -> {
-
+					person.assignOwner(this);
 					var encounter = Encounter.with(person, date);
 
 					registerEvent(!encounters.hasBeenInTouchWith(person)
 							? EncounterReported.firstEncounter(encounter, id)
 							: EncounterReported.subsequentEncounter(encounter, id));
-
 					this.encounters.add(encounter);
-
 					return encounter;
 				});
 	}
@@ -225,6 +240,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 		private static final long serialVersionUID = -853047182358126916L;
 
+		@Column(name = "tracked_person_id")
 		private final UUID trackedPersonId;
 
 		@Override

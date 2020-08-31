@@ -34,11 +34,11 @@ class DiaryEntryReminderMailJobTests {
 		job.checkForReminderMail();
 
 		// wait for max 5s for 1 email to arrive
-		assertTrue(greenMail.waitForIncomingEmail(3), "not all emails sented");
+		assertTrue(greenMail.waitForIncomingEmail(5), "not all emails sent");
 
 		Message[] messages = greenMail.getReceivedMessages();
 
-		assertThat(messages).hasSize(3);
+		assertThat(messages).hasSize(5);
 
 		assertThat(messages).extracting(it -> it.getSubject())
 				.containsOnly("Erinnerung an Covid-19 Symptomtagebuch");
@@ -48,10 +48,13 @@ class DiaryEntryReminderMailJobTests {
 		assertThat(messages).extracting(it -> it.getRecipients(RecipientType.TO)[0].toString())
 				.containsOnly("Siggi Seufert <siggi@testtest.de>",
 						"Sandra Schubert <sandra.schubert@testtest.de>",
-						"Gustav Meier <gustav.meier@testtest.de>");
+						"Gustav Meier <gustav.meier@testtest.de>",
+						"Joel Fabiani <joel.fabiani@testtest.de>",
+						"Carlos Dorn <carlos.dorn@testtest.de>");
 
 		assertThat(messages).extracting(it -> it.getFrom()[0].toString()).containsOnly(
 				"GA Mannheim <index-email@gesundheitsamt.de>",
-				"GA Darmstadt <index-email@gadarmstadt.de>");
+				"GA Darmstadt <index-email@gadarmstadt.de>",
+				"GA Mannheim <contact-email@gesundheitsamt.de>");
 	}
 }

@@ -777,6 +777,7 @@ class TrackedCaseControllerWebIntegrationTests {
 					.andReturn().getResponse();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}

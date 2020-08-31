@@ -2,7 +2,9 @@ package quarano.actions;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import quarano.department.TrackedCase;
 import quarano.diary.DiaryEntry;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import javax.persistence.Entity;
@@ -21,9 +23,9 @@ public class DiaryEntryActionItem extends ActionItem {
 
 	private @ManyToOne DiaryEntry entry;
 
-	DiaryEntryActionItem(TrackedPersonIdentifier person, DiaryEntry entry, ItemType type, Description description) {
+	DiaryEntryActionItem(TrackedPerson person, TrackedCase trackedCase, DiaryEntry entry, ItemType type, Description description) {
 
-		super(person, type, description);
+		super(person, trackedCase, type, description);
 
 		this.entry = entry;
 	}

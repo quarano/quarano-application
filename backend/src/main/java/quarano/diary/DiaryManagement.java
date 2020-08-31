@@ -2,6 +2,7 @@ package quarano.diary;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.Encounter;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;

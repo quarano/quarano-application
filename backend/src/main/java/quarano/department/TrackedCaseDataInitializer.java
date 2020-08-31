@@ -6,11 +6,10 @@ import quarano.account.DepartmentRepository;
 import quarano.core.DataInitializer;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.tracking.Quarantine;
-import quarano.tracking.TrackedPersonDataInitializer;
-import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.core.annotation.Order;
@@ -67,6 +66,13 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_SUNNY = TrackedCaseIdentifier
 			.of(UUID.fromString("cbb52d97-fb3e-45a1-b7a3-d2cb5d9c65a2"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_JOEL = TrackedCaseIdentifier
+			.of(UUID.fromString("5d5ed296-ec66-11ea-adc1-0242ac120002"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_CARLOS = TrackedCaseIdentifier
+			.of(UUID.fromString("5d5ed5f2-ec66-11ea-adc1-0242ac120002"));
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -74,11 +80,11 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		var person1 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
-		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
+		var tanja = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var markus = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
 		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
-		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		var gustav = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
+		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
 		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
 		var harriette = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1).orElseThrow();
@@ -92,14 +98,17 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var steffen = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC7_ID_DEP1).orElseThrow();
 		var sunny = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1).orElseThrow();
 
+		var joel = trackedPeople.findById(TrackedPersonDataInitializer.INDEX_PERSON_DELETE1_DEP1).orElseThrow();
+		var carlos = trackedPeople.findById(TrackedPersonDataInitializer.CONTACT_PERSON_DELETE1_DEP1).orElseThrow();
+
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
 
 		// CASE Tanja
-		cases.save(new TrackedCase(person1, CaseType.CONTACT, department1));
+		cases.save(new TrackedCase(tanja, CaseType.CONTACT, department1));
 
 		// CASE Markus
-		cases.save(new TrackedCase(person2, CaseType.INDEX, department1)
+		cases.save(new TrackedCase(markus, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2))));
 
@@ -107,16 +116,16 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate end = start.plusWeeks(4);
 
 		// CASE Sandra
-		cases.save(new TrackedCase(TRACKED_CASE_SANDRA, sandra, CaseType.INDEX, department2, null)
+		TrackedCase caseSandra = cases.save(new TrackedCase(TRACKED_CASE_SANDRA, sandra, CaseType.INDEX, department2, null)
 				.setTestResult(TestResult.infected(start.minusDays(3)))
 				.setQuarantine(Quarantine.of(start, end))
 				.submitEnrollmentDetails()
 				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
 						"Arbeite als Pfleger im Klinikum Mannheim")
-								.withoutSymptoms()
-								.withContactToVulnerablePeople("Arbeite in der Pflege")
-								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
-								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
+						.withoutSymptoms()
+						.withContactToVulnerablePeople("Arbeite in der Pflege")
+						.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
+						.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		// CASE Jessica
@@ -126,7 +135,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startG = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endG = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, person4, CaseType.INDEX, department1, null)
+		cases.save(new TrackedCase(TRACKED_CASE_GUSTAV, gustav, CaseType.INDEX, department1, null)
 				.setTestResult(TestResult.infected(startG.minusDays(1)))
 				.setQuarantine(Quarantine.of(startG, endG))
 				.submitEnrollmentDetails()
@@ -141,7 +150,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startN = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endN = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1, null)
+		cases.save(new TrackedCase(TRACKED_CASE_NADINE, nadine, CaseType.INDEX, department1, null)
 				.setTestResult(TestResult.infected(startN.minusDays(1)))
 				.setQuarantine(Quarantine.of(startN, endN))
 				.submitEnrollmentDetails()
@@ -197,5 +206,32 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		cases.save(new TrackedCase(sylvia, CaseType.INDEX, department1) // s
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(9), LocalDate.now().plusWeeks(2).minusDays(9))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(10)));
+
+		// Special cases for deletion
+		cases.save(new TrackedCase(TRACKED_CASE_JOEL, joel, CaseType.INDEX, department1, null)
+				.setTestResult(TestResult.infected(start.minusDays(3)))
+				.setQuarantine(Quarantine.of(start, end))
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
+						"Arbeite als Pfleger im Klinikum Mannheim")
+						.withoutSymptoms())
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)
+				.setOriginContacts(List.of(new ContactPerson("First", "Last", ContactWays.ofEmailAddress("contact4joel@here.com"))))
+				.setComments(List.of(new Comment("Comment", TRACKED_CASE_CARLOS.toString())))
+				.setOriginCases(List.of(caseSandra)));
+
+		cases.save(new TrackedCase(TRACKED_CASE_CARLOS, carlos, CaseType.CONTACT, department1, null)
+				.setTestResult(TestResult.infected(start.minusDays(3)))
+				.setQuarantine(Quarantine.of(start, end))
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), "Herzinfarkt und Bluthochdruck",
+						"Arbeite als Pfleger im Klinikum Mannheim")
+								.withoutSymptoms())
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS)
+				.setOriginContacts(List.of(new ContactPerson("First", "Last", ContactWays.ofEmailAddress("contact4carlos@here.com"))))
+				.setComments(List.of(new Comment("Comment", TRACKED_CASE_CARLOS.toString())))
+				.setOriginCases(List.of(caseSandra)));
+
+
 	}
 }

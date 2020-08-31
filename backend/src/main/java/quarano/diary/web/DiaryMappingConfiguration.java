@@ -22,6 +22,7 @@ import quarano.reference.Symptom;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;

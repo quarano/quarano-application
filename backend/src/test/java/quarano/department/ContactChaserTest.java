@@ -84,14 +84,14 @@ class ContactChaserTest {
 	@Test
 	void testFindIndexContactsForContactCasePerDiaryEntry() {
 
-		var indexPersonId = TrackedPersonIdentifier.of(UUID.randomUUID());
+		var indexCase = indexCase();
+		var indexPersonId = indexCase.getTrackedPerson().getId();
 		var contactCase = contactCase(CaseType.CONTACT, indexPersonId);
 
-		var indexCase = indexCase(indexPersonId);
 		var trackedPerson = indexCase.getTrackedPerson();
 
 		when(cases.findByTrackedPerson(indexPersonId)).thenReturn(Optional.of(indexCase));
-		when(diaries.findDiaryFor(trackedPerson)).thenReturn(diary(indexPersonId, contactCase.getOriginContacts().get(0)));
+		when(diaries.findDiaryFor(trackedPerson)).thenReturn(diary(trackedPerson, contactCase.getOriginContacts().get(0)));
 
 		var contacts = contactChaser.findIndexContactsFor(contactCase);
 
@@ -122,22 +122,14 @@ class ContactChaserTest {
 		return new TrackedCase(new TrackedPerson("firstName", "lastName"), CaseType.INDEX, new Department("test"));
 	}
 
-	private static TrackedCase indexCase(TrackedPersonIdentifier identifier) {
-
-		var person = spy(new TrackedPerson("firstName", "lastName"));
-		when(person.getId()).thenReturn(identifier);
-
-		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
-	}
-
 	private static TrackedCase indexCase(TrackedPersonIdentifier identifier, ContactPerson contactPerson) {
 
 		var person = spy(new TrackedPerson("indexFirstName", "indexLastName"));
 		lenient().when(person.getId()).thenReturn(identifier);
+		contactPerson.setTrackedPerson(person);
 		// test with two encounters because CORE-270
 		when(person.getEncounters()).thenReturn(Encounters
 				.of(List.of(Encounter.with(contactPerson, LocalDate.now()), Encounter.with(contactPerson, YESTERDAY))));
-
 		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
 	}
 
@@ -148,8 +140,8 @@ class ContactChaserTest {
 						ContactWays.builder().phoneNumber(PhoneNumber.of("013291")).build()).setOwnerId(indexPersonId)));
 	}
 
-	private static Diary diary(TrackedPersonIdentifier trackedPersonIdentifier, ContactPerson contactPerson) {
-		return Diary.of(Streamable.of(DiaryEntry.of(Slot.of(YESTERDAY, Slot.TimeOfDay.MORNING), trackedPersonIdentifier)
+	private static Diary diary(TrackedPerson person, ContactPerson contactPerson) {
+		return Diary.of(Streamable.of(DiaryEntry.of(Slot.of(YESTERDAY, Slot.TimeOfDay.MORNING), person)
 				.setContacts(List.of(contactPerson))));
 	}
 }

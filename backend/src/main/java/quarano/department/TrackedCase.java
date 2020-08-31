@@ -1,5 +1,27 @@
 package quarano.department;
 
+import java.io.Serializable;
+import java.util.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.jddd.core.types.Identifier;
+import org.jddd.event.types.DomainEvent;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,23 +33,12 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
+import quarano.actions.ActionItem;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.*;
-
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm
@@ -42,9 +53,9 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_person_id")
-	private TrackedPerson trackedPerson;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id", referencedColumnName="tracked_person_id")
+	private @Getter @Setter TrackedPerson trackedPerson;
 
 	@ManyToOne
 	@JoinColumn(name = "department_id", nullable = false)
@@ -67,12 +78,19 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	private @Getter @Setter String extReferenceNumber;
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
+	private @ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "tracked_cases_origin_contacts",
+			joinColumns = @JoinColumn(name = "tracked_case_tracked_case_id"),
+			inverseJoinColumns = @JoinColumn(name = "origin_contacts_contact_person_id")
+	)
+	@Getter @Setter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_case_id")
-	private @Getter List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="trackedCase")
+	private @Getter @Setter List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="trackedCase")
+	private @Getter @Setter List<ActionItem> actions = new ArrayList<>();
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -126,7 +144,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.type = type;
 		this.department = department;
 		this.status = Status.OPEN;
-		this.originCases = new ArrayList<>();
 
 		this.registerEvent(CaseCreated.of(this));
 
@@ -428,7 +445,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public static class TrackedCaseIdentifier implements Identifier, Serializable {
 
 		private static final long serialVersionUID = -1255657328932035265L;
-
+		@Column(name = "tracked_case_id")
 		final UUID trackedCaseId;
 
 		/*

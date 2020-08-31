@@ -1,6 +1,16 @@
 package quarano.diary.web;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.modelmapper.MappingException;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
@@ -8,16 +18,10 @@ import quarano.core.web.MapperWrapper;
 import quarano.core.web.RepositoryMappingModule.AggregateReferenceMappingException;
 import quarano.diary.DiaryEntry;
 import quarano.diary.Slot;
-import quarano.diary.web.DiaryRepresentations;
 import quarano.diary.web.DiaryRepresentations.DiaryEntryInput;
 import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.modelmapper.MappingException;
 
 /**
  * @author Oliver Drotbohm
@@ -47,7 +51,7 @@ class DiaryEntryMappingIntegrationTests {
 	@Test
 	void mapsEntityToDetailsDto() {
 
-		var source = DiaryEntry.of(Slot.now(), TrackedPersonIdentifier.of(UUID.randomUUID()))//
+		var source = DiaryEntry.of(Slot.now(), mockPerson())//
 				.setBodyTemperature(BodyTemperature.of(40.0f));
 
 		var result = representations.toRepresentation(source);
@@ -62,5 +66,12 @@ class DiaryEntryMappingIntegrationTests {
 			assertThat(it.getName()).isNotBlank();
 			assertThat(it.isCharacteristic()).isNotNull();
 		});
+	}
+
+	private static TrackedPerson mockPerson() {
+		TrackedPersonIdentifier identifier = TrackedPersonIdentifier.of(UUID.randomUUID());
+		TrackedPerson mocked = mock(TrackedPerson.class);
+		when(mocked.getId()).thenReturn(identifier);
+		return mocked;
 	}
 }

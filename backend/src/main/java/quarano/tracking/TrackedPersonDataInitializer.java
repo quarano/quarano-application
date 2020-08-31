@@ -69,6 +69,12 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC8_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("ca5f631e-c7ba-495f-9a54-77e90a71100f"));
 
+	public final static TrackedPersonIdentifier INDEX_PERSON_DELETE1_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("4ecfc70e-3a34-4ea6-907a-469b925f2fb8"));
+
+	public final static TrackedPersonIdentifier CONTACT_PERSON_DELETE1_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("5d5ed084-ec66-11ea-adc1-0242ac120002"));
+
 	/**
 	 * A persona with all contact details submitted, ready to take the next steps in enrollment.
 	 *
@@ -236,6 +242,18 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 				PhoneNumber.of("0621884466"), LocalDate.of(1980, 1, 1));
 	}
 
+	public static TrackedPerson createJoel() {
+		return new TrackedPerson(INDEX_PERSON_DELETE1_DEP1, "Joel", "Fabiani",
+				EmailAddress.of("joel.fabiani@testtest.de"), PhoneNumber.of("0621 88 334 2"), LocalDate.of(1980, 1, 1))
+				.setAddress(new Address("Seckenheimer Landstr.", HouseNumber.of("50a"), "Mannheim", ZipCode.of("68199")));
+	}
+
+	public static TrackedPerson createCarlos() {
+		return new TrackedPerson(CONTACT_PERSON_DELETE1_DEP1, "Carlos", "Dorn",
+				EmailAddress.of("carlos.dorn@testtest.de"), PhoneNumber.of("0621 88 334 2"), LocalDate.of(1980, 1, 1))
+				.setAddress(new Address("Seckenheimer Landstr.", HouseNumber.of("50c"), "Mannheim", ZipCode.of("68199")));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -265,6 +283,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSteven());
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
+		trackedPeople.save(createJoel());
+		trackedPeople.save(createCarlos());
 
 		log.info("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}
