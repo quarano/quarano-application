@@ -1,5 +1,6 @@
+import { TranslateService } from '@ngx-translate/core';
 import {
-  ValidationErrorGenerator,
+  ValidationErrorService,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
   ArrayValidator,
@@ -8,13 +9,15 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { SymptomDto } from '@qro/shared/util-symptom';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'qro-initial-questionaire-form',
-  templateUrl: './initial-questionaire-form.component.html',
-  styleUrls: ['./initial-questionaire-form.component.scss'],
+  selector: 'qro-initial-questionnaire-form',
+  templateUrl: './initial-questionnaire-form.component.html',
+  styleUrls: ['./initial-questionnaire-form.component.scss'],
 })
-export class InitialQuestionaireFormComponent implements OnInit {
+export class InitialQuestionnaireFormComponent implements OnInit {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   @Input()
@@ -24,22 +27,15 @@ export class InitialQuestionaireFormComponent implements OnInit {
   symptoms: SymptomDto[];
 
   subs = new SubSink();
-  errorGenerator = ValidationErrorGenerator;
 
-  tooltip =
-    'In diesem Fall sind das folgende Vorerkankungen: chronische Herzerkrankung, ' +
-    'Lungenerkrankungen (z. B. Asthma, COPD, chronische Bronchitis), chronische Lebererkrankungen, ' +
-    'Diabetes mellitus (Zuckerkrankheit), Tumor-/Krebserkrankungen, Patienten mit geschwächtem ' +
-    'Immunsystem (inkl. HIV/AIDS)';
+  symptomTooltip$: Observable<string>;
 
-  symptomTooltip: string;
-
-  constructor() {}
+  constructor(private translate: TranslateService, public validationErrorService: ValidationErrorService) {}
 
   ngOnInit(): void {
-    this.symptomTooltip = `Als Covid-19 charakterische Symptome zählen: ${this.symptoms
-      ?.map((s) => s.name)
-      .join(', ')}`;
+    this.symptomTooltip$ = this.translate
+      .get('INITIAL_QUESTIONNAIRE_FORM.CHARAKTERISTISCHE_SYMPTOME')
+      .pipe(map((res) => `${res}: ${this.symptoms?.map((s) => s.name).join(', ')}`));
     this.toggleAdditionalFieldValitations('hasSymptoms', 'dayOfFirstSymptoms', null, [Validators.required]);
     this.toggleAdditionalFieldValitations('hasSymptoms', 'symptoms', [], [ArrayValidator.minLengthArray(1)]);
     this.toggleAdditionalFieldValitations('belongToMedicalStaff', 'belongToMedicalStaffDescription', null, [

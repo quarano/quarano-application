@@ -1,7 +1,7 @@
 import { HealthDepartmentService } from '@qro/health-department/api';
 import { SubSink } from 'subsink';
 import { ActivatedRoute } from '@angular/router';
-import { ValidationErrorGenerator, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
+import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, combineLatest } from 'rxjs';
@@ -15,7 +15,6 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
   styleUrls: ['./comments.component.scss'],
 })
 export class CommentsComponent implements OnInit, OnDestroy {
-  errorGenerator = ValidationErrorGenerator;
   comments$: Observable<CaseCommentDto[]>;
   loading: boolean;
   private subs = new SubSink();
@@ -32,7 +31,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private healthDepartmentService: HealthDepartmentService,
     private snackbarService: SnackbarService,
-    private entityService: CaseEntityService
+    private entityService: CaseEntityService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit(): void {

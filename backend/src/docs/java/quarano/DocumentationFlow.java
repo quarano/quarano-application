@@ -98,13 +98,13 @@ public class DocumentationFlow {
 		var authenticationProcessor = new AuthenticationHeaderProcessor();
 
 		var preprocessRequest = preprocessRequest(prettyPrint(),
-				replacePattern(Pattern.compile("\"username\" : \".*\""), "\"username\" : \"…\""),
-				replacePattern(Pattern.compile("\"password\" : \".*\""), "\"password\" : \"…\""),
-				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), "\"passwordConfirm\" : \"…\""),
+				replacePattern(Pattern.compile("\"username\" : \".*\""), "\"username\" : \"...\""),
+				replacePattern(Pattern.compile("\"password\" : \".*\""), "\"password\" : \"...\""),
+				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), "\"passwordConfirm\" : \"...\""),
 				authenticationProcessor);
 
 		var preprocessResponse = maskUris
-				? preprocessResponse(maskLinks("…"), prettyPrint(), authenticationProcessor)
+				? preprocessResponse(maskLinks("..."), prettyPrint(), authenticationProcessor)
 				: preprocessResponse(prettyPrint(), authenticationProcessor);
 
 		return MockMvcRestDocumentation.document(name.concat("/").concat(step), preprocessRequest, preprocessResponse,

@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +11,7 @@ describe('ForgottenContactBannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateTestingModule],
       declarations: [ForgottenContactBannerComponent],
       providers: [
         { provide: MatDialog, useValue: {} },

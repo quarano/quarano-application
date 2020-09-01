@@ -1,6 +1,6 @@
-<div class="container" *ngIf="userService.isLoggedIn$ | async">
+<div class="container" *ngIf="userService.isLoggedIn$ | async; else NOT_LOGGED_IN">
   <ng-container *ngIf="!userService.isHealthDepartmentUser">
-    <ng-container *ngIf="(enrollmentService.getEnrollmentStatus() | async)?.complete">
+    <ng-container *ngIf="(clientStore.enrollmentStatus$ | async)?.complete">
       <button
         *ngIf="healthDepartment$ | async as healthDepartment"
         mat-stroked-button
@@ -8,7 +8,7 @@
         class="contact-button"
         (click)="showContact(healthDepartment)"
       >
-        Kontakt zum Amt
+        {{ 'HEADER_RIGHT.KONTAKT_ZUM_AMT' | translate }}
       </button>
     </ng-container>
   </ng-container>
@@ -18,18 +18,44 @@
     <mat-icon style="color: white;">arrow_drop_down</mat-icon>
   </button>
   <mat-menu #profilemenu="matMenu">
-    <ng-container
-      *ngIf="!userService.isHealthDepartmentUser && (enrollmentService.getEnrollmentStatus() | async)?.complete"
-    >
-      <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
-        <mat-icon>person</mat-icon> Benutzerprofil
+    <ng-container *ngIf="!userService.isHealthDepartmentUser">
+      <button *ngIf="selectedLanguage$ | async as selectedLanguage" mat-menu-item [matMenuTriggerFor]="languages">
+        <i [class]="'language-icon fa-fw flag:' + selectedLanguage.flagIconKey"></i> {{ selectedLanguage.name }}
       </button>
     </ng-container>
+
+    <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
+      <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
+        <mat-icon>person</mat-icon> {{ 'HEADER_RIGHT.BENUTZERPROFIL' | translate }}
+      </button>
+    </ng-container>
+
     <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
-      <mat-icon>vpn_key</mat-icon> Passwort ändern
+      <mat-icon>vpn_key</mat-icon> {{ 'HEADER_RIGHT.PASSWORT_ÄNDERN' | translate }}
     </button>
+
     <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon> Abmelden
+      <mat-icon>exit_to_app</mat-icon> {{ 'HEADER_RIGHT.ABMELDEN' | translate }}
+    </button>
+  </mat-menu>
+
+  <mat-menu #languages="matMenu">
+    <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguage(lang)">
+      <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
     </button>
   </mat-menu>
 </div>
+<ng-template #NOT_LOGGED_IN>
+  <div class="container">
+    <button *ngIf="selectedLanguage$ | async as selectedLanguage" mat-button [matMenuTriggerFor]="languages">
+      <i [class]="'language-icon fa-fw flag:' + selectedLanguage.flagIconKey"></i>
+      <span>{{ selectedLanguage.name }}</span>
+      <mat-icon style="color: white;">arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #languages="matMenu">
+      <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguage(lang)">
+        <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
+      </button>
+    </mat-menu>
+  </div>
+</ng-template>

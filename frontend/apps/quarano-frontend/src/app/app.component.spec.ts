@@ -1,3 +1,4 @@
+import { LanguageService } from '@qro/shared/util-translation';
 import { async, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -10,7 +11,10 @@ describe('AppComponent', () => {
     progressBarService = new ProgressBarService();
     TestBed.configureTestingModule({
       declarations: [AppComponent],
-      providers: [{ provide: ProgressBarService, useValue: progressBarService }],
+      providers: [
+        { provide: ProgressBarService, useValue: progressBarService },
+        { provide: LanguageService, useValue: {} },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

@@ -11,6 +11,7 @@ import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
 import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -56,13 +57,10 @@ class ActionItemRepositoryIntegrationTests {
 				.resolveAutomatically(repository::save);
 
 		assertThat(repository.findByTrackedPerson(person).stream())
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, true), Index.atIndex(0))
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(1))
-				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(2));
+				.has(itemMatching(DescriptionCode.INCREASED_TEMPERATURE, true), Index.atIndex(0));
 
 		assertThat(repository.findUnresolvedByTrackedPerson(person).stream())
-				.hasSize(1)
-				.has(itemMatching(DescriptionCode.FIRST_CHARACTERISTIC_SYMPTOM, false), Index.atIndex(0));
+				.hasSize(0);
 	}
 
 	@RequiredArgsConstructor(staticName = "itemMatching")

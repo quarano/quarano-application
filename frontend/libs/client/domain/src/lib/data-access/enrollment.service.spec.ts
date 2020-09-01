@@ -1,3 +1,4 @@
+import { ClientStore } from './../store/client-store.service';
 /* tslint:disable:no-unused-variable */
 
 import { inject, TestBed } from '@angular/core/testing';
@@ -9,7 +10,7 @@ describe('Service: Enrollment', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [EnrollmentService, { provide: API_URL, useValue: '' }],
+      providers: [EnrollmentService, { provide: API_URL, useValue: '' }, { provide: ClientStore, useValue: {} }],
     });
   });
 

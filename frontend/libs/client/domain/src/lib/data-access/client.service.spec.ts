@@ -1,3 +1,4 @@
+import { ClientStore } from './../store/client-store.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 
@@ -9,7 +10,7 @@ describe('Service: Client', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ClientService, { provide: API_URL, useValue: '' }],
+      providers: [ClientService, { provide: API_URL, useValue: '' }, { provide: ClientStore, useValue: {} }],
     });
   });
 

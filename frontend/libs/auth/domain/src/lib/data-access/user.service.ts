@@ -1,11 +1,12 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { Observable, combineLatest } from 'rxjs';
+import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TokenService } from './token.service';
-import { UserDto } from '../model/user';
 import { roles } from '../model/role';
 import { AuthService } from './auth.service';
+import { AuthStore } from '../store/auth-store.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +14,11 @@ import { AuthService } from './auth.service';
 export class UserService {
   constructor(
     private authService: AuthService,
-    private snackbarService: SnackbarService,
-    private tokenService: TokenService
+    private snackbarService: TranslatedSnackbarService,
+    private tokenService: TokenService,
+    private authStore: AuthStore,
+    private translate: TranslateService
   ) {}
-
-  public get user$(): Observable<UserDto> {
-    return this.authService.getMe().pipe(distinctUntilChanged());
-  }
 
   public get isLoggedIn$(): Observable<boolean> {
     return this.tokenService.token$.pipe(
@@ -28,17 +27,15 @@ export class UserService {
     );
   }
 
-  public get currentUserName$(): Observable<string> {
-    return this.user$.pipe(
-      map((user) => {
+  public get nameOfCurrentUser$(): Observable<string> {
+    return combineLatest([this.authStore.user$, this.translate.get('USER.GESUNDHEITSAMT_UNBEKANNT')]).pipe(
+      map(([user, translatedText]) => {
         if (user) {
           if (this.isHealthDepartmentUser) {
             if (user.firstName && user.lastName) {
-              return `${user.firstName} ${user.lastName} (${
-                user.healthDepartment?.name || 'Gesundheitsamt unbekannt'
-              })`;
+              return `${user.firstName} ${user.lastName} (${user.healthDepartment?.name || translatedText})`;
             }
-            return `${user.username} (${user.healthDepartment?.name || 'Gesundheitsamt unbekannt'})`;
+            return `${user.username} (${user.healthDepartment?.name || translatedText})`;
           } else if (user.client?.firstName || user.client?.lastName) {
             return `${user.client.firstName || ''} ${user.client.lastName || ''}`;
           }
@@ -50,14 +47,16 @@ export class UserService {
   }
 
   public login(username: string, password: string): Observable<any> {
-    return this.authService
-      .login(username, password)
-      .pipe(tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))));
+    return this.authService.login(username, password).pipe(
+      tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+      tap((res) => this.authStore.login())
+    );
   }
 
   public logout() {
-    this.snackbarService.message('Sie wurden abgemeldet');
+    this.snackbarService.message('USER.SIE_WURDEN_ABGEMELDET').subscribe();
     this.tokenService.unsetToken();
+    this.authStore.logout();
   }
 
   public roleMatch(roleNames: string[]): boolean {

@@ -3,8 +3,8 @@ import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operat
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
+  ValidationErrorService,
   VALIDATION_PATTERNS,
-  ValidationErrorGenerator,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -32,7 +32,6 @@ export interface CaseDetailResult {
 export class EditComponent implements OnInit, OnDestroy {
   private subs: SubSink = new SubSink();
   today = new Date();
-  errorGenerator = ValidationErrorGenerator;
   selectableIndexCases: CaseSearchItem[] = [];
   type$$ = new BehaviorSubject<CaseType>(CaseType.Index);
 
@@ -52,7 +51,8 @@ export class EditComponent implements OnInit, OnDestroy {
     public indexCaseService: IndexCaseService,
     private route: ActivatedRoute,
     private router: Router,
-    private entityService: CaseEntityService
+    private entityService: CaseEntityService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit(): void {
@@ -178,7 +178,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   showIndexCaseItem(item: CaseDto): string {
     if (!item) return '';
-    return `${item.firstName} ${item.lastName} (${
+    return `${item.lastName}, ${item.firstName} (${
       item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
     })`;
   }

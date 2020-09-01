@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LandingComponent } from './landing.component';
@@ -10,7 +11,7 @@ describe('LandingComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, TranslateTestingModule],
       declarations: [LandingComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

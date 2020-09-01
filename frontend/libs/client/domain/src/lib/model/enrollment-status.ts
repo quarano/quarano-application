@@ -1,6 +1,17 @@
-export interface EnrollmentStatusDto {
+import { HalResponse } from '@qro/shared/util-data-access';
+
+export interface EnrollmentStatusDto extends HalResponse {
   completedPersonalData: boolean;
   completedQuestionnaire: boolean;
   completedContactRetro: boolean;
   complete: boolean;
+}
+
+export function getEmptyEnrollmentStatus(): EnrollmentStatusDto {
+  return {
+    completedPersonalData: false,
+    completedQuestionnaire: false,
+    completedContactRetro: false,
+    complete: false,
+  };
 }

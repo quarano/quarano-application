@@ -9,4 +9,6 @@ export {
   roleNames,
   roles,
   CaseType,
+  AuthStore,
+  AuthActions,
 } from '@qro/auth/domain';

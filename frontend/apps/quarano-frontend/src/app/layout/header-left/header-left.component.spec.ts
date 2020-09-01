@@ -1,3 +1,4 @@
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -5,7 +6,7 @@ import { HeaderLeftComponent } from './header-left.component';
 import { of } from 'rxjs';
 import { UserService } from '@qro/auth/api';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EnrollmentService } from '@qro/client/api';
+import { ClientStore } from '@qro/client/api';
 
 describe('HeaderLeftComponent', () => {
   let component: HeaderLeftComponent;
@@ -14,10 +15,10 @@ describe('HeaderLeftComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [HeaderLeftComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, TranslateTestingModule],
       providers: [
         { provide: UserService, useValue: { isLoggedIn$: of() } },
-        { provide: EnrollmentService, useValue: {} },
+        { provide: ClientStore, useValue: {} },
       ],
     }).compileComponents();
   }));

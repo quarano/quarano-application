@@ -46,7 +46,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@JoinColumn(name = "tracked_person_id")
 	private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "department_id", nullable = false)
 	private Department department;
 
 	private @Getter TestResult testResult;
@@ -58,6 +59,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE)
 	private Enrollment enrollment = new Enrollment();
+
 	@Column(name = "case_type")
 	@Enumerated(EnumType.STRING)
 	private @Getter @Setter CaseType type = CaseType.INDEX;
@@ -75,6 +77,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private @Getter Status status;
+
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
 
 	@OneToMany
 	private @Getter List<TrackedCase> originCases = new ArrayList<>();
@@ -305,7 +311,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public boolean hasTestResult() {
 		return testResult != null;
 	}
-	
+
 	public boolean hasQuestionnaire() {
 		return questionnaire != null;
 	}
@@ -316,7 +322,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.TRACKED_MANUALLY;
 		this.registerEvent(CaseStatusUpdated.of(this));
-		
+
 		return this;
 	}
 
@@ -345,6 +351,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	TrackedCase markNewContactCaseMailSent() {
+
+		this.newContactCaseMailStatus = MailStatus.SENT;
+
+		return this;
+	}
+
+	TrackedCase markNewContactCaseMailCantSent() {
+
+		this.newContactCaseMailStatus = MailStatus.CANT_SENT;
+
+		return this;
+	}
+
 	private void assertStatus(Status status, String message, Object... args) {
 
 		if (!this.status.equals(status)) {
@@ -365,6 +385,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		TRACKING,
 
 		CONCLUDED;
+	}
+
+	public enum MailStatus {
+
+		NOT_SENT,
+
+		CANT_SENT,
+
+		SENT
 	}
 
 	@Value(staticConstructor = "of")

@@ -5,7 +5,10 @@
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <ng-container *ngIf="morning; else morning_warning"
-        ><qro-diary-entry-success [entry]="morning" label="Morgens"></qro-diary-entry-success
+        ><qro-diary-entry-success
+          [entry]="morning"
+          [label]="'DIARY_LIST_ITEM.MORGENS' | translate"
+        ></qro-diary-entry-success
       ></ng-container>
       <ng-template #morning_warning
         ><qro-diary-entry-warning
@@ -17,7 +20,10 @@
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <ng-container *ngIf="evening; else evening_warning"
-        ><qro-diary-entry-success [entry]="evening" label="Abends"></qro-diary-entry-success
+        ><qro-diary-entry-success
+          [entry]="evening"
+          [label]="'DIARY_LIST_ITEM.ABENDS' | translate"
+        ></qro-diary-entry-success
       ></ng-container>
       <ng-template #evening_warning>
         <qro-diary-entry-warning

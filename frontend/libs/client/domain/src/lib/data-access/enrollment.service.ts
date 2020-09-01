@@ -1,10 +1,10 @@
+import { ClientStore } from './../store/client-store.service';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { map, share, switchMap, tap, shareReplay } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
-import { EnrollmentStatusDto } from '../model/enrollment-status';
 import { RegisterDto } from '../model/register';
 import { DateFunctions } from '@qro/shared/util-date';
 import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from '../model/encounter';
@@ -14,9 +14,12 @@ import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from 
 })
 export class EnrollmentService {
   private baseUrl = `${this.apiUrl}/api`;
-  private enrollmentSubject$$ = new BehaviorSubject<EnrollmentStatusDto>(null);
 
-  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(API_URL) private apiUrl: string,
+    private clientStore: ClientStore
+  ) {}
 
   getQuestionnaire(): Observable<QuestionnaireDto> {
     return this.httpClient.get<QuestionnaireDto>(`${this.baseUrl}/enrollment/questionnaire`).pipe(shareReplay());
@@ -25,25 +28,8 @@ export class EnrollmentService {
   updateQuestionnaire(questionnaire: QuestionnaireDto): Observable<any> {
     return this.httpClient.put(`${this.baseUrl}/enrollment/questionnaire`, questionnaire).pipe(
       shareReplay(),
-      switchMap((_) => this.loadEnrollmentStatus())
+      tap((_) => this.clientStore.loadEnrollmentStatus())
     );
-  }
-
-  loadEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    return this.httpClient
-      .get<EnrollmentStatusDto>(`${this.baseUrl}/enrollment`)
-      .pipe(shareReplay())
-      .pipe(
-        tap((data) => this.enrollmentSubject$$.next(data)),
-        switchMap(() => this.enrollmentSubject$$)
-      );
-  }
-
-  getEnrollmentStatus(): Observable<EnrollmentStatusDto> {
-    if (!this.enrollmentSubject$$.value) {
-      return this.loadEnrollmentStatus();
-    }
-    return this.enrollmentSubject$$;
   }
 
   getEncounters(): Observable<EncounterEntry[]> {
@@ -73,22 +59,6 @@ export class EnrollmentService {
 
   deleteEncounter(encounter: EncounterDto) {
     return this.httpClient.delete(encounter._links.self.href).pipe(shareReplay());
-  }
-
-  completeEnrollment(withoutEncounters: boolean): Observable<any> {
-    return this.httpClient
-      .post(`${this.baseUrl}/enrollment/completion?withoutEncounters=${withoutEncounters}`, {})
-      .pipe(
-        shareReplay(),
-        switchMap(() => this.loadEnrollmentStatus())
-      );
-  }
-
-  reopenEnrollment(): Observable<EnrollmentStatusDto> {
-    return this.httpClient.delete(`${this.baseUrl}/enrollment/completion`).pipe(
-      shareReplay(),
-      switchMap(() => this.getEnrollmentStatus())
-    );
   }
 
   registerClient(registerClient: RegisterDto): Observable<any> {

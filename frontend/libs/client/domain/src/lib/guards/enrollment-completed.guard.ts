@@ -1,9 +1,9 @@
+import { ClientStore } from './../store/client-store.service';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { UserService } from '@qro/auth/api';
-import { EnrollmentService } from '../data-access/enrollment.service';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Injectable({
@@ -11,22 +11,18 @@ import { SnackbarService } from '@qro/shared/util-snackbar';
 })
 export class EnrollmentCompletedGuard implements CanActivate {
   constructor(
-    private enrollmentService: EnrollmentService,
+    private clientStore: ClientStore,
     private userService: UserService,
     private router: Router,
     private snackbarService: SnackbarService
   ) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     if (this.userService.isHealthDepartmentUser) {
       this.router.navigate(['/auth/forbidden']);
-      return false;
+      return of(false);
     }
-
-    return this.enrollmentService.getEnrollmentStatus().pipe(
+    return this.clientStore.getEnrollmentStatus().pipe(
       map((status) => {
         if (status?.complete) {
           return true;

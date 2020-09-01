@@ -115,11 +115,15 @@ Some additional settings that are not contained in the formatter:
 ==== Import order
 
 * static imports, wild card used from the first declaration
-* `*` - all unmatched imports
+* `+*+` - all unmatched imports
 * `java.…`
 * `javax.–`
 * `org.…`
 * `com.…`
+
+For non-static imports we switch to `+*+` imports after the 10th import.
+For static ones we always use `+*+` ones.
+An Eclipse configuration file setting this up can be found https://github.com/quarano/quarano-application/tree/develop/infrastructure[here].
 
 ==== Blank lines
 

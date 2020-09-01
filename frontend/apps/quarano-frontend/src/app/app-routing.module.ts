@@ -1,7 +1,7 @@
 import { IsAdminGuard } from '@qro/administration/api';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from '@qro/shared/ui-error';
+import { NotFoundComponent, ErrorComponent } from '@qro/shared/ui-error';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { IsHealthDepartmentUserGuard } from '@qro/health-department/api';
 
@@ -29,13 +29,12 @@ const routes: Routes = [
     loadChildren: () => import('@qro/general/shell').then((m) => m.GeneralShellModule),
   },
   {
-    // ToDo: Remove this route after next go live
-    path: 'welcome/landing/:usertype/:clientcode',
-    redirectTo: 'client/enrollment/landing/:usertype/:clientcode',
-  },
-  {
     path: '404/:message',
     component: NotFoundComponent,
+  },
+  {
+    path: 'error',
+    component: ErrorComponent,
   },
   { path: '', redirectTo: 'general', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },

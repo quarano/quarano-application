@@ -12,8 +12,8 @@
           #first_name_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.firstName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.firstName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width" data-cy="input-lastname">
@@ -26,8 +26,8 @@
           #last_name_input
           (blur)="trimValue(last_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.lastName)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.lastName, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width" data-cy="input-dayofbirth">
@@ -42,8 +42,8 @@
         />
         <mat-datepicker-toggle matSuffix [for]="dateOfBirthPicker"></mat-datepicker-toggle>
         <mat-datepicker #dateOfBirthPicker></mat-datepicker>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.dateOfBirth)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.dateOfBirth, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.dateOfBirth)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.dateOfBirth, error) | async }}
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -63,8 +63,8 @@
           />
           <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #testDatePicker></mat-datepicker>
-          <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.testDate)">
-            {{ errorGenerator.getErrorMessage(formGroup.controls.testDate, error) }}
+          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.testDate)">
+            {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
           </mat-error>
         </mat-form-field>
         <div
@@ -91,8 +91,8 @@
         />
         <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
         <mat-datepicker #quarantineStartPicker></mat-datepicker>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.quarantineStartDate)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineStartDate, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineStartDate)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineStartDate, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width" data-cy="input-quarantineend">
@@ -108,8 +108,8 @@
         />
         <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.quarantineEndDate)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.quarantineEndDate, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineEndDate)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineEndDate, error) | async }}
         </mat-error>
       </mat-form-field>
 
@@ -143,8 +143,8 @@
           #phone_input
           (blur)="trimValue(phone_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.phone)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.phone, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.phone)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.phone, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="half-width" data-cy="input-mobile">
@@ -158,8 +158,8 @@
           #mobile_phone_input
           (blur)="trimValue(mobile_phone_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.mobilePhone)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.mobilePhone, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.mobilePhone)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.mobilePhone, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width" data-cy="input-email">
@@ -171,8 +171,8 @@
           #email_input
           (blur)="trimValue(email_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.email)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.email, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -187,8 +187,8 @@
           #street_input
           (blur)="trimValue(first_name_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.street)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.street, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.street)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field style="width: 30%;">
@@ -201,8 +201,8 @@
           #house_number_input
           (blur)="trimValue(house_number_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.houseNumber)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.houseNumber, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.houseNumber)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field style="width: 30%;" data-cy="input-zipcode">
@@ -214,8 +214,8 @@
           #zip_code_input
           (blur)="trimValue(zip_code_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.zipCode)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.zipCode, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.zipCode)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
         </mat-error>
       </mat-form-field>
       <mat-form-field style="width: 70%;">
@@ -227,8 +227,8 @@
           #city_input
           (blur)="trimValue(city_input)"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.city)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.city, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.city)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.city, error) | async }}
         </mat-error>
       </mat-form-field>
     </fieldset>
@@ -244,8 +244,8 @@
           (blur)="trimValue(first_name_input)"
           maxlength="40"
         />
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.extReferenceNumber)">
-          {{ errorGenerator.getErrorMessage(formGroup.controls.extReferenceNumber, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.extReferenceNumber)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.extReferenceNumber, error) | async }}
         </mat-error>
       </mat-form-field>
     </fieldset>

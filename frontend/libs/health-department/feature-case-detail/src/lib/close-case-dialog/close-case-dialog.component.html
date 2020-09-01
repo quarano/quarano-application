@@ -10,8 +10,8 @@
       <legend>Zusätzliche Informationen zum Fallabschluss:</legend>
       <mat-form-field class="full-width">
         <textarea matInput formControlName="comment" type="text"></textarea>
-        <mat-error *ngFor="let error of errorGenerator.getErrorKeys(commentGroup.controls.comment)">
-          {{ errorGenerator.getErrorMessage(commentGroup.controls.comment, error) }}
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(commentGroup.controls.comment)">
+          {{ validationErrorService.getErrorMessage(commentGroup.controls.comment, error) | async }}
         </mat-error>
       </mat-form-field>
     </fieldset>

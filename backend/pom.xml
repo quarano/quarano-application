@@ -22,6 +22,7 @@
 		<jddd.version>0.1.0</jddd.version>
 		<moduliths.version>1.0.0.RC4</moduliths.version>
 		<spring-hateoas.version>1.2.0-M1</spring-hateoas.version>
+		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
@@ -29,6 +30,11 @@
 
 		<profile>
 			<id>inmemory</id>
+			<activation>
+				<file>
+					<exists>src/main/resources/application-local.properties</exists>
+				</file>
+			</activation>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
 				<spring.profile.active>integrationtest</spring.profile.active>
@@ -37,6 +43,10 @@
 				<dependency>
 					<groupId>com.h2database</groupId>
 					<artifactId>h2</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.icegreen</groupId>
+					<artifactId>greenmail</artifactId>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -57,6 +67,30 @@
 		</profile>
 
 	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.icegreen</groupId>
+				<artifactId>greenmail</artifactId>
+				<version>${greenmail.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId>junit</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.activation</groupId>
+						<artifactId>activation</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.sun.mail</groupId>
+						<artifactId>javax.mail</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 
@@ -157,7 +191,12 @@
 		</dependency>
 
 		<dependency>
-		<groupId>org.jddd</groupId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jddd</groupId>
 			<artifactId>jddd-core</artifactId>
 			<version>${jddd.version}</version>
 		</dependency>
@@ -216,6 +255,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Not included in the application unless inmemory profile is active (see above) -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Development-only dependencies -->
 
 		<dependency>
@@ -242,7 +288,6 @@
 			<type>zip</type>
 			<optional>true</optional>
 		</dependency>
-
 
 	</dependencies>
 
@@ -485,6 +530,11 @@
 		<repository>
 			<id>spring-libs-snapshot</id>
 			<url>https://repo.spring.io/libs-snapshot</url>
+		</repository>
+		<!-- For Moduliths & jDDD -->
+		<repository>
+			<id>greenmail-snapshot</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 	</repositories>
 

@@ -1,29 +1,25 @@
-<h1 mat-dialog-title>Kontaktmöglichkeiten</h1>
+<h1 mat-dialog-title>{{ 'HD_CONTACT.KONTAKTMÖGLICHKEITEN' | translate }}</h1>
 <div mat-dialog-content>
-  <p>Sie benötigen weitere Informationen oder möchten uns aus anderen Gründen kontaktieren?</p>
-  <p>Über folgende Möglichkeiten können Sie ihr zuständiges Gesundheitsamt erreichen:</p>
+  <p>{{ 'HD_CONTACT.SIE_BENÖTIGEN_INFORMATIONEN' | translate }}</p>
+  <p>{{ 'HD_CONTACT.ÜBER_FOLGENDE_MÖGLICHKEITEN' | translate }}:</p>
   <div class="contact-fields">
     <div class="contact-item">
       <h2>{{ data.name }}</h2>
     </div>
     <div class="contact-item">
-      <div class="label">Telefonnummer:</div>
+      <div class="label">{{ 'HD_CONTACT.TELEFONNUMMER' | translate }}:</div>
       <div class="value">{{ data.phone }}</div>
     </div>
     <div class="contact-item">
-      <div class="label">E-Mail:</div>
+      <div class="label">{{ 'HD_CONTACT.EMAIL' | translate }}:</div>
       <div class="value">{{ data.email }}</div>
     </div>
   </div>
   <div class="notice">
-    <h3>Wichtiger Hinweis:</h3>
-    Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am
-    Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen
-    der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter
-    der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung
-    mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.
+    <h3>{{ 'HD_CONTACT.WICHTIGER_HINWEIS' | translate }}:</h3>
+    {{ 'HD_CONTACT.WENN_SIE_AKUT_ÄRZTLICHE_BEHANDLUNG_BENÖTIGEN' | translate }}
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" mat-dialog-close>Schließen</button>
+  <button mat-raised-button color="primary" mat-dialog-close>{{ 'HD_CONTACT.SCHLIESSEN' | translate }}</button>
 </div>

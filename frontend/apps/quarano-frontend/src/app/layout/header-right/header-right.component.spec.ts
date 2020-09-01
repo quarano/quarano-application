@@ -1,3 +1,4 @@
+import { provideMockStore } from '@ngrx/store/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderRightComponent } from './header-right.component';
 import { of } from 'rxjs';
@@ -6,7 +7,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserService } from '@qro/auth/api';
 import { HealthDepartmentService } from '@qro/health-department/api';
-import { EnrollmentService } from '@qro/client/api';
+import { ClientStore } from '@qro/client/api';
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 
 describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
@@ -19,13 +21,14 @@ describe('HeaderRightComponent', () => {
     userService.isLoggedIn$ = of();
 
     TestBed.configureTestingModule({
-      imports: [MatMenuModule],
+      imports: [MatMenuModule, TranslateTestingModule],
       declarations: [HeaderRightComponent],
       providers: [
         { provide: UserService, useValue: userService },
         { provide: MatDialog, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
-        { provide: EnrollmentService, useValue: {} },
+        { provide: ClientStore, useValue: {} },
+        provideMockStore({}),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

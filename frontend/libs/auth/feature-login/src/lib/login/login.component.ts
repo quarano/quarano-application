@@ -1,12 +1,13 @@
+import { SubSink } from 'subsink';
 import { HttpResponse } from '@angular/common/http';
-import { ValidationErrorGenerator } from '@qro/shared/util-forms';
-import { Component, OnInit } from '@angular/core';
+import { ValidationErrorService } from '@qro/shared/util-forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, map, switchMap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ChangePasswordComponent } from '@qro/auth/feature-change-password';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -15,9 +16,9 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
+  private subs = new SubSink();
 
   public loginFormGroup = new FormGroup({
     username: new FormControl(null, Validators.required),
@@ -26,48 +27,61 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private router: Router,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit(): void {
-    this.userService.isLoggedIn$
-      .pipe(
-        take(1),
-        filter((loggedin) => loggedin)
-      )
-      .subscribe(() => {
-        this.userService.logout();
-      });
+    this.subs.add(
+      this.userService.isLoggedIn$
+        .pipe(
+          take(1),
+          filter((loggedin) => loggedin)
+        )
+        .subscribe(() => {
+          this.userService.logout();
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   public submitForm() {
     this.loading = true;
-    this.userService
-      .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
-      .subscribe(
-        (resData) => {
-          this.snackbarService.success('Willkommen bei quarano');
-          if (this.userService.isHealthDepartmentUser) {
-            if (this.checkIfPasswordChangeNeeded(resData)) {
-              this.openPasswordChangeDialog();
+    this.subs.add(
+      this.userService
+        .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
+        .pipe(
+          switchMap((resData) =>
+            this.snackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
+          )
+        )
+        .subscribe(
+          (resData) => {
+            if (this.userService.isHealthDepartmentUser) {
+              if (this.checkIfPasswordChangeNeeded(resData)) {
+                this.openPasswordChangeDialog();
+              } else {
+                this.router.navigate(['/health-department/index-cases/case-list']);
+              }
             } else {
-              this.router.navigate(['/health-department/index-cases/case-list']);
+              this.router.navigate(['/client/diary/diary-list']);
             }
-          } else {
-            this.router.navigate(['/client/diary/diary-list']);
+          },
+          (error) => {
+            if (error.error === 'Case already closed!') {
+              this.subs.add(this.snackbarService.message('LOGIN.FALL_BEREITS_GESCHLOSSEN').subscribe());
+            } else {
+              this.subs.add(this.snackbarService.error('LOGIN.BENUTZERNAME_ODER_PASSWORT_FALSCH').subscribe());
+            }
           }
-        },
-        (error) => {
-          if (error.error === 'Case already closed!') {
-            this.snackbarService.message('Ihr Fall ist bereits geschlossen');
-          } else {
-            this.snackbarService.error('Benutzername oder Passwort falsch');
-          }
-        }
-      )
-      .add(() => (this.loading = false));
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   /**

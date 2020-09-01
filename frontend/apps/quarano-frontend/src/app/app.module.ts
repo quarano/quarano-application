@@ -1,3 +1,6 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
+import { metaReducers } from './reducers/index';
+import { ClientStoreModule } from '@qro/client/api';
 import { SharedUtilDateModule } from '@qro/shared/util-date';
 import { HeaderRightComponent } from './layout/header-right/header-right.component';
 import { HeaderLeftComponent } from './layout/header-left/header-left.component';
@@ -13,7 +16,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { environment } from '../environments/environment';
@@ -21,22 +24,56 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { reducers } from './reducers';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 
 registerLocaleData(localeDe, 'de');
 
+function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/');
+}
+
 const SUB_MODULES = [
   SharedUiErrorModule,
-  AuthDomainModule,
+  AuthDomainModule.forRoot(),
   SharedUiAsideModule,
   SharedUtilDateModule,
   SharedUiMaterialModule,
+  SharedUtilTranslationModule,
 ];
 
 const NGRX = [
-  StoreModule.forRoot({}),
+  StoreModule.forRoot(reducers, {
+    metaReducers,
+    runtimeChecks: {
+      strictStateImmutability: true,
+      strictActionImmutability: true,
+    },
+  }),
   EffectsModule.forRoot([]),
   EntityDataModule.forRoot({}),
-  StoreDevtoolsModule.instrument(),
+  StoreRouterConnectingModule.forRoot({
+    stateKey: 'router',
+    routerState: RouterState.Minimal,
+  }),
+  ClientStoreModule.forRoot(),
+  StoreDevtoolsModule.instrument({
+    maxAge: 25,
+    logOnly: environment.production,
+  }),
+];
+
+const NGX_TRANSLATE = [
+  TranslateModule.forRoot({
+    loader: {
+      provide: TranslateLoader,
+      useFactory: HttpLoaderFactory,
+      deps: [HttpClient],
+    },
+    defaultLanguage: 'de',
+  }),
 ];
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -53,7 +90,9 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     FormsModule,
     HttpClientModule,
     ...SUB_MODULES,
-    NGRX,
+    ...NGX_TRANSLATE,
+    ...NGRX,
+    ...NGX_TRANSLATE,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'de-de' },

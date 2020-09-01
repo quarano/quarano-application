@@ -1,22 +1,17 @@
 import { CaseDto } from './../model/case';
-import { API_URL } from '@qro/shared/util-data-access';
-import { Injectable, Inject } from '@angular/core';
+import { API_URL, Link } from '@qro/shared/util-data-access';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Link } from '@qro/shared/util-data-access';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../model/case-action';
-import { share, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
-import { UserService, HealthDepartmentDto, CaseType } from '@qro/auth/api';
+import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
+import { AuthStore, CaseType, HealthDepartmentDto } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HealthDepartmentService {
-  constructor(
-    private httpClient: HttpClient,
-    @Inject(API_URL) private apiUrl: string,
-    private userService: UserService
-  ) {}
+  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string, private authStore: AuthStore) {}
 
   resolveAnomalies(link: Link, comment: string) {
     return this.httpClient.put(link.href, { comment }).pipe(shareReplay());
@@ -45,7 +40,7 @@ export class HealthDepartmentService {
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {
-    return this.userService.user$.pipe(
+    return this.authStore.user$.pipe(
       distinctUntilChanged(),
       map((user) => user?.healthDepartment)
     );
