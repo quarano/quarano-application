@@ -21,6 +21,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,10 @@ class AuthenticationController {
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!"))
 				.filter(this::hasOpenCaseForAccount, () -> new AccessDeniedException("Case already closed!"))
+				// set authentication to security context for a later use during the request (e.g. to get the current
+				// authentication)
+				.peek(it -> SecurityContextHolder.getContext()
+						.setAuthentication(new PreAuthenticatedAuthenticationToken(it, null)))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
 				.get();

@@ -10,6 +10,7 @@ import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.core.annotation.Order;
@@ -87,7 +88,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createMarkus() {
 		return new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus", "Hanser",
-				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1));
+				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1))
+						.setLocale(Locale.UK);
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		return new TrackedPerson(VALID_TRACKED_PERSON4_ID_DEP2, "Jessica", "Wagner",
 				EmailAddress.of("jessica.wagner@testtest.de"), PhoneNumber.of("0621222256"), LocalDate.of(1989, 1, 1))
-				.setAddress(new Address("Wingertstraße", HouseNumber.of("70"), "Mannheim", ZipCode.of("68199")));
+						.setAddress(new Address("Wingertstraße", HouseNumber.of("70"), "Mannheim", ZipCode.of("68199")));
 	}
 
 	/**
@@ -138,7 +140,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createHarry() {
 		return new TrackedPerson(VALID_TRACKED_PERSON6_ID_DEP1, "Harry", "Hirsch", EmailAddress.of("harry@hirsch.de"),
-				PhoneNumber.of("0621 115545"), null);
+				PhoneNumber.of("0621 115545"), null).setLocale(Locale.US);
 	}
 
 	/**
