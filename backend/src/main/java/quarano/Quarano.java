@@ -20,10 +20,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -87,11 +85,6 @@ public class Quarano {
 				.forEach(it -> it.customize(mapper));
 
 		return mapper;
-	}
-
-	@Bean
-	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
-		return new MessageSourceAccessor(source);
 	}
 
 	/**

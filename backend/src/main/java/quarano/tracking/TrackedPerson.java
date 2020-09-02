@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -57,6 +58,8 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter PhoneNumber mobilePhoneNumber;
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
+
+	private @Getter(onMethod = @__(@Nullable)) @Setter(onMethod = @__(@Nullable)) Locale locale;
 
 	@OneToOne
 	@JoinColumn(name = "account_id")
