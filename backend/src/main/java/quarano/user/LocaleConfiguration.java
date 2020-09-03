@@ -1,4 +1,4 @@
-package quarano.core;
+package quarano.user;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +90,7 @@ public class LocaleConfiguration {
 	 */
 	@Component
 	@RequiredArgsConstructor
-	public class FirstFilter extends OncePerRequestFilter {
+	public class SetContentHeaderFilter extends OncePerRequestFilter {
 
 		private final @NonNull LocaleResolver localeResolver;
 
