@@ -15,7 +15,6 @@ import quarano.account.DepartmentRepository;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.actions.web.AnomaliesController;
-import quarano.core.LocaleConfiguration;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
@@ -23,6 +22,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseController;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.user.LocaleConfiguration;
 
 import java.util.Collections;
 import java.util.Locale;
