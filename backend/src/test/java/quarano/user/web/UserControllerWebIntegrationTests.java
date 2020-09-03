@@ -11,6 +11,7 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.core.web.QuaranoHttpHeaders;
 import quarano.user.web.UserController.NewPassword;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.username", String.class)).isEqualTo("DemoAccount");
 		assertThat(document.read("$.firstName", String.class)).isEqualTo("Markus");
 		assertThat(document.read("$.lastName", String.class)).isEqualTo("Hanser");
+		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
 		assertThat(document.read("$.healthDepartment.name", String.class)).isEqualTo("GA Mannheim");
 		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("index-email@gesundheitsamt.de");
 		assertThat(document.read("$.healthDepartment.phone", String.class)).isEqualTo("0123456789");
@@ -178,6 +180,31 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		issuePasswordChange(new NewPassword(PASSWORD, newPassword, newPassword))
 				.andDo(documentPasswordChange())
 				.andExpect(status().is2xxSuccessful());
+	}
+
+	@Test
+	void changesLocale() throws Exception {
+
+		var token = login(USERNAME, PASSWORD);
+
+		// before
+		var document = JsonPath.parse(performGet(token));
+
+		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
+
+		// change
+		var newLocale = new Locale("tr");
+
+		mvc.perform(patch("/api/user/me/locale")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(Map.of("newLocale", newLocale.toLanguageTag())))
+				.header("Authorization", "Bearer " + token))
+				.andExpect(status().is2xxSuccessful());
+
+		// after
+		document = JsonPath.parse(performGet(token));
+
+		assertThat(document.read("$.client.locale", String.class)).isEqualTo("tr");
 	}
 
 	private String login(String username, String password) throws Exception {

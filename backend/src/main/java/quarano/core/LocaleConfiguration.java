@@ -38,6 +38,10 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @RequiredArgsConstructor
 public class LocaleConfiguration {
 
+	public static final List<Locale> LOCALES = List.of(
+			new Locale("en"),
+			new Locale("tr"));
+
 	private final @NonNull AuthenticationManager accounts;
 	private final @NonNull TrackedPersonRepository persons;
 
@@ -56,10 +60,6 @@ public class LocaleConfiguration {
 	 * header.
 	 */
 	class LocaleResolver extends AcceptHeaderLocaleResolver {
-
-		final List<Locale> LOCALES = List.of(
-				new Locale("en"),
-				new Locale("tr"));
 
 		@Override
 		public Locale resolveLocale(HttpServletRequest request) {
