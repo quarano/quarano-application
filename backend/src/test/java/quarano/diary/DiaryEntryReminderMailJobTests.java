@@ -10,6 +10,7 @@ import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.icegreen.greenmail.util.GreenMail;
@@ -21,6 +22,11 @@ class DiaryEntryReminderMailJobTests {
 
 	private final DiaryEntryReminderMailJob job;
 	private final GreenMail greenMail;
+
+	@BeforeEach
+	void resetGreenMail() throws Exception {
+		greenMail.purgeEmailFromAllMailboxes();
+	}
 
 	@Test // CORE-61
 	void runsCorrect() throws MessagingException {

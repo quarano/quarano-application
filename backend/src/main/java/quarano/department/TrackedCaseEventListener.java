@@ -93,7 +93,7 @@ class TrackedCaseEventListener {
 
 			var trackedPerson = trackedCase.getTrackedPerson();
 			var subject = messages.getMessage("NewContactCaseMail.subject",
-					new Object[] { trackedCase.getDepartment().getName() });
+					new Object[] { trackedCase.getDepartment().getName() }, trackedPerson.getLocale());
 			var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 					trackedCase.getId().toString() };
 

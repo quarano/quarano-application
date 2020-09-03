@@ -12,6 +12,8 @@ import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.util.Locale;
+
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
@@ -39,7 +41,7 @@ class MailForNewContactCaseEventListenerTests {
 	@Test // CORE-61
 	void sendMailCorrect() throws MessagingException {
 
-		var trackedCase = trackedCase();
+		var trackedCase = trackedCase(null);
 
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
 
@@ -62,10 +64,58 @@ class MailForNewContactCaseEventListenerTests {
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
 	}
 
+	@Test // CORE-375
+	void multiLanguageMails() throws Exception {
+
+		// without saved language
+		var trackedCase = trackedCase(null);
+
+		events.on(CaseCreated.of(trackedCase));
+
+		// wait for max 5s for 1 email to arrive
+		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
+
+		Message message = greenMail.getReceivedMessages()[0];
+
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
+				.doesNotContain("==========");
+
+		greenMail.purgeEmailFromAllMailboxes();
+
+		// with default language as saved language
+		trackedCase = trackedCase(Locale.GERMANY);
+
+		events.on(CaseCreated.of(trackedCase));
+
+		// wait for max 5s for 1 email to arrive
+		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
+
+		message = greenMail.getReceivedMessages()[0];
+
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
+				.doesNotContain("=3D".repeat(10)); // is ==========
+
+		greenMail.purgeEmailFromAllMailboxes();
+
+		// with saved language
+		trackedCase = trackedCase(Locale.ENGLISH);
+
+		events.on(CaseCreated.of(trackedCase));
+
+		// wait for max 5s for 1 email to arrive
+		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
+
+		message = greenMail.getReceivedMessages()[0];
+
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs./Mr. Mueller,")
+				.contains("=3D".repeat(10)) // is ==========
+				.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
+	}
+
 	@Test
 	void noMailAddress() throws MessagingException {
 
-		var trackedCase = trackedCase();
+		var trackedCase = trackedCase(null);
 		trackedCase.getTrackedPerson().setEmailAddress(null);
 
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
@@ -81,9 +131,10 @@ class MailForNewContactCaseEventListenerTests {
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.CANT_SENT);
 	}
 
-	private TrackedCase trackedCase() {
+	private TrackedCase trackedCase(Locale locale) {
 
-		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
+		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow()
+				.setLocale(locale);
 		var department = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 
 		return new TrackedCase(person, CaseType.CONTACT, department);
