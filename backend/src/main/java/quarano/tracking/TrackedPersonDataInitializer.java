@@ -78,7 +78,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		return new TrackedPerson(VALID_TRACKED_PERSON1_ID_DEP1, "Tanja", "Mueller",
 				EmailAddress.of("tanja.mueller@testtest.de"), PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3))
-						.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")));
+						.setAddress(new Address("Hauptstr. 4", HouseNumber.of("3"), "Mannheim", ZipCode.of("68259")))
+						.setLocale(Locale.GERMANY);
 	}
 
 	/**

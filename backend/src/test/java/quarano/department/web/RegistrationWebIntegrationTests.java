@@ -175,6 +175,8 @@ class RegistrationWebIntegrationTests {
 		var harry = harryCase.getTrackedPerson();
 
 		assertThat(document.read("$.email", String.class)).contains(harry.getLastName());
+		assertThat(document.read("$.email", String.class)).contains("==========");
+		assertThat(document.read("$.email", String.class)).startsWith("Dear Mrs./Mr. " + harry.getLastName() + ",");
 		assertThat(document.read("$.expirationDate", String.class)).isNotBlank();
 		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
 
@@ -182,6 +184,68 @@ class RegistrationWebIntegrationTests {
 		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.CONCLUDE, response)).isPresent();
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
+	}
+
+	@Test // CORE-375
+	@WithQuaranoUser("agent2")
+	void multiLanguageRegistrationMail() throws Exception {
+
+		// with saved language
+		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1)
+				.orElseThrow();
+
+		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		var document = JsonPath.parse(response);
+		var harry = harryCase.getTrackedPerson();
+
+		assertThat(document.read("$.email", String.class)).contains("==========");
+		assertThat(document.read("$.email", String.class)).startsWith("Dear Mrs./Mr. " + harry.getLastName() + ",");
+		assertThat(document.read("$.email", String.class)).contains("Sehr geehrte/geehrter Frau/Herr");
+
+		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
+
+		// without saved language
+		var harrietteCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1)
+				.orElseThrow();
+
+		response = mvc.perform(put("/api/hd/cases/{id}/registration", harrietteCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		document = JsonPath.parse(response);
+		var harriette = harrietteCase.getTrackedPerson();
+
+		assertThat(document.read("$.email", String.class)).doesNotContain("==========");
+		assertThat(document.read("$.email", String.class))
+				.contains("Sehr geehrte/geehrter Frau/Herr " + harriette.getLastName() + ",");
+
+		assertThat(codes.getPendingActivationCode(harriette.getId())).isPresent();
+
+		// with default languge as saved language
+		var tanjaCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+
+		response = mvc.perform(put("/api/hd/cases/{id}/registration", tanjaCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		document = JsonPath.parse(response);
+		var tanja = tanjaCase.getTrackedPerson();
+
+		assertThat(document.read("$.email", String.class)).doesNotContain("==========");
+		assertThat(document.read("$.email", String.class))
+				.contains("Sehr geehrte/geehrter Frau/Herr " + tanja.getLastName() + ",");
+
+		assertThat(codes.getPendingActivationCode(tanja.getId())).isPresent();
 	}
 
 	@Test

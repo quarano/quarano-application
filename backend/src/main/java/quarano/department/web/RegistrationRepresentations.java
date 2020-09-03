@@ -4,8 +4,8 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.RequiredArgsConstructor;
 import quarano.core.CoreProperties;
-import quarano.core.EmailTemplates.Keys;
 import quarano.core.EmailTemplates;
+import quarano.core.EmailTemplates.Keys;
 import quarano.core.web.MapperWrapper;
 import quarano.department.RegistrationDetails;
 import quarano.department.TrackedCase;
@@ -61,7 +61,7 @@ class RegistrationRepresentations {
 
 		var key = trackedCase.isIndexCase() ? Keys.REGISTRATION_INDEX : Keys.REGISTRATION_CONTACT;
 
-		return templates.expandTemplate(key, placeholders);
+		return templates.expandTemplate(key, placeholders, trackedCase.getTrackedPerson().getLocale());
 	}
 
 	RepresentationModel<?> toNoRegistration(TrackedCase trackedCase) {

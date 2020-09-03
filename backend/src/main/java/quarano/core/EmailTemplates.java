@@ -22,22 +22,25 @@ import java.util.stream.Stream;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 public interface EmailTemplates {
 
 	/**
-	 * Expands the template with the given {@link Key} and placeholders.
+	 * Expands the template with the given {@link Key} and placeholders in the language of the given locale.
 	 *
 	 * @param key must not be {@literal null}.
 	 * @param placeholders must not be {@literal null}.
+	 * @param locale can be {@literal null}.
 	 * @return will never be {@literal null}.
 	 */
-	String expandTemplate(Key key, Map<String, Object> placeholders);
+	String expandTemplate(Key key, Map<String, Object> placeholders, Locale locale);
 
 	/**
 	 * A template key.
 	 *
 	 * @author Oliver Drotbohm
+	 * @author Jens Kutzsche
 	 */
 	interface Key {
 
@@ -45,16 +48,16 @@ public interface EmailTemplates {
 		 * Resolves the current {@link Key} to a file that can be loaded via a
 		 * {@link org.springframework.core.io.ResourceLoader}.
 		 *
-		 * @param pattern must not be {@literal null} or empty.
 		 * @return
 		 */
-		String toFileName(String pattern);
+		String toFileName();
 	}
 
 	/**
 	 * Predefined keys to be usable with the application.
 	 *
 	 * @author Oliver Drotbohm
+	 * @author Jens Kutzsche
 	 */
 	enum Keys implements Key {
 
@@ -71,14 +74,11 @@ public interface EmailTemplates {
 
 		/*
 		 * (non-Javadoc)
-		 * @see quarano.core.EmailTemplates.Key#toFileName(java.lang.String)
+		 * @see quarano.core.EmailTemplates.Key#toFileName()
 		 */
 		@Override
-		public String toFileName(String pattern) {
-
-			var localName = name().toLowerCase(Locale.US).replace('_', '-').concat(".txt");
-
-			return String.format(pattern, localName);
+		public String toFileName() {
+			return name().toLowerCase(Locale.US).replace('_', '-').concat(".txt");
 		}
 	}
 }
