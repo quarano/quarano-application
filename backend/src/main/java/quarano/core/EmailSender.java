@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
@@ -120,6 +121,7 @@ public class EmailSender {
 		private final @Getter String subject;
 		private final Key template;
 		private final Map<String, ? extends Object> placeholders;
+		private final Locale locale;
 
 		/*
 		 * (non-Javadoc)
@@ -151,7 +153,7 @@ public class EmailSender {
 			placeholders.put("host", configuration.getHost());
 			placeholders.putAll(this.placeholders);
 
-			return templates.expandTemplate(template, placeholders);
+			return templates.expandTemplate(template, placeholders, locale);
 		}
 
 		private interface InternetAdressSource {

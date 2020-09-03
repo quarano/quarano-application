@@ -14,6 +14,6 @@ class TrackedCaseEmail extends AbstractTemplatedEmail {
 
 		super(DepartmentSender.of(trackedCase.getDepartment(), trackedCase.getType().toContactType()),
 				TrackedPersonReceipient.of(trackedCase.getTrackedPerson()),
-				subject, template, placeholders);
+				subject, template, placeholders, trackedCase.getTrackedPerson().getLocale());
 	}
 }

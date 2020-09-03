@@ -83,10 +83,11 @@ class DiaryEntryReminderMailJob {
 				.flatMap(it -> departments.findById(it.getDepartmentId()))
 				.ifPresent(it -> {
 
-					var subject = messages.getMessage("DiaryEntryReminderMail.subject");
+					var subject = messages.getMessage("DiaryEntryReminderMail.subject", trackedPerson.getLocale());
 					var textTemplate = Keys.DIARY_REMINDER;
 					var slotTranslated = messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
-							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) });
+							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) },
+							trackedPerson.getLocale());
 					var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 							trackedPerson.getId().toString() };
 

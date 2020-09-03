@@ -14,6 +14,6 @@ public class TrackedPersonEmail extends AbstractTemplatedEmail {
 			String subject, Key templateKey, Map<String, ? extends Object> placeholders) {
 
 		super(DepartmentSender.of(department, contactType), TrackedPersonReceipient.of(trackedPerson), subject, templateKey,
-				placeholders);
+				placeholders, trackedPerson.getLocale());
 	}
 }
