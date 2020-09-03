@@ -4,6 +4,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static quarano.actions.web.AnomaliesLinkRelations.*;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
+import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -14,6 +15,7 @@ import quarano.account.DepartmentRepository;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.actions.web.AnomaliesController;
+import quarano.core.LocaleConfiguration;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
@@ -22,15 +24,20 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseController;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.util.Collections;
+import java.util.Locale;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import org.apache.commons.lang3.LocaleUtils;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,6 +113,41 @@ public class UserController {
 				.alwaysMap((password, it) -> password.validate(it, account.getPassword(), accounts))
 				.peek(it -> accounts.changePassword(UnencryptedPassword.of(it.password), account))
 				.onValidGet(() -> ResponseEntity.noContent().build());
+	}
+
+	@PatchMapping("/me/locale")
+	public HttpEntity<?> patchLocale(@Valid @RequestBody NewLocale payload, Errors errors, @LoggedIn Account account) {
+
+		return MappedPayloads.of(payload, errors)
+				.alwaysMap(NewLocale::validate)
+				.map(NewLocale::getLocale)
+				.peek(it -> trackedPersonRepository.findByAccount(account)
+						.map(a -> a.setLocale(it))
+						.ifPresent(a -> trackedPersonRepository.save(a)))
+				.onValidGet(() -> ResponseEntity.noContent().build());
+	}
+
+	@Data // Jackson can't simply call single argument constructors like by NewPassword - @Value don't work.
+	static class NewLocale {
+
+		/**
+		 * The current password.
+		 */
+		@NotBlank
+		String newLocale;
+
+		NewLocale validate(Errors errors) {
+
+			if (Collections.disjoint(LocaleUtils.localeLookupList(getLocale()), LocaleConfiguration.LOCALES)) {
+				errors.rejectValue("newLocale", "Unsupported");
+			}
+
+			return this;
+		}
+
+		public Locale getLocale() {
+			return Locale.forLanguageTag(newLocale);
+		}
 	}
 
 	@Value
