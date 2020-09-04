@@ -84,7 +84,7 @@ class ConfigurableEmailTemplates implements EmailTemplates {
 				var resourceDefault = getFirstExistingResource(templates.get(key), List.of(""));
 				var templateDefault = readTemplate(resourceDefault);
 
-				return String.format("%s\n\n==========\n\n%s", template, templateDefault);
+				return String.join("\r\n\r\n==========\r\n\r\n", template, templateDefault);
 
 			} else {
 				return template;
