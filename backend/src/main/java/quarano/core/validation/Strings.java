@@ -5,7 +5,7 @@ package quarano.core.validation;
  */
 public class Strings {
 
-	static final String LETTERS = "[\\p{L}]*";
+	static final String LETTERS = "[\\p{L}\\s]*";
 	static final String NUMBERS = "[0-9]*";
 	static final String LETTERS_AND_NUMBERS = "[\\p{L}\\s\\d]*";
 	static final String TEXTUAL = "[\\p{L}\\s\\d\\.\\,\\?\\!\\(\\)\\-\\n\\r]*";

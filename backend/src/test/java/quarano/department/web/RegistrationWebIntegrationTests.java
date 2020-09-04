@@ -416,12 +416,12 @@ class RegistrationWebIntegrationTests {
 	private void checkLoginFails(String username, String password) throws Exception {
 
 		// login with new account
-		var requestbody = createLoginRequestBody(username, password);
+		var requestBody = createLoginRequestBody(username, password);
 
 		mvc.perform(post("/login")
 				.header("Origin", "*")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(requestbody))
+				.content(requestBody))
 				.andExpect(status().isUnauthorized());
 	}
 

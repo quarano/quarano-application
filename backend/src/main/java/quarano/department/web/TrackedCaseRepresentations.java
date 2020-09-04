@@ -160,11 +160,12 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
 
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
+
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
 	}
 
-	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry) {
-		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper);
+	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry, Locale lang) {
+		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper, lang);
 	}
 
 	QuestionnaireDto toRepresentation(Questionnaire report) {
@@ -197,27 +198,27 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
-	Questionnaire from(QuestionnaireDto source) {
+	Questionnaire from(QuestionnaireDto source, Locale lang) {
 
 		var report = createQuestionnaireFrom(source);
-		return source.applyTo(mapper.map(source, report), symptoms);
 
+		return source.applyTo(mapper.map(source, report), symptoms, lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase) {
+	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase, Locale lang) {
 
 		return trackedCase.getQuestionnaire() == null
-				? from(source)
-				: from(source, trackedCase.getQuestionnaire());
+				? from(source, lang)
+				: from(source, trackedCase.getQuestionnaire(), lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing) {
+	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing, Locale lang) {
 
 		var mapped = existing == null
-				? from(source)
+				? from(source, lang)
 				: mapper.map(source, existing);
 
-		return source.applyTo(mapped, symptoms);
+		return source.applyTo(mapped, symptoms, lang);
 	}
 
 	Comment from(CommentInput payload, Account account) {
@@ -259,7 +260,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		}
 
 		// When an account has been created, the user's setting matter and only the user can change these setting.
-		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this person.
+		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this
+		// person.
 		if (existing.getTrackedPerson().getAccount().isPresent()
 				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
 			errors.rejectValue("locale", "TrackedCase.localeCantChange");
@@ -300,7 +302,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	private void validateAfterEnrollment(TrackedCaseDto source, Errors errors) {
 
-		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
+		var dto = mapper.map(source, TrackedPersonDto.class);
 
 		validator.validate(dto, errors);
 	}

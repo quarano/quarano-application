@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,6 @@ class SymptomController {
 
 	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ModelMapper modelMapper;
-	private final @NonNull MessageSourceAccessor messages;
 
 	/**
 	 * Returns all symptom entries. Should be used as master-data for other api calls;
@@ -39,8 +38,10 @@ class SymptomController {
 	@GetMapping("/api/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
 
+		final var lang = LocaleContextHolder.getLocale();
+
 		return symptoms.findAll(BY_NAME_ASCENDING)
-				.map(it -> modelMapper.map(it, SymptomDto.class))
+				.map(it -> modelMapper.map(it.translate(lang), SymptomDto.class))
 				.stream();
 	}
 
