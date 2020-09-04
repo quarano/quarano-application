@@ -5,8 +5,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import quarano.core.support.Language;
 import quarano.core.validation.Alphabetic;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,4 +26,5 @@ public class SymptomDto {
 
 	private @Alphabetic	String name;
 	private boolean isCharacteristic;
+	private Map<Language, String> translations;
 }

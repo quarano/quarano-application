@@ -5,17 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.springframework.data.domain.Persistable;
+import quarano.core.support.Language;
 
 @Entity
 @Table(name = "symptoms")
@@ -29,6 +26,10 @@ public class Symptom implements Persistable<UUID> {
 	private @Transient boolean isNew = true;
 	private String name;
 	private boolean isCharacteristic;
+
+	@Column(name = "translations", columnDefinition = "clob")
+	@Convert(converter = TranslationConverter.class)
+	private Map<Language, String> translations;
 
 	Symptom() {
 		this.id = UUID.randomUUID();
@@ -47,5 +48,15 @@ public class Symptom implements Persistable<UUID> {
 	@PostLoad
 	void markNotNew() {
 		this.isNew = false;
+	}
+
+	public Symptom translate(Language lang) {
+		if(translations != null) {
+			String translation = translations.get(lang);
+			if(translation != null) {
+				this.name = translation;
+			}
+		}
+		return this;
 	}
 }

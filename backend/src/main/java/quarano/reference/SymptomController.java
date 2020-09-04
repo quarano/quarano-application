@@ -1,15 +1,12 @@
 package quarano.reference;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.core.support.Language;
+
 @Transactional
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +30,6 @@ class SymptomController {
 
 	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ModelMapper modelMapper;
-	private final @NonNull MessageSourceAccessor messages;
 
 	/**
 	 * Returns all symptom entries. Should be used as master-data for other api calls;
@@ -38,9 +38,9 @@ class SymptomController {
 	 */
 	@GetMapping("/api/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
-
+		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
 		return symptoms.findAll(BY_NAME_ASCENDING)
-				.map(it -> modelMapper.map(it, SymptomDto.class))
+				.map(it -> modelMapper.map(it.translate(lang), SymptomDto.class))
 				.stream();
 	}
 
