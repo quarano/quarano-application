@@ -22,15 +22,12 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseController;
 import quarano.tracking.TrackedPersonRepository;
-import quarano.user.LocaleConfiguration;
 
-import java.util.Collections;
 import java.util.Locale;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import org.apache.commons.lang3.LocaleUtils;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
@@ -119,7 +116,6 @@ public class UserController {
 	public HttpEntity<?> patchLocale(@Valid @RequestBody NewLocale payload, Errors errors, @LoggedIn Account account) {
 
 		return MappedPayloads.of(payload, errors)
-				.alwaysMap(NewLocale::validate)
 				.map(NewLocale::getLocale)
 				.peek(it -> trackedPersonRepository.findByAccount(account)
 						.map(a -> a.setLocale(it))
@@ -135,15 +131,6 @@ public class UserController {
 		 */
 		@NotBlank
 		String newLocale;
-
-		NewLocale validate(Errors errors) {
-
-			if (Collections.disjoint(LocaleUtils.localeLookupList(getLocale()), LocaleConfiguration.LOCALES)) {
-				errors.rejectValue("newLocale", "Unsupported");
-			}
-
-			return this;
-		}
 
 		public Locale getLocale() {
 			return Locale.forLanguageTag(newLocale);
