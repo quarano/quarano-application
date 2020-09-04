@@ -61,9 +61,13 @@ public class LocaleConfiguration {
 	 */
 	class LocaleResolver extends AcceptHeaderLocaleResolver {
 
+		public LocaleResolver() {
+			setDefaultLocale(Locale.GERMANY);
+		}
+
 		@Override
 		public Locale resolveLocale(HttpServletRequest request) {
-			return getLocaleFromTrackedPerson().or(() -> resolveLocaleFrom(request)).orElse(Locale.GERMANY);
+			return getLocaleFromTrackedPerson().or(() -> resolveLocaleFrom(request)).orElse(getDefaultLocale());
 		}
 
 		private Optional<Locale> getLocaleFromTrackedPerson() {
