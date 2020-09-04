@@ -66,6 +66,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
 			it.mvcMatchers("/docs/**").permitAll();
+			it.mvcMatchers("/h2_console/**").permitAll();
 			it.mvcMatchers("/login").permitAll();
 			it.mvcMatchers("/api/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
 			it.mvcMatchers("/api/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN));
@@ -77,6 +78,10 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			it.mvcMatchers("/api/symptoms").authenticated();
 			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')");
 		});
+		// this will ignore only h2-console csrf, spring security 4+
+		httpSecurity.csrf().ignoringAntMatchers("/h2-console/**");
+		//this will allow frames with same origin which is much more safe
+		httpSecurity.headers().frameOptions().sameOrigin();
 
 		httpSecurity.csrf().disable().cors(it -> {
 			it.configurationSource(corsConfigurationSource());
