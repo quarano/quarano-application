@@ -9,6 +9,7 @@ import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.core.web.QuaranoHttpHeaders;
+import quarano.user.LocaleConfiguration;
 import quarano.user.web.UserController.NewPassword;
 
 import java.util.Map;
@@ -72,6 +73,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	private String performGet(String token) throws Exception {
+
 		// check if token is valid for authentication
 		String resultDtoStr = mvc.perform(get("/api/user/me")
 				.header("Origin", "*")

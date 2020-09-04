@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -268,15 +269,14 @@ class EnrollmentWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(responseBody);
-
-		var houseNumber = messages.getMessage("Pattern.houseNumber");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
+		var houseNumber = messages.getMessage("Pattern.houseNumber", Locale.UK);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.UK);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.UK);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
-		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.city", String.class)).contains("valid place");
+		assertThat(document.read("$.street", String.class)).contains("valid street");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 }

@@ -1,6 +1,7 @@
 package quarano.department.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +11,8 @@ import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
-import quarano.department.CaseType;
-import quarano.department.EnrollmentCompletion;
-import quarano.department.TrackedCase;
+import quarano.department.*;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.department.TrackedCaseProperties;
-import quarano.department.TrackedCaseRepository;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
@@ -35,6 +32,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -43,14 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Oliver Drotbohm
@@ -62,7 +53,6 @@ public class TrackedCaseController {
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull DiaryManagement diaries;
-	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 
@@ -92,14 +82,12 @@ public class TrackedCaseController {
 	@PostMapping(path = "/api/hd/cases", params = "type=index")
 	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
-
 		return postCase(payload, errors, department);
 	}
 
 	@PostMapping("/api/hd/cases")
 	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
-
 		return createTrackedCase(payload, CaseType.INDEX, department, errors);
 	}
 
@@ -122,7 +110,6 @@ public class TrackedCaseController {
 
 	@GetMapping(path = "/api/hd/cases/form")
 	HttpEntity<?> getCaseForm() {
-
 		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
 
@@ -285,9 +272,11 @@ public class TrackedCaseController {
 					.body(representations.resolve("enrollment.detailsSubmissionRequired"));
 		}
 
+		final var lang = LocaleContextHolder.getLocale();
+
 		return MappedPayloads.of(dto, errors)
 				.map(QuestionnaireDto::validate)
-				.map(it -> representations.from(it, trackedCase.getQuestionnaire()))
+				.map(it -> representations.from(it, trackedCase.getQuestionnaire(), lang))
 				.map(trackedCase::submitQuestionnaire)
 				.map(cases::save)
 				.concludeIfValid(__ -> {
@@ -337,8 +326,10 @@ public class TrackedCaseController {
 
 	private Collection<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
 
+		final var lang = LocaleContextHolder.getLocale();
+
 		return diaries.findDiaryFor(trackedCase.getTrackedPerson()).stream()
-				.map(representations::toDiaryEntrySummary)
+				.map(it -> representations.toDiaryEntrySummary(it, lang))
 				.collect(Collectors.toUnmodifiableList());
 	}
 
