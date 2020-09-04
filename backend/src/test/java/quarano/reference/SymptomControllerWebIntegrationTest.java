@@ -2,7 +2,6 @@ package quarano.reference;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.jayway.jsonpath.DocumentContext;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import quarano.core.support.Language;
 
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
