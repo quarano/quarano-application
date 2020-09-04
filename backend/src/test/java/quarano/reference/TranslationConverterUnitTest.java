@@ -6,8 +6,6 @@ import java.util.EnumMap;
 
 import org.junit.jupiter.api.Test;
 
-import quarano.core.support.Language;
-
 class TranslationConverterUnitTest {
 
 	EnumMap<Language, String> example = new EnumMap<>(Language.class);

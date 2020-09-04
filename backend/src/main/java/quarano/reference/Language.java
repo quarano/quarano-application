@@ -1,4 +1,4 @@
-package quarano.core.support;
+package quarano.reference;
 
 import java.util.Locale;
 import java.util.Optional;
