@@ -23,6 +23,8 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,6 +102,8 @@ public class RegistrationController {
 	private HttpEntity<?> doRegisterClient(RegistrationDto payload, MappedErrors errors) {
 
 		return registration.createTrackedPersonAccount(representations.from(payload))
+				.peek(it -> SecurityContextHolder.getContext()
+						.setAuthentication(new PreAuthenticatedAuthenticationToken(it, null)))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(RegistrationException.class, it -> recover(it, errors))
 				.recover(ActivationCodeException.class, it -> recover(it, errors))
