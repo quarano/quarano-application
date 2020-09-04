@@ -78,7 +78,7 @@ class MailForNewContactCaseEventListenerTests {
 		Message message = greenMail.getReceivedMessages()[0];
 
 		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
-				.doesNotContain("==========");
+				.doesNotContain("=3D".repeat(10)); // is ==========
 
 		greenMail.purgeEmailFromAllMailboxes();
 
@@ -108,7 +108,7 @@ class MailForNewContactCaseEventListenerTests {
 		message = greenMail.getReceivedMessages()[0];
 
 		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs./Mr. Mueller,")
-				.contains("=3D".repeat(10)) // is ==========
+				.contains("\r\n\r\n" + "=3D".repeat(10) + "\r\n\r\n") // is ==========
 				.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
 	}
 
