@@ -39,7 +39,8 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 public class LocaleConfiguration {
 
 	public static final List<Locale> LOCALES = List.of(
-			new Locale("en"),
+			Locale.GERMAN,
+			Locale.ENGLISH,
 			new Locale("tr"));
 
 	private final @NonNull AuthenticationManager accounts;
