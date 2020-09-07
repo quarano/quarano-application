@@ -1,7 +1,5 @@
 ALTER TABLE symptoms ADD translations text null;
 
-ALTER TABLE accounts ADD language char(2) default 'TR';
-
 UPDATE public.symptoms SET translations='{"EN":"EN", "TR":"TR"}' WHERE symptom_id='800706bd-d7e9-4783-8385-a97388cd8d9c';
 UPDATE public.symptoms SET translations='{"EN":"EN", "TR":"TR"}' WHERE symptom_id='8075e463-8adb-4935-9215-574d44681003';
 UPDATE public.symptoms SET translations='{"EN":"EN", "TR":"TR"}' WHERE symptom_id='80fc6bd9-b156-425e-a40d-2c0b89babaa1';
