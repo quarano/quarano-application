@@ -193,4 +193,5 @@ UPDATE public.symptoms SET translations='{"DE":"Zahnfleischschwund","TR":"Diş e
 UPDATE public.symptoms SET translations='{"DE":"Zahnschmerzen","TR":"Diş Ağrısı","EN":"Toothache"}' WHERE symptom_id='df3f4152-e7c3-4671-bcd1-29839623b4cd';
 UPDATE public.symptoms SET translations='{"DE":"Zahnstein","TR":"Tatar","EN":"Tartar"}' WHERE symptom_id='80fc6bd9-b156-425e-a40d-2c0b89babaa1';
 UPDATE public.symptoms SET translations='{"DE":"Zittern","TR":"titreme","EN":"Tremors"}' WHERE symptom_id='51001079-fd19-4890-b3a3-d3cc953163f2';
-UPDATE public.symptoms SET translations='{"DE":"Zyanose"}' 	 'Siyanoz","EN":"Cyanosis"}' WHERE symptom_id='e7ea953a-c5b2-4b77-89f9-2dd214fa8ced';
+UPDATE public.symptoms SET translations='{"DE":"Zyanose","TR":"Siyanoz","EN":"Cyanosis"}' WHERE symptom_id='e7ea953a-c5b2-4b77-89f9-2dd214fa8ced';
+UPDATE public.symptoms SET translations='{"DE":"Allgemeine Schwäche","TR":"Genel zayıflık","EN":"General Weakness"}' WHERE symptom_id='5397f942-95cb-4e7e-8146-8201cf5bf623';

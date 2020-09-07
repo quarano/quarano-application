@@ -32,6 +32,9 @@ public class TranslationConverter implements AttributeConverter<Map<Language, St
 	@Override
 	public Map<Language, String> convertToEntityAttribute(String data) {
         var mapValue = new HashMap<Language, String>();
+        if(data == null) {
+        	return mapValue;
+		}
 		var typeRef = new TypeReference<HashMap<Language, String>>() {};
 		try {
 			mapValue = mapper.readValue(data, typeRef);
