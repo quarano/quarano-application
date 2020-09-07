@@ -1,12 +1,5 @@
 package quarano.department.web;
 
-import lombok.Data;
-import lombok.Setter;
-import quarano.core.validation.Textual;
-import quarano.department.Questionnaire;
-import quarano.reference.Symptom;
-import quarano.reference.SymptomRepository;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +10,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.validation.Errors;
+
+import lombok.Data;
+import lombok.Setter;
+import quarano.core.validation.Textual;
+import quarano.department.Questionnaire;
+import quarano.reference.Language;
+import quarano.reference.Symptom;
+import quarano.reference.SymptomRepository;
 
 @Data
 public class QuestionnaireDto {
@@ -37,7 +38,7 @@ public class QuestionnaireDto {
 	private @Setter Boolean hasContactToVulnerablePeople;
 	private @Textual String hasContactToVulnerablePeopleDescription;
 
-	Questionnaire applyTo(Questionnaire report, SymptomRepository symptoms) {
+	Questionnaire applyTo(Questionnaire report, SymptomRepository symptoms, Language lang) {
 
 		List<Symptom> symptomsOfReport = Collections.emptyList();
 
@@ -45,7 +46,7 @@ public class QuestionnaireDto {
 
 			if (null != this.symptoms) {
 				symptomsOfReport = this.symptoms.stream()
-						.map(it -> symptoms.findById(it).get())
+						.map(it -> symptoms.findById(it).get().translate(lang))
 						.collect(Collectors.toList());
 			}
 
@@ -93,22 +94,16 @@ public class QuestionnaireDto {
 
 	QuestionnaireDto validate(Errors errors) {
 
-		if (Boolean.TRUE.equals(hasPreExistingConditions)
-				&& (hasPreExistingConditionsDescription == null
-						|| hasPreExistingConditionsDescription.isBlank())) {
+		if (hasNoDescription(hasPreExistingConditions, hasPreExistingConditionsDescription)) {
 			errors.rejectValue("hasPreExistingConditionsDescription",
 					"NotNull.IntialReportDto.hasPreExistingConditionsDescription");
 		}
 
-		if (Boolean.TRUE.equals(belongToMedicalStaff)
-				&& (belongToMedicalStaffDescription == null
-						|| belongToMedicalStaffDescription.isBlank())) {
+		if (hasNoDescription(belongToMedicalStaff, belongToMedicalStaffDescription)) {
 			errors.rejectValue("belongToMedicalStaffDescription", "NotNull.IntialReportDto.belongToMedicalStaffDescription");
 		}
 
-		if (Boolean.TRUE.equals(hasContactToVulnerablePeople)
-				&& (hasContactToVulnerablePeopleDescription == null
-						|| hasContactToVulnerablePeopleDescription.isBlank())) {
+		if (hasNoDescription(hasContactToVulnerablePeople,hasContactToVulnerablePeopleDescription)) {
 			errors.rejectValue("hasContactToVulnerablePeopleDescription",
 					"NotNull.IntialReportDto.hasContactToVulnerablePeopleDescription");
 		}
@@ -118,5 +113,9 @@ public class QuestionnaireDto {
 		}
 
 		return this;
+	}
+
+	boolean hasNoDescription(Boolean indicator, String description) {
+		return (Boolean.TRUE.equals(indicator) && (description == null || description.isBlank()));
 	}
 }

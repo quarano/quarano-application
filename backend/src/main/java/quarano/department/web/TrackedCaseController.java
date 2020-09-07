@@ -4,6 +4,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
@@ -22,6 +23,7 @@ import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
+import quarano.reference.Language;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -284,10 +286,11 @@ public class TrackedCaseController {
 			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
 					.body(representations.resolve("enrollment.detailsSubmissionRequired"));
 		}
+		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
 
 		return MappedPayloads.of(dto, errors)
 				.map(QuestionnaireDto::validate)
-				.map(it -> representations.from(it, trackedCase.getQuestionnaire()))
+				.map(it -> representations.from(it, trackedCase.getQuestionnaire(), lang))
 				.map(trackedCase::submitQuestionnaire)
 				.map(cases::save)
 				.concludeIfValid(__ -> {
@@ -336,9 +339,9 @@ public class TrackedCaseController {
 	}
 
 	private Collection<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
-
+		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
 		return diaries.findDiaryFor(trackedCase.getTrackedPerson()).stream()
-				.map(representations::toDiaryEntrySummary)
+				.map(it -> representations.toDiaryEntrySummary(it, lang))
 				.collect(Collectors.toUnmodifiableList());
 	}
 

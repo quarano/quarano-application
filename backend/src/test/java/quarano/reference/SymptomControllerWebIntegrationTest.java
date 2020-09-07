@@ -60,7 +60,7 @@ class SymptomControllerWebIntegrationTest {
 	void storesSymptomWithTranslations() throws Exception {
 		var payload = new SymptomDto();
 		payload.setId(UUID.randomUUID());
-		payload.setName("Arterienverkalkung ");
+		payload.setName("Arterienverkalkung");
 		var translations = new EnumMap<Language, String>(Language.class);
 		payload.setTranslations(translations);
 		translations.put(Language.DE, "Arterienverkalkung");

@@ -25,6 +25,7 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.diary.DiaryEntry;
 import quarano.diary.Slot;
+import quarano.reference.Language;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -105,7 +106,7 @@ class TrackedCaseRepresentationIntegrationTests {
 		var source = DiaryEntry.of(Slot.now(), TrackedPersonIdentifier.of(UUID.randomUUID()))
 				.setBodyTemperature(BodyTemperature.of(40.0f));
 
-		var result = representations.toDiaryEntrySummary(source);
+		var result = representations.toDiaryEntrySummary(source, Language.DE);
 
 		assertThat(result.getId()).isEqualTo(source.getId().toString());
 		assertThat(result.getBodyTemperature()).isEqualTo(source.getBodyTemperature().getValue());

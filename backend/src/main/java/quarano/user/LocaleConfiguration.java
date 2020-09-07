@@ -2,6 +2,7 @@ package quarano.user;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import quarano.account.AuthenticationManager;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
@@ -102,10 +103,10 @@ public class LocaleConfiguration {
 		@Override
 		protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 				FilterChain filterChain) throws ServletException, IOException {
-
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 
 			var locale = localeResolver.resolveLocale(httpServletRequest);
+			LocaleContextHolder.setLocale(locale);
 			httpServletResponse.setLocale(locale);
 			httpServletResponse.addHeader(HttpHeaders.CONTENT_LANGUAGE, locale.toLanguageTag());
 		}

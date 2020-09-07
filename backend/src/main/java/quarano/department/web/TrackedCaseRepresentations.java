@@ -1,37 +1,9 @@
 package quarano.department.web;
 
-import static org.springframework.hateoas.IanaLinkRelations.*;
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static org.springframework.hateoas.IanaLinkRelations.NEXT;
+import static org.springframework.hateoas.IanaLinkRelations.SELF;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.account.Account;
-import quarano.account.Department;
-import quarano.core.PhoneNumber;
-import quarano.core.validation.Email;
-import quarano.core.validation.Strings;
-import quarano.core.validation.Textual;
-import quarano.core.web.MapperWrapper;
-import quarano.department.CaseType;
-import quarano.department.Comment;
-import quarano.department.ContactChaser;
-import quarano.department.Enrollment;
-import quarano.department.Questionnaire;
-import quarano.department.Questionnaire.SymptomInformation;
-import quarano.department.TrackedCase;
-import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.department.TrackedCaseRepository;
-import quarano.diary.DiaryEntry;
-import quarano.reference.SymptomRepository;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
-import quarano.tracking.web.TrackedPersonDto;
-import quarano.tracking.web.TrackingController;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -40,12 +12,7 @@ import java.lang.annotation.Target;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,6 +42,26 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import lombok.*;
+import quarano.account.Account;
+import quarano.account.Department;
+import quarano.core.PhoneNumber;
+import quarano.core.validation.Email;
+import quarano.core.validation.Strings;
+import quarano.core.validation.Textual;
+import quarano.core.web.MapperWrapper;
+import quarano.department.*;
+import quarano.department.Questionnaire.SymptomInformation;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.diary.DiaryEntry;
+import quarano.reference.Language;
+import quarano.reference.SymptomRepository;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.ZipCode;
+import quarano.tracking.web.TrackedPersonDto;
+import quarano.tracking.web.TrackingController;
+
 /**
  * @author Oliver Drotbohm
  * @author Jens Kutzsche
@@ -91,7 +78,6 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	private final @NonNull ContactChaser contactChaser;
 
 	private final @NonNull List<TrackedCaseDetailsEnricher> enrichers;
-
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.department.web.ExternalTrackedCaseRepresentations#toSummary(quarano.department.TrackedCase)
@@ -162,8 +148,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
 	}
 
-	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry) {
-		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper);
+	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry, Language lang) {
+		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper, lang);
 	}
 
 	QuestionnaireDto toRepresentation(Questionnaire report) {
@@ -196,27 +182,26 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
-	Questionnaire from(QuestionnaireDto source) {
+	Questionnaire from(QuestionnaireDto source, Language lang) {
 
 		var report = createQuestionnaireFrom(source);
-		return source.applyTo(mapper.map(source, report), symptoms);
-
+		return source.applyTo(mapper.map(source, report), symptoms, lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase) {
+	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase, Language lang) {
 
 		return trackedCase.getQuestionnaire() == null
-				? from(source)
-				: from(source, trackedCase.getQuestionnaire());
+				? from(source, lang)
+				: from(source, trackedCase.getQuestionnaire(), lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing) {
+	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing, Language lang) {
 
 		var mapped = existing == null
-				? from(source)
+				? from(source, lang)
 				: mapper.map(source, existing);
 
-		return source.applyTo(mapped, symptoms);
+		return source.applyTo(mapped, symptoms, lang);
 	}
 
 	Comment from(CommentInput payload, Account account) {
