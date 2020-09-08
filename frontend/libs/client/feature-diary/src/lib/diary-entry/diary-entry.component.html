@@ -16,6 +16,7 @@
         <div style="display: flex; flex-direction: row; align-items: center;">
           <span class="text-small mr-2">35,0</span>
           <mat-slider
+            data-cy="body-temperature"
             #slider
             style="flex-grow: 1;"
             color="primary"
@@ -37,6 +38,7 @@
       <div class="radio-group">
         <mat-label class="mb-3">{{ 'DIARY_ENTRY.KRANKHEITSSPEZIFISCHE_SYMPTOME' | translate }}</mat-label>
         <mat-slide-toggle
+          data-cy="symptoms-select"
           color="primary"
           class="radio-button"
           *ngFor="let symptom of characteristicSymptoms"
@@ -47,6 +49,7 @@
         >
       </div>
       <qro-multiple-autocomplete
+        data-cy="other-symptoms"
         [control]="this.formGroup.controls.nonCharacteristicSymptoms"
         [selectableItems]="nonCharacteristicSymptoms"
         [placeholder]="'DIARY_ENTRY.SONSTIGE_SYMPTOME' | translate"
@@ -54,6 +57,7 @@
         name="nonCharacteristicSymptoms"
       ></qro-multiple-autocomplete>
       <qro-multiple-contact-autocomplete
+        data-cy="other-contacts"
         #contactMultipleAutoComplete
         [control]="this.formGroup.controls.contactPersons"
         [selectableItems]="contactPersons"
@@ -65,6 +69,7 @@
       <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">
         <span class="text-muted">{{ 'DIARY_ENTRY.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
         <button
+          data-cy="add-missing-contacts"
           mat-button
           color="primary"
           type="button"
@@ -77,10 +82,10 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button *ngIf="!isReadonly" [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading"
+      <qro-button data-cy="save-diary-entry" *ngIf="!isReadonly" [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading"
         >{{ 'DIARY_ENTRY.SPEICHERN' | translate }}
       </qro-button>
-      <button type="button" mat-raised-button color="secondary" [routerLink]="['/client/diary/diary-list']">
+      <button data-cy="cancel-diary-entry"  type="button" mat-raised-button color="secondary" [routerLink]="['/client/diary/diary-list']">
         {{ 'DIARY_ENTRY.ABBRECHEN' | translate }}
       </button>
     </mat-card-actions>

@@ -8,13 +8,13 @@ describe('landing page', () => {
 
   describe('correct content is shown', () => {
     it('index person', () => {
-      cy.visit(`http://localhost:4200/client/enrollment/landing/index/${clientCode}`);
+      cy.visit(`client/enrollment/landing/index/${clientCode}`);
       cy.get('[data-cy="cta-button-index"]').should('exist');
       cy.get('[data-cy="cta-button-contact"]').should('not.exist');
     });
 
     it('contact person', () => {
-      cy.visit(`http://localhost:4200/client/enrollment/landing/contact/${clientCode}`);
+      cy.visit(`client/enrollment/landing/contact/${clientCode}`);
       cy.get('[data-cy="cta-button-index"]').should('not.exist');
       cy.get('[data-cy="cta-button-contact"]').should('exist');
     });
@@ -22,14 +22,14 @@ describe('landing page', () => {
 
   describe('user is directed to the right page with correct client code', () => {
     it('index person', () => {
-      cy.visit(`http://localhost:4200/client/enrollment/landing/index/${clientCode}`);
+      cy.visit(`client/enrollment/landing/index/${clientCode}`);
       cy.get('[data-cy="cta-button-index"]').click();
       cy.url().should('include', `/client/enrollment/register/${clientCode}`);
       cy.get('[data-cy="input-client-code"] input[matInput]').should('exist').should('have.value', clientCode);
     });
 
     it('contact person', () => {
-      cy.visit(`http://localhost:4200/client/enrollment/landing/contact/${clientCode}`);
+      cy.visit(`client/enrollment/landing/contact/${clientCode}`);
       cy.get('[data-cy="cta-button-contact"]').click();
       cy.url().should('include', `/client/enrollment/register/${clientCode}`);
       cy.get('[data-cy="input-client-code"] input[matInput]').should('exist').should('have.value', clientCode);
