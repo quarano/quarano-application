@@ -1,11 +1,5 @@
 package quarano.user;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import quarano.account.AuthenticationManager;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -23,11 +17,18 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import quarano.account.AuthenticationManager;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
 
 /**
  * Configuration class for locale and message related matters.
@@ -60,7 +61,7 @@ public class LocaleConfiguration {
 	 * Resolves the locale from users stored data if set and if not then from requests <code>Accept-Language</code>
 	 * header.
 	 */
-	class LocaleResolver extends AcceptHeaderLocaleResolver {
+	public class LocaleResolver extends AcceptHeaderLocaleResolver {
 
 		public LocaleResolver() {
 			setDefaultLocale(Locale.GERMANY);
@@ -93,6 +94,7 @@ public class LocaleConfiguration {
 	/**
 	 * Sets the used language to the response header <code>Content-Language</code>.
 	 */
+	@Order(1000)
 	@Component
 	@RequiredArgsConstructor
 	public class SetContentHeaderFilter extends OncePerRequestFilter {
@@ -110,4 +112,44 @@ public class LocaleConfiguration {
 			httpServletResponse.addHeader(HttpHeaders.CONTENT_LANGUAGE, locale.toLanguageTag());
 		}
 	}
+
+	/**
+	 * monitors request URLs for language changing
+	 */
+	@Order(999)
+	@Component
+	@RequiredArgsConstructor
+	public class AdoptLanguageChangeFilter extends OncePerRequestFilter {
+
+		@Override
+		protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+				FilterChain filterChain) throws ServletException, IOException {
+
+			accounts.getCurrentUser().ifPresent(account -> {
+				Optional.ofNullable(request.getParameter("locale")).ifPresent(locale -> {
+
+					persons.findByAccount(account).ifPresent(person -> {
+						switch (locale.length()) {
+							case 2:
+								person.setLocale(new Locale(locale));
+								persons.save(person);
+								break;
+							case 5:
+								if ('_' == locale.charAt(2)) {
+									person.setLocale(new Locale(locale.substring(0, 2), locale.substring(3)));
+									persons.save(person);
+								}
+								break;
+							default:
+								logger.error("Locale change attempted with unsupported value: " + locale);
+								break;
+						}
+					});
+				});
+			});
+
+			filterChain.doFilter(request, response);
+		}
+	}
+
 }
