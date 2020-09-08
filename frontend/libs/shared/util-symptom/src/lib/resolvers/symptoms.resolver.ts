@@ -1,9 +1,9 @@
 import { SymptomEntityService } from './../data-access/symptom-entity.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { SymptomDto } from '../model/symptom';
-import { filter, first, switchMap, tap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class SymptomsResolver implements Resolve<SymptomDto[] | boolean> {
