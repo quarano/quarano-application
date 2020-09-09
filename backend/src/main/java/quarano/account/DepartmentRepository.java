@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface DepartmentRepository extends QuaranoRepository<Department, DepartmentIdentifier> {
 
 	Optional<Department> findByName(String name);
+
+	Optional<Department> findByRkiCode(String rkiCode);
 }

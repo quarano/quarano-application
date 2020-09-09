@@ -3,6 +3,7 @@ package quarano.department.web;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +11,11 @@ import net.minidev.json.JSONArray;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.web.MapperWrapper;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.web.TrackedPersonDto;
@@ -21,10 +25,12 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -45,6 +51,8 @@ class EnrollmentWebIntegrationTests {
 	private final MapperWrapper mapper;
 	private final MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
+	private final TrackedCaseRepository cases;
+	private final LinkDiscoverer discoverer;
 
 	@Test
 	@WithQuaranoUser("DemoAccount")
@@ -161,6 +169,66 @@ class EnrollmentWebIntegrationTests {
 		expectResponseCarriesEmptyQuestionnaire(result);
 	}
 
+	@Test // CORE-356
+	@WithQuaranoUser("DemoAccount")
+	void rejectsWrongZipCode() throws Exception {
+
+		var source = givenTestPersonForZipCodeHandling(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1, "11111");
+
+		var responseBody = expectBadSubmitDetailsRequest(source);
+
+		var document = JsonPath.parse(responseBody);
+
+		assertThat(document.read("$.zipCode", String.class)).isNotNull();
+	}
+
+	@Test // CORE-356
+	@WithQuaranoUser("DemoAccount")
+	void rejectsUnsupportedZipCode() throws Exception {
+
+		var source = givenTestPersonForZipCodeHandling(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1, "01665");
+
+		var responseBody = expectDetailsUnprocessableEntity(source);
+
+		var document = JsonPath.parse(responseBody);
+		var zipCode = JsonPath.parse(document.read("$.zipCode", Map.class));
+
+		assertThat(zipCode.read("$.message", String.class)).isNotNull();
+		assertThat(zipCode.read("$.department.name", String.class)).isEqualTo("Landkreis Meißen");
+		assertThat(discoverer.findLinkWithRel(CONFIRM, zipCode.jsonString())).asString().contains("confirmed=true");
+		assertThat(discoverer.findLinkWithRel(CORRECT, zipCode.jsonString())).asString().contains("confirmed=false");
+	}
+
+	@Test // CORE-356
+	@WithQuaranoUser("DemoAccount")
+	void acceptConfirmedUnsupportedZipCode() throws Exception {
+
+		var source = givenTestPersonForZipCodeHandling(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1, "01665");
+
+		var responseBody = submitDetailsConfirmedSuccessfully(source);
+
+		var document = JsonPath.parse(responseBody);
+		var zipCode = JsonPath.parse(document.read("$.zipCode", Map.class));
+
+		assertThat(document.read("$.name", String.class)).isEqualTo("Landkreis Meißen");
+
+		assertThat(discoverer.findLinkWithRel(CONFIRM, zipCode.jsonString())).isEmpty();
+		assertThat(discoverer.findLinkWithRel(CORRECT, zipCode.jsonString())).isEmpty();
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1)
+				.orElseThrow();
+		assertThat(trackedCase.getStatus()).isEqualTo(TrackedCase.Status.EXTERNAL_ZIP);
+	}
+
+	@Test // CORE-356
+	@WithQuaranoUser("DemoAccount")
+	void acceptCorrectZipCode() throws Exception {
+
+		var source = givenTestPersonForZipCodeHandling(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1, "68163");
+
+		submitDetailsSuccessfully(source);
+	}
+
 	private void expectResponseCarriesEmptyQuestionnaire(String result) {
 		var document = JsonPath.parse(result);
 
@@ -216,6 +284,34 @@ class EnrollmentWebIntegrationTests {
 				.andReturn().getResponse().getContentAsString();
 	}
 
+	private String submitDetailsConfirmedSuccessfully(TrackedPersonDto source)
+			throws UnsupportedEncodingException, Exception, JsonProcessingException {
+		return mvc.perform(put("/api/enrollment/details")
+				.param("confirmed", "true")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	private String expectBadSubmitDetailsRequest(TrackedPersonDto source)
+			throws UnsupportedEncodingException, Exception, JsonProcessingException {
+		return mvc.perform(put("/api/enrollment/details")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	private String expectDetailsUnprocessableEntity(TrackedPersonDto source)
+			throws UnsupportedEncodingException, Exception, JsonProcessingException {
+		return mvc.perform(put("/api/enrollment/details")
+				.content(jackson.writeValueAsString(source))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnprocessableEntity())
+				.andReturn().getResponse().getContentAsString();
+	}
+
 	private void submitQuestionnaireSuccessfully(QuestionnaireDto source)
 			throws UnsupportedEncodingException, Exception, JsonProcessingException {
 		mvc.perform(put("/api/enrollment/questionnaire")
@@ -259,11 +355,7 @@ class EnrollmentWebIntegrationTests {
 				.setHouseNumber("@");
 
 		// When all enrollment details were submitted
-		var responseBody = mvc.perform(put("/api/enrollment/details")
-				.content(jackson.writeValueAsString(source))
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest())
-				.andReturn().getResponse().getContentAsString();
+		var responseBody = expectBadSubmitDetailsRequest(source);
 
 		var document = JsonPath.parse(responseBody);
 
@@ -276,5 +368,13 @@ class EnrollmentWebIntegrationTests {
 		assertThat(document.read("$.city", String.class)).contains("valid place name");
 		assertThat(document.read("$.street", String.class)).contains("valid street name");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
+	}
+
+	private TrackedPersonDto givenTestPersonForZipCodeHandling(TrackedPersonIdentifier personIdentifier, String zipCode) {
+
+		var person = repository.findById(personIdentifier).orElseThrow();
+		var source = mapper.map(person, TrackedPersonDto.class);
+
+		return source.setStreet("Test").setHouseNumber("1").setCity("Test").setZipCode(zipCode);
 	}
 }

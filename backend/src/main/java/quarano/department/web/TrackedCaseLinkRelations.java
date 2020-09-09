@@ -4,6 +4,7 @@ import org.springframework.hateoas.LinkRelation;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 public class TrackedCaseLinkRelations {
 
@@ -24,4 +25,7 @@ public class TrackedCaseLinkRelations {
 	static final LinkRelation DETAILS = LinkRelation.of("details");
 	static final LinkRelation ENCOUNTERS = LinkRelation.of("encounters");
 	static final LinkRelation REOPEN = LinkRelation.of("reopen");
+
+	public static final LinkRelation CONFIRM = LinkRelation.of("confirm");
+	public static final LinkRelation CORRECT = LinkRelation.of("correct");
 }

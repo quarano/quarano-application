@@ -16,7 +16,6 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 
 import java.time.LocalDate;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class TrackedCaseUnitTests {
 
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
 
-		var department = new Department("Musterstadt", UUID.randomUUID());
+		var department = new Department("Musterstadt");
 
 		return new TrackedCase(person, CaseType.INDEX, department)
 				.markInRegistration()
@@ -97,7 +96,7 @@ class TrackedCaseUnitTests {
 	void rejectDetailsSubmissionIfIncomplete() {
 
 		var person = TrackedPersonDataInitializer.createMarkus();
-		var department = new Department("Musterstadt", UUID.randomUUID());
+		var department = new Department("Musterstadt");
 
 		var trackedCase = new TrackedCase(person, CaseType.INDEX, department)
 				.markInRegistration()
@@ -112,7 +111,7 @@ class TrackedCaseUnitTests {
 
 		var account = mock(Account.class);
 		var markus = TrackedPersonDataInitializer.createMarkus().markAccountRegistration(account);
-		var department = new Department("Musterstadt", UUID.randomUUID());
+		var department = new Department("Musterstadt");
 
 		assertThat(new TrackedCase(markus, CaseType.INDEX, department).getStatus()).isEqualTo(Status.REGISTERED);
 	}
@@ -161,7 +160,7 @@ class TrackedCaseUnitTests {
 	void turnsCaseIntoIndexCaseForPositiveReport() {
 
 		var person = TrackedPersonDataInitializer.createMarkus();
-		var department = new Department("Musterstadt", UUID.randomUUID());
+		var department = new Department("Musterstadt");
 
 		var trackedCase = new TrackedCase(person, CaseType.CONTACT, department);
 
