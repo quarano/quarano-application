@@ -17,7 +17,7 @@ public class HealthDepartmentOverviewTest {
 
 		var healthDepartments = overview.getAllHealthDepartments();
 
-		assertThat(healthDepartments).hasSize(401);
+		assertThat(healthDepartments).hasSize(399);
 
 		var first = assertThat(healthDepartments).first();
 		first.extracting(HealthDepartment::getName).isEqualTo("Stadt Flensburg");
