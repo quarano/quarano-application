@@ -3,6 +3,13 @@ package quarano.core;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import quarano.QuaranoUnitTest;
+import quarano.account.Account;
+import quarano.account.AuthenticationManager;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
+import quarano.user.LocaleConfiguration;
+
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Optional;
@@ -15,13 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-
-import quarano.QuaranoUnitTest;
-import quarano.account.Account;
-import quarano.account.AuthenticationManager;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
-import quarano.user.LocaleConfiguration;
 
 @QuaranoUnitTest
 public class LocaleConfigurationUnitTests {

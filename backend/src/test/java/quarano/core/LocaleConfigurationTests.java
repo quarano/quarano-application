@@ -1,10 +1,11 @@
 package quarano.core;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.http.HttpHeaders.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_LANGUAGE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static quarano.core.web.QuaranoHttpHeaders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static quarano.core.web.QuaranoHttpHeaders.AUTH_TOKEN;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
