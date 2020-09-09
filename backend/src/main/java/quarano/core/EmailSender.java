@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class EmailSender {
 	private final @NonNull JavaMailSenderImpl emailSender;
 	private final @NonNull EmailTemplates templates;
 	private final @NonNull CoreProperties configuration;
+	private final @NonNull MailProperties mailProperties;
 
 	/**
 	 * Verifies the connection to the actual email server.
@@ -70,7 +72,7 @@ public class EmailSender {
 
 		Assert.notNull(email, "Email must not be null!");
 
-		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration)));
+		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration, mailProperties)));
 	}
 
 	/**
@@ -88,9 +90,11 @@ public class EmailSender {
 		 *
 		 * @param templates must not be {@literal null}.
 		 * @param configuration must not be {@literal null}.
+		 * @param mailProperties
 		 * @return
 		 */
-		SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration);
+		SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
+				@NonNull MailProperties mailProperties);
 	}
 
 	/**
@@ -102,6 +106,15 @@ public class EmailSender {
 	 */
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static abstract class AbstractTemplatedEmail implements TemplatedEmail {
+
+		/**
+		 * At the moment we can only use a configured fix sender address, to avoid problems with permissions. This comes
+		 * from spam protection. With other sender addresses we get the following error:
+		 * <code>550 5.7.60 SMTP; Client does not
+		 * have permissions to send as this sender</code>. To configure the fix sender address use
+		 * <code>spring.mail.properties.fixSender</code>.
+		 */
+		private static final String FIX_SENDER_PROPERTY_KEY = "fixSender";
 
 		private final @Getter Sender from;
 		private final @Getter Recipient to;
@@ -115,10 +128,14 @@ public class EmailSender {
 		 * @see quarano.core.EmailSender.TemplatedEmail#toMailMessage(quarano.core.EmailTemplates, quarano.core.CoreProperties)
 		 */
 		@Override
-		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration) {
+		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
+											   @NonNull MailProperties mailProperties) {
+
+			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
+			var from = StringUtils.isEmpty(fixSender) ? this.from.toInternetAddress() : EmailAddress.of(fixSender).toString();
 
 			var message = new SimpleMailMessage();
-			message.setFrom(from.toInternetAddress());
+			message.setFrom(from);
 			message.setTo(to.toInternetAddress());
 			message.setSubject(subject);
 			message.setText(getBody(templates, configuration));
