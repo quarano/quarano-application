@@ -15,7 +15,7 @@
  */
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;

@@ -5,6 +5,26 @@ import static org.springframework.hateoas.IanaLinkRelations.SELF;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
+import lombok.*;
+import quarano.account.Account;
+import quarano.account.Department;
+import quarano.core.PhoneNumber;
+import quarano.core.validation.Email;
+import quarano.core.validation.Strings;
+import quarano.core.validation.Textual;
+import quarano.core.web.MapperWrapper;
+import quarano.department.*;
+import quarano.department.Questionnaire.SymptomInformation;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.diary.DiaryEntry;
+import quarano.reference.Language;
+import quarano.reference.SymptomRepository;
+import quarano.tracking.ContactPerson;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.ZipCode;
+import quarano.tracking.web.TrackedPersonDto;
+import quarano.tracking.web.TrackingController;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -41,26 +61,6 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
-import lombok.*;
-import quarano.account.Account;
-import quarano.account.Department;
-import quarano.core.PhoneNumber;
-import quarano.core.validation.Email;
-import quarano.core.validation.Strings;
-import quarano.core.validation.Textual;
-import quarano.core.web.MapperWrapper;
-import quarano.department.*;
-import quarano.department.Questionnaire.SymptomInformation;
-import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.diary.DiaryEntry;
-import quarano.reference.Language;
-import quarano.reference.SymptomRepository;
-import quarano.tracking.ContactPerson;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
-import quarano.tracking.web.TrackedPersonDto;
-import quarano.tracking.web.TrackingController;
 
 /**
  * @author Oliver Drotbohm

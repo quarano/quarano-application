@@ -1,22 +1,18 @@
 package quarano.department.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.i18n.LocaleContextHolder;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
-import quarano.department.CaseType;
-import quarano.department.EnrollmentCompletion;
-import quarano.department.TrackedCase;
+import quarano.department.*;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
-import quarano.department.TrackedCaseProperties;
-import quarano.department.TrackedCaseRepository;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
@@ -37,6 +33,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -45,14 +42,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Oliver Drotbohm

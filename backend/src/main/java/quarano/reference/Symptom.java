@@ -1,16 +1,16 @@
 package quarano.reference;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.*;
 
 import org.springframework.data.domain.Persistable;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "symptoms")

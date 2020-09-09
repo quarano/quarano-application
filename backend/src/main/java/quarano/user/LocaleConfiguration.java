@@ -2,7 +2,6 @@ package quarano.user;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.i18n.LocaleContextHolder;
 import quarano.account.AuthenticationManager;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
@@ -23,6 +22,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
