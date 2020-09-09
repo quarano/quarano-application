@@ -129,7 +129,7 @@ public class EmailSender {
 		 */
 		@Override
 		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
-											   @NonNull MailProperties mailProperties) {
+				@NonNull MailProperties mailProperties) {
 
 			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
 			var from = StringUtils.isEmpty(fixSender) ? this.from.toInternetAddress() : EmailAddress.of(fixSender).toString();
