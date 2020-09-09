@@ -1,5 +1,7 @@
 package quarano.reference;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +12,6 @@ import javax.persistence.Converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Converter

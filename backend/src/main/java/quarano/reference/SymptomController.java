@@ -1,5 +1,8 @@
 package quarano.reference;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -16,9 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Transactional
 @RestController
