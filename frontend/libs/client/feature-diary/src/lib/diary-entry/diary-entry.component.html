@@ -35,10 +35,9 @@
           'DIARY_ENTRY.BITTE_GEBEN_SIE_IHRE_KÖRPERTEMPERATUR_EIN' | translate
         }}</mat-error>
       </div>
-      <div class="radio-group">
+      <div class="radio-group" data-cy="symptoms-select">
         <mat-label class="mb-3">{{ 'DIARY_ENTRY.KRANKHEITSSPEZIFISCHE_SYMPTOME' | translate }}</mat-label>
         <mat-slide-toggle
-          data-cy="symptoms-select"
           color="primary"
           class="radio-button"
           *ngFor="let symptom of characteristicSymptoms"
