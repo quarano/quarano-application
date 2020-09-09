@@ -72,7 +72,8 @@ include::{moduliths-docs}/module-reference.adoc[]
 [[modules.health_departments]]
 === Health Departments
 
-Contains a service that uses the https://www.rki.de/DE/Content/Infekt/IfSG/Software/Aktueller_Datenbestand.html[data from RKI] to offer the search for health departments by zip code or location.
+Contains a service that uses the https://www.rki.de/DE/Content/Infekt/IfSG/Software/software_node.html[data from RKI (see section "Aktueller Datenbestand des PLZ-Tools")] to offer the search for health departments by zip code or location.
+
 
 include::{moduliths-docs}/module-health_departments.adoc[]
 
