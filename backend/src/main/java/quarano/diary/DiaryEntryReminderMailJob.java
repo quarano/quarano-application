@@ -19,6 +19,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.util.Streamable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "quarano.diary", name = "reminder.enable", matchIfMissing = true)
 class DiaryEntryReminderMailJob {
 
 	private final @NonNull DiaryManagement diaries;
