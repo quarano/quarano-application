@@ -9,8 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import quarano.account.Account;
 import quarano.account.Department;
+import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
@@ -25,6 +27,7 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
@@ -46,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -259,7 +263,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		}
 
 		// When an account has been created, the user's setting matter and only the user can change these setting.
-		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this person.
+		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this
+		// person.
 		if (existing.getTrackedPerson().getAccount().isPresent()
 				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
 			errors.rejectValue("locale", "TrackedCase.localeCantChange");
@@ -530,5 +535,51 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					.andIf(enrollment.isCompletedPersonalData(), questionnareLink, questionnareLink.withRel(NEXT))
 					.merge(MergeMode.SKIP_BY_REL, detailsLink.withRel(NEXT));
 		}
+	}
+
+	@Value
+	class UnsupportedZipCode extends RepresentationModel<UnsupportedZipCode> {
+		String message;
+		HealthDepartment department;
+
+		UnsupportedZipCode(String zipCode, HealthDepartment department) {
+
+			message = messages.getMessage("unsupported.trackedPersonDto.zipCode", new Object[] { zipCode });
+			this.department = department;
+
+			add(getLinks());
+		}
+
+		@Override
+		public Links getLinks() {
+
+			var controller = on(TrackedCaseController.class);
+
+			return Links
+					.of(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.TRUE), null), CONFIRM))
+					.and(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.FALSE), null), CORRECT));
+		}
+	}
+
+	@Value
+	static class HealthDepartment {
+
+		static HealthDepartment of(quarano.department.rki.HealthDepartments.HealthDepartment rkiDepartment) {
+
+			Address address = rkiDepartment.getAddress();
+
+			return new HealthDepartment(rkiDepartment.getName(), rkiDepartment.getDepartment(), address.getStreet(),
+					address.getZipcode(), address.getPlace(), rkiDepartment.getPhone(), rkiDepartment.getFax(),
+					rkiDepartment.getEmail());
+		}
+
+		String name;
+		String department;
+		String street;
+		ZipCode zipCode;
+		String city;
+		PhoneNumber phone;
+		PhoneNumber fax;
+		EmailAddress email;
 	}
 }

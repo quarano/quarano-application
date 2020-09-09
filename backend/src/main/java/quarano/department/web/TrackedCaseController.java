@@ -2,12 +2,14 @@ package quarano.department.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
+import io.vavr.control.Option;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
+import quarano.core.web.ErrorsWithDetails;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
@@ -16,9 +18,12 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
+import quarano.department.web.TrackedCaseRepresentations.HealthDepartment;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
+import quarano.department.web.TrackedCaseRepresentations.UnsupportedZipCode;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
@@ -35,6 +40,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -65,6 +71,8 @@ public class TrackedCaseController {
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
+	private final @NonNull HealthDepartments rkiDepartments;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping(path = "/api/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
@@ -241,21 +249,44 @@ public class TrackedCaseController {
 	}
 
 	@PutMapping("/api/enrollment/details")
-	HttpEntity<?> submitEnrollmentDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
+	HttpEntity<?> submitEnrollmentDetails(
+			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam Optional<Boolean> confirmed,
 			@LoggedIn TrackedPerson user) {
 
-		return MappedPayloads.of(errors)
-				.onValidGet(() -> {
+		var unsupportedZipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
+
+		var mappedPayload = MappedPayloads.of(dto, errors);
+
+		if (unsupportedZipCode.isDefined() && !confirmed.orElse(Boolean.FALSE)) {
+
+			String field = "zipCode";
+			
+			mappedPayload.rejectField(field, "unsupported");
+			mappedPayload = mappedPayload.onErrors(err -> {
+				return unsupportedZipCode
+						.map(it -> ErrorsWithDetails.of(err).addDetails(field, it))
+						.map(it -> ResponseEntity.unprocessableEntity().body(it)).get();
+			});
+		}
+
+		return mappedPayload
+				.peek(__ -> {
 
 					tracking.updateTrackedPersonDetails(dto, errors, user);
 
-					cases.findByTrackedPerson(user)
-							.map(TrackedCase::submitEnrollmentDetails)
-							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
+					Function<? super TrackedCase, ? extends TrackedCase> markerFunktion = unsupportedZipCode.isDefined()
+							? TrackedCase::markAsExternalZip
+							: TrackedCase::submitEnrollmentDetails;
 
+					cases.findByTrackedPerson(user)
+							.map(markerFunktion)
+							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
+				})
+				.onValidGet(() -> {
 					return ResponseEntity.ok()
 							.header(HttpHeaders.LOCATION, getEnrollmentLink())
-							.build();
+							.body(unsupportedZipCode.map(UnsupportedZipCode::getDepartment)
+									.getOrElse((HealthDepartment) null));
 				});
 	}
 
@@ -345,5 +376,27 @@ public class TrackedCaseController {
 	@SuppressWarnings("null")
 	private static String getEnrollmentLink() {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
+	}
+
+	private Option<UnsupportedZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
+			Errors errors) {
+
+		String field = "zipCode";
+
+		if (errors.hasFieldErrors(field)) {
+			return Option.none();
+		}
+
+		var zipCode = dto.getZipCode();
+
+		return Option.ofOptional(rkiDepartments.findDepartmentWithExact(zipCode.toString()))
+				.onEmpty(() -> errors.rejectValue(field, "wrong", new Object[] { zipCode }, ""))
+				.filter(this::isDepartmentUnsupportedByThisQuarano)
+				.map(HealthDepartment::of)
+				.map(it -> representations.new UnsupportedZipCode(zipCode, it));
+	}
+
+	private boolean isDepartmentUnsupportedByThisQuarano(quarano.department.rki.HealthDepartments.HealthDepartment it) {
+		return departments.findByRkiCode(it.getCode()).isEmpty();
 	}
 }

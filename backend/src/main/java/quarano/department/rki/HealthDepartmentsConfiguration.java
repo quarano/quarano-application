@@ -1,4 +1,4 @@
-package quarano.health_departments;
+package quarano.department.rki;
 
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;

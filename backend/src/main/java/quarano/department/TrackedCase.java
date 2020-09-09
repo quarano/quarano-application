@@ -284,6 +284,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	public TrackedCase markAsExternalZip() {
+
+		this.status = Status.EXTERNAL_ZIP;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
+
+		return this;
+	}
+
 	public boolean belongsTo(Department department) {
 		return this.department.equals(department);
 	}
@@ -398,7 +407,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		TRACKING,
 
-		CONCLUDED;
+		CONCLUDED,
+
+		EXTERNAL_ZIP;
 	}
 
 	public enum MailStatus {
