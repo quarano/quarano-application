@@ -14,6 +14,7 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -57,7 +58,7 @@ public class RegistrationManagement {
 				.filter(it -> isUsernameAvailable(it.getUsername()), RegistrationException::forInvalidUsername)
 				.flatMapTry(it -> activationCodes.redeemCode(it.getActivationCodeIdentifier()).map(it::apply))
 				.flatMap(this::checkIdentity)
-				.flatMap(this::setDateOfBirthToTrackedPerson)
+				.flatMap(this::setDateOfBirthAndLocaleToTrackedPerson)
 				.flatMap(this::applyTrackedPerson)
 				.map(this::toAccount);
 	}
@@ -66,15 +67,29 @@ public class RegistrationManagement {
 		return accounts.isUsernameAvailable(userName);
 	}
 
-	private Try<RegistrationDetails> setDateOfBirthToTrackedPerson(RegistrationDetails details) {
+	private Try<RegistrationDetails> setDateOfBirthAndLocaleToTrackedPerson(RegistrationDetails details) {
 
 		return Option.ofOptional(trackedPeople.findById(details.getTrackedPersonId()))
 				.toTry(() -> new RegistrationException("No tracked person found!"))
 				.map(person -> {
+
+					boolean changed = false;
+
 					if (person.getDateOfBirth() == null) {
 						person.setDateOfBirth(details.getDateOfBirth());
+						changed = true;
+					}
+
+					Locale locale = details.getLocale();
+					if (locale != null) {
+						person.setLocale(locale);
+						changed = true;
+					}
+
+					if (changed) {
 						trackedPeople.save(person);
 					}
+
 					return details;
 				});
 	}
