@@ -1,6 +1,7 @@
 package quarano.core;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,6 +9,10 @@ import static quarano.core.web.QuaranoHttpHeaders.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.WithQuaranoUser;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Locale;
 import java.util.Map;
@@ -15,10 +20,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -38,6 +46,7 @@ public class LocaleConfigurationTests {
 
 	final MockMvc mvc;
 	final ObjectMapper mapper;
+	final TrackedPersonRepository persons;
 
 	@Test
 	void testLocaleHandlingWithDefault() throws Exception {
@@ -107,6 +116,41 @@ public class LocaleConfigurationTests {
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
 		assertThat(document.read("$.current", String.class)).isEqualTo("Invalid current password!");
+	}
+
+	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
+	@ParameterizedTest
+	@ValueSource(strings = { "de", "de_DE", "en", "en_GB", "tr", "tr_TR", "en_CA" })
+	void processCorrectLocalesSucceeds(String locale) throws Exception {
+
+		mvc.perform(get("/api/user/me")
+				.header("Origin", "*")
+				.locale(Locale.forLanguageTag("tr"))
+				.param("locale", locale))
+				.andExpect(status().is2xxSuccessful());
+
+		assertThat(persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2))
+				.isPresent()
+				.map(TrackedPerson::getLocale)
+				.map(Locale::toString)
+				.hasValue(locale);
+	}
+
+	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
+	@ParameterizedTest
+	@ValueSource(strings = { "en,de", "en_US,tr_TR" })
+	void processInvalidLocalesRejects(String locale) throws Exception {
+
+		var exception = assertThrows(NestedServletException.class, () -> {
+			mvc.perform(post("/login")
+					.header("Origin", "*")
+					.param("locale", locale)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(createRequestBody(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE)))
+					.andExpect(status().is4xxClientError());
+		});
+
+		assertThat(exception.getCause()).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	private HttpServletResponse login(String username, String password, Locale locale) throws Exception {
