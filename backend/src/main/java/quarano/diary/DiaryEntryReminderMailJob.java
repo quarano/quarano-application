@@ -49,7 +49,17 @@ class DiaryEntryReminderMailJob {
 	@Scheduled(cron = "0 10 12,23 * * *")
 	void checkForReminderMail() {
 
-		if (emailSender.testConnection().isFailure()) {
+		var testResult = emailSender.testConnection()
+				.onFailure(it -> {
+
+					if (log.isTraceEnabled()) {
+						log.warn("Quarano can't connect the mail server to send reminder mails!", it);
+					} else {
+						log.warn("Quarano can't connect the mail server to send reminder mails! {}", it.getMessage());
+					}
+				});
+
+		if (testResult.isFailure()) {
 			return;
 		}
 
