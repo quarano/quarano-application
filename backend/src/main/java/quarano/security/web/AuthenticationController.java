@@ -14,6 +14,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @RestController
 @RequestMapping
@@ -39,7 +41,7 @@ class AuthenticationController {
 	private final @NonNull AccountRepresentations accountRepresentations;
 
 	@PostMapping({ "/login", "/api/login" })
-	HttpEntity<?> login(@RequestBody AuthenticationRequest request) {
+	HttpEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
 
 		UnencryptedPassword password = UnencryptedPassword.of(request.getPassword());
 
@@ -51,6 +53,11 @@ class AuthenticationController {
 				// authentication)
 				.peek(it -> SecurityContextHolder.getContext()
 						.setAuthentication(new PreAuthenticatedAuthenticationToken(it, null)))
+				// sets the locale to TrackedPerson if none is set yet and saves this entity
+				.peek(account -> people.findByAccount(account)
+						.filter(it -> it.getLocale() == null)
+						.map(it -> it.setLocale(new AcceptHeaderLocaleResolver().resolveLocale(httpRequest)))
+						.ifPresent(people::save))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
 				.get();

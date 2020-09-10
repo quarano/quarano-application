@@ -17,8 +17,10 @@ import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.activation.ActivationCodeException;
 import quarano.department.activation.ActivationCodeService;
 
+import java.util.Locale;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,11 +48,14 @@ public class RegistrationController {
 	private final @NonNull RegistrationRepresentations representations;
 
 	@PostMapping("/api/registration")
-	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors) {
+	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors,
+			HttpServletRequest request) {
+
+		var locale = new AcceptHeaderLocaleResolver().resolveLocale(request);
 
 		return MappedPayloads.of(payload, errors)
 				.alwaysMap(RegistrationDto::validate)
-				.concludeSelfIfValid(this::doRegisterClient);
+				.concludeSelfIfValid((p, e) -> doRegisterClient(p, e, locale));
 	}
 
 	@PutMapping("/api/hd/cases/{id}/registration")
@@ -99,9 +105,9 @@ public class RegistrationController {
 		return ResponseEntity.ok(registration.isUsernameAvailable(userName));
 	}
 
-	private HttpEntity<?> doRegisterClient(RegistrationDto payload, MappedErrors errors) {
+	private HttpEntity<?> doRegisterClient(RegistrationDto payload, MappedErrors errors, Locale locale) {
 
-		return registration.createTrackedPersonAccount(representations.from(payload))
+		return registration.createTrackedPersonAccount(representations.from(payload).setLocale(locale))
 				.peek(it -> SecurityContextHolder.getContext()
 						.setAuthentication(new PreAuthenticatedAuthenticationToken(it, null)))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
