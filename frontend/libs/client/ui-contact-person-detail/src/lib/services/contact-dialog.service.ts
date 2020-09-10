@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { Observable } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 import { ContactPersonDialogComponent } from '..//contact-person-dialog/contact-person-dialog.component';
 
 export interface ContactPerson {
@@ -52,17 +52,21 @@ export class ContactDialogService {
     return this.openConfirmDialog()
       .afterClosed()
       .pipe(
-        filter((choice) => choice),
-        switchMap(() => {
-          const firstName = name.split(' ')[0];
-          const lastName = name.split(' ')[1];
-          const contactPersonDialogData: ContactPersonDialogData = {
-            contactPerson: {
-              firstName: firstName,
-              lastName: lastName,
-            },
-          };
-          return this.openContactPersonDialog({ data: contactPersonDialogData }).afterClosed();
+        flatMap((choice) => {
+          if (choice) {
+            const firstName = name.split(' ')[0];
+            const lastName = name.split(' ')[1];
+            const contactPersonDialogData: ContactPersonDialogData = {
+              contactPerson: {
+                firstName: firstName,
+                lastName: lastName,
+              },
+            };
+            return this.openContactPersonDialog({ data: contactPersonDialogData }).afterClosed();
+          } else {
+            // Notify the autocomplete field that no new contact was created
+            return of(null);
+          }
         })
       );
   }
