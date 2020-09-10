@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Locale.LanguageRange;
 import java.util.Optional;
 
 import javax.servlet.FilterChain;
@@ -20,9 +19,11 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ import quarano.tracking.TrackedPersonRepository;
  */
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
-public class LocaleConfiguration {
+public class LocaleConfiguration implements WebMvcConfigurer {
 
 	public static final List<Locale> LOCALES = List.of(
 			Locale.GERMAN,
@@ -45,7 +46,7 @@ public class LocaleConfiguration {
 			new Locale("tr"));
 
 	private final @NonNull AuthenticationManager accounts;
-	private final @NonNull TrackedPersonRepository persons;
+	private final @NonNull TrackedPersonRepository people;
 
 	@Bean
 	LocaleResolver localeResolver() {
@@ -57,6 +58,16 @@ public class LocaleConfiguration {
 		return new MessageSourceAccessor(source);
 	}
 
+	@Bean
+	LocaleChangeInterceptor localeChangeInterceptor() {
+		return new LocaleChangeInterceptor();
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
+		interceptorRegistry.addInterceptor(localeChangeInterceptor());
+	}
+
 	/**
 	 * Resolves the locale from users stored data if set and if not then from requests <code>Accept-Language</code>
 	 * header.
@@ -65,29 +76,33 @@ public class LocaleConfiguration {
 
 		public LocaleResolver() {
 			setDefaultLocale(Locale.GERMANY);
+			setSupportedLocales(LOCALES);
 		}
 
 		@Override
 		public Locale resolveLocale(HttpServletRequest request) {
-			return getLocaleFromTrackedPerson().or(() -> resolveLocaleFrom(request)).orElse(getDefaultLocale());
+			return getLocaleFromTrackedPerson().orElseGet(() -> super.resolveLocale(request));
 		}
 
 		private Optional<Locale> getLocaleFromTrackedPerson() {
 
 			return accounts.getCurrentUser()
-					.flatMap(persons::findByAccount)
+					.flatMap(people::findByAccount)
 					.map(TrackedPerson::getLocale)
 					.filter(it -> !Collections.disjoint(LocaleUtils.localeLookupList(it), LOCALES));
 		}
 
-		private Optional<Locale> resolveLocaleFrom(HttpServletRequest request) {
-
-			var headerLang = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
-
-			return Optional.ofNullable(headerLang)
-					.filter(StringUtils::hasText)
-					.map(LanguageRange::parse)
-					.map(it -> Locale.lookup(it, LOCALES));
+		/**
+		 * This method is called by {@link LocaleChangeInterceptor} to set the locale if one was specified by parameter.
+		 * Sets the given {@link Locale} to the {@link TrackedPerson} of the current account and saves this
+		 * {@link TrackedPerson}.
+		 */
+		@Override
+		public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+			accounts.getCurrentUser()
+					.flatMap(people::findByAccount)
+					.map(it -> it.setLocale(locale))
+					.ifPresent(people::save);
 		}
 	}
 
@@ -97,7 +112,7 @@ public class LocaleConfiguration {
 	@Order(1000)
 	@Component
 	@RequiredArgsConstructor
-	public class SetContentHeaderFilter extends OncePerRequestFilter {
+	class SetContentHeaderFilter extends OncePerRequestFilter {
 
 		private final @NonNull LocaleResolver localeResolver;
 
