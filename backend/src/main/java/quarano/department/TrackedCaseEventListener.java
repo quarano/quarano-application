@@ -66,7 +66,7 @@ class TrackedCaseEventListener {
 					.onFailure(it -> {
 
 						if (log.isTraceEnabled()) {
-							log.trace("Quarano can't connect the mail server!", it);
+							log.warn("Quarano can't connect the mail server!", it);
 						} else {
 							log.warn("Quarano can't connect the mail server! {}", it.getMessage());
 						}
