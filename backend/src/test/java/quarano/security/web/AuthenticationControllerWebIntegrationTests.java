@@ -14,9 +14,14 @@ import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.department.TrackedCaseRepository;
 import quarano.security.web.AuthenticationController.AuthenticationRequest;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
+import quarano.tracking.TrackedPersonRepository;
 import quarano.user.web.UserLinkRelations;
 
+import java.util.Locale;
+
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
@@ -38,6 +43,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 	private final ObjectMapper jackson;
 	private final AccountService accounts;
 	private final LinkDiscoverers discoverers;
+	final TrackedPersonRepository people;
 
 	@Test
 	void rejectsLoginForPersonWithCaseConcluded() throws Exception {
@@ -56,17 +62,17 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 
 	@Test
 	void logsInTrackedUserWithOpenCase() throws Exception {
-		assertSuccessfulLogin("secUser1", "secur1tyTest!");
+		assertSuccessfulLogin("secUser1", "secur1tyTest!", null);
 	}
 
 	@Test
 	void logsInStaffMember() throws Exception {
-		assertSuccessfulLogin("agent1", "agent1");
+		assertSuccessfulLogin("agent1", "agent1", null);
 	}
 
 	@Test
 	void logsInAdmin() throws Exception {
-		assertSuccessfulLogin("admin", "admin");
+		assertSuccessfulLogin("admin", "admin", null);
 	}
 
 	@Test // CORE-231
@@ -95,6 +101,45 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 				.contains("/user/me/password");
 	}
 
+	@Test // CORE-355
+	void adoptionOfLanguage() throws Exception {
+
+		var newLocale = Locale.CANADA_FRENCH;
+
+		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
+		assertThat(person).isPresent()
+				.map(TrackedPerson::getLocale)
+				.isEmpty();
+
+		assertSuccessfulLogin("test3", "test123", newLocale);
+
+		person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
+		assertThat(person).isPresent()
+				.map(TrackedPerson::getLocale)
+				.hasValue(newLocale);
+	}
+
+	@Test // CORE-355
+	void noAdoptionOfLanguage() throws Exception {
+
+		var newLocale = Locale.CANADA_FRENCH;
+
+		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
+		assertThat(person).isPresent()
+				.map(TrackedPerson::getLocale)
+				.hasValueSatisfying(it -> ObjectUtils.notEqual(it, newLocale));
+
+		var locale = person.get().getLocale();
+
+		assertSuccessfulLogin("DemoAccount", "DemoPassword", null);
+
+		person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
+		assertThat(person).isPresent()
+				.map(TrackedPerson::getLocale)
+				.hasValueSatisfying(it -> ObjectUtils.notEqual(it, newLocale))
+				.hasValue(locale);
+	}
+
 	private static ResultHandler documentExpiredPassword() {
 
 		var links = relaxedLinks(
@@ -106,9 +151,10 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 		return DocumentationFlow.of("password-expired").document("login", links);
 	}
 
-	private void assertSuccessfulLogin(String username, String password) throws Exception {
+	private void assertSuccessfulLogin(String username, String password, Locale locale) throws Exception {
 
 		mvc.perform(post("/api/login")
+				.locale(locale)
 				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password)))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());

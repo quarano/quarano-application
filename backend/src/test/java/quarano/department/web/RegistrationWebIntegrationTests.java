@@ -15,9 +15,11 @@ import quarano.department.activation.ActivationCode;
 import quarano.department.activation.ActivationCodeDataInitializer;
 import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -336,6 +338,45 @@ class RegistrationWebIntegrationTests {
 		checkLoginFails("DemoAccount", password);
 	}
 
+	@Test // CORE-355
+	void adoptionOfLanguage() throws Exception {
+
+		var newLocale = Locale.CANADA_FRENCH;
+
+		// Given
+		var activation = createActivation();
+		var person = activation.getPerson();
+
+		var password = "myPassword";
+		var username = "testusername";
+
+		var registrationDto = RegistrationDto.builder()
+				.username(username)
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth())
+				.clientCode(activation.getCode())
+				.build();
+
+		assertThat(person.getLocale()).isNotNull().isNotEqualTo(newLocale);
+
+		// when
+		mvc.perform(post("/api/registration")
+				.header("Origin", "*")
+				.locale(newLocale)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(registrationDto)))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn()
+				.getResponse();
+
+		// then check for token
+		assertThat(repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1))
+				.isPresent()
+				.map(TrackedPerson::getLocale)
+				.hasValue(newLocale);
+	}
+
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
 		String resultDtoStr = mvc.perform(get("/api/user/me")
@@ -401,8 +442,12 @@ class RegistrationWebIntegrationTests {
 	}
 
 	private PersonAndCode createActivation() {
+		return createActivation(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1);
+	}
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+	private PersonAndCode createActivation(TrackedPersonIdentifier ident) {
+
+		var person = repository.findById(ident)
 				.orElseThrow();
 		var activationCode = registration.initiateRegistration(cases.findByTrackedPerson(person)
 				.orElseThrow())
