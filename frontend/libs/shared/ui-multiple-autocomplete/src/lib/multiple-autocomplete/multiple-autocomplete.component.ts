@@ -50,10 +50,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearInput(): void {
-    // fixme: best to do this only via formControl ! ..... :(
-    this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
-    this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
+  resetInput(): void {
+    // Clear the input field and reset the autocomplete list
+    this.input.nativeElement.value = '';
+    this.inputControl.setValue(null);
+    this.filteredList$$.next(this.prefilteredList);
   }
 
   ngOnDestroy(): void {
@@ -102,11 +103,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     }
     const selectedValue = event.option.value;
     this.selectedItemIds.push(selectedValue);
-    this.input.nativeElement.value = '';
-    this.inputControl.setValue(null);
     this.setFormControlValue();
     this.added.emit(selectedValue);
-    this.filteredList$$.next(this.prefilteredList);
+    this.resetInput();
   }
 
   remove(id: string): void {
