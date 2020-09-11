@@ -183,31 +183,6 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 				.andExpect(status().is2xxSuccessful());
 	}
 
-	@Test
-	void changesLocale() throws Exception {
-
-		var token = login(USERNAME, PASSWORD);
-
-		// before
-		var document = JsonPath.parse(performGet(token));
-
-		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
-
-		// change
-		var newLocale = LocaleConfiguration.TURKISH;
-
-		mvc.perform(patch("/api/user/me/locale")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(mapper.writeValueAsString(Map.of("newLocale", newLocale.toLanguageTag())))
-				.header("Authorization", "Bearer " + token))
-				.andExpect(status().is2xxSuccessful());
-
-		// after
-		document = JsonPath.parse(performGet(token));
-
-		assertThat(document.read("$.client.locale", String.class)).isEqualTo("tr");
-	}
-
 	private String login(String username, String password) throws Exception {
 
 		return mvc.perform(post("/login")
