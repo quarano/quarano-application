@@ -37,9 +37,7 @@ public class LocaleConfigurationTests {
 	static final String DEFAULT_LOCALE = "de-DE";
 
 	final String USERNAME_WITH_LOCALE = "DemoAccount";
-	final String PASSWORD_WITH_LOCALE = "DemoPassword";
 	final String USERNAME_WITHOUT_LOCALE = "test3";
-	final String PASSWORD_WITHOUT_LOCALE = "test123";
 
 	final MockMvc mvc;
 	final ObjectMapper mapper;
@@ -103,7 +101,7 @@ public class LocaleConfigurationTests {
 	@ValueSource(strings = { "de", "de_DE", "en", "en_GB", "tr", "tr_TR", "en_CA" })
 	void processCorrectLocalesSucceeds(String locale) throws Exception {
 
-		mvc.perform(get("/api/user/me")
+		mvc.perform(get(ME)
 				.header("Origin", "*")
 				.locale(Locale.forLanguageTag("tr"))
 				.param("locale", locale))
@@ -122,19 +120,14 @@ public class LocaleConfigurationTests {
 	void processInvalidLocalesRejects(String locale) throws Exception {
 
 		var exception = assertThrows(NestedServletException.class, () -> {
-			mvc.perform(post("/login")
+			mvc.perform(get(ME)
 					.header("Origin", "*")
 					.param("locale", locale)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(createRequestBody(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE)))
+					.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().is4xxClientError());
 		});
 
 		assertThat(exception.getCause()).isInstanceOf(IllegalArgumentException.class);
-	}
-
-	private String createRequestBody(String username, String password) throws Exception {
-		return mapper.writeValueAsString(Map.of("username", username, "password", password));
 	}
 
 	private MockHttpServletResponse performGet(String urlTemplate, Locale locale) throws Exception {
