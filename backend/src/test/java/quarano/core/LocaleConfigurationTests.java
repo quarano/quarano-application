@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static quarano.core.web.QuaranoHttpHeaders.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
@@ -16,8 +15,6 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -49,21 +46,16 @@ public class LocaleConfigurationTests {
 	final TrackedPersonRepository persons;
 
 	@Test
+	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
 	void testLocaleHandlingWithDefault() throws Exception {
 
-		var response = login(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE, null);
-
-		assertThat(response.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
-
-		var token = response.getHeader(AUTH_TOKEN);
-
-		var responseGet = performGet(ME, token, Locale.KOREA); // unsupported language
+		var responseGet = performGet(ME, null);
 		var document = JsonPath.parse(responseGet.getContentAsString());
 
 		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
 		assertThat(document.read("$.client.locale", String.class)).isNull();
 
-		var responsePut = performWrongPasswordChange(token, Locale.KOREA);
+		var responsePut = performWrongPasswordChange(Locale.KOREA); // unsupported language
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
@@ -71,23 +63,16 @@ public class LocaleConfigurationTests {
 	}
 
 	@Test
+	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
 	void testLocaleHandlingWithAcceptLanguageHeader() throws Exception {
 
-		var response = login(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE, Locale.forLanguageTag("tr"));
-
-		assertThat(response.getHeader(CONTENT_LANGUAGE)).isEqualTo("tr");
-
-		var token = response.getHeader(AUTH_TOKEN);
-
-		var locale = Locale.forLanguageTag("en");
-
-		var responseGet = performGet(ME, token, locale);
+		var responseGet = performGet(ME, Locale.ENGLISH);
 		var document = JsonPath.parse(responseGet.getContentAsString());
 
 		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo("en");
 		assertThat(document.read("$.client.locale", String.class)).isNull();
 
-		var responsePut = performWrongPasswordChange(token, locale);
+		var responsePut = performWrongPasswordChange(Locale.ENGLISH);
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en");
@@ -95,23 +80,18 @@ public class LocaleConfigurationTests {
 	}
 
 	@Test
+	@WithQuaranoUser(USERNAME_WITH_LOCALE)
 	void testLocaleHandlingWithUserSetting() throws Exception {
-
-		var response = login(USERNAME_WITH_LOCALE, PASSWORD_WITH_LOCALE, null);
-
-		assertThat(response.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
-
-		var token = response.getHeader(AUTH_TOKEN);
 
 		var locale = Locale.forLanguageTag("tr");
 
-		var responseGet = performGet(ME, token, locale);
+		var responseGet = performGet(ME, locale);
 		var document = JsonPath.parse(responseGet.getContentAsString());
 
 		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
 		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
 
-		var responsePut = performWrongPasswordChange(token, locale);
+		var responsePut = performWrongPasswordChange(locale);
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
@@ -153,26 +133,14 @@ public class LocaleConfigurationTests {
 		assertThat(exception.getCause()).isInstanceOf(IllegalArgumentException.class);
 	}
 
-	private HttpServletResponse login(String username, String password, Locale locale) throws Exception {
-
-		return mvc.perform(post("/login")
-				.header("Origin", "*")
-				.locale(locale)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(createRequestBody(username, password)))
-				.andExpect(status().is2xxSuccessful())
-				.andReturn().getResponse();
-	}
-
 	private String createRequestBody(String username, String password) throws Exception {
 		return mapper.writeValueAsString(Map.of("username", username, "password", password));
 	}
 
-	private MockHttpServletResponse performGet(String urlTemplate, String token, Locale locale) throws Exception {
+	private MockHttpServletResponse performGet(String urlTemplate, Locale locale) throws Exception {
 
 		return mvc.perform(get(urlTemplate)
 				.header("Origin", "*")
-				.header("Authorization", "Bearer " + token)
 				.locale(locale)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -180,11 +148,10 @@ public class LocaleConfigurationTests {
 				.andReturn().getResponse();
 	}
 
-	private MockHttpServletResponse performWrongPasswordChange(String token, Locale locale) throws Exception {
+	private MockHttpServletResponse performWrongPasswordChange(Locale locale) throws Exception {
 
 		return mvc.perform(put("/api/user/me/password")
 				.header("Origin", "*")
-				.header("Authorization", "Bearer " + token)
 				.locale(locale)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(createRequestBody("xxxx#", "xxxx#", "xxxx#")))
