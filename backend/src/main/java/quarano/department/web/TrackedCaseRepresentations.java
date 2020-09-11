@@ -74,6 +74,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.base.Objects;
 
 /**
  * @author Oliver Drotbohm
@@ -255,6 +256,11 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 		if (existing.isEnrollmentCompleted()) {
 			validateAfterEnrollment(payload, errors);
+		}
+
+		if (existing.getTrackedPerson().getAccount().isPresent()
+				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
+			errors.rejectValue("locale", "TrackedCase.localeCantChange");
 		}
 
 		return validate(payload, existing.getType(), errors);
@@ -483,7 +489,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual String comment;
+		@Textual
+		String comment;
 	}
 
 	static class ValidationGroups {
