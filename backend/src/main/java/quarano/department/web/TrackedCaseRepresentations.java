@@ -258,6 +258,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			validateAfterEnrollment(payload, errors);
 		}
 
+		// When an account has been created, the user's setting matter and only the user can change these setting.
+		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this person.
 		if (existing.getTrackedPerson().getAccount().isPresent()
 				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
 			errors.rejectValue("locale", "TrackedCase.localeCantChange");
