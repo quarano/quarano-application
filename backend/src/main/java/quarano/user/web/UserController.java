@@ -4,7 +4,6 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static quarano.actions.web.AnomaliesLinkRelations.*;
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
-import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -23,8 +22,6 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseController;
 import quarano.tracking.TrackedPersonRepository;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -34,7 +31,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -112,48 +108,26 @@ public class UserController {
 				.onValidGet(() -> ResponseEntity.noContent().build());
 	}
 
-	@PatchMapping("/me/locale")
-	public HttpEntity<?> patchLocale(@Valid @RequestBody NewLocale payload, Errors errors, @LoggedIn Account account) {
-
-		return MappedPayloads.of(payload, errors)
-				.map(NewLocale::getLocale)
-				.peek(it -> trackedPersonRepository.findByAccount(account)
-						.map(a -> a.setLocale(it))
-						.ifPresent(a -> trackedPersonRepository.save(a)))
-				.onValidGet(() -> ResponseEntity.noContent().build());
-	}
-
-	@Data // Jackson can't simply call single argument constructors like by NewPassword - @Value don't work.
-	static class NewLocale {
-
-		/**
-		 * The current password.
-		 */
-		@NotBlank
-		String newLocale;
-
-		public Locale getLocale() {
-			return Locale.forLanguageTag(newLocale);
-		}
-	}
-
 	@Value
 	static class NewPassword {
 
 		/**
 		 * The current password.
 		 */
-		@NotBlank String current;
+		@NotBlank
+		String current;
 
 		/**
 		 * The new password to set.
 		 */
-		@NotBlank String password;
+		@NotBlank
+		String password;
 
 		/**
 		 * The new password repeated for verification.
 		 */
-		@NotBlank String passwordConfirm;
+		@NotBlank
+		String passwordConfirm;
 
 		NewPassword validate(Errors errors, EncryptedPassword existing, AccountService accounts) {
 
