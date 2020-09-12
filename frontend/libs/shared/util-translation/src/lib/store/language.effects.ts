@@ -10,7 +10,7 @@ export class LanguageEffects {
   languageSelected$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(LanguageActions.languageSelected),
+        ofType(LanguageActions.languageSelected, LanguageActions.contentLanguageHeaderRead),
         tap((action) => {
           this.translate.use(action.selectedLanguage.key);
           localStorage.setItem('selectedLanguage', JSON.stringify(action.selectedLanguage));

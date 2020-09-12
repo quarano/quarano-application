@@ -24,6 +24,13 @@ export const languageReducer = createReducer(
     };
   }),
 
+  on(LanguageActions.contentLanguageHeaderRead, (state, action) => {
+    return {
+      ...state,
+      selectedLanguage: action.selectedLanguage,
+    };
+  }),
+
   on(LanguageActions.supportedLanguagesLoaded, (state, action) => {
     return {
       ...state,

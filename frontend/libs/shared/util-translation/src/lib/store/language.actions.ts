@@ -6,6 +6,11 @@ export const languageSelected = createAction(
   props<{ selectedLanguage: ILanguageConfig }>()
 );
 
+export const contentLanguageHeaderRead = createAction(
+  '[Login] Content Language Header Read',
+  props<{ selectedLanguage: ILanguageConfig }>()
+);
+
 export const supportedLanguagesLoaded = createAction(
   '[App Component] Supported Languages Loaded',
   props<{ supportedLanguages: ILanguageConfig[] }>()
