@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map, tap } from 'rxjs/operators';
+import { shareReplay, switchMap, take } from 'rxjs/operators';
 import { CaseDto, getEmptyCase } from '../model/case';
 import { CaseEntityService } from '../data-access/case-entity.service';
 
@@ -12,15 +12,17 @@ export class CaseDetailResolver implements Resolve<CaseDto> {
   resolve(route: ActivatedRouteSnapshot): Observable<CaseDto> {
     const id = route.paramMap.get('id');
     if (id) {
-      return this.entityService.getByKey(id).pipe(
-        map((detail) => {
-          console.log(detail);
-          if (!detail.caseId) {
-            detail.caseId = id;
+      return this.entityService.entityMap$.pipe(
+        take(1),
+        switchMap((entityMap) => {
+          const query = entityMap[id];
+          if (!query || !query.comments) {
+            return this.entityService.getByKey(id);
           }
-
-          return detail;
-        })
+          return of(query);
+        }),
+        shareReplay(1),
+        take(1)
       );
     } else {
       return of(getEmptyCase());
