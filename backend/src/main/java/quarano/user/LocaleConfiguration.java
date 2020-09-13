@@ -6,14 +6,11 @@ import quarano.account.AuthenticationManager;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,11 +20,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
@@ -65,9 +61,15 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		return new LocaleChangeInterceptor();
 	}
 
+	@Bean
+	HandlerInterceptor getHandlerInterceptor() {
+		return new SetContentHeaderInterceptor();
+	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
 		interceptorRegistry.addInterceptor(localeChangeInterceptor());
+		interceptorRegistry.addInterceptor(getHandlerInterceptor());
 	}
 
 	/**
@@ -111,22 +113,15 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 	/**
 	 * Sets the used language to the response header <code>Content-Language</code>.
 	 */
-	@Component
-	@RequiredArgsConstructor
-	class SetContentHeaderFilter extends OncePerRequestFilter {
-
-		private final @NonNull LocaleResolver localeResolver;
+	class SetContentHeaderInterceptor extends HandlerInterceptorAdapter {
 
 		@Override
-		protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-				FilterChain filterChain) throws ServletException, IOException {
+		public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+				throws Exception {
 
-			filterChain.doFilter(httpServletRequest, httpServletResponse);
+			response.setLocale(LocaleContextHolder.getLocale());
 
-			var locale = localeResolver.resolveLocale(httpServletRequest);
-			LocaleContextHolder.setLocale(locale);
-			httpServletResponse.setLocale(locale);
-			httpServletResponse.addHeader(HttpHeaders.CONTENT_LANGUAGE, locale.toLanguageTag());
+			return super.preHandle(request, response, handler);
 		}
 	}
 }
