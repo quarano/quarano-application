@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -17,6 +17,7 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseType } from '@qro/auth/api';
+import { mapCaseIdToCaseEntity } from '@qro/health-department/domain';
 
 @Component({
   selector: 'qro-case-detail',
@@ -62,13 +63,7 @@ export class CaseDetailComponent implements OnDestroy {
     this.caseDetail$ = combineLatest([
       this.route.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
       this.entityService.entityMap$,
-    ]).pipe(
-      map(([id, entityMap]) => {
-        this.caseId = id;
-        return entityMap[id];
-      }),
-      shareReplay(1)
-    );
+    ]).pipe(mapCaseIdToCaseEntity(), shareReplay(1));
 
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
       this.type$$.next(paramMap.get('type') as CaseType);

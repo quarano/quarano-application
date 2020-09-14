@@ -27,7 +27,6 @@ describe('health-department top navigation', () => {
 
     cy.get('@me').then((request: any) => {
       const user = request.response?.body;
-      console.log(user);
       const fullName = user.firstName + ' ' + user.lastName;
       const buttonLabel = `${fullName} (${user.healthDepartment.name})`;
 

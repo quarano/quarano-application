@@ -104,7 +104,7 @@
         Kommentare <span class="info-badge">{{ caseDetail.comments.length }}</span>
       </a>
       <a
-        *ngIf="caseDetail.indexContacts.length > 0"
+        *ngIf="caseDetail?.indexContacts?.length > 0"
         mat-tab-link
         [routerLink]="['index-case-data']"
         routerLinkActive
@@ -124,7 +124,7 @@
         E-Mail Vorlage
       </a>
       <a
-        *ngIf="caseDetail._links.hasOwnProperty('questionnaire')"
+        *ngIf="caseDetail?._links?.hasOwnProperty('questionnaire')"
         mat-tab-link
         [routerLink]="['questionnaire']"
         routerLinkActive

@@ -1,11 +1,10 @@
-import { share, map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
-import { CaseDto } from '../..';
 
 @Injectable({
   providedIn: 'root',

@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { shareReplay, switchMap, take } from 'rxjs/operators';
-import { CaseDto, getEmptyCase } from '../model/case';
+import { CaseDto } from '../model/case';
 import { CaseEntityService } from '../data-access/case-entity.service';
 
 @Injectable()
@@ -24,8 +24,6 @@ export class CaseDetailResolver implements Resolve<CaseDto> {
         shareReplay(1),
         take(1)
       );
-    } else {
-      return of(getEmptyCase());
     }
   }
 }
