@@ -1,0 +1,23 @@
+@import '../../../../../shared/ui-styles/src/lib/variables';
+
+h3 {
+  text-transform: uppercase;
+}
+
+.date-header {
+  @media screen And (max-width: $break-lg) {
+    display: none;
+  }
+}
+
+.header {
+  @media screen And (max-width: $break-md) {
+    display: none;
+  }
+}
+
+.row {
+  padding: 1rem;
+  align-items: center;
+  padding-left: calc(1rem - 6px);
+}
