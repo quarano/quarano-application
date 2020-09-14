@@ -1,0 +1,40 @@
+@import '../../../../../shared/ui-styles/src/lib/variables';
+
+.row {
+  padding: 1rem;
+  align-items: center;
+  padding-left: calc(1rem - 6px);
+}
+
+.line {
+  @media screen and (max-width: $break-lg) {
+    margin-top: 1rem;
+  }
+}
+
+.entry-container {
+  display: flex;
+  align-items: center;
+}
+
+.data-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-container {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 0.5rem;
+  font-size: 18px;
+}
+
+.label {
+  width: 52px;
+  @media screen and (min-width: $break-md) {
+    display: none;
+  }
+}
