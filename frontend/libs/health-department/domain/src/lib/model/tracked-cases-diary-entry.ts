@@ -1,4 +1,4 @@
-import {IIdentifiable} from "@qro/shared/util-data-access";
+import { IIdentifiable } from '@qro/shared/util-data-access';
 
 export interface TrackedCaseDiaryEntryDto extends IIdentifiable {
   bodyTemperature: number;
