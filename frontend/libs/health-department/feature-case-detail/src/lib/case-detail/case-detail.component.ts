@@ -4,6 +4,7 @@ import {
   CaseStatus,
   HealthDepartmentService,
   StartTracking,
+  TrackedCaseDiaryEntryDto,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';

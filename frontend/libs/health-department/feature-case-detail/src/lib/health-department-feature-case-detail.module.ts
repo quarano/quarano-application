@@ -1,5 +1,6 @@
 import { SharedUiErrorModule } from '@qro/shared/ui-error';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -23,6 +24,8 @@ import { CommentsComponent } from './comments/comments.component';
 import { CloseCaseDialogComponent } from './close-case-dialog/close-case-dialog.component';
 import { AnomalyComponent } from './anomaly/anomaly.component';
 import { ActionComponent } from './action/action.component';
+import { DiaryEntriesListComponent } from './diary-entries-list/diary-entries-list.component';
+import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-entries-list-item.component';
 
 const routes: Routes = [
   {
@@ -81,6 +84,10 @@ const routes: Routes = [
         path: 'email',
         component: MailComponent,
       },
+      {
+        path: 'diary-entries',
+        component: DiaryEntriesListComponent,
+      },
     ],
   },
 ];
@@ -97,6 +104,8 @@ const routes: Routes = [
     MailComponent,
     QuestionnaireComponent,
     ContactListComponent,
+    DiaryEntriesListComponent,
+    DiaryEntriesListItemComponent,
   ],
   imports: [
     CommonModule,
@@ -110,6 +119,7 @@ const routes: Routes = [
     SharedUtilSymptomModule,
     NgxDatatableModule,
     SharedUiMultipleAutocompleteModule,
+    SharedUtilTranslationModule,
   ],
 })
 export class HealthDepartmentFeatureCaseDetailModule {}
