@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 export interface TrackedCaseDiaryEntry {
   date: string;
@@ -8,7 +8,7 @@ export interface TrackedCaseDiaryEntry {
 
 interface TrackedCaseDiaryEntrySlot {
   bodyTemperature: number;
-  symptoms: TrackedCaseDiaryEntrySymptom[]
+  symptoms: TrackedCaseDiaryEntrySymptom[];
   contacts: TrackedCaseDiaryEntryContact[];
 }
 
@@ -29,12 +29,9 @@ interface TrackedCaseDiaryEntryContact {
 export class DiaryEntriesListItemComponent implements OnInit {
   @Input() diaryEntry: TrackedCaseDiaryEntry;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   getSymptomsString(diaryEntrySlot: TrackedCaseDiaryEntrySlot): string {
     return diaryEntrySlot.symptoms.map((s) => s.name).join(', ');
@@ -43,5 +40,4 @@ export class DiaryEntriesListItemComponent implements OnInit {
   getContactsString(diaryEntrySlot: TrackedCaseDiaryEntrySlot): string {
     return diaryEntrySlot.contacts.map((s) => `${s.firstName} ${s.lastName}`).join(', ');
   }
-
 }
