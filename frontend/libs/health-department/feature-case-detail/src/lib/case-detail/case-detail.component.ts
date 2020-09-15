@@ -1,8 +1,10 @@
 import {
+  CaseActionDto,
   CaseDto,
   CaseEntityService,
   CaseStatus,
   HealthDepartmentService,
+  mapCaseIdToCaseEntity,
   StartTracking,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +19,6 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseType } from '@qro/auth/api';
-import { mapCaseIdToCaseEntity } from '@qro/health-department/domain';
 
 @Component({
   selector: 'qro-case-detail',
@@ -25,13 +26,15 @@ import { mapCaseIdToCaseEntity } from '@qro/health-department/domain';
   styleUrls: ['./case-detail.component.scss'],
 })
 export class CaseDetailComponent implements OnDestroy {
-  caseId: string;
   private type$$: BehaviorSubject<CaseType> = new BehaviorSubject<CaseType>(null);
+  private subs = new SubSink();
+
+  caseId: string;
   type$: Observable<CaseType> = this.type$$.asObservable();
   caseLabel$: Observable<string>;
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
-  private subs = new SubSink();
+  caseActions$: Observable<CaseActionDto>;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,6 +71,11 @@ export class CaseDetailComponent implements OnDestroy {
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
       this.type$$.next(paramMap.get('type') as CaseType);
     });
+
+    this.caseActions$ = this.caseDetail$.pipe(
+      filter((caseDetail) => !!caseDetail.caseId),
+      switchMap((caseDetail) => this.healthDepartmentService.getCaseActions(caseDetail.caseId))
+    );
   }
 
   getStartTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {

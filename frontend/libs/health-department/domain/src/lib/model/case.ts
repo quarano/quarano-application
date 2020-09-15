@@ -48,22 +48,6 @@ export enum CaseStatus {
   Abgeschlossen = 'abgeschlossen',
 }
 
-export function getEmptyCase(): CaseDto {
-  return {
-    firstName: null,
-    lastName: null,
-    quarantineEndDate: null,
-    quarantineStartDate: null,
-    dateOfBirth: null,
-    infected: null,
-    caseTypeLabel: null,
-    extReferenceNumber: null,
-    contactCount: null,
-    originCases: [],
-    _embedded: { originCases: [] },
-  };
-}
-
 export function sortByLastName(a: { lastName: string }, b: { lastName: string }): number {
   return a.lastName.localeCompare(b.lastName);
 }

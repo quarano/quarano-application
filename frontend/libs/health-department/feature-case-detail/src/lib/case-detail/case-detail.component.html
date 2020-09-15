@@ -74,25 +74,28 @@
         {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
       </a>
       <!-- ToDo: Action Count aus casedto auslesen sobald verfügbar -->
-      <a
-        mat-tab-link
-        [routerLink]="['actions']"
-        routerLinkActive
-        #rlactions="routerLinkActive"
-        [active]="rlactions.isActive"
-      >
-        <span
-          *ngIf="true; else has_no_open_anomalies"
-          matBadge="?"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-          >Aktionen</span
+      <ng-container *ngIf="caseActions$ | async as caseActionDto">
+        <a
+          *ngIf="caseActionDto.anomalies.health.length > 0"
+          mat-tab-link
+          [routerLink]="['actions']"
+          routerLinkActive
+          #rlactions="routerLinkActive"
+          [active]="rlactions.isActive"
         >
-        <ng-template #has_no_open_anomalies>
-          <span>Aktionen</span>
-        </ng-template>
-      </a>
+          <span
+            *ngIf="true; else has_no_open_anomalies"
+            matBadge="{{ caseActionDto.anomalies.health.length }}"
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+            >Aktionen</span
+          >
+          <ng-template #has_no_open_anomalies>
+            <span>Aktionen</span>
+          </ng-template>
+        </a>
+      </ng-container>
       <a
         *ngIf="caseDetail.comments"
         mat-tab-link
