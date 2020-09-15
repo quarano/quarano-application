@@ -73,7 +73,6 @@
       >
         {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
       </a>
-      <!-- ToDo: Action Count aus casedto auslesen sobald verfügbar -->
       <ng-container *ngIf="caseActions$ | async as caseActionDto">
         <a
           *ngIf="caseActionDto.anomalies.health.length > 0"

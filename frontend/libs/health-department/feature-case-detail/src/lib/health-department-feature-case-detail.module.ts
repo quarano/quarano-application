@@ -23,6 +23,17 @@ const routes: Routes = [
   {
     path: 'new/:type',
     component: CaseDetailComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'edit',
+        pathMatch: 'full',
+      },
+      {
+        path: 'edit',
+        component: EditComponent,
+      },
+    ],
   },
   {
     path: ':type/:id',
