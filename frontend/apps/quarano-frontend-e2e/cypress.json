@@ -8,5 +8,6 @@
   "video": true,
   "videosFolder": "../../dist/cypress/apps/quarano-frontend-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/quarano-frontend-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "baseUrl": "http://localhost:4200"
 }

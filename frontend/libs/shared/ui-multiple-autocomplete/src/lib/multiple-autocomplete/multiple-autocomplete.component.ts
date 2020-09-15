@@ -1,8 +1,8 @@
 import { FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, startWith, takeUntil } from 'rxjs/operators';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IIdentifiable } from '@qro/shared/util-data-access';
 import { cloneDeep } from 'lodash';
@@ -24,7 +24,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   inputControl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') autocomplete;
+  @ViewChild('auto') autocomplete: MatAutocomplete;
   destroy$: Subject<void> = new Subject<void>();
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
 
@@ -50,10 +50,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearInput(): void {
-    // fixme: best to do this only via formControl ! ..... :(
-    this.inputControl.patchValue(null); // patchInputControl to null for later comparisons
-    this.input.nativeElement.value = null; // set input value of native element to null, otherwise its shown in the GUI
+  resetInput(): void {
+    // Clear the input field and reset the autocomplete list
+    this.input.nativeElement.value = '';
+    this.inputControl.setValue(null);
+    this.filteredList$$.next(this.prefilteredList);
   }
 
   ngOnDestroy(): void {
@@ -69,7 +70,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     return arrayToReturn;
   }
 
-  checkInputForData() {
+  checkInputForData(event: FocusEvent) {
+    if (event.relatedTarget && this.autocomplete.panel?.nativeElement?.contains?.(event.relatedTarget)) {
+      // Do nothing if the user selected an option from the autocomplete list
+      return;
+    }
     const input = this.inputControl.value;
     const inList = this.isInputInSelectedList(input);
     if (!inList && input) {
@@ -102,11 +107,9 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     }
     const selectedValue = event.option.value;
     this.selectedItemIds.push(selectedValue);
-    this.input.nativeElement.value = '';
-    this.inputControl.setValue(null);
     this.setFormControlValue();
     this.added.emit(selectedValue);
-    this.filteredList$$.next(this.prefilteredList);
+    this.resetInput();
   }
 
   remove(id: string): void {

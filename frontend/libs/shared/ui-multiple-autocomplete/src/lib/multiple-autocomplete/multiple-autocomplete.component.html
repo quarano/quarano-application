@@ -23,7 +23,7 @@
           ? ('MULTIPLE_AUTOCOMPLETE.KEINE_WEITEREN_AUSWAHLMÖGLICHKEITEN' | translate)
           : null
       "
-      (blur)="checkInputForData()"
+      (blur)="checkInputForData($event)"
       #trigger="matAutocompleteTrigger"
     />
   </mat-chip-list>

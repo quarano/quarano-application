@@ -12,6 +12,7 @@ import quarano.tracking.ZipCode;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -43,4 +44,5 @@ public class TrackedPersonDto {
 	private @NotEmpty @Email String email;
 	private @NotNull @Past LocalDate dateOfBirth;
 	private List<URI> originContacts;
+	private Locale locale;
 }

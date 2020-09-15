@@ -16,6 +16,6 @@ class CoreConfiguration {
 
 	@Bean
 	ConfigurableEmailTemplates emailTemplates(ResourceLoader loader) {
-		return new ConfigurableEmailTemplates(loader, Keys.stream(), "classpath:masterdata/templates/%s");
+		return new ConfigurableEmailTemplates(loader, Keys.stream(), "classpath:masterdata/templates/%2$s/%1$s");
 	}
 }

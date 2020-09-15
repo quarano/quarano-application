@@ -66,7 +66,7 @@ class TrackedCaseEventListener {
 					.onFailure(it -> {
 
 						if (log.isTraceEnabled()) {
-							log.trace("Quarano can't connect the mail server!", it);
+							log.warn("Quarano can't connect the mail server!", it);
 						} else {
 							log.warn("Quarano can't connect the mail server! {}", it.getMessage());
 						}
@@ -93,7 +93,7 @@ class TrackedCaseEventListener {
 
 			var trackedPerson = trackedCase.getTrackedPerson();
 			var subject = messages.getMessage("NewContactCaseMail.subject",
-					new Object[] { trackedCase.getDepartment().getName() });
+					new Object[] { trackedCase.getDepartment().getName() }, trackedPerson.getLocale());
 			var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 					trackedCase.getId().toString() };
 

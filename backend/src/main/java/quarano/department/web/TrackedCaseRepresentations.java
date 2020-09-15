@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -73,6 +74,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.base.Objects;
 
 /**
  * @author Oliver Drotbohm
@@ -256,6 +258,13 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			validateAfterEnrollment(payload, errors);
 		}
 
+		// When an account has been created, the user's setting matter and only the user can change these setting.
+		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this person.
+		if (existing.getTrackedPerson().getAccount().isPresent()
+				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
+			errors.rejectValue("locale", "TrackedCase.localeCantChange");
+		}
+
 		return validate(payload, existing.getType(), errors);
 	}
 
@@ -327,6 +336,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		private @Email String email;
 		private @Past LocalDate dateOfBirth;
 		private @Getter boolean infected;
+		private Locale locale;
 
 		Errors validate(Errors errors, CaseType type) {
 
@@ -481,7 +491,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual String comment;
+		@Textual
+		String comment;
 	}
 
 	static class ValidationGroups {

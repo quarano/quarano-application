@@ -53,6 +53,7 @@
         <mat-form-field class="half-width" data-cy="input-testdate">
           <mat-label>Abstrichdatum (Test)</mat-label>
           <input
+            data-cy="input-field-test-date"
             matInput
             [required]="isIndexCase"
             [max]="today"
@@ -73,7 +74,9 @@
         >
           <label class="example-margin">Covid-19 Test:</label>
           <mat-radio-group [disabled]="isIndexCase" [value]="isIndexCase" formControlName="infected">
-            <mat-radio-button class="example-margin" [value]="true">Positiv</mat-radio-button>
+            <mat-radio-button class="example-margin" data-cy="covid-test-result-true" [value]="true"
+              >Positiv</mat-radio-button
+            >
             <mat-radio-button class="example-margin" [value]="false">Negativ</mat-radio-button>
           </mat-radio-group>
         </div>
@@ -81,6 +84,7 @@
       <mat-form-field class="half-width" data-cy="input-quarantinestart">
         <mat-label>Beginn häusliche Isolation</mat-label>
         <input
+          data-cy="quarantine-start-input"
           matInput
           [required]="isIndexCase || formGroup.controls.quarantineEndDate.value"
           [max]="today"
@@ -98,6 +102,7 @@
       <mat-form-field class="half-width" data-cy="input-quarantineend">
         <mat-label>Ende häusliche Isolation</mat-label>
         <input
+          data-cy="quarantine-end-input"
           matInput
           [required]="isIndexCase || formGroup.controls.quarantineStartDate.value"
           [matDatepicker]="quarantineEndDatePicker"
@@ -134,6 +139,7 @@
       >
       <mat-form-field class="half-width" data-cy="input-phone">
         <input
+          data-cy="phone-number-input"
           matInput
           maxlength="17"
           minlength="5"
@@ -180,6 +186,7 @@
       <legend>Adresse</legend>
       <mat-form-field style="width: 70%;">
         <input
+          data-cy="street-input"
           matInput
           placeholder="Straße"
           formControlName="street"
@@ -193,6 +200,7 @@
       </mat-form-field>
       <mat-form-field style="width: 30%;">
         <input
+          data-cy="house-number-input"
           matInput
           placeholder="Hausnummer"
           maxlength="6"
@@ -207,6 +215,7 @@
       </mat-form-field>
       <mat-form-field style="width: 30%;" data-cy="input-zipcode">
         <input
+          data-cy="zip-code-input"
           matInput
           placeholder="Postleitzahl"
           formControlName="zipCode"
@@ -220,6 +229,7 @@
       </mat-form-field>
       <mat-form-field style="width: 70%;">
         <input
+          data-cy="city-input"
           matInput
           placeholder="Ort"
           formControlName="city"
@@ -258,6 +268,7 @@
         Speichern
       </qro-button>
       <qro-button
+        data-cy="client-submit-and-close-button"
         style="margin-left: 8px;"
         type="button"
         [disabled]="formGroup.invalid || formGroup.pristine"
@@ -266,7 +277,13 @@
       >
         Speichern und schließen
       </qro-button>
-      <button type="button" mat-raised-button color="secondary" [routerLink]="[returnLink]">
+      <button
+        data-cy="client-cancel-button"
+        type="button"
+        mat-raised-button
+        color="secondary"
+        [routerLink]="[returnLink]"
+      >
         Abbrechen
       </button>
     </div>

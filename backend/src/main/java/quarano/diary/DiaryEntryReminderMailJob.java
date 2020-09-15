@@ -19,6 +19,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.util.Streamable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "quarano.diary", name = "reminder.enable", matchIfMissing = true)
 class DiaryEntryReminderMailJob {
 
 	private final @NonNull DiaryManagement diaries;
@@ -47,7 +49,17 @@ class DiaryEntryReminderMailJob {
 	@Scheduled(cron = "0 10 12,23 * * *")
 	void checkForReminderMail() {
 
-		if (emailSender.testConnection().isFailure()) {
+		var testResult = emailSender.testConnection()
+				.onFailure(it -> {
+
+					if (log.isTraceEnabled()) {
+						log.warn("Quarano can't connect the mail server to send reminder mails!", it);
+					} else {
+						log.warn("Quarano can't connect the mail server to send reminder mails! {}", it.getMessage());
+					}
+				});
+
+		if (testResult.isFailure()) {
 			return;
 		}
 
@@ -71,10 +83,11 @@ class DiaryEntryReminderMailJob {
 				.flatMap(it -> departments.findById(it.getDepartmentId()))
 				.ifPresent(it -> {
 
-					var subject = messages.getMessage("DiaryEntryReminderMail.subject");
+					var subject = messages.getMessage("DiaryEntryReminderMail.subject", trackedPerson.getLocale());
 					var textTemplate = Keys.DIARY_REMINDER;
 					var slotTranslated = messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
-							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) });
+							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) },
+							trackedPerson.getLocale());
 					var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 							trackedPerson.getId().toString() };
 

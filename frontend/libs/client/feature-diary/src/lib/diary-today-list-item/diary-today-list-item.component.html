@@ -18,6 +18,7 @@
         <ng-template #morning_create>
           <span class="mr-3 label">{{ 'DIARY_TODAY_LIST_ITEM.MORGENS' | translate }}</span>
           <button
+            data-cy="add-diary-entry"
             mat-mini-fab
             color="primary"
             [routerLink]="['/client/diary/diary-detail/new', diaryListItem.date, 'morning']"
@@ -40,6 +41,7 @@
         <ng-container *ngIf="currentSlotIsEvening; else evening_wait">
           <span class="mr-3 label">{{ 'DIARY_TODAY_LIST_ITEM.ABENDS' | translate }}</span>
           <button
+            data-cy="add-diary-entry"
             mat-mini-fab
             color="primary"
             [routerLink]="['/client/diary/diary-detail/new', diaryListItem.date, 'evening']"

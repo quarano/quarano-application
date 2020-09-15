@@ -1,7 +1,9 @@
-<button type="button" mat-icon-button color="primary" routerLink="/client/contact-persons/contact-person-detail/new">
-  <i class="material-icons">add</i>
+<span>
+  <button mat-icon-button color="primary" routerLink="/client/contact-persons/contact-person-detail/new">
+    <mat-icon>add</mat-icon>
+  </button>
   {{ 'CONTACT_PERSONS.NEUE_KONTAKTPERSON_ANLEGEN' | translate }}
-</button>
+</span>
 <qro-alert
   *ngIf="contacts.length === 0"
   [message]="'CONTACT_PERSONS.NOCH_KEINE_EINTRÄGE_VORHANDEN' | translate"

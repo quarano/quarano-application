@@ -15,7 +15,7 @@ const login = (username: string, password: string) => {
   cy.server();
   cy.route('POST', '/login').as('login');
 
-  cy.visit('http://localhost:4200', {
+  cy.visit('/', {
     onBeforeLoad(win) {
       cy.stub(win, 'open').as('windowOpen');
     },
