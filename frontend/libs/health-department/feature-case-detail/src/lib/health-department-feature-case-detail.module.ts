@@ -9,11 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { CaseDetailComponent } from './case-detail/case-detail.component';
-import {
-  CaseDetailResolver,
-  ReportCaseActionsResolver,
-  HealthDepartmentDomainModule,
-} from '@qro/health-department/domain';
+import { HealthDepartmentDomainModule, ReportCaseActionsResolver } from '@qro/health-department/domain';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import { MailComponent } from './mail/mail.component';
 import { IndexContactsComponent } from './index-contacts/index-contacts.component';
@@ -25,9 +21,12 @@ import { ActionComponent } from './action/action.component';
 
 const routes: Routes = [
   {
+    path: 'new/:type',
+    component: CaseDetailComponent,
+  },
+  {
     path: ':type/:id',
     component: CaseDetailComponent,
-    resolve: { case: CaseDetailResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
@@ -66,11 +65,6 @@ const routes: Routes = [
         component: MailComponent,
       },
     ],
-  },
-  {
-    path: ':type',
-    component: CaseDetailComponent,
-    resolve: { case: CaseDetailResolver },
   },
 ];
 
