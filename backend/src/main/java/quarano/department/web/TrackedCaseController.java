@@ -19,7 +19,6 @@ import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
-import quarano.reference.Language;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
@@ -54,7 +53,6 @@ public class TrackedCaseController {
 	private final @NonNull TrackingController tracking;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull DiaryManagement diaries;
-	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 
@@ -84,14 +82,12 @@ public class TrackedCaseController {
 	@PostMapping(path = "/api/hd/cases", params = "type=index")
 	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
-
 		return postCase(payload, errors, department);
 	}
 
 	@PostMapping("/api/hd/cases")
 	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
-
 		return createTrackedCase(payload, CaseType.INDEX, department, errors);
 	}
 
@@ -114,7 +110,6 @@ public class TrackedCaseController {
 
 	@GetMapping(path = "/api/hd/cases/form")
 	HttpEntity<?> getCaseForm() {
-
 		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
 
@@ -276,7 +271,8 @@ public class TrackedCaseController {
 			return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
 					.body(representations.resolve("enrollment.detailsSubmissionRequired"));
 		}
-		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
+
+		final var lang = LocaleContextHolder.getLocale();
 
 		return MappedPayloads.of(dto, errors)
 				.map(QuestionnaireDto::validate)
@@ -329,7 +325,9 @@ public class TrackedCaseController {
 	}
 
 	private Collection<TrackedCaseDiaryEntrySummary> createDiaryEntrySummaries(TrackedCase trackedCase) {
-		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
+
+		final var lang = LocaleContextHolder.getLocale();
+
 		return diaries.findDiaryFor(trackedCase.getTrackedPerson()).stream()
 				.map(it -> representations.toDiaryEntrySummary(it, lang))
 				.collect(Collectors.toUnmodifiableList());

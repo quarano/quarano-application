@@ -4,13 +4,13 @@ import lombok.Data;
 import lombok.Setter;
 import quarano.core.validation.Textual;
 import quarano.department.Questionnaire;
-import quarano.reference.Language;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +38,7 @@ public class QuestionnaireDto {
 	private @Setter Boolean hasContactToVulnerablePeople;
 	private @Textual String hasContactToVulnerablePeopleDescription;
 
-	Questionnaire applyTo(Questionnaire report, SymptomRepository symptoms, Language lang) {
+	Questionnaire applyTo(Questionnaire report, SymptomRepository symptoms, Locale lang) {
 
 		List<Symptom> symptomsOfReport = Collections.emptyList();
 

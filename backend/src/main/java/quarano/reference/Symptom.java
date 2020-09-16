@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class Symptom implements Persistable<UUID> {
 
 	@Column(name = "translations", columnDefinition = "clob")
 	@Convert(converter = TranslationConverter.class)
-	private Map<Language, String> translations;
+	private Map<Locale, String> translations;
 
 	Symptom() {
 		this.id = UUID.randomUUID();
@@ -48,9 +49,11 @@ public class Symptom implements Persistable<UUID> {
 		this.isNew = false;
 	}
 
-	public Symptom translate(Language lang) {
+	public Symptom translate(Locale lang) {
+
 		if(translations != null) {
-			String translation = translations.get(lang);
+
+			var translation = translations.get(lang);
 			if(translation != null) {
 				this.name = translation;
 			}

@@ -1,31 +1,39 @@
-Dear Mrs./Mr. {lastName},
+Dear Mr/Ms {lastName},
 
 
-Sie wurden vom Gesundheitsamt Mannheim kontaktiert und als enge Kontaktperson zu einem bestätigten Covid-19 Fall eingestuft und es wurde eine Quarantäne angeordnet. 
+You have been contacted by the Gesundheitsamt Mannheim, classified as a close contact of a confirmed Covid-19 case and ordered to stay in quarantine.
 
-Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserer Online-Anwendung zur Erfassung der Kontakte und Symptome an unter:
+As discussed on the telephone, please register immediately in our online-application for the recording of contacts and symptoms under:
 
 https://{host}/client/enrollment/landing/contact/{activationCode}
 
-Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
+Please enter your personal information and details of any potential contacts. Further we request that you take your
+temperature twice daily and record this together with any symptoms you might experience (e.g. difficulty breathing,
+body or muscle aches, diarrhoea, etc) directly in the online-tool.
 
-Bei Fragen scheuen Sie sich bitte nicht, uns zu kontaktieren. Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer 0621-293 2253.
+If you have any questions, please do not hesitate to contact us. For general questions regarding Corona please contact
+Mannheim's Corona-Hotline under the phone number 0621-293 2253.
 
-•   Montag bis Freitag von 9:00 – 17:00 Uhr
-•   Samstags sowie an Sonn- und Feiertagen von 9:00 – 14:00 Uhr 
+• Monday to Friday from 9 am – 5 pm
+• Saturday, Sunday and public holidays from 9 am – 2 pm
 
-Bei Fragen, die Sie als Kontaktperson im Speziellen betreffen, wenden Sie sich bitte an die Hotline für Kontaktpersonen unter der Telefonnummer: 0621 -293 2212.
+For particular questions about yourself as a contact person, please call the hotline for contact persons
+under the phone number: 0621 -293 2212.
 
-•   Montag bis Freitag von 8:30-13:30 Uhr
-•   Samstags sowie an Sonn- und Feiertagen von 10:00 – 14:00 Uhr 
-
-
-Im Anhang erhalten Sie außerdem Informationen und Unterlagen, die für Sie als Kontaktperson wichtig sind. 
-
-
-Wir bedanken uns für Ihre Mitarbeit und wünschen Ihnen alles Gute. 
-
-Ihr Gesundheitsamt Mannheim
+•   Monday to Friday from 8:30 am - 1:30 pm
+•   Saturday, Sunday and public holidays from 10 am – 2 pm
 
 
-Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.
+Attached you will find information and documentation of importance to you as a contact person.
+
+Thank you for your cooperation.
+
+Best wishes,
+
+Your Gesundheitsamt Mannheim
+
+If you need urgent medical treatment, please contact your general practitioner (GP).
+During the night and at weekends please contact the GP on-call service (116 117) or in severe
+cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the
+ambulance service under the number 112. Before going to see your GP or going to the hospital
+in person, you must first call and tell them you have COVID-19 and are currently in quarantine.

@@ -9,6 +9,7 @@ import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.core.web.QuaranoHttpHeaders;
+import quarano.user.LocaleConfiguration;
 import quarano.user.web.UserController.NewPassword;
 
 import java.util.Locale;
@@ -73,6 +74,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	private String performGet(String token) throws Exception {
+
 		// check if token is valid for authentication
 		String resultDtoStr = mvc.perform(get("/api/user/me")
 				.header("Origin", "*")
@@ -193,7 +195,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
 
 		// change
-		var newLocale = new Locale("tr");
+		var newLocale = LocaleConfiguration.TURKISH;
 
 		mvc.perform(patch("/api/user/me/locale")
 				.contentType(MediaType.APPLICATION_JSON)

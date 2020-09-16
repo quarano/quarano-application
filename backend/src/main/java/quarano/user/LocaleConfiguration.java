@@ -39,10 +39,12 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @RequiredArgsConstructor
 public class LocaleConfiguration {
 
+	public static final Locale TURKISH = new Locale("tr");
+
 	public static final List<Locale> LOCALES = List.of(
 			Locale.GERMAN,
 			Locale.ENGLISH,
-			new Locale("tr"));
+			TURKISH);
 
 	private final @NonNull AuthenticationManager accounts;
 	private final @NonNull TrackedPersonRepository persons;
@@ -103,6 +105,7 @@ public class LocaleConfiguration {
 		@Override
 		protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 				FilterChain filterChain) throws ServletException, IOException {
+
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 
 			var locale = localeResolver.resolveLocale(httpServletRequest);

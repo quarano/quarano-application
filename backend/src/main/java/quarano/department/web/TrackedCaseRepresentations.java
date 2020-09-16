@@ -17,7 +17,6 @@ import quarano.department.*;
 import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.diary.DiaryEntry;
-import quarano.reference.Language;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
@@ -145,10 +144,11 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	TrackedCaseContactSummary toContactSummary(ContactPerson contactPerson, List<LocalDate> contactDates) {
 
 		var contactTrackedCase = cases.findByOriginContacts(contactPerson);
+
 		return new TrackedCaseContactSummary(contactPerson, contactDates, contactTrackedCase, messages);
 	}
 
-	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry, Language lang) {
+	public TrackedCaseDiaryEntrySummary toDiaryEntrySummary(DiaryEntry diaryEntry, Locale lang) {
 		return new TrackedCaseDiaryEntrySummary(diaryEntry, mapper, lang);
 	}
 
@@ -182,20 +182,21 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return mapper.map(source, new TrackedCase(person, type, department));
 	}
 
-	Questionnaire from(QuestionnaireDto source, Language lang) {
+	Questionnaire from(QuestionnaireDto source, Locale lang) {
 
 		var report = createQuestionnaireFrom(source);
+
 		return source.applyTo(mapper.map(source, report), symptoms, lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase, Language lang) {
+	Questionnaire from(QuestionnaireDto source, TrackedCase trackedCase, Locale lang) {
 
 		return trackedCase.getQuestionnaire() == null
 				? from(source, lang)
 				: from(source, trackedCase.getQuestionnaire(), lang);
 	}
 
-	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing, Language lang) {
+	Questionnaire from(QuestionnaireDto source, @Nullable Questionnaire existing, Locale lang) {
 
 		var mapped = existing == null
 				? from(source, lang)
@@ -277,7 +278,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	private void validateAfterEnrollment(TrackedCaseDto source, Errors errors) {
 
-		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
+		var dto = mapper.map(source, TrackedPersonDto.class);
 
 		validator.validate(dto, errors);
 	}

@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import quarano.user.LocaleConfiguration;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
@@ -64,7 +65,7 @@ public class LocaleConfigurationTests {
 	@Test
 	void testLocaleHandlingWithAcceptLanguageHeader() throws Exception {
 
-		var response = login(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE, Locale.forLanguageTag("tr"));
+		var response = login(USERNAME_WITHOUT_LOCALE, PASSWORD_WITHOUT_LOCALE, LocaleConfiguration.TURKISH);
 
 		assertThat(response.getHeader(CONTENT_LANGUAGE)).isEqualTo("tr");
 
@@ -94,7 +95,7 @@ public class LocaleConfigurationTests {
 
 		var token = response.getHeader(AUTH_TOKEN);
 
-		var locale = Locale.forLanguageTag("tr");
+		var locale = LocaleConfiguration.TURKISH;
 
 		var responseGet = performGet(ME, token, locale);
 		var document = JsonPath.parse(responseGet.getContentAsString());
