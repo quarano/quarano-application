@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.AttributeConverter;
@@ -15,12 +16,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Converter
-public class TranslationConverter implements AttributeConverter<Map<Language, String>, String> {
+public class TranslationConverter implements AttributeConverter<Map<Locale, String>, String> {
 
 	ObjectMapper mapper = new ObjectMapper();
 
 	@Override
-	public String convertToDatabaseColumn(Map<Language, String> data) {
+	public String convertToDatabaseColumn(Map<Locale, String> data) {
 		try {
 			return mapper.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
@@ -30,12 +31,14 @@ public class TranslationConverter implements AttributeConverter<Map<Language, St
 	}
 
 	@Override
-	public Map<Language, String> convertToEntityAttribute(String data) {
-        var mapValue = new HashMap<Language, String>();
+	public Map<Locale, String> convertToEntityAttribute(String data) {
+
+        var mapValue = new HashMap<Locale, String>();
+
         if(data == null) {
         	return mapValue;
 		}
-		var typeRef = new TypeReference<HashMap<Language, String>>() {};
+		var typeRef = new TypeReference<HashMap<Locale, String>>() {};
 		try {
 			mapValue = mapper.readValue(data, typeRef);
 		} catch (IOException e) {

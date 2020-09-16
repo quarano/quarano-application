@@ -37,7 +37,9 @@ class SymptomController {
 	 */
 	@GetMapping("/api/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
-		final Language lang = Language.fromLocale(LocaleContextHolder.getLocale());
+
+		final var lang = LocaleContextHolder.getLocale();
+
 		return symptoms.findAll(BY_NAME_ASCENDING)
 				.map(it -> modelMapper.map(it.translate(lang), SymptomDto.class))
 				.stream();

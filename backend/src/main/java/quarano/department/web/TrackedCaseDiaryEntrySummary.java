@@ -3,7 +3,6 @@ package quarano.department.web;
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.MapperWrapper;
 import quarano.diary.DiaryEntry;
-import quarano.reference.Language;
 import quarano.reference.SymptomDto;
 import quarano.tracking.ContactPerson;
 
@@ -24,7 +23,7 @@ public class TrackedCaseDiaryEntrySummary extends RepresentationModel<TrackedCas
 
 	private final DiaryEntry entry;
 	private final MapperWrapper mapper;
-	private final Language lang;
+	private final Locale lang;
 
 	public String getId() {
 		return entry.getId().toString();

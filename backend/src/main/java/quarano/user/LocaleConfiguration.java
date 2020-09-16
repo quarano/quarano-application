@@ -36,10 +36,12 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @RequiredArgsConstructor
 public class LocaleConfiguration implements WebMvcConfigurer {
 
+	public static final Locale TURKISH = new Locale("tr");
+
 	public static final List<Locale> LOCALES = List.of(
 			Locale.GERMAN,
 			Locale.ENGLISH,
-			new Locale("tr"));
+			TURKISH);
 
 	private final @NonNull AuthenticationManager accounts;
 	private final @NonNull TrackedPersonRepository people;

@@ -27,6 +27,7 @@ import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import quarano.user.LocaleConfiguration;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
@@ -81,7 +82,7 @@ public class LocaleConfigurationTests {
 	@WithQuaranoUser(USERNAME_WITH_LOCALE)
 	void testLocaleHandlingWithUserSetting() throws Exception {
 
-		var locale = Locale.forLanguageTag("tr");
+		var locale = LocaleConfiguration.TURKISH;
 
 		var responseGet = performGet(ME, locale);
 		var document = JsonPath.parse(responseGet.getContentAsString());

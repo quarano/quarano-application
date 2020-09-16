@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import quarano.user.LocaleConfiguration;
 
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
@@ -34,7 +35,7 @@ class SymptomControllerWebIntegrationTest {
 		var germanSymptoms = getSymptoms(Locale.GERMAN);
 		var germanName = germanSymptoms.read("$.[0].name", String.class);
 
-		var turkishSymptoms = getSymptoms(new Locale("tr"));
+		var turkishSymptoms = getSymptoms(LocaleConfiguration.TURKISH);
 		var turkishName = turkishSymptoms.read("$.[0].name", String.class);
 
 		assertThat(germanName.equals(turkishName)).isFalse();
@@ -59,24 +60,24 @@ class SymptomControllerWebIntegrationTest {
 
 	@Test
 	void storesSymptomWithTranslations() throws Exception {
+
 		var payload = new SymptomDto();
 		payload.setId(UUID.randomUUID());
 		payload.setName("Arterienverkalkung");
-		var translations = new EnumMap<Language, String>(Language.class);
+		var translations = new HashMap<Locale, String>();
 		payload.setTranslations(translations);
-		translations.put(Language.DE, "Arterienverkalkung");
-		translations.put(Language.EN, "Hardening of the arteries");
-		translations.put(Language.TR, "Arterlerin sertleşmesi");
+		translations.put(Locale.GERMAN, "Arterienverkalkung");
+		translations.put(Locale.ENGLISH, "Hardening of the arteries");
+		translations.put(LocaleConfiguration.TURKISH, "Arterlerin sertleşmesi");
 
-
-		String response = mvc.perform(post("/api/symptoms")
+		var response = mvc.perform(post("/api/symptoms")
 				.content(mapper.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.translations.TR", String.class)).isEqualTo("Arterlerin sertleşmesi");
+		assertThat(document.read("$.translations.tr", String.class)).isEqualTo("Arterlerin sertleşmesi");
 	}
 
 	DocumentContext getSymptoms(Locale locale) throws Exception {
@@ -85,6 +86,7 @@ class SymptomControllerWebIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(locale))
 				.andReturn().getResponse().getContentAsString();
+
 		return JsonPath.parse(response);
 	}
 }

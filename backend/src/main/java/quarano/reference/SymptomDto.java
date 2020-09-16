@@ -3,6 +3,7 @@ package quarano.reference;
 import lombok.*;
 import quarano.core.validation.Alphabetic;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,5 +21,5 @@ public class SymptomDto {
 
 	private @Alphabetic	String name;
 	private boolean isCharacteristic;
-	private Map<Language, String> translations;
+	private Map<Locale, String> translations;
 }
