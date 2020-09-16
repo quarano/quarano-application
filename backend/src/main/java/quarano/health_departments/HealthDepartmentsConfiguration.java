@@ -6,15 +6,12 @@ import quarano.tracking.ZipCode;
 
 import java.io.IOException;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.TimeZone;
 
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.xmlbeam.XBProjector;
-import org.xmlbeam.annotation.XBDocURL;
-import org.xmlbeam.annotation.XBRead;
 import org.xmlbeam.config.DefaultXMLFactoriesConfig;
 import org.xmlbeam.config.DefaultXMLFactoriesConfig.NamespacePhilosophy;
 import org.xmlbeam.types.DefaultTypeConverter;
@@ -26,14 +23,13 @@ import org.xmlbeam.types.DefaultTypeConverter.Conversion;
  * 
  * @author Jens Kutzsche
  */
-@Service
-public class HealthDepartmentOverview {
+@Configuration
+public class HealthDepartmentsConfiguration {
 
 	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
 
-	private final HealthDepartments healthDepartments;
-
-	HealthDepartmentOverview() {
+	@Bean
+	HealthDepartments healthDepartments() {
 
 		var config = new DefaultXMLFactoriesConfig().setNamespacePhilosophy(NamespacePhilosophy.AGNOSTIC);
 		var projector = new XBProjector(config);
@@ -45,82 +41,9 @@ public class HealthDepartmentOverview {
 		projector.config().setTypeConverter(converter);
 
 		try {
-			this.healthDepartments = projector.io().fromURLAnnotation(HealthDepartments.class);
+			return projector.io().fromURLAnnotation(HealthDepartments.class);
 		} catch (IOException e) {
 			throw new IllegalStateException("Can't initialize service HealthDepartmentOverview!", e);
-		}
-	}
-
-	public List<HealthDepartment> getAllHealthDepartments() {
-		return healthDepartments.getAll();
-	}
-
-	public Optional<HealthDepartment> findHealthDepartmentWithExact(String searchString) {
-		return Optional.ofNullable(healthDepartments.findDepartmentWithExact(searchString));
-	}
-
-	public List<HealthDepartment> findHealthDepartmentsContains(String searchString) {
-		return healthDepartments.findDepartmentsContains(searchString);
-	}
-
-	@XBDocURL("resource://masterdata/TransmittingSiteSearchText.xml")
-	private interface HealthDepartments {
-
-		// Without NamespacePhilosophy.AGNOSTIC the namespace of an element must be declared!
-		// @XBRead("/xbdefaultns:TransmittingSites/xbdefaultns:TransmittingSite")
-		@XBRead("/TransmittingSites/TransmittingSite")
-		List<HealthDepartment> getAll();
-
-		@XBRead("//SearchText[@Value='{0}']/..")
-		HealthDepartment findDepartmentWithExact(String searchString);
-
-		@XBRead("//SearchText[contains(@Value, '{0}')]/..")
-		List<HealthDepartment> findDepartmentsContains(String searchString);
-	}
-
-	public interface HealthDepartment {
-		/**
-		 * @return Often the administrative unit (e.g. the county)
-		 */
-		@XBRead("@Name")
-		String getName();
-
-		/**
-		 * @return The code from RKI
-		 */
-		@XBRead("@Code")
-		String getCode();
-
-		/**
-		 * @return The department of the administrative unit.
-		 */
-		@XBRead("@Department")
-		String getDepartment();
-
-		@XBRead("@Phone")
-		PhoneNumber getPhone();
-
-		@XBRead("@Fax")
-		PhoneNumber getFax();
-
-		@XBRead("@Email")
-		EmailAddress getEmail();
-
-		@XBRead(".")
-		Address getAddress();
-
-		@XBRead("SearchText/@Value")
-		List<String> getSearchTexts();
-
-		public interface Address {
-			@XBRead("@Street")
-			String getStreet();
-
-			@XBRead("@Postalcode")
-			ZipCode getZipcode();
-
-			@XBRead("@Place")
-			String getPlace();
 		}
 	}
 
