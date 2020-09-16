@@ -1,12 +1,5 @@
 package quarano.department.web;
 
-import lombok.Data;
-import lombok.Setter;
-import quarano.core.validation.Textual;
-import quarano.department.Questionnaire;
-import quarano.reference.Symptom;
-import quarano.reference.SymptomRepository;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +11,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.validation.Errors;
+
+import lombok.Data;
+import lombok.Setter;
+import quarano.core.validation.Textual;
+import quarano.department.Questionnaire;
+import quarano.reference.Symptom;
+import quarano.reference.SymptomRepository;
 
 @Data
 public class QuestionnaireDto {
