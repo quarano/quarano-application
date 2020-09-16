@@ -3,8 +3,8 @@ import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operat
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
-  ValidationErrorService,
   VALIDATION_PATTERNS,
+  ValidationErrorService,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -47,6 +47,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   caseDetail$: Observable<CaseDto>;
   loading$: Observable<boolean>;
+  caseLink: string;
 
   formGroup: FormGroup;
   @ViewChild('editForm') editFormElement: NgForm;
@@ -256,10 +257,17 @@ export class EditComponent implements OnInit, OnDestroy {
       if (closeAfterSave) {
         this.router.navigate([this.returnLink]);
       } else {
-        this.formGroup.markAsPristine();
-        this.formGroup.markAsUntouched();
+        this.subs.add(
+          this.caseDetail$.pipe(filter((caseDto) => !!caseDto.caseId)).subscribe((next) => {
+            this.router.navigate([this.getCaseLink(next.caseId)]);
+          })
+        );
       }
     });
+  }
+
+  getCaseLink(id: string) {
+    return `/health-department/case-detail/${this.type$$.value}/` + id;
   }
 
   get returnLink() {
