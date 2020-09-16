@@ -2,24 +2,24 @@ package quarano.health_departments;
 
 import static org.assertj.core.api.Assertions.*;
 
-import quarano.health_departments.HealthDepartmentOverview.HealthDepartment;
-import quarano.health_departments.HealthDepartmentOverview.HealthDepartment.Address;
+import quarano.health_departments.HealthDepartments.HealthDepartment;
+import quarano.health_departments.HealthDepartments.HealthDepartment.Address;
 
 import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
 
-public class HealthDepartmentOverviewTest {
+public class HealthDepartmentsTest {
 
 	@Test
 	void testGetAllHealthDepartments() {
 
-		var overview = new HealthDepartmentOverview();
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
 
-		var healthDepartments = overview.getAllHealthDepartments();
+		var allDepartments = healthDepartments.getAll();
 
-		assertThat(healthDepartments).hasSize(399);
+		assertThat(allDepartments).hasSize(399);
 
-		var first = assertThat(healthDepartments).first();
+		var first = assertThat(allDepartments).first();
 		first.extracting(HealthDepartment::getName).isEqualTo("Stadt Flensburg");
 		first.extracting(HealthDepartment::getCode).isEqualTo("1.01.0.01.");
 		first.extracting(HealthDepartment::getDepartment).isEqualTo("Fachbereich 2 / Gesundheitsdienste");
@@ -27,7 +27,7 @@ public class HealthDepartmentOverviewTest {
 		first.extracting(HealthDepartment::getFax).asString().isEqualTo("0461851960");
 		first.extracting(HealthDepartment::getEmail).asString().isEqualTo("amtsarzt@flensburg.de");
 
-		Address address = healthDepartments.get(0).getAddress();
+		Address address = allDepartments.get(0).getAddress();
 		assertThat(address.getStreet()).isEqualTo("Norderstr. 58-60");
 		assertThat(address.getZipcode()).asString().isEqualTo("24939");
 		assertThat(address.getPlace()).isEqualTo("Flensburg");
@@ -40,45 +40,45 @@ public class HealthDepartmentOverviewTest {
 	@Test
 	void testFindHealthDepartmentWithExact() {
 
-		var overview = new HealthDepartmentOverview();
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
 
-		var healthDepartment = overview.findHealthDepartmentWithExact("01665");
+		var department = healthDepartments.findDepartmentWithExact("01665");
 
-		assertThat(healthDepartment).isPresent();
+		assertThat(department).isPresent();
 
-		checkDepartmentMeissen(assertThat(healthDepartment.get()));
+		checkDepartmentMeissen(assertThat(department.get()));
 	}
 
 	@Test
 	void testCantFindHealthDepartmentWithExact() {
 
-		var overview = new HealthDepartmentOverview();
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
 
-		var healthDepartment = overview.findHealthDepartmentWithExact("99999");
+		var department = healthDepartments.findDepartmentWithExact("99999");
 
-		assertThat(healthDepartment).isEmpty();
+		assertThat(department).isEmpty();
 	}
 
 	@Test
 	void testFindHealthDepartmentContains() {
 
-		var overview = new HealthDepartmentOverview();
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
 
-		var healthDepartments = overview.findHealthDepartmentsContains("1665");
+		var departments = healthDepartments.findDepartmentsContains("1665");
 
-		assertThat(healthDepartments).hasSize(2);
+		assertThat(departments).hasSize(2);
 
-		checkDepartmentMeissen(assertThat(healthDepartments).last());
+		checkDepartmentMeissen(assertThat(departments).last());
 	}
 
 	@Test
 	void testCantFindHealthDepartmentContains() {
 
-		var overview = new HealthDepartmentOverview();
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
 
-		var healthDepartments = overview.findHealthDepartmentsContains("ABC");
+		var departments = healthDepartments.findDepartmentsContains("ABC");
 
-		assertThat(healthDepartments).isEmpty();
+		assertThat(departments).isEmpty();
 	}
 
 	private void checkDepartmentMeissen(ObjectAssert<HealthDepartment> department) {
