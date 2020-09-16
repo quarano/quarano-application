@@ -42,6 +42,9 @@
     "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
     "USERNAME": "Benutzername"
   },
+  "CONTACT_LOCATION": {
+    "ADD_LOCATION": "Kontaktort hinzufügen"
+  },
   "CONTACT_DIALOG": {
     "ABBRECHEN": "Abbrechen",
     "KONTAKT_ANLEGEN": "Kontakt anlegen",
@@ -234,6 +237,20 @@
     "SIE_HABEN_VOM_GESUNDHEITSAMT": "Sie haben vom Gesundheitsamt Mannheim einen personalisierten Registrierungs-Link erhalten. In den folgenden Seiten melden Sie sich bitte an und nutzen die Anwendung. Mit der Nutzung dieser Anwendung unterstützen Sie das Gesundheitsamt und tragen dazu bei, dass schneller agiert werden kann.",
     "WEITER": "Weiter",
     "WICHTIG": "Wichtig"
+  },
+  "LOCATION": {
+    "DESCRIPTION": "Sie können hier Kontaktorte hinzufügen. Das kann Cafes, Sportvereine oder Arbeitgeber sein.",
+    "TITLE": "Ort hinzufügen",
+    "STREET": "Straße",
+    "HOUSE_NUMBER": "Hausnummer",
+    "ZIP_CODE": "Postleitzahl",
+    "CITY": "Stadt",
+    "START_TIME": "Von",
+    "END_TIME": "Bis",
+    "CONTACT_PERSON": "Ansprechpartner (optional)",
+    "NOTES": "Notizen (optional)",
+    "SAVE": "Speichern",
+    "CANCEL": "Verwerfen"
   },
   "LOGIN": {
     "ANMELDEN": "Anmelden",

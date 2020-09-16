@@ -4,6 +4,7 @@ import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmati
 import { Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { ContactPersonDialogComponent } from '..//contact-person-dialog/contact-person-dialog.component';
+import { ContactLocationFormComponent } from '../contact-location-form/contact-location-form.component';
 
 export interface ContactPerson {
   id?: string;
@@ -46,6 +47,16 @@ export class ContactDialogService {
     };
     const combinedConfig = { ...standardConfig, ...dialogConfig };
     return this.dialog.open(ContactPersonDialogComponent, combinedConfig);
+  }
+
+  openContactLocationDialog(dialogConfig: MatDialogConfig = {}): MatDialogRef<ContactLocationFormComponent> {
+    const standardConfig: MatDialogConfig = {
+      height: '90vh',
+      maxWidth: '100vw',
+      data: {},
+    };
+    const combinedConfig = { ...standardConfig, ...dialogConfig };
+    return this.dialog.open(ContactLocationFormComponent, combinedConfig);
   }
 
   askAndOpenContactPersonDialog(name: string): Observable<any> {

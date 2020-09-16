@@ -1,0 +1,21 @@
+<mat-chip-list #chipList>
+  <mat-chip
+    *ngFor="let location of addedLocations"
+    [selectable]="selectable"
+    [removable]="removable"
+    (removed)="remove(location)"
+  >
+    {{ getLocationTitle(location) }}
+    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+  </mat-chip>
+  <button
+    mat-stroked-button
+    color="primary"
+    type="button"
+    (click)="openLocationDialog()"
+    class="px-1 py-0 m-1"
+    style="float: right;"
+  >
+    {{ 'CONTACT_LOCATION.ADD_LOCATION' | translate }}
+  </button>
+</mat-chip-list>

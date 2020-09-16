@@ -9,6 +9,9 @@ import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultipleContactAutocompleteComponent } from './/multiple-contact-autocomplete/multiple-contact-autocomplete.component';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
+import { ContactLocationFormComponent } from './contact-location-form/contact-location-form.component';
+import { MultipleLocationChipComponent } from './multiple-location-chip/multiple-location-chip.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -20,9 +23,22 @@ import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-auto
     SharedUiButtonModule,
     SharedUiMultipleAutocompleteModule,
     SharedUtilTranslationModule,
+    MatDialogModule,
   ],
-  declarations: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
-  exports: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
-  entryComponents: [ContactPersonDialogComponent],
+  declarations: [
+    ContactPersonDialogComponent,
+    ContactPersonFormComponent,
+    MultipleContactAutocompleteComponent,
+    ContactLocationFormComponent,
+    MultipleLocationChipComponent,
+  ],
+  exports: [
+    ContactPersonDialogComponent,
+    ContactPersonFormComponent,
+    MultipleContactAutocompleteComponent,
+    ContactLocationFormComponent,
+    MultipleLocationChipComponent,
+  ],
+  entryComponents: [ContactPersonDialogComponent, ContactLocationFormComponent],
 })
 export class ClientUiContactPersonDetailModule {}

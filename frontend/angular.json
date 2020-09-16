@@ -1804,6 +1804,35 @@
           "style": "scss"
         }
       }
+    },
+    "shared-ui-map": {
+      "projectType": "library",
+      "root": "libs/shared/ui-map",
+      "sourceRoot": "libs/shared/ui-map/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/ui-map/tsconfig.lib.json", "libs/shared/ui-map/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-map/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-map/jest.config.js",
+            "tsConfig": "libs/shared/ui-map/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/ui-map/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

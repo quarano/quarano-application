@@ -178,6 +178,9 @@
     },
     "shared-util-translation": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "shared-ui-map": {
+      "tags": []
     }
   }
 }

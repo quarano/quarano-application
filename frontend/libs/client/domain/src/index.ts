@@ -18,3 +18,5 @@ export * from './lib/model/contact-person';
 export * from './lib/data-access/contact-person.service';
 export * from './lib/resolvers/contact-person.resolver';
 export * from './lib/store/client-store.service';
+export * from './lib/data-access/contact-location.service';
+export * from './lib/model/contact-location';

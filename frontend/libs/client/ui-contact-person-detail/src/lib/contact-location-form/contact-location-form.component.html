@@ -1,0 +1,82 @@
+<h1 mat-dialog-title>{{ 'LOCATION.TITLE' | translate }}</h1>
+
+<mat-dialog-content [formGroup]="formGroup">
+  <p>{{ 'LOCATION.DESCRIPTION' | translate }}</p>
+
+  <mat-form-field class="full-width">
+    <mat-label>{{ 'LOCATION.TITLE' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="name" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('name')">
+      {{ getErrorMessage('name', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.STREET' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="street" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('street')">
+      {{ getErrorMessage('street', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.HOUSE_NUMBER' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="houseNumber" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('houseNumber')">
+      {{ getErrorMessage('houseNumber', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.ZIP_CODE' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="zipCode" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('zipCode')">
+      {{ getErrorMessage('zipCode', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.CITY' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="city" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('city')">
+      {{ getErrorMessage('city', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.START_TIME' | translate }}</mat-label>
+    <input type="time" [readonly]="viewOnly" matInput formControlName="startTime" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('startTime')">
+      {{ getErrorMessage('startTime', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>{{ 'LOCATION.END_TIME' | translate }}</mat-label>
+    <input type="time" [readonly]="viewOnly" matInput formControlName="endTime" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('endTime')">
+      {{ getErrorMessage('endTime', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>{{ 'LOCATION.CONTACT_PERSON' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="contactPerson" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('contactPerson')">
+      {{ getErrorMessage('contactPerson', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>{{ 'LOCATION.NOTES' | translate }}</mat-label>
+    <input [readonly]="viewOnly" matInput formControlName="notes" />
+    <mat-error *ngFor="let errorKey of getErrorKeys('notes')">
+      {{ getErrorMessage('notes', errorKey) | async }}
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'LOCATION.CANCEL' | translate }}</button>
+  <button mat-button (click)="saveLocation()">{{ 'LOCATION.SAVE' | translate }}</button>
+</mat-dialog-actions>
