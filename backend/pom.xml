@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.3.RELEASE</version>
+		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
@@ -20,8 +20,8 @@
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
 		<jddd.version>0.1.0</jddd.version>
-		<moduliths.version>1.0.0.RC4</moduliths.version>
-		<spring-hateoas.version>1.2.0-M1</spring-hateoas.version>
+		<moduliths.version>1.0.0</moduliths.version>
+		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
@@ -261,7 +261,7 @@
 			<artifactId>greenmail</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- For XML projection of RKI PLZTool data -->
 		<dependency>
 			<groupId>org.xmlbeam</groupId>
