@@ -197,9 +197,10 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "options": {
-            "browserTarget": "quarano-frontend:build"
+            "browserTarget": "quarano-frontend:build",
+            "extraWebpackConfig": "./apps/quarano-frontend-e2e/coverage.webpack.ts"
           },
           "configurations": {
             "production": {

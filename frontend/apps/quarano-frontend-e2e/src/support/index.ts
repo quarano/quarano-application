@@ -1,4 +1,5 @@
 import './commands';
+import '@cypress/code-coverage/support';
 
 /*
  * workaround for cypress electron issue.
