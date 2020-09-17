@@ -181,7 +181,7 @@ describe('new case', () => {
         });
 
         it('should be a date string lower or equal today', () => {
-          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
+          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString('de');
 
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').type(dateTomorrow);
           cy.get('[data-cy="input-dayofbirth"] input[matInput]').blur();
@@ -210,7 +210,7 @@ describe('new case', () => {
         dateChecks('[data-cy="input-testdate"]', '.mat-calendar-body-today', '04.06.2020');
 
         it('should be a date string lower or equal today', () => {
-          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
+          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString('de');
           cy.get('[data-cy="input-testdate"]').should('exist');
           cy.get('[data-cy="input-testdate"] input[matInput]').clear().type(dateTomorrow);
           cy.get('[data-cy="input-testdate"] input[matInput]').blur();
@@ -224,7 +224,7 @@ describe('new case', () => {
         dateChecks(selector, '.mat-calendar-body-today', '04.06.2020');
 
         it('should be a date string lower or equal today', () => {
-          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString();
+          const dateTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString('de');
           cy.get(selector).should('exist');
           cy.get(selector + ' input[matInput]')
             .clear()
@@ -240,12 +240,12 @@ describe('new case', () => {
           cy.get(selector).should('exist');
           cy.get(selector + ' input[matInput]')
             .clear()
-            .type(now.toLocaleDateString());
+            .type(now.toLocaleDateString('de'));
           cy.get(selector + ' input[matInput]').blur();
 
           cy.get('[data-cy="input-quarantineend"] input[matInput]').should(
             'contain.value',
-            fourteenDaysLater.toLocaleDateString()
+            fourteenDaysLater.toLocaleDateString('de')
           );
         });
       });
