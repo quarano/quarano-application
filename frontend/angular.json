@@ -201,6 +201,7 @@
           "options": {
             "browserTarget": "quarano-frontend:build",
             "proxyConfig": "proxy.conf.json"
+            "extraWebpackConfig": "./apps/quarano-frontend-e2e/coverage.webpack.ts"
           },
           "configurations": {
             "production": {
