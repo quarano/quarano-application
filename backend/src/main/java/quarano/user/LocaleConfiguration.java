@@ -53,7 +53,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
-		return new MessageSourceAccessor(source);
+		return new MessageSourceAccessor(source, Locale.GERMANY);
 	}
 
 	@Bean
