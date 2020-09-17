@@ -205,9 +205,10 @@ class RegistrationWebIntegrationTests {
 		var document = JsonPath.parse(response);
 		var harry = harryCase.getTrackedPerson();
 
-		assertThat(document.read("$.email", String.class)).contains("\r\n\r\n==========\r\n\r\n");
-		assertThat(document.read("$.email", String.class)).startsWith("Dear Mr/Ms " + harry.getLastName() + ",");
-		assertThat(document.read("$.email", String.class)).contains("Sehr geehrte/geehrter Frau/Herr");
+		var mailBody = document.read("$.email", String.class);
+		assertThat(mailBody).contains("\r\n\r\n==========\r\n\r\n");
+		assertThat(mailBody).startsWith("Dear Mr/Ms " + harry.getLastName());
+		assertThat(mailBody).contains("Sehr geehrte/geehrter Frau/Herr");
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
 
@@ -222,11 +223,11 @@ class RegistrationWebIntegrationTests {
 				.getContentAsString();
 
 		document = JsonPath.parse(response);
+		mailBody = document.read("$.email", String.class);
 		var harriette = harrietteCase.getTrackedPerson();
 
-		assertThat(document.read("$.email", String.class)).doesNotContain("==========");
-		assertThat(document.read("$.email", String.class))
-				.contains("Sehr geehrte/geehrter Frau/Herr " + harriette.getLastName() + ",");
+		assertThat(mailBody).doesNotContain("==========");
+		assertThat(mailBody).contains("Sehr geehrte/geehrter Frau/Herr " + harriette.getLastName());
 
 		assertThat(codes.getPendingActivationCode(harriette.getId())).isPresent();
 
@@ -241,11 +242,11 @@ class RegistrationWebIntegrationTests {
 				.getContentAsString();
 
 		document = JsonPath.parse(response);
+		mailBody = document.read("$.email", String.class);
 		var tanja = tanjaCase.getTrackedPerson();
 
-		assertThat(document.read("$.email", String.class)).doesNotContain("==========");
-		assertThat(document.read("$.email", String.class))
-				.contains("Sehr geehrte/geehrter Frau/Herr " + tanja.getLastName() + ",");
+		assertThat(mailBody).doesNotContain("==========");
+		assertThat(mailBody).contains("Sehr geehrte/geehrter Frau/Herr " + tanja.getLastName());
 
 		assertThat(codes.getPendingActivationCode(tanja.getId())).isPresent();
 	}

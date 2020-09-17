@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.MessageSourceAccessor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.tracking.TrackedPerson;
@@ -43,6 +44,7 @@ public class LocaleConfigurationTests {
 	final MockMvc mvc;
 	final ObjectMapper mapper;
 	final TrackedPersonRepository persons;
+	final MessageSourceAccessor messages;
 
 	@Test
 	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
@@ -58,7 +60,8 @@ public class LocaleConfigurationTests {
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
-		assertThat(document.read("$.current", String.class)).isEqualTo("Ungültiges aktuelles Passwort!");
+		var message = messages.getMessage("Invalid.newPassword.current", DEFAULT_LOCALE);
+		assertThat(document.read("$.current", String.class)).isEqualTo(message);
 	}
 
 	@Test
@@ -75,7 +78,8 @@ public class LocaleConfigurationTests {
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en");
-		assertThat(document.read("$.current", String.class)).isEqualTo("Invalid current password!");
+		var error = messages.getMessage("Invalid.newPassword.current", Locale.UK);
+		assertThat(document.read("$.current", String.class)).isEqualTo(error);
 	}
 
 	@Test
@@ -94,7 +98,8 @@ public class LocaleConfigurationTests {
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
-		assertThat(document.read("$.current", String.class)).isEqualTo("Invalid current password!");
+		var error = messages.getMessage("Invalid.newPassword.current", Locale.UK);
+		assertThat(document.read("$.current", String.class)).isEqualTo(error);
 	}
 
 	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)

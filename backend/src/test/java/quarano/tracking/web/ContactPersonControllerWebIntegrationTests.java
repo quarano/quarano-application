@@ -102,11 +102,13 @@ class ContactPersonControllerWebIntegrationTests {
 		var houseNumber = messages.getMessage("Pattern.houseNumber");
 		var firstName = messages.getMessage("Pattern.firstName");
 		var lastName = messages.getMessage("Pattern.lastName");
+		var city = messages.getMessage("Pattern.city");
+		var street = messages.getMessage("Pattern.street");
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
-		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.city", String.class)).isEqualTo(city);
+		assertThat(document.read("$.street", String.class)).isEqualTo(street);
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 

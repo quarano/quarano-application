@@ -292,11 +292,13 @@ class TrackedCaseControllerWebIntegrationTests {
 		var firstName = messages.getMessage("Pattern.firstName");
 		var lastName = messages.getMessage("Pattern.lastName");
 		var extReference = messages.getMessage("Pattern.extReferenceNumber");
+		var city = messages.getMessage("Pattern.city");
+		var street = messages.getMessage("Pattern.street");
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
-		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.city", String.class)).isEqualTo(city);
+		assertThat(document.read("$.street", String.class)).isEqualTo(street);
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 		assertThat(document.read("$.extReferenceNumber", String.class)).isEqualTo(extReference);
 	}
@@ -567,7 +569,8 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(contact.read("$.isHealthStaff", boolean.class)).isTrue();
 		assertThat(contact.read("$.isSenior", Boolean.class)).isNull();
 		assertThat(contact.read("$.hasPreExistingConditions", Boolean.class)).isNull();
-		assertThat(contact.read("$.caseStatusLabel", String.class)).isEqualTo("angelegt");
+		var msgCreated = messages.getMessage("quarano.department.CaseStatus.opened", trackingCase.getTrackedPerson().getLocale());
+		assertThat(contact.read("$.caseStatusLabel", String.class)).isEqualTo(msgCreated);
 		assertThat(contact.read("$.caseType", String.class)).isEqualTo("contact");
 		assertThat(contact.read("$.contactDates", List.class)).contains(LocalDate.now().minusDays(1).toString());
 
