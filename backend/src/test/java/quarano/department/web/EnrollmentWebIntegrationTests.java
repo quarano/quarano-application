@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -266,17 +267,18 @@ class EnrollmentWebIntegrationTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
-
 		var document = JsonPath.parse(responseBody);
-
-		var houseNumber = messages.getMessage("Pattern.houseNumber");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
+		Locale locale = person.getLocale();
+		var houseNumber = messages.getMessage("Pattern.houseNumber", locale);
+		var firstName = messages.getMessage("Pattern.firstName", locale);
+		var lastName = messages.getMessage("Pattern.lastName", locale);
+		var city = messages.getMessage("Pattern.city", locale);
+		var street = messages.getMessage("Pattern.street", locale);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
-		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.city", String.class)).isEqualTo(city);
+		assertThat(document.read("$.street", String.class)).isEqualTo(street);
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 }

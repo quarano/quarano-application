@@ -3,6 +3,7 @@ package quarano.department;
 import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.MessageSourceAccessor;
 import quarano.QuaranoIntegrationTest;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
@@ -32,6 +33,7 @@ class MailForNewContactCaseEventListenerTests {
 	final TrackedPersonRepository persons;
 	final DepartmentRepository departments;
 	final GreenMail greenMail;
+	final MessageSourceAccessor messages;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -50,17 +52,21 @@ class MailForNewContactCaseEventListenerTests {
 		// wait for max 5s for 1 email to arrive
 		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
 
-		Message[] messages = greenMail.getReceivedMessages();
-		assertThat(messages).hasSize(1);
+		Message[] mails = greenMail.getReceivedMessages();
+		assertThat(mails).hasSize(1);
 
-		Message message = messages[0];
+		Message mail = mails[0];
 
-		assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
+		var subject = messages.getMessage("NewContactCaseMail.subject",
+				new Object[] { trackedCase.getDepartment().getName() },
+				trackedCase.getTrackedPerson().getLocale());
+
+		assertThat(mail.getSubject()).isEqualTo(subject);
+		assertThat(GreenMailUtil.getBody(mail)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
 				.contains("/client/enrollment/landing/contact/");
-		assertThat(message.getRecipients(RecipientType.TO)[0].toString())
+		assertThat(mail.getRecipients(RecipientType.TO)[0].toString())
 				.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
-		assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
+		assertThat(mail.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
 	}
 

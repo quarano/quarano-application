@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.MessageSourceAccessor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import quarano.core.validation.Alphabetic;
 import quarano.user.LocaleConfiguration;
 
 @QuaranoWebIntegrationTest
@@ -28,6 +30,7 @@ class SymptomControllerWebIntegrationTest {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
+	private final MessageSourceAccessor messages;
 
 	@Test
 	void readsSymptomsWithTranslations() throws Exception {
@@ -55,7 +58,7 @@ class SymptomControllerWebIntegrationTest {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.name", String.class)).isEqualTo("Dieses Feld darf nur Buchstaben enthalten!");
+		assertThat(document.read("$.name", String.class)).isEqualTo(messages.getMessage("Alphabetic"));
 	}
 
 	@Test
