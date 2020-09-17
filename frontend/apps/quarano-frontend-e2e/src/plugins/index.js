@@ -16,7 +16,23 @@ const { preprocessTypescript } = require('@nrwl/cypress/plugins/preprocessor');
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  require('@cypress/code-coverage/task')(on, config);
 
   // Preprocess Typescript file using Nx helper
   on('file:preprocessor', preprocessTypescript(config));
+
+  // set browser language to German to avoid test failures to due the developer's browser locale
+  // https://docs.cypress.io/api/plugins/browser-launch-api.html#Modify-browser-launch-arguments-preferences-and-extensions
+  on('before:browser:launch', (browser, launchOptions) => {
+    if (browser.family === 'chromium' && browser.name !== 'electron') {
+      launchOptions.preferences.default.intl = { accept_languages: 'de' };
+      return launchOptions;
+    }
+
+    if (browser.family === 'firefox') {
+      launchOptions.preferences['intl.locale.requested'] = 'de';
+      return launchOptions;
+    }
+  });
+  return config;
 };
