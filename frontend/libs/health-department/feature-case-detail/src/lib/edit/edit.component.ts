@@ -25,11 +25,6 @@ import {
 import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
-export interface CaseDetailResult {
-  caseDetail: CaseDto;
-  closeAfterSave: boolean;
-}
-
 @Component({
   selector: 'qro-client-edit',
   templateUrl: './edit.component.html',
@@ -39,15 +34,14 @@ export class EditComponent implements OnInit, OnDestroy {
   private subs: SubSink = new SubSink();
   today = new Date();
   selectableIndexCases: CaseSearchItem[] = [];
-  type$$ = new BehaviorSubject<CaseType>(CaseType.Index);
+  caseType: CaseType;
 
   get isIndexCase() {
-    return this.type$$.value === CaseType.Index;
+    return this.caseType === CaseType.Index;
   }
 
   caseDetail$: Observable<CaseDto>;
   loading$: Observable<boolean>;
-  caseLink: string;
 
   formGroup: FormGroup;
   @ViewChild('editForm') editFormElement: NgForm;
@@ -63,15 +57,8 @@ export class EditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.setCaseType();
     this.createFormGroup();
-
-    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      if (type === CaseType.Index) {
-        this.type$$.next(CaseType.Index);
-      } else if (type === CaseType.Contact) {
-        this.type$$.next(CaseType.Contact);
-      }
-    });
 
     this.caseDetail$ = combineLatest([
       this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
@@ -97,6 +84,12 @@ export class EditComponent implements OnInit, OnDestroy {
     );
 
     this.loading$ = this.entityService.loading$;
+  }
+
+  private setCaseType() {
+    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
+      type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
+    });
   }
 
   ngOnDestroy(): void {
@@ -138,7 +131,7 @@ export class EditComponent implements OnInit, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl(),
+      infected: new FormControl(false),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
@@ -150,7 +143,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.setValidators();
     this.subs.add(
       this.formGroup.get('infected').valueChanges.subscribe((value) => {
-        if (value && this.type$$.value === CaseType.Contact) {
+        if (value && this.caseType === CaseType.Contact) {
           this.onTestDateAdded(this.formGroup.controls.caseId.value);
         }
       })
@@ -239,7 +232,7 @@ export class EditComponent implements OnInit, OnDestroy {
           submitData[key] = submitData[key].toDate();
         }
       });
-      submitData.caseType = this.type$$.value;
+      submitData.caseType = this.caseType;
       submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
       this.saveCaseData(submitData, closeAfterSave);
     }
@@ -267,10 +260,10 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   getCaseLink(id: string) {
-    return `/health-department/case-detail/${this.type$$.value}/` + id;
+    return `/health-department/case-detail/${this.caseType}/` + id;
   }
 
   get returnLink() {
-    return `/health-department/${this.type$$.value}-cases/case-list`;
+    return `/health-department/${this.caseType}-cases/case-list`;
   }
 }
