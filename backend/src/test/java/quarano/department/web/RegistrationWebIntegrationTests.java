@@ -135,7 +135,7 @@ class RegistrationWebIntegrationTests {
 		var payload = expectFailedRegistration(registrationDto);
 		var document = JsonPath.parse(payload);
 
-		var invalidUsernameMessage = messages.getMessage("Invalid.accountRegistration.username");
+		var invalidUsernameMessage = messages.getMessage("Invalid.accountRegistration.username", Locale.GERMANY);
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(invalidUsernameMessage);
 
@@ -269,6 +269,7 @@ class RegistrationWebIntegrationTests {
 		// when
 		var responseBody = mvc.perform(post("/api/registration")
 				.header("Origin", "*")
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(registrationDto)))
 				.andExpect(status().isBadRequest())
@@ -279,7 +280,7 @@ class RegistrationWebIntegrationTests {
 
 		var document = JsonPath.parse(responseBody);
 
-		var usernameMessage = messages.getMessage("UserName");
+		var usernameMessage = messages.getMessage("UserName", Locale.GERMANY);
 
 		assertThat(document.read("$.username", String.class)).isEqualTo(usernameMessage);
 	}
@@ -332,7 +333,7 @@ class RegistrationWebIntegrationTests {
 		var responseBody = expectFailedRegistration(payload);
 		var document = JsonPath.parse(responseBody);
 
-		var wrongDateMessage = messages.getMessage("Invalid.accountRegistration.wrongBirthDate");
+		var wrongDateMessage = messages.getMessage("Invalid.accountRegistration.wrongBirthDate", Locale.GERMANY);
 
 		assertThat(document.read("$.dateOfBirth", String.class)).isEqualTo(wrongDateMessage);
 
@@ -434,6 +435,7 @@ class RegistrationWebIntegrationTests {
 
 		return mvc.perform(post("/api/registration")
 				.contentType(MediaType.APPLICATION_JSON)
+				.locale(Locale.GERMANY)
 				.content(mapper.writeValueAsString(payload)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

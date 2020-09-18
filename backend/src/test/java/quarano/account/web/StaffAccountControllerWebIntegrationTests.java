@@ -13,6 +13,7 @@ import quarano.account.RoleType;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountCreateInputDto;
 import quarano.account.web.StaffAccountRepresentations.StaffAccountUpdateInputDto;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -132,16 +133,17 @@ class StaffAccountControllerWebIntegrationTests {
 		// send request
 		var responseBody = mvc.perform(post("/api/hd/accounts")
 				.content(jackson.writeValueAsString(source))
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(responseBody);
 
-		var usernameMessage = messages.getMessage("UserName");
-		var emailMessage = messages.getMessage("Email");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
+		var usernameMessage = messages.getMessage("UserName", Locale.GERMANY);
+		var emailMessage = messages.getMessage("Email", Locale.GERMANY);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.GERMANY);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.GERMANY);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
@@ -163,16 +165,17 @@ class StaffAccountControllerWebIntegrationTests {
 
 		var response = mvc.perform(put("/api/hd/accounts/" + agent1.get().getId())
 				.content(jackson.writeValueAsString(dto))
-				.contentType(MediaType.APPLICATION_JSON)) // )
+				.locale(Locale.GERMANY)
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
 
-		var usernameMessage = messages.getMessage("UserName");
-		var emailMessage = messages.getMessage("Email");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
+		var usernameMessage = messages.getMessage("UserName", Locale.GERMANY);
+		var emailMessage = messages.getMessage("Email", Locale.GERMANY);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.GERMANY);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.GERMANY);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
@@ -218,13 +221,14 @@ class StaffAccountControllerWebIntegrationTests {
 
 		var responseBody = mvc.perform(put("/api/hd/accounts/{id}/password", agent1.getId())
 				.content(jackson.writeValueAsString(newPassword))
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(responseBody);
 
-		var nonMatchingPassword = messages.getMessage("NonMatching.password");
+		var nonMatchingPassword = messages.getMessage("NonMatching.password", Locale.GERMANY);
 
 		assertThat(document.read("$.password", String.class)).isEqualTo(nonMatchingPassword);
 		assertThat(document.read("$.passwordConfirm", String.class)).isEqualTo(nonMatchingPassword);
