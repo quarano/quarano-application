@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 @Embeddable
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
+@NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 public class Address {
 
 	private String street;
