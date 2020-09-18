@@ -32,6 +32,7 @@
   <mat-card-content *ngIf="caseDetail$ | async as caseDetail">
     <div class="button-area" *ngIf="caseDetail.caseId">
       <button
+        data-cy="start-tracking-button"
         #start_tracking_btn
         (click)="startTracking(caseDetail)"
         color="primary"
