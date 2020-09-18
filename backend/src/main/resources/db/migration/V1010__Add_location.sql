@@ -22,11 +22,10 @@ CREATE TABLE location_visits (
 	created_by uuid NULL,
 	last_modified timestamp NULL,
 	last_modified_by uuid NULL,
-    tracked_person_id uuid NULL,
-
 	location_id uuid NOT NULL,
-
-
+    tracked_person_id uuid NULL,
+    from date NULL,
+    to date NULL,
 	CONSTRAINT location_visits_pkey PRIMARY KEY (visit_id),
 	CONSTRAINT location_visits_fk FOREIGN KEY (location_id) REFERENCES locations(location_id),
 	CONSTRAINT person_visits_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)
