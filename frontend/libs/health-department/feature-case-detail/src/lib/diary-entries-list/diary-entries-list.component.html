@@ -13,10 +13,10 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="(diaryEntries.length > 0) else no_data">
-      <ng-container *ngFor="let diaryEntry of diaryEntries;let i = index">
-        <qro-diary-entries-list-item [diaryEntry]="diaryEntry"></qro-diary-entries-list-item>
-        <mat-divider *ngIf="diaryEntries.length > 1 && i % 2 === 0"></mat-divider>
+    <ng-container *ngIf="(listItems.length > 0) else no_data">
+      <ng-container *ngFor="let item of listItems;let i = index">
+        <qro-diary-entries-list-item [diaryListItem]="item"></qro-diary-entries-list-item>
+        <mat-divider *ngIf="listItems.length > 1 && i % 2 === 0"></mat-divider>
       </ng-container>
     </ng-container>
   </mat-card-content>
