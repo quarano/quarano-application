@@ -70,6 +70,7 @@ export class CaseDetailComponent implements OnDestroy {
 
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
       this.type$$.next(paramMap.get('type') as CaseType);
+      this.caseId = paramMap.get('id');
     });
 
     this.caseActions$ = this.caseDetail$.pipe(
@@ -136,8 +137,8 @@ export class CaseDetailComponent implements OnDestroy {
       .deleteApiCall<any>(halResponse, 'conclude')
       .pipe(switchMap(() => this.entityService.getByKey(this.caseId)))
       .subscribe((data) => {
-        this.snackbarService.success('Fall abgeschlossen.');
         this.entityService.updateOneInCache(data);
+        this.snackbarService.success('Fall abgeschlossen.');
       });
   }
 
