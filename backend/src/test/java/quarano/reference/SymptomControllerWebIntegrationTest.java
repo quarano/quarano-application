@@ -59,7 +59,7 @@ class SymptomControllerWebIntegrationTest {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.name", String.class)).isEqualTo(messages.getMessage("Alphabetic"));
+		assertThat(document.read("$.name", String.class)).isEqualTo(messages.getMessage("Alphabetic", Locale.GERMANY));
 	}
 
 	@Test

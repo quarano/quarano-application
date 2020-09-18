@@ -546,7 +546,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var link = discoverer.findRequiredLinkWithRel(TrackedCaseLinkRelations.CONTACTS, response);
 		assertThat(link).isNotNull();
 
-		response = mvc.perform(get(link.getHref()))
+		response = mvc.perform(get(link.getHref()).locale(Locale.GERMANY))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -564,7 +564,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(contact.read("$.isHealthStaff", boolean.class)).isTrue();
 		assertThat(contact.read("$.isSenior", Boolean.class)).isNull();
 		assertThat(contact.read("$.hasPreExistingConditions", Boolean.class)).isNull();
-		var msgCreated = messages.getMessage("quarano.department.CaseStatus.opened", trackingCase.getTrackedPerson().getLocale());
+		var msgCreated = messages.getMessage("quarano.department.CaseStatus.opened", Locale.GERMANY);
 		assertThat(contact.read("$.caseStatusLabel", String.class)).isEqualTo(msgCreated);
 		assertThat(contact.read("$.caseType", String.class)).isEqualTo("contact");
 		assertThat(contact.read("$.contactDates", List.class)).contains(LocalDate.now().minusDays(1).toString());
