@@ -25,12 +25,7 @@ import quarano.util.TestUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -288,12 +283,12 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
-		var houseNumber = messages.getMessage("Pattern.houseNumber");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
-		var extReference = messages.getMessage("Pattern.extReferenceNumber");
-		var city = messages.getMessage("Pattern.city");
-		var street = messages.getMessage("Pattern.street");
+		var houseNumber = messages.getMessage("Pattern.houseNumber", Locale.GERMANY);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.GERMANY);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.GERMANY);
+		var extReference = messages.getMessage("Pattern.extReferenceNumber", Locale.GERMANY);
+		var city = messages.getMessage("Pattern.city", Locale.GERMANY);
+		var street = messages.getMessage("Pattern.street", Locale.GERMANY);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
@@ -744,6 +739,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		return JsonPath.parse(mvc.perform(request(method, uri)
 				.content(jackson.writeValueAsString(payload))
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString());

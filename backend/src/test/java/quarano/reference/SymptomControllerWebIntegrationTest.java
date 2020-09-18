@@ -53,6 +53,7 @@ class SymptomControllerWebIntegrationTest {
 
 		String response = mvc.perform(post("/api/symptoms")
 				.content(mapper.writeValueAsString(payload))
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse().getContentAsString();
 

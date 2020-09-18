@@ -60,7 +60,7 @@ public class LocaleConfigurationTests {
 		document = JsonPath.parse(responsePut.getContentAsString());
 
 		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
-		var message = messages.getMessage("Invalid.newPassword.current", DEFAULT_LOCALE);
+		var message = messages.getMessage("Invalid.newPassword.current", Locale.GERMANY);
 		assertThat(document.read("$.current", String.class)).isEqualTo(message);
 	}
 

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -93,17 +94,18 @@ class ContactPersonControllerWebIntegrationTests {
 
 		String response = mvc.perform(post("/api/contacts")
 				.content(mapper.writeValueAsString(payload))
+				.locale(Locale.GERMANY)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
 		var document = JsonPath.parse(response);
 
-		var houseNumber = messages.getMessage("Pattern.houseNumber");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
-		var city = messages.getMessage("Pattern.city");
-		var street = messages.getMessage("Pattern.street");
+		var houseNumber = messages.getMessage("Pattern.houseNumber", Locale.GERMANY);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.GERMANY);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.GERMANY);
+		var city = messages.getMessage("Pattern.city", Locale.GERMANY);
+		var street = messages.getMessage("Pattern.street", Locale.GERMANY);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
