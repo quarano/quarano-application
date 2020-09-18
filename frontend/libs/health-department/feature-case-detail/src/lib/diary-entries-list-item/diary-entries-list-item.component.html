@@ -4,7 +4,7 @@
       <div class="entry-container">
         <div class="data-container text-muted">
           <div class="row-container">
-            <span>{{ diaryEntry.date | date: 'EEEEEE, dd.MM.y'}}</span>
+            <span>{{ diaryListItem.date | date: 'EEEEEE, dd.MM.y'}}</span>
           </div>
         </div>
       </div>
@@ -12,18 +12,18 @@
     <div class="col-12 col-md-6 col-lg-5 line">
       <div class="entry-container">
         <span class="mr-3 label">{{ 'CASE_DETAILS.MORGENS' | translate}}</span>
-        <div class="data-container text-muted" *ngIf="diaryEntry.morning else missing_data">
+        <div class="data-container text-muted" *ngIf="diaryListItem.morning else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
-            <span>{{ diaryEntry.morning.bodyTemperature | number: '1.1-1':'de' }} °C</span>
+            <span>{{ diaryListItem.morning.bodyTemperature | number: '1.1-1':'de' }} °C</span>
           </div>
-          <div class="row-container" *ngIf="diaryEntry.morning.contacts.length > 0">
+          <div class="row-container" *ngIf="diaryListItem.morning.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ getContactsString(diaryEntry.morning) }}</span>
+            <span>{{ getContactsString(diaryListItem.morning) }}</span>
           </div>
-          <div class="row-container" *ngIf="diaryEntry.morning.symptoms.length > 0">
+          <div class="row-container" *ngIf="diaryListItem.morning.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ getSymptomsString(diaryEntry.morning) }}</span>
+            <span>{{ getSymptomsString(diaryListItem.morning) }}</span>
           </div>
         </div>
       </div>
@@ -31,18 +31,18 @@
     <div class="col-12 col-md-6 col-lg-5 line">
       <div class="entry-container">
         <span class="mr-3 label">{{ 'CASE_DETAILS.ABENDS' | translate}}</span>
-        <div class="data-container text-muted" *ngIf="diaryEntry.evening else missing_data">
+        <div class="data-container text-muted" *ngIf="diaryListItem.evening else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
-            <span>{{ diaryEntry.evening.bodyTemperature | number: '1.1-1':'de' }} °C</span>
+            <span>{{ diaryListItem.evening.bodyTemperature | number: '1.1-1':'de' }} °C</span>
           </div>
-          <div class="row-container" *ngIf="diaryEntry.evening.contacts.length > 0">
+          <div class="row-container" *ngIf="diaryListItem.evening.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ getContactsString(diaryEntry.evening) }}</span>
+            <span>{{ getContactsString(diaryListItem.evening) }}</span>
           </div>
-          <div class="row-container" *ngIf="diaryEntry.evening.symptoms.length > 0">
+          <div class="row-container" *ngIf="diaryListItem.evening.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ getSymptomsString(diaryEntry.evening) }}</span>
+            <span>{{ getSymptomsString(diaryListItem.evening) }}</span>
           </div>
         </div>
       </div>

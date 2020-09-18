@@ -1,24 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TrackedCaseDiaryEntryContactDto } from '@qro/health-department/domain';
 
-export interface TrackedCaseDiaryEntry {
+export interface DiaryListItemModel {
   date: string;
-  morning: TrackedCaseDiaryEntrySlot;
-  evening: TrackedCaseDiaryEntrySlot;
+  morning: CellModel;
+  evening: CellModel;
 }
 
-interface TrackedCaseDiaryEntrySlot {
+interface CellModel {
   bodyTemperature: number;
-  symptoms: TrackedCaseDiaryEntrySymptom[];
-  contacts: TrackedCaseDiaryEntryContact[];
-}
-
-interface TrackedCaseDiaryEntrySymptom {
-  name: string;
-}
-
-interface TrackedCaseDiaryEntryContact {
-  firstName: string;
-  lastName: string;
+  symptoms: string[];
+  contacts: TrackedCaseDiaryEntryContactDto[];
 }
 
 @Component({
@@ -27,17 +19,17 @@ interface TrackedCaseDiaryEntryContact {
   styleUrls: ['./diary-entries-list-item.component.scss'],
 })
 export class DiaryEntriesListItemComponent implements OnInit {
-  @Input() diaryEntry: TrackedCaseDiaryEntry;
+  @Input() diaryListItem: DiaryListItemModel;
 
   constructor() {}
 
   ngOnInit() {}
 
-  getSymptomsString(diaryEntrySlot: TrackedCaseDiaryEntrySlot): string {
-    return diaryEntrySlot.symptoms.map((s) => s.name).join(', ');
+  getSymptomsString(cell: CellModel): string {
+    return cell.symptoms.join(', ');
   }
 
-  getContactsString(diaryEntrySlot: TrackedCaseDiaryEntrySlot): string {
-    return diaryEntrySlot.contacts.map((s) => `${s.firstName} ${s.lastName}`).join(', ');
+  getContactsString(cell: CellModel): string {
+    return cell.contacts.map((s) => `${s.firstName} ${s.lastName}`).join(', ');
   }
 }

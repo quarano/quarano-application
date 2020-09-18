@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TrackedCaseDiaryEntryDto } from '@qro/health-department/domain';
 import * as _ from 'lodash';
-import { TrackedCaseDiaryEntry } from '../diary-entries-list-item/diary-entries-list-item.component';
 import { Dictionary } from '@ngrx/entity';
+import { DiaryListItemModel } from '../diary-entries-list-item/diary-entries-list-item.component';
 
 @Component({
   selector: 'qro-diary-entries-list',
@@ -12,7 +12,7 @@ import { Dictionary } from '@ngrx/entity';
 export class DiaryEntriesListComponent implements OnInit {
   @Input() entriesDto: TrackedCaseDiaryEntryDto[];
 
-  diaryEntries: TrackedCaseDiaryEntry[] = [];
+  listItems: DiaryListItemModel[] = [];
 
   private readonly MORNING = 'morning';
   private readonly EVENING = 'evening';
@@ -20,21 +20,21 @@ export class DiaryEntriesListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.mapToEntries(this.entriesDto);
+    this.mapToListItems(this.entriesDto);
   }
 
-  private mapToEntries(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
+  private mapToListItems(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
     if (!!diaryEntriesDto && diaryEntriesDto.length > 0) {
       const groupedDiaryEntryDto = this.groupEntriesByDate(diaryEntriesDto);
 
-      const convertedEntries = this.convertToDiaryEntries(groupedDiaryEntryDto);
+      const convertedListItems = this.convertToListItems(groupedDiaryEntryDto);
 
-      this.diaryEntries = this.sortByDateDescending(convertedEntries);
+      this.listItems = this.sortByDateDescending(convertedListItems);
     }
   }
 
-  private convertToDiaryEntries(groupedDiaryEntries: Dictionary<any[]>): TrackedCaseDiaryEntry[] {
-    const mappedEntries: TrackedCaseDiaryEntry[] = [];
+  private convertToListItems(groupedDiaryEntries: Dictionary<any[]>): DiaryListItemModel[] {
+    const convertedItems: DiaryListItemModel[] = [];
     for (const [date, diaryEntries] of Object.entries(groupedDiaryEntries)) {
       const entryMorning = diaryEntries.filter(
         (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.slot.timeOfDay === this.MORNING
@@ -43,15 +43,15 @@ export class DiaryEntriesListComponent implements OnInit {
         (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.slot.timeOfDay === this.EVENING
       )?.[0];
 
-      const entry = {
+      const item = {
         date: date,
         morning: entryMorning,
         evening: entryEvening,
-      } as TrackedCaseDiaryEntry;
+      } as DiaryListItemModel;
 
-      mappedEntries.push(entry);
+      convertedItems.push(item);
     }
-    return mappedEntries;
+    return convertedItems;
   }
 
   private groupEntriesByDate(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
@@ -60,8 +60,8 @@ export class DiaryEntriesListComponent implements OnInit {
     });
   }
 
-  private sortByDateDescending(convertedEntries: TrackedCaseDiaryEntry[]) {
-    return convertedEntries.sort((entryA, entryB) => {
+  private sortByDateDescending(items: DiaryListItemModel[]) {
+    return items.sort((entryA, entryB) => {
       if (entryA.date < entryB.date) return -1;
       if (entryA.date < entryB.date) return 1;
       return 0;
