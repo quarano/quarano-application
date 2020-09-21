@@ -233,7 +233,9 @@ export class EditComponent implements OnInit, OnDestroy {
         }
       });
       submitData.caseType = this.caseType;
-      submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
+      submitData.originCases = this.formGroup.controls.originCases.value?.map(
+        (v: CaseSearchItem) => v._links.self.href
+      );
       this.saveCaseData(submitData, closeAfterSave);
     }
   }
