@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
-import { CaseDto, mapCaseIdToCaseEntity } from '../..';
+import { CaseDto } from '../..';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { Dictionary } from '@ngrx/entity';
-import { Store } from '@ngrx/store';
+import { switchMap } from 'rxjs/operators';
 
 export const CASE_FEATURE_KEY = 'Case';
+
+const emptyCase = {
+  firstName: null,
+  lastName: null,
+  quarantineEndDate: null,
+  quarantineStartDate: null,
+  dateOfBirth: null,
+  infected: null,
+  caseTypeLabel: null,
+  extReferenceNumber: null,
+  contactCount: null,
+  originCases: [],
+  _embedded: { originCases: [] },
+};
 
 @Injectable()
 export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
@@ -15,15 +27,15 @@ export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
   }
 
   public loadOneFromStore(id: string): Observable<CaseDto> {
-    return this.entities$.pipe(
-      switchMap((entities) => {
-        const caseDto = entities.find((caseDto) => id === caseDto.caseId);
-        if (caseDto) {
-          return of(caseDto);
-        } else {
-          return this.getByKey(id);
-        }
-      })
-    );
+    if (id) {
+      return this.entities$.pipe(
+        switchMap((entities) => {
+          const loadedCase = entities.find((caseDto) => id === caseDto.caseId);
+          return loadedCase ? of(loadedCase) : this.getByKey(id);
+        })
+      );
+    } else {
+      return of(emptyCase);
+    }
   }
 }

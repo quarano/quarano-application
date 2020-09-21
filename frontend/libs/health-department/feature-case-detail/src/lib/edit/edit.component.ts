@@ -15,13 +15,7 @@ import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import {
-  CaseDto,
-  CaseEntityService,
-  CaseSearchItem,
-  IndexCaseService,
-  mapCaseIdToCaseEntity,
-} from '@qro/health-department/domain';
+import { CaseDto, CaseEntityService, CaseSearchItem, IndexCaseService } from '@qro/health-department/domain';
 import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
 
@@ -54,12 +48,9 @@ export class EditComponent implements OnInit, OnDestroy {
     private router: Router,
     private entityService: CaseEntityService,
     public validationErrorService: ValidationErrorService
-  ) {
-    console.log('construktor');
-  }
+  ) {}
 
   ngOnInit(): void {
-    console.log('init');
     this.setCaseType();
     this.createFormGroup();
 

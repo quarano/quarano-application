@@ -4,7 +4,6 @@ import {
   CaseEntityService,
   CaseStatus,
   HealthDepartmentService,
-  mapCaseIdToCaseEntity,
   StartTracking,
 } from '@qro/health-department/domain';
 import { MatDialog } from '@angular/material/dialog';
@@ -63,10 +62,10 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   initData(): void {
-    this.caseDetail$ = combineLatest([
-      this.route.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
-      this.entityService.entityMap$,
-    ]).pipe(mapCaseIdToCaseEntity(), shareReplay(1));
+    this.caseDetail$ = this.route.paramMap.pipe(
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
+      shareReplay(1)
+    );
 
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
       this.type$$.next(paramMap.get('type') as CaseType);

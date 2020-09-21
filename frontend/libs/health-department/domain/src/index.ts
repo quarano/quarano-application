@@ -20,4 +20,3 @@ export * from './lib/data-access/index-case.service';
 export * from './lib/model/case-search-item';
 export * from './lib/data-access/case-entity.service';
 export * from './lib/model/case';
-export * from './lib/rx-operators/mapCaseIdToCaseEntity';

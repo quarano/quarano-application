@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, combineLatest } from 'rxjs';
-import { CaseCommentDto, CaseEntityService, mapCaseIdToCaseEntity } from '@qro/health-department/domain';
-import { map, tap, finalize, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { CaseCommentDto, CaseEntityService } from '@qro/health-department/domain';
+import { map, tap, finalize, shareReplay, switchMap } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Component({
@@ -36,11 +36,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.comments$ = combineLatest([
-      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
-      this.entityService.entityMap$,
-    ]).pipe(
-      mapCaseIdToCaseEntity(),
+    this.comments$ = this.route.paramMap.pipe(
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
       map((caseDto) => {
         return caseDto.comments;
       }),
