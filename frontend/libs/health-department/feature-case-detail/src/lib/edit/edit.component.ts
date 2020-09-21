@@ -237,7 +237,6 @@ export class EditComponent implements OnInit, OnDestroy {
     } else {
       this.caseDetail$ = this.entityService.update(result);
     }
-    debugger;
     this.subs.sink = this.caseDetail$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       if (closeAfterSave) {
