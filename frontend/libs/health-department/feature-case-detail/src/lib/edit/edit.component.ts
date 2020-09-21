@@ -182,8 +182,6 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   setValidators() {
-    this.formGroup.get('street').setValidators([Validators.required]);
-
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
       this.formGroup.get('infected').setValue(true);
