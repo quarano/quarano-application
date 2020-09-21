@@ -131,7 +131,7 @@ export class EditComponent implements OnInit, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl(false),
+      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
