@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
@@ -54,17 +54,17 @@ export class EditComponent implements OnInit, OnDestroy {
     private router: Router,
     private entityService: CaseEntityService,
     public validationErrorService: ValidationErrorService
-  ) {}
+  ) {
+    console.log('construktor');
+  }
 
   ngOnInit(): void {
+    console.log('init');
     this.setCaseType();
     this.createFormGroup();
 
-    this.caseDetail$ = combineLatest([
-      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
-      this.entityService.entityMap$,
-    ]).pipe(
-      mapCaseIdToCaseEntity(),
+    this.caseDetail$ = this.route.parent.paramMap.pipe(
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
       shareReplay(1),
       tap((data) => this.updateFormGroup(data)),
       filter(() => !!this.formGroup),
@@ -246,7 +246,7 @@ export class EditComponent implements OnInit, OnDestroy {
     } else {
       this.caseDetail$ = this.entityService.update(result);
     }
-
+    debugger;
     this.subs.sink = this.caseDetail$.subscribe(() => {
       this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
       if (closeAfterSave) {
