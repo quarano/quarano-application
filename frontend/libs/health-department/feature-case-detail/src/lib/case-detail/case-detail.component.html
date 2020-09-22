@@ -105,7 +105,7 @@
         Kommentare <span class="info-badge">{{ caseDetail.comments.length }}</span>
       </a>
       <a
-        *ngIf="caseDetail?.indexContacts"
+        *ngIf="caseDetail?.indexContacts?.length > 0"
         mat-tab-link
         [routerLink]="['index-case-data']"
         routerLinkActive
