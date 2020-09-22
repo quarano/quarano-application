@@ -1,12 +1,12 @@
 import { HealthDepartmentService } from '@qro/health-department/api';
 import { SubSink } from 'subsink';
 import { ActivatedRoute } from '@angular/router';
-import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS, ValidationErrorService } from '@qro/shared/util-forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { CaseCommentDto, CaseEntityService } from '@qro/health-department/domain';
-import { map, tap, finalize, shareReplay, switchMap } from 'rxjs/operators';
+import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 
 @Component({
@@ -19,6 +19,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   loading: boolean;
   private subs = new SubSink();
   private caseId: string;
+  private case: string;
 
   formGroup: FormGroup = new FormGroup({
     comment: new FormControl(null, [
@@ -36,15 +37,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.comments$ = this.route.paramMap.pipe(
+    this.comments$ = this.route.parent.paramMap.pipe(
+      tap((params) => (this.caseId = params.get('id'))),
       switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
       map((caseDto) => {
         return caseDto.comments;
       }),
       shareReplay(1)
     );
-
-    this.caseId = this.route.parent.snapshot.paramMap.get('id');
   }
 
   ngOnDestroy(): void {
@@ -52,10 +52,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   submitComment() {
-    if (this.formGroup.valid) {
-      this.addComment(this.formGroup.get('comment').value);
-      this.formGroup.reset();
-    }
+    this.addComment(this.formGroup.get('comment').value);
   }
 
   addComment(commentText: string) {
@@ -66,6 +63,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
         tap((data) => this.entityService.updateOneInCache(data)),
         finalize(() => (this.loading = false))
       )
-      .subscribe((data) => this.snackbarService.success('Kommentar erfolgreich eingetragen.'));
+      .subscribe(() => {
+        this.snackbarService.success('Kommentar erfolgreich eingetragen.');
+        this.formGroup.reset();
+      });
   }
 }
