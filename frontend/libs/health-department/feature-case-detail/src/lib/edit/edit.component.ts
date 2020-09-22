@@ -241,6 +241,7 @@ export class EditComponent implements OnInit, OnDestroy {
       } else {
         this.subs.add(
           this.caseDetail$.pipe(filter((caseDto) => !!caseDto.caseId)).subscribe((next) => {
+            this.formGroup.markAsPristine();
             this.router.navigate([this.getCaseLink(next.caseId)]);
           })
         );
