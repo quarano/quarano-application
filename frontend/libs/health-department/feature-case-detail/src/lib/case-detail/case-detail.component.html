@@ -75,7 +75,6 @@
       </a>
       <ng-container *ngIf="caseActions$ | async as caseActionDto">
         <a
-          *ngIf="caseActionDto.anomalies.health.length > 0"
           mat-tab-link
           [routerLink]="['actions']"
           routerLinkActive
@@ -106,7 +105,7 @@
         Kommentare <span class="info-badge">{{ caseDetail.comments.length }}</span>
       </a>
       <a
-        *ngIf="caseDetail?.indexContacts?.length > 0"
+        *ngIf="caseDetail?.indexContacts"
         mat-tab-link
         [routerLink]="['index-case-data']"
         routerLinkActive
@@ -136,7 +135,7 @@
         Fragebogen
       </a>
       <a
-        *ngIf="caseDetail?._links?.hasOwnProperty('contacts')"
+        *ngIf="contacts$ | async as contacts"
         mat-tab-link
         [routerLink]="['contacts']"
         routerLinkActive

@@ -9,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
@@ -34,6 +34,7 @@ export class CaseDetailComponent implements OnDestroy {
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
   caseActions$: Observable<CaseActionDto>;
+  contacts$: Observable<any>;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +76,11 @@ export class CaseDetailComponent implements OnDestroy {
     this.caseActions$ = this.caseDetail$.pipe(
       filter((caseDetail) => !!caseDetail.caseId),
       switchMap((caseDetail) => this.healthDepartmentService.getCaseActions(caseDetail.caseId))
+    );
+
+    this.contacts$ = this.caseDetail$.pipe(
+      filter((caseDto) => !!caseDto?._links?.hasOwnProperty('contacts')),
+      switchMap((caseDto) => this.apiService.getApiCall(caseDto, 'contacts'))
     );
   }
 

@@ -54,7 +54,6 @@ export class EditComponent implements OnInit, OnDestroy {
     this.createFormGroup();
 
     this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      console.log(type);
       type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
     });
 
