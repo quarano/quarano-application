@@ -13,6 +13,7 @@ import org.jddd.core.types.Identifier;
 import org.modelmapper.Converter;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -38,6 +39,7 @@ public class QuaranoIdentifierToPrimitivesConverter implements GenericConverter 
 	 * (non-Javadoc)
 	 * @see org.springframework.core.convert.converter.GenericConverter#getConvertibleTypes()
 	 */
+	@NonNull
 	@Override
 	public Set<ConvertiblePair> getConvertibleTypes() {
 
@@ -50,6 +52,7 @@ public class QuaranoIdentifierToPrimitivesConverter implements GenericConverter 
 	 * (non-Javadoc)
 	 * @see org.springframework.core.convert.converter.GenericConverter#convert(java.lang.Object, org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
 	 */
+	@Nullable
 	@Override
 	public Object convert(@Nullable Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
 
@@ -67,6 +70,10 @@ public class QuaranoIdentifierToPrimitivesConverter implements GenericConverter 
 		});
 
 		var id = ReflectionUtils.getField(idField, source);
+
+		if (id == null) {
+			throw new IllegalStateException(String.format("No identifier found on instance %s!", source.toString()));
+		}
 
 		return targetType.getType().equals(UUID.class) ? (UUID) id : id.toString();
 	}
