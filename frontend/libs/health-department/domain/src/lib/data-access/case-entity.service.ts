@@ -31,7 +31,11 @@ export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
       return this.entities$.pipe(
         switchMap((entities) => {
           const loadedCase = entities.find((caseDto) => id === caseDto.caseId);
-          return loadedCase ? of(loadedCase) : this.getByKey(id);
+          if (loadedCase && loadedCase?.comments) {
+            return of(loadedCase);
+          } else {
+            return this.getByKey(id);
+          }
         })
       );
     } else {
