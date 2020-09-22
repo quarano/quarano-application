@@ -9,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -51,8 +51,12 @@ export class EditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.setCaseType();
     this.createFormGroup();
+
+    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
+      console.log(type);
+      type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
+    });
 
     this.caseDetail$ = this.route.parent.paramMap.pipe(
       switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
@@ -75,12 +79,6 @@ export class EditComponent implements OnInit, OnDestroy {
     );
 
     this.loading$ = this.entityService.loading$;
-  }
-
-  private setCaseType() {
-    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
-    });
   }
 
   ngOnDestroy(): void {
@@ -122,7 +120,7 @@ export class EditComponent implements OnInit, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
+      infected: new FormControl({ value: this.isIndexCase }),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),

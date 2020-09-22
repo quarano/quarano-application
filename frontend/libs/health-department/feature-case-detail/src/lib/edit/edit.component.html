@@ -68,12 +68,9 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
           </mat-error>
         </mat-form-field>
-        <div
-          class="half-width form-field form-field-radio"
-          *ngIf="formGroup.controls.testDate.value || formGroup.get('infected').value"
-        >
+        <div *ngIf="formGroup.controls.testDate.value" class="half-width form-field form-field-radio">
           <label class="example-margin">Covid-19 Test:</label>
-          <mat-radio-group formControlName="infected">
+          <mat-radio-group [disabled]="isIndexCase" formControlName="infected">
             <mat-radio-button class="example-margin" data-cy="covid-test-result-true" [value]="true">
               Positiv
             </mat-radio-button>
