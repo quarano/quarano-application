@@ -107,7 +107,7 @@ class MailForNewContactCaseEventListenerTests {
 
 		message = greenMail.getReceivedMessages()[0];
 
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs./Mr. Mueller,")
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mr/Ms Mueller,")
 				.contains("\r\n\r\n" + "=3D".repeat(10) + "\r\n\r\n") // is ==========
 				.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
 	}

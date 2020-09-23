@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -99,7 +100,6 @@ class EnrollmentWebIntegrationTests {
 		assertThat(symptoms).containsExactlyElementsOf(
 				List.of("e5cea3b0-c8f4-4e03-a24e-89213f3f6637", "571a03cd-173c-4499-995c-d6a003e8c032"));
 	}
-
 
 	@Test // CORE-115
 	@WithQuaranoUser("DemoAccount")
@@ -193,8 +193,6 @@ class EnrollmentWebIntegrationTests {
 		return questionnaire;
 	}
 
-
-
 	private String performRequestToGetEnrollementState() throws UnsupportedEncodingException, Exception {
 		String result = mvc.perform(get("/api/enrollment"))
 				.andExpect(status().isOk())
@@ -269,14 +267,14 @@ class EnrollmentWebIntegrationTests {
 
 		var document = JsonPath.parse(responseBody);
 
-		var houseNumber = messages.getMessage("Pattern.houseNumber");
-		var firstName = messages.getMessage("Pattern.firstName");
-		var lastName = messages.getMessage("Pattern.lastName");
+		var houseNumber = messages.getMessage("Pattern.houseNumber", Locale.UK);
+		var firstName = messages.getMessage("Pattern.firstName", Locale.UK);
+		var lastName = messages.getMessage("Pattern.lastName", Locale.UK);
 
 		assertThat(document.read("$.firstName", String.class)).isEqualTo(firstName);
 		assertThat(document.read("$.lastName", String.class)).isEqualTo(lastName);
-		assertThat(document.read("$.city", String.class)).contains("gültige Stadt");
-		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
+		assertThat(document.read("$.city", String.class)).contains("valid place name");
+		assertThat(document.read("$.street", String.class)).contains("valid street name");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 }

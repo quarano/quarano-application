@@ -178,7 +178,7 @@ class RegistrationWebIntegrationTests {
 
 		assertThat(document.read("$.email", String.class)).contains(harry.getLastName());
 		assertThat(document.read("$.email", String.class)).contains("\r\n\r\n==========\r\n\r\n");
-		assertThat(document.read("$.email", String.class)).startsWith("Dear Mrs./Mr. " + harry.getLastName() + ",");
+		assertThat(document.read("$.email", String.class)).startsWith("Dear Mr/Ms " + harry.getLastName() + ",");
 		assertThat(document.read("$.expirationDate", String.class)).isNotBlank();
 		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
 
@@ -206,7 +206,7 @@ class RegistrationWebIntegrationTests {
 		var harry = harryCase.getTrackedPerson();
 
 		assertThat(document.read("$.email", String.class)).contains("\r\n\r\n==========\r\n\r\n");
-		assertThat(document.read("$.email", String.class)).startsWith("Dear Mrs./Mr. " + harry.getLastName() + ",");
+		assertThat(document.read("$.email", String.class)).startsWith("Dear Mr/Ms " + harry.getLastName() + ",");
 		assertThat(document.read("$.email", String.class)).contains("Sehr geehrte/geehrter Frau/Herr");
 
 		assertThat(codes.getPendingActivationCode(harry.getId())).isPresent();
