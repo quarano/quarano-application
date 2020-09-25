@@ -45,4 +45,9 @@ class PhoneNumbersUnitTests {
 		assertThat(PhoneNumber.ofNullable(null)).isNull();
 		assertThat(PhoneNumber.ofNullable("")).isNull();
 	}
+
+	@Test
+	void doesNotConsiderNullValidPhoneNumberSource() {
+		assertThat(PhoneNumber.isValid("")).isFalse();
+	}
 }

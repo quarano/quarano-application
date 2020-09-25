@@ -2,6 +2,7 @@ package quarano.core.web;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import quarano.core.web.QuaranoWebConfiguration.MessageSourceResolvableSerializer;
 
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.lang.NonNull;
@@ -19,6 +20,7 @@ import org.springframework.util.Assert;
 public class I18nedMessage implements MessageSourceResolvable {
 
 	private final String[] codes;
+	private final Object[] arguments;
 
 	/**
 	 * Creates a new {@link I18nedMessage} for the given codes.
@@ -39,7 +41,11 @@ public class I18nedMessage implements MessageSourceResolvable {
 			codes[i + 1] = additionalCodes[i];
 		}
 
-		return new I18nedMessage(codes);
+		return new I18nedMessage(codes, new Object[0]);
+	}
+
+	public I18nedMessage withArguments(Object... arguments) {
+		return new I18nedMessage(codes, arguments);
 	}
 
 	/*
@@ -50,5 +56,15 @@ public class I18nedMessage implements MessageSourceResolvable {
 	@Override
 	public String[] getCodes() {
 		return codes;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.context.MessageSourceResolvable#getArguments()
+	 */
+	@NonNull
+	@Override
+	public Object[] getArguments() {
+		return arguments;
 	}
 }

@@ -42,6 +42,7 @@ public class EmailAddress {
 	}
 
 	@Nullable
+	@SuppressWarnings("null")
 	public static EmailAddress ofNullable(@Nullable String email) {
 		return StringUtils.hasText(email) ? of(email) : null;
 	}
@@ -49,11 +50,11 @@ public class EmailAddress {
 	/**
 	 * Returns whether the given email address candidate is a valid one.
 	 *
-	 * @param candidate must not be {@literal null}.
+	 * @param candidate can be {@literal null}.
 	 * @return
 	 */
-	public static boolean isValid(String candidate) {
-		return REGEX.matcher(candidate).matches();
+	public static boolean isValid(@Nullable String candidate) {
+		return candidate != null && REGEX.matcher(candidate).matches();
 	}
 
 	/*

@@ -5,6 +5,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -17,6 +18,8 @@ import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
+import quarano.core.web.ErrorsWithDetails;
+import quarano.core.web.I18nedMessage;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
@@ -27,6 +30,7 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments.HealthDepartment;
 import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
@@ -49,7 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,6 +64,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.Links.MergeMode;
 import org.springframework.hateoas.RepresentationModel;
@@ -132,6 +136,22 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	public EnrollmentDto toRepresentation(Enrollment enrollment) {
 		return new EnrollmentDto(enrollment);
+	}
+
+	InstitutionDto toRepresentation(HealthDepartment department) {
+		return InstitutionDto.of(department);
+	}
+
+	@SuppressWarnings("null")
+	EntityModel<?> toRepresentation(DeviatingZipCode zipCode, Errors errors) {
+
+		var details = ErrorsWithDetails.of(errors).addDetails("zipCode", zipCode);
+		var controller = on(TrackedCaseController.class);
+
+		EntityModel<ErrorsWithDetails> model = EntityModel.of(details);
+		model.add(MvcLink.of(controller.submitEnrollmentDetails(null, null, true, null), CONFIRM));
+
+		return model;
 	}
 
 	String resolve(String source) {
@@ -380,6 +400,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		}
 
 		@Data
+		@EqualsAndHashCode(callSuper = true)
 		static class Input extends TrackedCaseDto {
 			private List<URI> originCases = new ArrayList<>();
 		}
@@ -500,8 +521,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual
-		String comment;
+		@Textual String comment;
 	}
 
 	static class ValidationGroups {
@@ -538,33 +558,39 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	}
 
 	@Value
-	class UnsupportedZipCode extends RepresentationModel<UnsupportedZipCode> {
-		String message;
-		HealthDepartment department;
+	static class DeviatingZipCode {
 
-		UnsupportedZipCode(String zipCode, HealthDepartment department) {
+		/**
+		 * An error message to give a summary of the problem.
+		 */
+		I18nedMessage message;
 
-			message = messages.getMessage("unsupported.trackedPersonDto.zipCode", new Object[] { zipCode });
-			this.department = department;
+		/**
+		 * Information about the institution that is actually responsible to manage cases for people living in the provided
+		 * zip code.
+		 */
+		InstitutionDto institution;
 
-			add(getLinks());
-		}
+		DeviatingZipCode(String zipCode, InstitutionDto department) {
 
-		@Override
-		public Links getLinks() {
-
-			var controller = on(TrackedCaseController.class);
-
-			return Links
-					.of(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.TRUE), null), CONFIRM))
-					.and(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.FALSE), null), CORRECT));
+			this.message = I18nedMessage.of("unsupported.trackedPersonDto.zipCode").withArguments(zipCode);
+			this.institution = department;
 		}
 	}
 
 	@Value
-	static class HealthDepartment {
+	@EqualsAndHashCode(callSuper = true)
+	static class InstitutionDto extends RepresentationModel<InstitutionDto> {
 
-		static HealthDepartment of(quarano.department.rki.HealthDepartments.HealthDepartment rkiDepartment) {
+		@Pattern(regexp = Strings.NAMES) String name;
+		String department;
+		@Pattern(regexp = Strings.STREET) String street;
+		@Pattern(regexp = Strings.CITY) String city;
+		@Pattern(regexp = ZipCode.PATTERN) String zipCode;
+		@Pattern(regexp = PhoneNumber.PATTERN) String fax, phone;
+		@Pattern(regexp = EmailAddress.PATTERN) String email;
+
+		private static InstitutionDto of(HealthDepartment rkiDepartment) {
 
 			Address address = rkiDepartment.getAddress();
 
@@ -580,17 +606,14 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					? rkiDepartment.getEmail()
 					: rkiDepartment.getCovid19EMail();
 
-			return new HealthDepartment(rkiDepartment.getName(), rkiDepartment.getDepartment(), address.getStreet(),
-					address.getZipcode(), address.getPlace(), phone, fax, email);
+			return new InstitutionDto(rkiDepartment.getName(),
+					rkiDepartment.getDepartment(),
+					address.getStreet(),
+					address.getPlace(),
+					address.getZipcode().toString(),
+					fax.toString(),
+					phone.toString(),
+					email.toString());
 		}
-
-		String name;
-		String department;
-		String street;
-		ZipCode zipCode;
-		String city;
-		PhoneNumber phone;
-		PhoneNumber fax;
-		EmailAddress email;
 	}
 }
