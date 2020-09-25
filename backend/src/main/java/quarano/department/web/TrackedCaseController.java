@@ -2,7 +2,6 @@ package quarano.department.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
-import io.vavr.control.Option;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
@@ -21,9 +20,8 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.rki.HealthDepartments;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
-import quarano.department.web.TrackedCaseRepresentations.HealthDepartment;
+import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
-import quarano.department.web.TrackedCaseRepresentations.UnsupportedZipCode;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
@@ -41,6 +39,7 @@ import java.util.stream.Stream;
 import javax.validation.Valid;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpEntity;
@@ -250,31 +249,29 @@ public class TrackedCaseController {
 
 	@PutMapping("/api/enrollment/details")
 	HttpEntity<?> submitEnrollmentDetails(
-			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam Optional<Boolean> confirmed,
+			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam(required = false) boolean confirmed,
 			@LoggedIn TrackedPerson user) {
 
-		var unsupportedZipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
-
+		var zipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
+		var field = "zipCode";
+		var needToRejectDeviatingZipCode = !errors.hasFieldErrors(field) && zipCode.isPresent() && !confirmed;
 		var mappedPayload = MappedPayloads.of(dto, errors);
 
-		if (unsupportedZipCode.isDefined() && !confirmed.orElse(Boolean.FALSE)) {
-
-			String field = "zipCode";
-			
-			mappedPayload.rejectField(field, "unsupported");
-			mappedPayload = mappedPayload.onErrors(err -> {
-				return unsupportedZipCode
-						.map(it -> ErrorsWithDetails.of(err).addDetails(field, it))
-						.map(it -> ResponseEntity.unprocessableEntity().body(it)).get();
-			});
-		}
-
 		return mappedPayload
+				.rejectField(needToRejectDeviatingZipCode, field, "__placeholder__", err -> {
+
+					return zipCode
+							.map(it -> ErrorsWithDetails.of(err).addDetails(field, it))
+							.map(EntityModel::of)
+							.map(it -> ResponseEntity.unprocessableEntity().body(it))
+							.get();
+
+				})
 				.peek(__ -> {
 
 					tracking.updateTrackedPersonDetails(dto, errors, user);
 
-					Function<? super TrackedCase, ? extends TrackedCase> markerFunktion = unsupportedZipCode.isDefined()
+					Function<? super TrackedCase, ? extends TrackedCase> markerFunktion = zipCode.isPresent()
 							? TrackedCase::markAsExternalZip
 							: TrackedCase::submitEnrollmentDetails;
 
@@ -283,10 +280,10 @@ public class TrackedCaseController {
 							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
 				})
 				.onValidGet(() -> {
+
 					return ResponseEntity.ok()
 							.header(HttpHeaders.LOCATION, getEnrollmentLink())
-							.body(unsupportedZipCode.map(UnsupportedZipCode::getDepartment)
-									.getOrElse((HealthDepartment) null));
+							.body(zipCode.map(DeviatingZipCode::getDepartment).orElse(null));
 				});
 	}
 
@@ -378,22 +375,26 @@ public class TrackedCaseController {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}
 
-	private Option<UnsupportedZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
+	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
 			Errors errors) {
 
 		String field = "zipCode";
 
 		if (errors.hasFieldErrors(field)) {
-			return Option.none();
+			return Optional.empty();
 		}
 
 		var zipCode = dto.getZipCode();
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode.toString());
 
-		return Option.ofOptional(rkiDepartments.findDepartmentWithExact(zipCode.toString()))
-				.onEmpty(() -> errors.rejectValue(field, "wrong", new Object[] { zipCode }, ""))
+		return findDepartmentWithExact
+				.or(() -> {
+					errors.rejectValue(field, "wrong", new Object[] { zipCode }, "");
+					return Optional.empty();
+				})
 				.filter(this::isDepartmentUnsupportedByThisQuarano)
-				.map(HealthDepartment::of)
-				.map(it -> representations.new UnsupportedZipCode(zipCode, it));
+				.map(representations::toRepresentation)
+				.map(it -> new DeviatingZipCode(zipCode, it));
 	}
 
 	private boolean isDepartmentUnsupportedByThisQuarano(quarano.department.rki.HealthDepartments.HealthDepartment it) {

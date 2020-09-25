@@ -1,11 +1,15 @@
 package quarano.core.web;
 
 import lombok.RequiredArgsConstructor;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
+import quarano.tracking.ZipCode;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jddd.core.types.Identifier;
 import org.springframework.context.MessageSourceResolvable;
@@ -40,6 +44,11 @@ class QuaranoWebConfiguration implements WebMvcConfigurer {
 		module.addSerializer(new MessageSourceResolvableSerializer(accessor));
 		module.addSerializer(new ErrorsSerializer());
 		module.addDeserializer(String.class, new EmptyStringDeserializer());
+
+		var toStringSerializer = new ToStringSerializer();
+
+		Stream.of(PhoneNumber.class, EmailAddress.class, ZipCode.class)
+				.forEach(it -> module.addSerializer(it, toStringSerializer));
 
 		return module;
 	}

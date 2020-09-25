@@ -11,6 +11,7 @@ import java.util.TimeZone;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.Nullable;
 import org.xmlbeam.XBProjector;
 import org.xmlbeam.config.DefaultXMLFactoriesConfig;
 import org.xmlbeam.config.DefaultXMLFactoriesConfig.NamespacePhilosophy;
@@ -20,8 +21,9 @@ import org.xmlbeam.types.DefaultTypeConverter.Conversion;
 /**
  * Uses the <a href="https://www.rki.de/DE/Content/Infekt/IfSG/Software/Aktueller_Datenbestand.html">data from RKI</a>
  * to offer the search for health departments by zip code or location in one service.
- * 
+ *
  * @author Jens Kutzsche
+ * @author Oliver Drotbohm
  */
 @Configuration
 public class HealthDepartmentsConfiguration {
@@ -34,11 +36,11 @@ public class HealthDepartmentsConfiguration {
 		var config = new DefaultXMLFactoriesConfig().setNamespacePhilosophy(NamespacePhilosophy.AGNOSTIC);
 		var projector = new XBProjector(config);
 
-		var converter = new DefaultTypeConverter(Locale.getDefault(), TimeZone.getTimeZone(ZONE_BERLIN))
-				.setConversionForType(EmailAddress.class, new EmailConversion())
-				.setConversionForType(PhoneNumber.class, new PhoneConversion())
-				.setConversionForType(ZipCode.class, new ZipCodeConversion());
-		projector.config().setTypeConverter(converter);
+		projector.config()
+				.setTypeConverter(new DefaultTypeConverter(Locale.getDefault(), TimeZone.getTimeZone(ZONE_BERLIN))
+						.setConversionForType(EmailAddress.class, new EmailConversion())
+						.setConversionForType(PhoneNumber.class, new PhoneConversion())
+						.setConversionForType(ZipCode.class, new ZipCodeConversion()));
 
 		try {
 			return projector.io().fromURLAnnotation(HealthDepartments.class);
@@ -55,8 +57,14 @@ public class HealthDepartmentsConfiguration {
 			super(null);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.xmlbeam.types.DefaultTypeConverter.Conversion#convert(java.lang.String)
+		 */
+		@Nullable
 		@Override
-		public EmailAddress convert(final String data) {
+		@SuppressWarnings("null")
+		public EmailAddress convert(@Nullable String data) {
 			return EmailAddress.isValid(data) ? EmailAddress.of(data) : null;
 		}
 	}
@@ -69,8 +77,14 @@ public class HealthDepartmentsConfiguration {
 			super(null);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.xmlbeam.types.DefaultTypeConverter.Conversion#convert(java.lang.String)
+		 */
 		@Override
-		public PhoneNumber convert(final String data) {
+		@Nullable
+		@SuppressWarnings("null")
+		public PhoneNumber convert(@Nullable String data) {
 			return PhoneNumber.isValid(data) ? PhoneNumber.of(data) : null;
 		}
 	}
@@ -83,8 +97,14 @@ public class HealthDepartmentsConfiguration {
 			super(null);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.xmlbeam.types.DefaultTypeConverter.Conversion#convert(java.lang.String)
+		 */
 		@Override
-		public ZipCode convert(final String data) {
+		@Nullable
+		@SuppressWarnings("null")
+		public ZipCode convert(@Nullable String data) {
 			return ZipCode.isValid(data) ? ZipCode.of(data) : null;
 		}
 	}

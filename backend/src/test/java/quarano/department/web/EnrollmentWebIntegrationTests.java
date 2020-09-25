@@ -195,6 +195,9 @@ class EnrollmentWebIntegrationTests {
 
 		assertThat(zipCode.read("$.message", String.class)).isNotNull();
 		assertThat(zipCode.read("$.department.name", String.class)).isEqualTo("Landkreis Meißen");
+		assertThat(zipCode.read("$.department.zipCode", String.class)).isEqualTo("01662");
+		assertThat(zipCode.read("$.department.fax", String.class)).isEqualTo("0352172588054");
+		assertThat(zipCode.read("$.department.email", String.class)).isEqualTo("corona@kreis-meissen.de");
 		assertThat(discoverer.findLinkWithRel(CONFIRM, zipCode.jsonString())).asString().contains("confirmed=true");
 		assertThat(discoverer.findLinkWithRel(CORRECT, zipCode.jsonString())).asString().contains("confirmed=false");
 	}

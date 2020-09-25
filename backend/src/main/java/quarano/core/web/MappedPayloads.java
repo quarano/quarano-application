@@ -104,6 +104,7 @@ public interface MappedPayloads {
 			Assert.notNull(errors, "Errors handler must not be null!");
 
 			errors.accept(this.errors);
+
 			return this;
 		}
 
@@ -155,6 +156,30 @@ public interface MappedPayloads {
 			Assert.hasText(defaultMessage, "Default message must not be null or empty!");
 
 			errors.rejectValue(field, errorCode, defaultMessage);
+
+			return this;
+		}
+
+		/**
+		 * Rejects the field with the given name with the given error code if the given condition is true.
+		 *
+		 * @param condition the condition under which to reject the given field.
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @param errorHandler and error handler to be registered in case the condition is {@literal true}.
+		 * @return the current instance, never {@literal null}.
+		 */
+		public MappedErrors rejectField(boolean condition, String field, String errorCode,
+				Function<Errors, HttpEntity<?>> errorHandler) {
+
+			Assert.hasText(field, "Field name must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+			Assert.notNull(errorHandler, "Error handler must not be null!");
+
+			if (condition) {
+				rejectField(field, errorCode);
+				return onErrors(errorHandler);
+			}
 
 			return this;
 		}
@@ -307,6 +332,17 @@ public interface MappedPayloads {
 			return this;
 		}
 
+		public MappedPayload<T> alwaysPeek(BiConsumer<? super T, Errors> consumer) {
+
+			Assert.notNull(consumer, "Consumer must not be null!");
+
+			if (payload != null) {
+				consumer.accept(payload, errors);
+			}
+
+			return this;
+		}
+
 		/**
 		 * Applies the given {@link Function}, even if errors have been accumulated.
 		 *
@@ -442,6 +478,67 @@ public interface MappedPayloads {
 			Assert.notNull(finalizer, "Finalizer must not be null!");
 
 			return errorsOrNone().orElseGet(() -> finalizer.apply(payload, this));
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(boolean, java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedPayload<T> rejectField(boolean condition, String field, String errorCode) {
+
+			super.rejectField(condition, field, errorCode);
+
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedPayload<T> rejectField(String field, String errorCode) {
+
+			super.rejectField(field, errorCode);
+
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(java.lang.String, java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedErrors rejectField(String field, String errorCode, String defaultMessage) {
+
+			super.rejectField(field, errorCode, defaultMessage);
+
+			return this;
+		}
+
+		/**
+		 * Rejects the field with the given name with the given error code if the given condition is true.
+		 *
+		 * @param condition the condition under which to reject the given field.
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @param errorHandler and error handler to be registered in case the condition is {@literal true}.
+		 * @return the current instance, never {@literal null}.
+		 */
+		@Override
+		public MappedPayload<T> rejectField(boolean condition, String field, String errorCode,
+				Function<Errors, HttpEntity<?>> errorHandler) {
+
+			Assert.hasText(field, "Field name must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+			Assert.notNull(errorHandler, "Error handler must not be null!");
+
+			if (condition) {
+				rejectField(field, errorCode);
+				return onErrors(errorHandler);
+			}
+
+			return this;
 		}
 
 		private <S> MappedPayload<S> withoutPayload() {

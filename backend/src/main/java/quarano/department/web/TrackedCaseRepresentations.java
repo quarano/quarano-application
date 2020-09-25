@@ -5,6 +5,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -17,6 +18,7 @@ import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
+import quarano.core.web.I18nedMessage;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
@@ -27,6 +29,7 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments.HealthDepartment;
 import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
@@ -49,7 +52,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -132,6 +134,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	public EnrollmentDto toRepresentation(Enrollment enrollment) {
 		return new EnrollmentDto(enrollment);
+	}
+
+	HealthDepartmentDto toRepresentation(HealthDepartment department) {
+		return HealthDepartmentDto.of(department);
 	}
 
 	String resolve(String source) {
@@ -380,6 +386,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		}
 
 		@Data
+		@EqualsAndHashCode(callSuper = true)
 		static class Input extends TrackedCaseDto {
 			private List<URI> originCases = new ArrayList<>();
 		}
@@ -500,8 +507,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual
-		String comment;
+		@Textual String comment;
 	}
 
 	static class ValidationGroups {
@@ -538,33 +544,29 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	}
 
 	@Value
-	class UnsupportedZipCode extends RepresentationModel<UnsupportedZipCode> {
-		String message;
-		HealthDepartment department;
+	@EqualsAndHashCode(callSuper = true)
+	static class DeviatingZipCode extends RepresentationModel<DeviatingZipCode> {
 
-		UnsupportedZipCode(String zipCode, HealthDepartment department) {
+		I18nedMessage message;
+		HealthDepartmentDto department;
 
-			message = messages.getMessage("unsupported.trackedPersonDto.zipCode", new Object[] { zipCode });
+		@SuppressWarnings("null")
+		DeviatingZipCode(String zipCode, HealthDepartmentDto department) {
+
+			this.message = I18nedMessage.of("unsupported.trackedPersonDto.zipCode").withArguments(zipCode);
 			this.department = department;
-
-			add(getLinks());
-		}
-
-		@Override
-		public Links getLinks() {
 
 			var controller = on(TrackedCaseController.class);
 
-			return Links
-					.of(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.TRUE), null), CONFIRM))
-					.and(MvcLink.of(controller.submitEnrollmentDetails(null, null, Optional.of(Boolean.FALSE), null), CORRECT));
+			add(MvcLink.of(controller.submitEnrollmentDetails(null, null, true, null), CONFIRM));
+			add(MvcLink.of(controller.submitEnrollmentDetails(null, null, false, null), CORRECT));
 		}
 	}
 
 	@Value
-	static class HealthDepartment {
+	static class HealthDepartmentDto {
 
-		static HealthDepartment of(quarano.department.rki.HealthDepartments.HealthDepartment rkiDepartment) {
+		private static HealthDepartmentDto of(HealthDepartment rkiDepartment) {
 
 			Address address = rkiDepartment.getAddress();
 
@@ -580,7 +582,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					? rkiDepartment.getEmail()
 					: rkiDepartment.getCovid19EMail();
 
-			return new HealthDepartment(rkiDepartment.getName(), rkiDepartment.getDepartment(), address.getStreet(),
+			return new HealthDepartmentDto(rkiDepartment.getName(), rkiDepartment.getDepartment(), address.getStreet(),
 					address.getZipcode(), address.getPlace(), phone, fax, email);
 		}
 

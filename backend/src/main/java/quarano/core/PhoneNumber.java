@@ -51,8 +51,8 @@ public class PhoneNumber {
 		return StringUtils.hasText(number) ? of(number) : null;
 	}
 
-	public static boolean isValid(String candidate) {
-		return REGEX.matcher(candidate).matches();
+	public static boolean isValid(@Nullable String candidate) {
+		return StringUtils.hasText(candidate) && REGEX.matcher(candidate).matches();
 	}
 
 	/*
