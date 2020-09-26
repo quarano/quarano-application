@@ -8,6 +8,7 @@ import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCase.MailStatus;
+import quarano.department.TrackedCase.Status;
 import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -44,6 +45,7 @@ class MailForNewContactCaseEventListenerTests {
 		var trackedCase = trackedCase(null);
 
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
+		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 
 		events.on(CaseCreated.of(trackedCase));
 
@@ -62,6 +64,7 @@ class MailForNewContactCaseEventListenerTests {
 				.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
 		assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
+		assertThat(trackedCase.getStatus()).isEqualTo(Status.IN_REGISTRATION);
 	}
 
 	@Test // CORE-375
@@ -119,6 +122,7 @@ class MailForNewContactCaseEventListenerTests {
 		trackedCase.getTrackedPerson().setEmailAddress(null);
 
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
+		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 
 		events.on(CaseCreated.of(trackedCase));
 
@@ -129,6 +133,7 @@ class MailForNewContactCaseEventListenerTests {
 
 		assertThat(messages).hasSize(0);
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.CANT_SENT);
+		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 	}
 
 	private TrackedCase trackedCase(Locale locale) {
