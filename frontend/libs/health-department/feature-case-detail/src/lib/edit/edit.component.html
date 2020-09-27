@@ -70,11 +70,15 @@
         </mat-form-field>
         <div *ngIf="formGroup.controls.testDate.value" class="half-width form-field form-field-radio">
           <label class="example-margin">Covid-19 Test:</label>
-          <mat-radio-group [disabled]="isIndexCase" formControlName="infected">
-            <mat-radio-button class="example-margin" data-cy="covid-test-result-true" [value]="true">
+          <mat-radio-group
+            [selected]="isIndexCase ? infectedTrue : infectedFalse"
+            [disabled]="isIndexCase"
+            formControlName="infected"
+          >
+            <mat-radio-button #infectedTrue class="example-margin" data-cy="covid-test-result-true" [value]="true">
               Positiv
             </mat-radio-button>
-            <mat-radio-button class="example-margin" [value]="false">
+            <mat-radio-button #infectedFalse class="example-margin" [value]="false">
               Negativ
             </mat-radio-button>
           </mat-radio-group>

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
+import { EntityActionOptions, EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
 import { CaseDto } from '../..';
+import { HealthDepartmentService } from './health-department.service';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { BadRequestService } from '@qro/shared/ui-error';
 
 export const CASE_FEATURE_KEY = 'Case';
 
@@ -22,8 +24,21 @@ const emptyCase = {
 
 @Injectable()
 export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
-  constructor(serviceElementsFactory: EntityCollectionServiceElementsFactory) {
+  constructor(
+    serviceElementsFactory: EntityCollectionServiceElementsFactory,
+    private hdService: HealthDepartmentService
+  ) {
     super(CASE_FEATURE_KEY, serviceElementsFactory);
+  }
+
+  add(entity: CaseDto, options?: EntityActionOptions): Observable<CaseDto> {
+    return this.hdService
+      .createCase(entity, entity.caseType)
+      .pipe(tap((updatedCase) => this.updateOneInCache(updatedCase)));
+  }
+
+  public update(entity: CaseDto): Observable<CaseDto> {
+    return this.hdService.updateCase(entity).pipe(tap((updatedCase) => this.updateOneInCache(updatedCase)));
   }
 
   public loadOneFromStore(id: string): Observable<CaseDto> {

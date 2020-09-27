@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { distinctUntilChanged, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
@@ -9,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -18,6 +18,7 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { CaseDto, CaseEntityService, CaseSearchItem, IndexCaseService } from '@qro/health-department/domain';
 import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
+import { BadRequestService } from '@qro/shared/ui-error';
 
 @Component({
   selector: 'qro-client-edit',
@@ -47,7 +48,8 @@ export class EditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private entityService: CaseEntityService,
-    public validationErrorService: ValidationErrorService
+    public validationErrorService: ValidationErrorService,
+    private badRequestService: BadRequestService
   ) {}
 
   ngOnInit(): void {
@@ -119,7 +121,7 @@ export class EditComponent implements OnInit, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl({ value: this.isIndexCase }),
+      infected: new FormControl(),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
@@ -230,23 +232,38 @@ export class EditComponent implements OnInit, OnDestroy {
 
   saveCaseData(result: CaseDto, closeAfterSave: boolean) {
     if (!result.caseId) {
-      this.caseDetail$ = this.entityService.add(result);
+      this.entityService
+        .add(result)
+        .pipe(
+          catchError((error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            return of(error);
+          }),
+          filter((value) => value instanceof Error)
+        )
+        .subscribe((changedCaseDto) => this.changeRouteAfterSave(changedCaseDto, closeAfterSave));
     } else {
-      this.caseDetail$ = this.entityService.update(result);
+      this.entityService
+        .update(result)
+        .pipe(
+          catchError((error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            return of(error);
+          }),
+          filter((value) => value instanceof Error)
+        )
+        .subscribe((changedCaseDto) => this.changeRouteAfterSave(changedCaseDto, closeAfterSave));
     }
-    this.subs.sink = this.caseDetail$.subscribe(() => {
-      this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
-      if (closeAfterSave) {
-        this.router.navigate([this.returnLink]);
-      } else {
-        this.subs.add(
-          this.caseDetail$.pipe(filter((caseDto) => !!caseDto.caseId)).subscribe((next) => {
-            this.formGroup.markAsPristine();
-            this.router.navigate([this.getCaseLink(next.caseId)]);
-          })
-        );
-      }
-    });
+  }
+
+  private changeRouteAfterSave(caseDto: CaseDto, closeAfterSave: boolean) {
+    this.snackbarService.error('Persönliche Daten erfolgreich aktualisiert');
+    if (closeAfterSave) {
+      this.router.navigate([this.returnLink]);
+    } else {
+      this.formGroup.markAsPristine();
+      this.router.navigate([this.getCaseLink(caseDto.caseId)]);
+    }
   }
 
   getCaseLink(id: string) {

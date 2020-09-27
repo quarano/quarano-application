@@ -3,7 +3,6 @@ import { CaseType } from '@qro/auth/api';
 import { CaseCommentDto } from './case-comment';
 import { ContactDto } from './contact';
 import { CaseSearchItem } from './case-search-item';
-import * as _ from 'lodash';
 
 export interface CaseDto extends HalResponse {
   dateOfBirth?: Date;
