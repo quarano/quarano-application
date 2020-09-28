@@ -32,6 +32,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			.of(UUID.fromString("738d3d1f-a9f1-4619-9896-2b5cb3a89c22"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON2_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("0c434624-7dbe-11ea-bc55-0242ac130003"));
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("705dc63d-fddf-47fe-8679-2c8c59ea23ae"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("a8bd1d2d-b824-4989-ad9f-73be224654d6"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON5_ID_DEP1 = TrackedPersonIdentifier
@@ -91,6 +93,17 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		return new TrackedPerson(VALID_TRACKED_PERSON2_ID_DEP1, "Markus", "Hanser",
 				EmailAddress.of("markus.hanser@testtest.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1))
 						.setLocale(Locale.UK);
+	}
+
+	/**
+	 * A persona without contact details completed, locale GERMANY.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createPeter() {
+			return new TrackedPerson(VALID_TRACKED_PERSON3_ID_DEP1, "Peter", "Aalen",
+					EmailAddress.of("peter.aalen@abc.de"), PhoneNumber.of("0621222255"), LocalDate.of(1990, 1, 1))
+					.setLocale(Locale.GERMANY);
 	}
 
 	/**
@@ -251,6 +264,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		trackedPeople.save(createTanja());
 		trackedPeople.save(createMarkus());
+		trackedPeople.save(createPeter());
 		trackedPeople.save(createGustav());
 		trackedPeople.save(createNadine());
 		trackedPeople.save(createSandra());
