@@ -77,6 +77,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var person1 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
 		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
 		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		var peter = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP1).orElseThrow();
 		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
 		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
@@ -161,6 +162,10 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt")
 						.withoutContactToVulnerablePeople())
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
+
+		cases.save(new TrackedCase(peter, CaseType.INDEX, department1)
+				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))))
+				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)));
 
 		cases.save(new TrackedCase(harry, CaseType.INDEX, department1)
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2))))

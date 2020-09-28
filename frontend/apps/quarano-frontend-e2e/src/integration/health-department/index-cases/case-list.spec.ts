@@ -4,6 +4,7 @@ describe('health-department index cases case-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/api/hd/cases?type=index').as('allcases');
+    cy.route('PUT', '/api/hd/cases/*').as('savedetails');
 
     cy.loginAgent();
   });
@@ -47,6 +48,19 @@ describe('health-department index cases case-list', () => {
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).find('[data-cy="mail-button"]').click();
 
       cy.get('@windowOpen').should('be.calledWithMatch', 'mailto');
+    });
+
+    it('should add address', () => {
+      cy.get('[data-cy="case-data-table"] datatable-row-wrapper').eq(0).click();
+      cy.location('pathname').should('include', '/index/');
+      cy.get("[data-cy='street-input']").type('Frankfurterstrasse');
+      cy.get("[data-cy='house-number-input']").type('11');
+      cy.get("[data-cy='zip-code-input']").type('60987');
+      cy.get("[data-cy='city-input']").type('Frankfurt');
+      cy.get("[data-cy='client-submit-and-close-button'] button").click();
+      cy.wait('@savedetails');
+      cy.get('@savedetails').its('status').should('eq', 200);
+      cy.location('pathname').should('include', 'health-department/index-cases/case-list');
     });
   });
 });
