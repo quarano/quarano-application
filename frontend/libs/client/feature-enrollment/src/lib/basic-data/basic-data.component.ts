@@ -185,9 +185,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         this.clientService
           .updatePersonalDetails(value)
           .pipe(
-            switchMap((result) =>
-              this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(map((res) => result))
-            )
+            switchMap((_) => this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT')),
+            switchMap((res) => this.clientStore.enrollmentStatus$.pipe(take(1)))
           )
           .subscribe(
             (result) => {
