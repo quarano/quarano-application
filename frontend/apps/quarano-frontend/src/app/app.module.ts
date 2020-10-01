@@ -32,7 +32,7 @@ import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 registerLocaleData(localeDe, 'de');
 
 function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/');
+  return new TranslateHttpLoader(http, 'assets/i18n/');
 }
 
 const SUB_MODULES = [

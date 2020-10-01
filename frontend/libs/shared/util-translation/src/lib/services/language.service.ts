@@ -15,7 +15,7 @@ export class LanguageService {
   constructor(private client: HttpClient, private store: Store, private translate: TranslateService) {}
 
   public init(): Observable<ILanguageConfig> {
-    return this.client.get<ILanguageConfig[]>('./assets/i18n/supported-languages.json').pipe(
+    return this.client.get<ILanguageConfig[]>('assets/i18n/supported-languages.json').pipe(
       shareReplay(),
       tap((languages) => {
         this.store.dispatch(
