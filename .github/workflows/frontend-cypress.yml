@@ -58,12 +58,12 @@ jobs:
           kill -9 `lsof -i:8080 -t`
 
       - uses: actions/upload-artifact@v1
-        if: always()
         with:
           name: cypress-videos
           path: frontend/dist/cypress/apps/quarano-frontend-e2e/videos
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@v1
-        if: always()
         with:
           name: cypress-screenshots
           path: frontend/dist/cypress/apps/quarano-frontend-e2e/screenshots
+          if-no-files-found: ignore
