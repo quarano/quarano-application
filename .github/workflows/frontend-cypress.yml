@@ -48,8 +48,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: cd frontend && npm install
-      - run: |
+      - name: Install node_modules
+        run: cd frontend && npm install
+      - name: Start backend and Run e2e tests
+        run: |
           export LANG="de_DE.UTF-8"
           export TZ="Europe/Berlin"
           mvn -B spring-boot:run -Pinmemory -f backend/pom.xml &
@@ -57,12 +59,16 @@ jobs:
           cd frontend && npm run e2e
           kill -9 `lsof -i:8080 -t`
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
+        name: Upload videos
+        if: always()
         with:
           name: cypress-videos
           path: frontend/dist/cypress/apps/quarano-frontend-e2e/videos
           if-no-files-found: ignore
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
+        name: Upload screenshots
+        if: always()
         with:
           name: cypress-screenshots
           path: frontend/dist/cypress/apps/quarano-frontend-e2e/screenshots
