@@ -31,16 +31,6 @@ export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
     super(CASE_FEATURE_KEY, serviceElementsFactory);
   }
 
-  add(entity: CaseDto, options?: EntityActionOptions): Observable<CaseDto> {
-    return this.hdService
-      .createCase(entity, entity.caseType)
-      .pipe(tap((updatedCase) => this.updateOneInCache(updatedCase)));
-  }
-
-  public update(entity: CaseDto): Observable<CaseDto> {
-    return this.hdService.updateCase(entity).pipe(tap((updatedCase) => this.updateOneInCache(updatedCase)));
-  }
-
   public loadOneFromStore(id: string): Observable<CaseDto> {
     if (id) {
       return this.entities$.pipe(

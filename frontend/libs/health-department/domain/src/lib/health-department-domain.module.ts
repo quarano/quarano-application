@@ -12,6 +12,7 @@ import { IndexCaseCaseListResolver } from './resolvers/index-case-case-list.reso
 import { EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
 import { HttpClientModule } from '@angular/common/http';
 import { CaseDto, sortByLastName, caseTypeFilter } from './model/case';
+import { SharedUtilDateModule } from '@qro/shared/util-date';
 
 const entityMetadata: EntityMetadataMap = {
   Case: {
@@ -22,7 +23,7 @@ const entityMetadata: EntityMetadataMap = {
 };
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, AuthDomainModule],
+  imports: [CommonModule, HttpClientModule, AuthDomainModule, SharedUtilDateModule],
   providers: [
     ReportCaseActionsResolver,
     CaseDetailResolver,

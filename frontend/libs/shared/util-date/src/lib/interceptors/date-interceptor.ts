@@ -11,7 +11,7 @@ export class DateInterceptor implements HttpInterceptor {
   iso8601 = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/;
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    return next.handle(request.clone({ body: this.recursiveTransform(request.body) })).pipe(
+    return next.handle(request.clone({ body: this.recursiveTransform({ ...request.body }) })).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           const body = event.body;
@@ -36,7 +36,7 @@ export class DateInterceptor implements HttpInterceptor {
 
     if (typeof object === 'object' && object !== null) {
       Object.keys(object).forEach((key) => (object[key] = this.recursiveTransform(object[key])));
-
+      console.log(object);
       return object;
     }
 
