@@ -1,45 +1,36 @@
 package quarano.tracking.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import quarano.core.EmailAddress;
-import quarano.core.PhoneNumber;
-import quarano.core.web.LoggedIn;
-import quarano.core.web.MappedPayloads;
-import quarano.core.web.MapperWrapper;
-import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.ContactPersonRepository;
-import quarano.tracking.Encounter.EncounterIdentifier;
-import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
-import quarano.tracking.ZipCode;
-
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
+import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
+import quarano.core.web.MapperWrapper;
+import quarano.tracking.*;
+import quarano.tracking.ContactPerson.ContactPersonIdentifier;
+import quarano.tracking.Encounter.EncounterIdentifier;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 /**
  * @author Oliver Drotbohm
@@ -52,6 +43,7 @@ public class TrackingController {
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
+	private final @NonNull LocationRepository locationRepository;
 
 	@GetMapping("/api/enrollment/details")
 	public HttpEntity<?> enrollmentOverview(@LoggedIn TrackedPerson person) {
@@ -91,6 +83,69 @@ public class TrackingController {
 				.toList();
 
 		return RepresentationModel.of(encounters);
+	}
+
+	@PostMapping("/api/contact-locations")
+	HttpEntity<?> addAndAttachContactLocation(@Valid @RequestBody LocationDto.ContactLocationDto contactLocation,
+			Errors errors, @LoggedIn TrackedPerson person) {
+		if (errors.hasErrors()) {
+			return ResponseEntity.badRequest().body(errors);
+		}
+
+		var maybeLocation = locationRepository
+				.findById(Location.LocationId.of(contactLocation.getLocation()));
+		if (maybeLocation.isEmpty()) {
+			errors.rejectValue("location", "location not found");
+			return ResponseEntity.badRequest().body(errors);
+		} else {
+			var location = maybeLocation.get();
+			var newContactLocation = new ContactLocation(
+					contactLocation.getName(),
+					location,
+					contactLocation.getContactPerson(),
+					contactLocation.getStartTime(),
+					contactLocation.getEndTime(),
+					contactLocation.getNotes());
+			person.getContactLocations().add(newContactLocation);
+			var uri = fromMethodCall(on(this.getClass()).getContactLocation(newContactLocation.getId(), person)).build()
+					.toUri();
+			return ResponseEntity.created(uri).body(LocationDto.ContactLocationDto.fromContactLocation(newContactLocation));
+		}
+	}
+
+	@GetMapping("/api/contact-locations/{id}")
+	HttpEntity<LocationDto.ContactLocationDto> getContactLocation(@PathVariable ContactLocation.ContactLocationId id,
+			@LoggedIn TrackedPerson person) {
+		return ResponseEntity.of(person.getContactLocations()
+				.stream()
+				.filter(contactLocation -> contactLocation.getId().equals(id))
+				.findFirst()
+				.map(LocationDto.ContactLocationDto::fromContactLocation));
+	}
+
+	@GetMapping("/api/contact-locations")
+	HttpEntity<List<LocationDto.ContactLocationDto>> getAllContactLocations(@LoggedIn TrackedPerson person) {
+		return ResponseEntity.ok(person.getContactLocations()
+				.stream()
+				.map(LocationDto.ContactLocationDto::fromContactLocation)
+				.collect(Collectors.toUnmodifiableList()));
+	}
+
+	@DeleteMapping("/api/contact-locations/{id}")
+	HttpEntity<?> detachAndDeleteContactLocation(@PathVariable ContactLocation.ContactLocationId id,
+			@LoggedIn TrackedPerson person) {
+		var maybeLocation = person.getContactLocations()
+				.stream()
+				.filter(contactLocation -> contactLocation.getId().equals(id))
+				.findFirst();
+		if (maybeLocation.isEmpty()) {
+			return ResponseEntity.badRequest()
+					.body("Id not found");
+		} else {
+			person.getContactLocations().remove(maybeLocation.get());
+			people.save(person);
+			return ResponseEntity.ok().build();
+		}
 	}
 
 	@PostMapping("/api/encounters")

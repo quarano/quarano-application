@@ -69,6 +69,11 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@JoinColumn(name = "tracked_person_id")
 	private List<Encounter> encounters;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tracked_person_id")
+	@Getter
+	private List<ContactLocation> contactLocations;
+
 	public TrackedPerson(String firstName, String lastName) {
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);
 	}
