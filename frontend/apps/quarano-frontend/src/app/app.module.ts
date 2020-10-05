@@ -28,6 +28,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { reducers } from './reducers';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { SharedUtilProgressBarModule } from '@qro/shared/util-progress-bar';
 
 registerLocaleData(localeDe, 'de');
 
@@ -42,6 +43,7 @@ const SUB_MODULES = [
   SharedUtilDateModule,
   SharedUiMaterialModule,
   SharedUtilTranslationModule,
+  SharedUtilProgressBarModule,
 ];
 
 const NGRX = [
