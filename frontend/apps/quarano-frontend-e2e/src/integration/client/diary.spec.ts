@@ -58,7 +58,7 @@ describe('Adding new symptom to symptom diary', () => {
         const contacts = body.contacts;
         const symptoms = body.symptoms;
         const entryId = body.id;
-        expect(bodyTemperature).to.eq(39.5);
+        expect(bodyTemperature).to.eq(39.4);
         expect(contacts).to.have.length(1);
         expect(symptoms).to.have.length(4);
         expect(entryId).to.eq(null);

@@ -23,8 +23,6 @@ describe('health-department contact cases case-list', () => {
 
   describe('case list', () => {
     it('should get a list of cases and display in table', () => {
-      cy.wait('@allcases').its('status').should('eq', 200);
-
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
     });
 

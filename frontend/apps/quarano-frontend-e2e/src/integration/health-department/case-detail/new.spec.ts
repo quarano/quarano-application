@@ -9,7 +9,7 @@ describe('new case', () => {
 
     cy.loginAgent();
 
-    cy.visit('health-department/case-detail/index');
+    cy.visit('health-department/case-detail/new/index/edit');
   });
 
   describe('field validations: required', () => {
