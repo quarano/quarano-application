@@ -232,32 +232,28 @@ export class EditComponent implements OnInit, OnDestroy {
 
   saveCaseData(result: CaseDto, closeAfterSave: boolean) {
     if (!result.caseId) {
-      this.entityService
-        .add(result)
-        .pipe(
-          catchError((error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => value instanceof Error)
-        )
-        .subscribe((changedCaseDto) => this.changeRouteAfterSave(changedCaseDto, closeAfterSave));
+      this.entityService.add(result).pipe(
+        catchError((error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+          return of(error);
+        }),
+        filter((value) => value instanceof Error)
+      );
+      this.changeRouteAfterSave(result, closeAfterSave);
     } else {
-      this.entityService
-        .update(result)
-        .pipe(
-          catchError((error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => value instanceof Error)
-        )
-        .subscribe((changedCaseDto) => this.changeRouteAfterSave(changedCaseDto, closeAfterSave));
+      this.entityService.update(result).pipe(
+        catchError((error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+          return of(error);
+        }),
+        filter((value) => value instanceof Error)
+      );
+      this.changeRouteAfterSave(result, closeAfterSave);
     }
   }
 
   private changeRouteAfterSave(caseDto: CaseDto, closeAfterSave: boolean) {
-    this.snackbarService.error('Persönliche Daten erfolgreich aktualisiert');
+    this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
     if (closeAfterSave) {
       this.router.navigate([this.returnLink]);
     } else {
