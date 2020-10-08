@@ -3,7 +3,7 @@
 describe('health-department contact cases case-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/hd/cases?type=contact').as('allcases');
+    cy.route('GET', '/api/hd/cases').as('allcases');
 
     cy.loginAgent();
     cy.get('[data-cy="contact-cases"]').click();
@@ -23,6 +23,8 @@ describe('health-department contact cases case-list', () => {
 
   describe('case list', () => {
     it('should get a list of cases and display in table', () => {
+      cy.wait('@allcases').its('status').should('eq', 200);
+
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
     });
 

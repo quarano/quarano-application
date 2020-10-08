@@ -4,8 +4,8 @@ import { DateFunctions } from '@qro/shared/util-date';
 describe('new case', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/hd/cases' /*, 'fixture:get-api-hd-cases.json'*/).as('createcase');
-    cy.route('PUT', '/api/hd/cases' /*, 'fixture:get-api-hd-cases.json'*/).as('updatecase');
+    cy.route('POST', '/api/hd/cases').as('createcase');
+    cy.route('PUT', '/api/hd/cases').as('updatecase');
 
     cy.loginAgent();
 
