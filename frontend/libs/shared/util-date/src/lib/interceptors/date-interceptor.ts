@@ -36,7 +36,6 @@ export class DateInterceptor implements HttpInterceptor {
 
     if (typeof object === 'object' && object !== null) {
       Object.keys(object).forEach((key) => (object[key] = this.recursiveTransform(object[key])));
-      console.log(object);
       return object;
     }
 
