@@ -9,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -30,6 +30,7 @@ export class EditComponent implements OnInit, OnDestroy {
   today = new Date();
   selectableIndexCases: CaseSearchItem[] = [];
   caseType: CaseType;
+  updateCase$$: BehaviorSubject<CaseDto> = new BehaviorSubject<CaseDto>(null);
 
   get isIndexCase() {
     return this.caseType === CaseType.Index;
@@ -54,6 +55,10 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.createFormGroup();
+
+    this.updateCase$$.asObservable().subscribe((data) => {
+      this.updateFormGroup(data as CaseDto);
+    });
 
     this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
       type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
@@ -157,10 +162,17 @@ export class EditComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.router.navigate([`/health-department/case-detail/index/${caseId}`]);
+        this.routeToIndexAndUpdateCaseData(caseId);
       } else {
         this.formGroup.get('testDate').setValue(null);
       }
+    });
+  }
+
+  private routeToIndexAndUpdateCaseData(caseId: string) {
+    const updatedCase = this.formGroup.getRawValue();
+    this.router.navigate([`/health-department/case-detail/index/${caseId}`]).then(() => {
+      this.updateCase$$.next(updatedCase);
     });
   }
 
