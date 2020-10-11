@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm run build-stage
-      - run: npm run prepare-deployment
+      - run: npm run build-internal-dev-otc
+      - run: npm run prepare-deployment-otc
       - run: npm run ci-test
       - run: npm run lint

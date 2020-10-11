@@ -340,6 +340,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	TrackedCase markRegistrationCanceled() {
+
+		if (this.getStatus() != Status.OPEN) {
+
+			assertStatus(Status.IN_REGISTRATION, "Cannot cancel registration for case %s in status %s!", id, status);
+
+			this.status = Status.OPEN;
+
+			this.registerEvent(CaseStatusUpdated.of(this));
+		}
+
+		return this;
+	}
+
 	TrackedCase markRegistrationCompleted() {
 
 		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);

@@ -10,7 +10,7 @@ import { LanguageEffects } from './store/language.effects';
 import { LanguageInterceptor } from './services/language.interceptor';
 
 function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/');
+  return new TranslateHttpLoader(http, 'assets/i18n/');
 }
 
 @NgModule({

@@ -85,8 +85,9 @@ class TrackedCaseEventListener {
 			cases.save(emailSender.testConnection()
 					.flatMap(__ -> registration.initiateRegistration(trackedCase))
 					.flatMap(code -> sendActivationMailFor(trackedCase, code))
-					.fold(it -> trackedCase.markNewContactCaseMailCantSent(),
-							it -> trackedCase.markNewContactCaseMailSent()));
+					.onFailure(__ -> trackedCase.markRegistrationCanceled())
+					.fold(__ -> trackedCase.markNewContactCaseMailCantSent(),
+							__ -> trackedCase.markNewContactCaseMailSent()));
 		}
 
 		private Try<Void> sendActivationMailFor(TrackedCase trackedCase, ActivationCode code) {

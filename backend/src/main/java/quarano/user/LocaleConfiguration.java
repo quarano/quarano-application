@@ -79,6 +79,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		public LocaleResolver() {
 			setDefaultLocale(Locale.GERMANY);
 			setSupportedLocales(LOCALES);
+			Locale.setDefault(getDefaultLocale());
 		}
 
 		@Override

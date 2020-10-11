@@ -1,18 +1,16 @@
-Dear Mrs./Mr. {lastName},
+Dear Mr/Ms {lastName},
 
 
-bitte denken Sie an Ihren regelmäßigen Tagebucheintrag in der Quarano-Anwendung.
-Uns fehlt noch der {slot}.
+please remember to record your regular diary entry in the Quarano-Application.
+We are missing data for {slot}.
 
 https://{host}
 
-Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-
-Hotline der Stadt Mannheim unter der Telefonnummer 
-0621-293 2253.
+For general questions regarding Corona please contact Mannheim's Corona-Hotline under the phone number 0621-293 2253.
 
-• Montag bis Freitag von 9:00 – 17:00 Uhr
-• Samstags sowie an Sonn- und Feiertagen von 9:00 – 14:00 Uhr 
+• Monday to Friday from 9 am – 5 pm
+• Saturday, Sunday and public holidays from 9 am – 2 pm
 
-Wir bedanken uns für Ihre Mitarbeit.
+Thank you for your cooperation.
 
-Ihr Gesundheitsamt Mannheim
+Your Gesundheitsamt Mannheim
