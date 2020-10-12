@@ -18,6 +18,9 @@ describe('new case', () => {
         cy.get('[data-cy="input-firstname"] input[matInput]').type('Testfirstname');
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
         cy.get('[data-cy="input-phone"] input[matInput]').type('0621 239 120 1');
+        cy.get('[data-cy="input-testdate"] input[matInput]').type('1.10.1987');
+        cy.get('[data-cy="input-quarantinestart"] input[matInput]').type('2.10.1987');
+        cy.get('[data-cy="input-quarantineend"] input[matInput]').type('16.10.1987');
 
         cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       });
@@ -26,6 +29,9 @@ describe('new case', () => {
         cy.get('[data-cy="input-firstname"] input[matInput]').type('Testfirstname');
         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
         cy.get('[data-cy="input-mobile"] input[matInput]').type('0621 239 120 1');
+        cy.get('[data-cy="input-testdate"] input[matInput]').type('1.10.1987');
+        cy.get('[data-cy="input-quarantinestart"] input[matInput]').type('2.10.1987');
+        cy.get('[data-cy="input-quarantineend"] input[matInput]').type('16.10.1987');
 
         cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       });
