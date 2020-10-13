@@ -54,15 +54,18 @@ export class EditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.createFormGroup();
-
     this.updateCase$$.asObservable().subscribe((data) => {
       this.updateFormGroup(data as CaseDto);
     });
 
-    this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('type'))).subscribe((type) => {
-      type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
-    });
+    this.route.parent.paramMap
+      .pipe(
+        map((paramMap) => paramMap.get('type')),
+        tap((type) => this.createFormGroup(type as CaseType))
+      )
+      .subscribe((type) => {
+        type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
+      });
 
     this.caseDetail$ = this.route.parent.paramMap.pipe(
       switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
@@ -91,7 +94,9 @@ export class EditComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  createFormGroup() {
+  createFormGroup(type: CaseType) {
+    const isIndexCase = type === CaseType.Index;
+
     this.formGroup = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
@@ -102,10 +107,10 @@ export class EditComponent implements OnInit, OnDestroy {
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
       ]),
 
-      testDate: new FormControl(this.isIndexCase ? this.today : null),
+      testDate: new FormControl(isIndexCase ? this.today : null),
 
-      quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
-      quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
+      quarantineStartDate: new FormControl(isIndexCase ? new Date() : null, []),
+      quarantineEndDate: new FormControl(isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
