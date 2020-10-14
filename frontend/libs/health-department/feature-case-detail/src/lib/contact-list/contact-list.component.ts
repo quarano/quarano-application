@@ -1,7 +1,10 @@
+import { ApiService } from '@qro/shared/util-data-access';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
-import { ContactListItemDto } from '@qro/health-department/domain';
+import { CaseEntityService, ContactListItemDto } from '@qro/health-department/domain';
+import { Observable, combineLatest } from 'rxjs';
+import { map, switchMap, shareReplay } from 'rxjs/operators';
 
 interface RowViewModel {
   firstName: string;
@@ -21,15 +24,39 @@ interface RowViewModel {
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent implements OnInit {
-  @Input() contacts: ContactListItemDto[];
-  @Input() caseName: string;
+  caseName$: Observable<string>;
+  rows$: Observable<RowViewModel[]>;
 
-  rows: RowViewModel[] = [];
-
-  constructor(private router: Router, private snackbarService: SnackbarService) {}
+  constructor(
+    private router: Router,
+    private snackbarService: SnackbarService,
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private entityService: CaseEntityService
+  ) {}
 
   ngOnInit() {
-    this.rows = this.contacts?.map((c) => this.getRowData(c));
+    const caseDetail$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1)
+    );
+
+    this.caseName$ = caseDetail$.pipe(map((detail) => `${detail.firstName} ${detail.lastName}`));
+
+    this.rows$ = caseDetail$.pipe(
+      switchMap((detail) => {
+        if (detail._links.hasOwnProperty('contacts')) {
+          return this.apiService
+            .getApiCall<any>(detail, 'contacts')
+            .pipe(map((result) => result?._embedded?.contacts?.map((c) => this.getRowData(c))));
+        }
+      })
+    );
   }
 
   onSelect(event) {

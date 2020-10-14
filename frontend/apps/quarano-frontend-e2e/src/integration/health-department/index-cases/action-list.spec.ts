@@ -28,7 +28,7 @@ describe('health-department index cases action-list', () => {
 
     it('should open selected case', () => {
       cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').eq(2).click();
-      cy.url().should('include', '/health-department/case-detail/').should('include', '?tab=1');
+      cy.url().should('include', '/health-department/case-detail/');
     });
   });
 });

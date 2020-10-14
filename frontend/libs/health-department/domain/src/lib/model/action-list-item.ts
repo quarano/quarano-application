@@ -1,12 +1,12 @@
 import { Link } from '@qro/shared/util-data-access';
 import { Alert } from '../enums/alert';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { CaseSearchItem } from './case-search-item';
 
 export interface ActionListItemDto {
   name: string;
   priority: number;
-  caseType: ClientType;
+  caseType: CaseType;
   dateOfBirth: Date;
   firstName: string;
   lastName: string;

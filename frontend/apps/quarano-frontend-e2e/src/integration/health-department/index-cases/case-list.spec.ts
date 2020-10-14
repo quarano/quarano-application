@@ -3,7 +3,7 @@
 describe('health-department index cases case-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/hd/cases?type=index').as('allcases');
+    cy.route('GET', '/api/hd/cases').as('allcases');
 
     cy.loginAgent();
   });

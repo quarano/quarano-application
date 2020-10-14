@@ -81,10 +81,20 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button data-cy="save-diary-entry" *ngIf="!isReadonly" [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading"
+      <qro-button
+        data-cy="save-diary-entry"
+        *ngIf="!isReadonly"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
         >{{ 'DIARY_ENTRY.SPEICHERN' | translate }}
       </qro-button>
-      <button data-cy="cancel-diary-entry"  type="button" mat-raised-button color="secondary" [routerLink]="['/client/diary/diary-list']">
+      <button
+        data-cy="cancel-diary-entry"
+        type="button"
+        mat-raised-button
+        color="secondary"
+        [routerLink]="['/client/diary/diary-list']"
+      >
         {{ 'DIARY_ENTRY.ABBRECHEN' | translate }}
       </button>
     </mat-card-actions>

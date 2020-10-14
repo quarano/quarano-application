@@ -20,7 +20,6 @@ export class BadRequestService {
       });
       if (!handled) {
         this.snackbar.error('BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
-        console.log(requestErrors);
       }
     }
   }

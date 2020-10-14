@@ -5,7 +5,7 @@
         data-cy="new-case-button"
         mat-raised-button
         color="primary"
-        [routerLink]="['/health-department/case-detail', 'contact']"
+        [routerLink]="['/health-department/case-detail/new', 'contact']"
       >
         <mat-icon>add</mat-icon>Neue Kontaktperson anlegen
       </button>
@@ -15,136 +15,143 @@
       <mat-icon>get_app</mat-icon>csv-Export speichern
     </button> -->
   </div>
+  <ng-container *ngIf="cases$ | async as cases">
+    <mat-form-field appearance="outline" class="full-width mt-3">
+      <input
+        matInput
+        data-cy="search-case-input"
+        type="text"
+        placeholder="Suchen..."
+        (keyup)="updateFilter($event, cases)"
+      />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full-width mt-3">
-    <input matInput data-cy="search-case-input" type="text" placeholder="Suchen..." (keyup)="updateFilter($event)" />
-  </mat-form-field>
-
-  <ngx-datatable
-    #table
-    data-cy="case-data-table"
-    class="material fixed-header"
-    style="max-width: 1335px;"
-    [count]="cases.length"
-    [headerHeight]="50"
-    rowHeight="auto"
-    [rows]="filteredData"
-    [messages]="{
-      emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
-      selectedMessage: 'ausgewählt',
-      totalMessage: cases.length === 1 ? 'Fall' : 'Fälle'
-    }"
-    [loadingIndicator]="loading"
-    [footerHeight]="50"
-    [selectionType]="selectionType"
-    (select)="onSelect($event)"
-    [limit]="15"
-  >
-    <ngx-datatable-column
-      prop="status"
-      name="Status"
-      width="170"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
+    <ngx-datatable
+      #table
+      data-cy="case-data-table"
+      class="material fixed-header"
+      style="max-width: 1335px;"
+      [count]="cases.length"
+      [headerHeight]="50"
+      rowHeight="auto"
+      [rows]="filteredData"
+      [messages]="{
+        emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
+        selectedMessage: 'ausgewählt',
+        totalMessage: cases.length === 1 ? 'Fall' : 'Fälle'
+      }"
+      [loadingIndicator]="loading"
+      [footerHeight]="50"
+      [selectionType]="selectionType"
+      (select)="onSelect($event)"
+      [limit]="15"
     >
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="status"
+        name="Status"
+        width="170"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+      >
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="lastName"
-      name="Nachname"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      width="150"
-    ></ngx-datatable-column>
+      <ngx-datatable-column
+        prop="lastName"
+        name="Nachname"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        width="150"
+      ></ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="firstName"
-      name="Vorname"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      width="150"
-    >
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="firstName"
+        name="Vorname"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        width="150"
+      >
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="dateOfBirth"
-      name="Geburtsdatum"
-      width="140"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      ><ng-template let-value="value" ngx-datatable-cell-template>
-        <ng-container *ngIf="value; else empty_date_of_birth">{{ value | date: 'dd.MM.y' }}</ng-container>
-        <ng-template #empty_date_of_birth>-</ng-template>
-      </ng-template>
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="dateOfBirth"
+        name="Geburtsdatum"
+        width="140"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        ><ng-template let-value="value" ngx-datatable-cell-template>
+          <ng-container *ngIf="value; else empty_date_of_birth">{{ value | date: 'dd.MM.y' }}</ng-container>
+          <ng-template #empty_date_of_birth>-</ng-template>
+        </ng-template>
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="typeName"
-      name="Typ"
-      width="140"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-    >
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="typeName"
+        name="Typ"
+        width="140"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+      >
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="quarantineEnd"
-      name="Quarantäne bis"
-      width="130"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      ><ng-template let-value="value" ngx-datatable-cell-template>
-        {{ getQuarantineEndString(value) }}
-      </ng-template>
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="quarantineEnd"
+        name="Quarantäne bis"
+        width="130"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        ><ng-template let-value="value" ngx-datatable-cell-template>
+          {{ getQuarantineEndString(value) }}
+        </ng-template>
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="createdAt"
-      name="Angelegt am"
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      width="130"
-    >
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="createdAt"
+        name="Angelegt am"
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        width="130"
+      >
+      </ngx-datatable-column>
 
-    <ngx-datatable-column
-      prop="extReferenceNumber"
-      name="Vorgangsnr."
-      [resizeable]="true"
-      [sortable]="true"
-      [draggable]="true"
-      [canAutoResize]="true"
-      width="150"
-    >
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        prop="extReferenceNumber"
+        name="Vorgangsnr."
+        [resizeable]="true"
+        [sortable]="true"
+        [draggable]="true"
+        [canAutoResize]="true"
+        width="150"
+      >
+      </ngx-datatable-column>
 
-    <!-- no width set for this column to adapt column width to fixed table width -->
-    <ngx-datatable-column
-      prop="originCases"
-      name="Ursprungsfälle"
-      [resizeable]="true"
-      [sortable]="true"
-      [canAutoResize]="true"
-      cellClass="break-words"
-    >
-      <ng-template let-value="value" ngx-datatable-cell-template>
-        <!-- guarantees word break for very long names -->
-        <span class="break-words">{{ value }}</span>
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
+      <!-- no width set for this column to adapt column width to fixed table width -->
+      <ngx-datatable-column
+        prop="originCases"
+        name="Ursprungsfälle"
+        [resizeable]="true"
+        [sortable]="true"
+        [canAutoResize]="true"
+        cellClass="break-words"
+      >
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <!-- guarantees word break for very long names -->
+          <span class="break-words">{{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ng-container>
 </div>

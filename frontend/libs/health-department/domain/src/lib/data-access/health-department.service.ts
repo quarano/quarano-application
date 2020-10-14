@@ -1,12 +1,11 @@
-import { API_URL } from '@qro/shared/util-data-access';
-import { Injectable, Inject } from '@angular/core';
+import { CaseDto } from './../model/case';
+import { API_URL, Link } from '@qro/shared/util-data-access';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Link } from '@qro/shared/util-data-access';
-import { CaseDetailDto } from '../model/case-detail';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../model/case-action';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
-import { HealthDepartmentDto, ClientType, AuthStore } from '@qro/auth/api';
+import { AuthStore, CaseType, HealthDepartmentDto } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',
@@ -18,15 +17,13 @@ export class HealthDepartmentService {
     return this.httpClient.put(link.href, { comment }).pipe(shareReplay());
   }
 
-  createCase(caseDetail: CaseDetailDto, type: ClientType): Observable<CaseDetailDto> {
-    return this.httpClient
-      .post<CaseDetailDto>(`${this.apiUrl}/api/hd/cases?type=${type}`, caseDetail)
-      .pipe(shareReplay());
+  createCase(caseDetail: CaseDto, type: CaseType): Observable<CaseDto> {
+    return this.httpClient.post<CaseDto>(`${this.apiUrl}/api/hd/cases?type=${type}`, caseDetail).pipe(shareReplay());
   }
 
-  updateCase(caseDetail: CaseDetailDto): Observable<CaseDetailDto> {
+  updateCase(caseDetail: CaseDto): Observable<CaseDto> {
     return this.httpClient
-      .put<CaseDetailDto>(`${this.apiUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail)
+      .put<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail)
       .pipe(shareReplay());
   }
 
@@ -34,8 +31,8 @@ export class HealthDepartmentService {
     return this.httpClient.post(`${this.apiUrl}/api/hd/cases/${caseId}/comments`, { comment }).pipe(shareReplay());
   }
 
-  getCase(caseId: string): Observable<CaseDetailDto> {
-    return this.httpClient.get<CaseDetailDto>(`${this.apiUrl}/api/hd/cases/${caseId}`).pipe(shareReplay());
+  getCase(caseId: string): Observable<CaseDto> {
+    return this.httpClient.get<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseId}`).pipe(shareReplay());
   }
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {

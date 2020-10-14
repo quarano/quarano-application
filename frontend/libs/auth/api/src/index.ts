@@ -1,4 +1,5 @@
 export {
+  AuthDomainModule,
   ClientDto,
   HealthDepartmentDto,
   AuthService,
@@ -7,7 +8,7 @@ export {
   IRole,
   roleNames,
   roles,
-  ClientType,
+  CaseType,
   AuthStore,
   AuthActions,
 } from '@qro/auth/domain';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 @Component({
   selector: 'qro-landing',
@@ -8,21 +8,21 @@ import { ClientType } from '@qro/auth/api';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  public ClientType = ClientType;
-  public userType = ClientType.Index;
+  public ClientType = CaseType;
+  public userType = CaseType.Index;
   public clientcode: string;
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.userType = (this.route.snapshot.paramMap.get('usertype') as ClientType) || this.userType;
+    this.userType = (this.route.snapshot.paramMap.get('usertype') as CaseType) || this.userType;
     this.clientcode = this.route.snapshot.paramMap.get('clientcode');
   }
 
   showIndexNumber() {
-    return this.userType === ClientType.Index;
+    return this.userType === CaseType.Index;
   }
   showContactNumber() {
-    return this.userType === ClientType.Contact;
+    return this.userType === CaseType.Contact;
   }
 }

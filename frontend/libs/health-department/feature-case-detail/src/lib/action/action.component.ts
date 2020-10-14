@@ -1,13 +1,15 @@
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/domain';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-client-action',
@@ -15,9 +17,9 @@ import { ClientType } from '@qro/auth/api';
   styleUrls: ['./action.component.scss'],
 })
 export class ActionComponent implements OnInit {
-  @Input() caseAction: CaseActionDto;
-  @Input() type: ClientType;
+  caseAction$: Observable<CaseActionDto>;
   formGroup: FormGroup;
+  caseType: CaseType;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,16 +28,20 @@ export class ActionComponent implements OnInit {
     private snackbarService: SnackbarService,
     private router: Router,
     private badRequestService: BadRequestService,
+    private route: ActivatedRoute,
     public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit() {
+    this.caseAction$ = this.route.data.pipe(map((data) => data.actions));
+    this.caseType = this.route.parent.snapshot.paramMap.get('type') as CaseType;
+
     this.formGroup = this.formBuilder.group({
       comment: new FormControl(null, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
     });
   }
 
-  submitForm() {
+  submitForm(caseAction: CaseActionDto) {
     if (this.formGroup.valid) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
@@ -50,16 +56,16 @@ export class ActionComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          this.resolveAnomalies();
+          this.resolveAnomalies(caseAction);
         }
       });
     }
   }
 
-  private resolveAnomalies() {
+  private resolveAnomalies(caseAction: CaseActionDto) {
     this.healthDepartmentService
       .resolveAnomalies(
-        this.caseAction._links.resolve,
+        caseAction._links.resolve,
         this.formGroup.controls.comment.value?.trim() || 'Auffälligkeiten geprüft und als erledigt markiert'
       )
       .subscribe(
@@ -73,11 +79,11 @@ export class ActionComponent implements OnInit {
       );
   }
 
-  hasOpenAnomalies(): boolean {
-    return this.caseAction.anomalies.health.length + this.caseAction.anomalies.process.length > 0;
+  hasOpenAnomalies(caseAction: CaseActionDto): boolean {
+    return caseAction.anomalies.health.length + caseAction.anomalies.process.length > 0;
   }
 
   get returnLink() {
-    return `/health-department/${this.type}-cases/action-list`;
+    return `/health-department/${this.caseType}-cases/action-list`;
   }
 }
