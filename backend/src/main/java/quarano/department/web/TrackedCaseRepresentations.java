@@ -413,6 +413,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			return summary.getCaseTypeLabel();
 		}
 
+		public String getCaseType() {
+			return summary.getCaseType();
+		}
+
 		public List<CommentRepresentation> getComments() {
 
 			return getTrackedCase().getComments().stream()
