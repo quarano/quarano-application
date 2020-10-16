@@ -39,11 +39,12 @@
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
       >
-        <span [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
+        <span data-cy="start-tracking-span" [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
           >Nachverfolgung starten</span
         >
       </button>
       <button
+        data-cy="analog-tracking-button"
         #analog_tracking_btn
         color="primary"
         [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"

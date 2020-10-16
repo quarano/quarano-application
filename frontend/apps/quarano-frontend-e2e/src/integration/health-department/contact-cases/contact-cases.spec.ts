@@ -82,7 +82,7 @@ describe('health-department contact cases', () => {
     });
   });
 
-  describe('create new contact cases', () => {
+  describe('create new contact case', () => {
     it('happy path', () => {
       cy.location('pathname').should('include', 'health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
@@ -115,8 +115,8 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="client-submit-button"] button').click();
       cy.wait('@newContact');
       cy.get('@newContact').its('status').should('eq', 200);
-      cy.get('[data-cy="start-tracking-button"]').should('be.enabled');
-      cy.get('[data-cy="start-tracking-button"]').click();
+      cy.get('[data-cy="start-tracking-button"]').should('be.disabled');
+      cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
       cy.wait('@registration');
       cy.get('@registration').its('status').should('eq', 200);
     });
