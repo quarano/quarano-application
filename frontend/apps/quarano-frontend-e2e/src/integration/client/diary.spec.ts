@@ -30,7 +30,7 @@ describe('Adding new symptom to symptom diary', () => {
     cy.get('[data-cy="add-missing-contacts"]').should('exist');
     cy.get('[data-cy="save-diary-entry"] button').should('be.disabled');
 
-    cy.get('[data-cy="body-temperature"]').trigger('mousedown', { button: 0 });
+    cy.get('[data-cy="body-temperature"]').trigger('mousedown', 'center', { button: 0 });
 
     cy.get('mat-slide-toggle').should('have.length', 8);
     cy.get('#mat-slide-toggle-1').should('exist');
