@@ -1,3 +1,4 @@
+import { provideMockStore } from '@ngrx/store/testing';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
@@ -11,6 +12,7 @@ import { of } from 'rxjs';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DiaryService, DiaryEntryDto } from '@qro/client/domain';
+import { StoreModule } from '@ngrx/store';
 
 describe('DiaryEntryComponent', () => {
   let component: DiaryEntryComponent;
@@ -22,6 +24,7 @@ describe('DiaryEntryComponent', () => {
       declarations: [DiaryEntryComponent],
       providers: [
         FormBuilder,
+        provideMockStore({}),
         { provide: DiaryService, useValue: { createDiaryEntry: () => {} } },
         { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
         { provide: MatDialog, useValue: {} },
