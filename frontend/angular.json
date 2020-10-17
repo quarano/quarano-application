@@ -38,7 +38,7 @@
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.prod.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod-otc.ts"
                 }
               ],
               "optimization": true,

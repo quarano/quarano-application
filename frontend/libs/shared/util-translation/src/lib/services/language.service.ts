@@ -40,7 +40,7 @@ export class LanguageService {
               lang = languages.find((l) => l.isDefaultLanguage);
             }
             this.store.dispatch(
-              LanguageActions.languageSelected({
+              LanguageActions.languageSelectedAnonymousUser({
                 selectedLanguage: lang,
               })
             );

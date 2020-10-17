@@ -40,7 +40,7 @@ const routes: Routes = [
         component: DiaryEntryComponent,
         resolve: {
           diaryEntry: DiaryDetailResolver,
-          symptoms: SymptomsResolver,
+          symptomsLoaded: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],
@@ -50,7 +50,7 @@ const routes: Routes = [
         component: DiaryEntryComponent,
         resolve: {
           diaryEntry: DiaryDetailResolver,
-          symptoms: SymptomsResolver,
+          symptomsLoaded: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],

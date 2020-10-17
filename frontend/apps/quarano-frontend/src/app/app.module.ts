@@ -1,3 +1,4 @@
+import { SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { metaReducers } from './reducers/index';
 import { ClientStoreModule } from '@qro/client/api';
@@ -42,6 +43,7 @@ const SUB_MODULES = [
   SharedUiAsideModule,
   SharedUtilDateModule,
   SharedUiMaterialModule,
+  SharedUtilSymptomModule,
   SharedUtilTranslationModule,
   SharedUtilProgressBarModule,
 ];

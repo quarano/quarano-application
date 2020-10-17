@@ -40,7 +40,7 @@
         <mat-slide-toggle
           color="primary"
           class="radio-button"
-          *ngFor="let symptom of characteristicSymptoms"
+          *ngFor="let symptom of characteristicSymptoms$ | async"
           [checked]="isCharacteristicSymptomSelected(symptom)"
           (change)="onSlideToggleChanged($event, symptom.id)"
           [disabled]="isReadonly"
@@ -50,7 +50,7 @@
       <qro-multiple-autocomplete
         data-cy="other-symptoms"
         [control]="this.formGroup.controls.nonCharacteristicSymptoms"
-        [selectableItems]="nonCharacteristicSymptoms"
+        [selectableItems]="nonCharacteristicSymptoms$ | async"
         [placeholder]="'DIARY_ENTRY.SONSTIGE_SYMPTOME' | translate"
         [nameProperties]="['name']"
         name="nonCharacteristicSymptoms"

@@ -1,23 +1,24 @@
-import { SymptomEntityService } from './../data-access/symptom-entity.service';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { SymptomDto } from '../model/symptom';
-import { first, switchMap } from 'rxjs/operators';
+import { filter, first, tap } from 'rxjs/operators';
+import { SymptomSelectors } from '../store/selector-types';
+import { SymptomActions } from '../store/action-types';
 
 @Injectable()
-export class SymptomsResolver implements Resolve<SymptomDto[] | boolean> {
-  constructor(private entityService: SymptomEntityService) {}
+export class SymptomsResolver implements Resolve<boolean> {
+  constructor(private store: Store) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<SymptomDto[] | boolean> {
-    return this.entityService.loaded$.pipe(
-      switchMap((loaded) => {
+  resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
+    return this.store.pipe(
+      select(SymptomSelectors.loaded),
+      tap((loaded) => {
         if (!loaded) {
-          return this.entityService.getAll();
-        } else {
-          return this.entityService.entities$;
+          this.store.dispatch(SymptomActions.load({ languageKey: null }));
         }
       }),
+      filter((loaded) => !!loaded),
       first()
     );
   }

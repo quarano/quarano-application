@@ -17,12 +17,17 @@ export const initialLanguageState: LanguageState = {
 export const languageReducer = createReducer(
   initialLanguageState,
 
-  on(LanguageActions.languageSelected, (state, action) => {
-    return {
-      ...state,
-      selectedLanguage: action.selectedLanguage,
-    };
-  }),
+  on(
+    LanguageActions.languageSelectedAnonymousUser,
+    LanguageActions.languageSelectedAuthenticatedUser,
+    LanguageActions.contentLanguageHeaderRead,
+    (state, action) => {
+      return {
+        ...state,
+        selectedLanguage: action.selectedLanguage,
+      };
+    }
+  ),
 
   on(LanguageActions.supportedLanguagesLoaded, (state, action) => {
     return {

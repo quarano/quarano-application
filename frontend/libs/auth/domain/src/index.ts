@@ -11,3 +11,4 @@ export * from './lib/model/client';
 export * from './lib/enums/case-type';
 export * from './lib/store/auth-store.service';
 export * from './lib/store/action-types';
+export * from './lib/store/selector-types';

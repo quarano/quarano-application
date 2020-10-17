@@ -61,7 +61,7 @@ const routes: Routes = [
       {
         path: 'questionnaire',
         component: QuestionnaireComponent,
-        resolve: { symptoms: SymptomsResolver },
+        resolve: { symptomsLoaded: SymptomsResolver },
       },
       {
         path: 'index-case-data',

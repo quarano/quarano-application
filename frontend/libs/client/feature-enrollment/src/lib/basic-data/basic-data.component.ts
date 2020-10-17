@@ -1,3 +1,5 @@
+import { SymptomSelectors } from '@qro/shared/util-symptom';
+import { select, Store } from '@ngrx/store';
 import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +29,7 @@ import { ClientDto } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { tap, finalize, take, switchMap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'qro-basic-data',
@@ -48,7 +51,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
   firstQuery: QuestionnaireDto;
-  symptoms: SymptomDto[];
+  symptoms$: Observable<SymptomDto[]>;
   secondFormLoading = false;
 
   // ########## STEP III ##########
@@ -70,7 +73,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private badRequestService: BadRequestService,
     private clientService: ClientService,
     private dialogService: ContactDialogService,
-    public clientStore: ClientStore
+    public clientStore: ClientStore,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -80,11 +84,11 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         this.firstQuery = data.firstQuery;
         this.client = data.clientData;
         this.encounters = data.encounters;
-        this.symptoms = data.symptoms.filter((symptom: SymptomDto) => symptom.characteristic);
-
         this.buildForms();
       })
     );
+
+    this.symptoms$ = this.store.pipe(select(SymptomSelectors.symptoms));
   }
 
   ngOnDestroy() {

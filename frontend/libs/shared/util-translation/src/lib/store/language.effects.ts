@@ -10,11 +10,13 @@ export class LanguageEffects {
   languageSelected$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(LanguageActions.languageSelected),
-        tap((action) => {
-          this.translate.use(action.selectedLanguage.key);
-          localStorage.setItem('selectedLanguage', JSON.stringify(action.selectedLanguage));
-        }),
+        ofType(
+          LanguageActions.languageSelectedAnonymousUser,
+          LanguageActions.languageSelectedAuthenticatedUser,
+          LanguageActions.contentLanguageHeaderRead
+        ),
+        tap((action) => this.translate.use(action.selectedLanguage.key)),
+        tap((action) => localStorage.setItem('selectedLanguage', JSON.stringify(action.selectedLanguage))),
         tap((action) => this.dateAdapter.setLocale(action.selectedLanguage.key))
       ),
     { dispatch: false }

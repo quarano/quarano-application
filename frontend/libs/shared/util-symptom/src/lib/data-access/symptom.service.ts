@@ -1,17 +1,34 @@
-import { API_URL } from '@qro/shared/util-data-access';
+import { SymptomDto } from './../model/symptom';
+import { LanguageSelectors } from '@qro/shared/util-translation';
+import { select, Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { API_URL } from '@qro/shared/util-data-access';
 import { Observable } from 'rxjs';
-import { SymptomDto } from '../model/symptom';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, switchMap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SymptomService {
-  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
+  constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string, private store: Store) {}
 
-  getSymptoms(): Observable<SymptomDto[]> {
-    return this.httpClient.get<SymptomDto[]>(`${this.apiUrl}/api/symptoms`).pipe(shareReplay());
+  getSymptoms(languageKey: string): Observable<SymptomDto[]> {
+    let uri = `${this.apiUrl}/api/symptoms`;
+    if (!languageKey) {
+      return this.store.pipe(
+        select(LanguageSelectors.selectedLanguage),
+        switchMap((selectedLanguage) => {
+          if (selectedLanguage) {
+            uri += `?locale=${selectedLanguage.key}`;
+          }
+          return this.loadSymptoms(uri);
+        })
+      );
+    }
+    uri += `?locale=${languageKey}`;
+    return this.loadSymptoms(uri);
+  }
+
+  private loadSymptoms(uri: string): Observable<SymptomDto[]> {
+    return this.httpClient.get<SymptomDto[]>(uri).pipe(shareReplay());
   }
 }

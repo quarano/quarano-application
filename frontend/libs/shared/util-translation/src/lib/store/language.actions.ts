@@ -1,8 +1,18 @@
 import { createAction, props } from '@ngrx/store';
 import { ILanguageConfig } from '../model/language-config';
 
-export const languageSelected = createAction(
-  '[Top Menu] Language Selected',
+export const languageSelectedAuthenticatedUser = createAction(
+  '[Top Menu] Language Selected (authenticated user)',
+  props<{ selectedLanguage: ILanguageConfig }>()
+);
+
+export const languageSelectedAnonymousUser = createAction(
+  '[Top Menu] Language Selected (anonymous user)',
+  props<{ selectedLanguage: ILanguageConfig }>()
+);
+
+export const contentLanguageHeaderRead = createAction(
+  '[Login] Content Language Header Read',
   props<{ selectedLanguage: ILanguageConfig }>()
 );
 
