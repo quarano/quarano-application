@@ -1,3 +1,5 @@
+import { SymptomSelectors } from 'libs/shared/util-symptom/src/lib/store/selector-types';
+import { Store, select } from '@ngrx/store';
 import { CaseEntityService } from '@qro/health-department/domain';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -18,7 +20,8 @@ export class QuestionnaireComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private entityService: CaseEntityService
+    private entityService: CaseEntityService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -37,8 +40,8 @@ export class QuestionnaireComponent implements OnInit {
       })
     );
 
-    this.symptoms$ = this.route.data.pipe(
-      map((data) => data.symptoms),
+    this.symptoms$ = this.store.pipe(
+      select(SymptomSelectors.symptoms),
       withLatestFrom(this.questionnaire$),
       map(([symptoms, questionnaire]) => {
         return symptoms.filter(

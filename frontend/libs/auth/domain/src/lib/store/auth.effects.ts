@@ -27,8 +27,7 @@ export class AuthEffects {
       ),
       withLatestFrom(this.store.pipe(select(LanguageSelectors.supportedLanguages))),
       switchMap(([res, languages]) => {
-        const header = res.headers.get('Content-Language') || 'tr';
-        console.log('Content Language Header Value:', header);
+        const header = res.headers.get('Content-Language');
         if (header) {
           const newLanguage = languages.find((l) => l.key === header);
           if (newLanguage) {

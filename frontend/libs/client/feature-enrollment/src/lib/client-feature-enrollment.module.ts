@@ -24,7 +24,7 @@ const routes: Routes = [
     pathMatch: 'full',
     component: BasicDataComponent,
     resolve: {
-      symptoms: SymptomsResolver,
+      symptomsLoaded: SymptomsResolver,
       contactPersons: ContactPersonsResolver,
       firstQuery: MyFirstQueryResolver,
       clientData: MyClientDataResolver,

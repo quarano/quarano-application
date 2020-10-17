@@ -5,3 +5,4 @@ export * from './lib/store/action-types';
 export * from './lib/store/selector-types';
 export * from './lib/translate-testing.module';
 export * from './lib/store/language.selectors';
+export * from './lib/store/language.actions';

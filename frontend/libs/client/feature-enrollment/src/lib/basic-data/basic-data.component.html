@@ -29,7 +29,7 @@
     <p>{{ 'BASIC_DATA.PFLICHTFELDER_SIND_MARKIERT' | translate }}</p>
     <form [formGroup]="secondFormGroup" id="second-form">
       <qro-initial-questionnaire-form
-        [symptoms]="symptoms"
+        [symptoms]="symptoms$ | async"
         [formGroup]="secondFormGroup"
       ></qro-initial-questionnaire-form>
       <div class="mt-3">
