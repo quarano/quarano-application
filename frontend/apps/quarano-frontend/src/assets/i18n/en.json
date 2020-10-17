@@ -337,5 +337,21 @@
     "USERNAME_INVALID": "The user name you have entered cannot be used",
     "UUID": "Please enter a valid UUID",
     "ZIP": "Please enter a valid 5-digit zip/postal code"
+  },
+  "WELCOME": {
+    "INDEXFÄLLE": "Index cases",
+    "VERWALTUNG_VON_INDEXFÄLLEN": "Administration of index cases",
+    "SEHEN_SIE_INDEXFÄLLE": "View and process all open index cases in your health department here. Create new cases and use the contact function.",
+    "ZU_DEN_INDEXFÄLLEN": "To the index cases",
+    "VERWALTUNG_VON_KONTAKTPERSONEN": "Administration of contacts",
+    "SEHEN_SIE_KONTAKTPERSONEN": "View and edit all open contact persons in your health department here. Create new cases and use the contact function.",
+    "KONTAKTNACHVERFOLGUNG": "Contact tracking",
+    "KONTAKTPERSONEN": "Contacts",
+    "PFLEGEN_SIE": "Record any symptoms and your body temperature in your diary twice a day.",
+    "SYMPTOM_TRACKING": "Symptom tracking",
+    "TAGEBUCH": "Diary",
+    "VERWALTEN_SIE": "Manage your personal contacts so that you can quickly and easily reference them in the diary entries without having to re-enter them.",
+    "ZUM_TAGEBUCH": "To the diary",
+    "ZU_DEN_KONTAKTPERSONEN": "To the contacts"
   }
 }
