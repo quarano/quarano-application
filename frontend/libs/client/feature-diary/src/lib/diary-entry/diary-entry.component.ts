@@ -1,5 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { DateFunctions } from '@qro/shared/util-date';
@@ -14,7 +14,7 @@ import { ContactPersonDto, DiaryEntryDto, DiaryEntryModifyDto, DiaryService } fr
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { DeactivatableComponent } from '@qro/shared/util-forms';
-import { SymptomSelectors } from 'libs/shared/util-symptom/src/lib/store/selector-types';
+import { SymptomSelectors } from '@qro/shared/util-symptom';
 
 @Component({
   selector: 'qro-diary-entry',

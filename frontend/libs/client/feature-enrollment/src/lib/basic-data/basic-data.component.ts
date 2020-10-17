@@ -1,4 +1,4 @@
-import { SymptomSelectors } from 'libs/shared/util-symptom/src/lib/store/selector-types';
+import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
 import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';

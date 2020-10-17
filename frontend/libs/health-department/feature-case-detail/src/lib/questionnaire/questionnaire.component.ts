@@ -1,10 +1,9 @@
-import { SymptomSelectors } from 'libs/shared/util-symptom/src/lib/store/selector-types';
 import { Store, select } from '@ngrx/store';
 import { CaseEntityService } from '@qro/health-department/domain';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { QuestionnaireDto, ApiService } from '@qro/shared/util-data-access';
-import { SymptomDto } from '@qro/shared/util-symptom';
+import { SymptomDto, SymptomSelectors } from '@qro/shared/util-symptom';
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap, withLatestFrom, shareReplay } from 'rxjs/operators';
 
