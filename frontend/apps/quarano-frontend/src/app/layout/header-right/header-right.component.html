@@ -40,7 +40,7 @@
   </mat-menu>
 
   <mat-menu #languages="matMenu">
-    <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguage(lang)">
+    <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguageAuthenticated(lang)">
       <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
     </button>
   </mat-menu>
@@ -53,7 +53,7 @@
       <mat-icon style="color: white;">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #languages="matMenu">
-      <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguage(lang)">
+      <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguageAnonymous(lang)">
         <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
       </button>
     </mat-menu>

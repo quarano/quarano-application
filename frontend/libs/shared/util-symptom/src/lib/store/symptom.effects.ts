@@ -9,7 +9,7 @@ import { SymptomActions } from './action-types';
 export class SymptomEffects {
   languageSelected$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(LanguageActions.languageSelected),
+      ofType(LanguageActions.languageSelectedAuthenticatedUser),
       switchMap((action) => [SymptomActions.load({ languageKey: action.selectedLanguage.key })])
     )
   );

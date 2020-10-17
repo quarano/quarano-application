@@ -49,7 +49,11 @@ export class HeaderRightComponent implements OnInit {
     this.matDialog.open(HdContactComponent, { data: department, maxWidth: 600 });
   }
 
-  changeLanguage(language: ILanguageConfig) {
-    this.store.dispatch(LanguageActions.languageSelected({ selectedLanguage: language }));
+  changeLanguageAuthenticated(language: ILanguageConfig) {
+    this.store.dispatch(LanguageActions.languageSelectedAuthenticatedUser({ selectedLanguage: language }));
+  }
+
+  changeLanguageAnonymous(language: ILanguageConfig) {
+    this.store.dispatch(LanguageActions.languageSelectedAnonymousUser({ selectedLanguage: language }));
   }
 }

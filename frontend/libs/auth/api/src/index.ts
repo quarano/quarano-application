@@ -11,4 +11,5 @@ export {
   CaseType,
   AuthStore,
   AuthActions,
+  AuthSelectors,
 } from '@qro/auth/domain';
