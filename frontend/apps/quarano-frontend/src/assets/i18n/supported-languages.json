@@ -10,11 +10,5 @@
     "flagIconKey": "GB",
     "isDefaultLanguage": false,
     "name": "English"
-  },
-  {
-    "key": "tr",
-    "flagIconKey": "TR",
-    "isDefaultLanguage": false,
-    "name": "Türkçe"
   }
 ]
