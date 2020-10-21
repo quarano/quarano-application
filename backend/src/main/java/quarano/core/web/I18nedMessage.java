@@ -1,10 +1,15 @@
 package quarano.core.web;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.With;
+import quarano.core.web.QuaranoWebConfiguration.MessageSourceResolvableSerializer;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.springframework.context.MessageSourceResolvable;
-import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 /**
@@ -12,13 +17,18 @@ import org.springframework.util.Assert;
  * translate texts within {@link ErrorsWithDetails}.
  *
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  * @see ErrorsWithDetails
  * @see MessageSourceResolvableSerializer
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class I18nedMessage implements MessageSourceResolvable {
 
-	private final String[] codes;
+	private final @Getter String[] codes;
+	/**
+	 * This text is used if the codes can't resolved.
+	 */
+	private final @Getter @With String defaultMessage;
 
 	/**
 	 * Creates a new {@link I18nedMessage} for the given codes.
@@ -31,24 +41,8 @@ public class I18nedMessage implements MessageSourceResolvable {
 
 		Assert.hasText(code, "Code must not be null or empty!");
 
-		String[] codes = new String[additionalCodes.length + 1];
+		var codes = Stream.concat(Stream.of(code), Arrays.stream(additionalCodes)).toArray(String[]::new);
 
-		codes[0] = code;
-
-		for (int i = 0; i < additionalCodes.length; i++) {
-			codes[i + 1] = additionalCodes[i];
-		}
-
-		return new I18nedMessage(codes);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.context.MessageSourceResolvable#getCodes()
-	 */
-	@NonNull
-	@Override
-	public String[] getCodes() {
-		return codes;
+		return new I18nedMessage(codes, null);
 	}
 }

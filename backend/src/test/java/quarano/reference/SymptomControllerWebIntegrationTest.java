@@ -1,27 +1,24 @@
 package quarano.reference;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.support.MessageSourceAccessor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.user.LocaleConfiguration;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import quarano.core.validation.Alphabetic;
-import quarano.user.LocaleConfiguration;
 
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("test3")
@@ -60,28 +57,6 @@ class SymptomControllerWebIntegrationTest {
 		var document = JsonPath.parse(response);
 
 		assertThat(document.read("$.name", String.class)).isEqualTo(messages.getMessage("Alphabetic", Locale.GERMANY));
-	}
-
-	@Test
-	void storesSymptomWithTranslations() throws Exception {
-
-		var payload = new SymptomDto();
-		payload.setId(UUID.randomUUID());
-		payload.setName("Arterienverkalkung");
-		var translations = new HashMap<Locale, String>();
-		payload.setTranslations(translations);
-		translations.put(Locale.GERMAN, "Arterienverkalkung");
-		translations.put(Locale.ENGLISH, "Hardening of the arteries");
-		translations.put(LocaleConfiguration.TURKISH, "Arterlerin sertleşmesi");
-
-		var response = mvc.perform(post("/api/symptoms")
-				.content(mapper.writeValueAsString(payload))
-				.contentType(MediaType.APPLICATION_JSON))
-				.andReturn().getResponse().getContentAsString();
-
-		var document = JsonPath.parse(response);
-
-		assertThat(document.read("$.translations.tr", String.class)).isEqualTo("Arterlerin sertleşmesi");
 	}
 
 	DocumentContext getSymptoms(Locale locale) throws Exception {

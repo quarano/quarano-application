@@ -15,7 +15,7 @@
  */
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
@@ -115,7 +115,7 @@ class TrackedCaseRepresentationIntegrationTests {
 		assertThat(result.getSlot()).containsEntry("timeOfDay", source.getSlot().getTimeOfDay().name().toLowerCase());
 		assertThat(result.getSymptoms()).allSatisfy(it -> {
 			assertThat(it.getId()).isNotNull();
-			assertThat(it.getName()).isNotBlank();
+			assertThat(it.getName()).isNotNull();
 			assertThat(it.isCharacteristic()).isNotNull();
 		});
 	}
