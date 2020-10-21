@@ -568,9 +568,20 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 			Address address = rkiDepartment.getAddress();
 
+			PhoneNumber phone = StringUtils.isEmpty(rkiDepartment.getCovid19Hotline())
+					? rkiDepartment.getPhone()
+					: rkiDepartment.getCovid19Hotline();
+
+			PhoneNumber fax = StringUtils.isEmpty(rkiDepartment.getCovid19Fax())
+					? rkiDepartment.getFax()
+					: rkiDepartment.getCovid19Fax();
+
+			EmailAddress email = StringUtils.isEmpty(rkiDepartment.getCovid19EMail())
+					? rkiDepartment.getEmail()
+					: rkiDepartment.getCovid19EMail();
+
 			return new HealthDepartment(rkiDepartment.getName(), rkiDepartment.getDepartment(), address.getStreet(),
-					address.getZipcode(), address.getPlace(), rkiDepartment.getPhone(), rkiDepartment.getFax(),
-					rkiDepartment.getEmail());
+					address.getZipcode(), address.getPlace(), phone, fax, email);
 		}
 
 		String name;

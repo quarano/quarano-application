@@ -52,6 +52,15 @@ public interface HealthDepartments {
 		@XBRead("@Email")
 		EmailAddress getEmail();
 
+		@XBRead("@Covid19Hotline")
+		PhoneNumber getCovid19Hotline();
+
+		@XBRead("@Covid19Fax")
+		PhoneNumber getCovid19Fax();
+
+		@XBRead("@Covid19EMail")
+		EmailAddress getCovid19EMail();
+
 		@XBRead(".")
 		Address getAddress();
 
