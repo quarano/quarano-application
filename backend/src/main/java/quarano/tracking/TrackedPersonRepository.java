@@ -1,6 +1,7 @@
 package quarano.tracking;
 
 import quarano.account.Account;
+import quarano.account.Account.AccountIdentifier;
 import quarano.core.EmailAddress;
 import quarano.core.QuaranoRepository;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -22,11 +23,11 @@ public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson
 	Optional<TrackedPerson> findByAccount(Account account);
 
 	/**
-	 * Returns the preferred {@link Locale} for the {@link TrackedPerson} with the given {@link Account}.
+	 * Returns the preferred {@link Locale} for the {@link TrackedPerson} with the given {@link AccountIdentifier}.
 	 *
-	 * @param account must not be {@literal null}.
+	 * @param accountIdentfier must not be {@literal null}.
 	 * @return
 	 */
-	@Query("select p.locale from TrackedPerson p where p.account = :account")
-	Optional<Locale> findLocaleByAccount(Account account);
+	@Query("select p.locale from TrackedPerson p where p.account.id = :accountIdentifier")
+	Optional<Locale> findLocaleByAccount(AccountIdentifier accountIdentifier);
 }

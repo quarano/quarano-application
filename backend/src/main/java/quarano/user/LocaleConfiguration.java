@@ -2,6 +2,7 @@ package quarano.user;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.AuthenticationManager;
 import quarano.tracking.TrackedPerson;
@@ -10,9 +11,7 @@ import quarano.tracking.TrackedPersonRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +20,11 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -36,6 +37,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  *
  * @author Jens Kutzsche
  */
+@EnableAspectJAutoProxy
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class LocaleConfiguration implements WebMvcConfigurer {
@@ -45,12 +47,9 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 			Locale.ENGLISH,
 			new Locale("tr"));
 
-	private final @NonNull AuthenticationManager accounts;
-	private final @NonNull TrackedPersonRepository people;
-
 	@Bean
-	LocaleResolver localeResolver() {
-		return new LocaleResolver();
+	LocaleResolver localeResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts) {
+		return new LocaleResolver(lookup, accounts);
 	}
 
 	@Bean
@@ -74,16 +73,55 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		interceptorRegistry.addInterceptor(getHandlerInterceptor());
 	}
 
+	@Component
+	@RequestScope
+	@RequiredArgsConstructor
+	static class TrackedPersonLocaleLookup {
+
+		private final @NonNull TrackedPersonRepository people;
+
+		private Optional<Locale> CACHE;
+
+		Optional<Locale> lookupLocale(AccountIdentifier identifier) {
+
+			if (CACHE != null) {
+				return CACHE;
+			}
+
+			CACHE = people.findLocaleByAccount(identifier)
+					.filter(locale -> !Collections.disjoint(LocaleUtils.localeLookupList(locale), LOCALES));
+
+			return CACHE;
+		}
+
+		void setLocale(Locale locale, Optional<Account> account) {
+
+			CACHE = Optional.ofNullable(locale);
+
+			account.ifPresent(it -> {
+
+				people.findByAccount(it)
+						.map(person -> person.setLocale(locale))
+						.ifPresent(people::save);
+			});
+		}
+	}
+
 	/**
 	 * Resolves the locale from users stored data if set and if not then from requests <code>Accept-Language</code>
 	 * header.
 	 */
+
 	class LocaleResolver extends AcceptHeaderLocaleResolver {
 
-		// TODO: Replace with ConcurrentLruCache once we upgrade to Spring 5.3 / Boot 2.4.
-		private final Map<AccountIdentifier, Optional<Locale>> CACHE = new ConcurrentHashMap<>();
+		private final TrackedPersonLocaleLookup lookup;
+		private final AuthenticationManager accounts;
 
-		public LocaleResolver() {
+		public LocaleResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts) {
+
+			this.lookup = lookup;
+			this.accounts = accounts;
+
 			setDefaultLocale(Locale.GERMANY);
 			setSupportedLocales(LOCALES);
 			Locale.setDefault(getDefaultLocale());
@@ -95,7 +133,11 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		 */
 		@Override
 		public Locale resolveLocale(HttpServletRequest request) {
-			return getLocaleFromTrackedPerson().orElseGet(() -> super.resolveLocale(request));
+
+			return accounts.getCurrentUser()
+					.map(Account::getId)
+					.flatMap(lookup::lookupLocale)
+					.orElseGet(() -> super.resolveLocale(request));
 		}
 
 		/**
@@ -105,46 +147,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		 */
 		@Override
 		public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-
-			accounts.getCurrentUser().ifPresent(it -> {
-
-				CACHE.put(it.getId(), Optional.ofNullable(locale));
-
-				people.findByAccount(it)
-						.map(person -> person.setLocale(locale))
-						.ifPresent(people::save);
-			});
-		}
-
-		/**
-		 * Wipes the {@link AccountIdentifier} to {@link Locale} cache in case it has outgrown 100 elements.
-		 * <p>
-		 * TODO: Replace with ConcurrentLruCache once we upgrade to Spring 5.3 / Boot 2.4.
-		 */
-		@Scheduled(fixedRate = 60 * 1000)
-		void wipeCache() {
-
-			if (CACHE.size() > 100) {
-				CACHE.clear();
-			}
-		}
-
-		private Optional<Locale> getLocaleFromTrackedPerson() {
-
-			return accounts.getCurrentUser()
-					.flatMap(it -> {
-
-						var identifier = it.getId();
-						var cached = CACHE.get(identifier);
-
-						if (cached == null) {
-							cached = people.findLocaleByAccount(it)
-									.filter(locale -> !Collections.disjoint(LocaleUtils.localeLookupList(locale), LOCALES));
-							CACHE.put(identifier, cached);
-						}
-
-						return cached;
-					});
+			lookup.setLocale(locale, accounts.getCurrentUser());
 		}
 	}
 
