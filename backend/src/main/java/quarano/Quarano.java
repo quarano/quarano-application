@@ -12,6 +12,10 @@ import java.util.Properties;
 
 import org.modelmapper.ModelMapper;
 import org.moduliths.Modulithic;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.interceptor.CustomizableTraceInterceptor;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
@@ -22,6 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -85,6 +90,38 @@ public class Quarano {
 				.forEach(it -> it.customize(mapper));
 
 		return mapper;
+	}
+
+	/**
+	 * Configuration class to activate a {@link CustomizableTraceInterceptor} around all repository invocations to monitor
+	 * their execution time.
+	 *
+	 * @author Oliver Drotbohm
+	 */
+	@Profile("tracing")
+	@Configuration(proxyBeanMethods = false)
+	private static class TracingConfiguration {
+
+		@Bean
+		CustomizableTraceInterceptor interceptor() {
+
+			CustomizableTraceInterceptor interceptor = new CustomizableTraceInterceptor();
+			interceptor.setHideProxyClassNames(true);
+			interceptor.setEnterMessage("Entering $[targetClassName].$[methodName]($[arguments]).");
+			interceptor.setExitMessage(
+					"Leaving $[targetClassName].$[methodName](…) with return value $[returnValue], took $[invocationTime]ms.");
+
+			return interceptor;
+		}
+
+		@Bean
+		Advisor traceAdvisor(CustomizableTraceInterceptor interceptor) {
+
+			AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+			pointcut.setExpression("execution(public * org.springframework.data.repository.Repository+.*(..))");
+
+			return new DefaultPointcutAdvisor(pointcut, interceptor);
+		}
 	}
 
 	/**
