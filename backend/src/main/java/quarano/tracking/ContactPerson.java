@@ -25,8 +25,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 
 /**
  * @author Oliver Drotbohm

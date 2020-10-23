@@ -19,7 +19,7 @@
 		<docker.image.prefix>quarano-backend</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
-		<jddd.version>0.1.0</jddd.version>
+		<jmolecules.version>1.0.0</jmolecules.version>
 		<moduliths.version>1.0.0</moduliths.version>
 		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
@@ -196,14 +196,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jddd</groupId>
-			<artifactId>jddd-core</artifactId>
-			<version>${jddd.version}</version>
+			<groupId>org.jmolecules</groupId>
+            <artifactId>jmolecules-ddd</artifactId>
+            <version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jddd</groupId>
-			<artifactId>jddd-events</artifactId>
-			<version>${jddd.version}</version>
+			<groupId>org.jmolecules</groupId>
+            <artifactId>jmolecules-events</artifactId>
+			<version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
@@ -538,7 +538,6 @@
 			<id>spring-libs-snapshot</id>
 			<url>https://repo.spring.io/libs-snapshot</url>
 		</repository>
-		<!-- For Moduliths & jDDD -->
 		<repository>
 			<id>greenmail-snapshot</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>

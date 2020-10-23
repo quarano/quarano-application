@@ -24,7 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
 
 /**
  * @author Oliver Drotbohm

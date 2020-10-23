@@ -23,7 +23,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
 
 /**
  * @author Patrick Otto

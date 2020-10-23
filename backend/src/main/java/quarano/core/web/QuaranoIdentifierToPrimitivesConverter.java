@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
 import org.modelmapper.Converter;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;

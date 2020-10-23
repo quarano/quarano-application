@@ -29,8 +29,8 @@ import java.util.stream.Stream;
 
 import javax.persistence.*;
 
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
