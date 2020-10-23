@@ -13,6 +13,7 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.ValidationUtils;
 import quarano.WithQuaranoUser;
 import quarano.department.CaseType;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseDataInitializer;
 import quarano.department.TrackedCaseProperties;
@@ -382,7 +383,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var document = JsonPath.parse(response.getContentAsString());
 		var caseId = TrackedCaseIdentifier.of(UUID.fromString(document.read("$.caseId", String.class)));
 
-		response = issueCaseUpdate(payload.setEmail("myemail@email.de"), caseId, CaseType.CONTACT);
+		response = issueCaseUpdate(payload.setEmail("myemail@email.de"), CaseType.CONTACT, caseId);
 
 		document = JsonPath.parse(response.getContentAsString());
 
@@ -408,7 +409,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_VULNERABLE);
+		issueCaseUpdate(createMinimalContactPayload(), CaseType.CONTACT_VULNERABLE, trackedCase);
 
 	}
 
@@ -417,7 +418,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT_MEDICAL);
+		issueCaseUpdate(createMinimalContactPayload(), CaseType.CONTACT_MEDICAL, trackedCase);
 
 	}
 
@@ -426,7 +427,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		issueCaseUpdate(createMinimalContactPayload(), trackedCase.getId(), CaseType.CONTACT);
+		issueCaseUpdate(createMinimalContactPayload(), CaseType.CONTACT, trackedCase);
 
 	}
 
@@ -447,12 +448,16 @@ class TrackedCaseControllerWebIntegrationTests {
 	@TestFactory
 	Stream<DynamicTest> updatingContactCasesOnlyWithCorrectQuarantineDates() throws Exception {
 
-		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+		var contactCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
-		var caseId = trackedCase.getId();
+		var indexCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1)
+				.orElseThrow();
+		var caseMap = Map.of(CaseType.INDEX, indexCase, CaseType.CONTACT, contactCase, CaseType.CONTACT_MEDICAL,
+				contactCase, CaseType.CONTACT_VULNERABLE, contactCase);
 
-		return createQuarantineTests((payload, type) -> issueCaseUpdate(payload, caseId, type),
-				(payload, type) -> expectBadRequestOnUpdate(payload, type, caseId));
+		return createQuarantineTests(
+				(payload, type) -> issueCaseUpdate(payload, type, caseMap.getOrDefault(type, contactCase)),
+				(payload, type) -> expectBadRequestOnUpdate(payload, type, caseMap.getOrDefault(type, contactCase)));
 	}
 
 	@SuppressWarnings("null")
@@ -797,7 +802,13 @@ class TrackedCaseControllerWebIntegrationTests {
 		}
 	}
 
-	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, TrackedCaseIdentifier caseId, CaseType type) {
+	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, CaseType type, TrackedCase trackedCase) {
+
+		payload.setLocale(trackedCase.getTrackedPerson().getLocale());
+		return issueCaseUpdate(payload, type, trackedCase.getId());
+	}
+
+	private MockHttpServletResponse issueCaseUpdate(TrackedCaseDto payload, CaseType type, TrackedCaseIdentifier caseId) {
 
 		try {
 
@@ -834,11 +845,13 @@ class TrackedCaseControllerWebIntegrationTests {
 	}
 
 	private MockHttpServletResponse expectBadRequestOnUpdate(TrackedCaseDto payload, CaseType type,
-			TrackedCaseIdentifier caseId) {
+			TrackedCase trackedCase) {
+
+		payload.setLocale(trackedCase.getTrackedPerson().getLocale());
 
 		try {
 
-			return mvc.perform(put("/api/hd/cases/{caseId}", caseId)
+			return mvc.perform(put("/api/hd/cases/{caseId}", trackedCase.getId())
 					.content(jackson.writeValueAsString(payload))
 					.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().isBadRequest())
