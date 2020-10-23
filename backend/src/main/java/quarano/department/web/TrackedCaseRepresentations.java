@@ -313,7 +313,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		var validationGroups = new ArrayList<>();
 		validationGroups.add(Default.class);
 
-		if (type.equals(CaseType.INDEX) || payload.getTestDate() != null) {
+		if (type.equals(CaseType.INDEX) || (payload.getTestDate() != null && payload.isInfected())) {
 			validationGroups.add(ValidationGroups.Index.class);
 		}
 
@@ -521,7 +521,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual String comment;
+		@Textual
+		String comment;
 	}
 
 	static class ValidationGroups {
@@ -582,13 +583,19 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	@EqualsAndHashCode(callSuper = true)
 	static class InstitutionDto extends RepresentationModel<InstitutionDto> {
 
-		@Pattern(regexp = Strings.NAMES) String name;
+		@Pattern(regexp = Strings.NAMES)
+		String name;
 		String department;
-		@Pattern(regexp = Strings.STREET) String street;
-		@Pattern(regexp = Strings.CITY) String city;
-		@Pattern(regexp = ZipCode.PATTERN) String zipCode;
-		@Pattern(regexp = PhoneNumber.PATTERN) String fax, phone;
-		@Pattern(regexp = EmailAddress.PATTERN) String email;
+		@Pattern(regexp = Strings.STREET)
+		String street;
+		@Pattern(regexp = Strings.CITY)
+		String city;
+		@Pattern(regexp = ZipCode.PATTERN)
+		String zipCode;
+		@Pattern(regexp = PhoneNumber.PATTERN)
+		String fax, phone;
+		@Pattern(regexp = EmailAddress.PATTERN)
+		String email;
 
 		private static InstitutionDto of(HealthDepartment rkiDepartment) {
 
