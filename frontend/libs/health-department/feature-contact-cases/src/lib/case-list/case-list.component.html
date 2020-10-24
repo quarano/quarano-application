@@ -124,7 +124,10 @@
         [draggable]="true"
         [canAutoResize]="true"
         width="130"
-      >
+        ><ng-template let-value="value" ngx-datatable-cell-template>
+          <ng-container *ngIf="value; else empty_created">{{ value | date: 'dd.MM.y' }}</ng-container>
+          <ng-template #empty_created>-</ng-template>
+        </ng-template>
       </ngx-datatable-column>
 
       <ngx-datatable-column

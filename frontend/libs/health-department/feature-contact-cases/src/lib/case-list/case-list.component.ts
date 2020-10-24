@@ -15,7 +15,7 @@ class CaseRowViewModel {
   type: CaseType;
   typeName: string;
   dateOfBirth: Date;
-  createdAt: string;
+  createdAt: Date;
   quarantineEnd: Date;
   caseId: string;
   status: string;
@@ -88,7 +88,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
       type: c.caseType,
       typeName: c.caseTypeLabel,
       dateOfBirth: c.dateOfBirth,
-      createdAt: c.createdAt ? DateFunctions.toCustomLocaleDateString(c.createdAt) : '-',
+      createdAt: c.createdAt,
       quarantineEnd: c.quarantineEndDate,
       status: c.status,
       caseId: c.caseId,
