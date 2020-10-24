@@ -17,6 +17,7 @@ import { RegisterComponent } from './register/register.component';
 import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
+import { HealthDepartmentAddressComponent } from './health-department-address/health-department-address.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,11 @@ const routes: Routes = [
       { path: ':clientcode', component: RegisterComponent },
     ],
   },
+  {
+    path: 'health-department',
+    pathMatch: 'full',
+    component: HealthDepartmentAddressComponent,
+  },
 ];
 
 @NgModule({
@@ -69,6 +75,7 @@ const routes: Routes = [
     InitialQuestionnaireFormComponent,
     LandingComponent,
     RegisterComponent,
+    HealthDepartmentAddressComponent,
   ],
 })
 export class ClientFeatureEnrollmentModule {}

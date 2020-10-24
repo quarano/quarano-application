@@ -1,8 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
-import { ZipCodeErrorDto } from './../../../../domain/src/lib/model/zip-code-error';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
-import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
+import { ClientService, EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -27,11 +26,11 @@ import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
 import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
-import { ClientDto } from '@qro/auth/api';
-import { QuestionnaireDto, ApiService } from '@qro/shared/util-data-access';
+import { ClientDto, UserService } from '@qro/auth/api';
+import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
-import { tap, finalize, take, switchMap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { tap, finalize, take, switchMap, map, mergeMap } from 'rxjs/operators';
+import { iif, noop, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'qro-basic-data',
@@ -77,7 +76,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private dialogService: ContactDialogService,
     public clientStore: ClientStore,
     private store: Store,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -192,31 +192,44 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         this.clientService
           .updatePersonalDetails(value, confirmedZipCode)
           .pipe(
-            switchMap((_) => this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT')),
-            switchMap((res) => this.clientStore.enrollmentStatus$.pipe(take(1)))
+            mergeMap((result) =>
+              iif(
+                () => confirmedZipCode,
+                this.logoutAndNavigate(result as HealthDepartmentDto),
+                this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(
+                  switchMap((res) => this.clientStore.enrollmentStatus$.pipe(take(1))),
+                  tap((enrollment) => {
+                    if (enrollment.completedPersonalData) {
+                      this.client = value;
+                      this.stepper.next();
+                    }
+                    this.firstFormLoading = false;
+                  })
+                )
+              )
+            )
           )
-          .subscribe(
-            (result) => {
-              if (result.completedPersonalData) {
-                this.client = value;
-                this.stepper.next();
-              }
-              this.firstFormLoading = false;
-            },
-            (error) => {
-              if (error.hasOwnProperty('unprocessableEntityErrors')) {
-                this.handleUnprocessableEntityError(error.unprocessableEntityErrors, value);
-              } else {
-                this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
-              }
+          .subscribe(noop, (error) => {
+            if (error.hasOwnProperty('unprocessableEntityErrors')) {
+              this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
+            } else {
+              this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
             }
-          )
+          })
           .add(() => (this.firstFormLoading = false))
       );
     }
   }
 
-  private handleUnprocessableEntityError(error: ZipCodeErrorDto, clientData: ClientDto): void {
+  private logoutAndNavigate(healthDepartment: HealthDepartmentDto): Observable<any> {
+    this.userService.logout();
+    this.router.navigate(['/client/enrollment/health-department'], {
+      queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(healthDepartment)) },
+    });
+    return of(null);
+  }
+
+  private handleUnprocessableEntityError(error: ZipCodeErrorDto): void {
     console.log(error);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
