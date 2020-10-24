@@ -222,10 +222,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   }
 
   private logoutAndNavigate(healthDepartment: HealthDepartmentDto): Observable<any> {
-    this.userService.logout();
-    this.router.navigate(['/client/enrollment/health-department'], {
-      queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(healthDepartment)) },
-    });
+    if (healthDepartment) {
+      this.userService.logout();
+      this.router.navigate(['/client/enrollment/health-department'], {
+        queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(healthDepartment)) },
+      });
+    }
     return of(null);
   }
 
