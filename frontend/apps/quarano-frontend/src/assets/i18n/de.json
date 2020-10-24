@@ -198,6 +198,14 @@
     "KONTAKT_ZUM_AMT": "Kontakt zum Amt",
     "PASSWORT_ÄNDERN": "Passwort ändern"
   },
+  "HEALTH_DEPARTMENT_ADDRESS": {
+    "ANRUFEN": "Anrufen",
+    "DAS_FUER_IHRE_PLZ_ZUSTAENDIGE": "Das für Sie zuständige Gesundheitsamt arbeitet nicht mit Quarano. Bitte wenden Sie sich direkt an Ihr Gesundheitsamt.",
+    "E_MAIL": "E-Mail",
+    "E_MAIL_SCHREIBEN": "E-Mail schreiben",
+    "FAX": "Fax",
+    "TELEFON": "Telefon"
+  },
   "INITIAL_QUESTIONNAIRE_FORM": {
     "BEHANDELNDEN_HAUSARZT": "Bitte geben Sie Ihren behandelnden Hausarzt an",
     "CHARAKTERISTISCHE_SYMPTOME": "Als Covid-19 charakterische Symptome zählen",

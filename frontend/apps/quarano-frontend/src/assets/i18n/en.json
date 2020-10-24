@@ -198,6 +198,14 @@
     "KONTAKT_ZUM_AMT": "Contact health authority",
     "PASSWORT_ÄNDERN": "Change password"
   },
+  "HEALTH_DEPARTMENT_ADDRESS": {
+    "ANRUFEN": "Call",
+    "DAS_FUER_IHRE_PLZ_ZUSTAENDIGE": "The health department responsible for you does not work with Quarano. Please contact your health department directly.",
+    "E_MAIL": "E-mail",
+    "E_MAIL_SCHREIBEN": "Write e-mail",
+    "FAX": "Fax",
+    "TELEFON": "Phone"
+  },
   "INITIAL_QUESTIONNAIRE_FORM": {
     "BEHANDELNDEN_HAUSARZT": "Please enter the name of your general practitioner",
     "CHARAKTERISTISCHE_SYMPTOME": "Characteristic symptoms of COVID-19 include",

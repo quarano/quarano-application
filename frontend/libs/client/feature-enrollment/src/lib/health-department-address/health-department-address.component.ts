@@ -1,3 +1,5 @@
+import { HealthDepartmentDto } from '@qro/client/domain';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./health-department-address.component.scss'],
 })
 export class HealthDepartmentAddressComponent implements OnInit {
-  constructor() {}
+  healthDepartment: HealthDepartmentDto;
+
+  constructor(private route: ActivatedRoute, private router: Router) {
+    const queryParams = this.route.snapshot.queryParamMap;
+    if (queryParams.has('healthDepartment')) {
+      this.healthDepartment = JSON.parse(decodeURIComponent(queryParams.get('healthDepartment')));
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit() {}
 }
