@@ -1,3 +1,4 @@
+import { ZipCodeErrorDto } from './../../../../domain/src/lib/model/zip-code-error';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
 import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
@@ -201,12 +202,21 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
               this.firstFormLoading = false;
             },
             (error) => {
-              this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
+              if (error.hasOwnProperty('unprocessableEntityErrors')) {
+                this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
+              } else {
+                this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
+              }
             }
           )
           .add(() => (this.firstFormLoading = false))
       );
     }
+  }
+
+  private handleUnprocessableEntityError(error: ZipCodeErrorDto): void {
+    console.log(error);
+    alert(error.zipCode.message);
   }
 
   get dateOfBirth() {
