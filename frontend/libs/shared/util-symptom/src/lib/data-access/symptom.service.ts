@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { API_URL } from '@qro/shared/util-data-access';
 import { Observable } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { first, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class SymptomService {
@@ -16,6 +16,7 @@ export class SymptomService {
     if (!languageKey) {
       return this.store.pipe(
         select(LanguageSelectors.selectedLanguage),
+        first(),
         switchMap((selectedLanguage) => {
           if (selectedLanguage) {
             uri += `?locale=${selectedLanguage.key}`;

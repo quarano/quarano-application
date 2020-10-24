@@ -29,7 +29,7 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto, UserService } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
-import { tap, finalize, take, switchMap, map, mergeMap } from 'rxjs/operators';
+import { tap, finalize, take, switchMap, map, mergeMap, filter, first } from 'rxjs/operators';
 import { iif, noop, Observable, of } from 'rxjs';
 
 @Component({
@@ -197,14 +197,14 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
                 () => confirmedZipCode,
                 this.logoutAndNavigate(result as HealthDepartmentDto),
                 this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(
-                  switchMap((res) => this.clientStore.enrollmentStatus$.pipe(take(1))),
+                  switchMap((res) => this.clientStore.enrollmentStatus$),
+                  filter((enrollment) => enrollment.completedPersonalData),
                   tap((enrollment) => {
-                    if (enrollment.completedPersonalData) {
-                      this.client = value;
-                      this.stepper.next();
-                    }
+                    this.client = value;
+                    this.stepper.next();
                     this.firstFormLoading = false;
-                  })
+                  }),
+                  first()
                 )
               )
             )
@@ -222,17 +222,17 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   }
 
   private logoutAndNavigate(healthDepartment: HealthDepartmentDto): Observable<any> {
-    if (healthDepartment) {
-      this.userService.logout();
-      this.router.navigate(['/client/enrollment/health-department'], {
-        queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(healthDepartment)) },
-      });
-    }
-    return of(null);
+    return of(healthDepartment).pipe(
+      tap((hd) => this.userService.logout()),
+      tap((hd) =>
+        this.router.navigate(['/client/enrollment/health-department'], {
+          queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(hd)) },
+        })
+      )
+    );
   }
 
   private handleUnprocessableEntityError(error: ZipCodeErrorDto): void {
-    console.log(error);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         abortButtonText: this.translate.instant('BASIC_DATA.ABBRECHEN'),
