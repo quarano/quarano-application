@@ -1,6 +1,6 @@
-import { Link } from '@qro/shared/util-data-access';
+import { Link, HalResponse } from '@qro/shared/util-data-access';
 
-export interface ZipCodeErrorDto {
+export interface ZipCodeErrorDto extends HalResponse {
   zipCode: {
     message: string;
     institution: {
@@ -13,8 +13,5 @@ export interface ZipCodeErrorDto {
       phone: string;
       email: string;
     };
-  };
-  _links: {
-    confirm: Link;
   };
 }

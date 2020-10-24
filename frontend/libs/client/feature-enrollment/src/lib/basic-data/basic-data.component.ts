@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { ZipCodeErrorDto } from './../../../../domain/src/lib/model/zip-code-error';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
@@ -24,10 +25,10 @@ import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
-import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto } from '@qro/auth/api';
-import { QuestionnaireDto } from '@qro/shared/util-data-access';
+import { QuestionnaireDto, ApiService } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { tap, finalize, take, switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -75,7 +76,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private clientService: ClientService,
     private dialogService: ContactDialogService,
     public clientStore: ClientStore,
-    private store: Store
+    private store: Store,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -181,14 +183,14 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     );
   }
 
-  checkAndSendFirstForm() {
+  checkAndSendFirstForm(confirmedZipCode = false) {
     if (this.firstFormGroup.valid) {
       this.firstFormLoading = true;
-      const value = this.firstFormGroup.value;
+      const value = this.firstFormGroup.value as ClientDto;
       value.dateOfBirth = this.dateOfBirth;
       this.subs.add(
         this.clientService
-          .updatePersonalDetails(value)
+          .updatePersonalDetails(value, confirmedZipCode)
           .pipe(
             switchMap((_) => this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT')),
             switchMap((res) => this.clientStore.enrollmentStatus$.pipe(take(1)))
@@ -203,7 +205,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
             },
             (error) => {
               if (error.hasOwnProperty('unprocessableEntityErrors')) {
-                this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
+                this.handleUnprocessableEntityError(error.unprocessableEntityErrors, value);
               } else {
                 this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
               }
@@ -214,9 +216,27 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     }
   }
 
-  private handleUnprocessableEntityError(error: ZipCodeErrorDto): void {
+  private handleUnprocessableEntityError(error: ZipCodeErrorDto, clientData: ClientDto): void {
     console.log(error);
-    alert(error.zipCode.message);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        abortButtonText: this.translate.instant('BASIC_DATA.ABBRECHEN'),
+        confirmButtonText: this.translate.instant('BASIC_DATA.PLZ_BESTAETIGEN'),
+        title: this.translate.instant('BASIC_DATA.PLZ_UEBERPRUEFEN'),
+        text: error.zipCode.message,
+      },
+    });
+
+    this.subs.add(
+      dialogRef
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.checkAndSendFirstForm(true);
+          }
+        })
+        .add(() => (this.thirdFormLoading = false))
+    );
   }
 
   get dateOfBirth() {

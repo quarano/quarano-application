@@ -25,6 +25,8 @@
     "PERSÖNLICHE_DATEN": "Personal data",
     "PERSÖNLICHE_DATEN_GESPEICHERT": "Personal data saved",
     "PFLICHTFELDER_SIND_MARKIERT": "Required fields are marked with an *",
+    "PLZ_BESTAETIGEN": "Confirm zip code",
+    "PLZ_UEBERPRUEFEN": "Please check the zip code you entered",
     "REGISTRIERUNG_ABGESCHLOSSEN": "Registration successfully completed",
     "SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST": "You have not registered any retrospective contacts. Please confirm that you have had no relevant contact with other people in the stated period of time.",
     "UMGANG_MIT_KONTAKTPERSONEN": "Interaction with contacts of confirmed COVID-19 cases",
@@ -340,18 +342,18 @@
   },
   "WELCOME": {
     "INDEXFÄLLE": "Index cases",
-    "VERWALTUNG_VON_INDEXFÄLLEN": "Administration of index cases",
-    "SEHEN_SIE_INDEXFÄLLE": "View and process all open index cases in your health department here. Create new cases and use the contact function.",
-    "ZU_DEN_INDEXFÄLLEN": "To the index cases",
-    "VERWALTUNG_VON_KONTAKTPERSONEN": "Administration of contacts",
-    "SEHEN_SIE_KONTAKTPERSONEN": "View and edit all open contact persons in your health department here. Create new cases and use the contact function.",
     "KONTAKTNACHVERFOLGUNG": "Contact tracking",
     "KONTAKTPERSONEN": "Contacts",
     "PFLEGEN_SIE": "Record any symptoms and your body temperature in your diary twice a day.",
+    "SEHEN_SIE_INDEXFÄLLE": "View and process all open index cases in your health department here. Create new cases and use the contact function.",
+    "SEHEN_SIE_KONTAKTPERSONEN": "View and edit all open contact persons in your health department here. Create new cases and use the contact function.",
     "SYMPTOM_TRACKING": "Symptom tracking",
     "TAGEBUCH": "Diary",
     "VERWALTEN_SIE": "Manage your personal contacts so that you can quickly and easily reference them in the diary entries without having to re-enter them.",
+    "VERWALTUNG_VON_INDEXFÄLLEN": "Administration of index cases",
+    "VERWALTUNG_VON_KONTAKTPERSONEN": "Administration of contacts",
     "ZUM_TAGEBUCH": "To the diary",
+    "ZU_DEN_INDEXFÄLLEN": "To the index cases",
     "ZU_DEN_KONTAKTPERSONEN": "To the contacts"
   }
 }
