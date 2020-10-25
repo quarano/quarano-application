@@ -15,6 +15,7 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.activation.ActivationCodeException;
+import quarano.department.activation.ActivationCodeException.Status;
 import quarano.department.activation.ActivationCodeService;
 
 import java.util.Locale;
@@ -133,7 +134,12 @@ public class RegistrationController {
 				.toBadRequest();
 	}
 
-	private static HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
-		return errors.rejectField("clientCode", "Invalid", it.getMessage()).toBadRequest();
+	private HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
+		final var field = "clientCode";
+		return errors
+			.rejectField(it.getStatus().equals(Status.NOT_FOUND), field, "Invalid.accountRegistration.clientCodeNotFound")
+			.rejectField(it.getStatus().equals(Status.EXPIRED), field, "Invalid.accountRegistration.clientCodeExpired")
+			.rejectField(it.getStatus().equals(Status.USED_OR_CANCELED), field, "Invalid.accountRegistration.clientCodeUsedOrCanceled")
+			.toBadRequest();
 	}
 }

@@ -1,10 +1,12 @@
 package quarano.department.activation;
 
+import lombok.Getter;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 
 /**
  * @author Oliver Drotbohm
  */
+@Getter
 public class ActivationCodeException extends RuntimeException {
 
 	private static final long serialVersionUID = -1862988574924745449L;
@@ -36,7 +38,7 @@ public class ActivationCodeException extends RuntimeException {
 		this.status = status;
 	}
 
-	enum Status {
+	public enum Status {
 		NOT_FOUND, EXPIRED, USED_OR_CANCELED;
 	}
 }
