@@ -18,10 +18,12 @@ export enum HttpStatusCode {
   badRequest = 400,
   internalServerError = 500,
   unprocessableEntity = 422,
+  preconditionFailed = 412,
 }
 
-export interface IBadRequestError {
-  badRequestErrors: any;
+export interface IErrorToDisplay {
+  errors: any;
+  status: number;
 }
 
 export interface IUnprocessableEntityError {
@@ -92,10 +94,11 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (
-            error.status === HttpStatusCode.badRequest.valueOf() &&
-            (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
+            (error.status === HttpStatusCode.badRequest.valueOf() &&
+              (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')) ||
+            error.status === HttpStatusCode.preconditionFailed.valueOf()
           ) {
-            return throwError({ badRequestErrors: serverError } as IBadRequestError);
+            return throwError({ errors: serverError, status: error.status } as IErrorToDisplay);
           }
 
           if (
