@@ -134,6 +134,8 @@ public class RegistrationController {
 	}
 
 	private static HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
-		return errors.rejectField("clientCode", "Invalid", it.getMessage()).toBadRequest();
+		return errors
+				.rejectField("clientCode", it.getMessageKey())
+				.toBadRequest();
 	}
 }
