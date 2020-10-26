@@ -4,7 +4,7 @@ import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '@qro/auth/domain';
@@ -34,6 +34,12 @@ fdescribe('LoginComponent', () => {
           useValue: {
             warning: () => {},
             success: () => {},
+          },
+        },
+        {
+          provide: SnackbarService,
+          useValue: {
+            error: () => {},
           },
         },
       ],

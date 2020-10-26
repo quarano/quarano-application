@@ -64,7 +64,7 @@ describe('enrollment external zip code', () => {
     cy.loginNotEnrolledClient2();
   });
 
-  describe('basic data', () => {
+  describe('confirm external zip code in basic data', () => {
     it('form completion', () => {
       cy.url().should('include', '/client/enrollment/basic-data');
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
@@ -84,6 +84,15 @@ describe('enrollment external zip code', () => {
       cy.get('[data-cy="health-department-name"]')
         .should('exist')
         .should('have.text', 'Landratsamt Breisgau-Hochschwarzwald');
+    });
+  });
+
+  describe('login forbidden after external zip code confirmation', () => {
+    it('login', () => {
+      cy.url().should('include', '/forbidden');
+      cy.get('[data-cy="forbidden-message"]')
+        .should('exist')
+        .should('have.text', 'Für Sie ist ein anderes Gesundheitsamt zuständig. Wenden Sie sich bitte an dieses!');
     });
   });
 });
