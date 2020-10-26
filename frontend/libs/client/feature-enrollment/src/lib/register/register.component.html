@@ -48,12 +48,13 @@
           type="password"
           #password_input
           (blur)="trimValue(password_input)"
+          [errorStateMatcher]="passwordIncludesUsernameMatcher"
         />
+        <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
+          {{ 'REGISTER.PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN' | translate }}
+        </mat-error>
         <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.password)">
           {{ validationErrorService.getErrorMessage(registrationForm.controls.password, error) | async }}
-        </mat-error>
-        <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
-          {{ 'REGISTER.PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN' | translate }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password-confirm">

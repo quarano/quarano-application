@@ -307,7 +307,7 @@
     "HIERMIT_AKZEPTIERE_ICH_DIE": "I herewith accept the",
     "PASSWORT": "Password",
     "PASSWORT_BESTÄTIGEN": "Confirm password",
-    "PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN": "The password may not contain the user name",
+    "PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "The password may not contain the user name",
     "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Password and confirmation must be identical",
     "REGISTRIEREN": "Register",
     "REGISTRIERUNG_ERFOLGREICH": "Registration successful. You will automatically be logged in",

@@ -307,7 +307,7 @@
     "HIERMIT_AKZEPTIERE_ICH_DIE": "Hiermit akzeptiere ich die",
     "PASSWORT": "Passwort",
     "PASSWORT_BESTÄTIGEN": "Passwort bestätigen",
-    "PASSWORT_DARG_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
     "PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
     "REGISTRIEREN": "Registrieren",
     "REGISTRIERUNG_ERFOLGREICH": "Die Registrierung war erfolgreich. Sie werden automatisch angemeldet",

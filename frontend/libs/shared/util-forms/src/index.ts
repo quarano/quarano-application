@@ -1,6 +1,6 @@
 export * from './lib/shared-util-forms.module';
 export * from './lib/validation-error.service';
-export * from './lib/validators/confirm-valid-password-matcher';
+export * from './lib/validators/error-state-matchers';
 export * from './lib/validators/array.validator';
 export * from './lib/validators/password.validator';
 export * from './lib/validators/phone.validator';

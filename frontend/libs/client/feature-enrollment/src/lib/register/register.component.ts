@@ -7,6 +7,7 @@ import {
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PasswordValidator,
+  PasswordIncludesUsernameMatcher,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -30,6 +31,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
+  public passwordIncludesUsernameMatcher = new PasswordIncludesUsernameMatcher();
   private usernameIsValid = false;
 
   public registrationForm = new FormGroup(

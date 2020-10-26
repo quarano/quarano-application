@@ -7,3 +7,9 @@ export class ConfirmValidPasswordMatcher implements ErrorStateMatcher {
     return !!PasswordValidator.mustMatch(control.parent) || (control.invalid && control.touched);
   }
 }
+
+export class PasswordIncludesUsernameMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!PasswordValidator.mustNotIncludeUsername(control.parent) || (control.invalid && control.touched);
+  }
+}
