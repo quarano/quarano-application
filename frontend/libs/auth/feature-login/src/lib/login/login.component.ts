@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { filter, take, map, switchMap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
-import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ChangePasswordComponent } from '@qro/auth/feature-change-password';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private snackbarService: TranslatedSnackbarService,
+    private translatedSnackbarService: TranslatedSnackbarService,
+    private snackbarService: SnackbarService,
     private router: Router,
     private matDialog: MatDialog,
     public validationErrorService: ValidationErrorService
@@ -57,7 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
         .pipe(
           switchMap((resData) =>
-            this.snackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
+            this.translatedSnackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
           )
         )
         .subscribe(
@@ -73,10 +74,14 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           },
           (error) => {
-            if (error.error === 'Case already closed!') {
-              this.subs.add(this.snackbarService.message('LOGIN.FALL_BEREITS_GESCHLOSSEN').subscribe());
+            if (error.hasOwnProperty('unprocessableEntityErrors')) {
+              this.snackbarService.error(error.unprocessableEntityErrors);
+            } else if (error.error === 'Case already closed!') {
+              this.subs.add(this.translatedSnackbarService.message('LOGIN.FALL_BEREITS_GESCHLOSSEN').subscribe());
             } else {
-              this.subs.add(this.snackbarService.error('LOGIN.BENUTZERNAME_ODER_PASSWORT_FALSCH').subscribe());
+              this.subs.add(
+                this.translatedSnackbarService.error('LOGIN.BENUTZERNAME_ODER_PASSWORT_FALSCH').subscribe()
+              );
             }
           }
         )
