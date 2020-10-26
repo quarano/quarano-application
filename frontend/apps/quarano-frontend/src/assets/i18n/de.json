@@ -25,6 +25,8 @@
     "PERSÖNLICHE_DATEN": "Persönliche Daten",
     "PERSÖNLICHE_DATEN_GESPEICHERT": "Persönliche Daten erfolgreich gespeichert",
     "PFLICHTFELDER_SIND_MARKIERT": "Pflichtfelder sind mit * markiert",
+    "PLZ_BESTAETIGEN": "PLZ bestätigen",
+    "PLZ_UEBERPRUEFEN": "Bitte prüfen Sie die eingegebene PLZ",
     "REGISTRIERUNG_ABGESCHLOSSEN": "Die Registrierung wurde erfolgreich abgeschlossen",
     "SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST": "Sie haben noch keinen retrospektiven Kontakt erfasst. Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten.",
     "UMGANG_MIT_KONTAKTPERSONEN": "Umgang mit Kontaktpersonen bestätigter COVID-19-Fälle",
@@ -196,6 +198,14 @@
     "KONTAKT_ZUM_AMT": "Kontakt zum Amt",
     "PASSWORT_ÄNDERN": "Passwort ändern"
   },
+  "HEALTH_DEPARTMENT_ADDRESS": {
+    "ANRUFEN": "Anrufen",
+    "DAS_FUER_IHRE_PLZ_ZUSTAENDIGE": "Das für Sie zuständige Gesundheitsamt arbeitet nicht mit Quarano. Bitte wenden Sie sich direkt an Ihr Gesundheitsamt.",
+    "E_MAIL": "E-Mail",
+    "E_MAIL_SCHREIBEN": "E-Mail schreiben",
+    "FAX": "Fax",
+    "TELEFON": "Telefon"
+  },
   "INITIAL_QUESTIONNAIRE_FORM": {
     "BEHANDELNDEN_HAUSARZT": "Bitte geben Sie Ihren behandelnden Hausarzt an",
     "CHARAKTERISTISCHE_SYMPTOME": "Als Covid-19 charakterische Symptome zählen",
@@ -340,18 +350,18 @@
   },
   "WELCOME": {
     "INDEXFÄLLE": "Indexfälle",
-    "VERWALTUNG_VON_INDEXFÄLLEN": "Verwaltung von Indexfällen",
-    "SEHEN_SIE_INDEXFÄLLE": "Sehen und bearbeiten Sie hier alle offenen Indexfälle in Ihrem Gesundheitsamt. Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.",
-    "ZU_DEN_INDEXFÄLLEN": "Zu den Indexfällen",
-    "VERWALTUNG_VON_KONTAKTPERSONEN": "Verwaltung von Kontaktpersonen",
-    "SEHEN_SIE_KONTAKTPERSONEN": "Sehen und bearbeiten Sie hier alle offenen Kontaktpersonen in Ihrem Gesundheitsamt. Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.",
     "KONTAKTNACHVERFOLGUNG": "Kontaktnachverfolgung",
     "KONTAKTPERSONEN": "Kontaktpersonen",
     "PFLEGEN_SIE": "Pflegen Sie zwei Mal täglich in Ihrem Tagebuch die eventuell auftretenden Symptome und Ihre Körpertemperatur.",
+    "SEHEN_SIE_INDEXFÄLLE": "Sehen und bearbeiten Sie hier alle offenen Indexfälle in Ihrem Gesundheitsamt. Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.",
+    "SEHEN_SIE_KONTAKTPERSONEN": "Sehen und bearbeiten Sie hier alle offenen Kontaktpersonen in Ihrem Gesundheitsamt. Legen Sie neue Fälle an und nutzen Sie die Kontaktfunktion.",
     "SYMPTOM_TRACKING": "Symptom-Tracking",
     "TAGEBUCH": "Tagebuch",
     "VERWALTEN_SIE": "Verwalten Sie Ihre persönlichen Kontaktpersonen, damit Sie diese einfach und schnell in den Tagebucheinträgen referenzieren können, ohne sie neu eingeben zu müssen.",
+    "VERWALTUNG_VON_INDEXFÄLLEN": "Verwaltung von Indexfällen",
+    "VERWALTUNG_VON_KONTAKTPERSONEN": "Verwaltung von Kontaktpersonen",
     "ZUM_TAGEBUCH": "Zum Tagebuch",
+    "ZU_DEN_INDEXFÄLLEN": "Zu den Indexfällen",
     "ZU_DEN_KONTAKTPERSONEN": "Zu den Kontaktpersonen"
   }
 }

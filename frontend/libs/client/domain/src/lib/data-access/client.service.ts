@@ -20,8 +20,12 @@ export class ClientService {
     return this.httpClient.get<ClientDto>(`${this.apiUrl}/api/enrollment/details`).pipe(shareReplay());
   }
 
-  updatePersonalDetails(client: ClientDto): Observable<any> {
-    return this.httpClient.put(`${this.apiUrl}/api/enrollment/details`, client).pipe(
+  updatePersonalDetails(client: ClientDto, confirmedZipCode: boolean = false): Observable<any> {
+    let url = `${this.apiUrl}/api/enrollment/details`;
+    if (confirmedZipCode) {
+      url += '?confirmed=true';
+    }
+    return this.httpClient.put(url, client).pipe(
       shareReplay(),
       tap((_) => this.clientStore.loadEnrollmentStatus())
     );

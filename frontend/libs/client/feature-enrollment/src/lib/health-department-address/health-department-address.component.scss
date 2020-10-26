@@ -1,0 +1,24 @@
+.example-header-image {
+  background-image: url('../../../../../../apps/quarano-frontend/src/assets/images/user.png');
+  background-size: 32px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.info-text {
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  border: 1px solid #dbdbdb;
+}
+
+.label {
+  min-width: 75px;
+}

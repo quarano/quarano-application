@@ -1,0 +1,46 @@
+<ng-container *ngIf="healthDepartment">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ healthDepartment.name }}</mat-card-title>
+      <mat-card-subtitle>{{ healthDepartment.department }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="info-text">
+        {{ 'HEALTH_DEPARTMENT_ADDRESS.DAS_FUER_IHRE_PLZ_ZUSTAENDIGE' | translate }}
+      </p>
+      <ul>
+        <li>
+          <h3 style="margin-bottom: 0;">
+            <strong>{{ healthDepartment.name }}</strong>
+          </h3>
+          <h4>{{ healthDepartment.department }}</h4>
+        </li>
+        <li>{{ healthDepartment.street }}</li>
+        <li>{{ healthDepartment.zipCode }} {{ healthDepartment.city }}</li>
+      </ul>
+      <table>
+        <tr *ngIf="healthDepartment.email">
+          <td class="label">{{ 'HEALTH_DEPARTMENT_ADDRESS.E_MAIL' | translate }}:</td>
+          <td>{{ healthDepartment.email }}</td>
+        </tr>
+        <tr *ngIf="healthDepartment.phone">
+          <td class="label">{{ 'HEALTH_DEPARTMENT_ADDRESS.TELEFON' | translate }}:</td>
+          <td>{{ healthDepartment.phone }}</td>
+        </tr>
+        <tr *ngIf="healthDepartment.fax">
+          <td class="label">{{ 'HEALTH_DEPARTMENT_ADDRESS.FAX' | translate }}:</td>
+          <td>{{ healthDepartment.fax }}</td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button *ngIf="healthDepartment.email" [href]="'mailto:' + healthDepartment.email" target="_blank"
+        ><mat-icon>email</mat-icon> {{ 'HEALTH_DEPARTMENT_ADDRESS.E_MAIL_SCHREIBEN' | translate }}</a
+      >
+      <a mat-button *ngIf="healthDepartment.phone" [href]="'tel:' + healthDepartment.phone" target="_blank"
+        ><mat-icon>call</mat-icon> {{ 'HEALTH_DEPARTMENT_ADDRESS.ANRUFEN' | translate }}</a
+      >
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

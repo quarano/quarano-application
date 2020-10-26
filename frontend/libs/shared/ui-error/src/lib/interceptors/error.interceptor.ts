@@ -8,9 +8,8 @@ import {
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 
 export enum HttpStatusCode {
   unauthorized = 401,
@@ -18,10 +17,17 @@ export enum HttpStatusCode {
   notFound = 404,
   badRequest = 400,
   internalServerError = 500,
+  unprocessableEntity = 422,
+  preconditionFailed = 412,
 }
 
-export interface IBadRequestError {
-  badRequestErrors: any;
+export interface IErrorToDisplay {
+  errors: any;
+  status: number;
+}
+
+export interface IUnprocessableEntityError {
+  unprocessableEntityErrors: any;
 }
 
 @Injectable({
@@ -88,10 +94,18 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (
-            error.status === HttpStatusCode.badRequest.valueOf() &&
+            (error.status === HttpStatusCode.badRequest.valueOf() &&
+              (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')) ||
+            error.status === HttpStatusCode.preconditionFailed.valueOf()
+          ) {
+            return throwError({ errors: serverError, status: error.status } as IErrorToDisplay);
+          }
+
+          if (
+            error.status === HttpStatusCode.unprocessableEntity.valueOf() &&
             (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
           ) {
-            return throwError({ badRequestErrors: serverError } as IBadRequestError);
+            return throwError({ unprocessableEntityErrors: serverError } as IUnprocessableEntityError);
           }
 
           return throwError(serverError || 'Server Error');
