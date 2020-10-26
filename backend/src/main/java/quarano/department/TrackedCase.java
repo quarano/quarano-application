@@ -313,6 +313,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return status.equals(Status.TRACKING);
 	}
 
+	public boolean isExternal() {
+		return status.equals(Status.EXTERNAL_ZIP);
+	}
+
 	public boolean isEnrollmentCompleted() {
 		return getEnrollment().isComplete();
 	}
