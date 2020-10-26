@@ -11,12 +11,16 @@ import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.account.web.AccountRepresentations;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.Status;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonRepository;
+
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -39,6 +43,7 @@ class AuthenticationController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull AccountRepresentations accountRepresentations;
+	private final @NonNull MessageSourceAccessor message;
 
 	@PostMapping({ "/login", "/api/login" })
 	HttpEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
@@ -48,7 +53,10 @@ class AuthenticationController {
 		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername()))
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!"))
-				.filter(this::hasOpenCaseForAccount, () -> new AccessDeniedException("Case already closed!"))
+				.filter(this::hasOpenCaseForAccount,
+						() -> new AccessDeniedException(message.getMessage("authentication.trackedCase.closed")))
+				.filter(this::isntCaseExternal,
+						() -> new ExternalZipException(message.getMessage("authentication.trackedCase.externalZip")))
 				// set authentication to security context for a later use during the request (e.g. to get the current
 				// authentication)
 				.peek(it -> SecurityContextHolder.getContext()
@@ -60,15 +68,26 @@ class AuthenticationController {
 						.ifPresent(people::save))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(EmptyResultDataAccessException.class, it -> toUnauthorized(it.getMessage()))
+				.recover(ExternalZipException.class, it -> toUnprocessable(it.getMessage()))
 				.get();
 	}
 
 	private boolean hasOpenCaseForAccount(Account account) {
 
-		return !account.isTrackedPerson() || people.findByAccount(account)
-				.flatMap(cases::findByTrackedPerson)
+		return !account.isTrackedPerson() || loadCaseFor(account)
 				.filter(TrackedCase::isOpen)
 				.isPresent();
+	}
+
+	private boolean isntCaseExternal(Account account) {
+
+		return !account.isTrackedPerson() || loadCaseFor(account)
+				.filter(it -> it.getStatus() != Status.EXTERNAL_ZIP)
+				.isPresent();
+	}
+
+	private Optional<TrackedCase> loadCaseFor(Account account) {
+		return people.findByAccount(account).flatMap(cases::findByTrackedPerson);
 	}
 
 	private Account lookupAccountFor(String username) {
@@ -81,9 +100,22 @@ class AuthenticationController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
 	}
 
+	private static HttpEntity<?> toUnprocessable(String message) {
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
+	}
+
 	@Data
 	@AllArgsConstructor(access = AccessLevel.PACKAGE)
 	static class AuthenticationRequest {
 		private @NotBlank String username, password;
+	}
+
+	class ExternalZipException extends RuntimeException {
+
+		private static final long serialVersionUID = 3751035061264462192L;
+
+		public ExternalZipException(String msg) {
+			super(msg);
+		}
 	}
 }
