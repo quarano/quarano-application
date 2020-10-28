@@ -44,7 +44,8 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 
 	@Query("select i from ActionItem i, TrackedCase t"
 			+ " where i.resolved = false"
-			+ " and t.trackedPerson.id = i.personIdentifier" + " and t.status <> 'CONCLUDED'"
+			+ " and t.trackedPerson.id = i.personIdentifier"
+			+ " and t.status <> 'CONCLUDED'"
 			+ " and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByActiveCaseByPersonIdentifier(TrackedPersonIdentifier identifier);
 
