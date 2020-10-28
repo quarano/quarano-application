@@ -38,7 +38,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged --pattern '**/*.*(ts|scss|html)' --verbose"
+      "pre-commit": "pretty-quick --staged --pattern '**/*.*(ts|scss|html)'"
     }
   },
   "private": true,
