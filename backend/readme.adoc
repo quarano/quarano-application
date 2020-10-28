@@ -71,6 +71,7 @@ The following Spring profiles are used for the application:
 * `integrationtest` -- Uses an H2 database instead of expecting a local PostgreSQL instance being around.
 * `develop` -- Wipes the database on application start.
 * `prod` -- Disables the creation of demo data in the system.
+* `tracing` -- Enables SQL logging and deploys an aspect to measure repository method executions times.
 
 For convenience we expose the following Maven profiles:
 
