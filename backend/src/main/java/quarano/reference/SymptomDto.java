@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import quarano.core.validation.Alphabetic;
-import quarano.core.web.I18nedMessage;
 
 import java.util.UUID;
 
@@ -24,8 +23,4 @@ public class SymptomDto {
 
 	private @Alphabetic String name;
 	private boolean isCharacteristic;
-
-	public I18nedMessage getName() {
-		return I18nedMessage.of("symptom." + id.toString()).withDefaultMessage(name);
-	}
 }
