@@ -24,6 +24,8 @@
 		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.version>0.2.2.RELEASE</refdocs.version>
+		<xmlprojector.version>1.4.17</xmlprojector.version>
+		<opencsv.version>5.3</opencsv.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
@@ -267,8 +269,15 @@
 		<dependency>
 			<groupId>org.xmlbeam</groupId>
 			<artifactId>xmlprojector</artifactId>
-			<version>1.4.17</version>
+			<version>${xmlprojector.version}</version>
 		</dependency>
+
+		<!-- For CSV import/export -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
 
 		<!-- Development-only dependencies -->
 
