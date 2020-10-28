@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ import javax.persistence.Embeddable;
 @Data
 @Embeddable
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor(staticName = "of")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Quarantine {
 
 	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
@@ -27,6 +28,13 @@ public class Quarantine {
 
 	@Column(name = "quarantine_to")
 	private final LocalDate to;
+
+	@Column(name = "quarantine_last_modified")
+	private final LocalDateTime lastModified;
+
+	public static Quarantine of(LocalDate from, LocalDate to) {
+		return new Quarantine(from, to, LocalDateTime.now());
+	}
 
 	public boolean isOver() {
 		return LocalDate.now(ZONE_BERLIN).isAfter(to);

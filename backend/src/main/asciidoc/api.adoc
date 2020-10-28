@@ -73,3 +73,19 @@ include::{snippets}/getting-started/agent-user-home/links.adoc[]
 
 include::api-agent.adoc[leveloffset=+1]
 include::api-user.adoc[leveloffset=+1]
+
+== CSV Import/Export
+
+=== Quarantine Export
+
+include::{snippets}/csv-import-export/quarantine-order/auto-description.adoc[]
+
+include::{snippets}/csv-import-export/quarantine-order/curl-request.adoc[]
+
+The request takes the following attributes:
+
+include::{snippets}/csv-import-export/quarantine-order/auto-request-parameters.adoc[]
+
+That call will return a 200 OK and contain the CSV data as body.
+
+include::{snippets}/csv-import-export/quarantine-order/response-body.adoc[]

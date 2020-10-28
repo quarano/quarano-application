@@ -30,6 +30,9 @@ import org.springframework.data.util.Streamable;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import com.querydsl.core.annotations.QueryEntity;
+import com.querydsl.core.annotations.QueryInit;
+
 /**
  * @author Oliver Drotbohm
  * @author Michael J. Simons
@@ -43,9 +46,11 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL }) @JoinColumn(name = "tracked_person_id") private TrackedPerson trackedPerson;
+	@QueryInit({ "*.*", "address.zipCode", "department.id" })
+	@OneToOne(cascade = { CascadeType.ALL })	@JoinColumn(name = "tracked_person_id")	private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false) private Department department;
+	@QueryInit({ "*.*", "id" })
+	@ManyToOne	@JoinColumn(name = "department_id", nullable = false)	private Department department;
 
 	private @Getter TestResult testResult;
 
