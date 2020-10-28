@@ -22,10 +22,10 @@ public class SymptomDto {
 	@Setter(onMethod = @__(@JsonIgnore)) //
 	private UUID id;
 
-	private @Alphabetic	String name;
+	private @Alphabetic String name;
 	private boolean isCharacteristic;
 
 	public I18nedMessage getName() {
-		return I18nedMessage.of(id.toString()).withDefaultMessage(name);
+		return I18nedMessage.of("symptom." + id.toString()).withDefaultMessage(name);
 	}
 }

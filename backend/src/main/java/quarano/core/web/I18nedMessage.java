@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
@@ -24,13 +25,17 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class I18nedMessage implements MessageSourceResolvable {
 
-	private final @Getter String[] codes;
+	@With @Nullable @Getter //
+	private final String[] codes;
+
+	@Nullable @Getter //
 	private final Object[] arguments;
 
 	/**
 	 * This text is used if the codes can't resolved.
 	 */
-	private final @Getter @With String defaultMessage;
+	@With @Nullable @Getter //
+	private final String defaultMessage;
 
 	/**
 	 * Creates a new {@link I18nedMessage} for the given codes.
@@ -45,30 +50,10 @@ public class I18nedMessage implements MessageSourceResolvable {
 
 		var codes = Stream.concat(Stream.of(code), Arrays.stream(additionalCodes)).toArray(String[]::new);
 
-		return new I18nedMessage(codes, new Object[0]);
+		return new I18nedMessage(codes, new Object[0], null);
 	}
 
 	public I18nedMessage withArguments(Object... arguments) {
-		return new I18nedMessage(codes, arguments);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.context.MessageSourceResolvable#getCodes()
-	 */
-	@NonNull
-	@Override
-	public String[] getCodes() {
-		return codes;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.context.MessageSourceResolvable#getArguments()
-	 */
-	@NonNull
-	@Override
-	public Object[] getArguments() {
-		return arguments;
+		return new I18nedMessage(codes, arguments, defaultMessage);
 	}
 }

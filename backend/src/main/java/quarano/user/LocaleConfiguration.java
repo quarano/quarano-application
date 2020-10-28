@@ -36,6 +36,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  * Configuration class for locale and message related matters.
  *
  * @author Jens Kutzsche
+ * @author Paul Guhl
+ * @author Oliver Drotbohm
  */
 @EnableAspectJAutoProxy
 @Configuration(proxyBeanMethods = false)
@@ -44,8 +46,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 
 	public static final List<Locale> LOCALES = List.of(
 			Locale.GERMAN,
-			Locale.ENGLISH,
-			new Locale("tr"));
+			Locale.ENGLISH);
 
 	@Bean
 	LocaleResolver localeResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts) {
