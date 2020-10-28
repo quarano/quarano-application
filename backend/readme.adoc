@@ -83,4 +83,4 @@ For convenience we expose the following Maven profiles:
 There's a demo deployment available at https://quarano-backend-dev.cfapps.io including some demo data.
 No guarantees about the availability and state of data.
 
-If you prefer to use a UI (what? 😳🤔😭) you can use https://quarano-frontend-dev.cfapps.io.
+If you prefer to use a UI (what? 😳🤔😭) you can use https://quarano.de/internal-dev.
