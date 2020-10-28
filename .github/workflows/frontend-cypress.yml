@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   build:
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     runs-on: ubuntu-latest
 
@@ -53,7 +53,7 @@ jobs:
           mvn -B spring-boot:run -Pinmemory -f backend/pom.xml &
           sleep 60
           cd frontend && npm run e2e
-          kill -2 `lsof -i:8080 -t`
+          kill -9 `lsof -i:8080 -t`
 
       - uses: actions/upload-artifact@v2
         name: Upload videos
