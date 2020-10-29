@@ -1,5 +1,6 @@
 package quarano.department;
 
+import quarano.account.Account;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoRepository;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
@@ -65,6 +66,9 @@ public interface TrackedCaseRepository
 
 	@Query(DEFAULT_SELECT + " where p.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	@Query("select c from TrackedCase c JOIN c.trackedPerson p WHERE p.account = :account")
+	Optional<TrackedCase> findByAccount(Account account);
 
 	/**
 	 * Returns whether a {@link TrackedCase} exists that's associated with the given {@link ContactPerson}.

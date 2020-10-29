@@ -57,7 +57,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 		mvc.perform(post("/api/login")
 				.content(jackson.writeValueAsString(new AuthenticationRequest("secUser1", "secur1tyTest!")))
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isUnauthorized());
+				.andExpect(status().isForbidden());
 	}
 
 	@Test

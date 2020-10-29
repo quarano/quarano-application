@@ -74,10 +74,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           },
           (error) => {
-            if (error.hasOwnProperty('unprocessableEntityErrors')) {
-              this.snackbarService.error(error.unprocessableEntityErrors);
-            } else if (error.error === 'Case already closed!') {
-              this.subs.add(this.translatedSnackbarService.message('LOGIN.FALL_BEREITS_GESCHLOSSEN').subscribe());
+            if (error.error) {
+              this.subs.add(this.translatedSnackbarService.error(error.error).subscribe());
             } else {
               this.subs.add(
                 this.translatedSnackbarService.error('LOGIN.BENUTZERNAME_ODER_PASSWORT_FALSCH').subscribe()
