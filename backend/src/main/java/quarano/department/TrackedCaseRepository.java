@@ -24,10 +24,13 @@ import com.querydsl.core.types.Predicate;
 public interface TrackedCaseRepository
 		extends QuaranoRepository<TrackedCase, TrackedCaseIdentifier>, QuerydslPredicateExecutor<TrackedCase> {
 
-	@Query(TrackedCaseJpql.DEFAULT_SELECT + " where d.id = :identifier")
+	static final String DEFAULT_SELECT = "select c from TrackedCase c" + //
+			" join fetch c.trackedPerson p join fetch c.department d ";
+
+	@Query(DEFAULT_SELECT + " where d.id = :identifier")
 	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier identifier);
 
-	@Query(TrackedCaseJpql.DEFAULT_SELECT + " where d.id = :id order by p.lastName")
+	@Query(DEFAULT_SELECT + " where d.id = :id order by p.lastName")
 	Streamable<TrackedCase> findByDepartmentIdOrderByLastNameAsc(DepartmentIdentifier id);
 
 	/**
@@ -60,7 +63,7 @@ public interface TrackedCaseRepository
 
 	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
 
-	@Query(TrackedCaseJpql.DEFAULT_SELECT + " where p.id = :identifier")
+	@Query(DEFAULT_SELECT + " where p.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
 
 	/**
