@@ -365,7 +365,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     }
   }
 
-  openContactDialog(dateString: string) {
+  openContactDialog(date: Date) {
+    const dateString = date.toLocaleDateString('de');
     this.subs.add(
       this.dialogService
         .openContactPersonDialog()
@@ -373,6 +374,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         .subscribe((createdContact: ContactPersonDto | null) => {
           if (createdContact) {
             this.contactPersons.push(createdContact);
+            this.onContactAdded(date, createdContact.id);
             this.thirdFormGroup.controls[dateString].patchValue([
               ...this.thirdFormGroup.controls[dateString].value,
               createdContact.id,

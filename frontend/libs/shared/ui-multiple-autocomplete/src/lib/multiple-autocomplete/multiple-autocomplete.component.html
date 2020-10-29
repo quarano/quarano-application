@@ -24,6 +24,7 @@
           : null
       "
       (blur)="checkInputForData($event)"
+      (click)="refreshFilteredList()"
       #trigger="matAutocompleteTrigger"
     />
   </mat-chip-list>

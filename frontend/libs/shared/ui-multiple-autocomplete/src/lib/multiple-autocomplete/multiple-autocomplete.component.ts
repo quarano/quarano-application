@@ -38,23 +38,31 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       .subscribe((data: string[]) => {
         this.selectedItemIds = data;
         this.control.markAsDirty();
-        data.forEach((value) => this.added.emit(value));
       });
 
-    this.selectedItemIds = this.control.value;
+    if (this.control.value && Array.isArray(this.control.value)) {
+      this.selectedItemIds = this.control.value;
+    } else {
+      console.error('This value is not an Array', this.control.value);
+    }
 
     this.inputControl.valueChanges.pipe(takeUntil(this.destroy$), startWith(null as string)).subscribe((searchTerm) => {
       if (typeof searchTerm === 'string') {
         this._filter(searchTerm);
       }
     });
+    this.refreshFilteredList();
+  }
+
+  refreshFilteredList(): void {
+    this.filteredList$$.next(this.getPrefilteredList());
   }
 
   resetInput(): void {
     // Clear the input field and reset the autocomplete list
     this.input.nativeElement.value = '';
     this.inputControl.setValue(null);
-    this.filteredList$$.next(this.prefilteredList);
+    this.filteredList$$.next(this.getPrefilteredList());
   }
 
   ngOnDestroy(): void {
@@ -62,7 +70,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  get prefilteredList(): IIdentifiable[] {
+  getPrefilteredList(): IIdentifiable[] {
     let arrayToReturn: IIdentifiable[] = cloneDeep(this.selectableItems);
     this.selectedItemIds.forEach((selectedItem) => {
       arrayToReturn = arrayToReturn.filter((item) => item.id !== selectedItem);
@@ -87,10 +95,10 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   private _filter(searchTerm: string) {
-    let arrayToReturn = this.prefilteredList.filter((item) => !this.selectedItemIds.includes(item.id));
+    let arrayToReturn = this.getPrefilteredList().filter((item) => !this.selectedItemIds.includes(item.id));
 
     if (!searchTerm) {
-      this.filteredList$$.next(this.prefilteredList);
+      this.refreshFilteredList();
     }
     const filterValue = searchTerm.toLowerCase();
     arrayToReturn = arrayToReturn.filter((item) => this.getName(item).toLowerCase().indexOf(filterValue) === 0);
@@ -109,6 +117,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.selectedItemIds.push(selectedValue);
     this.setFormControlValue();
     this.added.emit(selectedValue);
+    this.refreshFilteredList();
     this.resetInput();
   }
 
@@ -120,7 +129,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       this.setFormControlValue();
       this.removed.emit(id);
     }
-    this.filteredList$$.next(this.prefilteredList);
+    this.refreshFilteredList();
   }
 
   setFormControlValue() {
