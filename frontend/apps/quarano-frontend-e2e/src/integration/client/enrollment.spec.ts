@@ -54,3 +54,36 @@ describe('enrollment happy path', () => {
     });
   });
 });
+
+describe('enrollment external zip code', () => {
+  beforeEach(() => {
+    cy.server();
+    cy.route('PUT', '/api/enrollment/details?confirmed=true').as('updatepersonaldetailszipcodeconfirm');
+    cy.route('PUT', '/api/enrollment/details').as('updatepersonaldetails');
+
+    cy.loginNotEnrolledClient2();
+  });
+
+  describe('basic data', () => {
+    it('form completion', () => {
+      cy.url().should('include', '/client/enrollment/basic-data');
+      cy.get('[data-cy="first-step-button"] button').should('be.disabled');
+      cy.get('[data-cy="street-input"] input[matInput]').type('Höllentalstr.');
+      cy.get('[data-cy="house-number-input"] input[matInput]').type('49');
+      cy.get('[data-cy="zip-code-input"] input[matInput]').type('79110');
+      cy.get('[data-cy="city-input"] input[matInput]').type('Buchenbach');
+      cy.get('[data-cy="first-step-button"] button').should('be.enabled');
+      cy.get('[data-cy="first-step-button"] button').click();
+      cy.wait('@updatepersonaldetails').its('status').should('eq', 422);
+      cy.get('[data-cy="confirm-button"]').should('exist');
+      cy.get('[data-cy="confirm-button"]').click();
+      cy.wait('@updatepersonaldetailszipcodeconfirm').its('status').should('eq', 200);
+      cy.url().should('include', '/client/enrollment/health-department');
+      cy.get('[data-cy="contact-button"]').should('not.exist');
+      cy.get('[data-cy="profile-user-button"]').should('not.exist');
+      cy.get('[data-cy="health-department-name"]')
+        .should('exist')
+        .should('have.text', 'Landratsamt Breisgau-Hochschwarzwald');
+    });
+  });
+});

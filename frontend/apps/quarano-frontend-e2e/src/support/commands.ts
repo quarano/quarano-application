@@ -8,6 +8,7 @@ declare namespace Cypress {
     loginAgent: () => void;
     loginClient: () => void;
     loginNotEnrolledClient: () => void;
+    loginNotEnrolledClient2: () => void;
   }
 }
 
@@ -36,4 +37,7 @@ Cypress.Commands.add('loginClient', () => {
 });
 Cypress.Commands.add('loginNotEnrolledClient', () => {
   login('DemoAccount', 'DemoPassword');
+});
+Cypress.Commands.add('loginNotEnrolledClient2', () => {
+  login('secUser2', 'secur1tyTest!');
 });
