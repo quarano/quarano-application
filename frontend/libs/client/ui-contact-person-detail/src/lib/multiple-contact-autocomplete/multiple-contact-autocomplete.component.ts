@@ -29,6 +29,9 @@ export class MultipleContactAutocompleteComponent {
       .askAndOpenContactPersonDialog(name)
       .pipe(filter((contact) => !!contact))
       .subscribe((createdContact) => {
+        if (createdContact.id) {
+          this.emitAdded(createdContact.id);
+        }
         this.contactMultipleAutocomplete.clearInput();
         this.selectableItems.push(createdContact);
         this.control.patchValue([...this.control.value, createdContact.id]);

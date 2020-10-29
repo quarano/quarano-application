@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { BehaviorSubject } from 'rxjs';
 import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
@@ -181,11 +180,9 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           .updatePersonalDetails(value)
           .subscribe(
             (result) => {
-              if (result.completedPersonalData) {
-                this.client = value;
-                this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
-                this.stepper.next();
-              }
+              this.client = value;
+              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
+              this.stepper.next();
               this.firstFormLoading = false;
             },
             (error) => {

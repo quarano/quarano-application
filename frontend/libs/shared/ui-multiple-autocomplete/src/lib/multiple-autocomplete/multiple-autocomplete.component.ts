@@ -29,7 +29,6 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   filteredList$$: BehaviorSubject<IIdentifiable[]> = new BehaviorSubject<IIdentifiable[]>(undefined);
 
   ngOnInit() {
-    this.filteredList$$.next(this.selectableItems);
     this.control.valueChanges
       .pipe(
         takeUntil(this.destroy$),
@@ -51,6 +50,11 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
         this._filter(searchTerm);
       }
     });
+    this.refreshFilteredList();
+  }
+
+  refreshFilteredList(): void {
+    this.filteredList$$.next(this.getPrefilteredList());
   }
 
   clearInput(): void {
@@ -64,7 +68,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  get prefilteredList(): IIdentifiable[] {
+  getPrefilteredList(): IIdentifiable[] {
     let arrayToReturn: IIdentifiable[] = cloneDeep(this.selectableItems);
     this.selectedItemIds.forEach((selectedItem) => {
       arrayToReturn = arrayToReturn.filter((item) => item.id !== selectedItem);
@@ -85,10 +89,10 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   private _filter(searchTerm: string) {
-    let arrayToReturn = this.prefilteredList.filter((item) => !this.selectedItemIds.includes(item.id));
+    let arrayToReturn = this.getPrefilteredList().filter((item) => !this.selectedItemIds.includes(item.id));
 
     if (!searchTerm) {
-      this.filteredList$$.next(this.prefilteredList);
+      this.refreshFilteredList();
     }
     const filterValue = searchTerm.toLowerCase();
     arrayToReturn = arrayToReturn.filter((item) => this.getName(item).toLowerCase().indexOf(filterValue) === 0);
@@ -106,7 +110,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
     this.inputControl.setValue(null);
     this.setFormControlValue();
     this.added.emit(selectedValue);
-    this.filteredList$$.next(this.prefilteredList);
+    this.refreshFilteredList();
   }
 
   remove(id: string): void {
@@ -117,7 +121,7 @@ export class MultipleAutocompleteComponent implements OnInit, OnDestroy {
       this.setFormControlValue();
       this.removed.emit(id);
     }
-    this.filteredList$$.next(this.prefilteredList);
+    this.refreshFilteredList();
   }
 
   setFormControlValue() {
