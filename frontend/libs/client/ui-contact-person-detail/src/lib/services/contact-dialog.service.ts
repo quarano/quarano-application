@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { Observable } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 import { ContactPersonDialogComponent } from '..//contact-person-dialog/contact-person-dialog.component';
 
 export interface ContactPerson {
@@ -52,31 +52,33 @@ export class ContactDialogService {
     return this.openConfirmDialog()
       .afterClosed()
       .pipe(
-        filter((choice) => choice),
-        switchMap(() => {
-          const firstName = name.split(' ')[0];
-          const lastName = name.split(' ')[1];
-          const contactPersonDialogData: ContactPersonDialogData = {
-            contactPerson: {
-              firstName: firstName,
-              lastName: lastName,
-            },
-          };
-          return this.openContactPersonDialog({ data: contactPersonDialogData }).afterClosed();
+        flatMap((choice) => {
+          if (choice) {
+            const firstName = name.split(' ')[0];
+            const lastName = name.split(' ')[1];
+            const contactPersonDialogData: ContactPersonDialogData = {
+              contactPerson: {
+                firstName: firstName,
+                lastName: lastName,
+              },
+            };
+            return this.openContactPersonDialog({ data: contactPersonDialogData }).afterClosed();
+          } else {
+            // Notify the autocomplete field that no new contact was created
+            return of(null);
+          }
         })
       );
   }
 
   private openConfirmDialog() {
     const dialogData: ConfirmDialogData = {
-      text:
-        'Sie haben einen Namen einer Kontaktperson angegeben, den Sie bisher noch nicht angelegt haben. ' +
-        'Möchte Sie die Kontaktperson jetzt anlegen?',
-      title: 'Neue Kontaktperson',
-      abortButtonText: 'Abbrechen',
-      confirmButtonText: 'Kontakt anlegen',
+      text: 'CONTACT_DIALOG.MÖCHTEN_SIE_DIE_KONTAKTPERSON_JETZT_ANLEGEN',
+      title: 'CONTACT_DIALOG.NEUE_KONTAKTPERSON',
+      abortButtonText: 'CONTACT_DIALOG.ABBRECHEN',
+      confirmButtonText: 'CONTACT_DIALOG.KONTAKT_ANLEGEN',
     };
 
-    return this.dialog.open(ConfirmationDialogComponent, { data: dialogData });
+    return this.dialog.open(TranslatedConfirmationDialogComponent, { data: dialogData });
   }
 }

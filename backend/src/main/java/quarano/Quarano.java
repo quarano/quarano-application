@@ -2,17 +2,20 @@ package quarano;
 
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Role;
-import quarano.core.EmailTemplates;
 import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
 import quarano.core.web.RepositoryMappingModule;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.modelmapper.ModelMapper;
+import org.moduliths.Modulithic;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.interceptor.CustomizableTraceInterceptor;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
@@ -21,11 +24,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -34,7 +35,6 @@ import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.core.env.PropertySourcesPropertyResolver;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.support.Repositories;
@@ -50,6 +50,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Oliver Drotbohm
  */
 @Slf4j
+@Modulithic(sharedModules = "core")
 @SpringBootApplication
 @EnableJpaAuditing(dateTimeProviderRef = "quaranoDateTimeProvider")
 @ConfigurationPropertiesScan
@@ -63,16 +64,6 @@ public class Quarano {
 		SpringApplication application = new SpringApplication(Quarano.class);
 		application.setBanner(new QuaranoBanner(properties));
 		application.run(args);
-	}
-
-	@Bean
-	EmailTemplates emailTemplates(ResourceLoader loader) {
-
-		var templates = Map.of(//
-				EmailTemplates.Keys.REGISTRATION_INDEX, "classpath:masterdata/templates/registration-index.txt",
-				EmailTemplates.Keys.REGISTRATION_CONTACT, "classpath:masterdata/templates/registration-contact.txt");
-
-		return new EmailTemplates(loader, templates);
 	}
 
 	@Bean
@@ -101,9 +92,36 @@ public class Quarano {
 		return mapper;
 	}
 
-	@Bean
-	MessageSourceAccessor messageSourceAccessor(MessageSource source) {
-		return new MessageSourceAccessor(source);
+	/**
+	 * Configuration class to activate a {@link CustomizableTraceInterceptor} around all repository invocations to monitor
+	 * their execution time.
+	 *
+	 * @author Oliver Drotbohm
+	 */
+	@Profile("tracing")
+	@Configuration(proxyBeanMethods = false)
+	private static class TracingConfiguration {
+
+		@Bean
+		CustomizableTraceInterceptor interceptor() {
+
+			CustomizableTraceInterceptor interceptor = new CustomizableTraceInterceptor();
+			interceptor.setHideProxyClassNames(true);
+			interceptor.setEnterMessage("Entering $[targetClassName].$[methodName]($[arguments]).");
+			interceptor.setExitMessage(
+					"Leaving $[targetClassName].$[methodName](…) with return value $[returnValue], took $[invocationTime]ms.");
+
+			return interceptor;
+		}
+
+		@Bean
+		Advisor traceAdvisor(CustomizableTraceInterceptor interceptor) {
+
+			AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+			pointcut.setExpression("execution(public * org.springframework.data.repository.Repository+.*(..))");
+
+			return new DefaultPointcutAdvisor(pointcut, interceptor);
+		}
 	}
 
 	/**
@@ -178,7 +196,8 @@ public class Quarano {
 		 * @see org.springframework.boot.ResourceBanner#getPropertyResolvers(org.springframework.core.env.Environment, java.lang.Class)
 		 */
 		@Override
-		protected List<PropertyResolver> getPropertyResolvers(Environment environment, Class<?> sourceClass) {
+		protected List<PropertyResolver> getPropertyResolvers(@Nullable Environment environment,
+				@Nullable Class<?> sourceClass) {
 
 			List<PropertyResolver> resolvers = super.getPropertyResolvers(environment, sourceClass);
 
@@ -193,8 +212,5 @@ public class Quarano {
 
 	@Configuration
 	@EnableScheduling
-	@Profile("!integrationtest")
-	static class SchedulingProperties {
-
-	}
+	static class SchedulingProperties {}
 }

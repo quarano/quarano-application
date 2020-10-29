@@ -1,4 +1,4 @@
-import { ClientType } from '../enums/client-type';
+import { CaseType } from '../enums/case-type';
 
 export interface ClientDto {
   clientCode?: string;
@@ -16,5 +16,5 @@ export interface ClientDto {
   quarantineEndDateTime?: Date;
   houseNumber: string;
   dateOfBirth: Date;
-  type: ClientType;
+  type: CaseType;
 }

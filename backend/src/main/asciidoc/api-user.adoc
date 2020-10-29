@@ -3,6 +3,7 @@
 [[user.enrollment]]
 == User enrollment
 
+[[user.enrollment.resource]]
 == The enrollment resource
 
 If a user logs in an has not completed the tracking enrollment, a link relation named `enrollment` is contained in the response.
@@ -14,6 +15,44 @@ Depending on the state of the enrollment, the following link relations will be a
 * `questionnaire` -- Access or submit the initial questionnaire.
 * `encounters` -- Access or submit original encounters.
 * `next` -- Available as long as the enrollment is not completed.
+
+=== Submitting enrollment details
+
+include::{snippets}/enrollment/submit-details/curl-request.adoc[]
+
+include::{snippets}/enrollment/submit-details/auto-request-fields.adoc[]
+
+==== Zip code verification
+
+The `zipCode` field of the payload submitted for the enrollment details is not only verified for syntactical correctness (a five-digit string) but also for whether the health department is actually responsible to manage people living in the given zip code.
+
+Assume the original submission contains a syntactically invalid zip code (something other than 5 digits) or a syntactically correct one but one that's not a semantically valid one like 11111.
+
+include::{snippets}/enrollment/wrong-zip-code/curl-request.adoc[]
+
+The server will respond with a `400 Bad Request` pointing out that somethings wrong with the zip code:
+
+include::{snippets}/enrollment/wrong-zip-code/response-body.adoc[]
+
+If a zip code is provided that is a valid one but one that the current health department is not responsible for the response will change to return a `422 Unprocessable Entity` and the response body will contain more detailed information about the problematic zip code:
+
+include::{snippets}/enrollment/unsupported-zip-code/curl-request.adoc[]
+
+include::{snippets}/enrollment/unsupported-zip-code/response-body.adoc[]
+
+The value of the `zipCode` field is now an object containing detailed information about the health department responsible for the given zip code.
+
+include::{snippets}/enrollment/unsupported-zip-code/auto-response-fields.adoc[]
+
+Also, you can expect to find a link in the response that will provide you with the URI to be used in case the user wants to confirm the zip code she provided.
+Clients then need to reissue the `PUT` request to mark the case as externally managed.
+That call will then return a `200 OK` and contain a link to the main <<user.enrollment.resource, enrollment resource>>.
+
+include::{snippets}/enrollment/confirm-deviating-zip-code/curl-request.adoc[]
+
+include::{snippets}/enrollment/confirm-deviating-zip-code/response-body.adoc[]
+
+include::{snippets}/enrollment/confirm-deviating-zip-code/links.adoc[]
 
 
 == Tracking diary entries

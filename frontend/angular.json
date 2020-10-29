@@ -25,6 +25,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
+              "./node_modules/country-flag-icons/3x2/flags.css",
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
@@ -37,7 +38,7 @@
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.prod.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod-otc.ts"
                 }
               ],
               "optimization": true,
@@ -1763,6 +1764,38 @@
             "tsConfig": "libs/shared/util-snackbar/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/shared/util-snackbar/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-util-translation": {
+      "projectType": "library",
+      "root": "libs/shared/util-translation",
+      "sourceRoot": "libs/shared/util-translation/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/util-translation/tsconfig.lib.json",
+              "libs/shared/util-translation/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/util-translation/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/util-translation/jest.config.js",
+            "tsConfig": "libs/shared/util-translation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/util-translation/src/test-setup.ts"
           }
         }
       },

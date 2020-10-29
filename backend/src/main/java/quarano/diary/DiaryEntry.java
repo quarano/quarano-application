@@ -31,8 +31,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 import org.springframework.util.Assert;
 
 /**

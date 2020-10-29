@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
 
 /**
  * @author Oliver Drotbohm

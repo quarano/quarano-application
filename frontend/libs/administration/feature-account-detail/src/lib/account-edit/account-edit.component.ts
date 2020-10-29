@@ -10,12 +10,12 @@ import { Observable } from 'rxjs';
 import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import {
-  ValidationErrorGenerator,
   ArrayValidator,
   PasswordValidator,
   VALIDATION_PATTERNS,
   TrimmedPatternValidator,
   ConfirmValidPasswordMatcher,
+  ValidationErrorService,
 } from '@qro/shared/util-forms';
 
 @Component({
@@ -30,7 +30,6 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   private usernameIsValid = false;
   roles: IRole[] = roles.filter((r) => r.isHealthDepartmentUser);
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
 
   constructor(
@@ -40,7 +39,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private snackbarService: SnackbarService,
     private router: Router,
-    private badRequestService: BadRequestService
+    private badRequestService: BadRequestService,
+    public validationErrorService: ValidationErrorService
   ) {}
 
   ngOnInit() {

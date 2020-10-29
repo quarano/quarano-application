@@ -114,17 +114,20 @@ public class UserController {
 		/**
 		 * The current password.
 		 */
-		@NotBlank String current;
+		@NotBlank
+		String current;
 
 		/**
 		 * The new password to set.
 		 */
-		@NotBlank String password;
+		@NotBlank
+		String password;
 
 		/**
 		 * The new password repeated for verification.
 		 */
-		@NotBlank String passwordConfirm;
+		@NotBlank
+		String passwordConfirm;
 
 		NewPassword validate(Errors errors, EncryptedPassword existing, AccountService accounts) {
 

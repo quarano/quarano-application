@@ -1,3 +1,7 @@
+import { provideMockStore } from '@ngrx/store/testing';
+import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
+import { BadRequestService } from '@qro/shared/ui-error';
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DiaryEntryComponent } from './diary-entry.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -5,9 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DiaryService, DiaryEntryDto } from '@qro/client/domain';
+import { StoreModule } from '@ngrx/store';
 
 describe('DiaryEntryComponent', () => {
   let component: DiaryEntryComponent;
@@ -15,13 +20,16 @@ describe('DiaryEntryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, TranslateTestingModule],
       declarations: [DiaryEntryComponent],
       providers: [
         FormBuilder,
+        provideMockStore({}),
         { provide: DiaryService, useValue: { createDiaryEntry: () => {} } },
-        { provide: SnackbarService, useValue: { warning: () => {}, success: () => {} } },
+        { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
         { provide: MatDialog, useValue: {} },
+        { provide: ContactDialogService, useValue: {} },
+        { provide: BadRequestService, useValue: {} },
         {
           provide: ActivatedRoute,
           useValue: {

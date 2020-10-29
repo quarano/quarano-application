@@ -1,3 +1,4 @@
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -39,7 +40,7 @@ const routes: Routes = [
         component: DiaryEntryComponent,
         resolve: {
           diaryEntry: DiaryDetailResolver,
-          symptoms: SymptomsResolver,
+          symptomsLoaded: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],
@@ -49,7 +50,7 @@ const routes: Routes = [
         component: DiaryEntryComponent,
         resolve: {
           diaryEntry: DiaryDetailResolver,
-          symptoms: SymptomsResolver,
+          symptomsLoaded: SymptomsResolver,
           contactPersons: ContactPersonsResolver,
         },
         canDeactivate: [PreventUnsavedChangesGuard],
@@ -71,6 +72,7 @@ const routes: Routes = [
     SharedUtilSymptomModule,
     ClientDomainModule,
     ClientUiContactPersonDetailModule,
+    SharedUtilTranslationModule,
   ],
   declarations: [
     DiaryComponent,

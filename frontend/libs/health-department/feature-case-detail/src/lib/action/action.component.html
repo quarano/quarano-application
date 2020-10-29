@@ -1,74 +1,76 @@
-<mat-accordion [multi]="true">
-  <mat-expansion-panel *ngIf="caseAction.anomalies.health.length > 0" [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies.health.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
-          Gesundheit
-        </span>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <qro-client-action-anomaly [actions]="caseAction.anomalies.health"></qro-client-action-anomaly>
-  </mat-expansion-panel>
+<ng-container *ngIf="caseAction$ | async as caseAction">
+  <mat-accordion [multi]="true">
+    <mat-expansion-panel *ngIf="caseAction.anomalies.health.length > 0" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span
+            [matBadge]="caseAction.anomalies.health.length"
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+          >
+            Gesundheit
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <qro-client-action-anomaly [actions]="caseAction.anomalies.health"></qro-client-action-anomaly>
+    </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0" [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies.process.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="warn"
-        >
-          Prozess
-        </span>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <qro-client-action-anomaly [actions]="caseAction.anomalies.process"></qro-client-action-anomaly>
-  </mat-expansion-panel>
+    <mat-expansion-panel *ngIf="caseAction.anomalies.process.length > 0" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span
+            [matBadge]="caseAction.anomalies.process.length"
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="warn"
+          >
+            Prozess
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <qro-client-action-anomaly [actions]="caseAction.anomalies.process"></qro-client-action-anomaly>
+    </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <span
-          [matBadge]="caseAction.anomalies?.resolved?.length"
-          matBadgeOverlap="false"
-          matBadgeSize="small"
-          matBadgeColor="primary"
-        >
-          Abgeschlossen
-        </span>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <qro-client-action-anomaly [actions]="caseAction.anomalies.resolved"></qro-client-action-anomaly>
-  </mat-expansion-panel>
-</mat-accordion>
+    <mat-expansion-panel *ngIf="caseAction.anomalies?.resolved?.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span
+            [matBadge]="caseAction.anomalies?.resolved?.length"
+            matBadgeOverlap="false"
+            matBadgeSize="small"
+            matBadgeColor="primary"
+          >
+            Abgeschlossen
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <qro-client-action-anomaly [actions]="caseAction.anomalies.resolved"></qro-client-action-anomaly>
+    </mat-expansion-panel>
+  </mat-accordion>
 
-<form [formGroup]="formGroup" (ngSubmit)="submitForm()" class="mt-5" *ngIf="hasOpenAnomalies()">
-  <fieldset>
-    <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
-    <mat-form-field class="full-width">
-      <mat-label>Bemerkung</mat-label>
-      <textarea
-        [mat-autosize]="true"
-        [matAutosizeMinRows]="5"
-        matInput
-        formControlName="comment"
-        placeholder="Bemerkung"
-      ></textarea>
-      <mat-error *ngFor="let error of errorGenerator.getErrorKeys(formGroup.controls.comment)">
-        {{ errorGenerator.getErrorMessage(formGroup.controls.comment, error) }}
-      </mat-error>
-    </mat-form-field>
-    <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">
-      <mat-icon>check</mat-icon> Auffälligkeiten abschließen
-    </button>
-    <button class="ml-3" type="button" mat-raised-button color="secondary" [routerLink]="[returnLink]">
-      Abbrechen
-    </button>
-  </fieldset>
-</form>
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm(caseAction)" class="mt-5" *ngIf="hasOpenAnomalies(caseAction)">
+    <fieldset>
+      <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
+      <mat-form-field class="full-width">
+        <mat-label>Bemerkung</mat-label>
+        <textarea
+          [mat-autosize]="true"
+          [matAutosizeMinRows]="5"
+          matInput
+          formControlName="comment"
+          placeholder="Bemerkung"
+        ></textarea>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.comment)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.comment, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">
+        <mat-icon>check</mat-icon> Auffälligkeiten abschließen
+      </button>
+      <button class="ml-3" type="button" mat-raised-button color="secondary" [routerLink]="[returnLink]">
+        Abbrechen
+      </button>
+    </fieldset>
+  </form>
+</ng-container>

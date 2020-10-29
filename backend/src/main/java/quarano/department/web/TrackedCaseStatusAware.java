@@ -57,4 +57,8 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 	public String getStatus() {
 		return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getStatus()));
 	}
+
+	public String getNewContactCaseMailStatus() {
+		return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getNewContactCaseMailStatus()));
+	}
 }

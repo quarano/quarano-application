@@ -24,8 +24,8 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -46,7 +46,8 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@JoinColumn(name = "tracked_person_id")
 	private TrackedPerson trackedPerson;
 
-	@ManyToOne @JoinColumn(name = "department_id", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "department_id", nullable = false)
 	private Department department;
 
 	private @Getter TestResult testResult;
@@ -58,6 +59,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Setter(AccessLevel.NONE)
 	private Enrollment enrollment = new Enrollment();
+
 	@Column(name = "case_type")
 	@Enumerated(EnumType.STRING)
 	private @Getter @Setter CaseType type = CaseType.INDEX;
@@ -75,6 +77,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private @Getter Status status;
+
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
 
 	@OneToMany
 	private @Getter List<TrackedCase> originCases = new ArrayList<>();
@@ -278,6 +284,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	public TrackedCase markAsExternalZip() {
+
+		this.status = Status.EXTERNAL_ZIP;
+
+		this.registerEvent(CaseStatusUpdated.of(this));
+
+		return this;
+	}
+
 	public boolean belongsTo(Department department) {
 		return this.department.equals(department);
 	}
@@ -305,7 +320,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	public boolean hasTestResult() {
 		return testResult != null;
 	}
-	
+
 	public boolean hasQuestionnaire() {
 		return questionnaire != null;
 	}
@@ -316,7 +331,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.TRACKED_MANUALLY;
 		this.registerEvent(CaseStatusUpdated.of(this));
-		
+
 		return this;
 	}
 
@@ -334,6 +349,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	TrackedCase markRegistrationCanceled() {
+
+		if (this.getStatus() != Status.OPEN) {
+
+			assertStatus(Status.IN_REGISTRATION, "Cannot cancel registration for case %s in status %s!", id, status);
+
+			this.status = Status.OPEN;
+
+			this.registerEvent(CaseStatusUpdated.of(this));
+		}
+
+		return this;
+	}
+
 	TrackedCase markRegistrationCompleted() {
 
 		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
@@ -341,6 +370,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.status = Status.REGISTERED;
 
 		this.registerEvent(CaseStatusUpdated.of(this));
+
+		return this;
+	}
+
+	TrackedCase markNewContactCaseMailSent() {
+
+		this.newContactCaseMailStatus = MailStatus.SENT;
+
+		return this;
+	}
+
+	TrackedCase markNewContactCaseMailCantSent() {
+
+		this.newContactCaseMailStatus = MailStatus.CANT_SENT;
 
 		return this;
 	}
@@ -364,7 +407,18 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		TRACKING,
 
-		CONCLUDED;
+		CONCLUDED,
+
+		EXTERNAL_ZIP;
+	}
+
+	public enum MailStatus {
+
+		NOT_SENT,
+
+		CANT_SENT,
+
+		SENT
 	}
 
 	@Value(staticConstructor = "of")

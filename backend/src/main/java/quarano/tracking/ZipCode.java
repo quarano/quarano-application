@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.springframework.lang.Nullable;
+
 /**
  * @author Oliver Drotbohm
  */
@@ -39,8 +41,8 @@ public class ZipCode {
 		return new ZipCode(source);
 	}
 
-	public static boolean isValid(String source) {
-		return REGEX.matcher(source).matches();
+	public static boolean isValid(@Nullable String source) {
+		return source != null && REGEX.matcher(source).matches();
 	}
 
 	/*

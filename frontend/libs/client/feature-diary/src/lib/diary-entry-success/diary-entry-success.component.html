@@ -3,9 +3,12 @@
   <button
     mat-mini-fab
     color="basic"
-    aria-label="Danke für Ihren Eintrag!"
     [routerLink]="['/client/diary/diary-detail/edit', entry.id]"
-    [matTooltip]="isReadonly ? 'Eintrag ansehen' : 'Eintrag bearbeiten'"
+    [matTooltip]="
+      isReadonly
+        ? ('DIARY_ENTRY_SUCCESS.EINTRAG_ANSEHEN' | translate)
+        : ('DIARY_ENTRY_SUCCESS.EINTRAG_BEARBEITEN' | translate)
+    "
     matTooltipPosition="after"
   >
     <mat-icon *ngIf="isReadonly; else editable" class="text-muted">visibility</mat-icon>

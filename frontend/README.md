@@ -71,7 +71,11 @@ Run `nx affected:test` to execute the unit tests affected by a change.
 
 ## Running end-to-end tests
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+Run `ng e2e quarano-frontend` to execute the end-to-end tests via [Cypress](https://www
+.cypress.io).
+
+Run `ng e2e quarano-frontend-e2e --watch` to execute the end-to-end tests via [Cypress](https://www.cypress.io) in watch mode
+.
 
 Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 

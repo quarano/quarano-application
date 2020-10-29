@@ -13,6 +13,7 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.UUID;
 
 @Data
@@ -28,10 +29,11 @@ public class RegistrationDetails {
 	private UUID activationCodeLiteral;
 	private TrackedPersonIdentifier trackedPersonId;
 	private DepartmentIdentifier departmentId;
+	private Locale locale;
 
 	public Try<RegistrationDetails> apply(TrackedPerson person) {
 
-		if (!person.hasBirthdayOf(dateOfBirth)) {
+		if (person.getDateOfBirth() != null && !person.hasBirthdayOf(dateOfBirth)) {
 			return Try.failure(new RegistrationException("Given date of birth does not match date of birth of case"));
 		}
 

@@ -2,4 +2,13 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  flex-direction: column;
+
+  @media screen and (min-width: 870px) and (max-width: 992px) {
+    flex-direction: row;
+  }
+
+  @media screen and (min-width: 1425px) {
+    flex-direction: row;
+  }
 }

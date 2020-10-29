@@ -69,6 +69,19 @@ Contains reference data like an abstraction of symptoms.
 
 include::{moduliths-docs}/module-reference.adoc[]
 
+[[third-party-integration]]
+== Third party integration
+
+[[third-party-integration.rki]]
+=== Health department verification information
+
+The RKI provides information about all available health departments in machine readable form from https://www.rki.de/DE/Content/Infekt/IfSG/Software/Aktueller_Datenbestand.html[this website].
+Quarano includes a pre-processed version of that data in `src/main/resources/masterdata/TransmittingSiteSearchText.xml`.
+The data is obtained and pre-processed by the `get_rki_health_departmet_data.sh` script in the project root.
+We mainly pre-process the original document to wipe data not needed for our use cases to reduce the file size of the document included in our deployment artifact (6MB -> 300kB).
+
+The content of the XML document is exposed by some API contained in `quarano.department.rki` (currently only usable from the `department` module).
+
 == Technical structure
 
 === Implementing business logic

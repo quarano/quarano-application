@@ -1,0 +1,14 @@
+[
+  {
+    "key": "de",
+    "flagIconKey": "DE",
+    "isDefaultLanguage": true,
+    "name": "Deutsch"
+  },
+  {
+    "key": "en",
+    "flagIconKey": "GB",
+    "isDefaultLanguage": false,
+    "name": "English"
+  }
+]

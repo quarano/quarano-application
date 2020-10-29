@@ -25,7 +25,7 @@ public class DepartmentProperties {
 
 	Department getDefaultDepartment() {
 
-		return new Department(defaultDepartment.name)
+		return new Department(defaultDepartment.name, defaultDepartment.rkiCode)
 				.setContacts(defaultDepartment.contacts.stream()
 						.map(contact -> new DepartmentContact()
 								.setType(ContactType.valueOf(contact.type))
@@ -38,6 +38,7 @@ public class DepartmentProperties {
 	static class DefaultDepartment {
 
 		private final String name;
+		private final String rkiCode;
 		private final List<DefaultDepartmentContact> contacts;
 
 		@RequiredArgsConstructor

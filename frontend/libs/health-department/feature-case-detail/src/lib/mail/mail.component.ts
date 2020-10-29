@@ -1,40 +1,61 @@
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ApiService, HalResponse } from '@qro/shared/util-data-access';
+import { Component, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subject } from 'rxjs';
+import { Subject, Observable, of, combineLatest } from 'rxjs';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { StartTracking } from '@qro/health-department/domain';
+import { StartTracking, CaseEntityService } from '@qro/health-department/domain';
+import { map, switchMap, tap, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'qro-client-mail',
   templateUrl: './mail.component.html',
   styleUrls: ['./mail.component.scss'],
 })
-export class MailComponent implements OnInit, OnChanges {
-  @Input()
-  tracking: StartTracking;
+export class MailComponent implements OnInit {
+  tracking$: Observable<StartTracking>;
 
-  mailText: SafeHtml;
+  mailText$: Observable<SafeHtml>;
 
   @Output()
   renewTrackingCode: Subject<void> = new Subject<void>();
 
-  constructor(private domSanitizer: DomSanitizer, private snackbarService: SnackbarService) {}
+  constructor(
+    private domSanitizer: DomSanitizer,
+    private snackbarService: SnackbarService,
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private entityService: CaseEntityService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.tracking$ = combineLatest([
+      this.route.parent.paramMap.pipe(map((paramMap) => paramMap.get('id'))),
+      this.entityService.entityMap$,
+    ]).pipe(
+      map(([id, entityMap]) => {
+        return entityMap[id];
+      }),
+      shareReplay(1),
+      switchMap((data) => {
+        if (data?._links?.hasOwnProperty('renew')) {
+          return this.apiService.getApiCall<StartTracking>(data, 'renew');
+        }
+        return of(null);
+      })
+    );
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hasOwnProperty('tracking')) {
-      this.mailText = this.domSanitizer.bypassSecurityTrustHtml(this.tracking.email);
-    }
+    this.mailText$ = this.tracking$.pipe(map((tracking) => this.domSanitizer.bypassSecurityTrustHtml(tracking?.email)));
   }
 
-  renewTrackickng() {
-    this.renewTrackingCode.next();
-    this.snackbarService.success('Der Aktivierungscode wurde erneuert.');
+  renewTracking(tracking: HalResponse) {
+    this.tracking$ = this.apiService
+      .putApiCall<StartTracking>(tracking, 'renew')
+      .pipe(tap((track) => this.snackbarService.success('Der Aktivierungscode wurde erneuert.')));
   }
 
-  copyToClipBoard() {
+  copyToClipBoard(tracking: StartTracking) {
     this.snackbarService.success('Der E-Mail Text wurde in die Zwischenablage kopiert.');
-    navigator.clipboard.writeText(this.tracking.email);
+    navigator.clipboard.writeText(tracking.email);
   }
 }

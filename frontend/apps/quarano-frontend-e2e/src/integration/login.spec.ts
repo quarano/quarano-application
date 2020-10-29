@@ -13,7 +13,7 @@ describe('login', () => {
   };
 
   beforeEach(() => {
-    cy.visit('http://localhost:4200');
+    cy.visit('/');
   });
 
   describe('client login', () => {

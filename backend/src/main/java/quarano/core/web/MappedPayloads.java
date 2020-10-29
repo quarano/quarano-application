@@ -34,7 +34,7 @@ public interface MappedPayloads {
 	 * @return will never be {@literal null}.
 	 */
 	public static MappedErrors of(Errors errors) {
-		return new MappedErrors(errors);
+		return new MappedErrors(errors, MappedPayloads::toBadRequest);
 	}
 
 	/**
@@ -80,6 +80,7 @@ public interface MappedPayloads {
 	public static class MappedErrors {
 
 		private final @NonNull Errors errors;
+		protected final Function<Errors, HttpEntity<?>> onErrors;
 
 		/**
 		 * Creates a new {@link MappedPayload} with the given payload and the current {@link Errors} instance.
@@ -103,6 +104,7 @@ public interface MappedPayloads {
 			Assert.notNull(errors, "Errors handler must not be null!");
 
 			errors.accept(this.errors);
+
 			return this;
 		}
 
@@ -159,6 +161,30 @@ public interface MappedPayloads {
 		}
 
 		/**
+		 * Rejects the field with the given name with the given error code if the given condition is true.
+		 *
+		 * @param condition the condition under which to reject the given field.
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @param errorHandler and error handler to be registered in case the condition is {@literal true}.
+		 * @return the current instance, never {@literal null}.
+		 */
+		public MappedErrors rejectField(boolean condition, String field, String errorCode,
+				Function<Errors, HttpEntity<?>> errorHandler) {
+
+			Assert.hasText(field, "Field name must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+			Assert.notNull(errorHandler, "Error handler must not be null!");
+
+			if (condition) {
+				rejectField(field, errorCode);
+				return onErrors(errorHandler);
+			}
+
+			return this;
+		}
+
+		/**
 		 * Unconditionally creates a {@link HttpStatus#BAD_REQUEST} with the current {@link Errors} as payload.
 		 *
 		 * @return will never be {@literal null}.
@@ -178,7 +204,28 @@ public interface MappedPayloads {
 
 			Assert.notNull(response, "Response supplier must not be null!");
 
-			return errors.hasErrors() ? ResponseEntity.badRequest().body(errors) : response.get();
+			return errorsOrNone().orElseGet(response);
+		}
+
+		/**
+		 * Registers a {@link Function} to eventually turn an {@link Errors} instance into an {@link HttpEntity}. Will only
+		 * be used if the {@link Errors} have accumulated at least one error in the pipeline.
+		 *
+		 * @param callback must not be {@literal null}.
+		 * @return
+		 */
+		public MappedErrors onErrors(Function<Errors, HttpEntity<?>> callback) {
+
+			Assert.notNull(callback, "Callback must not be null!");
+
+			return new MappedErrors(errors, callback);
+		}
+
+		protected Optional<HttpEntity<?>> errorsOrNone() {
+
+			return errors.hasErrors()
+					? Optional.of(onErrors.apply(errors))
+					: Optional.empty();
 		}
 	}
 
@@ -192,7 +239,6 @@ public interface MappedPayloads {
 
 		private final Errors errors;
 		private final @Nullable T payload;
-		private final Function<Errors, HttpEntity<?>> onErrors;
 		private final Supplier<HttpEntity<?>> onAbsence;
 
 		/**
@@ -215,11 +261,10 @@ public interface MappedPayloads {
 		private MappedPayload(@Nullable T payload, Errors errors, Function<Errors, HttpEntity<?>> onErrors,
 				Supplier<HttpEntity<?>> onAbsence) {
 
-			super(errors);
+			super(errors, onErrors);
 
 			this.errors = errors;
 			this.payload = payload;
-			this.onErrors = onErrors;
 			this.onAbsence = onAbsence;
 		}
 
@@ -281,6 +326,17 @@ public interface MappedPayloads {
 			Assert.notNull(consumer, "Consumer must not be null!");
 
 			if (!errors.hasErrors() && payload != null) {
+				consumer.accept(payload, errors);
+			}
+
+			return this;
+		}
+
+		public MappedPayload<T> alwaysPeek(BiConsumer<? super T, Errors> consumer) {
+
+			Assert.notNull(consumer, "Consumer must not be null!");
+
+			if (payload != null) {
 				consumer.accept(payload, errors);
 			}
 
@@ -354,13 +410,11 @@ public interface MappedPayloads {
 					: withPayload(mapper.apply(payload, errors));
 		}
 
-		/**
-		 * Registers a {@link Function} to eventually turn an {@link Errors} instance into an {@link HttpEntity}. Will only
-		 * be used if the {@link Errors} have accumulated at least one error in the pipeline.
-		 *
-		 * @param callback must not be {@literal null}.
-		 * @return
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#onErrors(java.util.function.Function)
 		 */
+		@Override
 		public MappedPayload<T> onErrors(Function<Errors, HttpEntity<?>> callback) {
 
 			Assert.notNull(callback, "Callback must not be null!");
@@ -426,6 +480,67 @@ public interface MappedPayloads {
 			return errorsOrNone().orElseGet(() -> finalizer.apply(payload, this));
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(boolean, java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedPayload<T> rejectField(boolean condition, String field, String errorCode) {
+
+			super.rejectField(condition, field, errorCode);
+
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedPayload<T> rejectField(String field, String errorCode) {
+
+			super.rejectField(field, errorCode);
+
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(java.lang.String, java.lang.String, java.lang.String)
+		 */
+		@Override
+		public MappedErrors rejectField(String field, String errorCode, String defaultMessage) {
+
+			super.rejectField(field, errorCode, defaultMessage);
+
+			return this;
+		}
+
+		/**
+		 * Rejects the field with the given name with the given error code if the given condition is true.
+		 *
+		 * @param condition the condition under which to reject the given field.
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @param errorHandler and error handler to be registered in case the condition is {@literal true}.
+		 * @return the current instance, never {@literal null}.
+		 */
+		@Override
+		public MappedPayload<T> rejectField(boolean condition, String field, String errorCode,
+				Function<Errors, HttpEntity<?>> errorHandler) {
+
+			Assert.hasText(field, "Field name must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+			Assert.notNull(errorHandler, "Error handler must not be null!");
+
+			if (condition) {
+				rejectField(field, errorCode);
+				return onErrors(errorHandler);
+			}
+
+			return this;
+		}
+
 		private <S> MappedPayload<S> withoutPayload() {
 			return new MappedPayload<S>(null, errors, onErrors, onAbsence);
 		}
@@ -434,17 +549,18 @@ public interface MappedPayloads {
 			return new MappedPayload<S>(payload, errors, onErrors, onAbsence);
 		}
 
-		private Optional<HttpEntity<?>> errorsOrNone() {
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#errorsOrNone()
+		 */
+		@Override
+		protected Optional<HttpEntity<?>> errorsOrNone() {
 
-			if (payload == null) {
-				return Optional.of(onAbsence.get());
-			}
+			Optional<HttpEntity<?>> byPayload = payload == null
+					? Optional.of(onAbsence.get())
+					: Optional.empty();
 
-			if (errors.hasErrors()) {
-				return Optional.of(onErrors.apply(errors));
-			}
-
-			return Optional.empty();
+			return byPayload.or(super::errorsOrNone);
 		}
 	}
 }

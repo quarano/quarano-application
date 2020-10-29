@@ -1,5 +1,5 @@
 .header-image {
-  background-image: url('/assets/images/diary.png');
+  background-image: url('../../../../../../apps/quarano-frontend/src/assets/images/diary.png');
   background-size: 32px;
   background-repeat: no-repeat;
   background-position-x: center;
@@ -33,7 +33,7 @@ p.hint {
   margin: 12px 0;
 }
 
-.comment-cnt {
+.info-badge {
   display: flex;
   margin-left: 7px;
   font-size: 9px;
@@ -48,6 +48,10 @@ p.hint {
   mat-tab-header {
     margin-bottom: 1rem !important;
   }
+}
+
+nav {
+  margin-bottom: 2rem;
 }
 
 mat-card-title {

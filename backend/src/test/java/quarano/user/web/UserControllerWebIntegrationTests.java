@@ -48,6 +48,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.username", String.class)).isEqualTo("DemoAccount");
 		assertThat(document.read("$.firstName", String.class)).isEqualTo("Markus");
 		assertThat(document.read("$.lastName", String.class)).isEqualTo("Hanser");
+		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
 		assertThat(document.read("$.healthDepartment.name", String.class)).isEqualTo("GA Mannheim");
 		assertThat(document.read("$.healthDepartment.email", String.class)).isEqualTo("index-email@gesundheitsamt.de");
 		assertThat(document.read("$.healthDepartment.phone", String.class)).isEqualTo("0123456789");

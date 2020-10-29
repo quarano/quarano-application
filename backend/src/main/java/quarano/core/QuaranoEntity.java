@@ -10,8 +10,8 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
-import org.jddd.core.types.Entity;
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Entity;
+import org.jmolecules.ddd.types.Identifier;
 import org.springframework.data.domain.Persistable;
 import org.springframework.lang.NonNull;
 

@@ -1,3 +1,5 @@
+import { SharedUtilSymptomModule } from '@qro/shared/util-symptom';
+import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { metaReducers } from './reducers/index';
 import { ClientStoreModule } from '@qro/client/api';
 import { SharedUtilDateModule } from '@qro/shared/util-date';
@@ -15,7 +17,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { environment } from '../environments/environment';
@@ -23,10 +25,17 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { reducers } from './reducers';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { SharedUtilProgressBarModule } from '@qro/shared/util-progress-bar';
 
 registerLocaleData(localeDe, 'de');
+
+function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/');
+}
 
 const SUB_MODULES = [
   SharedUiErrorModule,
@@ -34,6 +43,9 @@ const SUB_MODULES = [
   SharedUiAsideModule,
   SharedUtilDateModule,
   SharedUiMaterialModule,
+  SharedUtilSymptomModule,
+  SharedUtilTranslationModule,
+  SharedUtilProgressBarModule,
 ];
 
 const NGRX = [
@@ -57,6 +69,17 @@ const NGRX = [
   }),
 ];
 
+const NGX_TRANSLATE = [
+  TranslateModule.forRoot({
+    loader: {
+      provide: TranslateLoader,
+      useFactory: HttpLoaderFactory,
+      deps: [HttpClient],
+    },
+    defaultLanguage: 'de',
+  }),
+];
+
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
   root: environment.api.baseUrl,
   timeout: 3000, // request timeout
@@ -71,7 +94,9 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     FormsModule,
     HttpClientModule,
     ...SUB_MODULES,
+    ...NGX_TRANSLATE,
     ...NGRX,
+    ...NGX_TRANSLATE,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'de-de' },

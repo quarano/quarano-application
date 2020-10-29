@@ -7,10 +7,9 @@ import {
   HttpErrorResponse,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { SnackbarService } from '@qro/shared/util-snackbar';
 
 export enum HttpStatusCode {
   unauthorized = 401,
@@ -18,24 +17,30 @@ export enum HttpStatusCode {
   notFound = 404,
   badRequest = 400,
   internalServerError = 500,
+  unprocessableEntity = 422,
+  preconditionFailed = 412,
 }
 
-export interface IBadRequestError {
-  badRequestErrors: any;
+export interface IErrorToDisplay {
+  errors: any;
+  status: number;
+}
+
+export interface IUnprocessableEntityError {
+  unprocessableEntityErrors: any;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private snackbarService: SnackbarService, private router: Router) {}
+  constructor(private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
-            this.snackbarService.message('Sie müssen sich zunächst einloggen');
             this.router.navigate(['/auth/login']);
             return throwError(error);
           }
@@ -47,9 +52,12 @@ export class ErrorInterceptor implements HttpInterceptor {
 
           if (error.status === HttpStatusCode.internalServerError.valueOf()) {
             // ToDo: Message ggf. anpassen, wenn wir ein Ticketsystem oder eine Supporthotline haben
-            this.snackbarService.error('Server Fehler - Für weitere Informationen siehe Konsole');
-            console.error(error);
-            return throwError(error);
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: encodeURIComponent('ERROR.SERVERFEHLER'),
+              },
+            });
+            return of(null);
           }
 
           const applicationError = error.headers.get('Application-Error');
@@ -59,10 +67,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (error.status === 0) {
-            this.snackbarService.error(
-              'Es konnte keine Verbindung zur Api hergestellt werden. Bitte versuchen Sie es später noch einmal.'
-            );
-            return throwError(error);
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: encodeURIComponent('ERROR.KEINE_VERBINDUNG_ZUR_API'),
+              },
+            });
+            return of(null);
           }
 
           const serverError = error.error;
@@ -84,13 +94,21 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           if (
-            error.status === HttpStatusCode.badRequest.valueOf() &&
-            (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
+            (error.status === HttpStatusCode.badRequest.valueOf() &&
+              (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')) ||
+            error.status === HttpStatusCode.preconditionFailed.valueOf()
           ) {
-            return throwError({ badRequestErrors: serverError } as IBadRequestError);
+            return throwError({ errors: serverError, status: error.status } as IErrorToDisplay);
           }
 
-          return throwError(serverError || 'Server Fehler');
+          if (
+            error.status === HttpStatusCode.unprocessableEntity.valueOf() &&
+            (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
+          ) {
+            return throwError({ unprocessableEntityErrors: serverError } as IUnprocessableEntityError);
+          }
+
+          return throwError(serverError || 'Server Error');
         }
         return throwError(error);
       })

@@ -5,16 +5,21 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import quarano.account.Account;
 import quarano.account.Department;
+import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
+import quarano.core.web.ErrorsWithDetails;
+import quarano.core.web.I18nedMessage;
 import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.Comment;
@@ -25,6 +30,8 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments.HealthDepartment;
+import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.reference.SymptomRepository;
 import quarano.tracking.ContactPerson;
@@ -44,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -56,6 +64,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.Links.MergeMode;
 import org.springframework.hateoas.RepresentationModel;
@@ -73,6 +82,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.base.Objects;
 
 /**
  * @author Oliver Drotbohm
@@ -126,6 +136,22 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	public EnrollmentDto toRepresentation(Enrollment enrollment) {
 		return new EnrollmentDto(enrollment);
+	}
+
+	InstitutionDto toRepresentation(HealthDepartment department) {
+		return InstitutionDto.of(department);
+	}
+
+	@SuppressWarnings("null")
+	EntityModel<?> toRepresentation(DeviatingZipCode zipCode, Errors errors) {
+
+		var details = ErrorsWithDetails.of(errors).addDetails("zipCode", zipCode);
+		var controller = on(TrackedCaseController.class);
+
+		EntityModel<ErrorsWithDetails> model = EntityModel.of(details);
+		model.add(MvcLink.of(controller.submitEnrollmentDetails(null, null, true, null), CONFIRM));
+
+		return model;
 	}
 
 	String resolve(String source) {
@@ -256,6 +282,14 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			validateAfterEnrollment(payload, errors);
 		}
 
+		// When an account has been created, the user's setting matter and only the user can change these setting.
+		// So the locale of the TrackedPerson of the processed case must remain unchanged if there is an account for this
+		// person.
+		if (existing.getTrackedPerson().getAccount().isPresent()
+				&& !Objects.equal(payload.getLocale(), existing.getTrackedPerson().getLocale())) {
+			errors.rejectValue("locale", "TrackedCase.localeCantChange");
+		}
+
 		return validate(payload, existing.getType(), errors);
 	}
 
@@ -279,7 +313,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		var validationGroups = new ArrayList<>();
 		validationGroups.add(Default.class);
 
-		if (type.equals(CaseType.INDEX) || payload.getTestDate() != null) {
+		if (type.equals(CaseType.INDEX) || (payload.getTestDate() != null && payload.isInfected())) {
 			validationGroups.add(ValidationGroups.Index.class);
 		}
 
@@ -327,6 +361,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		private @Email String email;
 		private @Past LocalDate dateOfBirth;
 		private @Getter boolean infected;
+		private Locale locale;
 
 		Errors validate(Errors errors, CaseType type) {
 
@@ -365,6 +400,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		}
 
 		@Data
+		@EqualsAndHashCode(callSuper = true)
 		static class Input extends TrackedCaseDto {
 			private List<URI> originCases = new ArrayList<>();
 		}
@@ -401,6 +437,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 		public String getCaseTypeLabel() {
 			return summary.getCaseTypeLabel();
+		}
+
+		public String getCaseType() {
+			return summary.getCaseType();
 		}
 
 		public List<CommentRepresentation> getComments() {
@@ -481,7 +521,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual String comment;
+		@Textual
+		String comment;
 	}
 
 	static class ValidationGroups {
@@ -514,6 +555,72 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					.andIf(enrollment.isCompletedQuestionnaire(), questionnareLink, encountersLink, encountersLink.withRel(NEXT))
 					.andIf(enrollment.isCompletedPersonalData(), questionnareLink, questionnareLink.withRel(NEXT))
 					.merge(MergeMode.SKIP_BY_REL, detailsLink.withRel(NEXT));
+		}
+	}
+
+	@Value
+	static class DeviatingZipCode {
+
+		/**
+		 * An error message to give a summary of the problem.
+		 */
+		I18nedMessage message;
+
+		/**
+		 * Information about the institution that is actually responsible to manage cases for people living in the provided
+		 * zip code.
+		 */
+		InstitutionDto institution;
+
+		DeviatingZipCode(String zipCode, InstitutionDto department) {
+
+			this.message = I18nedMessage.of("unsupported.trackedPersonDto.zipCode").withArguments(zipCode);
+			this.institution = department;
+		}
+	}
+
+	@Value
+	@EqualsAndHashCode(callSuper = true)
+	static class InstitutionDto extends RepresentationModel<InstitutionDto> {
+
+		@Pattern(regexp = Strings.NAMES)
+		String name;
+		String department;
+		@Pattern(regexp = Strings.STREET)
+		String street;
+		@Pattern(regexp = Strings.CITY)
+		String city;
+		@Pattern(regexp = ZipCode.PATTERN)
+		String zipCode;
+		@Pattern(regexp = PhoneNumber.PATTERN)
+		String fax, phone;
+		@Pattern(regexp = EmailAddress.PATTERN)
+		String email;
+
+		private static InstitutionDto of(HealthDepartment rkiDepartment) {
+
+			Address address = rkiDepartment.getAddress();
+
+			PhoneNumber phone = StringUtils.isEmpty(rkiDepartment.getCovid19Hotline())
+					? rkiDepartment.getPhone()
+					: rkiDepartment.getCovid19Hotline();
+
+			PhoneNumber fax = StringUtils.isEmpty(rkiDepartment.getCovid19Fax())
+					? rkiDepartment.getFax()
+					: rkiDepartment.getCovid19Fax();
+
+			EmailAddress email = StringUtils.isEmpty(rkiDepartment.getCovid19EMail())
+					? rkiDepartment.getEmail()
+					: rkiDepartment.getCovid19EMail();
+
+			return new InstitutionDto(rkiDepartment.getName(),
+					rkiDepartment.getDepartment(),
+					address.getStreet(),
+					address.getPlace(),
+					address.getZipcode().toString(),
+					fax.toString(),
+					phone.toString(),
+					email.toString());
 		}
 	}
 }

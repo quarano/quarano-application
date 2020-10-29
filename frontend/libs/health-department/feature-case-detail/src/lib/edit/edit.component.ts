@@ -1,78 +1,80 @@
-import { distinctUntilChanged } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, distinctUntilChanged, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
-  ValidationErrorGenerator,
+  ValidationErrorService,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
-import { CaseDetailDto, IndexCaseService, CaseListItemDto, CaseSearchItem } from '@qro/health-department/domain';
-import { ClientType } from '@qro/auth/api';
+import { CaseDto, CaseEntityService, CaseSearchItem, IndexCaseService } from '@qro/health-department/domain';
+import { CaseType } from '@qro/auth/api';
 import { DateFunctions } from '@qro/shared/util-date';
-
-export interface CaseDetailResult {
-  caseDetail: CaseDetailDto;
-  closeAfterSave: boolean;
-}
+import { BadRequestService } from '@qro/shared/ui-error';
 
 @Component({
   selector: 'qro-client-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss'],
 })
-export class EditComponent implements OnInit, OnChanges, OnDestroy {
+export class EditComponent implements OnInit, OnDestroy {
   private subs: SubSink = new SubSink();
-  ClientType = ClientType;
   today = new Date();
-  errorGenerator = ValidationErrorGenerator;
   selectableIndexCases: CaseSearchItem[] = [];
+  caseType: CaseType;
+  updateCase$$: BehaviorSubject<CaseDto> = new BehaviorSubject<CaseDto>(null);
 
   get isIndexCase() {
-    return this.type === ClientType.Index;
+    return this.caseType === CaseType.Index;
   }
 
-  @Input()
-  caseDetail: CaseDetailDto;
-  @Input()
-  type: ClientType;
-  @Input() loading: boolean;
-  @Output()
-  changedToIndex = new EventEmitter<boolean>();
+  caseDetail$: Observable<CaseDto>;
+  loading$: Observable<boolean>;
 
   formGroup: FormGroup;
   @ViewChild('editForm') editFormElement: NgForm;
 
-  @Output()
-  submittedValues: Subject<CaseDetailResult> = new Subject<CaseDetailResult>();
-
   constructor(
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    public indexCaseService: IndexCaseService
+    public indexCaseService: IndexCaseService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private entityService: CaseEntityService,
+    public validationErrorService: ValidationErrorService,
+    private badRequestService: BadRequestService
   ) {}
 
   ngOnInit(): void {
-    this.createFormGroup();
+    this.updateCase$$.asObservable().subscribe((data) => {
+      this.updateFormGroup(data as CaseDto);
+    });
 
-    this.updateFormGroup(this.caseDetail);
+    this.route.parent.paramMap
+      .pipe(
+        map((paramMap) => paramMap.get('type')),
+        tap((type) => this.createFormGroup(type as CaseType))
+      )
+      .subscribe((type) => {
+        type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
+      });
+
+    this.caseDetail$ = this.route.parent.paramMap.pipe(
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
+      shareReplay(1),
+      tap((data) => this.updateFormGroup(data)),
+      filter(() => !!this.formGroup),
+      tap(() => this.setValidators()),
+      tap((data) => (data.infected === false && this.isIndexCase ? this.triggerErrorMessages() : undefined))
+    );
 
     this.subs.add(
       this.formGroup
@@ -84,23 +86,17 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
           }
         })
     );
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hasOwnProperty('caseDetail')) {
-      this.updateFormGroup(this.caseDetail);
-    }
-    if ('type' in changes && this.formGroup) {
-      this.setValidators();
-      this.triggerErrorMessages();
-    }
+    this.loading$ = this.entityService.loading$;
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  createFormGroup() {
+  createFormGroup(type: CaseType) {
+    const isIndexCase = type === CaseType.Index;
+
     this.formGroup = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
@@ -111,10 +107,10 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
       ]),
 
-      testDate: new FormControl(this.isIndexCase ? this.today : null),
+      testDate: new FormControl(isIndexCase ? this.today : null),
 
-      quarantineStartDate: new FormControl(this.isIndexCase ? new Date() : null, []),
-      quarantineEndDate: new FormControl(this.isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
+      quarantineStartDate: new FormControl(isIndexCase ? new Date() : null, []),
+      quarantineEndDate: new FormControl(isIndexCase ? moment().add(2, 'weeks').toDate() : null, []),
 
       street: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street)]),
       houseNumber: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber)]),
@@ -135,19 +131,20 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
       email: new FormControl('', [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email)]),
 
       dateOfBirth: new FormControl(null, []),
-      infected: new FormControl({ value: this.isIndexCase, disabled: this.isIndexCase }),
+      infected: new FormControl(),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.extReferenceNumber),
       ]),
-      originCases: new FormControl(this.caseDetail?._embedded?.originCases || []),
+      originCases: new FormControl([]),
+      caseId: new FormControl(null),
     });
     this.setValidators();
     this.subs.add(
       this.formGroup.get('infected').valueChanges.subscribe((value) => {
-        if (value && this.type === ClientType.Contact) {
-          this.onTestDateAdded();
+        if (value && this.caseType === CaseType.Contact) {
+          this.onTestDateAdded(this.formGroup.controls.caseId.value);
         }
       })
     );
@@ -157,7 +154,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     this.indexCaseService.searchCases(searchTerm).subscribe((result) => (this.selectableIndexCases = [...result]));
   }
 
-  onTestDateAdded() {
+  onTestDateAdded(caseId: string) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         abortButtonText: 'Abbrechen',
@@ -170,14 +167,21 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.changedToIndex.emit(true);
+        this.routeToIndexAndUpdateCaseData(caseId);
       } else {
         this.formGroup.get('testDate').setValue(null);
       }
     });
   }
 
-  showIndexCaseItem(item: CaseListItemDto): string {
+  private routeToIndexAndUpdateCaseData(caseId: string) {
+    const updatedCase = this.formGroup.getRawValue();
+    this.router.navigate([`/health-department/case-detail/index/${caseId}`]).then(() => {
+      this.updateCase$$.next(updatedCase);
+    });
+  }
+
+  showIndexCaseItem(item: CaseDto): string {
     if (!item) return '';
     return `${item.lastName}, ${item.firstName} (${
       item.dateOfBirth ? DateFunctions.toCustomLocaleDateString(item.dateOfBirth) : 'Geburtstag unbekannt'
@@ -187,7 +191,6 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
   setValidators() {
     if (this.isIndexCase) {
       this.formGroup.setValidators([PhoneOrMobilePhoneValidator]);
-      this.formGroup.get('infected').disable();
       this.formGroup.get('infected').setValue(true);
     } else {
       this.formGroup.clearValidators();
@@ -199,7 +202,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
     input.value = input.value?.trim();
   }
 
-  updateFormGroup(caseDetailDto: CaseDetailDto) {
+  updateFormGroup(caseDetailDto: CaseDto) {
     if (caseDetailDto && caseDetailDto.caseId && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
@@ -210,6 +213,7 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
           this.formGroup.get(key).setValue(value);
         }
       });
+      this.formGroup.controls.originCases.setValue(caseDetailDto?._embedded?.originCases);
     }
   }
 
@@ -229,21 +233,57 @@ export class EditComponent implements OnInit, OnChanges, OnDestroy {
 
   submitForm(form: NgForm, closeAfterSave: boolean) {
     if (this.formGroup.valid) {
-      const submitData: CaseDetailDto = { ...this.formGroup.getRawValue() };
+      const submitData: CaseDto = { ...this.formGroup.getRawValue() };
       Object.keys(submitData).forEach((key) => {
         if (moment.isMoment(submitData[key])) {
           submitData[key] = submitData[key].toDate();
         }
       });
-      if (this.caseDetail?.caseId) {
-        submitData.caseId = this.caseDetail.caseId;
-      }
-      submitData.originCases = this.formGroup.controls.originCases.value.map((v: CaseSearchItem) => v._links.self.href);
-      this.submittedValues.next({ caseDetail: submitData, closeAfterSave: closeAfterSave });
+      submitData.caseType = this.caseType;
+      submitData.originCases = this.formGroup.controls.originCases.value?.map(
+        (v: CaseSearchItem) => v._links.self.href
+      );
+      this.saveCaseData(submitData, closeAfterSave);
     }
   }
 
+  saveCaseData(result: CaseDto, closeAfterSave: boolean) {
+    if (!result.caseId) {
+      this.entityService.add(result).pipe(
+        catchError((error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+          return of(error);
+        }),
+        filter((value) => value instanceof Error)
+      );
+      this.changeRouteAfterSave(result, closeAfterSave);
+    } else {
+      this.entityService.update(result).pipe(
+        catchError((error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+          return of(error);
+        }),
+        filter((value) => value instanceof Error)
+      );
+      this.changeRouteAfterSave(result, closeAfterSave);
+    }
+  }
+
+  private changeRouteAfterSave(caseDto: CaseDto, closeAfterSave: boolean) {
+    this.snackbarService.success('Persönliche Daten erfolgreich aktualisiert');
+    if (closeAfterSave) {
+      this.router.navigate([this.returnLink]);
+    } else {
+      this.formGroup.markAsPristine();
+      this.router.navigate([this.getCaseLink(caseDto.caseId)]);
+    }
+  }
+
+  getCaseLink(id: string) {
+    return `/health-department/case-detail/${this.caseType}/` + id;
+  }
+
   get returnLink() {
-    return `/health-department/${this.type}-cases/case-list`;
+    return `/health-department/${this.caseType}-cases/case-list`;
   }
 }

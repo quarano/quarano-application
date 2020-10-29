@@ -6,6 +6,7 @@ import quarano.actions.ActionItem.ItemType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component
+@Profile("!integrationtest")
 class QuarantineEndChecker {
 
 	private final @NonNull TrackedCaseRepository trackedCases;

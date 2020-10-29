@@ -1,13 +1,15 @@
-import { SnackbarService } from '@qro/shared/util-snackbar';
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { TestBed, inject } from '@angular/core/testing';
 import { BadRequestService } from './bad-request.service';
 
 describe('Service: BadRequest', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BadRequestService, { provide: SnackbarService, useValue: {} }],
+      providers: [
+        BadRequestService,
+        { provide: TranslatedSnackbarService, useValue: {} },
+        { provide: SnackbarService, useValue: {} },
+      ],
     });
   });
 

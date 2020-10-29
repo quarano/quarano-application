@@ -1,28 +1,16 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { CaseDetailDto, GetEmptyCaseDetail } from '../model/case-detail';
-import { HealthDepartmentService } from '../data-access/health-department.service';
+import { shareReplay, take } from 'rxjs/operators';
+import { CaseDto } from '../model/case';
+import { CaseEntityService } from '../data-access/case-entity.service';
 
 @Injectable()
-export class CaseDetailResolver implements Resolve<CaseDetailDto> {
-  constructor(private healthDepartmentService: HealthDepartmentService) {}
+export class CaseDetailResolver implements Resolve<CaseDto> {
+  constructor(private entityService: CaseEntityService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<CaseDetailDto> {
+  resolve(route: ActivatedRouteSnapshot): Observable<CaseDto> {
     const id = route.paramMap.get('id');
-    if (id) {
-      return this.healthDepartmentService.getCase(id).pipe(
-        map((detail) => {
-          if (!detail.caseId) {
-            detail.caseId = id;
-          }
-
-          return detail;
-        })
-      );
-    } else {
-      return of(GetEmptyCaseDetail());
-    }
+    return this.entityService.loadOneFromStore(id).pipe(shareReplay(1), take(1));
   }
 }

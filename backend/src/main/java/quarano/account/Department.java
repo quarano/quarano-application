@@ -24,7 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
 
 /**
  * @author Oliver Drotbohm
@@ -38,23 +38,30 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 
 	private @Getter @Column(unique = true) String name;
 
+	private @Getter @Column(unique = true) String rkiCode;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "department_id")
 	private @Getter Set<DepartmentContact> contacts = new HashSet<>();
 
 	public Department(String name) {
-		this(name, UUID.randomUUID());
+		this(name, "0.0.0.0.");
 	}
 
-	public Department(String name, UUID uuid) {
-		this(name, DepartmentIdentifier.of(uuid));
+	public Department(String name, String rkiCode) {
+		this(name, UUID.randomUUID(), rkiCode);
+	}
+
+	public Department(String name, UUID uuid, String rkiCode) {
+		this(name, DepartmentIdentifier.of(uuid), rkiCode);
 	}
 
 	// fixed Id department for tests and integration data
-	Department(String name, DepartmentIdentifier fixedId) {
+	Department(String name, DepartmentIdentifier fixedId, String rkiCode) {
 
 		this.id = fixedId;
 		this.name = name;
+		this.rkiCode = rkiCode;
 	}
 
 	Set<DepartmentContact> getContacts() {

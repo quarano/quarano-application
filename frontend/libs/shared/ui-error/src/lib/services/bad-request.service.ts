@@ -1,17 +1,18 @@
+import { IErrorToDisplay, HttpStatusCode } from './../interceptors/error.interceptor';
 import { FormGroup } from '@angular/forms';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BadRequestService {
-  constructor(private snackbar: SnackbarService) {}
+  constructor(private translatedSnackbar: TranslatedSnackbarService, private snackbar: SnackbarService) {}
 
-  public handleBadRequestError(error: any, form: FormGroup) {
+  public handleBadRequestError(error: IErrorToDisplay, form: FormGroup) {
     let handled = false;
-    if (error.hasOwnProperty('badRequestErrors')) {
-      const requestErrors = error.badRequestErrors;
+    if (error.status === HttpStatusCode.badRequest.valueOf()) {
+      const requestErrors = error.errors;
       Object.keys(form.controls).forEach((key) => {
         if (requestErrors.hasOwnProperty(key)) {
           handled = true;
@@ -19,9 +20,12 @@ export class BadRequestService {
         }
       });
       if (!handled) {
-        this.snackbar.error('Die Aktion wurde wegen ungültiger Werte vom Server abgelehnt');
-        console.log(requestErrors);
+        this.translatedSnackbar.error('BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
       }
+    }
+
+    if (error.status === HttpStatusCode.preconditionFailed.valueOf()) {
+      this.snackbar.error(error.errors);
     }
   }
 }

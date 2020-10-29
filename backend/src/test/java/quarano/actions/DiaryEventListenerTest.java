@@ -1,20 +1,11 @@
 package quarano.actions;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import quarano.QuaranoUnitTest;
-import quarano.diary.Diary;
-import quarano.diary.DiaryEntry;
-import quarano.diary.DiaryEntryMissing;
-import quarano.diary.DiaryManagement;
-import quarano.diary.Slot;
-import quarano.reference.Symptom;
-import quarano.tracking.BodyTemperature;
-import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +14,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.springframework.data.util.Streamable;
+
+import quarano.QuaranoUnitTest;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseRepository;
+import quarano.diary.*;
+import quarano.reference.Symptom;
+import quarano.tracking.BodyTemperature;
+import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 /**
  * @author Oliver Drotbohm
@@ -34,6 +33,7 @@ class DiaryEventListenerTest {
 	@Mock ActionItemRepository items;
 	@Mock DiaryManagement diaryManagement;
 	@Mock AnomaliesProperties config;
+	@Mock TrackedCaseRepository cases;
 
 	@Captor ArgumentCaptor<DiaryEntryActionItem> itemCaptor;
 
@@ -42,7 +42,7 @@ class DiaryEventListenerTest {
 	@BeforeEach
 	void setup() {
 
-		listener = new DiaryEventListener(config, items, diaryManagement);
+		listener = new DiaryEventListener(config, items, diaryManagement, cases);
 
 		// stubbing just needed for the diary entry added tests
 		lenient().when(config.getTemperatureThreshold()).thenReturn(BodyTemperature.of(40.99F));
@@ -56,9 +56,9 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now().previous(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
-		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> of(newerEntry)));
+		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.of(newerEntry)));
 
-		listener.handleDiaryEntryForBodyTemprature(entry);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(items, times(0)).save(itemCaptor.capture());
 	}
@@ -70,19 +70,21 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
-		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
+		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemprature(entry);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
 		DiaryEntryActionItem item = itemCaptor.getValue();
 
 		assertThat(item.getType()).isEqualTo(ActionItem.ItemType.MEDICAL_INCIDENT);
-		assertThat(item.getDescription().getArguments()).isEqualTo(new Object[] { "41,0°C", "41,0°C" });
-		assertThat(item.getDescription().getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
+
+		Description description = item.getDescription();
+		assertThat(description.getArguments()).isEqualTo(new Object[] { "41,0°C", "41,0°C" });
+		assertThat(description.getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
 	}
 
 	@Test // CORE-222
@@ -94,19 +96,21 @@ class DiaryEventListenerTest {
 		var entry = DiaryEntry.of(Slot.now(), person)
 				.setBodyTemperature(BodyTemperature.of(41F));
 
-		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.<DiaryEntry> empty()));
+		when(diaryManagement.findDiaryFor(person)).thenReturn(Diary.of(Streamable.empty()));
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.empty());
 
-		listener.handleDiaryEntryForBodyTemprature(entry);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(items, times(1)).save(itemCaptor.capture());
 
 		DiaryEntryActionItem item = itemCaptor.getValue();
 
 		assertThat(item.getType()).isEqualTo(ActionItem.ItemType.MEDICAL_INCIDENT);
-		assertThat(item.getDescription().getArguments()).isEqualTo(new Object[] { "41,0°C", "41,0°C" });
-		assertThat(item.getDescription().getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
+		Description description = item.getDescription();
+
+		assertThat(description.getArguments()).isEqualTo(new Object[] { "41,0°C", "41,0°C" });
+		assertThat(description.getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
 
 		// second update with exceeding temperature
 		entry = DiaryEntry.of(Slot.now(), person)
@@ -116,17 +120,18 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemprature(entry);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(actionItem, times(1)).resolve();
 		itemCaptor = ArgumentCaptor.forClass(DiaryEntryActionItem.class);
 		verify(items, times(3)).save(itemCaptor.capture());
 
 		item = itemCaptor.getValue();
+        description = item.getDescription();
 
 		assertThat(item.getType()).isEqualTo(ActionItem.ItemType.MEDICAL_INCIDENT);
-		assertThat(item.getDescription().getArguments()).isEqualTo(new Object[] { "42,0°C", "41,0°C" });
-		assertThat(item.getDescription().getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
+		assertThat(description.getArguments()).isEqualTo(new Object[] { "42,0°C", "41,0°C" });
+		assertThat(description.getCode()).isEqualTo(DescriptionCode.INCREASED_TEMPERATURE);
 	}
 
 	@Test // CORE-222
@@ -141,7 +146,7 @@ class DiaryEventListenerTest {
 		when(items.findUnresolvedByDescriptionCode(person, DescriptionCode.INCREASED_TEMPERATURE))
 				.thenReturn(ActionItems.of(actionItem));
 
-		listener.handleDiaryEntryForBodyTemprature(entry);
+		listener.handleDiaryEntryForBodyTemperature(entry);
 
 		verify(actionItem, times(1)).resolve();
 		verify(items, times(1)).save(actionItem);
@@ -318,6 +323,27 @@ class DiaryEventListenerTest {
 		assertThat(itemCaptor.getAllValues()).hasSize(1);
 		assertThat(itemCaptor.getValue().getSlot()).isEqualTo(slots.get(0));
 		assertThat(itemCaptor.getValue().getDescription().getCode()).isEqualTo(DescriptionCode.DIARY_ENTRY_MISSING);
+	}
+
+	@Test
+	void testNoActionItemForIndexPerson() {
+
+		var now = Slot.now();
+		var person = TrackedPersonIdentifier.of(UUID.randomUUID());
+		var entry = mock(DiaryEntry.class);
+		var event = DiaryEntry.DiaryEntryAdded.of(entry);
+		var trackedCase = mock(TrackedCase.class);
+
+		when(entry.getTrackedPersonId()).thenReturn(person);
+		lenient().when(entry.getSlot()).thenReturn(now);
+		lenient().when(entry.getBodyTemperature()).thenReturn(BodyTemperature.of(42.0f)); // body temp well above conf threshold
+		when(cases.findByTrackedPerson(person)).thenReturn(Optional.of(trackedCase));
+		when(trackedCase.isIndexCase()).thenReturn(true);
+		when(items.findDiaryEntryMissingActionItemsFor(person, now)).thenReturn(ActionItems.empty());
+
+		listener.on(event);
+
+		verify(items, times(0)).save(itemCaptor.capture());
 	}
 
 	private static DiaryEntryActionItem createMockedActionItem() {

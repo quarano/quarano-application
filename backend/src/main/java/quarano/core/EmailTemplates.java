@@ -1,55 +1,69 @@
 package quarano.core;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import java.util.stream.Stream;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
-public class EmailTemplates {
+public interface EmailTemplates {
 
-	private final ResourceLoader resources;
-	private final Map<Keys, String> templates;
-	private final Map<Keys, String> cache;
+	/**
+	 * Expands the template with the given {@link Key} and placeholders in the language of the given locale.
+	 *
+	 * @param key must not be {@literal null}.
+	 * @param placeholders must not be {@literal null}.
+	 * @param locale can be {@literal null}.
+	 * @return will never be {@literal null}.
+	 */
+	String expandTemplate(Key key, Map<String, Object> placeholders, Locale locale);
 
-	public EmailTemplates(ResourceLoader resources, Map<Keys, String> templates) {
+	/**
+	 * A template key.
+	 *
+	 * @author Oliver Drotbohm
+	 * @author Jens Kutzsche
+	 */
+	interface Key {
 
-		this.resources = resources;
-		this.templates = templates;
-		this.cache = new ConcurrentHashMap<>(templates.size());
+		/**
+		 * Resolves the current {@link Key} to a file that can be loaded via a
+		 * {@link org.springframework.core.io.ResourceLoader}.
+		 *
+		 * @return
+		 */
+		String toFileName();
 	}
 
-	public String getTemplate(Keys name, Map<String, Object> placeholders) {
+	/**
+	 * Predefined keys to be usable with the application.
+	 *
+	 * @author Oliver Drotbohm
+	 * @author Jens Kutzsche
+	 */
+	enum Keys implements Key {
 
-		String template = cache.computeIfAbsent(name, it -> {
+		REGISTRATION_INDEX, REGISTRATION_CONTACT, NEW_CONTACT_CASE, DIARY_REMINDER;
 
-			String location = templates.get(name);
-
-			Resource resource = resources.getResource(location);
-
-			try {
-				var path = resource.getFile().getPath();
-				return Files.readString(Path.of(path));
-			} catch (IOException o_O) {
-				throw new IllegalStateException("Could not read file " + location + "!", o_O);
-			}
-		});
-
-		for (Entry<String, Object> replacement : placeholders.entrySet()) {
-			template = template.replace(String.format("{%s}", replacement.getKey()), replacement.getValue().toString());
+		/**
+		 * Returns all {@link Key}s as a {@link Stream}.
+		 *
+		 * @return
+		 */
+		public static Stream<Key> stream() {
+			return Arrays.stream(values());
 		}
 
-		return template;
-	}
-
-	public enum Keys {
-		REGISTRATION_INDEX, REGISTRATION_CONTACT;
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.EmailTemplates.Key#toFileName()
+		 */
+		@Override
+		public String toFileName() {
+			return name().toLowerCase(Locale.US).replace('_', '-').concat(".txt");
+		}
 	}
 }

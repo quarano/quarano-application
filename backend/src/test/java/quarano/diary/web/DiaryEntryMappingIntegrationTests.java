@@ -8,7 +8,6 @@ import quarano.core.web.MapperWrapper;
 import quarano.core.web.RepositoryMappingModule.AggregateReferenceMappingException;
 import quarano.diary.DiaryEntry;
 import quarano.diary.Slot;
-import quarano.diary.web.DiaryRepresentations;
 import quarano.diary.web.DiaryRepresentations.DiaryEntryInput;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -59,7 +58,7 @@ class DiaryEntryMappingIntegrationTests {
 		assertThat(result.getSlot()).containsEntry("timeOfDay", source.getSlot().getTimeOfDay().name().toLowerCase());
 		assertThat(result.getSymptoms()).allSatisfy(it -> {
 			assertThat(it.getId()).isNotNull();
-			assertThat(it.getName()).isNotBlank();
+			assertThat(it.getName()).isNotNull();
 			assertThat(it.isCharacteristic()).isNotNull();
 		});
 	}

@@ -5,12 +5,12 @@ import { ActionListItemDto, AlertConfiguration, getAlertConfigurations, Alert } 
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption } from '@angular/material/core';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 
 export class ActionRowViewModel {
   lastName: string;
   firstName: string;
-  type: ClientType;
+  type: CaseType;
   typeName: string;
   dateOfBirth: string;
   email: string;
@@ -103,9 +103,12 @@ export class ActionListComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.caseId], {
-      queryParams: { tab: 1 },
-    });
+    this.router.navigate([
+      '/health-department/case-detail',
+      event?.selected[0]?.type,
+      event?.selected[0]?.caseId,
+      'actions',
+    ]);
   }
 
   onAlertFilterChanged(selectedValues: string[]) {

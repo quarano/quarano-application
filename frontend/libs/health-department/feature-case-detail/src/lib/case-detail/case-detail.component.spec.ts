@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ApiService } from '@qro/shared/util-data-access';
-import { HealthDepartmentService } from '@qro/health-department/domain';
+import { HealthDepartmentService, CaseEntityService } from '@qro/health-department/domain';
 
 describe('CaseDetailComponent', () => {
   let component: CaseDetailComponent;
@@ -21,6 +21,7 @@ describe('CaseDetailComponent', () => {
         { provide: ApiService, useValue: {} },
         { provide: SnackbarService, useValue: {} },
         { provide: HealthDepartmentService, useValue: {} },
+        { provide: CaseEntityService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

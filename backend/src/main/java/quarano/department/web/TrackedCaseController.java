@@ -16,8 +16,10 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.rki.HealthDepartments;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
+import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
@@ -37,6 +39,7 @@ import javax.validation.Valid;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -65,6 +68,7 @@ public class TrackedCaseController {
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
+	private final @NonNull HealthDepartments rkiDepartments;
 
 	@GetMapping(path = "/api/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
@@ -109,7 +113,7 @@ public class TrackedCaseController {
 
 		return MappedPayloads.of(trackedCase, errors)
 				.map(cases::save)
-				.map(representations::toRepresentation)
+				.map(it -> representations.toRepresentation(it))
 				.concludeIfValid(it -> {
 
 					var location = on(TrackedCaseController.class).getCase(trackedCase.getId(), department);
@@ -190,7 +194,7 @@ public class TrackedCaseController {
 				.notFoundIf(existing == null)
 				.map((it, nested) -> representations.from(it, existing, nested))
 				.map(cases::save)
-				.map(representations::toRepresentation)
+				.map(it -> representations.toRepresentation(it))
 				.concludeIfValid(ResponseEntity::ok);
 	}
 
@@ -217,7 +221,7 @@ public class TrackedCaseController {
 				.map(it -> representations.from(it, account))
 				.map(trackedCase::addComment)
 				.map(cases::save)
-				.map(representations::toRepresentation)
+				.map(it -> representations.toRepresentation(it))
 				.concludeIfValid(ResponseEntity::ok);
 	}
 
@@ -241,21 +245,45 @@ public class TrackedCaseController {
 	}
 
 	@PutMapping("/api/enrollment/details")
-	HttpEntity<?> submitEnrollmentDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
+	HttpEntity<?> submitEnrollmentDetails(
+			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam(required = false) boolean confirmed,
 			@LoggedIn TrackedPerson user) {
 
-		return MappedPayloads.of(errors)
-				.onValidGet(() -> {
+		var zipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
+		var field = "zipCode";
+		var needToRejectDeviatingZipCode = !errors.hasFieldErrors(field) && zipCode.isPresent() && !confirmed;
+		var mappedPayload = MappedPayloads.of(dto, errors);
+
+		return mappedPayload
+				.rejectField(needToRejectDeviatingZipCode, field, "__placeholder__", err -> {
+
+					return zipCode
+							.map(it -> representations.toRepresentation(it, errors))
+							.map(it -> ResponseEntity.unprocessableEntity().body(it))
+							.get();
+				})
+				.peek(__ -> {
 
 					tracking.updateTrackedPersonDetails(dto, errors, user);
 
-					cases.findByTrackedPerson(user)
-							.map(TrackedCase::submitEnrollmentDetails)
-							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
+					Function<? super TrackedCase, ? extends TrackedCase> markerFunktion = zipCode.isPresent()
+							? TrackedCase::markAsExternalZip
+							: TrackedCase::submitEnrollmentDetails;
 
-					return ResponseEntity.ok()
-							.header(HttpHeaders.LOCATION, getEnrollmentLink())
-							.build();
+					cases.findByTrackedPerson(user)
+							.map(markerFunktion)
+							.ifPresentOrElse(cases::save, () -> new IllegalArgumentException("Couldn't find case!"));
+				})
+				.onValidGet(() -> {
+
+					var controller = on(TrackedCaseController.class);
+
+					var body = zipCode
+							.map(DeviatingZipCode::getInstitution)
+							.map(inst -> inst.add(MvcLink.of(controller.enrollment(user), TrackedCaseLinkRelations.ENROLLMENT)))
+							.orElse(null);
+
+					return ResponseEntity.ok(body);
 				});
 	}
 
@@ -345,5 +373,31 @@ public class TrackedCaseController {
 	@SuppressWarnings("null")
 	private static String getEnrollmentLink() {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
+	}
+
+	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
+			Errors errors) {
+
+		String field = "zipCode";
+
+		if (errors.hasFieldErrors(field)) {
+			return Optional.empty();
+		}
+
+		var zipCode = dto.getZipCode();
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode.toString());
+
+		return findDepartmentWithExact
+				.or(() -> {
+					errors.rejectValue(field, "wrong", new Object[] { zipCode }, "");
+					return Optional.empty();
+				})
+				.filter(this::isDepartmentUnsupportedByThisQuarano)
+				.map(representations::toRepresentation)
+				.map(it -> new DeviatingZipCode(zipCode, it));
+	}
+
+	private boolean isDepartmentUnsupportedByThisQuarano(quarano.department.rki.HealthDepartments.HealthDepartment it) {
+		return departments.findByRkiCode(it.getCode()).isEmpty();
 	}
 }

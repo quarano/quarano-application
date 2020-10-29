@@ -1,9 +1,20 @@
-import { ClientService, EncounterEntry, ClientStore } from '@qro/client/domain';
+import { TranslateService } from '@ngx-translate/core';
+import { SymptomSelectors } from '@qro/shared/util-symptom';
+import { select, Store } from '@ngrx/store';
+import { ClientService, EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Moment } from 'moment';
@@ -11,21 +22,22 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { EnrollmentStatusDto, EnrollmentService } from '@qro/client/domain';
 import { SymptomDto } from '@qro/shared/util-symptom';
 import { ContactPersonDto } from '@qro/client/domain';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { TrimmedPatternValidator, VALIDATION_PATTERNS, PhoneOrMobilePhoneValidator } from '@qro/shared/util-forms';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { DateFunctions } from '@qro/shared/util-date';
-import { ClientDto } from '@qro/auth/api';
+import { ClientDto, UserService } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
-import { tap, finalize, take } from 'rxjs/operators';
+import { tap, finalize, take, switchMap, map, mergeMap, filter, first } from 'rxjs/operators';
+import { iif, noop, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'qro-basic-data',
   templateUrl: './basic-data.component.html',
   styleUrls: ['./basic-data.component.scss'],
 })
-export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   subs = new SubSink();
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
@@ -40,7 +52,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   // ########## STEP II ##########
   secondFormGroup: FormGroup;
   firstQuery: QuestionnaireDto;
-  symptoms: SymptomDto[];
+  symptoms$: Observable<SymptomDto[]>;
   secondFormLoading = false;
 
   // ########## STEP III ##########
@@ -55,14 +67,17 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private enrollmentService: EnrollmentService,
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
     private clientService: ClientService,
     private dialogService: ContactDialogService,
-    public clientStore: ClientStore
+    public clientStore: ClientStore,
+    private store: Store,
+    private translate: TranslateService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -72,14 +87,20 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.firstQuery = data.firstQuery;
         this.client = data.clientData;
         this.encounters = data.encounters;
-        this.symptoms = data.symptoms.filter((symptom) => symptom.characteristic);
-
         this.buildForms();
       })
     );
 
+    this.symptoms$ = this.store.pipe(select(SymptomSelectors.symptoms));
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
     this.subs.add(
-      this.clientStore.enrollmentStatus$.subscribe((status) => {
+      this.clientStore.enrollmentStatus$.pipe(take(1)).subscribe((status) => {
         if (status.completedPersonalData) {
           this.stepper?.next();
         }
@@ -88,10 +109,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       })
     );
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -170,28 +187,75 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
   }
 
-  checkAndSendFirstForm() {
+  checkAndSendFirstForm(confirmedZipCode = false) {
     if (this.firstFormGroup.valid) {
       this.firstFormLoading = true;
-      const value = this.firstFormGroup.value;
+      const value = this.firstFormGroup.value as ClientDto;
       value.dateOfBirth = this.dateOfBirth;
       this.subs.add(
         this.clientService
-          .updatePersonalDetails(value)
-          .subscribe(
-            (result) => {
-              this.client = value;
-              this.snackbarService.success('Persönliche Daten erfolgreich gespeichert');
-              this.stepper.next();
-              this.firstFormLoading = false;
-            },
-            (error) => {
+          .updatePersonalDetails(value, confirmedZipCode)
+          .pipe(
+            mergeMap((result) =>
+              iif(
+                () => confirmedZipCode,
+                this.logoutAndNavigate(result as HealthDepartmentDto),
+                this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(
+                  switchMap((res) => this.clientStore.enrollmentStatus$),
+                  filter((enrollment) => enrollment.completedPersonalData),
+                  tap((enrollment) => {
+                    this.client = value;
+                    this.stepper.next();
+                    this.firstFormLoading = false;
+                  }),
+                  first()
+                )
+              )
+            )
+          )
+          .subscribe(noop, (error) => {
+            if (error.hasOwnProperty('unprocessableEntityErrors')) {
+              this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
+            } else {
               this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
             }
-          )
+          })
           .add(() => (this.firstFormLoading = false))
       );
     }
+  }
+
+  private logoutAndNavigate(healthDepartment: HealthDepartmentDto): Observable<any> {
+    return of(healthDepartment).pipe(
+      tap((hd) => this.userService.logout()),
+      tap((hd) =>
+        this.router.navigate(['/client/enrollment/health-department'], {
+          queryParams: { healthDepartment: encodeURIComponent(JSON.stringify(hd)) },
+        })
+      )
+    );
+  }
+
+  private handleUnprocessableEntityError(error: ZipCodeErrorDto): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        abortButtonText: this.translate.instant('BASIC_DATA.ABBRECHEN'),
+        confirmButtonText: this.translate.instant('BASIC_DATA.PLZ_BESTAETIGEN'),
+        title: this.translate.instant('BASIC_DATA.PLZ_UEBERPRUEFEN'),
+        text: error.zipCode.message,
+      },
+    });
+
+    this.subs.add(
+      dialogRef
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.checkAndSendFirstForm(true);
+          }
+        })
+        .add(() => (this.thirdFormLoading = false))
+    );
   }
 
   get dateOfBirth() {
@@ -256,6 +320,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
           .pipe(
             take(1),
             tap((result) => (this.firstQuery = this.secondFormGroup.value)),
+            switchMap((result) => this.snackbarService.success('BASIC_DATA.FRAGEBOGEN_GESPEICHERT')),
             finalize(() => {
               this.secondFormLoading = false;
             })
@@ -333,9 +398,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subs.add(
       this.enrollmentService
         .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
+        .pipe(
+          switchMap((encounter) =>
+            this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
+          )
+        )
         .subscribe((encounter) => {
           this.encounters.push(encounter);
-          this.snackbarService.success('Kontakt erfolgreich gespeichert');
         })
     );
   }
@@ -345,10 +414,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
       (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
     );
     this.subs.add(
-      this.enrollmentService.deleteEncounter(encounterToRemove.encounter).subscribe((_) => {
-        this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
-        this.snackbarService.success('Kontakt erfolgreich entfernt');
-      })
+      this.enrollmentService
+        .deleteEncounter(encounterToRemove.encounter)
+        .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
+        .subscribe((_) => {
+          this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
+        })
     );
   }
 
@@ -365,14 +436,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
   onComplete() {
     this.thirdFormLoading = true;
     if (!this.hasRetrospectiveContacts()) {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      const dialogRef = this.dialog.open(TranslatedConfirmationDialogComponent, {
         data: {
-          abortButtonText: 'Abbrechen',
-          confirmButtonText: 'ok',
-          title: 'Keine relevanten Kontakte?',
-          text:
-            'Sie haben noch keinen retrospektiven Kontakt erfasst. ' +
-            'Bitte bestätigen Sie, dass Sie im genannten Zeitraum keinerlei relevanten Kontakte zu anderen Personen hatten',
+          abortButtonText: 'BASIC_DATA.ABBRECHEN',
+          confirmButtonText: 'BASIC_DATA.OK',
+          title: 'BASIC_DATA.KEINE_RELEVANTEN_KONTAKTE',
+          text: 'BASIC_DATA.SIE_HABEN_NOCH_KEINE_RELEVANTEN_KONTAKTE_ERFASST',
         },
       });
 
@@ -395,9 +464,13 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.clientStore.completeEnrollment(withoutEncounters);
     this.subs.add(
       this.clientStore.enrollmentStatus$
+        .pipe(
+          switchMap((result) =>
+            this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').pipe(map((res) => result))
+          )
+        )
         .subscribe((result) => {
           if (result.completedContactRetro) {
-            this.snackbarService.success('Die Registrierung wurde abgeschlossen');
             this.router.navigate(['/client/diary/diary-list']);
           }
         })

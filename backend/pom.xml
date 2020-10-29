@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.3.RELEASE</version>
+		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
@@ -19,9 +19,10 @@
 		<docker.image.prefix>quarano-backend</docker.image.prefix>
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
-		<jddd.version>0.1.0</jddd.version>
-		<moduliths.version>1.0.0.RC4</moduliths.version>
-		<spring-hateoas.version>1.2.0-M1</spring-hateoas.version>
+		<jmolecules.version>1.0.0</jmolecules.version>
+		<moduliths.version>1.0.0</moduliths.version>
+		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
+		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
@@ -29,6 +30,11 @@
 
 		<profile>
 			<id>inmemory</id>
+			<activation>
+				<file>
+					<exists>src/main/resources/application-local.properties</exists>
+				</file>
+			</activation>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
 				<spring.profile.active>integrationtest</spring.profile.active>
@@ -37,6 +43,10 @@
 				<dependency>
 					<groupId>com.h2database</groupId>
 					<artifactId>h2</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.icegreen</groupId>
+					<artifactId>greenmail</artifactId>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -57,6 +67,30 @@
 		</profile>
 
 	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.icegreen</groupId>
+				<artifactId>greenmail</artifactId>
+				<version>${greenmail.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId>junit</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.activation</groupId>
+						<artifactId>activation</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.sun.mail</groupId>
+						<artifactId>javax.mail</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 
@@ -157,14 +191,19 @@
 		</dependency>
 
 		<dependency>
-		<groupId>org.jddd</groupId>
-			<artifactId>jddd-core</artifactId>
-			<version>${jddd.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jmolecules</groupId>
+            <artifactId>jmolecules-ddd</artifactId>
+            <version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jddd</groupId>
-			<artifactId>jddd-events</artifactId>
-			<version>${jddd.version}</version>
+			<groupId>org.jmolecules</groupId>
+            <artifactId>jmolecules-events</artifactId>
+			<version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.moduliths</groupId>
@@ -216,6 +255,20 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Not included in the application unless inmemory profile is active (see above) -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- For XML projection of RKI PLZTool data -->
+		<dependency>
+			<groupId>org.xmlbeam</groupId>
+			<artifactId>xmlprojector</artifactId>
+			<version>1.4.17</version>
+		</dependency>
+
 		<!-- Development-only dependencies -->
 
 		<dependency>
@@ -242,7 +295,6 @@
 			<type>zip</type>
 			<optional>true</optional>
 		</dependency>
-
 
 	</dependencies>
 
@@ -485,6 +537,10 @@
 		<repository>
 			<id>spring-libs-snapshot</id>
 			<url>https://repo.spring.io/libs-snapshot</url>
+		</repository>
+		<repository>
+			<id>greenmail-snapshot</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 	</repositories>
 

@@ -61,7 +61,7 @@ class RegistrationRepresentations {
 
 		var key = trackedCase.isIndexCase() ? Keys.REGISTRATION_INDEX : Keys.REGISTRATION_CONTACT;
 
-		return templates.getTemplate(key, placeholders);
+		return templates.expandTemplate(key, placeholders, trackedCase.getTrackedPerson().getLocale());
 	}
 
 	RepresentationModel<?> toNoRegistration(TrackedCase trackedCase) {

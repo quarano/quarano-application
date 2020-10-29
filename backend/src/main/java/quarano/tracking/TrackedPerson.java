@@ -22,14 +22,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import javax.persistence.*;
 
-import org.jddd.core.types.Identifier;
-import org.jddd.event.types.DomainEvent;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -50,7 +51,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 			.thenComparing(TrackedPerson::getFirstName, nullsLast(String::compareToIgnoreCase));
 
 	private @Getter @Setter String firstName, lastName;
-	private @Getter @Setter EmailAddress emailAddress;
+	private @Getter(onMethod = @__(@Nullable)) @Setter(onMethod = @__(@Nullable)) EmailAddress emailAddress;
 	private @Getter @Setter PhoneNumber phoneNumber;
 
 	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber"))
@@ -58,7 +59,10 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
 
-	@OneToOne @JoinColumn(name = "account_id")
+	private @Getter(onMethod = @__(@Nullable)) @Setter(onMethod = @__(@Nullable)) Locale locale;
+
+	@OneToOne
+	@JoinColumn(name = "account_id")
 	private Account account;
 
 	@OneToMany(cascade = CascadeType.ALL)

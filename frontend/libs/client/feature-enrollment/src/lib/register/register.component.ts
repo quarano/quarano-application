@@ -1,34 +1,37 @@
+import { SubSink } from 'subsink';
 import { AuthService } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/ui-error';
 import {
-  ValidationErrorGenerator,
+  ValidationErrorService,
   ConfirmValidPasswordMatcher,
   TrimmedPatternValidator,
   VALIDATION_PATTERNS,
   PasswordValidator,
+  PasswordIncludesUsernameMatcher,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, tap, map, switchMap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { RegisterDto, EnrollmentService } from '@qro/client/domain';
 import { DataProtectionDialogComponent } from '../data-protection-dialog/data-protection-dialog.component';
-import { TokenService } from '@qro/auth/domain';
+import { TokenService, AuthStore } from '@qro/auth/domain';
 
 @Component({
   selector: 'qro-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   loading = false;
-  errorGenerator = ValidationErrorGenerator;
+  private subs = new SubSink();
 
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
+  public passwordIncludesUsernameMatcher = new PasswordIncludesUsernameMatcher();
   private usernameIsValid = false;
 
   public registrationForm = new FormGroup(
@@ -54,16 +57,22 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private enrollmentService: EnrollmentService,
-    private snackbarService: SnackbarService,
+    private snackbarService: TranslatedSnackbarService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private badRequestService: BadRequestService,
     private authService: AuthService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    public validationErrorService: ValidationErrorService,
+    private authStore: AuthStore
   ) {}
 
   ngOnInit(): void {
     this.checkUrlCode();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   private checkUrlCode() {
@@ -99,26 +108,31 @@ export class RegisterComponent implements OnInit {
 
   public submitForm() {
     if (this.registrationForm.invalid) {
-      this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
+      this.subs.add(this.snackbarService.warning('REGISTER.BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN').subscribe());
       return;
     }
     this.loading = true;
     const register: RegisterDto = Object.assign(this.registrationForm.value);
     register.dateOfBirth = this.registrationForm.controls.dateOfBirth.value.toDate();
 
-    this.enrollmentService
-      .registerClient(register)
-      .subscribe(
-        (res) => {
-          this.tokenService.setToken(res.headers.get('X-Auth-Token'));
-          this.router.navigate(['/client/diary/diary-list']);
-          this.snackbarService.success(`Die Registrierung war erfolgreich. Sie werden automatisch angemeldet.`);
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.registrationForm);
-        }
-      )
-      .add(() => (this.loading = false));
+    this.subs.add(
+      this.enrollmentService
+        .registerClient(register)
+        .pipe(
+          tap((res) => this.authStore.login()),
+          tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+          switchMap((res) => this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH').pipe(map((r) => res)))
+        )
+        .subscribe(
+          (res) => {
+            this.router.navigate(['/client/diary/diary-list']);
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.registrationForm);
+          }
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   openDataProtection() {

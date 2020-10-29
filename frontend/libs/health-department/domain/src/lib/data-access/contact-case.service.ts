@@ -1,10 +1,9 @@
-import { share, map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseListItemDto } from '../model/case-list-item';
-import { ClientType } from '@qro/auth/api';
+import { CaseType } from '@qro/auth/api';
 import { ActionListItemDto } from '../model/action-list-item';
 
 @Injectable({
@@ -13,54 +12,19 @@ import { ActionListItemDto } from '../model/action-list-item';
 export class ContactCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
-  getCaseList(): Observable<CaseListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=contact`).pipe(
-      shareReplay(),
-      map((result) => {
-        if (result?._embedded?.cases) {
-          return result._embedded.cases.map((item: any) => this.mapCaseListItem(item));
-        } else {
-          return [];
-        }
-      })
-    );
-  }
-
   getActionList(): Observable<ActionListItemDto[]> {
     return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
       shareReplay(),
       map((result) => {
         if (result?._embedded?.actions) {
           return result._embedded.actions
-            .filter((r) => r.caseType === ClientType.Contact)
+            .filter((r) => r.caseType === CaseType.Contact)
             .map((item) => this.mapActionListItem(item));
         } else {
           return [];
         }
       })
     );
-  }
-
-  private mapCaseListItem(item: any): CaseListItemDto {
-    return {
-      dateOfBirth: item.dateOfBirth ? new Date(item.dateOfBirth) : null,
-      status: item.status,
-      email: item.email,
-      phone: item.primaryPhoneNumber,
-      firstName: item.firstName,
-      lastName: item.lastName,
-      medicalStaff: item.medicalStaff,
-      enrollmentCompleted: item.enrollmentCompleted,
-      quarantineEnd: item.quarantine?.to ? new Date(item.quarantine.to) : null,
-      quarantineStart: item.quarantine?.from ? new Date(item.quarantine.from) : null,
-      caseType: item.caseType,
-      zipCode: item.zipCode,
-      caseId: item.caseId,
-      caseTypeLabel: item.caseTypeLabel,
-      createdAt: item.createdAt ? new Date(item.createdAt) : null,
-      extReferenceNumber: item.extReferenceNumber,
-      originCases: item._embedded?.originCases || [],
-    };
   }
 
   private mapActionListItem(item: any): ActionListItemDto {

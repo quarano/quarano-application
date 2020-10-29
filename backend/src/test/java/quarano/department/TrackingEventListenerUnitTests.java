@@ -18,7 +18,6 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +32,14 @@ import org.mockito.Mock;
 // @MockitoSettings(strictness = Strictness.LENIENT)
 class TrackingEventListenerUnitTests {
 
-	@Mock TrackedCaseRepository cases;
-	@Mock TrackedPersonRepository people;
-	@Mock DiaryManagement diaries;
-	@Mock Diary diary;
+	@Mock
+	TrackedCaseRepository cases;
+	@Mock
+	TrackedPersonRepository people;
+	@Mock
+	DiaryManagement diaries;
+	@Mock
+	Diary diary;
 
 	private TrackingEventListener listener;
 
@@ -49,7 +52,7 @@ class TrackingEventListenerUnitTests {
 	void rejectsEncounterReportIfEnrollmentQuestionnaireIncomplete() {
 
 		var person = TrackedPersonDataInitializer.createTanja();
-		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()))
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, new Department("Mannheim"))
 				.markInRegistration()
 				.markRegistrationCompleted()
 				.submitEnrollmentDetails();
@@ -233,7 +236,7 @@ class TrackingEventListenerUnitTests {
 
 	private TrackedCase createIndexCaseFor(TrackedPerson person) {
 
-		return new TrackedCase(person, CaseType.INDEX, new Department("Mannheim", UUID.randomUUID()))
+		return new TrackedCase(person, CaseType.INDEX, new Department("Mannheim"))
 				.markInRegistration()
 				.markRegistrationCompleted()
 				.submitEnrollmentDetails()

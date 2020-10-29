@@ -9,11 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { CaseDetailComponent } from './case-detail/case-detail.component';
-import {
-  CaseDetailResolver,
-  ReportCaseActionsResolver,
-  HealthDepartmentDomainModule,
-} from '@qro/health-department/domain';
+import { HealthDepartmentDomainModule, ReportCaseActionsResolver } from '@qro/health-department/domain';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import { MailComponent } from './mail/mail.component';
 import { IndexContactsComponent } from './index-contacts/index-contacts.component';
@@ -25,15 +21,61 @@ import { ActionComponent } from './action/action.component';
 
 const routes: Routes = [
   {
-    path: ':type/:id',
+    path: 'new/:type',
     component: CaseDetailComponent,
-    resolve: { case: CaseDetailResolver, actions: ReportCaseActionsResolver, symptoms: SymptomsResolver },
-    runGuardsAndResolvers: 'always',
+    children: [
+      {
+        path: '',
+        redirectTo: 'edit',
+        pathMatch: 'full',
+      },
+      {
+        path: 'edit',
+        component: EditComponent,
+      },
+    ],
   },
   {
-    path: ':type',
+    path: ':type/:id',
     component: CaseDetailComponent,
-    resolve: { case: CaseDetailResolver },
+    runGuardsAndResolvers: 'always',
+    children: [
+      {
+        path: '',
+        redirectTo: 'edit',
+        pathMatch: 'full',
+      },
+      {
+        path: 'edit',
+        component: EditComponent,
+      },
+      {
+        path: 'actions',
+        component: ActionComponent,
+        resolve: { actions: ReportCaseActionsResolver },
+      },
+      {
+        path: 'comments',
+        component: CommentsComponent,
+      },
+      {
+        path: 'questionnaire',
+        component: QuestionnaireComponent,
+        resolve: { symptomsLoaded: SymptomsResolver },
+      },
+      {
+        path: 'index-case-data',
+        component: IndexContactsComponent,
+      },
+      {
+        path: 'contacts',
+        component: ContactListComponent,
+      },
+      {
+        path: 'email',
+        component: MailComponent,
+      },
+    ],
   },
 ];
 

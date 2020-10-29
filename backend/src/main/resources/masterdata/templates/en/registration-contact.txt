@@ -1,0 +1,31 @@
+Dear Mr/Ms {lastName},
+
+
+You have been contacted by the Gesundheitsamt Mannheim, classified as a close contact of a confirmed Covid-19 case and ordered to stay in quarantine.
+
+As discussed on the telephone, please register immediately in our online-application for the recording of contacts and symptoms under:
+
+https://{host}/client/enrollment/landing/contact/{activationCode}
+
+Please enter your personal information and details of any potential contacts. Further we request that you take your temperature twice daily and record this together with any symptoms you might experience (e.g. difficulty breathing, body or muscle aches, diarrhoea, etc) directly in the online-tool.
+
+If you have any questions, please do not hesitate to contact us. For general questions regarding Corona please contact Mannheim's Corona-Hotline under the phone number 0621-293 2253.
+
+• Monday to Friday from 9 am – 5 pm
+• Saturday, Sunday and public holidays from 9 am – 2 pm
+
+For particular questions about yourself as a contact person, please call the hotline for contact persons under the phone number: 0621-293 2212.
+
+•   Monday to Friday from 8:30 am - 1:30 pm
+•   Saturday, Sunday and public holidays from 10 am – 2 pm
+
+
+Attached you will find information and documentation of importance to you as a contact person.
+
+Thank you for your cooperation.
+
+Best wishes,
+
+Your Gesundheitsamt Mannheim
+
+If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.
