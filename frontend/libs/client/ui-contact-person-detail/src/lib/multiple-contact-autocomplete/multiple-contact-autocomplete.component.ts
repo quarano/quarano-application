@@ -27,6 +27,10 @@ export class MultipleContactAutocompleteComponent {
     this.dialogService.askAndOpenContactPersonDialog(name).subscribe((createdContact) => {
       this.contactMultipleAutocomplete.resetInput();
       if (createdContact) {
+        if (createdContact.id) {
+          this.emitAdded(createdContact.id);
+        }
+        this.contactMultipleAutocomplete.resetInput();
         this.selectableItems.push(createdContact);
         this.control.patchValue([...this.control.value, createdContact.id]);
       }
@@ -42,6 +46,6 @@ export class MultipleContactAutocompleteComponent {
   }
 
   emitRemoved(event: any) {
-    this.itemNotFound.emit(event);
+    this.removed.emit(event);
   }
 }
