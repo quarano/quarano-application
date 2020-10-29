@@ -9,5 +9,6 @@
   "videosFolder": "../../dist/cypress/apps/quarano-frontend-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/quarano-frontend-e2e/screenshots",
   "chromeWebSecurity": false,
-  "baseUrl": "http://localhost:4200"
+  "baseUrl": "http://localhost:4200",
+  "viewportHeight": 1000
 }
