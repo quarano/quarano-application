@@ -5,7 +5,7 @@
     <mat-card-subtitle>{{ 'FORBIDDEN.ZUGRIFF_VERWEIGERT' | translate }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <h2>{{ 'FORBIDDEN.SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN' | translate }}</h2>
+    <h2 data-cy="forbidden-message">{{ message$ | async | translate }}</h2>
     <button mat-button color="primary" [routerLink]="['/']" type="button">
       {{ 'FORBIDDEN.ZURÜCK_ZUR_STARTSEITE' | translate }}
     </button>

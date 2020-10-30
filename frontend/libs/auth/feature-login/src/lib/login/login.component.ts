@@ -1,9 +1,10 @@
+import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { HttpResponse } from '@angular/common/http';
 import { ValidationErrorService } from '@qro/shared/util-forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { filter, take, map, switchMap } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
 import { UserService } from '@qro/auth/domain';
@@ -28,13 +29,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private translatedSnackbarService: TranslatedSnackbarService,
-    private snackbarService: SnackbarService,
     private router: Router,
     private matDialog: MatDialog,
-    public validationErrorService: ValidationErrorService
+    public validationErrorService: ValidationErrorService,
+    private badRequestService: BadRequestService,
+    private route: ActivatedRoute,
+    private snackbar: SnackbarService
   ) {}
 
   ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.has('message')) {
+      this.snackbar.error(decodeURIComponent(this.route.snapshot.queryParamMap.get('message')));
+    }
     this.subs.add(
       this.userService.isLoggedIn$
         .pipe(
@@ -74,13 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           },
           (error) => {
-            if (error.error) {
-              this.subs.add(this.translatedSnackbarService.error(error.error).subscribe());
-            } else {
-              this.subs.add(
-                this.translatedSnackbarService.error('LOGIN.BENUTZERNAME_ODER_PASSWORT_FALSCH').subscribe()
-              );
-            }
+            this.badRequestService.handleBadRequestError(error, this.loginFormGroup);
           }
         )
         .add(() => (this.loading = false))

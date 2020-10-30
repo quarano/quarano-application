@@ -40,16 +40,6 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse) {
-          if (error.status === HttpStatusCode.unauthorized.valueOf()) {
-            this.router.navigate(['/auth/login']);
-            return throwError(error);
-          }
-
-          if (error.status === HttpStatusCode.forbidden.valueOf()) {
-            this.router.navigate(['/auth/forbidden']);
-            return throwError(error);
-          }
-
           if (error.status === HttpStatusCode.internalServerError.valueOf()) {
             // ToDo: Message ggf. anpassen, wenn wir ein Ticketsystem oder eine Supporthotline haben
             this.router.navigate(['/error'], {
@@ -76,6 +66,25 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           const serverError = error.error;
+
+          if (error.status === HttpStatusCode.unauthorized.valueOf()) {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this.router.onSameUrlNavigation = 'reload';
+            this.router.navigate(['/auth/login'], {
+              queryParams: {
+                message: encodeURIComponent(serverError),
+              },
+            });
+            return throwError(error);
+          }
+
+          if (error.status === HttpStatusCode.forbidden.valueOf()) {
+            this.router.navigate(['/auth/forbidden'], {
+              queryParams: {
+                message: encodeURIComponent(serverError),
+              },
+            });
+          }
 
           if (
             error.status === HttpStatusCode.notFound.valueOf() ||
