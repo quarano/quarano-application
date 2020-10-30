@@ -1,6 +1,8 @@
 package quarano.security.web;
 
 import static io.vavr.API.*;
+import static quarano.security.web.AuthenticationController.ForbiddenException.*;
+import static quarano.security.web.AuthenticationController.ForbiddenException.Reason.*;
 
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -12,11 +14,8 @@ import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.account.web.AccountRepresentations;
-import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonRepository;
-
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
@@ -53,7 +52,7 @@ class AuthenticationController {
 		return Try.ofSupplier(() -> lookupAccountFor(request.getUsername()))
 				.filter(it -> accounts.matches(password, it.getPassword()),
 						() -> new AccessDeniedException("Authentication failed!"))
-				.flatMap(this::validateToTry)
+				.flatMap(this::isAccountEligibleForLogin)
 				// set authentication to security context for a later use during the request (e.g. to get the current
 				// authentication)
 				.peek(it -> SecurityContextHolder.getContext()
@@ -71,31 +70,23 @@ class AuthenticationController {
 	}
 
 	/**
-	 * Validates the given {@link Account} to a {@link Try} with exceptions if there are an mistake.
-	 * 
-	 * @return A <{@link Try} with the given account or an exception.
+	 * Verifies further conditions on the given {@link Account} to decide whether it is eligible for log in.
+	 *
+	 * @return A <{@link Try} with the given account or an exception describing the reason why the login was rejected.
 	 */
-	private Try<Account> validateToTry(Account account) {
+	private Try<Account> isAccountEligibleForLogin(Account account) {
 
 		if (!account.isTrackedPerson()) {
 			return Try.success(account);
 		}
 
-		var tc = cases.findByAccount(account);
+		var tc = cases.findByAccount(account).orElse(null);
+
 		return Match(tc).of(
-				Case($(this::isntOpenCase),
-						Try.failure(new ForbiddenException(messages.getMessage("authentication.trackedCase.closed")))),
-				Case($(this::isCaseExternal),
-						Try.failure(new ForbiddenException(messages.getMessage("authentication.trackedCase.externalZip")))),
+				Case($(it -> it == null), __ -> reject(CASE_ABSENT)),
+				Case($(it -> !it.isOpen()), __ -> reject(CASE_CLOSED)),
+				Case($(it -> it.isExternal()), __ -> reject(EXTERNAL_ZIP)),
 				Case($(), Try.success(account)));
-	}
-
-	private boolean isntOpenCase(Optional<TrackedCase> trackedCase) {
-		return trackedCase.filter(TrackedCase::isOpen).isEmpty();
-	}
-
-	private boolean isCaseExternal(Optional<TrackedCase> trackedCase) {
-		return trackedCase.filter(TrackedCase::isExternal).isPresent();
 	}
 
 	private Account lookupAccountFor(String username) {
@@ -108,8 +99,10 @@ class AuthenticationController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
 	}
 
-	private static HttpEntity<?> toForbidden(String message) {
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
+	private HttpEntity<?> toForbidden(String key) {
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+				.body(messages.getMessage("authentication.trackedCase." + key));
 	}
 
 	@Data
@@ -118,12 +111,20 @@ class AuthenticationController {
 		private @NotBlank String username, password;
 	}
 
-	class ForbiddenException extends RuntimeException {
+	static class ForbiddenException extends RuntimeException {
 
 		private static final long serialVersionUID = 3751035061264462192L;
 
-		public ForbiddenException(String msg) {
-			super(msg);
+		static enum Reason {
+			CASE_ABSENT, CASE_CLOSED, EXTERNAL_ZIP;
+		}
+
+		private ForbiddenException(Reason reason) {
+			super(reason.name());
+		}
+
+		public static Try<Account> reject(Reason reason) {
+			return Try.failure(new ForbiddenException(reason));
 		}
 	}
 }

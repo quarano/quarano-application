@@ -30,6 +30,15 @@ At this point, clients should not allow any other operation than changing the pa
 
 include::{snippets}/password-expired/login/links.adoc[]
 
+=== Error scenarios
+
+As the login may fail for a variety of reasons, the resource returns different HTTP status codes in case of failures:
+
+* `401 Unauthorized` -- if the given credentials are invalid.
+* `403 Forbidden` -- in case the account's associated case fails to meet additional business requirements.
+
+In all cases, the response contains a human readable message to display to the user in `text/plain` format.
+
 [[authentication.change-password]]
 === Changing the password
 

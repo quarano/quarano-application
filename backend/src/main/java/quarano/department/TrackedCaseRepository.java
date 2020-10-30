@@ -67,7 +67,7 @@ public interface TrackedCaseRepository
 	@Query(DEFAULT_SELECT + " where p.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select c from TrackedCase c JOIN c.trackedPerson p WHERE p.account = :account")
+	@Query(DEFAULT_SELECT + " where p.account = :account")
 	Optional<TrackedCase> findByAccount(Account account);
 
 	/**

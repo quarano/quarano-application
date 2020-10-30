@@ -12,6 +12,7 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.security.web.AuthenticationController.AuthenticationRequest;
 import quarano.tracking.TrackedPerson;
@@ -138,6 +139,20 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 				.map(TrackedPerson::getLocale)
 				.hasValueSatisfying(it -> ObjectUtils.notEqual(it, newLocale))
 				.hasValue(locale);
+	}
+
+	@Test // CORE-477
+	void rejectsLoginForExternalZip() throws Exception {
+
+		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1)
+				.map(TrackedCase::markAsExternalZip)
+				.map(cases::save)
+				.orElseThrow();
+
+		mvc.perform(post("/api/login")
+				.locale(trackedCase.getTrackedPerson().getLocale())
+				.content(jackson.writeValueAsString(new AuthenticationRequest("DemoAccount", "DemoPassword"))))
+				.andExpect(status().isForbidden());
 	}
 
 	private static ResultHandler documentExpiredPassword() {
