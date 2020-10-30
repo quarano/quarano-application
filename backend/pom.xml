@@ -23,7 +23,7 @@
 		<moduliths.version>1.0.0</moduliths.version>
 		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
-		<refdocs.version>0.1.0.RELEASE</refdocs.version>
+		<refdocs.version>0.2.2.RELEASE</refdocs.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
 	</properties>
 
@@ -477,7 +477,7 @@
 						<docinfo>shared</docinfo>
 						<docinfodir>${refdocs.dir}</docinfodir>
 						<highlightjsdir>js/highlight</highlightjsdir>
-						<highlightjs-theme>atom-one-dark-reasonable</highlightjs-theme>
+						<highlightjs-theme>github</highlightjs-theme>
 						<icons>font</icons>
 						<linkcss>true</linkcss>
 						<numbered>true</numbered>

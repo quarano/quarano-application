@@ -9,6 +9,7 @@ import capital.scalable.restdocs.jackson.JacksonResultHandlers;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -127,9 +128,9 @@ public abstract class AbstractDocumentation {
 	 */
 	private static class JsonResponseBodySnippet extends ResponseBodySnippet {
 
-		/**
-		 *
-		 */
+		private static final MediaType ANYTHING_JSON = MediaType.parseMediaType("application/*+json");
+		private static final List<MediaType> JSON_TYPES = List.of(MediaType.APPLICATION_JSON, ANYTHING_JSON);
+
 		public JsonResponseBodySnippet() {
 
 			Field field = ReflectionUtils.findField(TemplatedSnippet.class, "templateName");
@@ -149,8 +150,8 @@ public abstract class AbstractDocumentation {
 
 			var contentType = getContentType(operation);
 
-			if (MediaType.parseMediaType("application/*+json").isCompatibleWith(contentType)) {
-				model.put("language", "javascript,");
+			if (JSON_TYPES.stream().anyMatch(it -> it.isCompatibleWith(contentType))) {
+				model.put("language", "json,");
 			}
 
 			return model;
