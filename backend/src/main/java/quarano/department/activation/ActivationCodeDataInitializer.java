@@ -120,7 +120,7 @@ public class ActivationCodeDataInitializer implements DataInitializer {
 		// store each code
 		for (ActivationCode code : CODES) {
 
-			log.warn("Test data: Adding activation code {} with status {} for tracked person {}.", code.getId(),
+			log.debug("Test data: Adding activation code {} with status {} for tracked person {}.", code.getId(),
 					code.getStatus(), code.getTrackedPersonId());
 
 			codeRepo.save(code);

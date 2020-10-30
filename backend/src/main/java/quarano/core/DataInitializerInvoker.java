@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
@@ -37,7 +38,7 @@ class DataInitializerInvoker implements ApplicationRunner {
 	public void run(@Nullable ApplicationArguments args) throws Exception {
 
 		initializers.stream()
-				.peek(it -> log.info("Invoking " + it.getClass().getName()))
+				.peek(it -> log.info("Invoking " + AopUtils.getTargetClass(it)))
 				.forEach(it -> {
 
 					it.preInitialize();

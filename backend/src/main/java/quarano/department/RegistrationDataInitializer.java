@@ -43,7 +43,7 @@ class RegistrationDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		log.warn("Test data: creating accounts for tracked people.");
+		log.debug("Test data: creating accounts for tracked people.");
 
 		// person 1 should not have an account yet
 

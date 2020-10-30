@@ -31,7 +31,7 @@ class AccountDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		log.warn("Test data: creating test accounts...");
+		log.debug("Test data: creating test accounts...");
 
 		// account for GA user
 		accounts.createStaffAccount("admin", UnencryptedPassword.of("admin"), "Mark", "Muster",

@@ -32,7 +32,7 @@ class RoleDataInitializer implements DataInitializer {
 
 			roles.findByName(type.getCode()).orElseGet(() -> {
 
-				log.info("Adding missing role " + type);
+				log.debug("Adding missing role " + type);
 				return roles.save(new Role(type));
 			});
 		}

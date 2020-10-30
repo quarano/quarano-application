@@ -40,10 +40,10 @@ public class DepartmentDataInitializer implements DataInitializer {
 	public void initialize() {
 
 		if (departments.count() > 0) {
-			log.info("Departments found, skipping test data creation.");
+			log.debug("Departments found, skipping test data creation.");
 			return;
 		} else {
-			log.info("Testdata: creating two health departmens");
+			log.debug("Testdata: creating two health departmens");
 		}
 
 		departments.saveAll(List.of(

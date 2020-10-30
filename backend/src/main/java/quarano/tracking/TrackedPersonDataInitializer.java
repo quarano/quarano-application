@@ -258,7 +258,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 		// create a fixed set of tracked people for testing and integration if it is not present yet
 		if (this.trackedPeople.findById(VALID_TRACKED_PERSON1_ID_DEP1).isPresent()) {
-			log.info("Initial client data already exists, skipping test data generation");
+			log.debug("Initial client data already exists, skipping test data generation");
 			return;
 		}
 
@@ -280,6 +280,6 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
 
-		log.info("Test data: Generated {} tracked persons.", trackedPeople.count());
+		log.debug("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}
 }

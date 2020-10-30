@@ -48,7 +48,7 @@ class DiaryDataInitializer implements DataInitializer {
 		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		log.info("Start creating diary and contacts for test persons");
+		log.debug("Start creating diary and contacts for test persons");
 
 		// generate 2 contacts for Person 3
 
