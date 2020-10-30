@@ -21,6 +21,7 @@ import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
 import quarano.department.web.TrackedCaseRepresentations.InstitutionDto;
 import quarano.reference.Symptom;
 import quarano.reference.SymptomRepository;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -275,6 +276,20 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.city", String.class)).contains("valid place name");
 		assertThat(document.read("$.street", String.class)).contains("valid street name");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
+	}
+
+	@Test
+	@WithQuaranoUser("test6") // Jessica, contact case
+	void contactCasesDoNotSeeEncountersEnrollmentStep() throws Exception {
+
+		TrackedPerson jessica = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+
+		submitDetailsSuccessfully(mapper.map(jessica, TrackedPersonDto.class));
+		submitQuestionnaireSuccessfully(createValidQuestionnaireInput());
+
+		String result = performRequestToGetEnrollementState();
+
+		System.out.println(result);
 	}
 
 	private void expectResponseCarriesEmptyQuestionnaire(String result) {

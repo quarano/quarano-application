@@ -64,7 +64,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.util.Streamable;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.Links.MergeMode;
 import org.springframework.hateoas.RepresentationModel;
@@ -134,8 +136,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		return halModelBuilder.build();
 	}
 
-	public EnrollmentDto toRepresentation(Enrollment enrollment) {
-		return new EnrollmentDto(enrollment);
+	public EnrollmentDto toEnrollmentRepresentation(TrackedCase trackedCase) {
+		return new EnrollmentDto(trackedCase);
 	}
 
 	InstitutionDto toRepresentation(HealthDepartment department) {
@@ -313,7 +315,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		var validationGroups = new ArrayList<>();
 		validationGroups.add(Default.class);
 
-		if (type.equals(CaseType.INDEX) || (payload.getTestDate() != null && payload.isInfected())) {
+		if (type.equals(CaseType.INDEX) || payload.getTestDate() != null && payload.isInfected()) {
 			validationGroups.add(ValidationGroups.Index.class);
 		}
 
@@ -521,8 +523,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 	@Data
 	static class CommentInput {
-		@Textual
-		String comment;
+		@Textual String comment;
 	}
 
 	static class ValidationGroups {
@@ -532,10 +533,27 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		interface Contact {}
 	}
 
-	@RequiredArgsConstructor
 	public static class EnrollmentDto extends RepresentationModel<EnrollmentDto> {
 
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) Enrollment enrollment;
+		private final boolean isIndexCase;
+
+		public EnrollmentDto(TrackedCase trackedCase) {
+
+			this.enrollment = trackedCase.getEnrollment();
+			this.isIndexCase = trackedCase.isIndexCase();
+		}
+
+		public List<String> getSteps() {
+
+			var relations = Streamable.of(DETAILS, QUESTIONNAIRE);
+
+			if (isIndexCase) {
+				relations.and(ENCOUNTERS);
+			}
+
+			return relations.map(LinkRelation::value).toList();
+		}
 
 		@Override
 		@SuppressWarnings("null")
@@ -547,14 +565,33 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			var enrollmentLink = MvcLink.of(caseController.enrollment(null), SELF);
 			var questionnareLink = MvcLink.of(caseController.addQuestionaire(null, null, null), QUESTIONNAIRE);
 			var reopenLink = MvcLink.of(caseController.reopenEnrollment(null), REOPEN);
+			var confirmLink = MvcLink.of(caseController.completeEnrollment(null, true), CONFIRM);
 			var detailsLink = MvcLink.of(trackingController.enrollmentOverview(null), DETAILS);
 			var encountersLink = MvcLink.of(trackingController.getEncounters(null), ENCOUNTERS);
 
-			return Links.NONE.and(enrollmentLink, detailsLink)
-					.andIf(enrollment.isComplete(), questionnareLink, encountersLink, reopenLink)
-					.andIf(enrollment.isCompletedQuestionnaire(), questionnareLink, encountersLink, encountersLink.withRel(NEXT))
-					.andIf(enrollment.isCompletedPersonalData(), questionnareLink, questionnareLink.withRel(NEXT))
-					.merge(MergeMode.SKIP_BY_REL, detailsLink.withRel(NEXT));
+			var links = Links.NONE.and(enrollmentLink, detailsLink);
+
+			if (enrollment.isComplete()) {
+
+				links = links.and(questionnareLink, encountersLink, reopenLink);
+
+			} else if (enrollment.isCompletedQuestionnaire()) {
+
+				links = links.and(questionnareLink, encountersLink);
+				links = links.and((isIndexCase ? encountersLink : confirmLink).withRel(NEXT));
+
+			} else if (enrollment.isCompletedPersonalData()) {
+
+				links = links.and(questionnareLink, questionnareLink.withRel(NEXT));
+			}
+
+			links = links.merge(MergeMode.SKIP_BY_REL, detailsLink.withRel(NEXT));
+
+			if (!isIndexCase) {
+				links = links.without(ENCOUNTERS);
+			}
+
+			return links;
 		}
 	}
 
@@ -583,19 +620,13 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	@EqualsAndHashCode(callSuper = true)
 	static class InstitutionDto extends RepresentationModel<InstitutionDto> {
 
-		@Pattern(regexp = Strings.NAMES)
-		String name;
+		@Pattern(regexp = Strings.NAMES) String name;
 		String department;
-		@Pattern(regexp = Strings.STREET)
-		String street;
-		@Pattern(regexp = Strings.CITY)
-		String city;
-		@Pattern(regexp = ZipCode.PATTERN)
-		String zipCode;
-		@Pattern(regexp = PhoneNumber.PATTERN)
-		String fax, phone;
-		@Pattern(regexp = EmailAddress.PATTERN)
-		String email;
+		@Pattern(regexp = Strings.STREET) String street;
+		@Pattern(regexp = Strings.CITY) String city;
+		@Pattern(regexp = ZipCode.PATTERN) String zipCode;
+		@Pattern(regexp = PhoneNumber.PATTERN) String fax, phone;
+		@Pattern(regexp = EmailAddress.PATTERN) String email;
 
 		private static InstitutionDto of(HealthDepartment rkiDepartment) {
 

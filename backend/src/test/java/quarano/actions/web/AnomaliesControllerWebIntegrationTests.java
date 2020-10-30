@@ -114,7 +114,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void resolvesAnomaliesManuallyDoesNotWorkForSystemAnomalies() throws Exception {
 
-		var actionsResponse = mvc.perform(get("/api/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/api/hd/actions"))
 				.andExpect(status().isOk())
 				.andDo(documentAnomalies())
 				.andReturn().getResponse().getContentAsString();
@@ -126,8 +126,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.setComment("Comment!");
 
 		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", contactCaseId)
-				.content(jackson.writeValueAsString(reviewed))
-				.contentType(MediaType.APPLICATION_JSON))
+				.content(jackson.writeValueAsString(reviewed)))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -146,7 +145,6 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	@WithQuaranoUser("agent3")
 	void obtainsUnresolvedActions() throws Exception {
-
 
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 		var reviewed = new ActionsReviewed().setComment("Comment!");
@@ -212,8 +210,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions")
-				.accept("application/hal+json"))
+		var response = mvc.perform(get("/api/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 

@@ -229,19 +229,15 @@ public class TrackedCaseController {
 	Stream<?> allEnrollments() {
 
 		return cases.findAll()
-				.map(TrackedCase::getEnrollment)
-				.map(representations::toRepresentation)
+				.map(representations::toEnrollmentRepresentation)
 				.stream();
 	}
 
 	@GetMapping("/api/enrollment")
 	public HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
 
-		var map = cases.findByTrackedPerson(person)
-				.map(TrackedCase::getEnrollment)
-				.map(representations::toRepresentation);
-
-		return ResponseEntity.of(map);
+		return ResponseEntity.of(cases.findByTrackedPerson(person)
+				.map(representations::toEnrollmentRepresentation));
 	}
 
 	@PutMapping("/api/enrollment/details")
