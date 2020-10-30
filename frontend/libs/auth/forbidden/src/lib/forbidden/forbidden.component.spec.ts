@@ -1,3 +1,4 @@
+import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -10,7 +11,7 @@ describe('ForbiddenComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateTestingModule],
+      imports: [TranslateTestingModule, RouterTestingModule],
       declarations: [ForbiddenComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
