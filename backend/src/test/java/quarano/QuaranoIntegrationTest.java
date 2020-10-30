@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author Oliver Drotbohm
  */
-@ActiveProfiles("integrationtest")
+@ActiveProfiles({ "develop", "integrationtest" })
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @TestConstructor(autowireMode = AutowireMode.ALL)

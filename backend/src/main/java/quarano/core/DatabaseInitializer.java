@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author Oliver Drotbohm
  */
-@Profile("develop")
+@Profile("staging")
 @RequiredArgsConstructor
 @Slf4j
 @Component

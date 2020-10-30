@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author Oliver Drotbohm
  */
 @RequiredArgsConstructor
-@ActiveProfiles({ "tracing", "integrationtest" })
+@ActiveProfiles({ "tracing", "develop", "integrationtest" })
 @QuaranoIntegrationTest
 public class QuaranoTracingIntegrationTests {
 

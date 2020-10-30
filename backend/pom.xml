@@ -30,7 +30,7 @@
 	<profiles>
 
 		<profile>
-			<id>inmemory</id>
+			<id>localDev</id>
 			<activation>
 				<file>
 					<exists>src/main/resources/application-local.properties</exists>
@@ -38,7 +38,7 @@
 			</activation>
 			<properties>
 				<docker.build.skip>true</docker.build.skip>
-				<spring.profile.active>integrationtest</spring.profile.active>
+				<spring.profile.active>develop</spring.profile.active>
 			</properties>
 			<dependencies>
 				<dependency>

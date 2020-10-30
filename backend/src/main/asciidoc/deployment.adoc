@@ -1,0 +1,32 @@
+= Deployment information
+
+== Building deployable units
+
+=== Building a deployable JAR
+
+=== Building a Docker container
+
+== Spring profiles
+
+The application uses Spring application profiles that allow configuration to carry different values and different features activated based on the profiles selected on startup.
+The profiles are activated by setting the `spring.profile.active` property or environment variable respectively.
+
+* `prod` -- Activated in production environments.
+* `cloud` -- Activated on PaaS platforms like CloudFoundry.
+* `staging` -- Profile activated on the development staging instance.
+* `local` (not checked into the repository) -- if the file is created locally, it enables the Maven execution to automatically configure the `develop` profile for easy local execution.
+The profile itself can be used to tweak settings (work against a locally installed database or the like).
+* `develop` -- The profile to activate on the local developer machine (activated transparently in case an `application-local.properties` is placed under `src/main/resources`).
+* `tracing` -- Enables tracing information about database interaction written to the log files.
+
+Application functionality activated in the application based on profiles activated:
+
+* `!prod` -- Test data is inserted on application startup.
+* `develop` -- Switches the application to be run against an H2 in-memory database and a dummy mail server.
+* `staging` -- Drops all tables of the database on application startup.
+
+The profile configuration for the different deployment environments looks as follows:
+
+* _Development_ - `staging`, triggers database (wipe and test data) reset on startup.
+* _Test_ - TODO: investigate
+* _Production_ - `prod`
