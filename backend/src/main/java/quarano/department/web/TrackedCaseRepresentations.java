@@ -33,7 +33,7 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.rki.HealthDepartments.HealthDepartment;
 import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
-import quarano.reference.SymptomRepository;
+import quarano.masterdata.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;

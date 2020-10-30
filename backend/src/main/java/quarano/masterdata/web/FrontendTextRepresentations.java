@@ -1,7 +1,7 @@
-package quarano.reference.web;
+package quarano.masterdata.web;
 
 import lombok.Value;
-import quarano.reference.FrontendText;
+import quarano.masterdata.FrontendText;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.stereotype.Component;

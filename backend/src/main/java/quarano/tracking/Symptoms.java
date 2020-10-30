@@ -1,7 +1,7 @@
 package quarano.tracking;
 
 import lombok.RequiredArgsConstructor;
-import quarano.reference.Symptom;
+import quarano.masterdata.Symptom;
 
 import java.util.Iterator;
 import java.util.List;

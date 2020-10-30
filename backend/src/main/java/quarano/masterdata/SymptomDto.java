@@ -1,4 +1,4 @@
-package quarano.reference;
+package quarano.masterdata;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import quarano.core.QuaranoEntity;
 import quarano.department.Questionnaire.QuestionnaireIdentifier;
-import quarano.reference.Symptom;
+import quarano.masterdata.Symptom;
 
 import java.io.Serializable;
 import java.time.LocalDate;

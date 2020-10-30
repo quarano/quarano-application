@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.web.RepositoryMappingModule.AggregateReferenceMappingException;
 import quarano.core.web.RepositoryMappingModule.NullHandling;
-import quarano.reference.Symptom;
-import quarano.reference.SymptomRepository;
+import quarano.masterdata.Symptom;
+import quarano.masterdata.SymptomRepository;
 
 import java.net.URI;
 import java.util.UUID;

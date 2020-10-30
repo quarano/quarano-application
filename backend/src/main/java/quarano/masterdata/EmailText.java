@@ -1,4 +1,4 @@
-package quarano.reference;
+package quarano.masterdata;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import quarano.core.QuaranoAggregate;
-import quarano.reference.EmailText.ClientTextIdentifier;
+import quarano.masterdata.EmailText.ClientTextIdentifier;
 
 import java.io.Serializable;
 import java.util.Locale;

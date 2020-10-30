@@ -19,7 +19,7 @@ import quarano.QuaranoUnitTest;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.diary.*;
-import quarano.reference.Symptom;
+import quarano.masterdata.Symptom;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 

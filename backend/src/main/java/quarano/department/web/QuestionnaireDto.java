@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.Setter;
 import quarano.core.validation.Textual;
 import quarano.department.Questionnaire;
-import quarano.reference.Symptom;
-import quarano.reference.SymptomRepository;
+import quarano.masterdata.Symptom;
+import quarano.masterdata.SymptomRepository;
 
 import java.time.LocalDate;
 import java.util.Collections;

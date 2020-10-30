@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import quarano.QuaranoUnitTest;
 import quarano.department.Questionnaire.SymptomInformation;
-import quarano.reference.Symptom;
+import quarano.masterdata.Symptom;
 
 import java.time.LocalDate;
 import java.util.Arrays;

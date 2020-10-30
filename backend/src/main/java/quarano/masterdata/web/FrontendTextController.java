@@ -1,9 +1,9 @@
-package quarano.reference.web;
+package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.reference.FrontendText;
-import quarano.reference.web.FrontendTextRepresentations.FrontendTextDto;
+import quarano.masterdata.FrontendText;
+import quarano.masterdata.web.FrontendTextRepresentations.FrontendTextDto;
 
 import java.util.List;
 import java.util.Locale;

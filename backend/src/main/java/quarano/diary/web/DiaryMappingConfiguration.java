@@ -18,7 +18,7 @@ package quarano.diary.web;
 import quarano.core.web.MappingCustomizer;
 import quarano.diary.DiaryEntry;
 import quarano.diary.web.DiaryRepresentations.DiaryEntryInput;
-import quarano.reference.Symptom;
+import quarano.masterdata.Symptom;
 
 import java.util.ArrayList;
 import java.util.List;

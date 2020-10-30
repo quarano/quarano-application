@@ -1,4 +1,4 @@
-package quarano.reference;
+package quarano.masterdata;
 
 import java.util.List;
 import java.util.UUID;
