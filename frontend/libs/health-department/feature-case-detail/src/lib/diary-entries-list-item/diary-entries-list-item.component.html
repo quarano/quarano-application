@@ -19,11 +19,11 @@
           </div>
           <div class="row-container" *ngIf="diaryListItem.morning.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ getContactsString(diaryListItem.morning) }}</span>
+            <span>{{ format(diaryListItem.morning.contacts) }}</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.morning.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ getSymptomsString(diaryListItem.morning) }}</span>
+            <span>{{ format(diaryListItem.morning.symptoms) }}</span>
           </div>
         </div>
       </div>
@@ -38,11 +38,11 @@
           </div>
           <div class="row-container" *ngIf="diaryListItem.evening.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ getContactsString(diaryListItem.evening) }}</span>
+            <span>{{ format(diaryListItem.evening.contacts) }}</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.evening.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ getSymptomsString(diaryListItem.evening) }}</span>
+            <span>{{ format(diaryListItem.evening.symptoms) }}</span>
           </div>
         </div>
       </div>

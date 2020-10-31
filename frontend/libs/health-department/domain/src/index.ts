@@ -4,7 +4,6 @@ export * from './lib/model/action-list-item';
 export * from './lib/model/alert-configuration';
 export * from './lib/resolvers/report-case-actions.resolver';
 export * from './lib/resolvers/case-detail.resolver';
-export * from './lib/resolvers/tracked-case-diary-entries.resolver';
 export * from './lib/model/tracked-cases-diary-entry';
 export * from './lib/model/case-action';
 export * from './lib/data-access/health-department.service';
