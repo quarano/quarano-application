@@ -95,22 +95,22 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
-      cy.get('[data-cy="first-name-input"]').should('exist');
-      cy.get('[data-cy="last-name-input"]').should('exist');
-      cy.get('[data-cy="date-of-birth-input"]').should('exist');
-      cy.get('[data-cy="phone-number-input"]').should('exist');
-      cy.get('[data-cy="email-input"]').should('exist');
+      cy.get('[data-cy="input-firstname"]').should('exist');
+      cy.get('[data-cy="input-lastname"]').should('exist');
+      cy.get('[data-cy="input-dayofbirth"]').should('exist');
+      cy.get('[data-cy="input-phone"]').should('exist');
+      cy.get('[data-cy="input-email"]').should('exist');
 
-      cy.get('[data-cy="first-name-input"]').type('Jack');
-      cy.get('[data-cy="last-name-input"]').type('Randel');
+      cy.get('[data-cy="input-firstname"]').type('Jack');
+      cy.get('[data-cy="input-lastname"]').type('Randel');
 
       cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.enabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
-      cy.get('[data-cy="date-of-birth-input"]').type('01.01.1970');
-      cy.get('[data-cy="phone-number-input"]').type('162156156156');
-      cy.get('[data-cy="email-input"]').type('jack@gmail.com');
+      cy.get('[data-cy="input-dayofbirth"]').type('01.01.1970');
+      cy.get('[data-cy="input-phone"]').type('162156156156');
+      cy.get('[data-cy="input-email"]').type('jack@gmail.com');
 
       cy.get('[data-cy="client-submit-button"] button').click();
       cy.wait('@newContact');
