@@ -85,7 +85,7 @@ const routes: Routes = [
         component: MailComponent,
       },
       {
-        path: 'diary-entries',
+        path: 'diary',
         component: DiaryEntriesListComponent,
       },
     ],
