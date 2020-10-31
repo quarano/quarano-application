@@ -11,7 +11,7 @@
   </mat-card-header>
   <form [formGroup]="formGroup" (ngSubmit)="submitForm(false)">
     <mat-card-content>
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="input-firstname">
         <input
           required
           matInput
@@ -25,7 +25,7 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="input-lastname">
         <input
           matInput
           required
@@ -39,7 +39,7 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width" data-cy="input-email">
         <input
           matInput
           required
@@ -53,7 +53,7 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width">
+      <mat-form-field class="form__input--full-width" data-cy="input-username">
         <mat-label>Username</mat-label>
         <input
           required
@@ -68,7 +68,7 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.username, error) | async }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width" *ngIf="isNew">
+      <mat-form-field class="form__input--full-width" *ngIf="isNew" data-cy="input-password">
         <mat-label>Passwort</mat-label>
         <input
           required
@@ -87,7 +87,7 @@
           Das Passwort darf nicht den Benutzernamen beinhalten.
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="form__input--full-width" *ngIf="isNew">
+      <mat-form-field class="form__input--full-width" *ngIf="isNew" data-cy="input-passwordconfirm">
         <mat-label>Passwort bestätigen</mat-label>
         <input
           required
@@ -107,7 +107,7 @@
           >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
         >
       </mat-form-field>
-      <mat-form-field class="form__input--full-width">
+      <mat-form-field class="form__input--full-width" data-cy="select-role">
         <mat-label>Rollen *</mat-label>
         <mat-select formControlName="roles" multiple>
           <mat-option *ngFor="let role of roles" [value]="role.name">{{ role.displayName }}</mat-option>
@@ -119,7 +119,11 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
+      <qro-button
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+        data-cy="account-submit-button"
+      >
         Speichern
       </qro-button>
       <qro-button
@@ -128,6 +132,7 @@
         [disabled]="formGroup.invalid || formGroup.pristine"
         [loading]="loading"
         (buttonClicked)="submitForm(true)"
+        data-cy="account-submitandclose-button"
       >
         Speichern und schließen
       </qro-button>
@@ -136,6 +141,7 @@
         mat-raised-button
         color="secondary"
         [routerLink]="['/administration/accounts/account-list']"
+        data-cy="account-cancel-button"
       >
         Abbrechen
       </button>

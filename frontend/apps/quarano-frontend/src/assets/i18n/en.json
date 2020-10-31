@@ -258,7 +258,8 @@
     "REGISTRIEREN_SIE_SICH": "Please register",
     "SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "You don't have an account?",
     "WENN_SIE_BEREITS_EIN_BENUTZERKONTO_HABEN": "If you don't yet have an account, you can register here",
-    "WILLKOMMEN_BEI_QUARANO": "Welcome to quarano"
+    "WILLKOMMEN_BEI_QUARANO": "Welcome to quarano",
+    "ZUNAECHST_PASSWORT_AENDERN": "Please assign your own secure password first"
   },
   "MULTIPLE_AUTOCOMPLETE": {
     "KEINE_WEITEREN_AUSWAHLMÖGLICHKEITEN": "There are no further options available"

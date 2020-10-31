@@ -95,9 +95,8 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   checkIfPasswordChangeNeeded(response: HttpResponse<any>): boolean {
     const resBody = response.body;
-    if (resBody && resBody._links && resBody._links.length > 0) {
-      const changeNeeded = !!resBody._links.find((link) => link.rel === 'change-password');
-      return changeNeeded;
+    if (resBody && resBody._links && resBody._links.hasOwnProperty('change-password')) {
+      return true;
     } else {
       return false;
     }
@@ -108,9 +107,15 @@ export class LoginComponent implements OnInit, OnDestroy {
    * routes the user afterwards if the password change was successful
    */
   openPasswordChangeDialog(): void {
-    this.matDialog
-      .open(ChangePasswordComponent, { disableClose: true, data: { mode: 'initialPasswordChange' } })
-      .afterClosed()
+    this.snackbarService
+      .message('LOGIN.ZUNAECHST_PASSWORT_AENDERN')
+      .pipe(
+        switchMap((_) =>
+          this.matDialog
+            .open(ChangePasswordComponent, { disableClose: true, data: { mode: 'initialPasswordChange' } })
+            .afterClosed()
+        )
+      )
       .subscribe((result) => {
         if (result === 'success') {
           this.router.navigate(['/health-department/index-cases/case-list']);
