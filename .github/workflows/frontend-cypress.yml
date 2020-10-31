@@ -50,7 +50,7 @@ jobs:
         run: |
           export LANG="de_DE.UTF-8"
           export TZ="Europe/Berlin"
-          mvn -B spring-boot:run -Pinmemory -f backend/pom.xml &
+          mvn -B spring-boot:run -PlocalDev -f backend/pom.xml &
           sleep 60
           cd frontend && npm run e2e
           kill -2 `lsof -i:8080 -t`
