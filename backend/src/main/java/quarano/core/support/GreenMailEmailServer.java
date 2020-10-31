@@ -42,7 +42,7 @@ import com.icegreen.greenmail.util.ServerSetup;
  */
 @Slf4j
 @Service
-@Profile({ "integrationtest" })
+@Profile({ "develop" })
 class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, DisposableBean {
 
 	private static final int DELETE_AFTER_SECONDS = 600;
