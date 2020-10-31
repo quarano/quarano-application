@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * routes the user afterwards if the password change was successful
    */
   openPasswordChangeDialog(): void {
-    this.snackbarService
+    this.translatedSnackbarService
       .message('LOGIN.ZUNAECHST_PASSWORT_AENDERN')
       .pipe(
         switchMap((_) =>

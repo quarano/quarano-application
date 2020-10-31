@@ -336,11 +336,24 @@ describe('new account', () => {
 });
 
 describe('login with new account', () => {
-  it('login with new account should open change password dialog', () => {
+  beforeEach(() => {
     cy.server();
+    cy.route('PUT', '/api/user/me/password').as('changepassword');
+  });
+
+  it('login with new account should open change password dialog', () => {
     cy.login('testaccount', 'Test123!');
     cy.get('mat-dialog-container').should('exist');
     cy.get('mat-dialog-container mat-card-title h1').should('exist').should('have.text', 'Passwort ändern');
     cy.get('mat-dialog-container [data-cy="input-username"] input[matInput]').should('contain.value', 'testaccount');
+    cy.get('[data-cy="changepassword-submit-button"] button').should('be.disabled');
+    cy.get('mat-dialog-container [data-cy="input-currentpassword"] input[matInput]').type('Test123!');
+    cy.get('mat-dialog-container [data-cy="input-newpassword"] input[matInput]').type('New123!');
+    cy.get('mat-dialog-container [data-cy="input-password-confirm"] input[matInput]').type('New123!');
+    cy.get('[data-cy="changepassword-submit-button"] button').should('be.enabled');
+    cy.get('[data-cy="changepassword-submit-button"] button').click();
+
+    cy.wait('@changepassword').its('status').should('eq', 204);
+    cy.url().should('include', '/health-department/index-cases/case-list');
   });
 });
