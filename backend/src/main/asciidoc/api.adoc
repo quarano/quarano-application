@@ -16,6 +16,16 @@ The media type we use as foundation of our representations is http://stateless.c
 
 TODO
 
+== Frontend texts
+
+Even without authentication, it is possible to retrieve installation-specific texts from the Quarano REST API via `/api/frontendtexts`. 
+
+include::{snippets}/frontend-texts/get-frontend-texts/curl-request.adoc[]
+include::{snippets}/frontend-texts/get-frontend-texts/response-body.adoc[]
+
+The request takes the following attributes. Without parameters all frontend texts are returned.:
+
+include::{snippets}/frontend-texts/get-frontend-texts/auto-request-parameters.adoc[]
 
 == Authentication
 
