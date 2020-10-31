@@ -13,7 +13,6 @@ import { EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@
 import { HttpClientModule } from '@angular/common/http';
 import { CaseDto, sortByLastName, caseTypeFilter } from './model/case';
 import { SharedUtilDateModule } from '@qro/shared/util-date';
-import { TrackedCaseDiaryEntriesResolver } from './resolvers/tracked-case-diary-entries.resolver';
 
 const entityMetadata: EntityMetadataMap = {
   Case: {
@@ -34,7 +33,6 @@ const entityMetadata: EntityMetadataMap = {
     IndexCaseCaseListResolver,
     CaseEntityService,
     CaseDataService,
-    TrackedCaseDiaryEntriesResolver,
   ],
 })
 export class HealthDepartmentDomainModule {

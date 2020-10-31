@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TrackedCaseDiaryEntryContactDto } from '@qro/health-department/domain';
 
 export interface DiaryListItemModel {
   date: string;
@@ -10,7 +9,7 @@ export interface DiaryListItemModel {
 interface CellModel {
   bodyTemperature: number;
   symptoms: string[];
-  contacts: TrackedCaseDiaryEntryContactDto[];
+  contacts: string[];
 }
 
 @Component({
@@ -25,11 +24,7 @@ export class DiaryEntriesListItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  getSymptomsString(cell: CellModel): string {
-    return cell.symptoms.join(', ');
-  }
-
-  getContactsString(cell: CellModel): string {
-    return cell.contacts.map((s) => `${s.firstName} ${s.lastName}`).join(', ');
+  format(theArray: string[]) {
+    return theArray.join(', ');
   }
 }

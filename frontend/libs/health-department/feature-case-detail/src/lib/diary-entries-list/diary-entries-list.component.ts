@@ -1,8 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { TrackedCaseDiaryEntryDto } from '@qro/health-department/domain';
+import { Component, OnInit } from '@angular/core';
+import {
+  CaseDto,
+  CaseEntityService,
+  HealthDepartmentService,
+  TrackedCaseDiaryEntryDto,
+} from '@qro/health-department/domain';
 import * as _ from 'lodash';
 import { Dictionary } from '@ngrx/entity';
 import { DiaryListItemModel } from '../diary-entries-list-item/diary-entries-list-item.component';
+import { ActivatedRoute } from '@angular/router';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'qro-diary-entries-list',
@@ -10,17 +18,28 @@ import { DiaryListItemModel } from '../diary-entries-list-item/diary-entries-lis
   styleUrls: ['./diary-entries-list.component.scss'],
 })
 export class DiaryEntriesListComponent implements OnInit {
-  @Input() entriesDto: TrackedCaseDiaryEntryDto[];
-
-  listItems: DiaryListItemModel[] = [];
+  listItems$: Observable<DiaryListItemModel[]>;
+  private caseId: string;
 
   private readonly MORNING = 'morning';
   private readonly EVENING = 'evening';
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private entityService: CaseEntityService,
+    private healthDepartmentService: HealthDepartmentService
+  ) {}
 
   ngOnInit() {
-    this.mapToListItems(this.entriesDto);
+    this.listItems$ = this.route.parent.paramMap.pipe(
+      tap((params) => (this.caseId = params.get('id'))),
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
+      switchMap((caseDto: CaseDto) => this.healthDepartmentService.getCaseDiaryEntries(caseDto.caseId)), // HAL service aus shared data access, Schwellenwert, self-link in Antwort
+      map((diaryEntries: TrackedCaseDiaryEntryDto[]) => {
+        return this.mapToListItems(diaryEntries);
+      }),
+      shareReplay(1)
+    );
   }
 
   private mapToListItems(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
@@ -29,18 +48,19 @@ export class DiaryEntriesListComponent implements OnInit {
 
       const convertedListItems = this.convertToListItems(groupedDiaryEntryDto);
 
-      this.listItems = this.sortByDateDescending(convertedListItems);
+      return this.sortByDateDescending(convertedListItems);
     }
   }
 
   private convertToListItems(groupedDiaryEntries: Dictionary<any[]>): DiaryListItemModel[] {
     const convertedItems: DiaryListItemModel[] = [];
+
     for (const [date, diaryEntries] of Object.entries(groupedDiaryEntries)) {
       const entryMorning = diaryEntries.filter(
-        (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.slot.timeOfDay === this.MORNING
+        (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.timeOfDay === this.MORNING
       )?.[0];
       const entryEvening = diaryEntries.filter(
-        (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.slot.timeOfDay === this.EVENING
+        (diaryEntry: TrackedCaseDiaryEntryDto) => diaryEntry.timeOfDay === this.EVENING
       )?.[0];
 
       const item = {
@@ -56,7 +76,7 @@ export class DiaryEntriesListComponent implements OnInit {
 
   private groupEntriesByDate(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
     return _.groupBy(diaryEntriesDto, (entry) => {
-      return entry.slot.date;
+      return entry.date;
     });
   }
 
