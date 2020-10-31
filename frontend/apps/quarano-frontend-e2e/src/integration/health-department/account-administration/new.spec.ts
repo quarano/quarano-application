@@ -7,7 +7,7 @@ describe('new account', () => {
 
     cy.loginAdmin();
 
-    cy.visit('/administration/accounts/account-detail/new');
+    cy.visit('administration/accounts/account-detail/new');
   });
 
   describe('field validations: required', () => {
