@@ -3,6 +3,8 @@ package quarano.core;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.stream.Collectors;
+
 import javax.sql.DataSource;
 
 import org.flywaydb.core.api.configuration.FluentConfiguration;
@@ -46,11 +48,13 @@ public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 
 		var template = new JdbcTemplate(dataSource);
 
-		template.queryForList("select tablename from pg_tables;").stream()
+		String droptables = template.queryForList("select tablename from pg_tables;").stream()
 				.map(it -> it.get("tablename").toString())
 				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_"))
-				.peek(it -> log.info("Dropping database table " + it))
-				.forEach(it -> template.execute(String.format("DROP TABLE \"%s\" CASCADE;", it)));
+				.map(it -> String.format("\"%s\"", it))
+				.collect(Collectors.joining(", "));
+		log.info("Dropping database tables " + droptables);
+		template.execute(String.format("DROP TABLE %s CASCADE;", droptables));
 
 		// https://github.com/yugabyte/yugabyte-db/issues/1822
 		log.info("Initializing flyway history table by our own");
