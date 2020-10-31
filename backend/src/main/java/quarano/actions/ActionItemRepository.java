@@ -42,11 +42,11 @@ public interface ActionItemRepository extends QuaranoRepository<ActionItem, Acti
 			+ " and i.personIdentifier = :identifier")
 	long countUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
 
-	@Query("select i from ActionItem i, TrackedCase t"
-			+ " where i.resolved = false"
-			+ " and t.trackedPerson.id = i.personIdentifier"
-			+ " and t.status <> 'CONCLUDED'"
-			+ " and i.personIdentifier = :identifier")
+	@Query("select i from ActionItem i"
+			+ "   join TrackedCase t on t.trackedPerson.id = i.personIdentifier"
+			+ "  where i.resolved = false"
+			+ "    and t.status <> 'CONCLUDED'"
+			+ "    and i.personIdentifier = :identifier")
 	ActionItems findUnresolvedByActiveCaseByPersonIdentifier(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")

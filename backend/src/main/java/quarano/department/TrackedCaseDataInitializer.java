@@ -67,6 +67,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_SUNNY = TrackedCaseIdentifier
 			.of(UUID.fromString("cbb52d97-fb3e-45a1-b7a3-d2cb5d9c65a2"));
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -97,7 +98,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
 
 		// CASE Tanja
-		cases.save(new TrackedCase(person1, CaseType.CONTACT, department1));
+		cases.save(new TrackedCase(TRACKED_CASE_TANJA, person1, CaseType.CONTACT, department1, null));
 
 		// CASE Markus
 		cases.save(new TrackedCase(person2, CaseType.INDEX, department1)

@@ -7,11 +7,12 @@ import static quarano.tracking.TrackedPersonDataInitializer.*;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.actions.ActionItem.ItemType;
+import quarano.department.TrackedCaseDataInitializer;
+import quarano.department.TrackedCaseRepository;
 import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
 import quarano.tracking.BodyTemperature;
-import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -30,6 +31,7 @@ class ActionItemRepositoryIntegrationTests {
 
 	private final ActionItemRepository repository;
 	private final TrackedPersonRepository persons;
+	private final TrackedCaseRepository cases;
 	private final DiaryManagement diaries;
 
 	@Test
@@ -61,6 +63,15 @@ class ActionItemRepositoryIntegrationTests {
 
 		assertThat(repository.findUnresolvedByTrackedPerson(person).stream())
 				.hasSize(0);
+	}
+
+	@Test // For performance checks
+	void loadsUnresolvedActionItemsForCase() {
+
+		var result = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_TANJA).stream()
+				.flatMap(it -> repository.findUnresolvedByActiveCase(it).stream());
+
+		assertThat(result).isNotEmpty();
 	}
 
 	@RequiredArgsConstructor(staticName = "itemMatching")
