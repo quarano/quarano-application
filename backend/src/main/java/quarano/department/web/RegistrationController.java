@@ -134,7 +134,7 @@ public class RegistrationController {
 				.toBadRequest();
 	}
 
-	private HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
+	private static HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
 		final var field = "clientCode";
 		return errors
 			.rejectField(it.getStatus().equals(Status.NOT_FOUND), field, "Invalid.accountRegistration.clientCodeNotFound")
