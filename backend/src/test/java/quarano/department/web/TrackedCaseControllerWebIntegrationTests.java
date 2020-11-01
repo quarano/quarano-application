@@ -371,6 +371,10 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(JsonPath.parse(response).read("$.lastName", String.class).equals(payload.getLastName()));
 		assertThat(cases
 				.findById(TrackedCaseIdentifier.of(UUID.fromString(JsonPath.parse(response).read("$.caseId", String.class)))));
+
+		// CORE-511
+		assertThat(JsonPath.parse(response).read("$.createdAt", String.class)
+				.equals(LocalDate.now().format(DateTimeFormatter.ISO_DATE)));
 	}
 
 	@Test // CORE-121

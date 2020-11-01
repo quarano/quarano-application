@@ -47,6 +47,7 @@ import java.lang.annotation.Target;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -449,6 +450,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 					.sorted(Comparator.comparing(Comment::getDate).reversed())
 					.map(CommentRepresentation::new)
 					.collect(Collectors.toUnmodifiableList());
+		}
+
+		public String getCreatedAt() {
+			return trackedCase.getMetadata().getCreated().format(DateTimeFormatter.ISO_DATE);
 		}
 
 		/**
