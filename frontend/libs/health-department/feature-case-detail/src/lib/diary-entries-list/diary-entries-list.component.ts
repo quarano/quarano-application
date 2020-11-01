@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  CaseDto,
-  CaseEntityService,
-  HealthDepartmentService,
-  TrackedCaseDiaryEntryDto,
-} from '@qro/health-department/domain';
+import { CaseDto, CaseEntityService, TrackedCaseDiaryEntryDto } from '@qro/health-department/domain';
 import * as _ from 'lodash';
 import { Dictionary } from '@ngrx/entity';
 import { DiaryListItemModel } from '../diary-entries-list-item/diary-entries-list-item.component';
 import { ActivatedRoute } from '@angular/router';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ApiService } from '@qro/shared/util-data-access';
 
 @Component({
   selector: 'qro-diary-entries-list',
@@ -27,19 +23,31 @@ export class DiaryEntriesListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private entityService: CaseEntityService,
-    private healthDepartmentService: HealthDepartmentService
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
     this.listItems$ = this.route.parent.paramMap.pipe(
       tap((params) => (this.caseId = params.get('id'))),
       switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
-      switchMap((caseDto: CaseDto) => this.healthDepartmentService.getCaseDiaryEntries(caseDto.caseId)), // HAL service aus shared data access, Schwellenwert, self-link in Antwort
-      map((diaryEntries: TrackedCaseDiaryEntryDto[]) => {
-        return this.mapToListItems(diaryEntries);
+      switchMap((caseDto: CaseDto) => this.apiService.getApiCall(caseDto, 'diary')),
+      map((response) => {
+        return this.mapToListItems(this.mapToTrackedCaseDiaryEntryDtoList(response));
       }),
       shareReplay(1)
     );
+  }
+
+  private mapToTrackedCaseDiaryEntryDtoList(diaryEntriesList: any): TrackedCaseDiaryEntryDto[] {
+    return diaryEntriesList?._embedded?.trackedCaseDiaryEntrySummaryList?.map((entry) => {
+      return {
+        bodyTemperature: entry.bodyTemperature,
+        timeOfDay: entry.slot.timeOfDay,
+        date: entry.slot.date,
+        symptoms: entry.symptoms.map((symtom) => symtom.name),
+        contacts: entry.contacts.map((contact) => contact.firstName + ' ' + contact.lastName),
+      } as TrackedCaseDiaryEntryDto;
+    });
   }
 
   private mapToListItems(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
