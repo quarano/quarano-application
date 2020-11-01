@@ -119,8 +119,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.enrollmentService
         .registerClient(register)
         .pipe(
-          tap((res) => this.authStore.login()),
           tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
+          tap((res) => this.authStore.login()),
           switchMap((res) => this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH').pipe(map((r) => res)))
         )
         .subscribe(

@@ -3,6 +3,7 @@
 describe('registration form', () => {
   beforeEach(() => {
     cy.server();
+    cy.route('POST', '/registration').as('registration');
     cy.visit('http://localhost:4200/client/enrollment/register');
   });
 
@@ -183,4 +184,21 @@ describe('registration form', () => {
       });
     });
   });
+
+  // ToDo: Wieder einkommentieren, sobald funktionierender Registrierungs-Code geseedet wird
+
+  //  describe('complete form', () => {
+  //    it('completed form', () => {
+  //      cy.get('[data-cy="input-client-code"] input[matInput]').type('acc8b747-1eac-4db4-a8f3-d2a8bbe8320d');
+  //      cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
+  //      cy.get('[data-cy="input-password"] input[matInput]').type('thisIsMyPassword1!');
+  //      cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword1!');
+  //      cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('03.08.1975');
+  //      cy.get('[data-cy="input-privacy-policy"]').click();
+  //      cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
+  //      cy.get('[data-cy="registration-submit-button"] button').click();
+  //      cy.wait('@registration').its('status').should('eq', 200);
+  //      cy.url().should('include', '/client/enrollment/basic-data');
+  //    });
+  //  });
 });
