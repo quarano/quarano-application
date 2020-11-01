@@ -36,26 +36,6 @@ export class HealthDepartmentService {
     return this.httpClient.get<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseId}`).pipe(shareReplay());
   }
 
-  getCaseDiaryEntries(caseId: string): Observable<TrackedCaseDiaryEntryDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases/${caseId}/diary`).pipe(
-      map((result) => result?._embedded?.trackedCaseDiaryEntrySummaryList),
-      map((trackedCasesList) => this.mapToTrackedCaseDiaryEntryDtoList(trackedCasesList)),
-      shareReplay()
-    );
-  }
-
-  private mapToTrackedCaseDiaryEntryDtoList(diaryEntriesList: any): TrackedCaseDiaryEntryDto[] {
-    return diaryEntriesList.map((entry) => {
-      return {
-        bodyTemperature: entry.bodyTemperature,
-        timeOfDay: entry.slot.timeOfDay,
-        date: entry.slot.date,
-        symptoms: entry.symptoms.map((symtom) => symtom.name),
-        contacts: entry.contacts.map((contact) => contact.firstName + ' ' + contact.lastName),
-      } as TrackedCaseDiaryEntryDto;
-    });
-  }
-
   getCaseActions(caseId: string): Observable<CaseActionDto> {
     return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/api/hd/actions/${caseId}`).pipe(shareReplay());
   }
