@@ -9,7 +9,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { CaseDetailComponent } from './case-detail/case-detail.component';
-import { HealthDepartmentDomainModule, ReportCaseActionsResolver } from '@qro/health-department/domain';
+import {
+  CaseDetailResolver,
+  HealthDepartmentDomainModule,
+  ReportCaseActionsResolver,
+} from '@qro/health-department/domain';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import { MailComponent } from './mail/mail.component';
 import { IndexContactsComponent } from './index-contacts/index-contacts.component';
@@ -38,6 +42,7 @@ const routes: Routes = [
   {
     path: ':type/:id',
     component: CaseDetailComponent,
+    resolve: { caseDetail: CaseDetailResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {

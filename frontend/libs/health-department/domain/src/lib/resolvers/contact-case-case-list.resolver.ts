@@ -9,13 +9,15 @@ import { CaseType } from '@qro/auth/domain';
 export class ContactCaseCaseListResolver implements Resolve<boolean> {
   constructor(private entityService: CaseEntityService) {}
 
+  // ToDo: Caching muss optimiert werden
   resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.entityService.loaded$.pipe(
-      tap((loaded) => {
-        if (!loaded) {
-          this.entityService.getAll();
-        }
-      }),
+      // tap((loaded) => {
+      //   if (!loaded) {
+      //     this.entityService.getAll();
+      //   }
+      // }),
+      tap((loaded) => this.entityService.load()),
       filter((loaded) => !!loaded),
       tap((loaded) => this.entityService.setFilter(CaseType.Contact)),
       first()

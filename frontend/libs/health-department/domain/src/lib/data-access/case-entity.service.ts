@@ -33,9 +33,9 @@ export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
 
   public loadOneFromStore(id: string): Observable<CaseDto> {
     if (id) {
-      return this.entities$.pipe(
+      return this.entityMap$.pipe(
         switchMap((entities) => {
-          const loadedCase = entities.find((caseDto) => id === caseDto.caseId);
+          const loadedCase = entities[id];
           if (loadedCase && loadedCase?.comments) {
             return of(loadedCase);
           } else {

@@ -11,6 +11,6 @@ export class CaseDetailResolver implements Resolve<CaseDto> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<CaseDto> {
     const id = route.paramMap.get('id');
-    return this.entityService.loadOneFromStore(id).pipe(shareReplay(1), take(1));
+    return this.entityService.getByKey(id);
   }
 }

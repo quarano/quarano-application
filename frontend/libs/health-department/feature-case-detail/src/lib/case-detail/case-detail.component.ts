@@ -64,8 +64,7 @@ export class CaseDetailComponent implements OnDestroy {
 
   initData(): void {
     this.caseDetail$ = this.route.paramMap.pipe(
-      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
-      shareReplay(1)
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id')))
     );
 
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
@@ -120,7 +119,11 @@ export class CaseDetailComponent implements OnDestroy {
 
   startTracking(caseDetail: CaseDto) {
     this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking').subscribe((data) => {
-      this.entityService.updateOneInCache({ ...cloneDeep(caseDetail), _links: data._links });
+      this.entityService.updateOneInCache({
+        ...cloneDeep(caseDetail),
+        _links: data._links,
+        status: CaseStatus.InRegistrierung,
+      });
       this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDetail.caseId}/email`]);
     });
   }
