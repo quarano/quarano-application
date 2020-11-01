@@ -44,7 +44,10 @@
       [nameProperties]="['name']"
       name="characteristicSymptoms"
     ></qro-multiple-autocomplete>
-    <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.symptoms)">
+    <mat-error
+      *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.symptoms)"
+      style="font-size: 75%;"
+    >
       {{ validationErrorService.getErrorMessage(formGroup.controls.symptoms, error) | async }}
     </mat-error>
   </div>
