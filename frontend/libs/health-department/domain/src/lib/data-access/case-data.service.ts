@@ -79,6 +79,7 @@ export class CaseDataService extends DefaultDataService<CaseDto> {
       caseTypeLabel: item.caseTypeLabel,
       createdAt: item.createdAt ? new Date(item.createdAt) : null,
       extReferenceNumber: item.extReferenceNumber,
+      _embedded: item._embedded,
     };
   }
 }
