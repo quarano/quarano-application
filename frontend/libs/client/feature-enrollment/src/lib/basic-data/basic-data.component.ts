@@ -369,7 +369,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     const dateString = date.toLocaleDateString('de');
     this.subs.add(
       this.dialogService
-        .openContactPersonDialog()
+        .openContactPersonDialog({ disableClose: true })
         .afterClosed()
         .subscribe((createdContact: ContactPersonDto | null) => {
           if (createdContact) {

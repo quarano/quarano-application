@@ -223,7 +223,7 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
 
   openContactDialog() {
     this.dialogService
-      .openContactPersonDialog()
+      .openContactPersonDialog({ disableClose: true })
       .afterClosed()
       .subscribe((createdContact: ContactPersonDto | null) => {
         if (createdContact) {

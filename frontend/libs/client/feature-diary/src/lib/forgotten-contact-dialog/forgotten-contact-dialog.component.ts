@@ -84,7 +84,7 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
   openContactDialog() {
     this.subs.add(
       this.dialogService
-        .openContactPersonDialog()
+        .openContactPersonDialog({ disableClose: true })
         .afterClosed()
         .subscribe((createdContact: ContactPersonDto | null) => {
           if (createdContact) {
