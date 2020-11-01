@@ -15,10 +15,12 @@ export class ForbiddenComponent implements OnInit {
 
   ngOnInit() {
     this.message$ = this.route.queryParamMap.pipe(
-      map(
-        (paramMap) =>
-          decodeURIComponent(paramMap.get('message')) || 'FORBIDDEN.SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN'
-      )
+      map((paramMap) => {
+        if (paramMap.has('message')) {
+          return decodeURIComponent(paramMap.get('message'));
+        }
+        return 'FORBIDDEN.SIE_HABEN_NICHT_DIE_ERFORDERLICHEN_BERECHTIGUNGEN';
+      })
     );
   }
 }

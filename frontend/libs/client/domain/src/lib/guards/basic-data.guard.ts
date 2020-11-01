@@ -1,8 +1,8 @@
 import { ClientStore } from './../store/client-store.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { UserService } from '@qro/auth/api';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 
@@ -25,15 +25,22 @@ export class BasicDataGuard implements CanActivate {
       this.router.navigate(['/auth/forbidden']);
       return false;
     }
-    return this.clientStore.getEnrollmentStatus().pipe(
-      map((status) => {
-        if (status?.complete) {
-          this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
-          this.router.navigate(['/client/diary/diary-list']);
-          return false;
-        }
+    return this.userService.isLoggedIn$.pipe(
+      switchMap((isLoggedIn) => {
+        if (isLoggedIn) {
+          return this.clientStore.getEnrollmentStatus().pipe(
+            map((status) => {
+              if (status?.complete) {
+                this.snackbarService.message('Sie haben die Registrierung bereits abgeschlossen');
+                this.router.navigate(['/client/diary/diary-list']);
+                return false;
+              }
 
-        return true;
+              return true;
+            })
+          );
+        }
+        return of(false);
       })
     );
   }

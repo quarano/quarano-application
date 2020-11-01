@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from '@qro/auth/api';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,15 @@ export class IsAdminGuard implements CanActivate {
     if (this.userService.isAdmin) {
       return true;
     }
-    this.router.navigate(['/auth/forbidden']);
-    return false;
+
+    return this.userService.isLoggedIn$.pipe(
+      map((loggedIn) => {
+        if (loggedIn) {
+          this.router.navigate(['/auth/forbidden']);
+        }
+
+        return false;
+      })
+    );
   }
 }
