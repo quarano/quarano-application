@@ -36,6 +36,11 @@ public interface EmailTemplates {
 		 * @return
 		 */
 		String toFileName();
+
+		/**
+		 * @return The current {@link Key} as String.
+		 */
+		String getKey();
 	}
 
 	/**
@@ -63,7 +68,16 @@ public interface EmailTemplates {
 		 */
 		@Override
 		public String toFileName() {
-			return name().toLowerCase(Locale.US).replace('_', '-').concat(".txt");
+			return determineName().concat(".txt");
+		}
+
+		@Override
+		public String getKey() {
+			return determineName();
+		}
+
+		private String determineName() {
+			return name().toLowerCase(Locale.US).replace('_', '-');
 		}
 	}
 }

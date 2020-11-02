@@ -33,25 +33,25 @@ import org.springframework.util.Assert;
  * @author Oliver Drotbohm
  * @author Jens Kutzsche
  */
-class ConfigurableEmailTemplates implements EmailTemplates {
-
-	static final Locale DEFAULT_LOCALE = Locale.GERMANY;
+class ConfigurableFilebasedEmailTemplates implements EmailTemplates {
 
 	private final ResourceLoader resources;
 	private final Map<Key, String> templates;
 	private final Map<Tuple, String> cache;
 	private final String pathTemplate;
+	private I18nProperties i18nProperties;
 
 	/**
-	 * Creates a new {@link ConfigurableEmailTemplates} for the given {@link ResourceLoader}, {@link Stream} of template
-	 * {@link Key}s and a path template to turn the keys into actual files accessible for the {@link ResourceLoader}. In
-	 * the path template use <b>%1$s for file name</b> and <b>%2$s for language tage</b>.
+	 * Creates a new {@link ConfigurableFilebasedEmailTemplates} for the given {@link ResourceLoader}, {@link Stream} of
+	 * template {@link Key}s and a path template to turn the keys into actual files accessible for the
+	 * {@link ResourceLoader}. In the path template use <b>%1$s for file name</b> and <b>%2$s for language tage</b>.
 	 *
 	 * @param resources must not be {@literal null}.
 	 * @param keys must not be {@literal null}.
 	 * @param pathTemplate must not be {@literal null} or empty.
 	 */
-	public ConfigurableEmailTemplates(ResourceLoader resources, Stream<Key> keys, String pathTemplate) {
+	public ConfigurableFilebasedEmailTemplates(ResourceLoader resources, Stream<Key> keys, String pathTemplate,
+			I18nProperties i18nProperties) {
 
 		Assert.notNull(resources, "ResourceLoader must not be null!");
 		Assert.notNull(keys, "Keys must not be null!");
@@ -61,6 +61,7 @@ class ConfigurableEmailTemplates implements EmailTemplates {
 		this.templates = keys.collect(Collectors.toMap(Function.identity(), Key::toFileName));
 		this.pathTemplate = pathTemplate;
 		this.cache = new ConcurrentHashMap<>(templates.size());
+		this.i18nProperties = i18nProperties;
 	}
 
 	/*
@@ -79,7 +80,8 @@ class ConfigurableEmailTemplates implements EmailTemplates {
 
 			String localeTag = resource.getLocaleTag();
 
-			if (StringUtils.isNotBlank(localeTag) && !localeTag.startsWith(DEFAULT_LOCALE.getLanguage())) {
+			if (StringUtils.isNotBlank(localeTag)
+					&& !localeTag.startsWith(i18nProperties.getDefaultLocale().getLanguage())) {
 
 				var resourceDefault = getFirstExistingResource(templates.get(key), List.of(""));
 				var templateDefault = readTemplate(resourceDefault);

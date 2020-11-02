@@ -23,7 +23,7 @@ public class DepartmentProperties {
 	private final DefaultDepartment defaultDepartment;
 	private final @Getter DefaultAdminAccount defaultAccount;
 
-	Department getDefaultDepartment() {
+	public Department getDefaultDepartment() {
 
 		return new Department(defaultDepartment.name, defaultDepartment.rkiCode)
 				.setContacts(defaultDepartment.contacts.stream()

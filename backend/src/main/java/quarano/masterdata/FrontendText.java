@@ -1,12 +1,13 @@
 package quarano.masterdata;
 
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import quarano.core.QuaranoAggregate;
 import quarano.masterdata.FrontendText.FrontendTextIdentifier;
 
@@ -26,14 +27,16 @@ import org.jmolecules.ddd.types.Identifier;
  */
 @Entity
 @Table(name = "frontend_texts")
-@Data
-@Setter(AccessLevel.PACKAGE)
+@Setter(AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = true, of = {})
+@ToString
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(staticName = "of")
 public class FrontendText extends QuaranoAggregate<FrontendText, FrontendTextIdentifier> {
 
-	private final @Getter String textKey;
-	private final @Getter Locale locale;
-	private final @Getter @Lob String text;
+	private @Getter String textKey;
+	private @Getter Locale locale;
+	private @Getter @Lob String text;
 
 	@Embeddable
 	@EqualsAndHashCode

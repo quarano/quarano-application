@@ -1,12 +1,12 @@
 package quarano.masterdata;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import quarano.core.QuaranoAggregate;
 import quarano.masterdata.EmailText.EmailTextIdentifier;
 
@@ -26,14 +26,14 @@ import org.jmolecules.ddd.types.Identifier;
  */
 @Entity
 @Table(name = "email_texts")
-@Data
-@Setter(AccessLevel.PACKAGE)
+@Setter(AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = true, of = {})
+@ToString
 public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> {
 
-	private final @Getter String textKey;
-	private final @Getter Locale locale;
-	private final @Getter @Lob String text;
+	private @Getter String textKey;
+	private @Getter Locale locale;
+	private @Getter @Lob String text;
 
 	@Embeddable
 	@EqualsAndHashCode
@@ -41,7 +41,7 @@ public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> 
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 	public static class EmailTextIdentifier implements Identifier, Serializable {
 
-		private static final long serialVersionUID = -4584209020556099333L;
+		private static final long serialVersionUID = 4282930202833920047L;
 
 		final UUID emailTextId;
 
