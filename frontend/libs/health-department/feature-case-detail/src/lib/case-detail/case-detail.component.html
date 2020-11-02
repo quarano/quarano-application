@@ -149,7 +149,6 @@
         Kontakte <span class="info-badge">{{ caseDetail.contactCount }}</span>
       </a>
       <a
-        *ngIf="diaryEntries$ | async"
         mat-tab-link
         [routerLink]="['diary']"
         routerLinkActive
