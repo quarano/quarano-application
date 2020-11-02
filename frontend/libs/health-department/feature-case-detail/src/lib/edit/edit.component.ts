@@ -183,6 +183,7 @@ export class EditComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate([`/health-department/case-detail/new/index`]).then(() => {
         this.updateCase$$.next(updatedCase);
+        this.triggerErrorMessages();
       });
     }
   }
@@ -209,7 +210,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   updateFormGroup(caseDetailDto: CaseDto) {
-    if (caseDetailDto && caseDetailDto.caseId && this.formGroup) {
+    if (caseDetailDto && this.formGroup) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];
