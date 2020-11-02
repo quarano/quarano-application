@@ -3,6 +3,7 @@ package quarano.department.web;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static quarano.department.activation.ActivationCodeException.Status.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -375,6 +376,48 @@ class RegistrationWebIntegrationTests {
 				.isPresent()
 				.map(TrackedPerson::getLocale)
 				.hasValue(newLocale);
+	}
+
+	@Test // CORE-474
+	void errorMessagesForActivationCodesGetI18Ned() throws Exception {
+
+		var activation = createActivation();
+		var person = activation.getPerson();
+
+		var password = "myPassword";
+		var username = "testusername";
+
+		var registrationDto = RegistrationDto.builder()
+				.username(username)
+				.password(password)
+				.passwordConfirm(password)
+				.dateOfBirth(person.getDateOfBirth())
+				.clientCode(activation.getCode())
+				.build();
+
+		// Initiate registration
+
+		mvc.perform(post("/api/registration")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(registrationDto)))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn()
+				.getResponse();
+
+		// Retry registration with different name
+
+		registrationDto.setUsername("someother");
+
+		var response = mvc.perform(post("/api/registration")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(registrationDto)))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse();
+
+		var document = JsonPath.parse(response.getContentAsString());
+
+		assertThat(document.read("$.clientCode", String.class))
+				.isEqualTo(messages.getMessage(USED_OR_CANCELED.getMessageKey()));
 	}
 
 	@Test // CORE-469
