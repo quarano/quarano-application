@@ -377,6 +377,40 @@ class RegistrationWebIntegrationTests {
 				.hasValue(newLocale);
 	}
 
+	@Test // CORE-469
+	@WithQuaranoUser("agent2")
+	void startingTrackingCanBeRepeated() throws Exception {
+
+		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1;
+		var harryCase = cases.findByTrackedPerson(personId)
+				.orElseThrow();
+
+		mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+				.andExpect(status().isOk());
+
+		// Initial activation code
+		var code = codes.getPendingActivationCode(personId).orElseThrow();
+
+		assertThatCode(() -> {
+
+			// Re-start registration
+			var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+					.andExpect(status().isOk())
+					.andReturn().getResponse().getContentAsString();
+
+			// New activation code
+			assertThat(codes.getPendingActivationCode(personId)).hasValueSatisfying(it -> {
+
+				// … is different from old
+				assertThat(it).isNotEqualTo(code);
+				// … got returned from the API call
+				assertThat(JsonPath.parse(response).read("$.activationCode", String.class))
+						.isEqualTo(it.getId().toString());
+			});
+
+		}).doesNotThrowAnyException();
+	}
+
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
 		String resultDtoStr = mvc.perform(get("/api/user/me")

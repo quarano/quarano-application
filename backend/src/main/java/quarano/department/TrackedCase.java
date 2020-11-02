@@ -26,6 +26,7 @@ import javax.persistence.*;
 
 import org.jmolecules.ddd.types.Identifier;
 import org.jmolecules.event.types.DomainEvent;
+import org.springframework.data.util.Streamable;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -42,48 +43,33 @@ import org.springframework.util.Assert;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@OneToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_person_id")
-	private TrackedPerson trackedPerson;
+	@OneToOne(cascade = { CascadeType.ALL }) @JoinColumn(name = "tracked_person_id") private TrackedPerson trackedPerson;
 
-	@ManyToOne
-	@JoinColumn(name = "department_id", nullable = false)
-	private Department department;
+	@ManyToOne @JoinColumn(name = "department_id", nullable = false) private Department department;
 
 	private @Getter TestResult testResult;
 
-	@Setter(AccessLevel.NONE)
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "questionnaire_id")
-	private @Getter Questionnaire questionnaire;
+	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL,
+			orphanRemoval = true) @JoinColumn(name = "questionnaire_id") private @Getter Questionnaire questionnaire;
 
-	@Setter(AccessLevel.NONE)
-	private Enrollment enrollment = new Enrollment();
+	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
 
-	@Column(name = "case_type")
-	@Enumerated(EnumType.STRING)
-	private @Getter @Setter CaseType type = CaseType.INDEX;
+	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
 	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
 
 	private @Getter @Setter String extReferenceNumber;
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "tracked_case_id")
-	private @Getter List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL }) @JoinColumn(
+			name = "tracked_case_id") private @Getter List<Comment> comments = new ArrayList<>();
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private @Getter Status status;
+	@Column(nullable = false) @Enumerated(EnumType.STRING) private @Getter Status status;
 
-	@Column(nullable = true)
-	@Enumerated(EnumType.STRING)
-	private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
+	@Column(
+			nullable = true) @Enumerated(EnumType.STRING) private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
 
-	@OneToMany
-	private @Getter List<TrackedCase> originCases = new ArrayList<>();
+	@OneToMany private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(CaseSource source) {
 
@@ -317,6 +303,10 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return status.equals(Status.EXTERNAL_ZIP);
 	}
 
+	public boolean isInRegistration() {
+		return status.equals(Status.IN_REGISTRATION);
+	}
+
 	public boolean isEnrollmentCompleted() {
 		return getEnrollment().isComplete();
 	}
@@ -340,14 +330,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	/**
+	 * Marks the current {@link TrackedCase} to be in registration.
+	 *
 	 * @return
 	 */
 	TrackedCase markInRegistration() {
 
-		assertStatus(Status.OPEN, "Cannot start registration for case %s in status %s!", id, status);
+		assertStatus(Streamable.of(Status.OPEN, Status.IN_REGISTRATION),
+				"Cannot start registration for case %s in status %s!", id, status);
+
+		if (isInRegistration()) {
+			return this;
+		}
 
 		this.status = Status.IN_REGISTRATION;
-
 		this.registerEvent(CaseStatusUpdated.of(this));
 
 		return this;
@@ -393,8 +389,12 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	private void assertStatus(Status status, String message, Object... args) {
+		assertStatus(Streamable.of(status), message, args);
+	}
 
-		if (!this.status.equals(status)) {
+	private void assertStatus(Streamable<Status> statuses, String message, Object... args) {
+
+		if (!statuses.stream().anyMatch(status::equals)) {
 			throw new IllegalStateException(String.format(message, args));
 		}
 	}

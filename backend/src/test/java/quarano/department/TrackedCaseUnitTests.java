@@ -175,6 +175,19 @@ class TrackedCaseUnitTests {
 		assertThat(trackedCase.isInvestigationNeeded()).isEqualTo(isNeeded);
 	}
 
+	@Test // CORE-469
+	void markingInRegistrationIsIdempotentOperation() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var department = new Department("Musterstadt");
+
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, department);
+
+		trackedCase.markInRegistration();
+
+		assertThatCode(() -> trackedCase.markInRegistration()).doesNotThrowAnyException();
+	}
+
 	private static Stream<Arguments> missingDetailsSource() {
 
 		return Stream.of(
