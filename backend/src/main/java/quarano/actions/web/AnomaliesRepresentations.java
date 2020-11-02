@@ -287,7 +287,7 @@ class AnomaliesRepresentations {
 			return summary.getZipCode();
 		}
 
-		public String getDateOfBirth() {
+		public LocalDate getDateOfBirth() {
 			return summary.getDateOfBirth();
 		}
 
@@ -295,7 +295,7 @@ class AnomaliesRepresentations {
 			return summary.getEmail();
 		}
 
-		public String getCreatedAt() {
+		public LocalDate getCreatedAt() {
 			return summary.getCreatedAt();
 		}
 

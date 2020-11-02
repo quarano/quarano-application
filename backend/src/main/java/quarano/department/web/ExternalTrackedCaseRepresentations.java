@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.EnumMessageSourceResolvable;
 import quarano.department.TrackedCase;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
@@ -52,11 +53,8 @@ public interface ExternalTrackedCaseRepresentations {
 			return trackedCase.getTrackedPerson().getLastName();
 		}
 
-		public String getDateOfBirth() {
-
-			var dateOfBirth = trackedCase.getTrackedPerson().getDateOfBirth();
-
-			return dateOfBirth == null ? null : dateOfBirth.format(DateTimeFormatter.ISO_DATE);
+		public LocalDate getDateOfBirth() {
+			return trackedCase.getTrackedPerson().getDateOfBirth();
 		}
 
 		/*
@@ -128,11 +126,8 @@ public interface ExternalTrackedCaseRepresentations {
 			return zipCode == null ? null : zipCode.toString();
 		}
 
-		public String getDateOfBirth() {
-			var person = trackedCase.getTrackedPerson();
-			var dateOfBirth = person.getDateOfBirth();
-
-			return dateOfBirth == null ? null : dateOfBirth.format(DateTimeFormatter.ISO_DATE);
+		public LocalDate getDateOfBirth() {
+			return trackedCase.getTrackedPerson().getDateOfBirth();
 		}
 
 		public String getEmail() {
@@ -158,8 +153,8 @@ public interface ExternalTrackedCaseRepresentations {
 			return messages.getMessage(EnumMessageSourceResolvable.of(trackedCase.getType()));
 		}
 
-		public String getCreatedAt() {
-			return trackedCase.getMetadata().getCreated().format(DateTimeFormatter.ISO_DATE);
+		public LocalDate getCreatedAt() {
+			return trackedCase.getMetadata().getCreated().toLocalDate();
 		}
 
 		@Nullable
