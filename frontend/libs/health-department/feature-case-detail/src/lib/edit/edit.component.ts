@@ -178,11 +178,11 @@ export class EditComponent implements OnInit, OnDestroy {
     const updatedCase = this.formGroup.getRawValue();
     if (caseId) {
       this.router.navigate([`/health-department/case-detail/index/${caseId}`]).then(() => {
-        this.updateCase$$.next(updatedCase);
+        this.updateFormGroup(updatedCase);
       });
     } else {
       this.router.navigate([`/health-department/case-detail/new/index`]).then(() => {
-        this.updateCase$$.next(updatedCase);
+        this.updateFormGroup(updatedCase, true);
         this.triggerErrorMessages();
       });
     }
@@ -209,8 +209,8 @@ export class EditComponent implements OnInit, OnDestroy {
     input.value = input.value?.trim();
   }
 
-  updateFormGroup(caseDetailDto: CaseDto) {
-    if (caseDetailDto && this.formGroup) {
+  updateFormGroup(caseDetailDto: CaseDto, convertingFromContactCase: boolean = false) {
+    if ((caseDetailDto && caseDetailDto.caseId && this.formGroup) || convertingFromContactCase) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];
