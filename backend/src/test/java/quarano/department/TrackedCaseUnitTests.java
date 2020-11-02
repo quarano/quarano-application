@@ -30,17 +30,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class TrackedCaseUnitTests {
 
-	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
-
-		var department = new Department("Musterstadt");
-
-		return new TrackedCase(person, CaseType.INDEX, department)
-				.markInRegistration()
-				.markRegistrationCompleted()
-				.submitEnrollmentDetails()
-				.submitQuestionnaire(new MinimalQuestionnaire());
-	}
-
 	@Test
 	void rejectsEnrollmentCompletionForRequiredEncountersButNoneRegistered() {
 
@@ -186,6 +175,17 @@ class TrackedCaseUnitTests {
 		trackedCase.markInRegistration();
 
 		assertThatCode(() -> trackedCase.markInRegistration()).doesNotThrowAnyException();
+	}
+
+	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
+
+		var department = new Department("Musterstadt");
+
+		return new TrackedCase(person, CaseType.INDEX, department)
+				.markInRegistration()
+				.markRegistrationCompleted()
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new MinimalQuestionnaire());
 	}
 
 	private static Stream<Arguments> missingDetailsSource() {
