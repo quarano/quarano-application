@@ -3,8 +3,9 @@
 describe('health-department contact cases', () => {
   beforeEach(() => {
     cy.loginAgent();
-    cy.route('/api/hd/cases?type=contact').as('newContact');
-    cy.route('api/hd/cases/*/registration').as('registration');
+    cy.route('POST', 'api/hd/cases/?type=contact').as('newContact');
+    // cy.route('POST', 'api/hd/cases/*').as('newContactDetail');
+    // cy.route('api/hd/cases/*/registration').as('registration');
   });
 
   describe('converting to index case ', () => {
@@ -83,7 +84,7 @@ describe('health-department contact cases', () => {
   });
 
   describe('create new contact case', () => {
-    it('happy path', () => {
+    it('happy path save and close', () => {
       cy.location('pathname').should('include', 'health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
@@ -112,13 +113,65 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="input-phone"]').type('162156156156');
       cy.get('[data-cy="input-email"]').type('jack@gmail.com');
 
-      cy.get('[data-cy="client-submit-button"] button').click();
-      cy.wait('@newContact');
-      cy.get('@newContact').its('status').should('eq', 200);
-      cy.get('[data-cy="start-tracking-button"]').should('be.disabled');
-      cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
-      cy.wait('@registration');
-      cy.get('@registration').its('status').should('eq', 200);
+      cy.get('[data-cy="client-submit-and-close-button"] button').click();
+      cy.wait('@newContact').its('status').should('eq', 201);
+      cy.get('@newContact')
+        .its('response.body')
+        .then((body) => {
+          const caseId = body.caseId;
+          expect(caseId).not.to.eq(null);
+          expect(caseId).not.to.eq('');
+        });
+      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
     });
+
+    // TODO: uncomment and check as soon as CORE-472 is merged to develop
+    // it('happy path save and return to detail page', () => {
+    //   cy.location('pathname').should('include', 'health-department/index-cases/case-list');
+    //   cy.get('[data-cy="contact-cases"]').should('exist');
+    //   cy.get('[data-cy="contact-cases"]').click();
+    //   cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+    //   cy.get('[data-cy="new-case-button"]').should('exist');
+    //   cy.get('[data-cy="new-case-button"]').click();
+    //
+    //   cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
+    //   cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
+    //   cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
+    //
+    //   cy.get('[data-cy="input-firstname"]').should('exist');
+    //   cy.get('[data-cy="input-lastname"]').should('exist');
+    //   cy.get('[data-cy="input-dayofbirth"]').should('exist');
+    //   cy.get('[data-cy="input-phone"]').should('exist');
+    //   cy.get('[data-cy="input-email"]').should('exist');
+    //
+    //   cy.get('[data-cy="input-firstname"]').type('Jack');
+    //   cy.get('[data-cy="input-lastname"]').type('Randel');
+    //
+    //   cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
+    //   cy.get('[data-cy="client-submit-and-close-button"] button').should('be.enabled');
+    //   cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
+    //
+    //   cy.get('[data-cy="input-dayofbirth"]').type('01.01.1970');
+    //   cy.get('[data-cy="input-phone"]').type('162156156156');
+    //   cy.get('[data-cy="input-email"]').type('jack@gmail.com');
+    //
+    //   cy.get('[data-cy="client-submit-button"] button').click();
+    //   cy.wait('@newContact').its('status').should('eq', 201);
+    //   cy.get('@newContact')
+    //     .its('response.body')
+    //     .then((body) => {
+    //
+    //       const caseId = body.caseId;
+    //       expect(caseId).not.to.eq(null);
+    //       expect(caseId).not.to.eq('');
+    //
+    //       cy.location('pathname').should('include', 'health-department/case-detail/contact/' + caseId + '/edit');
+    //     });
+    //
+    //   cy.get('[data-cy="start-tracking-button"]').should('be.disabled');
+    //   cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
+    //   cy.wait('@registration');
+    //   cy.get('@registration').its('status').should('eq', 200);
+    // });
   });
 });
