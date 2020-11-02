@@ -1,5 +1,7 @@
 package quarano.masterdata.web;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.masterdata.FrontendText;
 
@@ -12,13 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class FrontendTextRepresentations {
 
-	public FrontendTextDto toDto(FrontendText textEntity) {
+	public FrontendTextDto toRepresentation(FrontendText textEntity) {
 		return FrontendTextDto.from(textEntity);
 	}
 
 	@Relation(collectionRelation = "texts")
-	@Value(staticConstructor = "")
+	@Value
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	static class FrontendTextDto {
+
 		private String key;
 		private String text;
 

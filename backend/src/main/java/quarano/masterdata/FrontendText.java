@@ -33,9 +33,7 @@ public class FrontendText extends QuaranoAggregate<FrontendText, FrontendTextIde
 
 	private final @Getter String textKey;
 	private final @Getter Locale locale;
-
-	@Lob
-	private final @Getter String text;
+	private final @Getter @Lob String text;
 
 	@Embeddable
 	@EqualsAndHashCode

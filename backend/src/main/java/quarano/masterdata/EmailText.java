@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import quarano.core.QuaranoAggregate;
-import quarano.masterdata.EmailText.ClientTextIdentifier;
+import quarano.masterdata.EmailText.EmailTextIdentifier;
 
 import java.io.Serializable;
 import java.util.Locale;
@@ -29,19 +29,17 @@ import org.jmolecules.ddd.types.Identifier;
 @Data
 @Setter(AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true, of = {})
-public class EmailText extends QuaranoAggregate<EmailText, ClientTextIdentifier> {
+public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> {
 
 	private final @Getter String textKey;
 	private final @Getter Locale locale;
-
-	@Lob
-	private final @Getter String text;
+	private final @Getter @Lob String text;
 
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
 	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-	public static class ClientTextIdentifier implements Identifier, Serializable {
+	public static class EmailTextIdentifier implements Identifier, Serializable {
 
 		private static final long serialVersionUID = -4584209020556099333L;
 

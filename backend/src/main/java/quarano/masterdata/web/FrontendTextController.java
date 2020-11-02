@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class FrontendTextControler {
+public class FrontendTextController {
 
 	private final @NonNull FrontendTextRepresentations representations;
 
@@ -30,12 +30,13 @@ public class FrontendTextControler {
 
 		var terms = new FrontendText("terms", Locale.GERMAN, AGB);
 		var dataProtection = new FrontendText("data-protection", Locale.GERMAN, DATA_PROTECTION);
-		var imprint = new FrontendText("imprint", Locale.GERMAN, DATA_PROTECTION);
+		var imprint = new FrontendText("imprint", Locale.GERMAN, IMPRINT);
 		var welcomeIndex = new FrontendText("welcome-index", Locale.GERMAN, WELCOME_INDEX);
 		var welcomeContact = new FrontendText("welcome-contact", Locale.GERMAN, WELCOME_CONTACT);
 
-		var entities = List.of(terms, dataProtection, imprint, welcomeIndex, welcomeContact);
-		var dtos = entities.stream().map(it -> representations.toDto(it)).collect(Collectors.toList());
+		var dtos = List.of(terms, dataProtection, imprint, welcomeIndex, welcomeContact).stream()
+				.map(it -> representations.toRepresentation(it))
+				.collect(Collectors.toList());
 
 		return HalModelBuilder.emptyHalModel()
 				.embed(dtos, FrontendTextDto.class)
