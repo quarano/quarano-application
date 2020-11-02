@@ -1,5 +1,4 @@
 import {
-  CaseActionDto,
   CaseDto,
   CaseEntityService,
   CaseStatus,
@@ -10,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -33,8 +32,6 @@ export class CaseDetailComponent implements OnDestroy {
   caseLabel$: Observable<string>;
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
-  caseActions$: Observable<CaseActionDto>;
-  contacts$: Observable<any>;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,16 +68,6 @@ export class CaseDetailComponent implements OnDestroy {
       this.type$$.next(paramMap.get('type') as CaseType);
       this.caseId = paramMap.get('id');
     });
-
-    this.caseActions$ = this.caseDetail$.pipe(
-      filter((caseDetail) => !!caseDetail.caseId),
-      switchMap((caseDetail) => this.healthDepartmentService.getCaseActions(caseDetail.caseId))
-    );
-
-    this.contacts$ = this.caseDetail$.pipe(
-      filter((caseDto) => !!caseDto?._links?.hasOwnProperty('contacts')),
-      switchMap((caseDto) => this.apiService.getApiCall(caseDto, 'contacts'))
-    );
   }
 
   getStartTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {

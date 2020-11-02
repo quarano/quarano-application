@@ -31,6 +31,7 @@ export interface CaseDto extends HalResponse {
   infected?: boolean;
   indexContacts?: ContactDto[];
   contactCount?: number;
+  openAnomaliesCount?: number;
   originCases?: string[];
   _embedded?: CaseDetailsEmbeddedDto;
 }

@@ -73,27 +73,25 @@
       >
         {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
       </a>
-      <ng-container *ngIf="caseActions$ | async as caseActionDto">
-        <a
-          mat-tab-link
-          [routerLink]="['actions']"
-          routerLinkActive
-          #rlactions="routerLinkActive"
-          [active]="rlactions.isActive"
+      <a
+        mat-tab-link
+        [routerLink]="['actions']"
+        routerLinkActive
+        #rlactions="routerLinkActive"
+        [active]="rlactions.isActive"
+      >
+        <span
+          *ngIf="true; else has_no_open_anomalies"
+          [matBadge]="caseDetail.openAnomaliesCount"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+          >Aktionen</span
         >
-          <span
-            *ngIf="true; else has_no_open_anomalies"
-            matBadge="{{ caseActionDto.anomalies.health.length }}"
-            matBadgeOverlap="false"
-            matBadgeSize="small"
-            matBadgeColor="warn"
-            >Aktionen</span
-          >
-          <ng-template #has_no_open_anomalies>
-            <span>Aktionen</span>
-          </ng-template>
-        </a>
-      </ng-container>
+        <ng-template #has_no_open_anomalies>
+          <span>Aktionen</span>
+        </ng-template>
+      </a>
       <a
         *ngIf="caseDetail.comments"
         mat-tab-link
@@ -135,7 +133,6 @@
         Fragebogen
       </a>
       <a
-        *ngIf="contacts$ | async as contacts"
         mat-tab-link
         [routerLink]="['contacts']"
         routerLinkActive
