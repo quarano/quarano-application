@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.AuthenticationManager;
+import quarano.core.I18nProperties;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 
@@ -49,8 +50,9 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 			Locale.ENGLISH);
 
 	@Bean
-	LocaleResolver localeResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts) {
-		return new LocaleResolver(lookup, accounts);
+	LocaleResolver localeResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts,
+			I18nProperties properties) {
+		return new LocaleResolver(lookup, accounts, properties);
 	}
 
 	@Bean
@@ -118,12 +120,12 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		private final TrackedPersonLocaleLookup lookup;
 		private final AuthenticationManager accounts;
 
-		public LocaleResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts) {
+		public LocaleResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts, I18nProperties properties) {
 
 			this.lookup = lookup;
 			this.accounts = accounts;
 
-			setDefaultLocale(Locale.GERMANY);
+			setDefaultLocale(properties.getDefaultLocale());
 			setSupportedLocales(LOCALES);
 			Locale.setDefault(getDefaultLocale());
 		}
@@ -138,7 +140,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 			Optional<Account> currentUser = accounts.getCurrentUser();
 
 			// For users who are not tracked persons, German should always be used.
-			if (currentUser.filter(Account::isTrackedPerson).isEmpty()) {
+			if (currentUser.isPresent() && currentUser.filter(Account::isTrackedPerson).isEmpty()) {
 				return getDefaultLocale();
 			}
 
