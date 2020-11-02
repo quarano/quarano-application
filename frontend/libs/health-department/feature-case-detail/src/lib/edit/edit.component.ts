@@ -176,9 +176,16 @@ export class EditComponent implements OnInit, OnDestroy {
 
   private routeToIndexAndUpdateCaseData(caseId: string) {
     const updatedCase = this.formGroup.getRawValue();
-    this.router.navigate([`/health-department/case-detail/index/${caseId}`]).then(() => {
-      this.updateCase$$.next(updatedCase);
-    });
+    if (caseId) {
+      this.router.navigate([`/health-department/case-detail/index/${caseId}`]).then(() => {
+        this.updateFormGroup(updatedCase);
+      });
+    } else {
+      this.router.navigate([`/health-department/case-detail/new/index`]).then(() => {
+        this.updateFormGroup(updatedCase, true);
+        this.triggerErrorMessages();
+      });
+    }
   }
 
   showIndexCaseItem(item: CaseDto): string {
@@ -202,8 +209,8 @@ export class EditComponent implements OnInit, OnDestroy {
     input.value = input.value?.trim();
   }
 
-  updateFormGroup(caseDetailDto: CaseDto) {
-    if (caseDetailDto && caseDetailDto.caseId && this.formGroup) {
+  updateFormGroup(caseDetailDto: CaseDto, convertingFromContactCase: boolean = false) {
+    if ((caseDetailDto && caseDetailDto.caseId && this.formGroup) || convertingFromContactCase) {
       Object.keys(this.formGroup.value).forEach((key) => {
         if (caseDetailDto.hasOwnProperty(key)) {
           let value = caseDetailDto[key];
@@ -232,41 +239,60 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   submitForm(form: NgForm, closeAfterSave: boolean) {
-    if (this.formGroup.valid) {
-      const submitData: CaseDto = { ...this.formGroup.getRawValue() };
-      Object.keys(submitData).forEach((key) => {
-        if (moment.isMoment(submitData[key])) {
-          submitData[key] = submitData[key].toDate();
-        }
-      });
-      submitData.caseType = this.caseType;
-      submitData.originCases = this.formGroup.controls.originCases.value?.map(
-        (v: CaseSearchItem) => v._links.self.href
-      );
-      this.saveCaseData(submitData, closeAfterSave);
+    if (this.formGroup.invalid) {
+      return;
+    }
+
+    const submitData: CaseDto = { ...this.formGroup.getRawValue() };
+
+    Object.keys(submitData).forEach((key) => {
+      if (moment.isMoment(submitData[key])) {
+        submitData[key] = submitData[key].toDate();
+      }
+    });
+
+    submitData.caseType = this.caseType;
+    submitData.originCases = this.formGroup.controls.originCases.value?.map((v: CaseSearchItem) => v._links.self.href);
+
+    if (!submitData.caseId) {
+      this.saveNewCase(submitData, closeAfterSave);
+    } else {
+      this.updateExistingCase(submitData, closeAfterSave);
     }
   }
 
-  saveCaseData(result: CaseDto, closeAfterSave: boolean) {
-    if (!result.caseId) {
-      this.entityService.add(result).pipe(
-        catchError((error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-          return of(error);
-        }),
-        filter((value) => value instanceof Error)
-      );
-      this.changeRouteAfterSave(result, closeAfterSave);
-    } else {
-      this.entityService.update(result).pipe(
-        catchError((error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-          return of(error);
-        }),
-        filter((value) => value instanceof Error)
-      );
-      this.changeRouteAfterSave(result, closeAfterSave);
-    }
+  private updateExistingCase(caseToSave: CaseDto, closeAfterSave: boolean) {
+    this.subs.add(
+      this.entityService
+        .update(caseToSave)
+        .pipe(
+          catchError((error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            return of(error);
+          }),
+          filter((value) => !(value instanceof Error))
+        )
+        .subscribe((result) => {
+          this.changeRouteAfterSave(result, closeAfterSave);
+        })
+    );
+  }
+
+  private saveNewCase(caseToSave: CaseDto, closeAfterSave: boolean) {
+    this.subs.add(
+      this.entityService
+        .add(caseToSave)
+        .pipe(
+          catchError((error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            return of(error);
+          }),
+          filter((value) => !(value instanceof Error))
+        )
+        .subscribe((result) => {
+          this.changeRouteAfterSave(result, closeAfterSave);
+        })
+    );
   }
 
   private changeRouteAfterSave(caseDto: CaseDto, closeAfterSave: boolean) {
