@@ -56,7 +56,7 @@ public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 
 		var template = new JdbcTemplate(dataSource);
 
-		String droptables = template.queryForList("select tablename from pg_tables;").stream()
+		String droptables = template.queryForList("select tablename from pg_tables where schemaname='public';").stream()
 				.map(it -> it.get("tablename").toString())
 				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_"))
 				.map(it -> String.format("\"%s\"", it))

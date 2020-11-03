@@ -218,7 +218,7 @@ CREATE TABLE activation_codes (
 	created_by uuid NULL,
 	last_modified timestamp NULL,
 	last_modified_by uuid NULL,
-	activation_tries integer NOT NULL,
+	activation_tries INT4 NOT NULL,
 	department_id uuid NULL,
 	expiration_time timestamp NULL,
 	status varchar(50) NULL,
