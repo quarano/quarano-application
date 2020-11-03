@@ -42,6 +42,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.contactPersonService.getContactPersons().subscribe((contactPersons) =>
         this.dialog.open(ForgottenContactDialogComponent, {
+          disableClose: true,
           data: {
             contactPersons,
           },

@@ -22,6 +22,7 @@ export class ForgottenContactBannerComponent implements OnDestroy {
     this.subs.add(
       this.contactPersonService.getContactPersons().subscribe((contactPersons) =>
         this.dialog.open(ForgottenContactDialogComponent, {
+          disableClose: true,
           data: {
             contactPersons,
           },
