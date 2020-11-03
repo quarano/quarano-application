@@ -40,10 +40,11 @@ public class AccountBootstrap implements ApplicationRunner {
 
 		if (departments.count() > 0) {
 
-			log.info("Found departments in database. Updating their contact information.");
+			log.info("Found departments in database. Updating their contact information and RKI code.");
 
 			departments.findByName(defaultDepartment.getName())
 					.map(department -> department.setContacts(defaultDepartment.getContacts()))
+					.map(department -> department.setRkiCode(defaultDepartment.getRkiCode()))
 					.ifPresent(departments::save);
 
 			return;

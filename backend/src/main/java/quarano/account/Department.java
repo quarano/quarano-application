@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentContact.ContactType;
 import quarano.core.QuaranoAggregate;
@@ -38,7 +39,7 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 
 	private @Getter @Column(unique = true) String name;
 
-	private @Getter @Column(unique = true) String rkiCode;
+	private @Getter @Setter(value = AccessLevel.PACKAGE) @Column(unique = true) String rkiCode;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "department_id")
