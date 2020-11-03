@@ -1,3 +1,4 @@
+import { StaticPageComponent } from './static-page/static-page.component';
 import { StaticPagesResolver } from './resolvers/static-pages.resolver';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,5 +15,7 @@ import { StaticPageEffects } from './store/static-page.effects';
     EffectsModule.forFeature([StaticPageEffects]),
   ],
   providers: [StaticPagesResolver, StaticPageStore],
+  declarations: [StaticPageComponent],
+  exports: [StaticPageComponent],
 })
 export class SharedUiStaticPagesModule {}

@@ -3,20 +3,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { DataProtectionComponent } from './data-protection.component';
+import { StaticPageComponent } from './static-page.component';
 
-describe('DataProtectionComponent', () => {
-  let component: DataProtectionComponent;
-  let fixture: ComponentFixture<DataProtectionComponent>;
+describe('StaticPageComponent', () => {
+  let component: StaticPageComponent;
+  let fixture: ComponentFixture<StaticPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DataProtectionComponent],
+      declarations: [StaticPageComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataProtectionComponent);
+    fixture = TestBed.createComponent(StaticPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

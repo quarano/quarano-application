@@ -1,3 +1,4 @@
+import { SharedUiStaticPagesModule } from '@qro/shared/ui-static-pages';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -10,6 +11,7 @@ import { ImpressumComponent } from './/impressum/impressum.component';
     CommonModule,
     RouterModule.forChild([{ path: '', pathMatch: 'full', component: ImpressumComponent }]),
     SharedUiMaterialModule,
+    SharedUiStaticPagesModule,
   ],
 })
 export class GeneralFeatureImprintModule {}

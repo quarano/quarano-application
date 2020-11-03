@@ -1468,38 +1468,6 @@
         }
       }
     },
-    "shared-ui-data-protection": {
-      "projectType": "library",
-      "root": "libs/shared/ui-data-protection",
-      "sourceRoot": "libs/shared/ui-data-protection/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/shared/ui-data-protection/tsconfig.lib.json",
-              "libs/shared/ui-data-protection/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-data-protection/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/shared/ui-data-protection/jest.config.js",
-            "tsConfig": "libs/shared/ui-data-protection/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-data-protection/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "administration-feature-account-detail": {
       "projectType": "library",
       "root": "libs/administration/feature-account-detail",

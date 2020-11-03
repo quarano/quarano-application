@@ -7,45 +7,8 @@
       </h1>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content *ngIf="userType === ClientType.Index">
-    <section>
-      <p>
-        {{ 'LANDING.SIE_HABEN_VOM_GESUNDHEITSAMT' | translate }}
-      </p>
-      <p>{{ 'LANDING.MIT_DER_ANWENDUNG_KÖNNEN_SIE' | translate }}:</p>
-      <ul>
-        <li>{{ 'LANDING.IHRE_STAMMDATEN_AKTUALISIEREN' | translate }}</li>
-        <li>{{ 'LANDING.KONTAKTPERSONEN_ANGEBEN' | translate }}</li>
-        <li>{{ 'LANDING.MÖGLICHE_KRANKHEITSZEICHEN_PROTOKOLLIEREN' | translate }}</li>
-      </ul>
-      <h3>
-        <strong>{{ 'LANDING.INFOS_ZUR_REGISTRIERUNG' | translate }}</strong>
-      </h3>
-      <p>
-        {{ 'LANDING.REGISTRIEREN_SIE_SICH' | translate }}
-      </p>
-      <h3>
-        <strong>{{ 'LANDING.INFOS_ZUR_NUTZUNG' | translate }}</strong>
-      </h3>
-      <p>
-        {{ 'LANDING.IHRE_STAMMDATEN_SIND_NUR_EINMAL_EINZUGEBEN' | translate }}
-      </p>
-      <p>
-        <strong>{{ 'LANDING.WICHTIG' | translate }}:</strong> {{ 'LANDING.DIESER_LINK' | translate }}
-      </p>
-      <p>
-        {{ 'LANDING.BEI_FRAGEN' | translate }}
-        <a href="tel:+496212932253" class="phone-link">0621-293 2253</a>:
-      </p>
-      <ul>
-        <li>{{ 'LANDING.MONTAG_BIS_FREITAG' | translate }} 9:00 – 17:00</li>
-        <li>{{ 'LANDING.SAMSTAGS' | translate }} 9:00 – 14:00</li>
-      </ul>
-      <p>{{ 'LANDING.IHR_GESUNDHEITSAMT' | translate }}</p>
-      <p class="footnote">
-        <em>{{ 'LANDING.AKUT_ÄRZTLICHE_BEHANDLUNG' | translate }}</em>
-      </p>
-    </section>
+  <mat-card-content>
+    <qro-static-page [staticPageKey]="pageKey"></qro-static-page>
     <mat-card-actions>
       <button
         mat-raised-button
@@ -53,65 +16,6 @@
         type="button"
         data-cy="cta-button-index"
         [routerLink]="['/client/enrollment/register/', clientcode]"
-      >
-        {{ 'LANDING.WEITER' | translate }}
-      </button>
-    </mat-card-actions>
-  </mat-card-content>
-  <mat-card-content *ngIf="userType === ClientType.Contact">
-    <section>
-      <p>
-        {{ 'LANDING.SIE_HABEN_VOM_GESUNDHEITSAMT' | translate }}
-      </p>
-      <p>{{ 'LANDING.MIT_DER_ANWENDUNG_KÖNNEN_SIE' | translate }}:</p>
-      <ul>
-        <li>{{ 'LANDING.IHRE_STAMMDATEN_AKTUALISIEREN' | translate }}</li>
-        <li>{{ 'LANDING.KONTAKTPERSONEN_ANGEBEN' | translate }}</li>
-        <li>{{ 'LANDING.MÖGLICHE_KRANKHEITSZEICHEN_PROTOKOLLIEREN' | translate }}</li>
-      </ul>
-      <h3>
-        <strong>{{ 'LANDING.INFOS_ZUR_REGISTRIERUNG' | translate }}</strong>
-      </h3>
-      <p>
-        {{ 'LANDING.REGISTRIEREN_SIE_SICH' | translate }}
-      </p>
-      <h3>
-        <strong>{{ 'LANDING.INFOS_ZUR_NUTZUNG' | translate }}</strong>
-      </h3>
-      <p>
-        {{ 'LANDING.IHRE_STAMMDATEN_SIND_NUR_EINMAL_EINZUGEBEN' | translate }}
-      </p>
-      <p>
-        <strong>{{ 'LANDING.WICHTIG' | translate }}:</strong> {{ 'LANDING.DIESER_LINK' | translate }}
-      </p>
-      <p>
-        {{ 'LANDING.BEI_FRAGEN' | translate }}
-        <a href="tel:+496212932253" class="phone-link">0621-293 2253</a>:
-      </p>
-      <ul>
-        <li>{{ 'LANDING.MONTAG_BIS_FREITAG' | translate }} 9:00 – 17:00</li>
-        <li>{{ 'LANDING.SAMSTAGS' | translate }} 9:00 – 14:00</li>
-      </ul>
-      <p>
-        {{ 'LANDING.BEI_FRAGEN_ALS_KONTAKTPERSON' | translate }}
-        <a href="tel:+496212932212" class="phone-link">0621-293 2212</a>:
-      </p>
-      <ul>
-        <li>{{ 'LANDING.MONTAG_BIS_FREITAG' | translate }} 8:30 – 13:30</li>
-        <li>{{ 'LANDING.SAMSTAGS' | translate }} 10:00 – 14:00</li>
-      </ul>
-      <p>{{ 'LANDING.IHR_GESUNDHEITSAMT' | translate }}</p>
-      <p class="footnote">
-        <em>{{ 'LANDING.AKUT_ÄRZTLICHE_BEHANDLUNG' | translate }}</em>
-      </p>
-    </section>
-    <mat-card-actions>
-      <button
-        mat-raised-button
-        color="primary"
-        type="button"
-        [routerLink]="['/client/enrollment/register/', clientcode]"
-        data-cy="cta-button-contact"
       >
         {{ 'LANDING.WEITER' | translate }}
       </button>
