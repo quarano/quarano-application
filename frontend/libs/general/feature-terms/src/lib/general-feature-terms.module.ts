@@ -1,4 +1,4 @@
-import { SharedUiStaticPagesModule } from '@qro/shared/ui-static-pages';
+import { SharedUiStaticPagesModule, StaticPagesResolver } from '@qro/shared/ui-static-pages';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -9,7 +9,9 @@ import { AgbComponent } from './/agb/agb.component';
   declarations: [AgbComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', pathMatch: 'full', component: AgbComponent }]),
+    RouterModule.forChild([
+      { path: '', pathMatch: 'full', component: AgbComponent, resolve: { staticPagesLoaded: StaticPagesResolver } },
+    ]),
     SharedUiMaterialModule,
     SharedUiStaticPagesModule,
   ],

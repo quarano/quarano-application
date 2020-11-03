@@ -1,4 +1,4 @@
-import { SharedUiStaticPagesModule } from '@qro/shared/ui-static-pages';
+import { SharedUiStaticPagesModule, StaticPagesResolver } from '@qro/shared/ui-static-pages';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -10,7 +10,14 @@ import { DataProtectionCardComponent } from './data-protection-card/data-protect
   exports: [DataProtectionCardComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', pathMatch: 'full', component: DataProtectionCardComponent }]),
+    RouterModule.forChild([
+      {
+        path: '',
+        pathMatch: 'full',
+        component: DataProtectionCardComponent,
+        resolve: { staticPagesLoaded: StaticPagesResolver },
+      },
+    ]),
     SharedUiMaterialModule,
     SharedUiStaticPagesModule,
   ],
