@@ -13,7 +13,7 @@ export class StaticPageEffects {
   loadStaticPages$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StaticPageActions.loadStaticPages),
-      switchMap((action) => this.httpClient.get<any>(`${this.baseUrl}/api/frontendtexts`).pipe(shareReplay())),
+      switchMap((action) => this.httpClient.get<any>(`${this.baseUrl}/frontendtexts`).pipe(shareReplay())),
       map((dto) => StaticPageActions.staticPagesLoaded({ staticPages: dto._embedded.texts }))
     )
   );

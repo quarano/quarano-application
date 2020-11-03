@@ -1,19 +1,22 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IsAuthenticatedGuard } from '@qro/auth/api';
+import { SharedUiStaticPagesModule, StaticPagesResolver } from '@qro/shared/ui-static-pages';
 
 const routes: Routes = [
   {
     path: 'terms',
+    resolve: { staticPagesLoaded: StaticPagesResolver },
     loadChildren: () => import('@qro/general/feature-terms').then((m) => m.GeneralFeatureTermsModule),
   },
   {
     path: 'imprint',
+    resolve: { staticPagesLoaded: StaticPagesResolver },
     loadChildren: () => import('@qro/general/feature-imprint').then((m) => m.GeneralFeatureImprintModule),
   },
   {
     path: 'data-protection',
+    resolve: { staticPagesLoaded: StaticPagesResolver },
     loadChildren: () =>
       import('@qro/general/feature-data-protection').then((m) => m.GeneralFeatureDataProtectionModule),
   },
@@ -29,6 +32,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes), SharedUiStaticPagesModule],
 })
 export class GeneralShellModule {}

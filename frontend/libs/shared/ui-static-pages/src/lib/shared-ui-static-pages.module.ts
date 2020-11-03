@@ -1,5 +1,5 @@
 import { StaticPagesResolver } from './resolvers/static-pages.resolver';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StaticPageStore } from './store/static-page-store.service';
 import { StoreModule } from '@ngrx/store';
@@ -13,13 +13,6 @@ import { StaticPageEffects } from './store/static-page.effects';
     StoreModule.forFeature(staticPageFeatureKey, staticPageReducer),
     EffectsModule.forFeature([StaticPageEffects]),
   ],
-  providers: [StaticPagesResolver],
+  providers: [StaticPagesResolver, StaticPageStore],
 })
-export class SharedUiStaticPagesModule {
-  static forRoot(): ModuleWithProviders<SharedUiStaticPagesModule> {
-    return {
-      ngModule: SharedUiStaticPagesModule,
-      providers: [StaticPageStore, StaticPagesResolver],
-    };
-  }
-}
+export class SharedUiStaticPagesModule {}

@@ -30,7 +30,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { reducers } from './reducers';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { SharedUtilProgressBarModule } from '@qro/shared/util-progress-bar';
-import { SharedUiStaticPagesModule } from '@qro/shared/ui-static-pages';
 
 registerLocaleData(localeDe, 'de');
 
@@ -64,7 +63,6 @@ const NGRX = [
     routerState: RouterState.Minimal,
   }),
   ClientStoreModule.forRoot(),
-  SharedUiStaticPagesModule.forRoot(),
   StoreDevtoolsModule.instrument({
     maxAge: 25,
     logOnly: environment.production,
