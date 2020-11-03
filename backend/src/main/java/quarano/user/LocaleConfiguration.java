@@ -135,7 +135,14 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 		@Override
 		public Locale resolveLocale(HttpServletRequest request) {
 
-			return accounts.getCurrentUser()
+			Optional<Account> currentUser = accounts.getCurrentUser();
+
+			// For users who are not tracked persons, German should always be used.
+			if (currentUser.filter(Account::isTrackedPerson).isEmpty()) {
+				return getDefaultLocale();
+			}
+
+			return currentUser
 					.map(Account::getId)
 					.flatMap(lookup::lookupLocale)
 					.orElseGet(() -> super.resolveLocale(request));
