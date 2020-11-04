@@ -43,12 +43,7 @@ public class FrontendTextController {
 				.build();
 	}
 
-	private static final String AGB = "<mat-card class=\"form__card--animated\">"
-			+ "  <mat-card-header>"
-			+ "    <mat-card-title><h1>AGB</h1></mat-card-title>"
-			+ "  </mat-card-header>"
-			+ "  <mat-card-content>"
-			+ "    <ol class=\"main-list\">"
+	private static final String AGB = "    <ol class=\"main-list\">"
 			+ "      <li>"
 			+ "        <h2>Inhalt und Zustandekommen</h2>"
 			+ "        <ol>"
@@ -325,9 +320,7 @@ public class FrontendTextController {
 			+ "          </li>"
 			+ "        </ol>"
 			+ "      </li>"
-			+ "    </ol>"
-			+ "  </mat-card-content>"
-			+ "</mat-card>";
+			+ "    </ol>";
 
 	private static final String DATA_PROTECTION = "<h2>Informationen zum Datenschutz</h2>"
 			+ "<p>"
@@ -400,12 +393,7 @@ public class FrontendTextController {
 			+ "  Gesundheitsamt."
 			+ "</p>";
 
-	private static final String IMPRINT = "<mat-card class=\"form__card--animated\">"
-			+ "  <mat-card-header>"
-			+ "    <mat-card-title><h1>Impressum</h1></mat-card-title>"
-			+ "  </mat-card-header>"
-			+ "  <mat-card-content>"
-			+ "    <p>"
+	private static final String IMPRINT = "    <p>"
 			+ "      Unser Impressum gilt für die Seite quarano.de sowie für Quarano auf Youtube und Twitter."
 			+ "    </p>"
 			+ "    <h2>Angaben gemäß § 5 TMG</h2>"
@@ -467,9 +455,7 @@ public class FrontendTextController {
 			+ "      Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von"
 			+ "      Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen."
 			+ "    </p>"
-			+ "    <p>Quelle: <a href=\"https://www.e-recht24.de\">eRecht24</a></p>"
-			+ "  </mat-card-content>"
-			+ "</mat-card>";
+			+ "    <p>Quelle: <a href=\"https://www.e-recht24.de\">eRecht24</a></p>";
 
 	private static final String WELCOME_INDEX = "<section>"
 			+ "  <p>"
