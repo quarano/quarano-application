@@ -26,7 +26,7 @@ class SymptomController {
 	 *
 	 * @return
 	 */
-	@GetMapping("/api/symptoms")
+	@GetMapping("/symptoms")
 	public Stream<SymptomDto> getSymptoms() {
 
 		return symptoms.findAll(BY_NAME_ASCENDING)

@@ -55,7 +55,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId()))
+		var response = mvc.perform(get("/hd/actions/{id}", trackedCase.getId()))
 				.andExpect(status().isOk())
 				.andDo(documentAnomaly())
 				.andReturn().getResponse().getContentAsString();
@@ -74,7 +74,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var trackedCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions/{id}", trackedCase.getId()))
+		var response = mvc.perform(get("/hd/actions/{id}", trackedCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -96,7 +96,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		ActionsReviewed reviewed = new ActionsReviewed();
 		reviewed.setComment("Comment!");
 
-		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId())
+		var response = mvc.perform(put("/hd/actions/{id}/resolve", trackedCase.getId())
 				.content(jackson.writeValueAsString(reviewed))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -114,7 +114,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void resolvesAnomaliesManuallyDoesNotWorkForSystemAnomalies() throws Exception {
 
-		var actionsResponse = mvc.perform(get("/api/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
 				.andExpect(status().isOk())
 				.andDo(documentAnomalies())
 				.andReturn().getResponse().getContentAsString();
@@ -125,7 +125,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		ActionsReviewed reviewed = new ActionsReviewed()
 				.setComment("Comment!");
 
-		var response = mvc.perform(put("/api/hd/actions/{id}/resolve", contactCaseId)
+		var response = mvc.perform(put("/hd/actions/{id}/resolve", contactCaseId)
 				.content(jackson.writeValueAsString(reviewed))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -151,13 +151,13 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 		var reviewed = new ActionsReviewed().setComment("Comment!");
 
-		mvc.perform(put("/api/hd/actions/{id}/resolve", trackedCase.getId())
+		mvc.perform(put("/hd/actions/{id}/resolve", trackedCase.getId())
 				.content(jackson.writeValueAsString(reviewed))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		var response = mvc.perform(get("/api/hd/actions"))
+		var response = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -178,7 +178,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	void getActionsDoesNotReturnConcludedCases() throws Exception {
 
 		// get an active case with open actions
-		var actionsResponse = mvc.perform(get("/api/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -192,7 +192,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.orElseThrow();
 
 		// request list again
-		var result = mvc.perform(get("/api/hd/actions"))
+		var result = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -212,7 +212,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/actions")
+		var response = mvc.perform(get("/hd/actions")
 				.accept("application/hal+json"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();

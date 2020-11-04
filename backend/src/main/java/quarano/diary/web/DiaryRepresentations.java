@@ -235,7 +235,7 @@ class DiaryRepresentations {
 		public Map<String, Object> getLinks() {
 
 			if (!diary.containsCurrentEntry()) {
-				return Map.of("create", Map.of("href", "/api/diary/form"));
+				return Map.of("create", Map.of("href", "/diary/form"));
 			}
 
 			return Collections.emptyMap();

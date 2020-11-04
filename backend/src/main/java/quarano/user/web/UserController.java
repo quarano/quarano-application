@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
 	private final @NonNull TrackedPersonRepository trackedPersonRepository;

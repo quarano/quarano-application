@@ -42,7 +42,7 @@ public class AnomaliesController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull AnomaliesRepresentations representations;
 
-	@GetMapping("/api/hd/actions/{identifier}")
+	@GetMapping("/hd/actions/{identifier}")
 	HttpEntity<CaseActionsRepresentation> getAnomalies(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
@@ -51,7 +51,7 @@ public class AnomaliesController {
 				.map(this::toRepresentation));
 	}
 
-	@PutMapping("/api/hd/actions/{identifier}/resolve")
+	@PutMapping("/hd/actions/{identifier}/resolve")
 	HttpEntity<?> resolveActions(@PathVariable TrackedCaseIdentifier identifier,
 			@Valid @RequestBody ActionsReviewed payload, Errors errors,
 			@LoggedIn DepartmentIdentifier department) {
@@ -67,7 +67,7 @@ public class AnomaliesController {
 				.concludeIfValid(__ -> getAnomalies(identifier, department));
 	}
 
-	@GetMapping("/api/hd/actions")
+	@GetMapping("/hd/actions")
 	public RepresentationModel<?> getAllCasesByAnomalies(@LoggedIn Department department) {
 
 		var actionRepresentations = cases.findByDepartmentId(department.getId())

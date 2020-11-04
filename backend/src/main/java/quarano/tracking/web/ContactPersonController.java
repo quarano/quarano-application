@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Transactional
 @RestController("newContactPersonController")
-@RequestMapping("/api/contacts")
+@RequestMapping("/contacts")
 @RequiredArgsConstructor
 public class ContactPersonController {
 

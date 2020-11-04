@@ -47,7 +47,7 @@ public class RegistrationController {
 
 	private final @NonNull RegistrationRepresentations representations;
 
-	@PostMapping("/api/registration")
+	@PostMapping("/registration")
 	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors,
 			HttpServletRequest request) {
 
@@ -58,7 +58,7 @@ public class RegistrationController {
 				.concludeSelfIfValid((p, e) -> doRegisterClient(p, e, locale));
 	}
 
-	@PutMapping("/api/hd/cases/{id}/registration")
+	@PutMapping("/hd/cases/{id}/registration")
 	public HttpEntity<?> createRegistration(@PathVariable TrackedCaseIdentifier id, @LoggedIn Account account) {
 
 		var trackedCase = cases.findById(id).orElse(null);
@@ -74,7 +74,7 @@ public class RegistrationController {
 						it -> ResponseEntity.ok(it));
 	}
 
-	@GetMapping("/api/hd/cases/{id}/registration")
+	@GetMapping("/hd/cases/{id}/registration")
 	HttpEntity<?> getRegistrationDetails(@PathVariable TrackedCaseIdentifier id, @LoggedIn Account account) {
 
 		return cases.findById(id)
@@ -88,7 +88,7 @@ public class RegistrationController {
 	 *
 	 * @return true if the code exists, error-json otherwise
 	 */
-	@GetMapping("api/registration/checkcode/{activationCode}")
+	@GetMapping("/registration/checkcode/{activationCode}")
 	public ResponseEntity<Boolean> doesClientexist(@PathVariable UUID activationCode) {
 
 		return ResponseEntity.ok(activationCodes.getValidCode(ActivationCodeIdentifier.of(activationCode))
@@ -100,7 +100,7 @@ public class RegistrationController {
 	 *
 	 * @return true if the username is available and valid, error JSON otherwise
 	 */
-	@GetMapping("api/registration/checkusername/{userName}")
+	@GetMapping("/registration/checkusername/{userName}")
 	public ResponseEntity<Boolean> checkUserName(@PathVariable String userName) {
 		return ResponseEntity.ok(registration.isUsernameAvailable(userName));
 	}

@@ -53,17 +53,17 @@ public class TrackingController {
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
 
-	@GetMapping("/api/enrollment/details")
+	@GetMapping("/enrollment/details")
 	public HttpEntity<?> enrollmentOverview(@LoggedIn TrackedPerson person) {
 		return overview(person);
 	}
 
-	@GetMapping("/api/details")
+	@GetMapping("/details")
 	HttpEntity<?> overview(@LoggedIn TrackedPerson person) {
 		return ResponseEntity.ok(mapper.map(person, TrackedPersonDto.class));
 	}
 
-	@PutMapping("/api/details")
+	@PutMapping("/details")
 	public HttpEntity<?> updateTrackedPersonDetails(@Validated @RequestBody TrackedPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson user) {
 
@@ -73,7 +73,7 @@ public class TrackingController {
 				.onValidGet(() -> ResponseEntity.ok().build());
 	}
 
-	@GetMapping("/api/details/form")
+	@GetMapping("/details/form")
 	HttpEntity<?> trackedPersonForm() {
 
 		var properties = Map.of("zipCode", Map.of("regex", ZipCode.PATTERN),
@@ -84,7 +84,7 @@ public class TrackingController {
 		return ResponseEntity.ok(Map.of("properties", properties));
 	}
 
-	@GetMapping("/api/encounters")
+	@GetMapping("/encounters")
 	public RepresentationModel<?> getEncounters(@LoggedIn TrackedPerson person) {
 
 		var encounters = person.getEncounters().map(it -> EncounterDto.of(it, person))
@@ -93,7 +93,7 @@ public class TrackingController {
 		return RepresentationModel.of(encounters);
 	}
 
-	@PostMapping("/api/encounters")
+	@PostMapping("/encounters")
 	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, Errors errors, @LoggedIn TrackedPerson person) {
 
 		if (errors.hasErrors() && errors.hasFieldErrors("contact")) {
@@ -122,7 +122,7 @@ public class TrackingController {
 				});
 	}
 
-	@GetMapping("/api/encounters/{identifier}")
+	@GetMapping("/encounters/{identifier}")
 	HttpEntity<?> getEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
 		return ResponseEntity.of(person.getEncounters()
@@ -130,7 +130,7 @@ public class TrackingController {
 				.map(it -> EncounterDto.of(it, person)));
 	}
 
-	@DeleteMapping("/api/encounters/{identifier}")
+	@DeleteMapping("/encounters/{identifier}")
 	HttpEntity<?> removeEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
 		person.removeEncounter(identifier);

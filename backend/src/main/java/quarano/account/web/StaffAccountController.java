@@ -46,7 +46,7 @@ class StaffAccountController {
 	private final @NonNull AccountService accounts;
 	private final @NonNull StaffAccountRepresentations representations;
 
-	@PostMapping("/api/hd/accounts")
+	@PostMapping("/hd/accounts")
 	HttpEntity<?> addStaffAccount(@Valid @RequestBody StaffAccountCreateInputDto payload,
 			Errors errors,
 			@LoggedIn Department department) {
@@ -75,7 +75,7 @@ class StaffAccountController {
 				});
 	}
 
-	@PutMapping("/api/hd/accounts/{accountId}/password")
+	@PutMapping("/hd/accounts/{accountId}/password")
 	HttpEntity<?> putStaffAccountPassword(@PathVariable AccountIdentifier accountId,
 			@Valid @RequestBody NewPassword payload, Errors errors, @LoggedIn Account admin) {
 
@@ -89,7 +89,7 @@ class StaffAccountController {
 				});
 	}
 
-	@PutMapping("/api/hd/accounts/{accountId}")
+	@PutMapping("/hd/accounts/{accountId}")
 	HttpEntity<?> updateStaffAccount(@PathVariable AccountIdentifier accountId,
 			@Validated @RequestBody StaffAccountUpdateInputDto payload,
 			Errors errors,
@@ -110,7 +110,7 @@ class StaffAccountController {
 				}).concludeIfValid(ResponseEntity::of);
 	}
 
-	@GetMapping(path = "/api/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
+	@GetMapping(path = "/hd/accounts", produces = MediaTypes.HAL_JSON_VALUE)
 	RepresentationModel<?> getStaffAccounts(@LoggedIn Account admin) {
 
 		var departmentAccounts = accounts.findStaffAccountsFor(admin.getDepartmentId());
@@ -120,7 +120,7 @@ class StaffAccountController {
 				.collect(Collectors.collectingAndThen(Collectors.toUnmodifiableList(), CollectionModel::of));
 	}
 
-	@GetMapping(path = "/api/hd/accounts/{accountId}", produces = MediaTypes.HAL_JSON_VALUE)
+	@GetMapping(path = "/hd/accounts/{accountId}", produces = MediaTypes.HAL_JSON_VALUE)
 	ResponseEntity<?> getStaffAccount(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
 
 		var adminDepartmentId = admin.getDepartmentId();
@@ -130,7 +130,7 @@ class StaffAccountController {
 				.map(it -> representations.toSummary(it)));
 	}
 
-	@DeleteMapping("/api/hd/accounts/{accountId}")
+	@DeleteMapping("/hd/accounts/{accountId}")
 	HttpEntity<?> deleteStaffAccounts(@PathVariable AccountIdentifier accountId, @LoggedIn Account admin) {
 
 		return accounts.findById(accountId)

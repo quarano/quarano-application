@@ -67,7 +67,7 @@ class RegistrationWebIntegrationTests {
 				.build();
 
 		// when
-		var response = mvc.perform(post("/api/registration")
+		var response = mvc.perform(post("/registration")
 				.header("Origin", "*")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(registrationDto)))
@@ -150,7 +150,7 @@ class RegistrationWebIntegrationTests {
 		var harrietteCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1)
 				.orElseThrow();
 
-		var response = mvc.perform(get("/api/hd/cases/{id}/registration", harrietteCase.getId()))
+		var response = mvc.perform(get("/hd/cases/{id}/registration", harrietteCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn()
 				.getResponse()
@@ -168,7 +168,7 @@ class RegistrationWebIntegrationTests {
 		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1)
 				.orElseThrow();
 
-		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+		var response = mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn()
 				.getResponse()
@@ -197,7 +197,7 @@ class RegistrationWebIntegrationTests {
 		var harryCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1)
 				.orElseThrow();
 
-		var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+		var response = mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn()
 				.getResponse()
@@ -216,7 +216,7 @@ class RegistrationWebIntegrationTests {
 		var harrietteCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1)
 				.orElseThrow();
 
-		response = mvc.perform(put("/api/hd/cases/{id}/registration", harrietteCase.getId()))
+		response = mvc.perform(put("/hd/cases/{id}/registration", harrietteCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn()
 				.getResponse()
@@ -235,7 +235,7 @@ class RegistrationWebIntegrationTests {
 		var tanjaCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
 
-		response = mvc.perform(put("/api/hd/cases/{id}/registration", tanjaCase.getId()))
+		response = mvc.perform(put("/hd/cases/{id}/registration", tanjaCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn()
 				.getResponse()
@@ -267,7 +267,7 @@ class RegistrationWebIntegrationTests {
 				.build();
 
 		// when
-		var responseBody = mvc.perform(post("/api/registration")
+		var responseBody = mvc.perform(post("/registration")
 				.header("Origin", "*")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(registrationDto)))
@@ -362,7 +362,7 @@ class RegistrationWebIntegrationTests {
 		assertThat(person.getLocale()).isNotNull().isNotEqualTo(newLocale);
 
 		// when
-		mvc.perform(post("/api/registration")
+		mvc.perform(post("/registration")
 				.header("Origin", "*")
 				.locale(newLocale)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -397,7 +397,7 @@ class RegistrationWebIntegrationTests {
 
 		// Initiate registration
 
-		mvc.perform(post("/api/registration")
+		mvc.perform(post("/registration")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(registrationDto)))
 				.andExpect(status().is2xxSuccessful())
@@ -408,7 +408,7 @@ class RegistrationWebIntegrationTests {
 
 		registrationDto.setUsername("someother");
 
-		var response = mvc.perform(post("/api/registration")
+		var response = mvc.perform(post("/registration")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(registrationDto)))
 				.andExpect(status().isBadRequest())
@@ -428,7 +428,7 @@ class RegistrationWebIntegrationTests {
 		var harryCase = cases.findByTrackedPerson(personId)
 				.orElseThrow();
 
-		mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+		mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
 				.andExpect(status().isOk());
 
 		// Initial activation code
@@ -437,7 +437,7 @@ class RegistrationWebIntegrationTests {
 		assertThatCode(() -> {
 
 			// Re-start registration
-			var response = mvc.perform(put("/api/hd/cases/{id}/registration", harryCase.getId()))
+			var response = mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
 					.andExpect(status().isOk())
 					.andReturn().getResponse().getContentAsString();
 
@@ -456,7 +456,7 @@ class RegistrationWebIntegrationTests {
 
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
-		String resultDtoStr = mvc.perform(get("/api/user/me")
+		String resultDtoStr = mvc.perform(get("/user/me")
 				.header("Origin", "*")
 				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -508,7 +508,7 @@ class RegistrationWebIntegrationTests {
 
 	private String expectFailedRegistration(RegistrationDto payload) throws Exception {
 
-		return mvc.perform(post("/api/registration")
+		return mvc.perform(post("/registration")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload)))
 				.andExpect(status().isBadRequest())

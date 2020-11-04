@@ -25,7 +25,7 @@ public class FrontendTextController {
 
 	private final @NonNull FrontendTextRepresentations representations;
 
-	@GetMapping(path = "/api/frontendtexts")
+	@GetMapping(path = "/frontendtexts")
 	public RepresentationModel<?> getText(@RequestParam("key") Optional<String> key) {
 
 		var terms = new FrontendText("terms", Locale.GERMAN, AGB);

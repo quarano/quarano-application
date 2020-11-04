@@ -40,7 +40,7 @@ public class DiaryController {
 	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull ContactPersonRepository contacts;
 
-	@GetMapping("/api/diary")
+	@GetMapping("/diary")
 	DiarySummary getDiary(@LoggedIn TrackedPerson person) {
 
 		var diary = diaries.findDiaryFor(person);
@@ -48,7 +48,7 @@ public class DiaryController {
 		return representations.toSummary(diary, person.getAccountRegistrationDate());
 	}
 
-	@PostMapping("/api/diary")
+	@PostMapping("/diary")
 	HttpEntity<?> addDiaryEntry(@Valid @RequestBody DiaryEntryInput payload, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
@@ -60,7 +60,7 @@ public class DiaryController {
 		});
 	}
 
-	@GetMapping("/api/diary/{identifier}")
+	@GetMapping("/diary/{identifier}")
 	public ResponseEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
 			@LoggedIn TrackedPerson person) {
 
@@ -71,7 +71,7 @@ public class DiaryController {
 		return ResponseEntity.of(dto);
 	}
 
-	@PutMapping("/api/diary/{identifier}")
+	@PutMapping("/diary/{identifier}")
 	HttpEntity<?> updateDiaryEntry(@PathVariable DiaryEntryIdentifier identifier,
 			@Valid @RequestBody DiaryEntryInput payload, Errors errors,
 			@LoggedIn TrackedPerson person) {

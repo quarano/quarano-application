@@ -44,7 +44,7 @@ class AuthenticationController {
 	private final @NonNull AccountRepresentations accountRepresentations;
 	private final @NonNull MessageSourceAccessor messages;
 
-	@PostMapping({ "/login", "/api/login" })
+	@PostMapping("/login")
 	HttpEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
 
 		UnencryptedPassword password = UnencryptedPassword.of(request.getPassword());

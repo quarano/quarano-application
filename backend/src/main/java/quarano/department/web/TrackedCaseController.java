@@ -70,7 +70,7 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull HealthDepartments rkiDepartments;
 
-	@GetMapping(path = "/api/hd/cases")
+	@GetMapping(path = "/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
 			@RequestParam("q") Optional<String> query,
 			@RequestParam("projection") Optional<String> projection,
@@ -87,20 +87,20 @@ public class TrackedCaseController {
 				.build();
 	}
 
-	@PostMapping(path = "/api/hd/cases", params = "type=contact")
+	@PostMapping(path = "/hd/cases", params = "type=contact")
 	HttpEntity<?> postContactCase(@ValidatedContactCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 		return createTrackedCase(payload, CaseType.CONTACT, department, errors);
 	}
 
-	@PostMapping(path = "/api/hd/cases", params = "type=index")
+	@PostMapping(path = "/hd/cases", params = "type=index")
 	HttpEntity<?> postIndexCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 
 		return postCase(payload, errors, department);
 	}
 
-	@PostMapping("/api/hd/cases")
+	@PostMapping("/hd/cases")
 	HttpEntity<?> postCase(@ValidatedIndexCase @RequestBody TrackedCaseDto.Input payload, Errors errors,
 			@LoggedIn Department department) {
 
@@ -124,13 +124,13 @@ public class TrackedCaseController {
 				});
 	}
 
-	@GetMapping(path = "/api/hd/cases/form")
+	@GetMapping(path = "/hd/cases/form")
 	HttpEntity<?> getCaseForm() {
 
 		return ResponseEntity.ok(TrackedCaseDefaults.of(configuration));
 	}
 
-	@GetMapping("/api/hd/cases/{identifier}")
+	@GetMapping("/hd/cases/{identifier}")
 	public HttpEntity<?> getCase(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
 		return ResponseEntity.of(cases.findById(identifier)
@@ -138,7 +138,7 @@ public class TrackedCaseController {
 				.map(representations::toRepresentation));
 	}
 
-	@GetMapping("/api/hd/cases/{identifier}/questionnaire")
+	@GetMapping("/hd/cases/{identifier}/questionnaire")
 	HttpEntity<?> getQuestionnaire(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Department department) {
 
 		return ResponseEntity.of(cases.findById(identifier)
@@ -147,7 +147,7 @@ public class TrackedCaseController {
 				.map(representations::toRepresentation));
 	}
 
-	@GetMapping("/api/hd/cases/{identifier}/diary")
+	@GetMapping("/hd/cases/{identifier}/diary")
 	HttpEntity<?> getDiaryOfCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier departmentIdentifier) {
 
@@ -164,7 +164,7 @@ public class TrackedCaseController {
 				.build());
 	}
 
-	@GetMapping("/api/hd/cases/{identifier}/contacts")
+	@GetMapping("/hd/cases/{identifier}/contacts")
 	HttpEntity<?> getContactsOfCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
@@ -183,7 +183,7 @@ public class TrackedCaseController {
 
 	// PUT Mapping for transformation into index case
 
-	@PutMapping("/api/hd/cases/{identifier}")
+	@PutMapping("/hd/cases/{identifier}")
 	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
 			@RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
@@ -198,7 +198,7 @@ public class TrackedCaseController {
 				.concludeIfValid(ResponseEntity::ok);
 	}
 
-	@DeleteMapping("/api/hd/cases/{identifier}")
+	@DeleteMapping("/hd/cases/{identifier}")
 	HttpEntity<?> concludeCase(@PathVariable TrackedCaseIdentifier identifier,
 			@LoggedIn DepartmentIdentifier department) {
 
@@ -208,7 +208,7 @@ public class TrackedCaseController {
 				.map(cases::save));
 	}
 
-	@PostMapping("/api/hd/cases/{identifier}/comments")
+	@PostMapping("/hd/cases/{identifier}/comments")
 	HttpEntity<?> postComment(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account,
 			@Valid @RequestBody CommentInput payload, Errors errors) {
 
@@ -225,7 +225,7 @@ public class TrackedCaseController {
 				.concludeIfValid(ResponseEntity::ok);
 	}
 
-	@GetMapping("/api/enrollments")
+	@GetMapping("/enrollments")
 	Stream<?> allEnrollments() {
 
 		return cases.findAll()
@@ -234,7 +234,7 @@ public class TrackedCaseController {
 				.stream();
 	}
 
-	@GetMapping("/api/enrollment")
+	@GetMapping("/enrollment")
 	public HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
 
 		var map = cases.findByTrackedPerson(person)
@@ -244,7 +244,7 @@ public class TrackedCaseController {
 		return ResponseEntity.of(map);
 	}
 
-	@PutMapping("/api/enrollment/details")
+	@PutMapping("/enrollment/details")
 	HttpEntity<?> submitEnrollmentDetails(
 			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam(required = false) boolean confirmed,
 			@LoggedIn TrackedPerson user) {
@@ -287,7 +287,7 @@ public class TrackedCaseController {
 				});
 	}
 
-	@GetMapping("/api/enrollment/questionnaire")
+	@GetMapping("/enrollment/questionnaire")
 	HttpEntity<?> showQuestionaire(@LoggedIn TrackedPerson person) {
 
 		var report = cases.findByTrackedPerson(person)
@@ -300,7 +300,7 @@ public class TrackedCaseController {
 				.body(report);
 	}
 
-	@PutMapping(path = "/api/enrollment/questionnaire")
+	@PutMapping(path = "/enrollment/questionnaire")
 	HttpEntity<?> addQuestionaire(@Validated @RequestBody QuestionnaireDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
@@ -325,7 +325,7 @@ public class TrackedCaseController {
 				});
 	}
 
-	@PostMapping("/api/enrollment/completion")
+	@PostMapping("/enrollment/completion")
 	HttpEntity<?> completeEnrollment(@LoggedIn TrackedPerson person,
 			@RequestParam("withoutEncounters") boolean withoutEncounters) {
 
@@ -342,7 +342,7 @@ public class TrackedCaseController {
 				.build();
 	}
 
-	@DeleteMapping("/api/enrollment/completion")
+	@DeleteMapping("/enrollment/completion")
 	HttpEntity<?> reopenEnrollment(@LoggedIn TrackedPerson person) {
 
 		cases.findByTrackedPerson(person)

@@ -55,7 +55,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 
 		cases.save(siggisCase);
 
-		mvc.perform(post("/api/login")
+		mvc.perform(post("/login")
 				.content(jackson.writeValueAsString(new AuthenticationRequest("secUser1", "secur1tyTest!")))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());
@@ -85,7 +85,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 		var account = accounts.changePassword(password, accounts.findByUsername("agent4").orElseThrow());
 
 		// When logging in
-		var result = mvc.perform(post("/api/login")
+		var result = mvc.perform(post("/login")
 				.content(jackson.writeValueAsString(new AuthenticationRequest(account.getUsername(), "test")))
 				.contentType(MediaType.APPLICATION_JSON))
 
@@ -149,7 +149,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 				.map(cases::save)
 				.orElseThrow();
 
-		mvc.perform(post("/api/login")
+		mvc.perform(post("/login")
 				.locale(trackedCase.getTrackedPerson().getLocale())
 				.content(jackson.writeValueAsString(new AuthenticationRequest("DemoAccount", "DemoPassword"))))
 				.andExpect(status().isForbidden());
@@ -168,7 +168,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 
 	private void assertSuccessfulLogin(String username, String password, Locale locale) throws Exception {
 
-		mvc.perform(post("/api/login")
+		mvc.perform(post("/login")
 				.locale(locale)
 				.content(jackson.writeValueAsString(new AuthenticationRequest(username, password)))
 				.contentType(MediaType.APPLICATION_JSON))

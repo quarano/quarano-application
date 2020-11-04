@@ -46,7 +46,7 @@ class ContactPersonControllerWebIntegrationTests {
 		payload.setEmail("test@testtest.de");
 		payload.setMobilePhone("0123910");
 
-		String response = mvc.perform(post("/api/contacts")
+		String response = mvc.perform(post("/contacts")
 				.content(mapper.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
@@ -66,7 +66,7 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var payload = new ContactPersonDto();
 
-		String response = mvc.perform(post("/api/contacts")
+		String response = mvc.perform(post("/contacts")
 				.content(mapper.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -91,7 +91,7 @@ class ContactPersonControllerWebIntegrationTests {
 		.setStreet("\\")
 		.setHouseNumber("\\");
 
-		String response = mvc.perform(post("/api/contacts")
+		String response = mvc.perform(post("/contacts")
 				.content(mapper.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -128,7 +128,7 @@ class ContactPersonControllerWebIntegrationTests {
 					var payload = JsonPath.parse(mapper.writeValueAsString(new ContactPersonDto())).set("$." + entry.getKey(),
 							entry.getValue());
 
-					String response = mvc.perform(post("/api/contacts")
+					String response = mvc.perform(post("/contacts")
 							.content(payload.jsonString())
 							.contentType(MediaType.APPLICATION_JSON))
 							.andExpect(status().isCreated())

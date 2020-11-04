@@ -59,7 +59,7 @@ class TrackedCaseRepresentationIntegrationTests {
 	@Test
 	void exposesCaseTypeLabelOnSummary() {
 
-		TestUtils.fakeRequest(HttpMethod.GET, "/api/hd/cases", context);
+		TestUtils.fakeRequest(HttpMethod.GET, "/hd/cases", context);
 
 		var contactCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();
@@ -88,7 +88,7 @@ class TrackedCaseRepresentationIntegrationTests {
 	@Test // CORE-252
 	void doesNotSerializeOriginCasesInMainBody() throws Exception {
 
-		TestUtils.fakeRequest(HttpMethod.GET, "/api/hd/cases", context);
+		TestUtils.fakeRequest(HttpMethod.GET, "/hd/cases", context);
 
 		var contactCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.orElseThrow();

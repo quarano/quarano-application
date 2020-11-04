@@ -25,7 +25,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	void getAllTexts() throws Exception {
 
-		var result = mvc.perform(get("/api/frontendtexts")
+		var result = mvc.perform(get("/frontendtexts")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(documentGetFrontendTexts())
 				.andExpect(status().is2xxSuccessful())
