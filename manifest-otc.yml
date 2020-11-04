@@ -76,17 +76,43 @@ applications:
 
   ####################################################################
   ########################   INTERNAL  ###############################
-  -
+
   ###############   Internal DEMO system #########################
-  - name: quarano-demo-frontend
+  - name: internal-demo-frontend
     memory: 128M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
     routes:
-      - route: demo.quarano.de/demo
+      - route: quarano.de/demo
     env:
       ENVIRONMENT_NAME: "demo"
+
+  - name: internal-demo-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/demo
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: ""
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 0621 293 2253
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.08.2.22.
+      SERVER_SERVLET_CONTEXTPATH: "/demo/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/demo/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      TZ: Europe/Berlin
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/demo/api
+    services:
+      - quarano-internal-demo-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
 
   ###############   Internal DEV system #########################
   - name: internal-dev-frontend
