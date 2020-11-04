@@ -8,7 +8,7 @@ import { API_URL } from '@qro/shared/util-data-access';
 @Injectable()
 export class StaticPageEffects {
   constructor(private actions$: Actions, private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
-  private baseUrl = `${this.apiUrl}/api`;
+  private baseUrl = `${this.apiUrl}`;
 
   loadStaticPages$ = createEffect(() =>
     this.actions$.pipe(

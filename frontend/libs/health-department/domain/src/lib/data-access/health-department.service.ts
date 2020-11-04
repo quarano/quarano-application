@@ -18,25 +18,23 @@ export class HealthDepartmentService {
   }
 
   createCase(caseDetail: CaseDto, type: CaseType): Observable<CaseDto> {
-    return this.httpClient.post<CaseDto>(`${this.apiUrl}/api/hd/cases?type=${type}`, caseDetail).pipe(shareReplay());
+    return this.httpClient.post<CaseDto>(`${this.apiUrl}/hd/cases?type=${type}`, caseDetail).pipe(shareReplay());
   }
 
   updateCase(caseDetail: CaseDto): Observable<CaseDto> {
-    return this.httpClient
-      .put<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseDetail.caseId}`, caseDetail)
-      .pipe(shareReplay());
+    return this.httpClient.put<CaseDto>(`${this.apiUrl}/hd/cases/${caseDetail.caseId}`, caseDetail).pipe(shareReplay());
   }
 
   addComment(caseId: string, comment: string): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/api/hd/cases/${caseId}/comments`, { comment }).pipe(shareReplay());
+    return this.httpClient.post(`${this.apiUrl}/hd/cases/${caseId}/comments`, { comment }).pipe(shareReplay());
   }
 
   getCase(caseId: string): Observable<CaseDto> {
-    return this.httpClient.get<CaseDto>(`${this.apiUrl}/api/hd/cases/${caseId}`).pipe(shareReplay());
+    return this.httpClient.get<CaseDto>(`${this.apiUrl}/hd/cases/${caseId}`).pipe(shareReplay());
   }
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {
-    return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/api/hd/actions/${caseId}`).pipe(shareReplay());
+    return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/hd/actions/${caseId}`).pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {

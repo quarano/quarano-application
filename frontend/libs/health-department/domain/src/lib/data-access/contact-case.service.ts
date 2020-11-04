@@ -13,7 +13,7 @@ export class ContactCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getActionList(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/hd/actions`).pipe(
       shareReplay(),
       map((result) => {
         if (result?._embedded?.actions) {

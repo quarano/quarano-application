@@ -22,7 +22,7 @@ export class AuthEffects {
       ofType(AuthActions.login),
       switchMap((action) =>
         this.httpClient
-          .get<UserDto>(`${this.apiUrl}/api/user/me`, { observe: 'response' })
+          .get<UserDto>(`${this.apiUrl}/user/me`, { observe: 'response' })
           .pipe(shareReplay())
       ),
       withLatestFrom(this.store.pipe(select(LanguageSelectors.supportedLanguages))),

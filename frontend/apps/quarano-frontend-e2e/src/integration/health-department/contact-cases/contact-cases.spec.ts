@@ -3,8 +3,8 @@
 describe('health-department contact cases', () => {
   beforeEach(() => {
     cy.loginAgent();
-    cy.route('POST', 'api/hd/cases/?type=contact').as('newContact');
-    cy.route('PUT', 'api/hd/cases/*').as('updateIndexCase');
+    cy.route('POST', '/hd/cases/?type=contact').as('newContact');
+    cy.route('PUT', '/hd/cases/*').as('updateIndexCase');
   });
 
   describe('converting to index case ', () => {

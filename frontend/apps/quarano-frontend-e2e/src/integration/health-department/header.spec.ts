@@ -1,7 +1,7 @@
 describe('health-department top navigation', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/user/me').as('me');
+    cy.route('GET', '/user/me').as('me');
 
     cy.loginAgent();
   });

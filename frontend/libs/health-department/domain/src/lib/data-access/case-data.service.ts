@@ -11,7 +11,7 @@ import { Update } from '@ngrx/entity';
 @Injectable()
 export class CaseDataService extends DefaultDataService<CaseDto> {
   constructor(http: HttpClient, httpUrlGenerator: HttpUrlGenerator, @Inject(API_URL) private apiUrl: string) {
-    super(CASE_FEATURE_KEY, http, httpUrlGenerator, { root: `${apiUrl}/api/hd` });
+    super(CASE_FEATURE_KEY, http, httpUrlGenerator, { root: `${apiUrl}/hd` });
   }
 
   getAll(): Observable<CaseDto[]> {

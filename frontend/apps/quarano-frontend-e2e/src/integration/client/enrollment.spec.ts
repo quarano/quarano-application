@@ -3,9 +3,9 @@
 describe('enrollment happy path', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/enrollment/completion?withoutEncounters=true').as('completeenrollment');
-    cy.route('PUT', '/api/enrollment/questionnaire').as('updatequestionnaire');
-    cy.route('PUT', '/api/enrollment/details').as('updatepersonaldetails');
+    cy.route('POST', '/enrollment/completion?withoutEncounters=true').as('completeenrollment');
+    cy.route('PUT', '/enrollment/questionnaire').as('updatequestionnaire');
+    cy.route('PUT', '/enrollment/details').as('updatepersonaldetails');
 
     cy.loginNotEnrolledClient();
   });
@@ -58,8 +58,8 @@ describe('enrollment happy path', () => {
 describe('enrollment external zip code', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('PUT', '/api/enrollment/details?confirmed=true').as('updatepersonaldetailszipcodeconfirm');
-    cy.route('PUT', '/api/enrollment/details').as('updatepersonaldetails');
+    cy.route('PUT', '/enrollment/details?confirmed=true').as('updatepersonaldetailszipcodeconfirm');
+    cy.route('PUT', '/enrollment/details').as('updatepersonaldetails');
 
     cy.loginNotEnrolledClient2();
   });

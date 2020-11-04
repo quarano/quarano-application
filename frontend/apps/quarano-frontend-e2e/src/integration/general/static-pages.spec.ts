@@ -1,7 +1,7 @@
 describe('static pages', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/frontendtexts').as('frontendtexts');
+    cy.route('GET', '/frontendtexts').as('frontendtexts');
     cy.visit('/');
   });
 

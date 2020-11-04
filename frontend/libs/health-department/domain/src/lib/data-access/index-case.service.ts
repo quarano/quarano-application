@@ -14,14 +14,14 @@ export class IndexCaseService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   searchCases(searchTerm: string): Observable<CaseSearchItem[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/cases?type=index&q=${searchTerm}&projection=select`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/hd/cases?type=index&q=${searchTerm}&projection=select`).pipe(
       shareReplay(),
       map((res) => res?._embedded?.cases)
     );
   }
 
   getActionList(): Observable<ActionListItemDto[]> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/actions`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/hd/actions`).pipe(
       shareReplay(),
       map((result) => {
         if (result?._embedded?.actions) {

@@ -3,7 +3,7 @@
 describe('new account', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/hd/accounts').as('createaccount');
+    cy.route('POST', '/hd/accounts').as('createaccount');
 
     cy.loginAdmin();
 
@@ -338,7 +338,7 @@ describe('new account', () => {
 describe('login with new account', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('PUT', '/api/user/me/password').as('changepassword');
+    cy.route('PUT', '/user/me/password').as('changepassword');
   });
 
   it('login with new account should open change password dialog', () => {

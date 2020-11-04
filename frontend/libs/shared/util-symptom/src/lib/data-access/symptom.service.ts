@@ -12,7 +12,7 @@ export class SymptomService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string, private store: Store) {}
 
   getSymptoms(languageKey: string): Observable<SymptomDto[]> {
-    let uri = `${this.apiUrl}/api/symptoms`;
+    let uri = `${this.apiUrl}/symptoms`;
     if (!languageKey) {
       return this.store.pipe(
         select(LanguageSelectors.selectedLanguage),

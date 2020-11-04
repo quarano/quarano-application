@@ -12,23 +12,23 @@ export class AccountService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getAccountList(): Observable<AccountListDto> {
-    return this.httpClient.get<any>(`${this.apiUrl}/api/hd/accounts`).pipe(
+    return this.httpClient.get<any>(`${this.apiUrl}/hd/accounts`).pipe(
       shareReplay(),
       map((result) => result._embedded)
     );
   }
 
   getAccountDetail(id: string): Observable<AccountDto> {
-    return this.httpClient.get<AccountDto>(`${this.apiUrl}/api/hd/accounts/${id}`).pipe(shareReplay());
+    return this.httpClient.get<AccountDto>(`${this.apiUrl}/hd/accounts/${id}`).pipe(shareReplay());
   }
 
   createAccount(account: AccountDto): Observable<AccountDto> {
-    return this.httpClient.post<AccountDto>(`${this.apiUrl}/api/hd/accounts`, account).pipe(shareReplay());
+    return this.httpClient.post<AccountDto>(`${this.apiUrl}/hd/accounts`, account).pipe(shareReplay());
   }
 
   editAccount(account: AccountDto): Observable<AccountDto> {
     return this.httpClient
-      .put<AccountDto>(`${this.apiUrl}/api/hd/accounts/${account.accountId}`, account)
+      .put<AccountDto>(`${this.apiUrl}/hd/accounts/${account.accountId}`, account)
       .pipe(shareReplay());
   }
 }

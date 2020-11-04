@@ -13,11 +13,11 @@ export class AuthService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   changePassword(dto: ChangePasswordDto) {
-    return this.httpClient.put(`${this.apiUrl}/api/user/me/password`, dto).pipe(shareReplay());
+    return this.httpClient.put(`${this.apiUrl}/user/me/password`, dto).pipe(shareReplay());
   }
 
   checkUsername(username: string): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/api/registration/checkusername/${username}`).pipe(shareReplay());
+    return this.httpClient.get(`${this.apiUrl}/registration/checkusername/${username}`).pipe(shareReplay());
   }
 
   login(username: string, password: string): Observable<any> {

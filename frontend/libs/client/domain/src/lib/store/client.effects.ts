@@ -9,7 +9,7 @@ import { EnrollmentStatusDto } from '../model/enrollment-status';
 @Injectable()
 export class ClientEffects {
   constructor(private actions$: Actions, private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
-  private baseUrl = `${this.apiUrl}/api`;
+  private baseUrl = `${this.apiUrl}`;
 
   loadEnrollmentStatus$ = createEffect(() =>
     this.actions$.pipe(

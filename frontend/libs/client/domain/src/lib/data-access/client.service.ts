@@ -17,11 +17,11 @@ export class ClientService {
   ) {}
 
   getPersonalDetails(): Observable<ClientDto> {
-    return this.httpClient.get<ClientDto>(`${this.apiUrl}/api/enrollment/details`).pipe(shareReplay());
+    return this.httpClient.get<ClientDto>(`${this.apiUrl}/enrollment/details`).pipe(shareReplay());
   }
 
   updatePersonalDetails(client: ClientDto, confirmedZipCode: boolean = false): Observable<any> {
-    let url = `${this.apiUrl}/api/enrollment/details`;
+    let url = `${this.apiUrl}/enrollment/details`;
     if (confirmedZipCode) {
       url += '?confirmed=true';
     }

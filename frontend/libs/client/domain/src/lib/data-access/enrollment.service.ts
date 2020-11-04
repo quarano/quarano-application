@@ -13,7 +13,7 @@ import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from 
   providedIn: 'root',
 })
 export class EnrollmentService {
-  private baseUrl = `${this.apiUrl}/api`;
+  private baseUrl = `${this.apiUrl}`;
 
   constructor(
     private httpClient: HttpClient,
