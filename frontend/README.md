@@ -1,49 +1,42 @@
-# NxFrontend
+# Frontend
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.3.
+
+## Development Server
+
+The modules must be installed with `npm install` before the first start.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Add the `--open` flag to automatically open a browser tab.
+
+## Build
+
+Run `nx build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+## Running unit tests
+
+Run `nx test` to execute the unit tests via Jest.
+
+## Running end-to-end tests
+
+Run `nx e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io). To run specific tests add the `--watch` flag to the command.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## CSS framework
+
+We use [Angular Material](https://v7.material.angular.io)
+
+[Corona Icons](https://icon-icons.com/de/pack/Coronavirus/2364)
+
+## Nx
 
 This project was generated using [Nx](https://nx.dev).
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png" width="450"></p>
-
 🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
 
-## Quick Start & Documentation
-
-[Nx Documentation](https://nx.dev/angular)
-
-[10-minute video showing all Nx features](https://nx.dev/angular/getting-started/what-is-nx)
-
-[Interactive Tutorial](https://nx.dev/angular/tutorial/01-create-application)
-
-## Adding capabilities to your workspace
-
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
-
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
-
-Below are some plugins which you can add to your workspace:
-
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
-
-## Generate an application
-
-Run `ng g @nrwl/angular:app my-app` to generate an application.
-
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
+### Generate a library
 
 Run `ng g @nrwl/angular:lib my-lib` to generate a library.
 
@@ -51,38 +44,14 @@ Run `ng g @nrwl/angular:lib my-lib` to generate a library.
 
 Libraries are sharable across libraries and applications. They can be imported from `@quarano/mylib`.
 
-## Development server
+### Code scaffolding
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Run `ng g component my-component` to generate a new component.
 
-## Code scaffolding
-
-Run `ng g component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e quarano-frontend` to execute the end-to-end tests via [Cypress](https://www
-.cypress.io).
-
-Run `ng e2e quarano-frontend-e2e --watch` to execute the end-to-end tests via [Cypress](https://www.cypress.io) in watch mode
-.
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
+### Understand your workspace
 
 Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 
-## Further help
+### Documentation
 
 Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
