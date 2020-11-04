@@ -21,7 +21,7 @@
 		<docker.build.skip>false</docker.build.skip>
 		<docker.build.userid>1001</docker.build.userid>
 		<jmolecules.version>1.0.0</jmolecules.version>
-		<moduliths.version>1.0.0</moduliths.version>
+		<moduliths.version>1.1.0-M1</moduliths.version>
 		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.version>0.2.2.RELEASE</refdocs.version>
 		<xmlprojector.version>1.4.17</xmlprojector.version>

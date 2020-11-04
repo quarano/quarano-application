@@ -30,13 +30,8 @@ body.toc2 {
   font-weight: bold;
 }
 
-ul>li p{
-  margin-bottom: 0.1em;
-}
-
-/* Remove margin under unordered lists in tables */
-td ul {
-  margin-bottom: 0em !important;
+ul>li p {
+  margin-bottom: 0.3em;
 }
 
 .admonitionblock {
