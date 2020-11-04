@@ -1,3 +1,4 @@
+import { StaticPageKeys } from '@qro/shared/ui-static-pages';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseType } from '@qro/auth/api';
@@ -17,6 +18,13 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
     this.userType = (this.route.snapshot.paramMap.get('usertype') as CaseType) || this.userType;
     this.clientcode = this.route.snapshot.paramMap.get('clientcode');
+  }
+
+  get pageKey(): StaticPageKeys {
+    if (this.userType === CaseType.Contact) {
+      return StaticPageKeys.WelcomeContact;
+    }
+    return StaticPageKeys.WelcomeIndex;
   }
 
   showIndexNumber() {

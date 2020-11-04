@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'shared-ui-data-protection',
+  name: 'shared-ui-static-pages',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/libs/shared/ui-data-protection',
+  coverageDirectory: '../../../coverage/libs/shared/ui-static-pages',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

@@ -5,7 +5,7 @@
   <h1 mat-dialog-title>{{ 'DATA_PROTECTION_DIALOG.DATENSCHUTZERKLÄRUNG' | translate }}</h1>
 </div>
 <mat-dialog-content>
-  <qro-data-protection></qro-data-protection>
+  <qro-static-page [staticPageKey]="StaticPageKeys.DataProtection"></qro-static-page>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>

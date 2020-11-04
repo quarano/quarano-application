@@ -1,4 +1,3 @@
-import { SharedUiDataProtectionModule } from '@qro/shared/ui-data-protection';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { NgModule } from '@angular/core';
@@ -18,6 +17,7 @@ import { DataProtectionDialogComponent } from './data-protection-dialog/data-pro
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { HealthDepartmentAddressComponent } from './health-department-address/health-department-address.component';
+import { SharedUiStaticPagesModule, StaticPagesResolver } from '@qro/shared/ui-static-pages';
 
 const routes: Routes = [
   {
@@ -34,6 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'landing',
+    resolve: { staticPagesLoaded: StaticPagesResolver },
     children: [
       { path: '', pathMatch: 'full', component: LandingComponent },
       { path: ':usertype/:clientcode', component: LandingComponent },
@@ -65,9 +66,9 @@ const routes: Routes = [
     ClientUiPersonalDataModule,
     ClientUiContactPersonDetailModule,
     ClientDomainModule,
-    SharedUiDataProtectionModule,
     RouterModule.forChild(routes),
     SharedUtilTranslationModule,
+    SharedUiStaticPagesModule,
   ],
   declarations: [
     DataProtectionDialogComponent,

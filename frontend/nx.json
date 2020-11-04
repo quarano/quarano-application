@@ -146,9 +146,6 @@
     "general-shell": {
       "tags": ["scope:general", "type:shell"]
     },
-    "shared-ui-data-protection": {
-      "tags": ["scope:shared", "type:ui"]
-    },
     "administration-feature-account-detail": {
       "tags": ["scope:administration", "type:feature"]
     },
@@ -178,6 +175,9 @@
     },
     "shared-util-translation": {
       "tags": ["scope:shared", "type:util"]
+    },
+    "shared-ui-static-pages": {
+      "tags": ["scope:shared", "type:ui"]
     }
   }
 }

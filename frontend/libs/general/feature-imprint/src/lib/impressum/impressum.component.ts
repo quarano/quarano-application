@@ -1,3 +1,4 @@
+import { StaticPageKeys } from '@qro/shared/ui-static-pages';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./impressum.component.scss'],
 })
 export class ImpressumComponent implements OnInit {
+  StaticPageKeys = StaticPageKeys;
   constructor() {}
 
   ngOnInit() {}
