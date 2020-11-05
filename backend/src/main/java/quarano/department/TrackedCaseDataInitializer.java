@@ -80,7 +80,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
 		var peter = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP1).orElseThrow();
 		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
-		var person5 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
 		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
 		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
 		var harriette = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1).orElseThrow();
@@ -143,7 +143,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		LocalDate startN = LocalDate.now().minusWeeks(1).plusDays(2);
 		LocalDate endN = start.plusWeeks(2);
 
-		cases.save(new TrackedCase(TRACKED_CASE_NADINE, person5, CaseType.INDEX, department1, null)
+		cases.save(new TrackedCase(TRACKED_CASE_NADINE, nadine, CaseType.INDEX, department1, null)
 				.setTestResult(TestResult.infected(startN.minusDays(1)))
 				.setQuarantine(Quarantine.of(startN, endN))
 				.submitEnrollmentDetails()
