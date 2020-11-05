@@ -30,6 +30,7 @@ import org.jmolecules.ddd.types.Identifier;
 /**
  * @author Oliver Drotbohm
  * @author Michael J. Simons
+ * @author Jens Kutzsche
  */
 @Entity
 @Table(name = "departments")
@@ -40,29 +41,33 @@ public class Department extends QuaranoAggregate<Department, DepartmentIdentifie
 	private @Getter @Column(unique = true) String name;
 
 	private @Getter @Setter(value = AccessLevel.PACKAGE) @Column(unique = true) String rkiCode;
+	private @Getter @Setter(value = AccessLevel.PACKAGE) String federalState;
+	private @Getter @Setter(value = AccessLevel.PACKAGE) String district;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "department_id")
 	private @Getter Set<DepartmentContact> contacts = new HashSet<>();
 
 	public Department(String name) {
-		this(name, "0.0.0.0.");
+		this(name, "0.0.0.0.", "", "");
 	}
 
-	public Department(String name, String rkiCode) {
-		this(name, UUID.randomUUID(), rkiCode);
+	public Department(String name, String rkiCode, String federalState, String district) {
+		this(name, UUID.randomUUID(), rkiCode, federalState, district);
 	}
 
-	public Department(String name, UUID uuid, String rkiCode) {
-		this(name, DepartmentIdentifier.of(uuid), rkiCode);
+	public Department(String name, UUID uuid, String rkiCode, String federalState, String district) {
+		this(name, DepartmentIdentifier.of(uuid), rkiCode, federalState, district);
 	}
 
 	// fixed Id department for tests and integration data
-	Department(String name, DepartmentIdentifier fixedId, String rkiCode) {
+	Department(String name, DepartmentIdentifier fixedId, String rkiCode, String federalState, String district) {
 
 		this.id = fixedId;
 		this.name = name;
 		this.rkiCode = rkiCode;
+		this.federalState = federalState;
+		this.district = district;
 	}
 
 	Set<DepartmentContact> getContacts() {

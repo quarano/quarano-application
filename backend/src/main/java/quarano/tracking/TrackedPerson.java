@@ -74,8 +74,8 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);
 	}
 
-	TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName, @Nullable EmailAddress emailAddress,
-			@Nullable PhoneNumber phoneNumber, @Nullable LocalDate dateOfBirth) {
+	public TrackedPerson(TrackedPersonIdentifier fixedId, String firstName, String lastName,
+			@Nullable EmailAddress emailAddress, @Nullable PhoneNumber phoneNumber, @Nullable LocalDate dateOfBirth) {
 
 		this.id = fixedId;
 		this.firstName = firstName;

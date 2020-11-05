@@ -36,7 +36,7 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 	private LocalDateTime date;
 	private String text, author;
 
-	public Comment(String text, String author) {
+	public Comment(String text, String author, LocalDateTime date) {
 
 		Assert.hasText(text, "Comment text must not be null or empty!");
 		Assert.hasText(author, "Author must not be null or empty!");
@@ -45,6 +45,13 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 		this.date = LocalDateTime.now();
 		this.text = text;
 		this.author = author;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public Comment(String text, String author) {
+		this(text, author, LocalDateTime.now());
 	}
 
 	/*

@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import org.springframework.data.util.Streamable;
@@ -54,6 +55,17 @@ public class Encounters implements Streamable<Encounter> {
 				.sorted(Comparator.comparing(Encounter::getDate))
 				.findFirst()
 				.map(Encounter::getDate);
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public Optional<LocalDate> getDateOfLastEncounterWith(ContactPerson contact) {
+
+		return encounters.stream()
+				.filter(it -> it.isEncounterWith(contact))
+				.map(Encounter::getDate)
+				.reduce(BinaryOperator.maxBy(Comparator.naturalOrder()));
 	}
 
 	public Map<ContactPerson, List<Encounter>> getEncountersGroupedByContactPerson() {

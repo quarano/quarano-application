@@ -45,6 +45,8 @@ public class AccountBootstrap implements ApplicationRunner {
 			departments.findByName(defaultDepartment.getName())
 					.map(department -> department.setContacts(defaultDepartment.getContacts()))
 					.map(department -> department.setRkiCode(defaultDepartment.getRkiCode()))
+					.map(department -> department.setFederalState(defaultDepartment.getFederalState()))
+					.map(department -> department.setDistrict(defaultDepartment.getDistrict()))
 					.ifPresent(departments::save);
 
 			return;

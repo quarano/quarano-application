@@ -86,11 +86,12 @@ public class Quarano {
 	FlywayConfigurationCustomizer getFlywayCustomizer(DepartmentProperties prop) {
 		return configuration -> {
 
-			if (StringUtils.hasText(prop.getDefaultDepartment().getRkiCode())) {
+			String rkiCode = prop.getDefaultDepartment().getRkiCode();
+			if (StringUtils.hasText(rkiCode)) {
 				configuration
 						.locations(
 								configuration.getLocations()[0],
-								new Location("classpath:db/client_migration/" + prop.getDefaultDepartment().getRkiCode() + "RKI"));
+								new Location("classpath:db/client_migration/" + rkiCode + "RKI"));
 			} else {
 				log.warn("No RKI code is set with the default department! No department-specific texts are imported.");
 			}
