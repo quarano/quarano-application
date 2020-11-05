@@ -36,6 +36,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -275,6 +276,16 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.city", String.class)).contains("valid place name");
 		assertThat(document.read("$.street", String.class)).contains("valid street name");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
+	}
+
+	@Test // CORE-554
+	@WithQuaranoUser("test5") // Nadine Ebert
+	void caseWithEnrollmentCompletedDoNotExposeNextLinkPointingToEnrollment() throws Exception {
+
+		var response = mvc.perform(get("/api/user/me"))
+				.andReturn().getResponse().getContentAsString();
+
+		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.NEXT, response)).isEmpty();
 	}
 
 	private void expectResponseCarriesEmptyQuestionnaire(String result) {

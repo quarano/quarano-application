@@ -59,17 +59,19 @@ public class UserController {
 			person.map(representations::toRepresentation)
 					.ifPresent(userDto::setClient);
 
-			var enrollmentLink = MvcLink.of(caseController.enrollment(null), ENROLLMENT);
 			var trackedCase = person.flatMap(cases::findByTrackedPerson);
 
 			trackedCase
 					.map(TrackedCase::getEnrollment)
-					.map(representations::toRepresentation)
 					.ifPresent(it -> {
 
-						userDto.add(enrollmentLink);
-						userDto.add(enrollmentLink.withRel(IanaLinkRelations.NEXT));
-						userDto.setEnrollment(it);
+						var enrollmentDto = representations.toRepresentation(it);
+						var enrollmentLink = MvcLink.of(caseController.enrollment(null), ENROLLMENT);
+
+						userDto.setEnrollment(enrollmentDto)
+								.add(enrollmentLink)
+								.addIf(!it.isComplete(),
+										() -> MvcLink.of(caseController.enrollment(null), ENROLLMENT).withRel(IanaLinkRelations.NEXT));
 					});
 
 			trackedCase.map(TrackedCase::getType)
@@ -114,20 +116,17 @@ public class UserController {
 		/**
 		 * The current password.
 		 */
-		@NotBlank
-		String current;
+		@NotBlank String current;
 
 		/**
 		 * The new password to set.
 		 */
-		@NotBlank
-		String password;
+		@NotBlank String password;
 
 		/**
 		 * The new password repeated for verification.
 		 */
-		@NotBlank
-		String passwordConfirm;
+		@NotBlank String passwordConfirm;
 
 		NewPassword validate(Errors errors, EncryptedPassword existing, AccountService accounts) {
 
