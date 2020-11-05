@@ -1,5 +1,6 @@
 package quarano.department.rki;
 
+import quarano.account.FederalStates;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.tracking.ZipCode;
@@ -47,6 +48,14 @@ public class HealthDepartmentsConfiguration {
 		} catch (IOException e) {
 			throw new IllegalStateException("Can't initialize service HealthDepartmentOverview!", e);
 		}
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	@Bean
+	FederalStates federalStates() {
+		return new FederalStates();
 	}
 
 	private final class EmailConversion extends Conversion<EmailAddress> {

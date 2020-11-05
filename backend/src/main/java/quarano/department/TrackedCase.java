@@ -74,6 +74,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private LocalDateTime quarantineLastModified = null;
 
 	private @Getter @Setter String extReferenceNumber;
+	
+	/**
+	 * @since 1.4
+	 */
+	private @Getter @Setter String sormasCaseId;
 
 	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
@@ -117,7 +122,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this(TrackedCaseIdentifier.of(UUID.randomUUID()), person, type, department, contactPerson);
 	}
 
-	TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department,
+	public TrackedCase(TrackedCaseIdentifier id, TrackedPerson person, CaseType type, Department department,
 			@Nullable ContactPerson originContact) {
 
 		this.id = id;

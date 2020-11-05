@@ -11,8 +11,10 @@ import quarano.tracking.Encounter;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 import org.springframework.data.util.Streamable;
@@ -75,6 +77,17 @@ public class Diary implements Streamable<DiaryEntry> {
 				.map(DiaryEntry::getSlotDate)
 				.sorted()
 				.findFirst();
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public Optional<LocalDate> getDateOfLastEncounterWith(ContactPerson contact) {
+
+		return entries.stream()
+				.filter(it -> it.containsEncounterWith(contact))
+				.map(DiaryEntry::getSlotDate)
+				.reduce(BinaryOperator.maxBy(Comparator.naturalOrder()));
 	}
 
 	/*

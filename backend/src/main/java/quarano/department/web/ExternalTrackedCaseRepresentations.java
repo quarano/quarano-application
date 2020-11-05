@@ -106,6 +106,13 @@ public interface ExternalTrackedCaseRepresentations {
 			return trackedCase.getExtReferenceNumber();
 		}
 
+		/**
+		 * @since 1.4
+		 */
+		public String getSormasCaseId() {
+			return trackedCase.getSormasCaseId();
+		}
+
 		public String getPrimaryPhoneNumber() {
 
 			var trackedPerson = trackedCase.getTrackedPerson();

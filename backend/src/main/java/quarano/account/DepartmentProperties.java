@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -25,13 +26,21 @@ public class DepartmentProperties {
 
 	public Department getDefaultDepartment() {
 
-		return new Department(defaultDepartment.name, defaultDepartment.rkiCode)
-				.setContacts(defaultDepartment.contacts.stream()
-						.map(contact -> new DepartmentContact()
-								.setType(ContactType.valueOf(contact.type))
-								.setEmailAddress(EmailAddress.ofNullable(contact.emailAddress))
-								.setPhoneNumber(PhoneNumber.of(contact.phoneNumber)))
-						.collect(Collectors.toUnmodifiableSet()));
+		var rkiCode = defaultDepartment.rkiCode;
+		var federalState = defaultDepartment.federalState;
+
+		if (!StringUtils.hasText(federalState)) {
+			federalState = new FederalStates().apply(rkiCode).getName();
+		}
+
+		return new Department(defaultDepartment.name, rkiCode, federalState,
+				defaultDepartment.district)
+						.setContacts(defaultDepartment.contacts.stream()
+								.map(contact -> new DepartmentContact()
+										.setType(ContactType.valueOf(contact.type))
+										.setEmailAddress(EmailAddress.ofNullable(contact.emailAddress))
+										.setPhoneNumber(PhoneNumber.of(contact.phoneNumber)))
+								.collect(Collectors.toUnmodifiableSet()));
 	}
 
 	@RequiredArgsConstructor
@@ -39,6 +48,8 @@ public class DepartmentProperties {
 
 		private final String name;
 		private final String rkiCode;
+		private final String federalState;
+		private final String district;
 		private final List<DefaultDepartmentContact> contacts;
 
 		@RequiredArgsConstructor

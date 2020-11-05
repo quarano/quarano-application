@@ -47,7 +47,7 @@ public class DepartmentDataInitializer implements DataInitializer {
 		}
 
 		departments.saveAll(List.of(
-				new Department("GA Mannheim", DEPARTMENT_ID_DEP1, RKI_CODE_DEP1)
+				new Department("GA Mannheim", DEPARTMENT_ID_DEP1, RKI_CODE_DEP1, "Baden-Württemberg", "Mannheim")
 						.setContacts(Set.of(
 								new DepartmentContact()
 										.setType(DepartmentContact.ContactType.INDEX)
@@ -57,7 +57,7 @@ public class DepartmentDataInitializer implements DataInitializer {
 										.setType(DepartmentContact.ContactType.CONTACT)
 										.setEmailAddress(EmailAddress.of("contact-email@gamannheim.de"))
 										.setPhoneNumber(PhoneNumber.of("00123456789")))),
-				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2, RKI_CODE_DEP2)
+				new Department("GA Darmstadt", DEPARTMENT_ID_DEP2, RKI_CODE_DEP2, "Hessen", "Darmstadt")
 						.setContacts(Set.of(
 								new DepartmentContact()
 										.setType(DepartmentContact.ContactType.INDEX)
