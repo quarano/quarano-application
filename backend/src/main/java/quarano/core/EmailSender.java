@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
@@ -115,6 +116,7 @@ public class EmailSender {
 		 * <code>spring.mail.properties.fixSender</code>.
 		 */
 		private static final String FIX_SENDER_PROPERTY_KEY = "fixSender";
+		private static final String FIX_SENDER_NAME_PROPERTY_KEY = "fixSenderName";
 
 		private final @Getter Sender from;
 		private final @Getter Recipient to;
@@ -131,17 +133,22 @@ public class EmailSender {
 		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
 				@NonNull MailProperties mailProperties) {
 
-			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
-			var from = StringUtils.isEmpty(fixSender) ? this.from.toInternetAddress() : EmailAddress.of(fixSender).toString();
-
 			var message = new SimpleMailMessage();
-			message.setFrom(from);
+			message.setFrom(determineFrom(mailProperties));
 			message.setTo(to.toInternetAddress());
 			message.setSubject(subject);
 			message.setText(getBody(templates, configuration));
 			message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 
 			return message;
+		}
+
+		private String determineFrom(MailProperties mailProperties) {
+
+			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
+
+			return StringUtils.isEmpty(fixSender) ? this.from.toInternetAddress()
+					: FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress();
 		}
 
 		private String getBody(EmailTemplates templates, CoreProperties configuration) {
@@ -176,6 +183,25 @@ public class EmailSender {
 
 		public interface Recipient extends InternetAdressSource {
 			String getLastName();
+		}
+
+		@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+		static class FixedConfiguredSender implements Sender {
+
+			private final @Getter String fullName;
+			private final @Getter EmailAddress emailAddress;
+
+			public static FixedConfiguredSender of(MailProperties mailProperties, Sender originSenderAsFallback) {
+
+				var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
+				var fixSenderName = mailProperties.getProperties().get(FIX_SENDER_NAME_PROPERTY_KEY);
+
+				var fullName = Optional.ofNullable(fixSenderName).orElseGet(originSenderAsFallback::getFullName);
+				var emailAddress = Optional.ofNullable(fixSender).map(EmailAddress::of)
+						.orElseGet(originSenderAsFallback::getEmailAddress);
+
+				return new FixedConfiguredSender(fullName, emailAddress);
+			}
 		}
 	}
 }
