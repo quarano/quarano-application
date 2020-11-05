@@ -29,7 +29,7 @@ export class AuthEffects {
       switchMap(([res, languages]) => {
         const header = res.headers.get('Content-Language');
         if (header) {
-          const newLanguage = languages.find((l) => l.key === header);
+          const newLanguage = languages.find((l) => l.key === header.split('-')[0]);
           if (newLanguage) {
             return [
               AuthActions.userDataLoaded({ user: res.body }),

@@ -15,6 +15,23 @@ export class DateFunctions {
     return dateClone.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
+  public static toISODateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const dt = date.getDate();
+    let dayString = dt.toString();
+    let monthString = month.toString();
+
+    if (dt < 10) {
+      dayString = '0' + dt;
+    }
+    if (month < 10) {
+      monthString = '0' + month;
+    }
+
+    return `${year}-${monthString}-${dayString}`;
+  }
+
   public static isDateInPast = function (date: Date): boolean {
     const dateClone = new Date(date.valueOf());
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());

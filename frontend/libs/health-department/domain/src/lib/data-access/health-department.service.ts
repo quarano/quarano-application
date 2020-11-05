@@ -1,11 +1,14 @@
+import { DateFunctions } from '@qro/shared/util-date';
 import { CaseDto } from './../model/case';
 import { API_URL, Link } from '@qro/shared/util-data-access';
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../model/case-action';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
 import { AuthStore, CaseType, HealthDepartmentDto } from '@qro/auth/api';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +38,28 @@ export class HealthDepartmentService {
 
   getCaseActions(caseId: string): Observable<CaseActionDto> {
     return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/hd/actions/${caseId}`).pipe(shareReplay());
+  }
+
+  getCsvData(caseType: CaseType, start: Moment, end: Moment): Observable<any> {
+    const params: { [param: string]: string | string[] } = {};
+
+    if (caseType) {
+      params['type'] = caseType;
+    }
+    if (start && end) {
+      params['from'] = start.format('YYYY-MM-DD');
+      params['to'] = end.format('YYYY-MM-DD');
+    }
+
+    const options: Object = {
+      headers: new HttpHeaders({
+        'Content-Type': 'text/csv',
+      }),
+      responseType: 'text',
+      params,
+    };
+
+    return this.httpClient.get<string>(`${this.apiUrl}/hd/quarantineorder`, options).pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {
