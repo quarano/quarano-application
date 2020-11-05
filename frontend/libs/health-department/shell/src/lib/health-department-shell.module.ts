@@ -28,6 +28,11 @@ import { RouterModule } from '@angular/router';
         loadChildren: () =>
           import('@qro/health-department/feature-case-detail').then((m) => m.HealthDepartmentFeatureCaseDetailModule),
       },
+      {
+        path: 'export',
+        loadChildren: () =>
+          import('@qro/health-department/feature-export').then((m) => m.HealthDepartmentFeatureExportModule),
+      },
     ]),
   ],
 })
