@@ -1804,6 +1804,35 @@
           "style": "scss"
         }
       }
+    },
+    "health-department-feature-export": {
+      "projectType": "library",
+      "root": "libs/health-department/feature-export",
+      "sourceRoot": "libs/health-department/feature-export/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/health-department/feature-export/tsconfig.lib.json", "libs/health-department/feature-export/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/health-department/feature-export/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/health-department/feature-export/jest.config.js",
+            "tsConfig": "libs/health-department/feature-export/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/health-department/feature-export/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

@@ -67,7 +67,8 @@
       "@qro/shared/util-common-functions": ["libs/shared/util-common-functions/src/index.ts"],
       "@qro/shared/util-snackbar": ["libs/shared/util-snackbar/src/index.ts"],
       "@qro/shared/util-translation": ["libs/shared/util-translation/src/index.ts"],
-      "@qro/shared/ui-static-pages": ["libs/shared/ui-static-pages/src/index.ts"]
+      "@qro/shared/ui-static-pages": ["libs/shared/ui-static-pages/src/index.ts"],
+      "@qro/health-department/feature-export": ["libs/health-department/feature-export/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
