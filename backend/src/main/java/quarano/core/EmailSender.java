@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
@@ -147,8 +146,9 @@ public class EmailSender {
 
 			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
 
-			return StringUtils.isEmpty(fixSender) ? this.from.toInternetAddress()
-					: FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress();
+			return StringUtils.hasText(fixSender)
+					? FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress()
+					: this.from.toInternetAddress();
 		}
 
 		private String getBody(EmailTemplates templates, CoreProperties configuration) {
@@ -193,12 +193,12 @@ public class EmailSender {
 
 			public static FixedConfiguredSender of(MailProperties mailProperties, Sender originSenderAsFallback) {
 
-				var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
-				var fixSenderName = mailProperties.getProperties().get(FIX_SENDER_NAME_PROPERTY_KEY);
+				var properties = mailProperties.getProperties();
+				var fixSender = properties.get(FIX_SENDER_PROPERTY_KEY);
+				var fixSenderName = properties.get(FIX_SENDER_NAME_PROPERTY_KEY);
 
-				var fullName = Optional.ofNullable(fixSenderName).orElseGet(originSenderAsFallback::getFullName);
-				var emailAddress = Optional.ofNullable(fixSender).map(EmailAddress::of)
-						.orElseGet(originSenderAsFallback::getEmailAddress);
+				var fullName = fixSenderName != null ? fixSenderName : originSenderAsFallback.getFullName();
+				var emailAddress = fixSender != null ? EmailAddress.of(fixSender) : originSenderAsFallback.getEmailAddress();
 
 				return new FixedConfiguredSender(fullName, emailAddress);
 			}
