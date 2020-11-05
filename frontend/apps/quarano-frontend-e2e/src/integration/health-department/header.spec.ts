@@ -3,7 +3,7 @@ describe('health-department top navigation', () => {
     cy.server();
     cy.route('GET', '/user/me').as('me');
 
-    cy.loginAgent();
+    cy.loginAdmin();
   });
 
   it('should show a navigation', () => {
@@ -20,6 +20,18 @@ describe('health-department top navigation', () => {
     cy.get('[data-cy="contact-cases"]').click();
     cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
     cy.url().should('include', '/health-department/contact-cases/case-list');
+  });
+
+  it('should switch to export on click', () => {
+    cy.get('[data-cy="export"]').click();
+    cy.get('[data-cy="export"]').should('have.class', 'active');
+    cy.url().should('include', '/health-department/export');
+  });
+
+  it('should switch to account administration on click', () => {
+    cy.get('[data-cy="account-administration"]').click();
+    cy.get('[data-cy="account-administration"]').should('have.class', 'active');
+    cy.url().should('include', '/administration/accounts/account-list');
   });
 
   it('should show the current logged in agent', () => {
