@@ -178,6 +178,9 @@
     },
     "shared-ui-static-pages": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "health-department-feature-export": {
+      "tags": ["scope:health-department", "type:feature"]
     }
   }
 }
