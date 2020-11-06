@@ -136,7 +136,9 @@ class TrackedCaseCsvRepresentations {
 			var quarantine = trackedCase.getQuarantine();
 			quarantineFrom = quarantine == null ? null : quarantine.getFrom().format(localizer);
 			quarantineTo = quarantine == null ? null : quarantine.getTo().format(localizer);
-			quarantineChanged = trackedCase.getQuarantineLastModified().format(localizerDateTime);
+
+			var quarantineLastModified = trackedCase.getQuarantineLastModified();
+			quarantineChanged = quarantineLastModified == null ? null : quarantineLastModified.format(localizerDateTime);
 
 			type = trackedCase.getType().getPrimaryCaseType().toString();
 		}

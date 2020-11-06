@@ -66,11 +66,12 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
 
-	@Getter(onMethod = @__(@Nullable)) //
+	@Nullable //
 	private Quarantine quarantine = null;
 
+	@Nullable @Setter(AccessLevel.NONE) //
 	@Column(name = "quarantine_last_modified") //
-	private LocalDateTime quarantineLastModified;
+	private LocalDateTime quarantineLastModified = null;
 
 	private @Getter @Setter String extReferenceNumber;
 
@@ -128,7 +129,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.department = department;
 		this.status = Status.OPEN;
 		this.originCases = new ArrayList<>();
-		this.quarantineLastModified = LocalDateTime.now();
 
 		this.registerEvent(CaseCreated.of(this));
 

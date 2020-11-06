@@ -202,6 +202,22 @@ class TrackedCaseUnitTests {
 						.isSameAs(otherAndDifferent);
 	}
 
+	@Test // CORE-487
+	void caseWithoutQuarantineDoesNotExposeQuarantineLastModifiedDate() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var department = new Department("Musterstadt");
+
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, department);
+
+		assertThat(trackedCase.getQuarantineLastModified()).isNull();
+
+		var now = LocalDate.now();
+		trackedCase.setQuarantine(Quarantine.of(now, now.plusDays(5)));
+
+		assertThat(trackedCase.getQuarantineLastModified()).isNotNull();
+	}
+
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {
 
 		var department = new Department("Musterstadt");
