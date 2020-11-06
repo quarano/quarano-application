@@ -1,18 +1,16 @@
-package quarano.department.csv;
+package quarano.department.web;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.department.TrackedCase;
-import quarano.tracking.Address;
-import quarano.tracking.Quarantine;
 
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,11 +25,12 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 /**
  * @author Jens Kutzsche
+ * @author Oliver Drotbohm
  */
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TrackedCaseCsvRepresentations {
+class TrackedCaseCsvRepresentations {
 
 	private static final String LAST_NAME = "LAST NAME";
 	private static final String FIRST_NAME = "FIRST NAME";
@@ -77,40 +76,41 @@ public class TrackedCaseCsvRepresentations {
 		}
 	}
 
-	private Comparator<String> createOrderComparatorFor(String[] orderArray) {
+	private static Comparator<String> createOrderComparatorFor(String[] orderArray) {
 		return Comparator.comparingInt(it -> ArrayUtils.indexOf(orderArray, it));
 	}
 
-	public static class QuarantineOrderCsv {
+	@Getter(AccessLevel.PACKAGE)
+	private static class QuarantineOrderCsv {
 
-		@CsvBindByName(column = LAST_NAME)
-		private final @Getter String lastName;
-		@CsvBindByName(column = FIRST_NAME)
-		private final @Getter String firstName;
-		@CsvBindByName(column = DATE_OF_BIRTH)
-		private final @Getter String dateOfBirth;
-		@CsvBindByName(column = EMAIL)
-		private final @Getter String email;
-		@CsvBindByName(column = PHONE)
-		private final @Getter String phone;
-		@CsvBindByName(column = MOBILE)
-		private final @Getter String mobile;
-		@CsvBindByName(column = CITY)
-		private final @Getter String city;
-		@CsvBindByName(column = ZIP_CODE)
-		private final @Getter String zipCode;
-		@CsvBindByName(column = STREET)
-		private final @Getter String street;
-		@CsvBindByName(column = HOUSE_NUMBER)
-		private final @Getter String houseNumber;
-		@CsvBindByName(column = QUARANTINE_FROM)
-		private final @Getter String quarantineFrom;
-		@CsvBindByName(column = QUARANTINE_TO)
-		private final @Getter String quarantineTo;
-		@CsvBindByName(column = TYPE)
-		private final @Getter String type;
-		@CsvBindByName(column = QUARANTINE_CHANGED)
-		private final @Getter String quarantineChanged;
+		@CsvBindByName(column = LAST_NAME) //
+		private final String lastName;
+		@CsvBindByName(column = FIRST_NAME) //
+		private final String firstName;
+		@CsvBindByName(column = DATE_OF_BIRTH) //
+		private final String dateOfBirth;
+		@CsvBindByName(column = EMAIL) //
+		private final String email;
+		@CsvBindByName(column = PHONE) //
+		private final String phone;
+		@CsvBindByName(column = MOBILE) //
+		private final String mobile;
+		@CsvBindByName(column = CITY) //
+		private final String city;
+		@CsvBindByName(column = ZIP_CODE) //
+		private final String zipCode;
+		@CsvBindByName(column = STREET) //
+		private final String street;
+		@CsvBindByName(column = HOUSE_NUMBER) //
+		private final String houseNumber;
+		@CsvBindByName(column = QUARANTINE_FROM) //
+		private final String quarantineFrom;
+		@CsvBindByName(column = QUARANTINE_TO) //
+		private final String quarantineTo;
+		@CsvBindByName(column = TYPE) //
+		private final String type;
+		@CsvBindByName(column = QUARANTINE_CHANGED) //
+		private final String quarantineChanged;
 
 		public QuarantineOrderCsv(TrackedCase trackedCase) {
 
@@ -124,20 +124,19 @@ public class TrackedCaseCsvRepresentations {
 			phone = Objects.toString(trackedPerson.getPhoneNumber(), null);
 			mobile = Objects.toString(trackedPerson.getMobilePhoneNumber(), null);
 
-			var birth = Optional.ofNullable(trackedPerson.getDateOfBirth());
-			dateOfBirth = birth.map(it -> it.format(localizer)).orElse(null);
+			var birth = trackedPerson.getDateOfBirth();
+			dateOfBirth = birth == null ? null : birth.format(localizer);
 
-			var address = Optional.ofNullable(trackedPerson.getAddress());
-			city = address.map(Address::getCity).orElse(null);
-			zipCode = address.map(Address::getZipCode).map(it -> Objects.toString(it, null)).orElse(null);
-			street = address.map(Address::getStreet).orElse(null);
-			houseNumber = address.map(Address::getHouseNumber).map(it -> Objects.toString(it)).orElse(null);
+			var address = trackedPerson.getAddress();
+			city = address == null ? null : address.getCity();
+			zipCode = address == null ? null : Objects.toString(address.getZipCode(), null);
+			street = address == null ? null : address.getStreet();
+			houseNumber = address == null ? null : Objects.toString(address.getHouseNumber(), null);
 
-			var quarantine = Optional.ofNullable(trackedCase.getQuarantine());
-			quarantineFrom = quarantine.map(Quarantine::getFrom).map(it -> it.format(localizer)).orElse(null);
-			quarantineTo = quarantine.map(Quarantine::getTo).map(it -> it.format(localizer)).orElse(null);
-			quarantineChanged = quarantine.map(Quarantine::getLastModified).map(it -> it.format(localizerDateTime))
-					.orElse(null);
+			var quarantine = trackedCase.getQuarantine();
+			quarantineFrom = quarantine == null ? null : quarantine.getFrom().format(localizer);
+			quarantineTo = quarantine == null ? null : quarantine.getTo().format(localizer);
+			quarantineChanged = trackedCase.getQuarantineLastModified().format(localizerDateTime);
 
 			type = trackedCase.getType().getPrimaryCaseType().toString();
 		}

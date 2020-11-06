@@ -1,4 +1,4 @@
-package quarano.department.csv;
+package quarano.department.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class TrackedCaseCsvController {
+class TrackedCaseCsvController {
 
 	private final @NonNull TrackedCaseRepository caseRepo;
 	private final @NonNull TrackedCaseCsvRepresentations representations;
@@ -35,9 +35,9 @@ public class TrackedCaseCsvController {
 	 * </p>
 	 * <p>
 	 * The quantity of exported cases can be limited by the type and date of the last quarantine modification. For
-	 * example, only quarantines created or modified in the last 24 hours can be exported.
+	 * example, only quarantines created or modified in the last days can be exported.
 	 * </p>
-	 * 
+	 *
 	 * @param department
 	 * @param quarantineFrom The date (YYYY-MM-DD) of the last quarantine modification from which (inclusive) the cases
 	 *          should be included in the export.
@@ -47,7 +47,7 @@ public class TrackedCaseCsvController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@GetMapping(path = "/api/hd/quarantineorder", produces = "text/csv")
+	@GetMapping(path = "/hd/quarantines", produces = "text/csv")
 	public void getQuarantineOrder(@LoggedIn Department department,
 			@RequestParam("from") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> quarantineFrom,
 			@RequestParam("to") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> quarantineTo,

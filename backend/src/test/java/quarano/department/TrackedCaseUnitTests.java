@@ -12,6 +12,7 @@ import quarano.core.PhoneNumber;
 import quarano.department.TrackedCase.Status;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
+import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 
@@ -175,6 +176,30 @@ class TrackedCaseUnitTests {
 		trackedCase.markInRegistration();
 
 		assertThatCode(() -> trackedCase.markInRegistration()).doesNotThrowAnyException();
+	}
+
+	@Test // CORE-487
+	void doesNotReplaceQuarantineIfItsLogicallyTheSame() {
+
+		var person = TrackedPersonDataInitializer.createTanja();
+		var department = new Department("Musterstadt");
+
+		var trackedCase = new TrackedCase(person, CaseType.INDEX, department);
+
+		var start = LocalDate.now();
+		var quarantine = Quarantine.of(start, start.plusDays(5));
+		var otherButEqual = Quarantine.of(start, start.plusDays(5));
+		var otherAndDifferent = Quarantine.of(start.minusDays(5), start.plusDays(5));
+
+		assertThat(trackedCase.setQuarantine(quarantine)
+				.setQuarantine(otherButEqual)
+				.getQuarantine())
+						.isSameAs(quarantine);
+
+		assertThat(trackedCase.setQuarantine(quarantine)
+				.setQuarantine(otherAndDifferent)
+				.getQuarantine())
+						.isSameAs(otherAndDifferent);
 	}
 
 	private static TrackedCase prepareTrackedCaseForCompletion(TrackedPerson person) {

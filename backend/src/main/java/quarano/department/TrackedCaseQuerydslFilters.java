@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.DateExpression;
+import com.querydsl.jpa.JPQLQuery;
 
 /**
  * Manual implementations of Querydsl-based queries. {@link QuerydslPredicateExecutor} was not an option as we need to
@@ -52,11 +53,7 @@ public interface TrackedCaseQuerydslFilters {
 					.and(applyCaseType(type))
 					.and($case.department.id.eq(id));
 
-			var jpql = from($case)
-					.join($casePerson).fetchJoin()
-					.leftJoin($case.questionnaire).fetchJoin()
-					.leftJoin($case.originCases).fetchJoin()
-					.where(predicate)
+			var jpql = queryBase().where(predicate)
 					.orderBy($casePerson.lastName.asc(), $casePerson.firstName.asc());
 
 			return Streamable.of(jpql.fetch());
@@ -87,11 +84,11 @@ public interface TrackedCaseQuerydslFilters {
 			var $address = $casePerson.address;
 			var $zipCode = $address.zipCode;
 
-			var builder = new BooleanBuilder($case.quarantine.lastModified.isNotNull());
+			var builder = new BooleanBuilder($case.quarantineLastModified.isNotNull());
 
 			if (Optionals.isAnyPresent(quarantineChangedFrom, quarantineChangedTo)) {
 
-				builder = builder.and($case.quarantine.lastModified
+				builder = builder.and($case.quarantineLastModified
 						.between(
 								quarantineChangedFrom.map(LocalDate::atStartOfDay).orElse(null),
 								quarantineChangedTo.map(it -> it.plusDays(1)).map(LocalDate::atStartOfDay).orElse(null)));
@@ -102,14 +99,21 @@ public interface TrackedCaseQuerydslFilters {
 					.and(applyCaseType(type))
 					.and($case.department.id.eq(id));
 
-			var jpql = from($case)
-					.join($casePerson).fetchJoin()
-					.leftJoin($case.questionnaire).fetchJoin()
-					.leftJoin($case.originCases).fetchJoin()
-					.where(predicate)
+			var jpql = queryBase().where(predicate)
 					.orderBy($zipCode.value.asc().nullsLast(), $casePerson.lastName.asc(), $casePerson.firstName.asc());
 
 			return Streamable.of(jpql.fetch());
+		}
+
+		private JPQLQuery<TrackedCase> queryBase() {
+
+			var $case = QTrackedCase.trackedCase;
+			var $casePerson = $case.trackedPerson;
+
+			return from($case)
+					.join($casePerson).fetchJoin()
+					.leftJoin($case.questionnaire).fetchJoin()
+					.leftJoin($case.originCases).fetchJoin();
 		}
 
 		/**

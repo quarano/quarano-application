@@ -1,4 +1,4 @@
-package quarano.department.csv;
+package quarano.department.web;
 
 import static java.time.format.DateTimeFormatter.*;
 import static org.assertj.core.api.Assertions.*;
@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.ResultHandler;
  */
 @QuaranoWebIntegrationTest
 @WithQuaranoUser("admin")
-public class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation {
+class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation {
 
 	private String header;
 
@@ -59,7 +59,39 @@ public class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumen
 		performGetAndExpect400(type, from, to);
 	}
 
-	private Stream<Arguments> quarantineParams() {
+	private String performGetAndExpect200(String type, String from, String to, boolean createDoku)
+			throws UnsupportedEncodingException, Exception {
+
+		return mvc.perform(get("/hd/quarantines")
+				.contentType(MediaType.valueOf("text/csv"))
+				.param("type", type)
+				.param("from", from)
+				.param("to", to))
+				.andDo(documentGetQuarantineOrder(createDoku))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn().getResponse().getContentAsString();
+	}
+
+	private void performGetAndExpect400(String type, String from, String to)
+			throws UnsupportedEncodingException, Exception {
+
+		mvc.perform(get("/hd/quarantines")
+				.contentType(MediaType.valueOf("text/csv"))
+				.param("type", type)
+				.param("from", from)
+				.param("to", to))
+				.andExpect(status().is4xxClientError());
+	}
+
+	private static ResultHandler documentGetQuarantineOrder(boolean createDocs) {
+
+		return createDocs
+				? DocumentationFlow.of("csv-import-export").document("quarantine-order")
+				: result -> {};
+	}
+
+	private static Stream<Arguments> quarantineParams() {
+
 		return Stream.of(
 				arguments(null, null, null, 15, false),
 				arguments("index", null, null, 15, false),
@@ -76,39 +108,10 @@ public class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumen
 						0, false));
 	}
 
-	private Stream<Arguments> wrongParams() {
+	private static Stream<Arguments> wrongParams() {
+
 		return Stream.of(
 				arguments(null, LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)), null),
 				arguments(null, null, LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))));
-	}
-
-	private String performGetAndExpect200(String type, String from, String to, boolean createDoku)
-			throws UnsupportedEncodingException, Exception {
-
-		return mvc.perform(get("/api/hd/quarantineorder")
-				.contentType(MediaType.valueOf("text/csv"))
-				.param("type", type)
-				.param("from", from)
-				.param("to", to))
-				.andDo(documentGetQuarantineOrder(createDoku))
-				.andExpect(status().is2xxSuccessful())
-				.andReturn().getResponse().getContentAsString();
-	}
-
-	private void performGetAndExpect400(String type, String from, String to)
-			throws UnsupportedEncodingException, Exception {
-
-		mvc.perform(get("/api/hd/quarantineorder")
-				.contentType(MediaType.valueOf("text/csv"))
-				.param("type", type)
-				.param("from", from)
-				.param("to", to))
-				.andExpect(status().is4xxClientError());
-	}
-
-	private static ResultHandler documentGetQuarantineOrder(boolean createDoku) {
-		return createDoku
-				? DocumentationFlow.of("csv-import-export").document("quarantine-order")
-				: result -> {};
 	}
 }

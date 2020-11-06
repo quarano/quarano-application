@@ -1,5 +1,6 @@
 package quarano.department;
 
+import io.jsonwebtoken.lang.Objects;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,7 @@ import quarano.tracking.Quarantine;
 import quarano.tracking.TrackedPerson;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +32,6 @@ import org.springframework.data.util.Streamable;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
-import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryInit;
 
 /**
@@ -46,11 +47,15 @@ import com.querydsl.core.annotations.QueryInit;
 @Slf4j
 public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdentifier> {
 
-	@QueryInit({ "*.*", "address.zipCode", "department.id" })
-	@OneToOne(cascade = { CascadeType.ALL })	@JoinColumn(name = "tracked_person_id")	private TrackedPerson trackedPerson;
+	@QueryInit({ "*.*", "address.zipCode", "department.id" }) //
+	@OneToOne(cascade = { CascadeType.ALL }) //
+	@JoinColumn(name = "tracked_person_id") //
+	private TrackedPerson trackedPerson;
 
-	@QueryInit({ "*.*", "id" })
-	@ManyToOne	@JoinColumn(name = "department_id", nullable = false)	private Department department;
+	@QueryInit({ "*.*", "id" }) //
+	@ManyToOne //
+	@JoinColumn(name = "department_id", nullable = false) //
+	private Department department;
 
 	private @Getter TestResult testResult;
 
@@ -60,7 +65,12 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
 
 	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
-	private @Getter(onMethod = @__(@Nullable)) @Setter Quarantine quarantine = null;
+
+	@Getter(onMethod = @__(@Nullable)) //
+	private Quarantine quarantine = null;
+
+	@Column(name = "quarantine_last_modified") //
+	private LocalDateTime quarantineLastModified;
 
 	private @Getter @Setter String extReferenceNumber;
 
@@ -118,6 +128,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.department = department;
 		this.status = Status.OPEN;
 		this.originCases = new ArrayList<>();
+		this.quarantineLastModified = LocalDateTime.now();
 
 		this.registerEvent(CaseCreated.of(this));
 
@@ -145,6 +156,18 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		Assert.state(trackedCase.isIndexCase(), () -> String.format("Case %s is not an index case!", trackedCase.getId()));
 
 		this.originCases.add(trackedCase);
+
+		return this;
+	}
+
+	public TrackedCase setQuarantine(Quarantine quarantine) {
+
+		if (Objects.nullSafeEquals(this.quarantine, quarantine)) {
+			return this;
+		}
+
+		this.quarantineLastModified = LocalDateTime.now();
+		this.quarantine = quarantine;
 
 		return this;
 	}
