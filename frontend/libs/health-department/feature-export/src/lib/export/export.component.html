@@ -46,11 +46,14 @@
       </fieldset>
       <fieldset>
         <legend>Personengruppe</legend>
-        <mat-radio-group aria-label="Personengruppe" formControlName="caseType">
+        <mat-radio-group aria-label="Personengruppe" formControlName="type">
           <mat-radio-button [value]="null">Alle</mat-radio-button>
           <mat-radio-button [value]="CaseType.Index">Indexfälle</mat-radio-button>
           <mat-radio-button [value]="CaseType.Contact">Kontaktfälle</mat-radio-button>
         </mat-radio-group>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.type)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.type, error) | async }}
+        </mat-error>
       </fieldset>
     </mat-card-content>
     <mat-card-actions>

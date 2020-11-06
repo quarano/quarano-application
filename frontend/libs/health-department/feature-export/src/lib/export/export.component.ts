@@ -86,15 +86,15 @@ export class ExportComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { from, to, caseType } = this.formGroup.getRawValue();
+    const { from, to, type } = this.formGroup.getRawValue();
     this.healthDepartmentService
-      .getCsvData(caseType, from, to)
+      .getCsvData(type, from, to)
       .pipe(
         map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
         tap((blob) => {
           fileSaver.saveAs(
             blob,
-            `csvexport_${caseType || 'alle_faelle'}_${(from as Moment).format('DD.MM.YYYY')}-${(to as Moment).format(
+            `csvexport_${type || 'alle_faelle'}_${(from as Moment).format('DD.MM.YYYY')}-${(to as Moment).format(
               'DD.MM.YYYY'
             )}.csv`
           );
