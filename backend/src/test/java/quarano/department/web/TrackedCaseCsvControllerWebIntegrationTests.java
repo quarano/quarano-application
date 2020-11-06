@@ -66,7 +66,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 					.param("to", bar.getTo()))
 					.andDo(documentGetQuarantineOrder(bar.isDocument()))
 					.andExpect(status().is2xxSuccessful())
-					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv")))
+					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
 					.andReturn().getResponse().getContentAsString();
 
 			assertThat(result.lines()).size().isEqualTo(bar.getResultSize());
@@ -87,7 +87,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
 
 			mvc.perform(get("/hd/quarantines")
-					.contentType(MediaType.valueOf("text/csv"))
+					.contentType(MediaType.valueOf("text/csv;charset=UTF-8"))
 					.param("type", foo.getType())
 					.param("from", foo.getFrom())
 					.param("to", foo.getTo()))
@@ -106,8 +106,10 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	@AllArgsConstructor
 	private static class Invalid {
 
-		@Nullable String type;
-		@Nullable LocalDate from, to;
+		@Nullable
+		String type;
+		@Nullable
+		LocalDate from, to;
 
 		@Nullable
 		String getFrom() {

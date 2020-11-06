@@ -54,7 +54,7 @@ class TrackedCaseCsvController {
 			@RequestParam("type") Optional<String> type,
 			HttpServletResponse response) throws IOException {
 
-		response.setContentType("text/csv");
+		response.setContentType("text/csv;charset=UTF-8");
 
 		var cases = caseRepo.findFilteredByQuarantine(quarantineFrom, quarantineTo, type, department.getId());
 
