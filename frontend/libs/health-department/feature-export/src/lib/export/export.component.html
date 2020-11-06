@@ -16,11 +16,11 @@
         <div style="display: flex;" class="mt-3">
           <mat-form-field class="half-width">
             <mat-label>Von</mat-label>
-            <input matInput required [matDatepicker]="startpicker" formControlName="start" name="start" />
+            <input matInput required [matDatepicker]="startpicker" formControlName="from" name="from" />
             <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
             <mat-datepicker #startpicker></mat-datepicker>
-            <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.start)">
-              {{ validationErrorService.getErrorMessage(formGroup.controls.start, error) | async }}
+            <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.from)">
+              {{ validationErrorService.getErrorMessage(formGroup.controls.from, error) | async }}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="half-width">
@@ -29,8 +29,8 @@
               matInput
               required
               [matDatepicker]="endpicker"
-              formControlName="end"
-              name="end"
+              formControlName="to"
+              name="to"
               [errorStateMatcher]="dateOrderMatcher"
             />
             <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
@@ -38,8 +38,8 @@
             <mat-error *ngIf="formGroup.hasError('dateOrder')">
               Das "Bis"-Datum darf nicht vor dem "Von"-Datum liegen
             </mat-error>
-            <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.end)">
-              {{ validationErrorService.getErrorMessage(formGroup.controls.end, error) | async }}
+            <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.to)">
+              {{ validationErrorService.getErrorMessage(formGroup.controls.to, error) | async }}
             </mat-error>
           </mat-form-field>
         </div>

@@ -2,7 +2,7 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { CaseDto } from './../model/case';
 import { API_URL, Link } from '@qro/shared/util-data-access';
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CaseActionDto } from '../model/case-action';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
@@ -57,9 +57,10 @@ export class HealthDepartmentService {
       }),
       responseType: 'text',
       params,
+      observe: 'response',
     };
 
-    return this.httpClient.get<string>(`${this.apiUrl}/hd/quarantineorder`, options).pipe(shareReplay());
+    return this.httpClient.get<string>(`${this.apiUrl}/hd/quarantines`, options).pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {

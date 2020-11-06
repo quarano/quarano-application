@@ -1,3 +1,5 @@
+import { SnackbarService } from '@qro/shared/util-snackbar';
+import { HttpResponse } from '@angular/common/http';
 import { HealthDepartmentService } from '@qro/health-department/domain';
 import { CaseType } from '@qro/auth/api';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -6,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
+import * as fileSaver from 'file-saver';
+import { Moment } from 'moment';
+import { BadRequestService } from '@qro/shared/ui-error';
 
 @Component({
   selector: 'qro-export',
@@ -23,7 +28,9 @@ export class ExportComponent implements OnInit {
   constructor(
     public validationErrorService: ValidationErrorService,
     private formBuilder: FormBuilder,
-    private healthDepartmentService: HealthDepartmentService
+    private healthDepartmentService: HealthDepartmentService,
+    private snackbar: SnackbarService,
+    private badRequestService: BadRequestService
   ) {}
 
   ngOnInit() {
@@ -33,9 +40,9 @@ export class ExportComponent implements OnInit {
   private createForm() {
     this.formGroup = this.formBuilder.group(
       {
-        start: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
-        end: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
-        caseType: new FormControl(null),
+        from: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
+        to: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
+        type: new FormControl(null),
       },
       {
         validators: [DateOrderValidator],
@@ -46,27 +53,27 @@ export class ExportComponent implements OnInit {
   onTimeOptionChange(event: MatRadioChange) {
     switch (event.value) {
       case '1':
-        this.formGroup.controls.start.setValue(moment());
-        this.formGroup.controls.start.disable();
+        this.formGroup.controls.from.setValue(moment());
+        this.formGroup.controls.from.disable();
 
-        this.formGroup.controls.end.setValue(moment());
-        this.formGroup.controls.end.disable();
+        this.formGroup.controls.to.setValue(moment());
+        this.formGroup.controls.to.disable();
         break;
 
       case '2':
-        this.formGroup.controls.start.setValue(moment().subtract(1, 'days'));
-        this.formGroup.controls.start.disable();
+        this.formGroup.controls.from.setValue(moment().subtract(1, 'days'));
+        this.formGroup.controls.from.disable();
 
-        this.formGroup.controls.end.setValue(moment().subtract(1, 'days'));
-        this.formGroup.controls.end.disable();
+        this.formGroup.controls.to.setValue(moment().subtract(1, 'days'));
+        this.formGroup.controls.to.disable();
         break;
 
       case '3':
-        this.formGroup.controls.start.setValue(null);
-        this.formGroup.controls.start.enable();
+        this.formGroup.controls.from.setValue(null);
+        this.formGroup.controls.from.enable();
 
-        this.formGroup.controls.end.setValue(null);
-        this.formGroup.controls.end.enable();
+        this.formGroup.controls.to.setValue(null);
+        this.formGroup.controls.to.enable();
         break;
 
       default:
@@ -79,9 +86,28 @@ export class ExportComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { start, end, caseType } = this.formGroup.getRawValue();
-    this.result$ = this.healthDepartmentService
-      .getCsvData(caseType, start, end)
-      .pipe(finalize(() => (this.loading = false)));
+    const { from, to, caseType } = this.formGroup.getRawValue();
+    this.healthDepartmentService
+      .getCsvData(caseType, from, to)
+      .pipe(
+        map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
+        tap((blob) => {
+          fileSaver.saveAs(
+            blob,
+            `csvexport_${caseType || 'alle_faelle'}_${(from as Moment).format('DD.MM.YYYY')}-${(to as Moment).format(
+              'DD.MM.YYYY'
+            )}.csv`
+          );
+        }),
+        finalize(() => (this.loading = false))
+      )
+      .subscribe(
+        (_) => {
+          this.snackbar.success('CSV-Export erfolgreich ausgeführt');
+        },
+        (error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+        }
+      );
   }
 }
