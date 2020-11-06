@@ -9,8 +9,11 @@ import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 
+import java.util.regex.Pattern;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +43,11 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	private static ResultHandler documentGetFrontendTexts() {
-		return DocumentationFlow.of("frontend-texts").document("get-frontend-texts");
+
+		return DocumentationFlow.of("frontend-texts")
+				.withResponsePreprocessor(
+						Preprocessors.replacePattern(Pattern.compile("\"text\" : \".*\""),
+								"\"text\" : \"<h1>Some HTML</h1><p>…</p>\""))
+				.document("get-frontend-texts");
 	}
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Oliver Drotbohm
  */
-public class BodyTemperatureUnitTests {
+class BodyTemperatureUnitTests {
 
 	@Test
 	void rendersToStringWithComma() {

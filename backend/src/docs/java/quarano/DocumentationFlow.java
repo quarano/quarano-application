@@ -17,6 +17,8 @@ package quarano;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.core.web.QuaranoHttpHeaders;
@@ -24,6 +26,7 @@ import quarano.core.web.QuaranoHttpHeaders;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +61,26 @@ import com.jayway.jsonpath.JsonPath;
  *
  * @author Oliver Gierke
  */
-@Value(staticConstructor = "of")
+@Value
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class DocumentationFlow {
 
-	public static DocumentationFlow NONE = new DocumentationFlow(null);
+	public static DocumentationFlow NONE = new DocumentationFlow(null, new ArrayList<>());
 
-	@Nullable String name;
+	private final @Nullable String name;
+	private final List<OperationPreprocessor> customResponsePreprocessors;
+
+	public static DocumentationFlow of(String name) {
+		return new DocumentationFlow(name, new ArrayList<>());
+	}
+
+	public DocumentationFlow withResponsePreprocessor(OperationPreprocessor processor) {
+
+		var newList = new ArrayList<>(customResponsePreprocessors);
+		newList.add(processor);
+
+		return new DocumentationFlow(name, newList);
+	}
 
 	/**
 	 * Creates a documenting {@link ResultHandler} for a named step.
@@ -98,14 +115,21 @@ public class DocumentationFlow {
 		var authenticationProcessor = new AuthenticationHeaderProcessor();
 
 		var preprocessRequest = preprocessRequest(prettyPrint(),
-				replacePattern(Pattern.compile("\"username\" : \".*\""), "\"username\" : \"...\""),
-				replacePattern(Pattern.compile("\"password\" : \".*\""), "\"password\" : \"...\""),
-				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), "\"passwordConfirm\" : \"...\""),
+				replacePattern(Pattern.compile("\"username\" : \".*\""), "\"username\" : \"…\""),
+				replacePattern(Pattern.compile("\"password\" : \".*\""), "\"password\" : \"…\""),
+				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), "\"passwordConfirm\" : \"…\""),
 				authenticationProcessor);
 
-		var preprocessResponse = maskUris
-				? preprocessResponse(maskLinks("..."), prettyPrint(), authenticationProcessor)
-				: preprocessResponse(prettyPrint(), authenticationProcessor);
+		var responseProcessors = new ArrayList<OperationPreprocessor>();
+
+		if (maskUris) {
+			responseProcessors.add(maskLinks("…"));
+		}
+
+		responseProcessors.addAll(List.of(prettyPrint(), authenticationProcessor));
+		responseProcessors.addAll(customResponsePreprocessors);
+
+		var preprocessResponse = preprocessResponse(responseProcessors.toArray(OperationPreprocessor[]::new));
 
 		return MockMvcRestDocumentation.document(name.concat("/").concat(step), preprocessRequest, preprocessResponse,
 				snippets);
