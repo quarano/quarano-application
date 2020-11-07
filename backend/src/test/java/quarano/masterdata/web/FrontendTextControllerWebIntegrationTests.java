@@ -47,7 +47,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 		return DocumentationFlow.of("frontend-texts")
 				.withResponsePreprocessor(
 						Preprocessors.replacePattern(Pattern.compile("\"text\" : \".*\""),
-								"\"text\" : \"<h1>Some HTML</h1><p>…</p>\""))
+								"\"text\" : \"<h1>Some HTML</h1><p>\u2026</p>\""))
 				.document("get-frontend-texts");
 	}
 }

@@ -66,6 +66,7 @@ import com.jayway.jsonpath.JsonPath;
 public class DocumentationFlow {
 
 	public static DocumentationFlow NONE = new DocumentationFlow(null, new ArrayList<>());
+	private static String ELLIPSIS = "\u2026";
 
 	private final @Nullable String name;
 	private final List<OperationPreprocessor> customResponsePreprocessors;
@@ -115,15 +116,15 @@ public class DocumentationFlow {
 		var authenticationProcessor = new AuthenticationHeaderProcessor();
 
 		var preprocessRequest = preprocessRequest(prettyPrint(),
-				replacePattern(Pattern.compile("\"username\" : \".*\""), "\"username\" : \"…\""),
-				replacePattern(Pattern.compile("\"password\" : \".*\""), "\"password\" : \"…\""),
-				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), "\"passwordConfirm\" : \"…\""),
+				replacePattern(Pattern.compile("\"username\" : \".*\""), ellipsisField("username")),
+				replacePattern(Pattern.compile("\"password\" : \".*\""), ellipsisField("password")),
+				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), ellipsisField("passwordConfirm")),
 				authenticationProcessor);
 
 		var responseProcessors = new ArrayList<OperationPreprocessor>();
 
 		if (maskUris) {
-			responseProcessors.add(maskLinks("…"));
+			responseProcessors.add(maskLinks(ELLIPSIS));
 		}
 
 		responseProcessors.addAll(List.of(prettyPrint(), authenticationProcessor));
@@ -133,6 +134,10 @@ public class DocumentationFlow {
 
 		return MockMvcRestDocumentation.document(name.concat("/").concat(step), preprocessRequest, preprocessResponse,
 				snippets);
+	}
+
+	private static String ellipsisField(String key) {
+		return String.format("\"%s\" : \"%s\"", key, ELLIPSIS);
 	}
 
 	private static class AuthenticationHeaderProcessor implements OperationPreprocessor {
