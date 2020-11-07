@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { Component, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subject, Observable, of, combineLatest } from 'rxjs';
+import { Subject, Observable, of, combineLatest, BehaviorSubject } from 'rxjs';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { StartTracking, CaseEntityService } from '@qro/health-department/domain';
 import { map, switchMap, tap, shareReplay } from 'rxjs/operators';
@@ -15,7 +15,8 @@ import { map, switchMap, tap, shareReplay } from 'rxjs/operators';
 export class MailComponent implements OnInit {
   tracking$: Observable<StartTracking>;
 
-  mailText$: Observable<SafeHtml>;
+  private mailText$$ = new BehaviorSubject<SafeHtml>(null);
+  mailText$: Observable<SafeHtml> = this.mailText$$.asObservable();
 
   @Output()
   renewTrackingCode: Subject<void> = new Subject<void>();
@@ -42,16 +43,16 @@ export class MailComponent implements OnInit {
           return this.apiService.getApiCall<StartTracking>(data, 'renew');
         }
         return of(null);
-      })
+      }),
+      tap((tracking) => this.mailText$$.next(this.domSanitizer.bypassSecurityTrustHtml(tracking?.email)))
     );
-
-    this.mailText$ = this.tracking$.pipe(map((tracking) => this.domSanitizer.bypassSecurityTrustHtml(tracking?.email)));
   }
 
   renewTracking(tracking: HalResponse) {
-    this.tracking$ = this.apiService
-      .putApiCall<StartTracking>(tracking, 'renew')
-      .pipe(tap((track) => this.snackbarService.success('Der Aktivierungscode wurde erneuert.')));
+    this.tracking$ = this.apiService.putApiCall<StartTracking>(tracking, 'renew').pipe(
+      tap((track) => this.mailText$$.next(this.domSanitizer.bypassSecurityTrustHtml(track?.email))),
+      tap((track) => this.snackbarService.success('Der Aktivierungscode wurde erneuert.'))
+    );
   }
 
   copyToClipBoard(tracking: StartTracking) {
