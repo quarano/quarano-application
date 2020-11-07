@@ -49,6 +49,9 @@ export enum CaseStatus {
 }
 
 export function sortByLastName(a: { lastName: string }, b: { lastName: string }): number {
+  if (!a.lastName) {
+    return -1;
+  }
   return a.lastName.localeCompare(b.lastName);
 }
 

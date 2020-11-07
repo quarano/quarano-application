@@ -13,10 +13,6 @@ h3 {
   mat-card-title {
     display: flex !important;
     flex-direction: column !important;
-
-    @media screen and(max-width: $break-lg) {
-      align-items: center !important;
-    }
   }
 }
 
