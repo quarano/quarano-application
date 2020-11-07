@@ -19,7 +19,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
   loading: boolean;
   private subs = new SubSink();
   private caseId: string;
-  private case: string;
 
   formGroup: FormGroup = new FormGroup({
     comment: new FormControl(null, [

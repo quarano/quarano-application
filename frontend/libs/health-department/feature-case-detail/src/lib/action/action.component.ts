@@ -37,7 +37,7 @@ export class ActionComponent implements OnInit {
     this.caseType = this.route.parent.snapshot.paramMap.get('type') as CaseType;
 
     this.formGroup = this.formBuilder.group({
-      comment: new FormControl(null, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual)]),
+      comment: new FormControl(null),
     });
   }
 
@@ -80,7 +80,7 @@ export class ActionComponent implements OnInit {
   }
 
   hasOpenAnomalies(caseAction: CaseActionDto): boolean {
-    return caseAction.anomalies.health.length + caseAction.anomalies.process.length > 0;
+    return !!caseAction._links.resolve;
   }
 
   get returnLink() {
