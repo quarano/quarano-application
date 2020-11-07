@@ -26,9 +26,7 @@ import quarano.util.TestUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -49,6 +47,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.comparator.Comparators;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -327,13 +326,17 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		var lastNamesFromResponse = List.of(
+		var lastNamesFromResponse = io.vavr.collection.List.of( // java.util.List.of does not accept a Null possible here
 				document.read("$._embedded.cases[0].lastName", String.class),
 				document.read("$._embedded.cases[1].lastName", String.class),
-				document.read("$._embedded.cases[2].lastName", String.class));
+				document.read("$._embedded.cases[2].lastName", String.class),
+				document.read("$._embedded.cases[3].lastName", String.class),
+				document.read("$._embedded.cases[4].lastName", String.class),
+				document.read("$._embedded.cases[5].lastName", String.class),
+				document.read("$._embedded.cases[6].lastName", String.class),
+				document.read("$._embedded.cases[7].lastName", String.class));
 
-		var expectedList = new ArrayList<>(lastNamesFromResponse);
-		Collections.sort(expectedList);
+		var expectedList = io.vavr.collection.List.ofAll(lastNamesFromResponse).sorted(Comparators.nullsLow());
 
 		assertThat(lastNamesFromResponse).containsExactlyElementsOf(expectedList);
 	}

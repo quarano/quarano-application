@@ -100,7 +100,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	}
 
 	public String getFullName() {
-		return firstName.concat(" ").concat(lastName);
+		return String.join(" ", firstName, lastName);
 	}
 
 	public Encounters getEncounters() {
