@@ -25,7 +25,6 @@
       "@qro/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
       "@qro/administration/shell": ["libs/administration/shell/src/index.ts"],
       "@qro/auth/api": ["libs/auth/api/src/index.ts"],
-      "@qro/shared/ui-alert": ["libs/shared/ui-alert/src/index.ts"],
       "@qro/shared/ui-confirmation-dialog": ["libs/shared/ui-confirmation-dialog/src/index.ts"],
       "@qro/shared/ui-multiple-autocomplete": ["libs/shared/ui-multiple-autocomplete/src/index.ts"],
       "@qro/auth/shell": ["libs/auth/shell/src/index.ts"],
@@ -68,7 +67,8 @@
       "@qro/shared/util-snackbar": ["libs/shared/util-snackbar/src/index.ts"],
       "@qro/shared/util-translation": ["libs/shared/util-translation/src/index.ts"],
       "@qro/shared/ui-static-pages": ["libs/shared/ui-static-pages/src/index.ts"],
-      "@qro/health-department/feature-export": ["libs/health-department/feature-export/src/index.ts"]
+      "@qro/health-department/feature-export": ["libs/health-department/feature-export/src/index.ts"],
+      "@qro/client/ui-forgotten-contact-dialog": ["libs/client/ui-forgotten-contact-dialog/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

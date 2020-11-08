@@ -2,7 +2,7 @@ import { ContactPersonService } from '@qro/client/domain';
 import { SubSink } from 'subsink';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy } from '@angular/core';
-import { ForgottenContactDialogComponent } from '../forgotten-contact-dialog/forgotten-contact-dialog.component';
+import { ForgottenContactDialogComponent } from '@qro/client/ui-forgotten-contact-dialog';
 
 @Component({
   selector: 'qro-forgotten-contact-banner',

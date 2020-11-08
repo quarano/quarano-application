@@ -1,13 +1,16 @@
 <span>
+  <div class="alert">
+    {{ 'CONTACT_PERSONS.HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN' | translate }},
+    <button style="padding: 0;" (click)="openContactDialog()" mat-button color="primary">
+      {{ 'CONTACT_PERSONS.KLICKEN_SIE_HIER' | translate }}</button
+    >.
+  </div>
   <button mat-icon-button color="primary" routerLink="/client/contact-persons/contact-person-detail/new">
     <mat-icon>add</mat-icon>
   </button>
   {{ 'CONTACT_PERSONS.NEUE_KONTAKTPERSON_ANLEGEN' | translate }}
 </span>
-<qro-alert
-  *ngIf="contacts.length === 0"
-  [message]="'CONTACT_PERSONS.NOCH_KEINE_EINTRÄGE_VORHANDEN' | translate"
-></qro-alert>
+<div class="alert" *ngIf="contacts.length === 0">{{ 'CONTACT_PERSONS.NOCH_KEINE_EINTRÄGE_VORHANDEN' | translate }}</div>
 <div class="bootstrap-wrapper">
   <div class="container-fluid">
     <div class="row">
