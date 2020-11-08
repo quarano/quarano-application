@@ -21,6 +21,5 @@ import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-auto
   ],
   declarations: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
   exports: [ContactPersonDialogComponent, ContactPersonFormComponent, MultipleContactAutocompleteComponent],
-  entryComponents: [ContactPersonDialogComponent],
 })
 export class ClientUiContactPersonDetailModule {}
