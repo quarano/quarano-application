@@ -15,7 +15,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["file-saver"],
+            "allowedCommonJsDependencies": ["file-saver", "lodash"],
             "outputPath": "dist/apps/quarano-frontend/public",
             "index": "apps/quarano-frontend/src/index.html",
             "main": "apps/quarano-frontend/src/main.ts",

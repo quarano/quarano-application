@@ -3,7 +3,7 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { AbstractControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import * as _ from 'lodash-es';
+import { toUpper, snakeCase } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class ValidationErrorService {
@@ -40,7 +40,7 @@ export class ValidationErrorService {
           value: DateFunctions.toCustomLocaleDateString(control.getError('matDatepickerMin').min.toDate()),
         });
       default:
-        return this.translate.get(`VALIDATION.${_.toUpper(_.snakeCase(errorKey))}`);
+        return this.translate.get(`VALIDATION.${toUpper(snakeCase(errorKey))}`);
     }
   }
 }

@@ -5,7 +5,7 @@ import { filter, startWith, takeUntil } from 'rxjs/operators';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { IIdentifiable } from '@qro/shared/util-data-access';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'qro-multiple-autocomplete',
