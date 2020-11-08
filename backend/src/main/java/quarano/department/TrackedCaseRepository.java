@@ -23,8 +23,7 @@ public interface TrackedCaseRepository
 	static final String DEFAULT_SELECT = //
 			"select c from TrackedCase c "
 					+ "join fetch c.trackedPerson p "
-					+ "join fetch c.department d "
-					+ "left join fetch c.originCases ";
+					+ "join fetch c.department d ";
 
 	@Query(DEFAULT_SELECT + " where d.id = :identifier")
 	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier identifier);

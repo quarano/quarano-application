@@ -147,7 +147,6 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void obtainsUnresolvedActions() throws Exception {
 
-
 		var trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SANDRA).orElseThrow();
 		var reviewed = new ActionsReviewed().setComment("Comment!");
 
@@ -235,6 +234,31 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		String originCaseLink = contactDoc.read("$._links.originCases.href", String.class);
 		assertThat(originCaseLink).contains(originCase.getId().toString());
 		assertThat(originCaseLink).isEqualTo(embeddedOriginCaseLink);
+	}
+
+	@Test // CORE-519
+	@WithQuaranoUser("agent1")
+	void getActionsDoesNotReturnDuplicatedActions() throws Exception {
+
+		// one case gets two original cases
+		var originCase1 = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_SIGGI);
+		var originCase2 = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV);
+
+		cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_TANJA)
+				.map(it -> it.addOriginCase(originCase1.get()))
+				.map(it -> it.addOriginCase(originCase2.get()))
+				.map(cases::save)
+				.orElseThrow();
+
+		// get an active case with open actions
+		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var cases = JsonPath.parse(actionsResponse).read("$..caseId", JSONArray.class);
+
+		// check that case is not duplicated
+		assertThat(cases).doesNotHaveDuplicates();
 	}
 
 	private ResultHandler documentAnomalies() {
