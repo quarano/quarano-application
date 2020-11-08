@@ -1,5 +1,5 @@
 import { switchMap } from 'rxjs/operators';
-import { ClientService } from '@qro/client/domain';
+import { ProfileService } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private snackbarService: TranslatedSnackbarService,
     private router: Router,
     private badRequestService: BadRequestService,
-    private clientService: ClientService
+    private clientService: ProfileService
   ) {}
 
   ngOnInit() {

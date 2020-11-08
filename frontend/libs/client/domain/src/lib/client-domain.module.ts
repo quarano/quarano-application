@@ -1,7 +1,8 @@
+import { EnrollmentProfileResolver } from './resolvers/enrollment-profile.resolver';
 import { ClientStoreModule } from './client-store.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MyClientDataResolver } from './resolvers/my-client-data.resolver';
+import { ProfileResolver } from './resolvers/profile.resolver';
 import { DiaryDetailResolver } from './resolvers/diary-detail.resolver';
 import { DiaryResolver } from './resolvers/diary.resolver';
 import { MyFirstQueryResolver } from './resolvers/my-first-query.resolver';
@@ -12,13 +13,14 @@ import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
 @NgModule({
   imports: [CommonModule, ClientStoreModule],
   providers: [
-    MyClientDataResolver,
+    ProfileResolver,
     DiaryDetailResolver,
     DiaryResolver,
     MyFirstQueryResolver,
     EncountersResolver,
     ContactPersonsResolver,
     ContactPersonResolver,
+    EnrollmentProfileResolver,
   ],
 })
 export class ClientDomainModule {}

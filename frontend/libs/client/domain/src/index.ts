@@ -1,8 +1,8 @@
 export * from './lib/client-domain.module';
 export * from './lib/client-store.module';
 export * from './lib/model/encounter';
-export * from './lib/resolvers/my-client-data.resolver';
-export * from './lib/data-access/client.service';
+export * from './lib/resolvers/profile.resolver';
+export * from './lib/data-access/profile.service';
 export * from './lib/resolvers/my-first-query.resolver';
 export * from './lib/resolvers/encounters.resolver';
 export * from './lib/data-access/enrollment.service';
@@ -19,3 +19,4 @@ export * from './lib/data-access/contact-person.service';
 export * from './lib/resolvers/contact-person.resolver';
 export * from './lib/store/client-store.service';
 export * from './lib/model/zip-code-error';
+export * from './lib/resolvers/enrollment-profile.resolver';
