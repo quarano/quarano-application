@@ -2,6 +2,7 @@ import { IErrorToDisplay, HttpStatusCode } from './../interceptors/error.interce
 import { FormGroup } from '@angular/forms';
 import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { Injectable } from '@angular/core';
+import { DataServiceError } from '@ngrx/data';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,17 @@ export class BadRequestService {
 
     if (error.status === HttpStatusCode.preconditionFailed.valueOf()) {
       this.snackbar.error(error.errors);
+    }
+
+    if (error instanceof DataServiceError && error.error.status === HttpStatusCode.badRequest.valueOf()) {
+      let errorMessage = '';
+      Object.values(error.error.error).forEach((entry: string) => {
+        if (errorMessage.length > 0) {
+          errorMessage = errorMessage + ', ';
+        }
+        errorMessage = errorMessage + entry;
+      });
+      this.snackbar.error(errorMessage);
     }
   }
 }

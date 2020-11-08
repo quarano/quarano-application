@@ -268,13 +268,10 @@ export class EditComponent implements OnInit, OnDestroy {
         .pipe(
           catchError((error) => {
             this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => !(value instanceof Error))
+            throw new Error(error);
+          })
         )
-        .subscribe((result) => {
-          this.changeRouteAfterSave(result, closeAfterSave);
-        })
+        .subscribe((result) => this.changeRouteAfterSave(result, closeAfterSave))
     );
   }
 
@@ -285,9 +282,8 @@ export class EditComponent implements OnInit, OnDestroy {
         .pipe(
           catchError((error) => {
             this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => !(value instanceof Error))
+            throw new Error(error);
+          })
         )
         .subscribe((result) => {
           this.changeRouteAfterSave(result, closeAfterSave);
