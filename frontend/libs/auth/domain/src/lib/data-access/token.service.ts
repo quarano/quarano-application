@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { Router } from '@angular/router';
@@ -51,7 +51,7 @@ export class TokenService {
     // Subscribe to token change
     this.token$.subscribe((token) => {
       if (token !== null) {
-        const payload = jwt_decode(token);
+        const payload = jwt_decode(token) as any;
         this.roles$$.next(payload.aut);
         this.username$$.next(payload.sub);
         this.expDateTime$$.next(new Date(payload.exp * 1000));

@@ -3,7 +3,7 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { AbstractControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 @Injectable({ providedIn: 'root' })
 export class ValidationErrorService {

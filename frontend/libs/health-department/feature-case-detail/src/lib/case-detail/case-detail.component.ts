@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
