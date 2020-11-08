@@ -3,8 +3,8 @@
     ><mat-card-title>
       <h1 class="text-center">{{ 'DIARY.SYMPTOMTAGEBUCH' | translate }}</h1>
       <ng-template *ngIf="!diary._links.create"
-        ><qro-alert message="{{ 'DIARY.ALLE_ERFORDERLICHEN_EINTRÄGE_ABGESCHLOSSEN' | translate }}"></qro-alert
-      ></ng-template>
+        ><div class="alert">{{ 'DIARY.ALLE_ERFORDERLICHEN_EINTRÄGE_ABGESCHLOSSEN' | translate }}</div></ng-template
+      >
       <button
         id="contact-button"
         mat-button
