@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 import { MatDialog } from '@angular/material/dialog';
 import { DiaryDto } from '@qro/client/domain';
+import { ForgottenContactDialogComponent } from '@qro/client/ui-forgotten-contact-dialog';
 import { ForgottenContactBannerComponent } from '../forgotten-contact-banner/forgotten-contact-banner.component';
-import { ForgottenContactDialogComponent } from '../forgotten-contact-dialog/forgotten-contact-dialog.component';
 
 @Component({
   selector: 'qro-diary',

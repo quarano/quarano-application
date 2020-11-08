@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ContactPersonDto, ContactPersonModifyDto } from '../model/contact-person';
-import { share, shareReplay } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

@@ -53,9 +53,6 @@
     "auth-api": {
       "tags": ["scope:auth", "type:api"]
     },
-    "shared-ui-alert": {
-      "tags": ["scope:shared", "type:ui"]
-    },
     "shared-ui-confirmation-dialog": {
       "tags": ["scope:shared", "type:ui"]
     },
@@ -181,6 +178,9 @@
     },
     "health-department-feature-export": {
       "tags": ["scope:health-department", "type:feature"]
+    },
+    "client-ui-forgotten-contact-dialog": {
+      "tags": ["scope:client", "type:ui"]
     }
   }
 }

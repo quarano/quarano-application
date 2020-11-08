@@ -512,35 +512,6 @@
         }
       }
     },
-    "shared-ui-alert": {
-      "projectType": "library",
-      "root": "libs/shared/ui-alert",
-      "sourceRoot": "libs/shared/ui-alert/src",
-      "prefix": "qro",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["libs/shared/ui-alert/tsconfig.lib.json", "libs/shared/ui-alert/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-alert/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/shared/ui-alert/jest.config.js",
-            "tsConfig": "libs/shared/ui-alert/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-alert/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "shared-ui-confirmation-dialog": {
       "projectType": "library",
       "root": "libs/shared/ui-confirmation-dialog",
@@ -1814,7 +1785,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/health-department/feature-export/tsconfig.lib.json", "libs/health-department/feature-export/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/health-department/feature-export/tsconfig.lib.json",
+              "libs/health-department/feature-export/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**", "!libs/health-department/feature-export/**"]
           }
         },
@@ -1825,6 +1799,38 @@
             "tsConfig": "libs/health-department/feature-export/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/health-department/feature-export/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-ui-forgotten-contact-dialog": {
+      "projectType": "library",
+      "root": "libs/client/ui-forgotten-contact-dialog",
+      "sourceRoot": "libs/client/ui-forgotten-contact-dialog/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/ui-forgotten-contact-dialog/tsconfig.lib.json",
+              "libs/client/ui-forgotten-contact-dialog/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/ui-forgotten-contact-dialog/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/ui-forgotten-contact-dialog/jest.config.js",
+            "tsConfig": "libs/client/ui-forgotten-contact-dialog/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/ui-forgotten-contact-dialog/src/test-setup.ts"
           }
         }
       },

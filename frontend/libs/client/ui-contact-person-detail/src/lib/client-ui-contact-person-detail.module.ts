@@ -1,6 +1,5 @@
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
-import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactPersonFormComponent } from './/contact-person-form/contact-person-form.component';
@@ -16,7 +15,6 @@ import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-auto
     SharedUiMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedUiAlertModule,
     SharedUiButtonModule,
     SharedUiMultipleAutocompleteModule,
     SharedUtilTranslationModule,

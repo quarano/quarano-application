@@ -52,7 +52,8 @@
 	},
 	"CONTACT_PERSONS": {
 		"ANONYME_KONTAKTPERSON": "Anonyme Kontaktperson",
-		"HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN": "Hier können Sie Personen erfassen, die Sie anschließend bei der Erfassung von konkreten Kontakten auswählen können. Sofern Sie stattdessen einen solchen konkreten Kontakt mit Datum erfassen möchten, wählen Sie ‘Kontakt erfassen’",
+		"HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN": "Hier können Sie Personen erfassen, die Sie anschließend bei der Erfassung von konkreten Kontakten auswählen können. Sofern Sie stattdessen einen solchen konkreten Kontakt mit Datum erfassen möchten",
+		"KLICKEN_SIE_HIER": "klicken Sie hier",
 		"NEUE_KONTAKTPERSON_ANLEGEN": "Neue Kontaktperson anlegen",
 		"NOCH_KEINE_EINTRÄGE_VORHANDEN": "Noch keine Einträge vorhanden"
 	},

@@ -52,7 +52,8 @@
 	},
 	"CONTACT_PERSONS": {
 		"ANONYME_KONTAKTPERSON": "Anonymous contact",
-		"HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN": "Here you can capture people that you can later select while recording a specific contact. In case you would like to record a specific contact instead, please select 'Record contact'",
+		"HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN": "Here you can capture people that you can later select while recording a specific contact. In case you would like to record a specific contact instead",
+		"KLICKEN_SIE_HIER": "click here",
 		"NEUE_KONTAKTPERSON_ANLEGEN": "Add new contact",
 		"NOCH_KEINE_EINTRÄGE_VORHANDEN": "No contacts in list"
 	},

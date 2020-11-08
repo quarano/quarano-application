@@ -1,5 +1,5 @@
+import { ClientUiForgottenContactDialogModule } from '@qro/client/ui-forgotten-contact-dialog';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
-import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiaryComponent } from './diary/diary.component';
@@ -18,7 +18,6 @@ import { DiaryEntrySuccessComponent } from './diary-entry-success/diary-entry-su
 import { DiaryEntryWarningComponent } from './diary-entry-warning/diary-entry-warning.component';
 import { DiaryListItemComponent } from './diary-list-item/diary-list-item.component';
 import { DiaryTodayListItemComponent } from './diary-today-list-item/diary-today-list-item.component';
-import { ForgottenContactDialogComponent } from './forgotten-contact-dialog/forgotten-contact-dialog.component';
 import { ForgottenContactBannerComponent } from './forgotten-contact-banner/forgotten-contact-banner.component';
 
 const routes: Routes = [
@@ -66,13 +65,13 @@ const routes: Routes = [
     SharedUiMaterialModule,
     SharedUiMultipleAutocompleteModule,
     SharedUiButtonModule,
-    SharedUiAlertModule,
     FormsModule,
     ReactiveFormsModule,
     SharedUtilSymptomModule,
     ClientDomainModule,
     ClientUiContactPersonDetailModule,
     SharedUtilTranslationModule,
+    ClientUiForgottenContactDialogModule,
   ],
   declarations: [
     DiaryComponent,
@@ -81,9 +80,7 @@ const routes: Routes = [
     DiaryListItemComponent,
     DiaryTodayListItemComponent,
     DiaryEntryComponent,
-    ForgottenContactDialogComponent,
     ForgottenContactBannerComponent,
   ],
-  entryComponents: [ForgottenContactDialogComponent],
 })
 export class ClientFeatureDiaryModule {}

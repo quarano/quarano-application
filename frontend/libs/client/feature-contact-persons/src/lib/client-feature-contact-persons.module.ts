@@ -1,3 +1,4 @@
+import { ClientUiForgottenContactDialogModule } from '@qro/client/ui-forgotten-contact-dialog';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person-detail';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -8,7 +9,6 @@ import { ContactPersonComponent } from './contact-person/contact-person.componen
 import { ContactPersonResolver, ContactPersonsResolver, ClientDomainModule } from '@qro/client/domain';
 import { PreventUnsavedChangesGuard } from '@qro/shared/util-forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
-import { SharedUiAlertModule } from '@qro/shared/ui-alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContactPersonsComponent } from './/contact-person-list/contact-persons.component';
 
@@ -47,7 +47,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedUiMaterialModule,
-    SharedUiAlertModule,
     SharedUiButtonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -55,6 +54,7 @@ const routes: Routes = [
     ClientDomainModule,
     RouterModule.forChild(routes),
     SharedUtilTranslationModule,
+    ClientUiForgottenContactDialogModule,
   ],
 })
 export class ClientFeatureContactPersonsModule {}
