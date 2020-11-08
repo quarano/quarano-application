@@ -1,6 +1,6 @@
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
-import { MyClientDataResolver, ClientDomainModule } from '@qro/client/domain';
+import { ProfileResolver, ClientDomainModule } from '@qro/client/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { Routes, RouterModule } from '@angular/router';
@@ -14,7 +14,7 @@ const routes: Routes = [
     component: ProfileComponent,
     pathMatch: 'full',
     resolve: {
-      clientData: MyClientDataResolver,
+      clientData: ProfileResolver,
     },
   },
 ];

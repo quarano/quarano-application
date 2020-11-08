@@ -8,6 +8,7 @@ import { API_URL } from '@qro/shared/util-data-access';
 import { RegisterDto } from '../model/register';
 import { DateFunctions } from '@qro/shared/util-date';
 import { EncounterEntry, EncountersDto, EncounterDto, EncounterCreateDto } from '../model/encounter';
+import { ClientDto } from '@qro/auth/api';
 
 @Injectable({
   providedIn: 'root',
@@ -65,5 +66,20 @@ export class EnrollmentService {
     return this.httpClient
       .post(`${this.baseUrl}/registration`, registerClient, { observe: 'response' })
       .pipe(shareReplay());
+  }
+
+  getPersonalDetails(): Observable<ClientDto> {
+    return this.httpClient.get<ClientDto>(`${this.apiUrl}/enrollment/details`).pipe(shareReplay());
+  }
+
+  updatePersonalDetails(client: ClientDto, confirmedZipCode: boolean = false): Observable<any> {
+    let url = `${this.apiUrl}/enrollment/details`;
+    if (confirmedZipCode) {
+      url += '?confirmed=true';
+    }
+    return this.httpClient.put(url, client).pipe(
+      shareReplay(),
+      tap((_) => this.clientStore.loadEnrollmentStatus())
+    );
   }
 }

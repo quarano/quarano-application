@@ -5,7 +5,13 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { BasicDataComponent } from './basic-data/basic-data.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
-import { MyClientDataResolver, ClientDomainModule, MyFirstQueryResolver, EncountersResolver } from '@qro/client/domain';
+import {
+  ProfileResolver,
+  ClientDomainModule,
+  MyFirstQueryResolver,
+  EncountersResolver,
+  EnrollmentProfileResolver,
+} from '@qro/client/domain';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
@@ -28,7 +34,7 @@ const routes: Routes = [
       symptomsLoaded: SymptomsResolver,
       contactPersons: ContactPersonsResolver,
       firstQuery: MyFirstQueryResolver,
-      clientData: MyClientDataResolver,
+      clientData: EnrollmentProfileResolver,
       encounters: EncountersResolver,
     },
   },

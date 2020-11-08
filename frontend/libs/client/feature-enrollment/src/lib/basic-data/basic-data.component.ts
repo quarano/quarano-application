@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
-import { ClientService, EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto } from '@qro/client/domain';
+import { ProfileService, EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -72,7 +72,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private clientService: ClientService,
+    private clientService: ProfileService,
     private dialogService: ContactDialogService,
     public clientStore: ClientStore,
     private store: Store,
@@ -189,7 +189,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
       const value = this.firstFormGroup.value as ClientDto;
       value.dateOfBirth = this.dateOfBirth;
       this.subs.add(
-        this.clientService
+        this.enrollmentService
           .updatePersonalDetails(value, confirmedZipCode)
           .pipe(
             mergeMap((result) =>
