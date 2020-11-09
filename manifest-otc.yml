@@ -73,6 +73,80 @@ applications:
       - quarano-mannheim-stage-db
     stack: cflinuxfs3
     path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+###############   Cuxhaven PROD system #########################
+  - name: quarano-cuxhaven-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/cuxhaven
+      - route: www.quarano.de/cuxhaven
+    env:
+      ENVIRONMENT_NAME: "cuxhaven"
+  - name: quarano-cuxhaven-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/cuxhaven
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: info@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 04721 660
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: info@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 04721 660
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Cuxhaven
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
+      SERVER_SERVLET_CONTEXTPATH: "/cuxhaven/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: prod
+      TZ: Europe/Berlin
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/cuxhaven/api
+    services:
+      - quarano-cuxhaven-prod-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+  ###############   Cuxhaven STAGE system #########################
+  - name: quarano-cuxhaven-stage-frontend
+    memory: 128M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/cuxhaven-stage
+      - route: www.quarano.de/cuxhaven-stage
+    env:
+      ENVIRONMENT_NAME: "cuxhaven-stage"
+  - name: quarano-cuxhaven-stage-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/cuxhaven-stage
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: info@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 04721 660
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: info@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 04721 660
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Cuxhaven
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
+      SERVER_SERVLET_CONTEXTPATH: "/cuxhaven-stage/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/cuxhaven-stage/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: prod
+      TZ: Europe/Berlin
+    instances: 1
+    memory: 1G
+    routes:
+      - route: quarano.de/cuxhaven-stage/api
+    services:
+      - quarano-cuxhaven-stage-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
 
   ####################################################################
   ########################   INTERNAL  ###############################

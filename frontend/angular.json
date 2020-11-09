@@ -114,6 +114,22 @@
                 }
               ]
             },
+            "cuxhaven-prod": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
+                  "with": "apps/quarano-frontend/src/environments/environment.cuxhaven-prod.ts"
+                }
+              ]
+            },
+            "cuxhaven-stage": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
+                  "with": "apps/quarano-frontend/src/environments/environment.cuxhaven-stage.ts"
+                }
+              ]
+            },
             "demo-otc": {
               "fileReplacements": [
                 {
