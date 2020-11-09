@@ -16,6 +16,7 @@ import {
   TrimmedPatternValidator,
   ConfirmValidPasswordMatcher,
   ValidationErrorService,
+  PasswordIncludesUsernameMatcher,
 } from '@qro/shared/util-forms';
 
 @Component({
@@ -31,6 +32,7 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   roles: IRole[] = roles.filter((r) => r.isHealthDepartmentUser);
   loading = false;
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
+  public passwordIncludesUsernameMatcher = new PasswordIncludesUsernameMatcher();
 
   constructor(
     private route: ActivatedRoute,

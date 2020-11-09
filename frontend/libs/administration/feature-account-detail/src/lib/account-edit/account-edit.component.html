@@ -79,6 +79,7 @@
           type="password"
           #password_input
           (blur)="trimValue(password_input)"
+          [errorStateMatcher]="passwordIncludesUsernameMatcher"
         />
         <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.password)">
           {{ validationErrorService.getErrorMessage(formGroup.controls.password, error) | async }}

@@ -43,7 +43,9 @@ export class PasswordValidator {
       return null;
     }
 
-    if (control.get('password').value.includes(control.get('username').value?.trim())) {
+    if (
+      control.get('password').value.trim().toLowerCase().includes(control.get('username').value?.trim().toLowerCase())
+    ) {
       return { passwordIncludesUsername: true };
     }
   }
