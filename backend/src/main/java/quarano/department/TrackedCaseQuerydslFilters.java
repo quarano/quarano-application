@@ -100,7 +100,7 @@ public interface TrackedCaseQuerydslFilters {
 					.and($case.department.id.eq(id));
 
 			var jpql = queryBase().where(predicate)
-					.orderBy($zipCode.value.asc().nullsLast(), $casePerson.lastName.asc(), $casePerson.firstName.asc());
+					.orderBy($zipCode.value.asc(), $casePerson.lastName.asc(), $casePerson.firstName.asc());
 
 			return Streamable.of(jpql.fetch());
 		}
