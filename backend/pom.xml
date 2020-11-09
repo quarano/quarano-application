@@ -442,7 +442,7 @@
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
 				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>2.0.0-RC.1</version>
+				<version>2.1.0</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.asciidoctor</groupId>
@@ -472,7 +472,6 @@
 				<configuration>
 					<doctype>book</doctype>
 					<backend>html5</backend>
-					<sourceHighlighter>highlight.js</sourceHighlighter>
 					<resources>
 						<!-- Copy our own resources first to make sure they trump the others -->
 						<resource>
@@ -492,6 +491,7 @@
 						<numbered>true</numbered>
 						<sectanchors>true</sectanchors>
 						<snippets>${project.build.directory}/generated-snippets</snippets>
+						<source-highlighter>highlight.js</source-highlighter>
 						<stylesdir>css/</stylesdir>
 						<stylesheet>quarano.css</stylesheet>
 						<toc>left</toc>

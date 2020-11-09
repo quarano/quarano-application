@@ -27,7 +27,10 @@ class QuaranoModuleTests {
 
 		Documenter documenter = new Documenter(modules);
 
+		var options = Options.defaults().withExclusions(it -> it.getName().equals("core"));
+
 		documenter.writeModuleCanvases(null);
-		documenter.writeModulesAsPlantUml(Options.defaults().withExclusions(it -> it.getName().equals("core")));
+		documenter.writeModulesAsPlantUml(options);
+		modules.forEach(it -> documenter.writeModuleAsPlantUml(it, options));
 	}
 }

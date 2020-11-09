@@ -26,6 +26,7 @@ include::{moduliths-docs}/module-core.adoc[]
 Types to abstract parties interacting with the system: accounts that have roles assigned to them belonging to a department.
 A thin layer on top of Spring Security to provide injectable access to the currently authenticated `Account`.
 
+plantuml::{moduliths-docs}/module-account.uml[,,svg]
 include::{moduliths-docs}/module-account.adoc[]
 
 [[modules.department]]
@@ -34,6 +35,7 @@ include::{moduliths-docs}/module-account.adoc[]
 Abstractions for a `TrackedCase` potentially related to a <<modules.tracking, `TrackedPerson`>>.
 Also contains the abstraction of the <<modules.accounts, `Account`>> registration and parts of the enrollment process.
 
+plantuml::{moduliths-docs}/module-department.uml[,,svg]
 include::{moduliths-docs}/module-department.adoc[]
 
 [[modules.tracking]]
@@ -41,6 +43,7 @@ include::{moduliths-docs}/module-department.adoc[]
 
 Abstractions for the `TrackedPerson` associated with a `TrackedCase`, their ``Encounter``s with ``ContactPerson``s.
 
+plantuml::{moduliths-docs}/module-tracking.uml[,,svg]
 include::{moduliths-docs}/module-tracking.adoc[]
 
 [[modules.diary]]
@@ -48,6 +51,7 @@ include::{moduliths-docs}/module-tracking.adoc[]
 
 Everything related to the medical diary a <<modules.tracking, `TrackedPerson`>> has to maintain.
 
+plantuml::{moduliths-docs}/module-diary.uml[,,svg]
 include::{moduliths-docs}/module-diary.adoc[]
 
 === Actions
@@ -55,19 +59,22 @@ include::{moduliths-docs}/module-diary.adoc[]
 Abstractions to capture anomalies detected in the life cycle of a <<modules.department, `TrackedCase`>>.
 Can be either be related to the process of tracking (e.g. missing diary entries) or related to the medical situation of a <<modules.tracking, `TrackedPerson`>>.
 
+plantuml::{moduliths-docs}/module-actions.uml[,,svg]
 include::{moduliths-docs}/module-actions.adoc[]
 
 === Security
 
 Implementation of JWT based security for the system, the expose of certain configuration properties related to that.
 
+plantuml::{moduliths-docs}/module-security.uml[,,svg]
 include::{moduliths-docs}/module-security.adoc[]
 
-=== Reference
+=== Master data
 
-Contains reference data like an abstraction of symptoms.
+Contains reference data like an abstraction of symptoms, frontend texts and email templates.
 
-include::{moduliths-docs}/module-reference.adoc[]
+plantuml::{moduliths-docs}/module-masterdata.uml[,,svg]
+include::{moduliths-docs}/module-masterdata.adoc[]
 
 [[third-party-integration]]
 == Third party integration
