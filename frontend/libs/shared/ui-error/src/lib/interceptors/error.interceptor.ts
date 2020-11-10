@@ -66,31 +66,41 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           const serverError = error.error;
-
+          debugger;
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate(['/auth/login'], {
-              queryParams: {
-                message: encodeURIComponent(serverError),
-              },
-            });
+            this.router.navigate(
+              ['/auth/login'],
+              serverError
+                ? {
+                    queryParams: {
+                      message: encodeURIComponent(serverError),
+                    },
+                  }
+                : null
+            );
             return throwError(error);
           }
 
           if (error.status === HttpStatusCode.forbidden.valueOf()) {
-            this.router.navigate(['/auth/forbidden'], {
-              queryParams: {
-                message: encodeURIComponent(serverError),
-              },
-            });
+            this.router.navigate(
+              ['/auth/forbidden'],
+              serverError
+                ? {
+                    queryParams: {
+                      message: encodeURIComponent(serverError),
+                    },
+                  }
+                : null
+            );
           }
 
           if (
             error.status === HttpStatusCode.notFound.valueOf() ||
             (error.status === HttpStatusCode.badRequest.valueOf() && req.method === 'GET')
           ) {
-            if (serverError.errors) {
+            if (serverError?.errors) {
               for (const key in serverError.errors) {
                 if (serverError.errors[key]) {
                   this.router.navigate(['/404', serverError.errors[key]]);

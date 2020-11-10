@@ -1,3 +1,4 @@
+import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { NgModule } from '@angular/core';
@@ -37,6 +38,7 @@ const routes: Routes = [
       clientData: EnrollmentProfileResolver,
       encounters: EncountersResolver,
     },
+    canActivate: [IsAuthenticatedGuard],
   },
   {
     path: 'landing',
