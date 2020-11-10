@@ -66,7 +66,6 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
 
           const serverError = error.error;
-          debugger;
           if (error.status === HttpStatusCode.unauthorized.valueOf()) {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';

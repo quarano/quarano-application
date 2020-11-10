@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    debugger;
     if (this.route.snapshot.queryParamMap.has('message') && this.route.snapshot.queryParamMap.get('message')) {
       this.snackbar.error(decodeURIComponent(this.route.snapshot.queryParamMap.get('message')));
     }
