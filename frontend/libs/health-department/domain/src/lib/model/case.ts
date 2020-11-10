@@ -33,6 +33,7 @@ export interface CaseDto extends HalResponse {
   contactCount?: number;
   openAnomaliesCount?: number;
   originCases?: string[];
+  locale?: string;
   _embedded?: CaseDetailsEmbeddedDto;
 }
 

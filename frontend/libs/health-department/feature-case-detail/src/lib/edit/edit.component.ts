@@ -132,6 +132,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
       dateOfBirth: new FormControl(null, []),
       infected: new FormControl(),
+      locale: new FormControl(),
 
       extReferenceNumber: new FormControl('', [
         Validators.maxLength(40),
@@ -257,6 +258,7 @@ export class EditComponent implements OnInit, OnDestroy {
     if (!submitData.caseId) {
       this.saveNewCase(submitData, closeAfterSave);
     } else {
+      console.log(submitData);
       this.updateExistingCase(submitData, closeAfterSave);
     }
   }
