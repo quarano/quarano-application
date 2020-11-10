@@ -71,7 +71,7 @@ https://quarano.de/internal-test/api/docs/index.html#_spring_profiles
 
 For convenience we expose the following Maven profiles:
 
-* `localDev` -- Includes H2 as database driver and activates the `integrationtest` profile.
+* `localDev` -- Includes H2 as database driver and activates the `develop` profile.
 
 
 == Demo deployments
