@@ -1,0 +1,29 @@
+<div class="entry-container">
+  <span class="mr-3 label">{{
+    slot === 'morning' ? ('DIARY_ENTRY_WARNING.MORGENS' | translate) : ('DIARY_ENTRY_WARNING.ABENDS' | translate)
+  }}</span>
+  <button
+    *ngIf="canCreate"
+    [matTooltip]="'DIARY_ENTRY_WARNING.EINTRAG_NACHTRAGEN' | translate"
+    matTooltipPosition="after"
+    mat-mini-fab
+    color="basic"
+    [routerLink]="['/client/diary/diary-detail/new', date, slot]"
+  >
+    <mat-icon>warning</mat-icon>
+  </button>
+  <span *ngIf="canCreate; else cannot_create" class="ml-3 text-muted">{{
+    'DIARY_ENTRY_WARNING.EINTRAG_FEHLT_NOCH' | translate
+  }}</span>
+  <ng-template #cannot_create
+    ><button
+      mat-mini-fab
+      disabled
+      class="info-button"
+      [matTooltip]="'DIARY_ENTRY_WARNING.LEIDER_HABEN_SIE_AN_DEISEM_TAG_VERPASST' | translate"
+      matTooltipPosition="after"
+    >
+      <span class="info-icon">i</span></button
+    ><span class="text-muted ml-3">{{ 'DIARY_ENTRY_WARNING.KEIN_EINTRAG_VORHANDEN' | translate }}</span></ng-template
+  >
+</div>

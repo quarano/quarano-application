@@ -1,18 +1,3 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.tracking;
 
 import lombok.AccessLevel;
@@ -21,7 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
+import lombok.Value;
+import quarano.core.EmailAddress;
+import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -33,48 +21,58 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 
 /**
  * @author Oliver Drotbohm
+ * @author Michael J. Simons
+ * @author Felix Schultze
  */
-@Entity(name = "newContactPerson")
+@Entity
+@Table(name = "contact_people")
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
-@Accessors(chain = true)
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPersonIdentifier> {
 
 	private String firstName, lastName;
-	private EmailAddress emailAddress;
+	private @Setter(AccessLevel.NONE) EmailAddress emailAddress;
 
-	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber")) //
-	private PhoneNumber mobilePhoneNumber;
-	private PhoneNumber phoneNumber;
+	@AttributeOverride(name = "value", column = @Column(name = "mobilePhoneNumber"))
+	private @Setter(AccessLevel.NONE) PhoneNumber mobilePhoneNumber;
+	private @Setter(AccessLevel.NONE) PhoneNumber phoneNumber;
 	private Address address;
-	private TypeOfContract typeOfContract;
+
+	private @Enumerated(EnumType.STRING) TypeOfContract typeOfContract;
 	private String remark;
-	private String identificationHint;
-	private Boolean isHealthStaff;
-	private Boolean isSenior;
-	private Boolean hasPreExistingConditions;
+	private @Setter(AccessLevel.NONE) String identificationHint;
 
-	private @Column(nullable = false) TrackedPersonIdentifier ownerId;
+	private @Getter @Setter Boolean isHealthStaff;
+	private @Getter @Setter Boolean isSenior;
+	private @Getter @Setter Boolean hasPreExistingConditions;
 
-	public ContactPerson(String firstName, String lastName) {
+	@Column(nullable = false)
+	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
+	private TrackedPersonIdentifier ownerId;
+
+	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
 
 		this.id = ContactPersonIdentifier.of(UUID.randomUUID());
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.emailAddress = contactWays.getEmailAddress();
+		this.phoneNumber = contactWays.getPhoneNumber();
+		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
+		this.identificationHint = contactWays.getIdentificationHint();
 	}
 
 	public String getFullName() {
 		return String.format("%s %s", firstName, lastName);
-	}
-
-	public boolean hasId(ContactPersonIdentifier id) {
-		return this.id.equals(id);
 	}
 
 	public ContactPerson assignOwner(TrackedPerson person) {
@@ -86,6 +84,20 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 	public boolean belongsTo(TrackedPerson person) {
 		return this.ownerId.equals(person.getId());
+	}
+
+	public boolean isVulnerable() {
+		return getIsSenior() == Boolean.TRUE || getHasPreExistingConditions() == Boolean.TRUE;
+	}
+
+	public ContactPerson contactWays(ContactWays contactWays) {
+
+		this.emailAddress = contactWays.getEmailAddress();
+		this.phoneNumber = contactWays.getPhoneNumber();
+		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
+		this.identificationHint = contactWays.getIdentificationHint();
+
+		return this;
 	}
 
 	public enum TypeOfContract {
@@ -109,6 +121,11 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		}
 	}
 
+	@Value(staticConstructor = "of")
+	public static class ContactPersonAdded implements DomainEvent {
+		ContactPerson contactPerson;
+	}
+
 	@Embeddable
 	@EqualsAndHashCode
 	@RequiredArgsConstructor(staticName = "of")
@@ -117,7 +134,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 
 		private static final long serialVersionUID = -8869631517068092437L;
 
-		final UUID id;
+		final UUID contactPersonId;
 
 		/*
 		 * (non-Javadoc)
@@ -125,7 +142,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		 */
 		@Override
 		public String toString() {
-			return id.toString();
+			return contactPersonId.toString();
 		}
 	}
 }

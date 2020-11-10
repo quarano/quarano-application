@@ -1,26 +1,11 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.tracking.web;
 
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.auth.web.LoggedIn;
-import quarano.core.web.ErrorsDto;
+import quarano.core.web.LoggedIn;
+import quarano.core.web.MappedPayloads;
 import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
@@ -50,9 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Transactional
 @RestController("newContactPersonController")
-@RequestMapping("/api/contacts")
+@RequestMapping("/contacts")
 @RequiredArgsConstructor
-class ContactPersonController {
+public class ContactPersonController {
 
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull TrackedPersonRepository people;
@@ -62,8 +47,8 @@ class ContactPersonController {
 	@GetMapping
 	Stream<ContactPersonDto> allContacts(@LoggedIn TrackedPerson person) {
 
-		return contacts.findByOwnerId(person.getId()) //
-				.map(it -> mapper.map(it, ContactPersonDto.class)) //
+		return contacts.findByOwnerId(person.getId())
+				.map(it -> mapper.map(it, ContactPersonDto.class))
 				.stream();
 	}
 
@@ -71,40 +56,46 @@ class ContactPersonController {
 	HttpEntity<?> createContactPerson(@Valid @RequestBody ContactPersonDto dto, Errors errors,
 			@LoggedIn TrackedPerson person) {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
-		}
+		return MappedPayloads.of(dto, errors)
+				.alwaysMap(ContactPersonDto::validate)
+				.map(it -> mapper.map(it, ContactPerson.class))
+				.map(it -> it.assignOwner(person))
+				.map(contacts::save)
+				.concludeIfValid(it -> {
+					var uri = fromMethodCall(on(this.getClass()).getContact(person, it.getId())).build().toUri();
 
-		var contact = contacts.save(mapper.map(dto, ContactPerson.class).assignOwner(person));
-		var uri = fromMethodCall(on(this.getClass()).getContact(person, contact.getId())).build().toUri();
 
-		return ResponseEntity.created(uri).body(mapper.map(contact, ContactPersonDto.class));
+					return ResponseEntity.created(uri)
+							.body(mapper.map(it, ContactPersonDto.class));
+				});
 	}
 
 	@GetMapping("/{identifier}")
-	HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
+	public HttpEntity<?> getContact(@LoggedIn TrackedPerson person, @PathVariable ContactPersonIdentifier identifier) {
 
-		var dto = contacts.findById(identifier) //
-				.filter(it -> it.belongsTo(person)) //
+		var dto = contacts.findById(identifier)
+				.filter(it -> it.belongsTo(person))
 				.map(it -> mapper.map(it, ContactPersonDto.class));
 
 		return ResponseEntity.of(dto);
 	}
 
 	@PutMapping("/{identifier}")
-	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person, //
-			@PathVariable ContactPersonIdentifier identifier, //
-			@Valid @RequestBody ContactPersonDto payload, //
+	HttpEntity<?> updateContact(@LoggedIn TrackedPerson person,
+			@PathVariable ContactPersonIdentifier identifier,
+			@Valid @RequestBody ContactPersonDto payload,
 			Errors errors) {
 
-		if (errors.hasErrors()) {
-			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
-		}
+		return MappedPayloads.of(payload, errors)
+				.alwaysMap(ContactPersonDto::validate)
+				.map(dto -> {
 
-		return ResponseEntity.of(contacts.findById(identifier) //
-				.filter(it -> it.belongsTo(person)) //
-				.map(it -> mapper.map(payload, it)) //
-				.map(contacts::save) //
-				.map(it -> mapper.map(it, ContactPersonDto.class)));
+					return contacts.findById(identifier)
+							.filter(it -> it.belongsTo(person))
+							.map(it -> mapper.map(dto, it))
+							.map(contacts::save)
+							.map(it -> mapper.map(it, ContactPersonDto.class));
+
+				}).concludeIfValid(ResponseEntity::of);
 	}
 }

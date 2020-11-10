@@ -1,0 +1,92 @@
+[[rest-api]]
+= Quarano REST API
+:snippets: ../../../target/generated-snippets
+
+== Fundamentals
+
+=== Use of hypermedia
+
+The Quarano REST API makes use of hypermedia elements in its responses to guide clients through business processes, indicate the availability of related resources and actions.
+Clients are encouraged to make use of those control to signal that availability to users via UI controls and use the metadata exposed via the API to avoid semantic coupling to the representations.
+The media type we use as foundation of our representations is http://stateless.co/hal_specification.html[HAL].
+
+=== Status codes
+
+=== Error responses
+
+TODO
+
+== Authentication
+
+The Quarano REST API uses JWT token based authentication.
+An authenticating HTTP resource is available via `/api/login`.
+
+include::{snippets}/getting-started/login/curl-request.adoc[]
+
+A successful login will contain a simple `next` link to point to which resource access to gather information about the currently logged in user, navigation options, etc.
+However, in case a password is expired, there'll also appear a `change-password` link pointing to a resource to change the password to a new one.
+At this point, clients should not allow any other operation than changing the password.
+
+include::{snippets}/password-expired/login/links.adoc[]
+
+=== Error scenarios
+
+As the login may fail for a variety of reasons, the resource returns different HTTP status codes in case of failures:
+
+* `401 Unauthorized` -- if the given credentials are invalid.
+* `403 Forbidden` -- in case the account's associated case fails to meet additional business requirements.
+
+In all cases, the response contains a human readable message to display to the user in `text/plain` format.
+
+[[authentication.change-password]]
+=== Changing the password
+
+The necessity to change a users password will be indicated by a `change-password` link available in the response of a successful login.
+To change the password, issue a request to the links target URI submitting the new password and the just returned authentication token:
+
+include::{snippets}/password-expired/change-password/curl-request.adoc[]
+
+The request takes the following attributes:
+
+include::{snippets}/password-expired/change-password/auto-request-fields.adoc[]
+
+[[user-details]]
+== User details
+
+After the login, resources available are advertised via the user details resource.
+The response of the login request points to that in the `next` link.
+Depending on the role of the logged in user, you'll find different links within that representation.
+For example, a case agent will see the following links.
+
+include::{snippets}/getting-started/agent-user-home/links.adoc[]
+
+include::api-agent.adoc[leveloffset=+1]
+include::api-user.adoc[leveloffset=+1]
+
+== CSV Import/Export
+
+=== Quarantine Export
+
+include::{snippets}/csv-import-export/quarantine-order/auto-description.adoc[]
+
+include::{snippets}/csv-import-export/quarantine-order/curl-request.adoc[]
+
+The request takes the following attributes:
+
+include::{snippets}/csv-import-export/quarantine-order/auto-request-parameters.adoc[]
+
+That call will return a 200 OK and contain the CSV data as body.
+
+include::{snippets}/csv-import-export/quarantine-order/response-body.adoc[]
+
+== Frontend texts
+
+Even without authentication, it is possible to retrieve installation-specific texts from the Quarano REST API via `/api/frontendtexts`.
+
+include::{snippets}/frontend-texts/get-frontend-texts/curl-request.adoc[]
+include::{snippets}/frontend-texts/get-frontend-texts/response-body.adoc[]
+
+The request takes the following attributes. Without parameters all frontend texts are returned.:
+
+include::{snippets}/frontend-texts/get-frontend-texts/auto-request-parameters.adoc[]
+

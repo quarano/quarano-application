@@ -1,6 +1,5 @@
 package quarano.core;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,12 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Drotbohm
  */
 @Component
-@Profile("!prod")
 public interface DataInitializer {
+
+	default void preInitialize() {}
 
 	/**
 	 * Called on application startup to trigger data initialization. Will run inside a transaction.
 	 */
 	@Transactional
 	void initialize();
+
+	default void postInitialize() {}
 }

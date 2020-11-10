@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="link-wrapper">
+    <a [routerLink]="['/general/terms']">{{ 'FOOTER.AGB' | translate }}</a>
+    <a [routerLink]="['/general/data-protection']">{{ 'FOOTER.DATENSCHUTZ' | translate }}</a>
+    <a [routerLink]="['/general/imprint']">{{ 'FOOTER.IMPRESSUM' | translate }}</a>
+  </div>
+
+  <div class="anchor-wrapper" *ngFor="let item of pictureUris | keyvalue">
+    <a [href]="item.key" target="_blank">
+      <img [src]="item.value" />
+    </a>
+  </div>
+</div>

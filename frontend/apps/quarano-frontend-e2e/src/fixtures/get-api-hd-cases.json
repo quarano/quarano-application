@@ -1,0 +1,331 @@
+{
+  "_embedded": {
+    "cases": [
+      {
+        "caseId": "03ea6953-f06c-418a-975c-bb2ff79c1ff3",
+        "primaryPhoneNumber": "062188334",
+        "caseType": "index",
+        "enrollmentCompleted": true,
+        "medicalStaff": true,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Ebert",
+        "quarantine": {
+          "from": "2020-04-26",
+          "to": "2020-05-08"
+        },
+        "firstName": "Nadine",
+        "zipCode": "68199",
+        "email": "nadine.ebert@testtest.de",
+        "status": "in Nachverfolgung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/03ea6953-f06c-418a-975c-bb2ff79c1ff3"
+          }
+        }
+      },
+      {
+        "caseId": "8c7970e9-c5ac-49d7-b80f-eda7cc1bf4d6",
+        "primaryPhoneNumber": "0621222255",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1990-01-01",
+        "lastName": "Hanser",
+        "quarantine": {
+          "from": "2020-05-01",
+          "to": "2020-05-15"
+        },
+        "firstName": "Markus",
+        "zipCode": null,
+        "email": "markus.hanser@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/8c7970e9-c5ac-49d7-b80f-eda7cc1bf4d6"
+          }
+        }
+      },
+      {
+        "caseId": "aef1346c-c8b1-48a8-ae57-12937c4a6a3b",
+        "primaryPhoneNumber": "0621115545",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": null,
+        "lastName": "Hirsch",
+        "quarantine": {
+          "from": "2020-05-01",
+          "to": "2020-05-15"
+        },
+        "firstName": "Harry",
+        "zipCode": null,
+        "email": "harry@hirsch.de",
+        "status": "angelegt",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/aef1346c-c8b1-48a8-ae57-12937c4a6a3b"
+          }
+        }
+      },
+      {
+        "caseId": "8ea1a457-3ba2-4319-a393-3d1379ab66cb",
+        "primaryPhoneNumber": "06214455684",
+        "caseType": "index",
+        "enrollmentCompleted": true,
+        "medicalStaff": true,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Meier",
+        "quarantine": {
+          "from": "2020-04-26",
+          "to": "2020-05-08"
+        },
+        "firstName": "Gustav",
+        "zipCode": "68259",
+        "email": "gustav.meier@testtest.de",
+        "status": "in Nachverfolgung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/8ea1a457-3ba2-4319-a393-3d1379ab66cb"
+          }
+        }
+      },
+      {
+        "caseId": "77badc2c-e71f-452f-addb-87d43962a58f",
+        "primaryPhoneNumber": "0621111155",
+        "caseType": "contact",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1975-08-03",
+        "lastName": "Mueller",
+        "quarantine": null,
+        "firstName": "Tanja",
+        "zipCode": "68259",
+        "email": "tanja.mueller@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/77badc2c-e71f-452f-addb-87d43962a58f"
+          },
+          "start-tracking": {
+            "href": "http://localhost:8080/hd/cases/77badc2c-e71f-452f-addb-87d43962a58f/registration"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/77badc2c-e71f-452f-addb-87d43962a58f/registration"
+          }
+        }
+      },
+      {
+        "caseId": "2def05c0-ffa5-456f-b359-90ef7f88db05",
+        "primaryPhoneNumber": "0621447785",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Sander",
+        "quarantine": {
+          "from": "2020-04-22",
+          "to": "2020-05-06"
+        },
+        "firstName": "Sylvia",
+        "zipCode": null,
+        "email": "sylvia@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/2def05c0-ffa5-456f-b359-90ef7f88db05"
+          },
+          "start-tracking": {
+            "href": "http://localhost:8080/hd/cases/2def05c0-ffa5-456f-b359-90ef7f88db05/registration"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/2def05c0-ffa5-456f-b359-90ef7f88db05/registration"
+          }
+        }
+      },
+      {
+        "caseId": "5bffd8ad-6ad5-405f-a31c-6373f621e4d9",
+        "primaryPhoneNumber": "0621443311",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Sch\u00F6n",
+        "quarantine": {
+          "from": "2020-04-18",
+          "to": "2020-05-02"
+        },
+        "firstName": "Steffen",
+        "zipCode": null,
+        "email": "steffen@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/5bffd8ad-6ad5-405f-a31c-6373f621e4d9"
+          },
+          "start-tracking": {
+            "href": "http://localhost:8080/hd/cases/5bffd8ad-6ad5-405f-a31c-6373f621e4d9/registration"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/5bffd8ad-6ad5-405f-a31c-6373f621e4d9/registration"
+          }
+        }
+      },
+      {
+        "caseId": "2fed21be-5638-4fe6-ac9c-2292e482a24f",
+        "primaryPhoneNumber": "0621884466",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Schuster",
+        "quarantine": {
+          "from": "2020-04-30",
+          "to": "2020-05-14"
+        },
+        "firstName": "Sunny",
+        "zipCode": null,
+        "email": "sunny@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/2fed21be-5638-4fe6-ac9c-2292e482a24f"
+          },
+          "start-tracking": {
+            "href": "http://localhost:8080/hd/cases/2fed21be-5638-4fe6-ac9c-2292e482a24f/registration"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/2fed21be-5638-4fe6-ac9c-2292e482a24f/registration"
+          }
+        }
+      },
+      {
+        "caseId": "01d8b3bd-041e-4493-b491-42f9bf40323d",
+        "primaryPhoneNumber": "0621883322",
+        "caseType": "index",
+        "enrollmentCompleted": true,
+        "medicalStaff": true,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Seufert",
+        "quarantine": {
+          "from": "2020-04-28",
+          "to": "2020-05-12"
+        },
+        "firstName": "Siggi",
+        "zipCode": "68309",
+        "email": "siggi@testtest.de",
+        "status": "in Nachverfolgung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/01d8b3bd-041e-4493-b491-42f9bf40323d"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/01d8b3bd-041e-4493-b491-42f9bf40323d/registration"
+          }
+        }
+      },
+      {
+        "caseId": "d73077aa-638f-4876-90f7-24793c7d9538",
+        "primaryPhoneNumber": "0621883322",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Siebel",
+        "quarantine": {
+          "from": "2020-04-27",
+          "to": "2020-05-11"
+        },
+        "firstName": "Sarah",
+        "zipCode": null,
+        "email": "sarah@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/d73077aa-638f-4876-90f7-24793c7d9538"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/d73077aa-638f-4876-90f7-24793c7d9538/registration"
+          }
+        }
+      },
+      {
+        "caseId": "a7912643-55d9-4a1c-a7d2-1b8eec8aaffe",
+        "primaryPhoneNumber": "0621889977",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Soller",
+        "quarantine": {
+          "from": "2020-04-28",
+          "to": "2020-05-12"
+        },
+        "firstName": "Samuel",
+        "zipCode": null,
+        "email": "samuel@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/a7912643-55d9-4a1c-a7d2-1b8eec8aaffe"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/a7912643-55d9-4a1c-a7d2-1b8eec8aaffe/registration"
+          }
+        }
+      },
+      {
+        "caseId": "91fc1ae4-2f86-4313-8750-ef4b7b87b15b",
+        "primaryPhoneNumber": "0621779988",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Sperber",
+        "quarantine": {
+          "from": "2020-04-23",
+          "to": "2020-05-07"
+        },
+        "firstName": "Steven",
+        "zipCode": null,
+        "email": "steven@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/91fc1ae4-2f86-4313-8750-ef4b7b87b15b"
+          },
+          "start-tracking": {
+            "href": "http://localhost:8080/hd/cases/91fc1ae4-2f86-4313-8750-ef4b7b87b15b/registration"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/91fc1ae4-2f86-4313-8750-ef4b7b87b15b/registration"
+          }
+        }
+      },
+      {
+        "caseId": "e781dd11-a3a5-403c-96b2-f20b18e559ed",
+        "primaryPhoneNumber": "0621556464",
+        "caseType": "index",
+        "enrollmentCompleted": false,
+        "medicalStaff": null,
+        "dateOfBirth": "1980-01-01",
+        "lastName": "Stra\u00DFmann",
+        "quarantine": {
+          "from": "2020-04-30",
+          "to": "2020-05-14"
+        },
+        "firstName": "Sonja",
+        "zipCode": null,
+        "email": "sonja@testtest.de",
+        "status": "in Registrierung",
+        "_links": {
+          "conclude": {
+            "href": "http://localhost:8080/hd/cases/e781dd11-a3a5-403c-96b2-f20b18e559ed"
+          },
+          "renew": {
+            "href": "http://localhost:8080/hd/cases/e781dd11-a3a5-403c-96b2-f20b18e559ed/registration"
+          }
+        }
+      }
+    ]
+  }
+}

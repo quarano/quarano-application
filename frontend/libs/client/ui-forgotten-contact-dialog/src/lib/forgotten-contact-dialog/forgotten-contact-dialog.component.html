@@ -1,0 +1,48 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmitted()">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title>{{ 'FORGOTTEN_CONTACT_DIALOG.KONTAKT_NACHTRAGEN' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'FORGOTTEN_CONTACT_DIALOG.PFLICHTEINGABEN_SIND_MARKIERT' | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-form-field class="full-width mb-3">
+      <mat-label>{{ 'FORGOTTEN_CONTACT_DIALOG.TAG_DES_KONTAKTS' | translate }}</mat-label>
+      <input matInput required [max]="today" [matDatepicker]="picker" formControlName="day" name="dayControl" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.day)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.day, error) | async }}
+      </mat-error>
+    </mat-form-field>
+
+    <qro-multiple-contact-autocomplete
+      [control]="formGroup.controls.contactIds"
+      [selectableItems]="data.contactPersons"
+      [placeholder]="('FORGOTTEN_CONTACT_DIALOG.WÄHLEN_SIE_DIE_KONTAKTPERSONEN' | translate) + '*'"
+      [nameProperties]="['firstName', 'lastName']"
+    >
+    </qro-multiple-contact-autocomplete>
+
+    <div style="display: flex; flex-direction: row; align-items: center;">
+      <span class="text-muted">{{ 'FORGOTTEN_CONTACT_DIALOG.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
+      <button
+        mat-button
+        color="primary"
+        type="button"
+        (click)="openContactDialog()"
+        class="p-2 mr-0"
+        style="line-height: normal;"
+      >
+        {{ 'FORGOTTEN_CONTACT_DIALOG.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
+      </button>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
+      {{ 'FORGOTTEN_CONTACT_DIALOG.SPEICHERN' | translate }}
+    </qro-button>
+    <button type="button" mat-raised-button color="secondary" (click)="cancel()">
+      {{ 'FORGOTTEN_CONTACT_DIALOG.ABBRECHEN' | translate }}
+    </button></mat-card-actions
+  >
+</form>

@@ -1,0 +1,15 @@
+.item {
+  display: flex;
+
+  & + .item {
+    padding-top: 5px;
+  }
+
+  div.value {
+    margin: 10px 40px;
+  }
+
+  &.col {
+    flex-direction: column;
+  }
+}

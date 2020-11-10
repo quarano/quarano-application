@@ -1,0 +1,118 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>{{ 'REGISTER.REGISTRIEREN' | translate }}</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+    <mat-card-content>
+      <p>
+        {{ 'REGISTER.WENN_SIE_VON_IHRER_ZUSTÄNDIGEN_BEHÖRDE' | translate }}
+      </p>
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-client-code">
+        <mat-label>{{ 'REGISTER.ANMELDECODE' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="clientCode"
+          [placeholder]="'REGISTER.ANMELDECODE' | translate"
+          id="client-code"
+          #client_code_input
+          (blur)="trimValue(client_code_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.clientCode)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.clientCode, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-username">
+        <mat-label>{{ 'REGISTER.BENUTZERNAME' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="username"
+          [placeholder]="'REGISTER.BENUTZERNAME' | translate"
+          id="username"
+          (change)="changeUsername()"
+          #username_input
+          (blur)="trimValue(username_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.username)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.username, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password">
+        <mat-label>{{ 'REGISTER.PASSWORT' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [placeholder]="'REGISTER.PASSWORT' | translate"
+          id="password"
+          type="password"
+          #password_input
+          (blur)="trimValue(password_input)"
+          [errorStateMatcher]="passwordIncludesUsernameMatcher"
+        />
+        <mat-error *ngIf="registrationForm.hasError('passwordIncludesUsername')">
+          {{ 'REGISTER.PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN' | translate }}
+        </mat-error>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.password)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.password, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-password-confirm">
+        <mat-label>{{ 'REGISTER.PASSWORT_BESTÄTIGEN' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="passwordConfirm"
+          [placeholder]="'REGISTER.PASSWORT_BESTÄTIGEN' | translate"
+          id="password-confirm"
+          type="password"
+          #password_confirm_input
+          (blur)="trimValue(password_confirm_input)"
+          [errorStateMatcher]="confirmValidParentMatcher"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.passwordConfirm)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.passwordConfirm, error) | async }}
+        </mat-error>
+        <mat-error *ngIf="registrationForm.hasError('passwordConfirmWrong')"
+          >{{ 'REGISTER.PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline" data-cy="input-dateofbirth">
+        <mat-label>{{ 'REGISTER.GEBURTSDATUM' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="dateOfBirth"
+          [matDatepicker]="picker"
+          [max]="today"
+          #date_of_birth_input
+          (blur)="trimValue(date_of_birth_input)"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(registrationForm.controls.dateOfBirth)">
+          {{ validationErrorService.getErrorMessage(registrationForm.controls.dateOfBirth, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <div class="data-protection-wrapper">
+        <mat-checkbox formControlName="dataProtectionConfirmed" data-cy="input-privacy-policy"
+          >{{ 'REGISTER.HIERMIT_AKZEPTIERE_ICH_DIE' | translate }}
+          <button type="button" class="p-0" id="data-protection-btn" mat-button (click)="openDataProtection()">
+            {{ 'REGISTER.DATENSCHUTZERKLÄRUNG' | translate }}
+          </button></mat-checkbox
+        >
+        <mat-icon
+          style="cursor: pointer; opacity: 0.8;"
+          [matTooltip]="'REGISTER.SIE_KÖNNEN_SICH_NICHT_REGISTRIEREN' | translate"
+          matTooltipPosition="after"
+          class="ml-1 text-muted"
+        >
+          info</mat-icon
+        >
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <qro-button data-cy="registration-submit-button" [disabled]="registrationForm.invalid" [loading]="loading">
+        {{ 'REGISTER.REGISTRIEREN' | translate }}
+      </qro-button>
+    </mat-card-actions>
+  </form>
+</mat-card>

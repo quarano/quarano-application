@@ -1,0 +1,16 @@
+<div class="container">
+  <mat-card class="form__card--small">
+    <mat-card-header>
+      <mat-card-title>{{ 'FORGOTTEN_CONTACT_BANNER.KONTAKT_NACHTRAGEN' | translate }}</mat-card-title>
+    </mat-card-header>
+    <img width="100%" src="assets/images/idea.png" />
+    <mat-card-content style="margin-top: 16px;">
+      {{ 'FORGOTTEN_CONTACT_BANNER.FALLS_SIE_WÄHREND_DER_ANFÄNGLICHEN_DATENEINGABE' | translate }}
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="button" (click)="openContactDialog()">
+        {{ 'FORGOTTEN_CONTACT_BANNER.JETZT_NACHTRAGEN' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

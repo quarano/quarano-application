@@ -1,0 +1,151 @@
+<mat-card class="form__card--small form__card--animated">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>
+        {{ isNew ? 'Mitarbeiter-Account anlegen' : 'Account-Daten für Mitarbeiter bearbeiten' }}
+      </h1>
+    </mat-card-title>
+    <mat-card-subtitle>
+      Pflichtfelder sind mit * markiert
+    </mat-card-subtitle>
+  </mat-card-header>
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm(false)">
+    <mat-card-content>
+      <mat-form-field class="half-width" data-cy="input-firstname">
+        <input
+          required
+          matInput
+          placeholder="Vorname"
+          formControlName="firstName"
+          type="text"
+          #first_name_input
+          (blur)="trimValue(first_name_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="half-width" data-cy="input-lastname">
+        <input
+          matInput
+          required
+          placeholder="Nachname"
+          formControlName="lastName"
+          type="text"
+          #last_name_input
+          (blur)="trimValue(last_name_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" data-cy="input-email">
+        <input
+          matInput
+          required
+          placeholder="E-Mail-Adresse"
+          formControlName="email"
+          type="email"
+          #email_input
+          (blur)="trimValue(email_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" data-cy="input-username">
+        <mat-label>Username</mat-label>
+        <input
+          required
+          matInput
+          formControlName="username"
+          placeholder="Username"
+          id="username"
+          #username_input
+          (blur)="trimValue(username_input)"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.username)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.username, error) | async }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" *ngIf="isNew" data-cy="input-password">
+        <mat-label>Passwort</mat-label>
+        <input
+          required
+          matInput
+          formControlName="password"
+          placeholder="Passwort"
+          id="password"
+          type="password"
+          #password_input
+          (blur)="trimValue(password_input)"
+          [errorStateMatcher]="passwordIncludesUsernameMatcher"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.password)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.password, error) | async }}
+        </mat-error>
+        <mat-error *ngIf="formGroup.hasError('passwordIncludesUsername')">
+          Das Passwort darf nicht den Benutzernamen beinhalten.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" *ngIf="isNew" data-cy="input-passwordconfirm">
+        <mat-label>Passwort bestätigen</mat-label>
+        <input
+          required
+          matInput
+          formControlName="passwordConfirm"
+          placeholder="Passwort bestätigen"
+          id="password-confirm"
+          type="password"
+          #password_confirm_input
+          (blur)="trimValue(password_confirm_input)"
+          [errorStateMatcher]="confirmValidParentMatcher"
+        />
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.passwordConfirm)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.passwordConfirm, error) | async }}
+        </mat-error>
+        <mat-error *ngIf="formGroup.hasError('passwordConfirmWrong')"
+          >Das Passwort und die Bestätigung müssen übereinstimmen</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" data-cy="select-role">
+        <mat-label>Rollen *</mat-label>
+        <mat-select formControlName="roles" multiple>
+          <mat-option *ngFor="let role of roles" [value]="role.name">{{ role.displayName }}</mat-option>
+        </mat-select>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.roles)">
+          {{ validationErrorService.getErrorMessage(formGroup.controls.roles, error) | async }}
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <qro-button
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+        data-cy="account-submit-button"
+      >
+        Speichern
+      </qro-button>
+      <qro-button
+        style="margin-left: 8px;"
+        type="button"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+        (buttonClicked)="submitForm(true)"
+        data-cy="account-submitandclose-button"
+      >
+        Speichern und schließen
+      </qro-button>
+      <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        [routerLink]="['/administration/accounts/account-list']"
+        data-cy="account-cancel-button"
+      >
+        Abbrechen
+      </button>
+    </mat-card-actions>
+  </form>
+</mat-card>

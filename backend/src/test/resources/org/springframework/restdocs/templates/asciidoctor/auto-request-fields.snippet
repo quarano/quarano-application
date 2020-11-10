@@ -1,0 +1,13 @@
+{{#hasContent}}
+[cols="1,1,1,3"]
+|===
+|{{th-path}}|{{th-type}}|{{th-optional}}|{{th-description}}
+
+{{#content}}
+|{{path}}
+|{{type}}
+|{{optional}}
+|{{description}}
+
+{{/content}}
+|==={{/hasContent}}{{#noContent}}{{no-request-body}}{{/noContent}}

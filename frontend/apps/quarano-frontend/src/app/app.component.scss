@@ -1,0 +1,69 @@
+@import '../../../../libs/shared/ui-styles/src/lib/variables';
+
+.container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+main > *,
+header,
+footer {
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+article {
+  flex: 4 0 60%;
+  margin: 0 5px;
+}
+
+nav {
+  flex: 1 1 20%;
+  order: -1;
+}
+
+aside {
+  flex: 1 1 20%;
+}
+
+footer,
+header {
+  flex-basis: 80px;
+}
+
+footer {
+  background-color: rgba(18, 8, 22, 0.3);
+  margin-top: 5px;
+  z-index: 1;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(to right, $primary-color, $accent-color) !important;
+}
+
+@media all and (max-width: $break-lg) {
+  main {
+    flex-direction: column;
+  }
+
+  nav {
+    order: 0;
+  }
+}

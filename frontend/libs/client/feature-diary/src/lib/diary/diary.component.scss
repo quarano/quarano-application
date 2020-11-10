@@ -1,0 +1,37 @@
+@import '../../../../../shared/ui-styles/src/lib/variables';
+
+h3 {
+  text-transform: uppercase;
+}
+
+::ng-deep {
+  .mat-card-header-text {
+    margin: 0 !important;
+    width: 100%;
+  }
+
+  mat-card-title {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+#contact-button {
+  margin-top: 1rem;
+
+  @media screen and(min-width: $break-lg) {
+    display: none;
+  }
+}
+
+.date-header {
+  @media screen And (max-width: $break-lg) {
+    display: none;
+  }
+}
+
+.diary-header {
+  @media screen And (max-width: $break-md) {
+    display: none;
+  }
+}

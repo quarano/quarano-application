@@ -1,0 +1,18 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image" [ngStyle]="{ 'background-image': getHeaderImageUrl() }"></div>
+    <mat-card-title>{{ viewModel.title | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ viewModel.subtitle | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="viewModel.backgroundImageUrl" alt="background image" />
+  <mat-card-content>
+    <p>
+      {{ viewModel.content | translate }}
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button [routerLink]="viewModel.routerLink" mat-button>
+      {{ viewModel.linkText | translate | uppercase }}
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,151 @@
+<mat-card class="form__card--small form__card--animated" *ngIf="caseDetail$ | async as caseDetail">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title *ngIf="caseDetail.caseId; else newCase">
+      <span>
+        {{ (type$ | async) === ClientType.Index ? 'Falldetails' : 'Kontaktperson' }} {{ caseDetail.firstName }}
+        {{ caseDetail.lastName }}
+        <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
+      </span>
+      <span class="type"
+        >{{ caseLabel$ | async }}
+        <button
+          (click)="onChangeTypeKeyPressed()"
+          *ngIf="(type$ | async) === ClientType.Contact"
+          mat-icon-button
+          matTooltip="Zum Indexfall machen"
+          matTooltipPosition="after"
+        >
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </span>
+    </mat-card-title>
+    <ng-template #newCase>
+      <mat-card-title
+        ><span>
+          {{ (type$ | async) === ClientType.Index ? 'Neuen Indexfall' : 'Neue Kontaktperson' }}
+          anlegen</span
+        >
+      </mat-card-title>
+    </ng-template>
+  </mat-card-header>
+  <mat-card-content *ngIf="caseDetail$ | async as caseDetail">
+    <div class="button-area" *ngIf="caseDetail.caseId">
+      <button
+        data-cy="start-tracking-button"
+        #start_tracking_btn
+        (click)="startTracking(caseDetail)"
+        color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
+        mat-button
+      >
+        <span
+          data-cy="start-tracking-span"
+          [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
+          >Nachverfolgung starten</span
+        >
+      </button>
+      <button
+        data-cy="analog-tracking-button"
+        #analog_tracking_btn
+        color="primary"
+        [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
+        mat-button
+      >
+        <span [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
+          >Analog nachverfolgen</span
+        >
+      </button>
+      <div class="spacer"></div>
+      <button
+        mat-button
+        color="primary"
+        (click)="checkForClose(caseDetail)"
+        [disabled]="!caseDetail._links?.hasOwnProperty('conclude') || caseDetail.status === 'abgeschlossen'"
+      >
+        Fall abschließen
+      </button>
+    </div>
+    <nav mat-tab-nav-bar>
+      <a
+        *ngIf="type$ | async as type"
+        mat-tab-link
+        [routerLink]="['edit']"
+        routerLinkActive
+        #rledit="routerLinkActive"
+        [active]="rledit.isActive"
+      >
+        {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
+      </a>
+      <a
+        mat-tab-link
+        [routerLink]="['actions']"
+        routerLinkActive
+        #rlactions="routerLinkActive"
+        [active]="rlactions.isActive"
+      >
+        <span
+          *ngIf="true; else has_no_open_anomalies"
+          [matBadge]="caseDetail.openAnomaliesCount"
+          matBadgeOverlap="false"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+          >Aktionen</span
+        >
+        <ng-template #has_no_open_anomalies>
+          <span>Aktionen</span>
+        </ng-template>
+      </a>
+      <a
+        *ngIf="caseDetail.comments"
+        mat-tab-link
+        [routerLink]="['comments']"
+        routerLinkActive
+        #rlcomments="routerLinkActive"
+        [active]="rlcomments.isActive"
+      >
+        Kommentare <span class="info-badge">{{ caseDetail.comments.length }}</span>
+      </a>
+      <a
+        *ngIf="caseDetail?.indexContacts?.length > 0"
+        mat-tab-link
+        [routerLink]="['index-case-data']"
+        routerLinkActive
+        #rlindexcontacts="routerLinkActive"
+        [active]="rlindexcontacts.isActive"
+      >
+        Angaben Indexfall
+      </a>
+      <a
+        *ngIf="caseDetail?._links?.hasOwnProperty('renew')"
+        mat-tab-link
+        [routerLink]="['email']"
+        routerLinkActive
+        #rlemail="routerLinkActive"
+        [active]="rlemail.isActive"
+      >
+        E-Mail Vorlage
+      </a>
+      <a
+        *ngIf="caseDetail?._links?.hasOwnProperty('questionnaire')"
+        mat-tab-link
+        [routerLink]="['questionnaire']"
+        routerLinkActive
+        #rlquestionnaire="routerLinkActive"
+        [active]="rlquestionnaire.isActive"
+      >
+        Fragebogen
+      </a>
+      <a
+        mat-tab-link
+        [routerLink]="['contacts']"
+        routerLinkActive
+        #rlcontacts="routerLinkActive"
+        [active]="rlcontacts.isActive"
+      >
+        Kontakte <span class="info-badge">{{ caseDetail.contactCount }}</span>
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

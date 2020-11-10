@@ -1,25 +1,10 @@
 = Quarano: Reference documentation
-:generated-docs: ../../../target/generated-docs
+:doctype: book
 
-== Business modules
+include::intro.adoc[]
 
-=== Overview
-plantuml::{generated-docs}/moduliths/components.uml[,,svg,title="Quarano component overview"]
+include::api.adoc[]
 
-=== Core
-include::{generated-docs}/moduliths/module-core.adoc[]
+include::deployment.adoc[]
 
-=== Tracking
-include::{generated-docs}/moduliths/module-tracking.adoc[]
-
-=== Department
-include::{generated-docs}/moduliths/module-department.adoc[]
-
-=== Actions
-include::{generated-docs}/moduliths/module-actions.adoc[]
-
-=== Authentication
-include::{generated-docs}/moduliths/module-auth.adoc[]
-
-=== Reference
-include::{generated-docs}/moduliths/module-reference.adoc[]
+include::developer.adoc[]

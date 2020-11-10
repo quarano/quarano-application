@@ -1,18 +1,3 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.core;
 
 import lombok.EqualsAndHashCode;
@@ -21,15 +6,34 @@ import lombok.Getter;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
-import org.jddd.core.types.Entity;
-import org.jddd.core.types.Identifier;
+import org.jmolecules.ddd.types.Entity;
+import org.jmolecules.ddd.types.Identifier;
+import org.springframework.data.domain.Persistable;
+import org.springframework.lang.NonNull;
 
 /**
  * @author Oliver Drotbohm
  */
 @MappedSuperclass
 @EqualsAndHashCode(of = "id")
-public abstract class QuaranoEntity<T extends QuaranoAggregate<T, ?>, ID extends Identifier> implements Entity<T, ID> {
-	protected @Getter @Id @GeneratedValue ID id;
+public abstract class QuaranoEntity<T extends QuaranoAggregate<T, ?>, ID extends Identifier>
+		implements Entity<T, ID>, Persistable<ID> {
+
+	protected @Getter(onMethod = @__(@NonNull)) @Id @GeneratedValue ID id;
+	private @Transient boolean isNew = true;
+
+	@Override
+	public boolean isNew() {
+		return isNew;
+	}
+
+	@PrePersist
+	@PostLoad
+	void markNotNew() {
+		this.isNew = false;
+	}
 }

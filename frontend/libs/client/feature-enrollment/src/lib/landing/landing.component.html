@@ -1,0 +1,24 @@
+<mat-card class="form__card--animated">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>
+        {{ 'LANDING.HERZLICH_WILLKOMMEN_BEI' | translate }} <strong>quarano</strong>,
+        {{ 'LANDING.DEM_ONLINE_DOKUMENTATIONSTOOL' | translate }}
+      </h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <qro-static-page [staticPageKey]="pageKey"></qro-static-page>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        data-cy="cta-button-index"
+        [routerLink]="['/client/enrollment/register/', clientcode]"
+      >
+        {{ 'LANDING.WEITER' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>

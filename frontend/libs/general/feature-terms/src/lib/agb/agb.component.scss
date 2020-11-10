@@ -1,0 +1,21 @@
+p {
+  margin: 12px 0;
+}
+
+.main-list {
+  list-style: none;
+  counter-reset: item;
+
+  > li {
+    counter-increment: item;
+    margin-bottom: 5px;
+
+    h2:before {
+      content: counter(item) '. ';
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: normal;
+      margin-right: 0.2rem;
+    }
+  }
+}

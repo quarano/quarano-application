@@ -1,64 +1,90 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.core;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
+import java.sql.DatabaseMetaData;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
-@Profile("!prod & !integrationtest")
+@Profile("staging")
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class DatabaseInitializer implements BeanPostProcessor {
+public class DatabaseInitializer implements FlywayConfigurationCustomizer {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
+	 * @see org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer#customize(org.flywaydb.core.api.configuration.FluentConfiguration)
 	 */
 	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+	@SuppressWarnings("null")
+	public void customize(FluentConfiguration configuration) {
 
-		if (!DataSource.class.isInstance(bean)) {
-			return bean;
+		DataSource dataSource = configuration.getDataSource();
+
+		String url;
+		try {
+
+			url = JdbcUtils.extractDatabaseMetaData(dataSource, DatabaseMetaData::getURL);
+
+			if (!url.contains("postgres")) {
+				log.info("Database is not a Postgres! Skipping data wiping!");
+				return;
+			}
+
+		} catch (MetaDataAccessException e) {
+
+			log.warn("Failed to lookup JDBC url for {}.", configuration);
+			return;
 		}
 
-		JdbcTemplate template = new JdbcTemplate((DataSource) bean);
-		List<Map<String, Object>> result = template.queryForList("select tablename from pg_tables;");
+		log.info("Wiping database tables.");
 
-		result.stream() //
-				.map(it -> it.get("tablename").toString()) //
-				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_")) //
-				.peek(it -> log.info("Dropping database table " + it)) //
-				.forEach(it -> template.execute(String.format("DROP TABLE \"%s\" CASCADE;", it)));
+		var template = new JdbcTemplate(dataSource);
 
-		return bean;
+		String droptables = template.queryForList("select tablename from pg_tables where schemaname='public';").stream()
+				.map(it -> it.get("tablename").toString())
+				.filter(it -> !it.startsWith("pg_") && !it.startsWith("sql_"))
+				.map(it -> String.format("\"%s\"", it))
+				.collect(Collectors.joining(", "));
+
+		if (droptables.isBlank()) {
+
+			log.info("No Quarano database tables found.");
+			return;
+		}
+
+		log.info("Dropping database tables " + droptables);
+		template.execute(String.format("DROP TABLE %s CASCADE;", droptables));
+
+		// https://github.com/yugabyte/yugabyte-db/issues/1822
+		log.info("Initializing flyway history table by our own");
+
+		template.execute("CREATE TABLE \"public\".\"flyway_schema_history\" (" +
+				"\"installed_rank\" INT NOT NULL primary key," +
+				"\"version\" VARCHAR(50)," +
+				"\"description\" VARCHAR(200) NOT NULL," +
+				"\"type\" VARCHAR(20) NOT NULL," +
+				"\"script\" VARCHAR(1000) NOT NULL," +
+				"\"checksum\" INTEGER," +
+				"\"installed_by\" VARCHAR(100) NOT NULL," +
+				"\"installed_on\" TIMESTAMP NOT NULL DEFAULT now()," +
+				"\"execution_time\" INTEGER NOT NULL," +
+				"\"success\" BOOLEAN NOT NULL" +
+				")");
 	}
-
 }

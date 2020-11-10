@@ -1,0 +1,1819 @@
+{
+	"info": {
+		"_postman_id": "08cab163-3cda-4c2e-a278-26796008af82",
+		"name": "quarano api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Gesundheitsamt",
+			"item": [
+				{
+					"name": "Cases",
+					"item": [
+						{
+							"name": "Add empty (invalid) case",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MSIsImV4cCI6MTU4NzY1MzA1MSwiaWF0IjoxNTg3NjUxMjUxfQ.SskQEG4SpiD6nufh4ujpxfl2cajC-AgZdDdW37ac1VWSUxYDJIuKmMeEPUdBNzcYyVy0AtTb4xaOr-qQcLdIzQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/hd/cases",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"cases"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new case",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MSIsImV4cCI6MTU4NzY1MzM2NSwiaWF0IjoxNTg3NjUxNTY1fQ.3Iw6jKPV3COwSo7LcZC9STpeSXXbJnfO6-w-HPrSeWhxfh0GvWttwuK6CnKL93H5TiqZUYx5tqigo57-nId8tQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"firstName\" : \"Michael\",\n\t\"lastName\" : \"Mustermann\",\n\t\"testDate\" : \"2020-04-20\",\n\t\"quarantineStartDate\" : \"2020-04-22\",\n\t\"quarantineEndDate\" : \"2020-05-04\",\n\t\"phone\" : \"0123456789\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/hd/cases",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"cases"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Case",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MSIsImV4cCI6MTU4OTI4NjIwMSwiaWF0IjoxNTg5Mjg0NDAxfQ.gPawIgtGTCwV7Mpf4YiLHpltqnNKXig_24TRAB_XDdMJcm3WaXavogjN7DU3jG8i9VvoeQGP1iLcniebwnCxaQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"firstName\" : \"Michael\",\n\t\"lastName\" : \"Mustermann\",\n\t\"testDate\" : \"2020-04-20\",\n\t\"email\" : \"Patrick@we.de\",\n\t\"quarantineStartDate\" : \"2020-04-22\",\n\t\"quarantineEndDate\" : \"2020-05-04\",\n\t\"phone\" : \"0123456789\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/hd/cases/050fc12e-23fd-4807-95d1-b4780f817662",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"cases",
+										"050fc12e-23fd-4807-95d1-b4780f817662"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Case defaults",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All cases",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MSIsImV4cCI6MTU5MDE2NzQ3MCwiaWF0IjoxNTkwMTY1NjcwfQ.Wpu45g6OHfARyJSg7Iu7qoXuw27HOPRBtrXQCULjv_2wOOUPV_FMBw6P8QLed3uhF5kPCXNoDvDa8wEirEFehA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/hd/cases",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"cases"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "registration",
+					"item": [
+						{
+							"name": "checkUsername",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9203b476-75af-41de-a912-7adbd4c7ad93",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response is true\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"true\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/registration/checkusername/DemoAccount8",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"registration",
+										"checkusername",
+										"DemoAccount8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "checkClientCode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b227e647-09a8-43b2-97c7-41c587dc534c",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Body returns true\", function () {",
+											"    pm.response.to.have.body(\"true\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/registration/checkcode/acc8b747-1eac-4db4-a8f3-d2a8bbe8320d",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"registration",
+										"checkcode",
+										"acc8b747-1eac-4db4-a8f3-d2a8bbe8320d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "checkClientCode Invalid code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "40e6cc39-8a21-4f99-a3e4-f295b5adde9b",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/client/acc8b747-1eac-4db4-a8f3-d2a8bbe8320d",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"client",
+										"acc8b747-1eac-4db4-a8f3-d2a8bbe8320d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registerClient",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"mynewuser\",\r\n    \"password\" : \"mynewpassword\",\r\n    \"dateOfBirth\" :  \"1975-08-03\",  \r\n    \"clientCode\" : \"acc8b747-1eac-4db4-a8f3-d2a8bbe8320d\",\r\n    \"email\" : \"dfsdfdsf@test.de\"  \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/registration",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"registration"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Actions",
+					"item": [
+						{
+							"name": "All actions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/hd/actions",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"actions"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Accounts",
+					"item": [
+						{
+							"name": "add account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9BRE1JTiJdLCJzdWIiOiJhZG1pbiIsImV4cCI6MTU4OTEzOTY4NSwiaWF0IjoxNTg4NzA3Njg1fQ.WnnJ57R8BIwC_muEljl9e3nJPJLsYVxCcrb5CBZ3PDaoi9_n2d8Jhl32snt-eHu8RKvfxXQajYCxQPAos9xloA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Peter\",\r\n    \"lastName\": \"Schäfer\",\r\n    \"email\": \"Peter.Schäfer@mannheim.de\",\r\n    \"username\" : \"peterschäfer\",\r\n    \"password\": \"Demo123!\",\r\n    \"passwordConfirm\": \"Demo123!\",\r\n    \"roles\": [\r\n        \"ROLE_HD_CASE_AGENT\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/hd/accounts",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"hd",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Log in as HD1 staff",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"agent1\",\r\n\t\"password\": \"agent1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Log in as HD2 staff",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"agent3\",\r\n\t\"password\": \"agent3\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Log in as admin",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Log in as Ruth",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"root\",\r\n\t\"password\": \"root\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tracked person",
+			"item": [
+				{
+					"name": "Enrollment",
+					"item": [
+						{
+							"name": "All cases",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/cases",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"cases"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All enrollments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollments",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Current enrollment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Enrollment details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment/details",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit enrollment details",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": 212,\n    \"clientCode\": null,\n    \"lastName\": \"Bauer\",\n    \"firstName\": \"Fabian\",\n    \"dateOfBirth\" : \"1978-06-05\",\n    \"street\": \"Some street\",\n    \"email\": \"fabian@bauer.de\",\n    \"houseNumber\": \"47\",\n    \"city\": \"Stadt\",\n    \"zipCode\": \"68199\",\n    \"mobilephone\": null,\n    \"phone\": null,\n    \"email\": null,\n    \"quarantineStartDateTime\": null,\n    \"quarantineEndDateTime\": null,\n    \"infected\": true,\n    \"type\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/enrollment/details",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Enrollment questionnaire",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment/questionnaire",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"questionnaire"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit enrollment questionnaire",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"hasSymptoms\": true,\n    \"dayOfFirstSymptoms\": \"2020-02-27\",\n    \"symptoms\": [ \"609e8ecc-4aae-46b8-a130-3608f1ea1982\" ],\n    \"familyDoctor\" : \"Dr. Müller, Schwanenstr. 34 in Mannheim\",\n    \"guessedOriginOfInfection\": \"Auf dem Mannheim Blasmusikfestival\",\n    \"hasPreExistingConditions\": true,\n    \"hasPreExistingConditionsDescription\": \"Herzinfarkt und Bluthochdruck\",\n    \"belongToMedicalStaff\": true,\n    \"belongToMedicalStaffDescription\": \"Pfleger im klinikum Mannehim, Geriatriche Abteilung. (Halbtags)\",\n    \"hasContactToVulnerablePeople\": true,\n    \"hasContactToVulnerablePeopleDescription\": \"Ich arbeite mit alten Leuten\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/enrollment/questionnaire",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"questionnaire"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit enrollment questionnaire OLD",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"min15MinutesContactWithC19Pat\": true,\n    \"nursingActionOnC19Pat\": true,\n    \"directContactWithLiquidsOfC19pat\": false,\n    \"flightPassengerCloseRowC19Pat\": true,\n    \"flightCrewMemberWithC19Pat\": true,\n    \"belongToMedicalStaff\": false,\n    \"belongToNursingStaff\": true,\n    \"belongToLaboratoryStaff\": false,\n    \"familyMember\": false,\n    \"hasSymptoms\": true,\n    \"dayOfFirstSymptoms\": \"2020-02-27\",\n    \"otherContactType\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/enrollment/questionnaire",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"questionnaire"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Complete enrollment with encounters",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment/completion?withoutEncounters=false",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"completion"
+									],
+									"query": [
+										{
+											"key": "withoutEncounters",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Complete enrollment without encounters",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment/completion?withoutEncounters=true",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"completion"
+									],
+									"query": [
+										{
+											"key": "withoutEncounters",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reopen enrollment",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/enrollment/completion",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"enrollment",
+										"completion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/registration/checkcode/acc8b747-1eac-4db4-a8f3-d2a8bbe8320d",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"registration",
+										"checkcode",
+										"acc8b747-1eac-4db4-a8f3-d2a8bbe8320d"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Tracking",
+					"item": [
+						{
+							"name": "Encounters",
+							"item": [
+								{
+									"name": "All encounters",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/encounters",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"encounters"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add encounter",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"contact\" : \"becfadf8-874b-446f-8064-61a8cc0fded3\",\n\t\"date\" : \"2020-03-15\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{ip}}/api/encounters",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"encounters"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove encounter",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9VU0VSIl0sInN1YiI6IkRlbW9BY2NvdW50IiwiZXhwIjoxNTg2ODY4NDUyLCJpYXQiOjE1ODY4NjEyNTIsImNpZCI6MjEyfQ.4DQZFIwp6HinYfVZqTipY-SPcBzUVOVRCnmAhLHYzgfhb4dXGIh8nZYFbeV5cqNztbuBIYQJ07QkkYaaXPLopA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/encounters",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"encounters"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Diary",
+							"item": [
+								{
+									"name": "Show diary",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/diary",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"diary"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "NEW: Show diary",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/slotted",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"slotted"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add diary entry",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9VU0VSIl0sInN1YiI6InRlc3QzIiwicGlkIjoiMWQ1Y2UzNzAtN2RiZS0xMWVhLWJjNTUtMDI0MmFjMTMwMDAzIiwiZXhwIjoxNTg3NTY0MTAxLCJpYXQiOjE1ODc1NjIzMDF9.BzFJK3bpVXmsD93HM7Fa31z06pLJNOuEhkt9Q8N0qmOh-TQepC6DzR52ZCj6ayrQjhl4gHSY71Rknuzf8fL_Aw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "    {\r\n        \"date\": \"2020-04-21\",\r\n        \"timeOfDay\" : \"evening\",\r\n        \"bodyTemperature\": 40.5,\r\n        \"contacts\": [ \"ff79f82d-2867-4c5d-b64d-142cb80f14b1\" ],\r\n        \"symptoms\": [ \"609e8ecc-4aae-46b8-a130-3608f1ea1982\" ]\r\n    }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{ip}}/api/diary",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"diary"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Diary by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/diary/638accb2-e3dd-4ea6-8535-745e2cd4a9a0",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"diary",
+												"638accb2-e3dd-4ea6-8535-745e2cd4a9a0"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Contacts",
+							"item": [
+								{
+									"name": "All contacts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/contacts",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"contacts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get contact",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/contacts/88a4fabd-bc90-4830-8692-3650f6b99903",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"contacts",
+												"88a4fabd-bc90-4830-8692-3650f6b99903"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add contact person",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9VU0VSIl0sInN1YiI6InNlY1VzZXIxIiwicGlkIjoiNGJjYjFkYTktMWUwMy00Y2EwLTlkYTEtZjg2ZDgwYWFhMWFiIiwiZXhwIjoxNTg4NDA4OTc3LCJpYXQiOjE1ODg0MDcxNzd9.KJjTqjtbMNA_q8dESMySA9MfLlqhWrQ-a-o793V3ia2Q9OJtZpfWPlyQ5KkVUzCQc3NieOp7IuI7mIXn8SdG4Q",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"lastName\": \"mememe\",\n    \"firstName\": \"\",\n    \"phone\": null,\n    \"email\": null,\n    \"street\" : \"Bahnhofstr.\",\n    \"typeOfContract\": \"AE\",\n    \"typeOfProtection\": null,\n    \"identificationHint\" : \"Beim Arzt Dr. üller in der Schwanenstr.\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{ip}}/api/contacts",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"contacts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update contact person",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9VU0VSIl0sInN1YiI6IkRlbW9BY2NvdW50IiwiZXhwIjoxNTg2OTQzMDg3LCJpYXQiOjE1ODY5MzU4ODcsImNpZCI6MjEyfQ.9EZCrPWEUJTWqrIuKZFhG_EGctIgPrIYDAPcpSZXDqO51NujaTSLBU0KbTT5MCfgz5tR0rqt7alN81qEHn6MIQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"lastName\": \"Sommer\",\n    \"firstName\": \"Doktor\",\n    \"phone\": null,\n    \"zipCode\": \"01234\",\n    \"city\": \"City\",\n    \"street\": \"STreet\",\n    \"email\": null,\n    \"typeOfContract\": \"AE\",\n    \"typeOfProtection\": null\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{ip}}/api/contacts/5a74df84-f1b9-4c39-b923-026cfe863980",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"contacts",
+												"5a74df84-f1b9-4c39-b923-026cfe863980"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Anomalies",
+							"item": [
+								{
+									"name": "All cases by anomalies",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MSIsImV4cCI6MTU4OTMyMTkxNywiaWF0IjoxNTg5MzIwMTE3fQ.QUaomPW8MVovlSuEI9YzCapIMd98IHhau4bhaX3Za5ToLq1QxV5RNuJO0k58sWJEniWSjMHN1zBrm8Pc3XsZbQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/hd/actions",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"hd",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Anomalies for case",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9IRF9DQVNFX0FHRU5UIl0sInN1YiI6ImFnZW50MyIsImV4cCI6MTU4NzY4MTA0OCwiaWF0IjoxNTg3Njc5MjQ4fQ.KPd6jfPV_W-zDneK56gOcvCGtOKKJUzMK2aMtnxYEKhVWaQ1Qc6YXe1sYwgQlCZXmqyK3k2VJ7iYoooYew6mzA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{ip}}/api/hd/actions/e55ce370-7dbe-11ea-bc55-0242ac134711",
+											"host": [
+												"{{ip}}"
+											],
+											"path": [
+												"api",
+												"hd",
+												"actions",
+												"e55ce370-7dbe-11ea-bc55-0242ac134711"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "10363261-36da-4671-82ff-8cea6f9cdcb0",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f4163db6-80a8-47dd-bc50-981246b35c0f",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Current tracked person's details",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXQiOlsiUk9MRV9VU0VSIl0sInN1YiI6IkRlbW9BY2NvdW50IiwiZXhwIjoxNTg2NDcyNjM3LCJpYXQiOjE1ODY0NjU0MzcsImNpZCI6MjEyfQ.MUF74CDmAU7hNzRRNljzYz2Yat1wGNNKh4tl4d8O6WANSgON8t5IPbiDfpP2VJlICq8cjqhUOeWBIv2FMFWbkw"
+									}
+								],
+								"url": {
+									"raw": "{{ip}}/api/details",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tracked person's form",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/details/form",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"details",
+										"form"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Reference data",
+					"item": [
+						{
+							"name": "All symptoms",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d76b0e08-6a26-4652-855f-5529224c0224",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var schema = {",
+											" \"id\": {",
+											" \"type\": \"string\"",
+											" },",
+											" \"name\": {",
+											"     \"type\": \"string\"",
+											" },",
+											" \"characteristic\": {",
+											"     \"type\": \"boolean\"",
+											" }",
+											" ",
+											"};",
+											"",
+											"pm.test('Schema is valid', function() {",
+											"  pm.expect(tv4.validate(pm.response.json, schema)).to.be.true;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{ip}}/api/symptoms",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"symptoms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add symptom",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"id\": 4711,\r\n    \"name\": \"Halsschmerzen\",\r\n    \"isCharacteristic\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/api/symptoms",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"api",
+										"symptoms"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Log in as DemoAccount",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84c1054f-0576-4087-b9e7-7e3f0f0981fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+											" ",
+											"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+											" ",
+											"if (contentTypeHeaderExists) {",
+											"    tests[\"Content-Type is application/json\"] = ",
+											"      responseHeaders[\"Content-Type\"].has(\"application/json\");",
+											"}",
+											"",
+											"pm.test(\"Returns token\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.token).to.be.a('string');",
+											"    pm.expect(jsonData.token).length.to.be.greaterThan(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"DemoAccount\",\r\n\t\"password\": \"DemoPassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Log in as Sandra (Tracking)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84c1054f-0576-4087-b9e7-7e3f0f0981fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+											" ",
+											"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+											" ",
+											"if (contentTypeHeaderExists) {",
+											"    tests[\"Content-Type is application/json\"] = ",
+											"      responseHeaders[\"Content-Type\"].has(\"application/json\");",
+											"}",
+											"",
+											"pm.test(\"Returns token\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.token).to.be.a('string');",
+											"    pm.expect(jsonData.token).length.to.be.greaterThan(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"username\": \"test3\",\r\n\t\"password\": \"test123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ip}}/login",
+									"host": [
+										"{{ip}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "getDiaryEntriesOfUser",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client-code",
+						"value": "d982aa50-0ff3-4ddd-b3bb-757a33d73c0a",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ip}}/diaryentries",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryentries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDiaryEntry",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client-code",
+						"type": "text",
+						"value": "2fd9227b-d2e4-42c7-944d-e39ec5db4cf6"
+					}
+				],
+				"url": {
+					"raw": "{{ip}}/diaryentries/222",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryentries",
+						"222"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getContact",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client-code",
+						"value": "78086729-0552-423c-ab71-2e2f1790a8ce",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ip}}/diaryEntries",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryEntries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addDiaryEntry",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-code",
+						"value": "80b9dc5f-e4e1-4c30-b651-e7f9186b66a7",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"bodyTemperature\": 37.3,\r\n        \"symptoms\": [ 6, 8 ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ip}}/diaryEntries",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryEntries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addContact",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-code",
+						"value": "80b9dc5f-e4e1-4c30-b651-e7f9186b66a7",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"bodyTemperature\": 37.3,\r\n        \"symptoms\": [ 6, 8 ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ip}}/diaryEntries",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryEntries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateDiaryEntry",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "client-code",
+						"value": "9c3a6afa-4923-434e-a2d3-b95bcba43381",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n    \t\"id\": 214,\r\n        \"bodyTemperature\": 39.5,\r\n        \"symptoms\": [ ],\r\n        \"dateTime\": \"2020-03-22T12:17:05.43\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ip}}/diaryentries/222",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"diaryentries",
+						"222"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addClient NOT Infected",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comments\": [\r\n    {\r\n      \"belongToLaboratoryStaff\": true,\r\n      \"belongToMedicalStaff\": false,\r\n      \"belongToNursingStaff\": false,\r\n      \"dateTime\": \"2020-03-20T12:17:05.430Z\",\r\n      \"directContactWithLiquidsOfC19pat\": true,\r\n      \"familyMember\": true,\r\n      \"flightCrewMemberWithC19Pat\": false,\r\n      \"flightPassengerCloseRowC19Pat\": false,\r\n      \"min15MinutesContactWithC19Pat\": true,\r\n      \"nursingActionOnC19Pat\": false,\r\n      \"otherContactType\": true,\r\n      \"passengerOnSameFlightAsPatient\": false\r\n    }\r\n  ],\r\n  \"firstname\": \"Sandra\",\r\n  \"healthDepartmentId\": \"45648\",\r\n  \"infected\": false,\r\n  \"phone\": \"+49 456 45465458\",\r\n  \"surename\": \"Klein\",\r\n  \"zipCode\": \"68259\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ip}}/client/register",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"client",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHDClients",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/report/Testamt1/clients/",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"report",
+						"Testamt1",
+						"clients",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "me for client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/api/user/me",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "me for GA user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/user/me",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b9d675e8-1d37-4839-853b-821a8c166fa0",
+				"type": "text/javascript",
+				"exec": [
+					"if (!pm.environment.get('ip')) {",
+					"    console.log('URL is missing');",
+					"}",
+					"",
+					"const echoPostRequest = {",
+					"    url: pm.environment.get('ip') + '/login',",
+					"    method: 'POST',",
+					"    header: 'Content-Type:application/json',",
+					"    body: {",
+					"        mode: 'application/json',",
+					"        raw: JSON.stringify(",
+					"            {",
+					"                username: pm.collectionVariables.get('username'),",
+					"                password: pm.collectionVariables.get('password')",
+					"            })",
+					"    }",
+					"};",
+					"",
+					"var getToken = true;",
+					"",
+					"if (!pm.collectionVariables.get('accessToken')) {",
+					"    console.log('Token is missing');",
+					"} else if (!pm.collectionVariables.get('expirationDate')) {",
+					"    console.log('Expiration Date is missing');",
+					"} else if (pm.collectionVariables.get('expirationDate') < new Date().getTime()) {",
+					"    console.log('Expiration Date is expired');",
+					"} else {",
+					"    getToken = false;",
+					"    console.log('Token is fine');",
+					"}",
+					"",
+					"if (getToken === true) {",
+					"    pm.sendRequest(echoPostRequest, function (err, res) {",
+					"        console.log(err ? err : res.json());",
+					"        if (err === null) {",
+					"            console.log('Decoding the token');",
+					"            var responseJson = res.json();",
+					"            var token = responseJson.token;",
+					"            var parts = token.split('.');",
+					"            var decodedToken = JSON.parse(atob(parts[1]));",
+					"            console.log(decodedToken.exp);",
+					"            var expDate = decodedToken.exp * 1000;",
+					"            console.log(expDate);",
+					"            console.log('Saving the token');",
+					"            pm.collectionVariables.set('accessToken', responseJson.token);",
+					"            pm.collectionVariables.set('expirationDate', expDate);",
+					"        }",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ade93ded-b539-409e-9584-c22557e58230",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0480c1f4-c9d6-4319-857b-d6dacfd8ccfb",
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "5f59b347-e58b-4832-92e7-ca5088b503e4",
+			"key": "expirationDate",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "28713718-c3fa-477e-a1c1-9629e1cf8348",
+			"key": "username",
+			"value": "DemoAccount",
+			"type": "string"
+		},
+		{
+			"id": "5e2c927f-1d06-44c4-9c5d-aaab86774e0f",
+			"key": "password",
+			"value": "DemoPassword",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

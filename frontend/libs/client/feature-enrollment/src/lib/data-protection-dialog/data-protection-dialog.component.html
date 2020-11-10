@@ -1,0 +1,14 @@
+<div class="header">
+  <button mat-dialog-close mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+  <h1 mat-dialog-title>{{ 'DATA_PROTECTION_DIALOG.DATENSCHUTZERKLÄRUNG' | translate }}</h1>
+</div>
+<mat-dialog-content>
+  <qro-static-page [staticPageKey]="StaticPageKeys.DataProtection"></qro-static-page>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial>
+    {{ 'DATA_PROTECTION_DIALOG.SCHLIESSEN' | translate }}
+  </button>
+</mat-dialog-actions>

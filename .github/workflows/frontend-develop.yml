@@ -1,0 +1,60 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build Frontend and deploy to DEV
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - frontend/**
+      - .github/workflows/frontend*.yml
+
+defaults:
+  run:
+    shell: bash
+    working-directory: frontend
+
+jobs:
+  build:
+    timeout-minutes: 15
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build-internal-dev-otc
+      - run: npm run prepare-deployment-otc
+      - run: npm run ci-test
+      - run: npm run lint
+
+      - name: Set up CF CLI
+        if: success()
+        uses: jvalkeal/setup-cf-cli@v0
+        with:
+          version: 6.51.0
+
+      - name: CF Login
+        if: success()
+        run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
+        env:
+          CF_API: ${{ secrets.CF_OTC_API }}
+          CF_ORG: ${{ secrets.CF_OTC_ORG }}
+          CF_SPACE: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
+          CF_USERNAME: ${{ secrets.CF_OTC_BUILD_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
+
+      - name: Deploy Frontend STAGE
+        if: success()
+        run: cf push internal-dev-frontend -f ../manifest-otc.yml

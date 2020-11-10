@@ -1,0 +1,102 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <mat-card class="form__card--small form__card--animated">
+    <mat-card-header>
+      <div mat-card-avatar class="header-image"></div>
+      <mat-card-title>{{ getTitle() | async }}</mat-card-title>
+      <mat-card-subtitle *ngIf="!isReadonly">{{
+        'DIARY_ENTRY.PFLICHTEINGABEN_SIND_MARKIERT' | translate
+      }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="isReadonly">{{
+        'DIARY_ENTRY.DIESER_EINTRAG_KANN_NICHT_MENR_BEARBEITET_WERDEN' | translate
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content style="margin-top: 16px;">
+      <div class="radio-group">
+        <mat-label class="mb-3">{{ 'DIARY_ENTRY.KÖRPERTEMPERATUR_IN' | translate }} °C *</mat-label>
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <span class="text-small mr-2">35,0</span>
+          <mat-slider
+            data-cy="body-temperature"
+            #slider
+            style="flex-grow: 1;"
+            color="primary"
+            thumbLabel
+            step="0.1"
+            min="35.0"
+            max="44.0"
+            tickInterval="10.0"
+            [displayWith]="formatLabel"
+            formControlName="bodyTemperature"
+            required
+          ></mat-slider>
+          <span class="text-small ml-2">44,0</span>
+        </div>
+        <mat-error *ngIf="!slider.value || slider.value === 35.0">{{
+          'DIARY_ENTRY.BITTE_GEBEN_SIE_IHRE_KÖRPERTEMPERATUR_EIN' | translate
+        }}</mat-error>
+      </div>
+      <div class="radio-group" data-cy="symptoms-select">
+        <mat-label class="mb-3">{{ 'DIARY_ENTRY.KRANKHEITSSPEZIFISCHE_SYMPTOME' | translate }}</mat-label>
+        <mat-slide-toggle
+          color="primary"
+          class="radio-button"
+          *ngFor="let symptom of characteristicSymptoms$ | async"
+          [checked]="isCharacteristicSymptomSelected(symptom)"
+          (change)="onSlideToggleChanged($event, symptom.id)"
+          [disabled]="isReadonly"
+          >{{ symptom.name }}</mat-slide-toggle
+        >
+      </div>
+      <qro-multiple-autocomplete
+        data-cy="other-symptoms"
+        [control]="this.formGroup.controls.nonCharacteristicSymptoms"
+        [selectableItems]="nonCharacteristicSymptoms$ | async"
+        [placeholder]="'DIARY_ENTRY.SONSTIGE_SYMPTOME' | translate"
+        [nameProperties]="['name']"
+        name="nonCharacteristicSymptoms"
+      ></qro-multiple-autocomplete>
+      <qro-multiple-contact-autocomplete
+        data-cy="other-contacts"
+        #contactMultipleAutoComplete
+        [control]="this.formGroup.controls.contactPersons"
+        [selectableItems]="contactPersons"
+        [placeholder]="'DIARY_ENTRY.KONTAKTE_SEIT_LETZTEM_EINTRAG' | translate"
+        [nameProperties]="['firstName', 'lastName']"
+        name="contactPersons"
+      >
+      </qro-multiple-contact-autocomplete>
+      <div *ngIf="!isReadonly" style="display: flex; flex-direction: row; align-items: center;">
+        <span class="text-muted">{{ 'DIARY_ENTRY.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
+        <button
+          data-cy="add-missing-contacts"
+          mat-button
+          color="primary"
+          type="button"
+          (click)="openContactDialog()"
+          class="p-2 mr-0"
+          style="line-height: normal;"
+        >
+          {{ 'DIARY_ENTRY.HIER_FEHLENDEN_KONTAKT_EINGEBEN' | translate }}
+        </button>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <qro-button
+        data-cy="save-diary-entry"
+        *ngIf="!isReadonly"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [loading]="loading"
+        >{{ 'DIARY_ENTRY.SPEICHERN' | translate }}
+      </qro-button>
+      <button
+        data-cy="cancel-diary-entry"
+        type="button"
+        mat-raised-button
+        color="secondary"
+        [routerLink]="['/client/diary/diary-list']"
+      >
+        {{ 'DIARY_ENTRY.ABBRECHEN' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,0 +1,186 @@
+{
+  "npmScope": "qro",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "projects": {
+    "quarano-frontend": {
+      "tags": ["scope:app", "type:app"]
+    },
+    "quarano-frontend-e2e": {
+      "tags": ["scope:tests", "type:app"],
+      "implicitDependencies": ["quarano-frontend"]
+    },
+    "auth-domain": {
+      "tags": ["scope:auth", "type:domain"]
+    },
+    "shared-ui-material": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "health-department-domain": {
+      "tags": ["scope:health-department", "type:domain"]
+    },
+    "health-department-ui-action-alert": {
+      "tags": ["scope:health-department", "type:ui"]
+    },
+    "health-department-shell": {
+      "tags": ["scope:health-department", "type:shell"]
+    },
+    "shared-ui-tile": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-ui-button": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "administration-shell": {
+      "tags": ["scope:administration", "type:shell"]
+    },
+    "auth-api": {
+      "tags": ["scope:auth", "type:api"]
+    },
+    "shared-ui-confirmation-dialog": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-ui-multiple-autocomplete": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-shell": {
+      "tags": ["scope:auth", "type:shell"]
+    },
+    "administration-domain": {
+      "tags": ["scope:administration", "type:domain"]
+    },
+    "administration-api": {
+      "tags": ["scope:administration", "type:api"]
+    },
+    "health-department-api": {
+      "tags": ["scope:health-department", "type:api"]
+    },
+    "auth-forbidden": {
+      "tags": ["scope:auth", "type:feature"]
+    },
+    "shared-util-progress-bar": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-domain": {
+      "tags": ["scope:client", "type:domain"]
+    },
+    "shared-ui-aside": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "client-shell": {
+      "tags": ["scope:client", "type:shell"]
+    },
+    "shared-util-symptom": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-data-access": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-api": {
+      "tags": ["scope:client", "type:api"]
+    },
+    "shared-util-date": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "client-feature-diary": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-enrollment": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-profile": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-health-department-contact": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-feature-contact-persons": {
+      "tags": ["scope:client", "type:feature"]
+    },
+    "client-ui-personal-data": {
+      "tags": ["scope:client", "type:ui"]
+    },
+    "client-ui-contact-person-detail": {
+      "tags": ["scope:client", "type:ui"]
+    },
+    "health-department-feature-contact-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-index-cases": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "health-department-feature-case-detail": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "general-feature-welcome": {
+      "tags": ["scope:general", "type:feature"]
+    },
+    "general-feature-data-protection": {
+      "tags": ["scope:general", "type:feature"]
+    },
+    "general-feature-imprint": {
+      "tags": ["scope:general", "type:feature"]
+    },
+    "general-feature-terms": {
+      "tags": ["scope:general", "type:feature"]
+    },
+    "general-shell": {
+      "tags": ["scope:general", "type:shell"]
+    },
+    "administration-feature-account-detail": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "administration-feature-account-list": {
+      "tags": ["scope:administration", "type:feature"]
+    },
+    "shared-ui-error": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "auth-feature-change-password": {
+      "tags": ["scope:general", "type:ui"]
+    },
+    "auth-feature-login": {
+      "tags": ["scope:general", "type:feature"]
+    },
+    "shared-ui-styles": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "shared-util-forms": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-common-functions": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-snackbar": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-util-translation": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "shared-ui-static-pages": {
+      "tags": ["scope:shared", "type:ui"]
+    },
+    "health-department-feature-export": {
+      "tags": ["scope:health-department", "type:feature"]
+    },
+    "client-ui-forgotten-contact-dialog": {
+      "tags": ["scope:client", "type:ui"]
+    }
+  }
+}

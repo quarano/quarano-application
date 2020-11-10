@@ -1,35 +1,71 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.actions;
 
 import quarano.actions.ActionItem.ActionItemIdentifier;
 import quarano.core.QuaranoRepository;
+import quarano.department.TrackedCase;
+import quarano.diary.Slot;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
+ * @author Felix Schultze
  */
 public interface ActionItemRepository extends QuaranoRepository<ActionItem, ActionItemIdentifier> {
 
+	default ActionItems findByCase(TrackedCase trackedCase) {
+		return findByTrackedPerson(trackedCase.getTrackedPerson().getId());
+	}
+
+	default ActionItems findUnresolvedByActiveCase(TrackedCase trackedCase) {
+		return findUnresolvedByActiveCaseByPersonIdentifier(trackedCase.getTrackedPerson().getId());
+	}
+
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier")
-	Streamable<ActionItem> findByTrackedPerson(TrackedPersonIdentifier identifier);
+	ActionItems findByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	@Query("select i from ActionItem i"
+			+ " where i.resolved = false"
+			+ " and i.personIdentifier = :identifier")
+	ActionItems findUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	/**
+	 * Returns the number of unresolved {@link ActionItem}s for the {@link TrackedPerson} with the given identifier.
+	 *
+	 * @param identifier must not be {@literal null}.
+	 * @return
+	 */
+	@Query("select count(i) from ActionItem i"
+			+ " where i.resolved = false"
+			+ " and i.personIdentifier = :identifier")
+	long countUnresolvedByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	@Query("select i from ActionItem i"
+			+ "   join TrackedCase t on t.trackedPerson.id = i.personIdentifier"
+			+ "  where i.resolved = false"
+			+ "    and t.status <> 'CONCLUDED'"
+			+ "    and i.personIdentifier = :identifier")
+	ActionItems findUnresolvedByActiveCaseByPersonIdentifier(TrackedPersonIdentifier identifier);
 
 	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code")
-	Streamable<ActionItem> findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+	ActionItems findByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+
+	@Query("select i from ActionItem i where i.personIdentifier = :identifier and i.description.code = :code and i.resolved = false")
+	ActionItems findUnresolvedByDescriptionCode(TrackedPersonIdentifier identifier, DescriptionCode code);
+
+	@Query("select i from DiaryEntryMissingActionItem i"
+			+ " where i.slot = :slot"
+			+ " and i.personIdentifier = :personIdentifier")
+	ActionItems findDiaryEntryMissingActionItemsFor(TrackedPersonIdentifier personIdentifier, Slot slot);
+
+	@Query("select i from TrackedCaseActionItem i"
+			+ " where i.personIdentifier = :personIdentifier"
+			+ "   and i.description.code = 'QUARANTINE_ENDING'")
+	ActionItems findQuarantineEndingActionItemsFor(TrackedPersonIdentifier personIdentifier);
+
+	default ActionItems findQuarantineEndingActionItemsFor(TrackedCase trackedCase) {
+		return findQuarantineEndingActionItemsFor(trackedCase.getTrackedPerson().getId());
+	}
 }

@@ -1,0 +1,1 @@
+ALTER TABLE tracked_people ADD locale varchar(20) NULL;

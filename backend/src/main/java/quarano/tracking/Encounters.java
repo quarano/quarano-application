@@ -1,28 +1,17 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano.tracking;
+
+import static java.util.stream.Collectors.*;
 
 import lombok.RequiredArgsConstructor;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.util.Streamable;
 
@@ -34,24 +23,60 @@ public class Encounters implements Streamable<Encounter> {
 
 	private final List<Encounter> encounters;
 
-	public boolean hasBeenInTouchWith(ContactPerson person, Period period) {
+	public boolean hasBeenInTouchWith(ContactPerson person) {
 
-		var reference = LocalDate.now().minus(period);
+		return encounters.stream()
+				.anyMatch(it -> it.getContact().equals(person));
+	}
 
-		return true;
-//		return encounters.stream() //
-//				.filter(it -> it.getDate().isAfter(reference)) //
-//				.anyMatch(it -> it.isEncounterWith(person));
+	public Optional<Encounter> getEncounter(ContactPerson person, LocalDate date) {
+
+		return encounters.stream()
+				.filter(it -> it.happenedOn(date))
+				.filter(it -> it.isEncounterWith(person))
+				.findFirst();
 	}
 
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
-		return encounters.stream() //
-//				.filter(it -> it.hasId(id)) //
+		return encounters.stream()
+				.filter(it -> it.hasId(id))
 				.findFirst();
 	}
 
 	public boolean hasAtLeastOneEncounter() {
 		return !encounters.isEmpty();
+	}
+
+	public Optional<LocalDate> getDateOfFirstEncounterWith(ContactPerson contact) {
+
+		return encounters.stream()
+				.filter(it -> it.isEncounterWith(contact))
+				.sorted(Comparator.comparing(Encounter::getDate))
+				.findFirst()
+				.map(Encounter::getDate);
+	}
+
+	public Map<ContactPerson, List<Encounter>> getEncountersGroupedByContactPerson() {
+		return encounters.stream()
+				.collect(Collectors.groupingBy(Encounter::getContact));
+	}
+
+	public Map<ContactPerson, List<LocalDate>> getContactDatesGroupedByContactPerson() {
+
+		var contactDatesGroupedByContactPerson = encounters.stream()//
+				.collect(groupingBy(Encounter::getContact, mapping(Encounter::getDate, Collectors.toList())));
+
+		contactDatesGroupedByContactPerson.forEach((key, list) -> list.sort(Comparator.naturalOrder()));
+
+		return contactDatesGroupedByContactPerson;
+	}
+
+	public long getNumberOfEncounters() {
+		return encounters.size();
+	}
+
+	public long getNumberOfUniqueContacts() {
+		return encounters.stream().map(Encounter::getContact).distinct().count();
 	}
 
 	/*

@@ -1,0 +1,18 @@
+<div class="header">
+  <button mat-dialog-close mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+  <h1 mat-dialog-title>{{ data.title | translate }}</h1>
+</div>
+<mat-dialog-content>
+  <p [innerHTML]="data.text | translate"></p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" data-cy="confirm-button">
+    <mat-icon>check</mat-icon>
+    <span>{{ data.confirmButtonText | translate }}</span>
+  </button>
+  <button mat-raised-button color="secondary" (click)="close()" cdkFocusInitial data-cy="confirm-button-cancel">
+    <span>{{ data.abortButtonText | translate }}</span>
+  </button>
+</mat-dialog-actions>

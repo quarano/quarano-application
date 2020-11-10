@@ -1,24 +1,9 @@
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package quarano;
 
 import lombok.RequiredArgsConstructor;
-import quarano.auth.Account;
-import quarano.auth.AccountRepository;
-import quarano.auth.Role;
+import quarano.account.Account;
+import quarano.account.AccountService;
+import quarano.account.Role;
 
 import java.util.stream.Collectors;
 
@@ -34,7 +19,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 @RequiredArgsConstructor
 class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQuaranoUser> {
 
-	private final AccountRepository repository;
+	private final AccountService accounts;
 
 	/*
 	 * (non-Javadoc)
@@ -43,8 +28,8 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 	@Override
 	public SecurityContext createSecurityContext(WithQuaranoUser annotation) {
 
-		return repository.findByUsername(annotation.value()) //
-				.map(AccountAuthentication::new) //
+		return accounts.findByUsername(annotation.value())
+				.map(AccountAuthentication::new)
 				.map(it -> {
 
 					SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -63,15 +48,14 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 
 		public AccountAuthentication(Account account) {
 
-			super(account.getRoles().stream() //
-					.map(Role::toString) //
-					.map(SimpleGrantedAuthority::new) //
+			super(account.getRoles().stream()
+					.map(Role::toString)
+					.map(SimpleGrantedAuthority::new)
 					.collect(Collectors.toUnmodifiableList()));
 
 			this.account = account;
 
 			setAuthenticated(true);
-			setDetails(account.getTrackedPersonId());
 		}
 
 		/*
@@ -89,7 +73,7 @@ class AccountSecurityContextFactory implements WithSecurityContextFactory<WithQu
 		 */
 		@Override
 		public Object getPrincipal() {
-			return account.getUsername();
+			return account;
 		}
 	}
 }
