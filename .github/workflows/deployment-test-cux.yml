@@ -6,7 +6,7 @@ name: Deploy to CUX TEST
 on:
   push:
     branches:
-      - master
+      - release
     paths:
       - backend/**
       - frontend/**
