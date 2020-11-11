@@ -1,5 +1,7 @@
 package quarano.core;
 
+import static org.apache.commons.lang3.ArrayUtils.*;
+
 import io.vavr.control.Try;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,7 @@ public class EmailSender {
 	private final @NonNull EmailTemplates templates;
 	private final @NonNull CoreProperties configuration;
 	private final @NonNull MailProperties mailProperties;
+	private final @NonNull Environment environment;
 
 	/**
 	 * Verifies the connection to the actual email server.
@@ -72,7 +76,7 @@ public class EmailSender {
 
 		Assert.notNull(email, "Email must not be null!");
 
-		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration, mailProperties)));
+		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration, mailProperties, environment)));
 	}
 
 	/**
@@ -91,10 +95,11 @@ public class EmailSender {
 		 * @param templates must not be {@literal null}.
 		 * @param configuration must not be {@literal null}.
 		 * @param mailProperties
+		 * @param environment
 		 * @return
 		 */
-		SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
-				@NonNull MailProperties mailProperties);
+		SimpleMailMessage toMailMessage(EmailTemplates templates, @NonNull CoreProperties configuration,
+				@NonNull MailProperties mailProperties, @NonNull Environment environment);
 	}
 
 	/**
@@ -107,6 +112,7 @@ public class EmailSender {
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static abstract class AbstractTemplatedEmail implements TemplatedEmail {
 
+		private static final String QUARANO_DOMAIN = "@quarano.de";
 		/**
 		 * At the moment we can only use a configured fix sender address, to avoid problems with permissions. This comes
 		 * from spam protection. With other sender addresses we get the following error:
@@ -129,12 +135,12 @@ public class EmailSender {
 		 * @see quarano.core.EmailSender.TemplatedEmail#toMailMessage(quarano.core.EmailTemplates, quarano.core.CoreProperties)
 		 */
 		@Override
-		public SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
-				@NonNull MailProperties mailProperties) {
+		public SimpleMailMessage toMailMessage(EmailTemplates templates, @NonNull CoreProperties configuration,
+				@NonNull MailProperties mailProperties, @NonNull Environment environment) {
 
 			var message = new SimpleMailMessage();
 			message.setFrom(determineFrom(mailProperties));
-			message.setTo(to.toInternetAddress());
+			message.setTo(determineTo(environment));
 			message.setSubject(subject);
 			message.setText(getBody(templates, configuration));
 			message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
@@ -149,6 +155,22 @@ public class EmailSender {
 			return StringUtils.hasText(fixSender)
 					? FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress()
 					: this.from.toInternetAddress();
+		}
+
+		private String determineTo(@NonNull Environment environment) {
+
+			if (isActiveProfileProdOrDev(environment) || this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)) {
+				return to.toInternetAddress();
+			} else {
+				return FixedQuaranoRecipient.of(to).toInternetAddress();
+			}
+		}
+
+		private boolean isActiveProfileProdOrDev(@NonNull Environment environment) {
+
+			var activeProfiles = environment.getActiveProfiles();
+
+			return contains(activeProfiles, "develop") || contains(activeProfiles, "prod");
 		}
 
 		private String getBody(EmailTemplates templates, CoreProperties configuration) {
@@ -201,6 +223,22 @@ public class EmailSender {
 				var emailAddress = fixSender != null ? EmailAddress.of(fixSender) : originSenderAsFallback.getEmailAddress();
 
 				return new FixedConfiguredSender(fullName, emailAddress);
+			}
+		}
+
+		@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+		static class FixedQuaranoRecipient implements Recipient {
+
+			private final @Getter String fullName;
+			private final @Getter String lastName;
+			private final @Getter EmailAddress emailAddress = EmailAddress.of("testmailbox" + QUARANO_DOMAIN);
+
+			public static FixedQuaranoRecipient of(Recipient originRecipient) {
+
+				var fullName = originRecipient.getFullName() + " - "
+						+ originRecipient.getEmailAddress().toString().replace("@", " {at} ");
+
+				return new FixedQuaranoRecipient(fullName, originRecipient.getLastName());
 			}
 		}
 	}

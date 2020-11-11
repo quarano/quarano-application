@@ -57,6 +57,16 @@ public class EmailAddress {
 		return candidate != null && REGEX.matcher(candidate).matches();
 	}
 
+	/**
+	 * Returns whether the email address ends with given {@link String}.
+	 *
+	 * @param suffix can be {@literal null}.
+	 * @return
+	 */
+	public boolean endsWith(@Nullable String suffix) {
+		return suffix != null && email.endsWith(suffix);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
