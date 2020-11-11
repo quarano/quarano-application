@@ -4,4 +4,5 @@
  * domain-oriented data model.
  */
 @org.springframework.lang.NonNullApi
+@org.moduliths.NamedInterface("API")
 package quarano.masterdata;

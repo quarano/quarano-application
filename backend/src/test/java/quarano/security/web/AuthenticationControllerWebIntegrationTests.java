@@ -105,7 +105,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 	@Test // CORE-355
 	void adoptionOfLanguage() throws Exception {
 
-		var newLocale = Locale.CANADA_FRENCH;
+		var newLocale = Locale.FRENCH;
 
 		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
 		assertThat(person).isPresent()
@@ -123,7 +123,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 	@Test // CORE-355
 	void noAdoptionOfLanguage() throws Exception {
 
-		var newLocale = Locale.CANADA_FRENCH;
+		var newLocale = Locale.FRENCH;
 
 		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
 		assertThat(person).isPresent()

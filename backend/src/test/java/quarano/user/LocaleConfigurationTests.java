@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.core.I18nProperties;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -34,14 +35,13 @@ public class LocaleConfigurationTests {
 
 	static final String ME = "/user/me";
 
-	static final String DEFAULT_LOCALE = "de-DE";
-
 	final String USERNAME_WITH_LOCALE = "DemoAccount";
 	final String USERNAME_WITHOUT_LOCALE = "test3";
 
 	final MockMvc mvc;
 	final ObjectMapper mapper;
 	final TrackedPersonRepository persons;
+	final I18nProperties i18nProperties;
 
 	@Test
 	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
@@ -50,13 +50,13 @@ public class LocaleConfigurationTests {
 		var responseGet = performGet(ME, null);
 		var document = JsonPath.parse(responseGet.getContentAsString());
 
-		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
+		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo(i18nProperties.getDefaultLocale().toString());
 		assertThat(document.read("$.client.locale", String.class)).isNull();
 
-		var responsePut = performWrongPasswordChange(Locale.KOREA); // unsupported language
+		var responsePut = performWrongPasswordChange(Locale.KOREAN); // unsupported language
 		document = JsonPath.parse(responsePut.getContentAsString());
 
-		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo(DEFAULT_LOCALE);
+		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo(i18nProperties.getDefaultLocale().toString());
 		assertThat(document.read("$.current", String.class)).isEqualTo("Ungültiges aktuelles Passwort!");
 	}
 
@@ -86,19 +86,19 @@ public class LocaleConfigurationTests {
 		var responseGet = performGet(ME, locale);
 		var document = JsonPath.parse(responseGet.getContentAsString());
 
-		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
-		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en_GB");
+		assertThat(responseGet.getHeader(CONTENT_LANGUAGE)).isEqualTo("en");
+		assertThat(document.read("$.client.locale", String.class)).isEqualTo("en");
 
 		var responsePut = performWrongPasswordChange(locale);
 		document = JsonPath.parse(responsePut.getContentAsString());
 
-		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en-GB");
+		assertThat(responsePut.getHeader(CONTENT_LANGUAGE)).isEqualTo("en");
 		assertThat(document.read("$.current", String.class)).isEqualTo("Invalid current password!");
 	}
 
 	@WithQuaranoUser(USERNAME_WITHOUT_LOCALE)
 	@ParameterizedTest
-	@ValueSource(strings = { "de", "de_DE", "en", "en_GB", "tr", "tr_TR", "en_CA" })
+	@ValueSource(strings = { "de", "en", "tr" })
 	void processCorrectLocalesSucceeds(String locale) throws Exception {
 
 		mvc.perform(get(ME)

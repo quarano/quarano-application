@@ -32,7 +32,21 @@ import org.jmolecules.ddd.types.Identifier;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor(staticName = "of")
-public class FrontendText extends QuaranoAggregate<FrontendText, FrontendTextIdentifier> {
+public class FrontendText extends QuaranoAggregate<FrontendText, FrontendTextIdentifier> implements Templated {
+
+	public enum Keys {
+
+		WELCOME_INDEX, WELCOME_CONTACT, TERMS, IMPRINT, DATA_PROTECTION;
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Enum#toString()
+		 */
+		@Override
+		public String toString() {
+			return name().toLowerCase(Locale.ENGLISH).replace("_", "-");
+		}
+	}
 
 	private @Getter String textKey;
 	private @Getter Locale locale;

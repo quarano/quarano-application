@@ -8,44 +8,31 @@ import quarano.account.DepartmentProperties;
 import quarano.masterdata.FrontendText;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Jens Kutzsche
+ * @author Oliver Drotbohm
  */
 @Component
 @RequiredArgsConstructor
-public class FrontendTextRepresentations {
+class FrontendTextRepresentations {
 
-	private final @NonNull DepartmentProperties depProperties;
+	private final @NonNull DepartmentProperties departmentConfiguration;
 
-	public FrontendTextDto toRepresentation(FrontendText textEntity) {
+	public FrontendTextDto toRepresentation(FrontendText entity) {
 
-		var placeholders = Map.of("departmentName", depProperties.getDefaultDepartment().getName());
+		var placeholders = Map.of("departmentName", departmentConfiguration.getDefaultDepartment().getName());
 
-		return FrontendTextDto.from(textEntity, placeholders);
+		return new FrontendTextDto(entity.getTextKey(), entity.expand(placeholders));
 	}
 
 	@Relation(collectionRelation = "texts")
 	@Value
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	static class FrontendTextDto {
-
-		private String key;
-		private String text;
-
-		static FrontendTextDto from(FrontendText textEntity, Map<String, ? extends Object> placeholders) {
-
-			String text = textEntity.getText();
-
-			for (Entry<String, ? extends Object> replacement : placeholders.entrySet()) {
-				text = text.replace(String.format("{%s}", replacement.getKey()), replacement.getValue().toString());
-			}
-
-			return new FrontendTextDto(textEntity.getTextKey(), text);
-		}
+		String key, text;
 	}
 }

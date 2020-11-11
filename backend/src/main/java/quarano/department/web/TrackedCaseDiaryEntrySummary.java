@@ -3,7 +3,7 @@ package quarano.department.web;
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.MapperWrapper;
 import quarano.diary.DiaryEntry;
-import quarano.masterdata.SymptomDto;
+import quarano.masterdata.web.SymptomDto;
 import quarano.tracking.ContactPerson;
 
 import java.time.LocalDateTime;

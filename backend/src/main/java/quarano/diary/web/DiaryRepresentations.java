@@ -14,7 +14,7 @@ import quarano.diary.DiaryEntry;
 import quarano.diary.DiaryProperties;
 import quarano.diary.Slot;
 import quarano.diary.Slot.TimeOfDay;
-import quarano.masterdata.SymptomDto;
+import quarano.masterdata.web.SymptomDto;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.web.ContactPersonController;

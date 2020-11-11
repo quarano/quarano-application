@@ -342,7 +342,7 @@ class RegistrationWebIntegrationTests {
 	@Test // CORE-355
 	void adoptionOfLanguage() throws Exception {
 
-		var newLocale = Locale.CANADA_FRENCH;
+		var newLocale = Locale.FRENCH;
 
 		// Given
 		var activation = createActivation();

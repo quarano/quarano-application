@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package quarano.masterdata;
+package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.core.web.MappingCustomizer;
+import quarano.masterdata.Symptom;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;

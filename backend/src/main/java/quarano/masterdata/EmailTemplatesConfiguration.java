@@ -2,7 +2,6 @@ package quarano.masterdata;
 
 import quarano.account.DepartmentProperties;
 import quarano.core.EmailTemplates;
-import quarano.core.EmailTemplates.Keys;
 import quarano.core.I18nProperties;
 
 import org.springframework.context.annotation.Bean;
@@ -20,6 +19,6 @@ class EmailTemplatesConfiguration {
 	@Bean
 	EmailTemplates emailTemplates(EmailTextRepository repository, I18nProperties i18nProperties,
 			DepartmentProperties depProperties) {
-		return new DatabasedEmailTemplates(repository, Keys.stream(), i18nProperties, depProperties);
+		return new DatabaseEmailTemplates(repository, i18nProperties, depProperties);
 	}
 }

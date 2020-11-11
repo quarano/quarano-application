@@ -1,7 +1,8 @@
-package quarano.masterdata;
+package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.masterdata.Symptom;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;

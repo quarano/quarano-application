@@ -34,7 +34,7 @@ class DiaryEntryReminderMailJobTests {
 		job.checkForReminderMail();
 
 		// wait for max 5s for 1 email to arrive
-		assertTrue(greenMail.waitForIncomingEmail(3), "not all emails sented");
+		assertTrue(greenMail.waitForIncomingEmail(3), "not all emails sent");
 
 		Message[] messages = greenMail.getReceivedMessages();
 

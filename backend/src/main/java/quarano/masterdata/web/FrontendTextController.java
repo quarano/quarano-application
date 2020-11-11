@@ -2,7 +2,6 @@ package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.masterdata.FrontendText;
 import quarano.masterdata.FrontendTextRepository;
 import quarano.masterdata.web.FrontendTextRepresentations.FrontendTextDto;
 
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class FrontendTextController {
+class FrontendTextController {
 
 	private final @NonNull FrontendTextRepresentations representations;
 	private final @NonNull FrontendTextRepository texts;
@@ -35,9 +34,7 @@ public class FrontendTextController {
 		var locale = LocaleContextHolder.getLocale();
 
 		var dtos = key
-				.map(it -> texts.findByTextKey(it, locale)
-						.recover(__ -> FrontendText.of(it, locale, it))
-						.toJavaStream())
+				.map(it -> texts.findByTextKey(it, locale).stream())
 				.orElseGet(() -> texts.findAll(locale).stream())
 				.map(representations::toRepresentation);
 

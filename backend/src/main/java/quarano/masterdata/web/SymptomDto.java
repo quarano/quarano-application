@@ -1,4 +1,4 @@
-package quarano.masterdata;
+package quarano.masterdata.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

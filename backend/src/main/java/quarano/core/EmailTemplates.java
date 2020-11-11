@@ -5,6 +5,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 /**
  * @author Oliver Drotbohm
  * @author Jens Kutzsche
@@ -19,7 +21,7 @@ public interface EmailTemplates {
 	 * @param locale can be {@literal null}.
 	 * @return will never be {@literal null}.
 	 */
-	String expandTemplate(Key key, Map<String, Object> placeholders, Locale locale);
+	String expandTemplate(Key key, Map<String, Object> placeholders, @Nullable Locale locale);
 
 	/**
 	 * A template key.

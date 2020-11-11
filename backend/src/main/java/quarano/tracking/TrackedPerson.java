@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.LocaleUtils;
 import org.jmolecules.ddd.types.Identifier;
 import org.jmolecules.event.types.DomainEvent;
 import org.springframework.lang.Nullable;
@@ -59,7 +60,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter Address address = new Address();
 	private @Getter @Setter LocalDate dateOfBirth;
 
-	private @Getter(onMethod = @__(@Nullable)) @Setter(onMethod = @__(@Nullable)) Locale locale;
+	private @Getter @Nullable Locale locale;
 
 	@OneToOne
 	@JoinColumn(name = "account_id")
@@ -185,6 +186,20 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				&& emailAddress != null
 				&& address.isComplete()
 				&& dateOfBirth != null;
+	}
+
+	/**
+	 * Sets the language of the given {@link Locale} as preferred {@link Locale} for the current {@link TrackedPerson}.
+	 * I.e. if {@code Locale#GERMANY} is provided, we store {@code Locale.GERMAN}.
+	 *
+	 * @param locale can be {@literal null}
+	 * @return
+	 */
+	public TrackedPerson setLocale(@Nullable Locale locale) {
+
+		this.locale = locale == null ? null : LocaleUtils.toLocale(locale.getLanguage());
+
+		return this;
 	}
 
 	@Override

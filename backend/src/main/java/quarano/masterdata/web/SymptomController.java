@@ -1,7 +1,9 @@
-package quarano.masterdata;
+package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.masterdata.Symptom;
+import quarano.masterdata.SymptomRepository;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
