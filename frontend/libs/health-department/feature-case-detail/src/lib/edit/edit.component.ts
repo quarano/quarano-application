@@ -258,7 +258,6 @@ export class EditComponent implements OnInit, OnDestroy {
     if (!submitData.caseId) {
       this.saveNewCase(submitData, closeAfterSave);
     } else {
-      console.log(submitData);
       this.updateExistingCase(submitData, closeAfterSave);
     }
   }

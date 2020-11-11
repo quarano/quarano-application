@@ -248,9 +248,11 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         .subscribe((result) => {
           if (result) {
             this.checkAndSendFirstForm(true);
+          } else if (this.stepper.selectedIndex === 1) {
+            this.stepper.previous();
           }
         })
-        .add(() => (this.thirdFormLoading = false))
+        .add(() => (this.firstFormLoading = false))
     );
   }
 
