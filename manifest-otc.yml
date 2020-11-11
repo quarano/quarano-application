@@ -179,6 +179,12 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       TZ: Europe/Berlin
+      SPRING_MAIL_HOST: smtp.ionos.de
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
+      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 1G
     routes:
@@ -217,6 +223,12 @@ applications:
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: staging
       TZ: Europe/Berlin
+      SPRING_MAIL_HOST: smtp.ionos.de
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
+      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 1G
     routes:
@@ -254,6 +266,12 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       TZ: Europe/Berlin
+      SPRING_MAIL_HOST: smtp.ionos.de
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
+      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 1G
     routes:
