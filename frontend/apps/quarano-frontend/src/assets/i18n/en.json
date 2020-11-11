@@ -366,5 +366,13 @@
 		"ZUM_TAGEBUCH": "To the diary",
 		"ZU_DEN_INDEXFÄLLEN": "To the index cases",
 		"ZU_DEN_KONTAKTPERSONEN": "To the contacts"
-	}
+	},
+  "CASE_DETAILS": {
+    "DIARY": "Diary",
+    "MORGENS": "Morning",
+    "ABENDS": "Evening",
+    "DATUM": "Date",
+    "KEIN_EINTRAG_VORHANDEN": "No entry",
+    "KEIN_EINTRAEGE_VORHANDEN": "No entries"
+  }
 }
