@@ -1,21 +1,26 @@
-Dear Mr/Ms {lastName},
+Dear Mrs/Mr {lastName},
 
-As you already know, you are required to remain in quarantine until {quarantineEndDate}.
+The health agency Mannheim has just informred you about the fact that you are infected with the new Corona virus SARS-CoV2 and as such you are infectious. The city of Mannheim has issued a general decree that regulates the quarantine. This is valid from 28-Oct-2020 and can be checked under the following link:
+https://www.mannheim.de/de/informationen-zu-corona/aktuelle-rechtsvorschriften
 
-As discussed on the telephone, please register immediately in our online-application for the recording of contacts and symptoms under:
+People, that are living with you within the same household and that have up to now not been tested positive must adhere to a 14 days quaarantine starting with the day of the first positive test within the household. For additionally people within youtr household that are tested positive the same rules apply as for yourself, meaning a quarantine for at least 10 days staring with the day of the respective test.
+
+The non-adherence to the quarantine rules can lead to persecution as adminstrative offense or possibly a criminal offense.
+The health agency is obliged to determine where you could have been infected and which otehr people might have been infected by you.
+
+As discussed on the phone, please immediately register in our online application for capturing of contacts and symptoms with the following link:
 
 https://{host}/client/enrollment/landing/index/{activationCode}
 
-Please enter your personal information and details of any potential contacts. Further we request that you take your temperature twice daily and record this together with any symptoms you might experience (e.g. difficulty breathing, body or muscle aches, diarrhoea, etc) directly in the online-tool.
+Within the aplication please maintain your master data and name possible contacts you had, so that we can contact them as soon as possible to prevent further spread of the infection.
 
-For general questions regarding Corona please contact Mannheim's Corona-Hotline under the phone number 0621-293 2253.
+For general questions in regards to Corona feel free to call the hotline of the city of Mannheim under 0621-293 2253.
 
-• Monday to Friday from 9 am – 5 pm
-• Saturday, Sunday and public holidays from 9 am – 2 pm
+• Monday through Friday from 9:00 – 17:00 Uhr
+• Saturdays, Sundays and on public holidays from 9:00 – 14:00 Uhr 
 
-The city of Mannheim's homepage (www.mannheim.de) also offers a great deal of information.
+In case you require urgent medical treatment please contact your regular doctor - at night or during weekends the emergency on call service (116 117) in german language can be contacted or in serious cases the emgency of the hospitals 
+In critical situations please do not hesitate calling 112.
+Please note that in case of personal appearance at your doctor or in a hospital you shall infrom the respective beforehand informing about your relation to COVID-19 and an ongoing quarantine.
 
-
-If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.
-
-Kind regards,
+Best regards,

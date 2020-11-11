@@ -1,22 +1,27 @@
 Sehr geehrte/geehrter Frau/Herr {lastName},
 
-wie Sie bereits wissen, befinden Sie sich bis einschließlich {quarantineEndDate} in Quarantäne.
+Das Gesundheitsamt Mannheim hat Ihnen soeben mitgeteilt, dass Sie mit dem neuartigen Coronavirus SARS-CoV2 infiziert und somit ansteckungsfähig sind. Die Stadt Mannheim hat zur Regelung der Quarantäne eine Allgemeinverfügung erlassen. Diese ist ab dem 28.10.2020 gültig und kann unter folgendem Link eingesehen werden:
+https://www.mannheim.de/de/informationen-zu-corona/aktuelle-rechtsvorschriften
 
-Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserer Online-Anwendung zur Erfassung der Kontaktpersonen und der Symptome an unter:
+Personen, die mit Ihnen im gleichen Haushalt wohnen und die bisher nicht selbst positiv getestet wurden, müssen eine Quarantäne von 14 Tagen ab dem Tag des ersten positiven Abstrichs in Ihrem Haushalt einhalten. Für weitere positiv getestete Personen in Ihrem Haushalt gelten die gleichen Quarantäneregeln wie für Sie, d.h. eine Quarantänedauer von mindestens 10 Tagen ab dem Tag des jeweiligen Abstrichs.
+
+Nichteinhaltung dieser Quarantäneregeln kann dazu führen, dass dies als Ordnungswidrigkeit oder gegebenenfalls als Straftat verfolgt wird.
+Das Gesundheitsamt ist verpflichtet, zu ermitteln, wo Sie sich infiziert haben könnten und wer durch Sie angesteckt worden sein könnte. 
+
+Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserer Online-Anwendung zur Erfassung der Kontakte und Symptome an unter:
 
 https://{host}/client/enrollment/landing/index/{activationCode}
 
-Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein, so dass wir zu diesen Kontakt aufnehmen können. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
+Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein, so dass wir zu diesen Kontakt aufnehmen können
 
-Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer 0621-293 2253. 
+
+Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer 0621-293 2253:
 
 •   Montag bis Freitag von 9:00 – 17:00 Uhr
 •   Samstags sowie an Sonn- und Feiertagen von 9:00 – 14:00 Uhr 
 
-Auch die Internetseite der Stadt Mannheim (www.mannheim.de) bietet eine Vielzahl von Informationen an.
 
-
-Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.
+Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen rufen Sie den Notruf: 112. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen
 
 
 Mit freundlichen Grüßen,

@@ -1,4 +1,4 @@
-Dear Mr/Ms {lastName},
+Dear Mrs/Mr {lastName},
 
 
 please remember to record your regular diary entry in the Quarano-Application.

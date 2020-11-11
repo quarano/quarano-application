@@ -58,8 +58,7 @@ class MailForNewContactCaseEventListenerTests {
 		Message message = messages[0];
 
 		assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
-				.contains("/client/enrollment/landing/contact/");
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,");
 		assertThat(message.getRecipients(RecipientType.TO)[0].toString())
 				.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
 		assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
@@ -110,7 +109,7 @@ class MailForNewContactCaseEventListenerTests {
 
 		message = greenMail.getReceivedMessages()[0];
 
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mr/Ms Mueller,")
+		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs/Mr Mueller,")
 				.contains("\r\n\r\n" + "=3D".repeat(10) + "\r\n\r\n") // is ==========
 				.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
 	}

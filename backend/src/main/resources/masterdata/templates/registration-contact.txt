@@ -1,13 +1,13 @@
 Sehr geehrte/geehrter Frau/Herr {lastName},
 
 
-Sie wurden vom Gesundheitsamt Mannheim kontaktiert und als enge Kontaktperson zu einem bestätigten Covid-19 Fall eingestuft und es wurde eine Quarantäne angeordnet. 
+Sie wurden vom Gesundheitsamt Mannheim kontaktiert und als enge Kontaktperson zu einem bestätigten Covid-19 Fall eingestuft und es wurde eine Quarantäne bis {quarantineEndDate} angeordnet. 
 
 Wie mit Ihnen am Telefon besprochen, melden Sie sich bitte umgehend in unserer Online-Anwendung zur Erfassung der Kontakte und Symptome an unter:
 
 https://{host}/client/enrollment/landing/contact/{activationCode}
 
-Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
+Bitte erfassen Sie dort Ihre Stammdaten. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
 
 Bei Fragen scheuen Sie sich bitte nicht, uns zu kontaktieren. Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline der Stadt Mannheim unter der Telefonnummer 0621-293 2253.
 
@@ -17,7 +17,6 @@ Bei Fragen scheuen Sie sich bitte nicht, uns zu kontaktieren. Bei allgemeinen Fr
 Bei Fragen, die Sie als Kontaktperson im Speziellen betreffen, wenden Sie sich bitte an die Hotline für Kontaktpersonen unter der Telefonnummer: 0621 -293 2212.
 
 •   Montag bis Freitag von 8:30-13:30 Uhr
-•   Samstags sowie an Sonn- und Feiertagen von 10:00 – 14:00 Uhr 
 
 
 Im Anhang erhalten Sie außerdem Informationen und Unterlagen, die für Sie als Kontaktperson wichtig sind. 

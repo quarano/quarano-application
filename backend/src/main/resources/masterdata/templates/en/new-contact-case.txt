@@ -1,28 +1,27 @@
-Dear Mr/Ms {lastName},
+Dear Mrs/Mr {lastName},
 
+You have been named as a contact by a confirmed COVID-19 case. 
+With this mail we want to inform you that the health agency Mannheim will be contacting you soon to clarify your contact status and discuss further proceeding.
 
-You have been named as a contact by a confirmed COVID-19 case. This message is to inform you in advance that the Gesundheitsamt Mannheim will be getting in touch with you.
-
-In the meantime, please register immediately in our online-application for the recording of contacts and symptoms under:
-
-https://{host}/client/enrollment/landing/contact/{activationCode}
-
-Please enter your personal information and details of any potential contacts. Further we request that you take your temperature twice daily and record this together with any symptoms you might experience (e.g. difficulty breathing, body or muscle aches, diarrhoea, etc) directly in the online-tool.
-
-An employee of the health authority will be discuss further procedure with you directly via telephone. Until then we kindly ask you to do the following:
+Up to that time we ask you to:
 
 • Stay at home and avoid contact with other people.
-• You and all other members of your household should wash your hands with soap regularly and thoroughly for at least 20 seconds.
-• Please keep your hands away from your face, particularly mouth, eyes and nose.
-• Please follow coughing and sneezing etiquette: keep as far away from other people as possible whilst coughing or sneezing and turn away from them. Cough or sneeze into your elbow or use a disposable tissue, which should be disposed of immediately. Wash your hands thoroughly afterwards and also after blowing your nose.
+• You and others in your household should regularly and thoroughly wash their hands with soap for at least 20 seconds.
+• Hands should be kept away from the face, especially from the mouth, eyes and nose.
+• Observe the rules of coughing and sneezing: 
+ Keep the greatest possible distance from others when you cough or sneeze and ideally turn away from others. 
+ Sneeze or cough into your elbow, not your hands or into a disposable handkerchief that you discard afterwards. 
+ Remember to immediately wash your hands after blowing your nose, coughing or sneezing.
 
-For general questions regarding Corona please contact Mannheim's Corona-Hotline under the phone number 0621-293 2253.
+For general questions in regards to Corona feel free to call the hotline of the city of Mannheim under 0621-293 2253.
 
-• Monday to Friday from 9 am – 5 pm
-• Saturday, Sunday and public holidays from 9 am – 2 pm
+• Monday through Friday from 9:00 – 17:00 Uhr
+• Saturdays, Sundays and on public holidays from 9:00 – 14:00 Uhr 
 
-Thank you for your cooperation. We will be contacting you shortly.
+We'd like to thank you for your cooperation and will contact you soon.
 
-Your Gesundheitsamt Mannheim
+Your Mannheim Health Agency
 
-If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.
+In case you require urgent medical treatment please contact your regular doctor - at night or during weekends the emergency on call service (116 117) in german language can be contacted or in serious cases the emgency of the hospitals 
+In critical situations please do not hesitate calling 112.
+Please note that in case of personal appearance at your doctor or in a hospital you shall infrom the respective beforehand informing about your relation to COVID-19.
