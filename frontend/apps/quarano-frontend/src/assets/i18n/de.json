@@ -366,5 +366,13 @@
 		"ZUM_TAGEBUCH": "Zum Tagebuch",
 		"ZU_DEN_INDEXFÄLLEN": "Zu den Indexfällen",
 		"ZU_DEN_KONTAKTPERSONEN": "Zu den Kontaktpersonen"
-	}
+	},
+  "CASE_DETAILS": {
+    "DIARY": "Tagebuch",
+    "MORGENS": "Morgens",
+    "ABENDS": "Abends",
+    "DATUM": "Datum",
+    "KEIN_EINTRAG_VORHANDEN": "Kein Eintrag vorhanden",
+    "KEIN_EINTRAEGE_VORHANDEN": "Kein Einträge vorhanden"
+  }
 }
