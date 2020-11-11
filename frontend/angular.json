@@ -38,7 +38,7 @@
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod-otc.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod.ts"
                 }
               ],
               "optimization": true,
@@ -98,19 +98,19 @@
                 }
               ]
             },
-            "mannheim-prod-otc": {
+            "mannheim-prod": {
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod-otc.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod.ts"
                 }
               ]
             },
-            "mannheim-stage-otc": {
+            "mannheim-stage": {
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-stage-otc.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-stage.ts"
                 }
               ]
             },
