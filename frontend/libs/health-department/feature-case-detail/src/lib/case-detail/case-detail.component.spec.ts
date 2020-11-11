@@ -6,8 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ApiService } from '@qro/shared/util-data-access';
-import { HealthDepartmentService, CaseEntityService } from '@qro/health-department/domain';
-import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
+import { CaseEntityService, HealthDepartmentService } from '@qro/health-department/domain';
+import { TranslateTestingModule } from '@qro/shared/util-translation';
 
 describe('CaseDetailComponent', () => {
   let component: CaseDetailComponent;
@@ -15,7 +15,7 @@ describe('CaseDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, SharedUtilTranslationModule],
+      imports: [RouterTestingModule, TranslateTestingModule],
       declarations: [CaseDetailComponent],
       providers: [
         { provide: MatDialog, useValue: {} },
