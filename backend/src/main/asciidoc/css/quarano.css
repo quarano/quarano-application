@@ -9,12 +9,22 @@ body.toc2 {
   padding: 0;
 }
 
+#header {
+  padding-right: 3em;
+}
+
+@media only screen and (min-width: 768px) {
+  #header::after {
+    background: none;
+  }
+}
+
 /* Custom TOC header */
 
 #toc::before {
   content: "Quarano";
-  padding: 2.5em 0em 0.75em 0.4em;
-  margin: 0em 3.5em 0em 1.6em;
+  padding: 2.5em 0em 0.75em 1em;
+  margin: 0em 1em 0em 0em;
   display: block;
   border-bottom: 1px solid #ddddd8;
   font-weight: bold;
@@ -24,18 +34,13 @@ ul>li p{
   margin-bottom: 0.1em;
 }
 
-/* Code links */
-
-a > code {
-  color: #097dff;
+/* Remove margin under unordered lists in tables */
+td ul {
+  margin-bottom: 0em !important;
 }
 
 .admonitionblock {
   border-width: 0px 0px 0px 5px !important;
-}
-
-.stretch {
-  width: 100%;
 }
 
 #content {
