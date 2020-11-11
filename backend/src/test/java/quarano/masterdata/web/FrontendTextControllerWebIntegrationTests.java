@@ -76,7 +76,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Your Gesundheitsamt Mannheim", "welcome-index");
+		assertThatResultContains(result, "Your health agency Mannheim", "welcome-index");
 	}
 
 	static void assertThatResultContains(String result, String excampleString, Object... keys) {

@@ -15,7 +15,7 @@ Ihr {departmentName}
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('331770d7-48b1-4bf3-bee9-8382918d8a43', 'diary-reminder', 'en', 
-'Dear Mr/Ms {lastName},
+'Dear Mrs/Mr {lastName},
 
 
 please remember to record your regular diary entry in the Quarano-Application.
@@ -79,7 +79,7 @@ COVID-19 erfolge
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('037beef1-d182-4682-abbf-9ce81ea73ffe', 'new-contact-case', 'en',
-'Dear Mr/Ms {lastName},
+'Dear Mrs/Mr {lastName},
 
 
 You have been named as a contact by a confirmed COVID-19 case. This message is to inform you in advance that the {departmentName} will be getting in touch with you.
@@ -132,7 +132,7 @@ Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarz
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('cee04c8f-427c-414b-883c-213d99744b4d', 'registration-contact', 'en',
-'Dear Mr/Ms {lastName},
+'Dear Mrs/Mr {lastName},
 
 
 You have been contacted by the {departmentName}, classified as a close contact of a confirmed Covid-19 case and ordered to stay in quarantine.
@@ -179,7 +179,7 @@ Ihr {departmentName}
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('58541fa0-c68a-4011-9b78-0b30a8406064', 'registration-index', 'en',
-'Dear Mr/Ms {lastName},
+'Dear Mrs/Mr {lastName},
 
 As you already know, you are required to remain in quarantine until {quarantineEndDate}.
 

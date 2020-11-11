@@ -55,7 +55,7 @@ class RegistrationRepresentations {
 		placeholders.put("host", configuration.getHost());
 		placeholders.put("activationCode", code.getId().toString());
 
-		if (trackedCase.isIndexCase()) {
+		if (trackedCase.getQuarantine() != null) {
 			placeholders.put("quarantineEndDate", trackedCase.getQuarantine().getTo().format(FORMATTER));
 		}
 
