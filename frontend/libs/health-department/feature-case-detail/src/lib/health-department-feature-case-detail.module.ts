@@ -1,3 +1,4 @@
+import { SharedUiErrorModule } from '@qro/shared/ui-error';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ContactListComponent } from './contact-list/contact-list.component';
@@ -99,6 +100,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    SharedUiErrorModule,
     RouterModule.forChild(routes),
     SharedUiMaterialModule,
     FormsModule,

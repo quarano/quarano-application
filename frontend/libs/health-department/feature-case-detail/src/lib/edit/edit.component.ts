@@ -264,35 +264,27 @@ export class EditComponent implements OnInit, OnDestroy {
 
   private updateExistingCase(caseToSave: CaseDto, closeAfterSave: boolean) {
     this.subs.add(
-      this.entityService
-        .update(caseToSave)
-        .pipe(
-          catchError((error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => !(value instanceof Error))
-        )
-        .subscribe((result) => {
+      this.entityService.update(caseToSave).subscribe(
+        (result) => {
           this.changeRouteAfterSave(result, closeAfterSave);
-        })
+        },
+        (error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+        }
+      )
     );
   }
 
   private saveNewCase(caseToSave: CaseDto, closeAfterSave: boolean) {
     this.subs.add(
-      this.entityService
-        .add(caseToSave)
-        .pipe(
-          catchError((error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
-            return of(error);
-          }),
-          filter((value) => !(value instanceof Error))
-        )
-        .subscribe((result) => {
+      this.entityService.add(caseToSave).subscribe(
+        (result) => {
           this.changeRouteAfterSave(result, closeAfterSave);
-        })
+        },
+        (error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+        }
+      )
     );
   }
 

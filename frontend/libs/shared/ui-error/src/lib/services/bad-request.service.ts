@@ -9,8 +9,14 @@ import { Injectable } from '@angular/core';
 export class BadRequestService {
   constructor(private translatedSnackbar: TranslatedSnackbarService, private snackbar: SnackbarService) {}
 
-  public handleBadRequestError(error: IErrorToDisplay, form: FormGroup) {
+  public handleBadRequestError(error: any, form: FormGroup) {
     let handled = false;
+
+    // remove ngrx/data error wrapper
+    if (error.error) {
+      error = error.error;
+    }
+
     if (error.status === HttpStatusCode.badRequest.valueOf()) {
       const requestErrors = error.errors;
       Object.keys(form.controls).forEach((key) => {

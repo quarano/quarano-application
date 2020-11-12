@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development Server
 
-The modules must be installed with `npm install` before the first start.
+The modules must be installed with `npm install` before the first start and after new packages have been added.
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 Add the `--open` flag to automatically open a browser tab.
 
@@ -18,15 +18,17 @@ Run `nx test` to execute the unit tests via Jest.
 
 ## Running end-to-end tests
 
-Run `nx e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io). To run specific tests add the `--watch` flag to the command.
+Run `nx e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io). To run specific tests add the `--watch` flag to the command. Cypress will store Screenshots and videos in the `dist/cypress` folder.
 
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## CSS framework
+## CSS framework / icons
 
-We use [Angular Material](https://v7.material.angular.io)
+We use [Angular Material](https://v7.material.angular.io) as css framework.
+
+[Material Icons](https://material.io/resources/icons/?style=baseline)
 
 [Corona Icons](https://icon-icons.com/de/pack/Coronavirus/2364)
 
@@ -55,3 +57,9 @@ Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 ### Documentation
 
 Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
+
+## Recommended IDE extensions
+
+- Angular Language Service
+- Nx Console
+- Prettier - Code formatter
