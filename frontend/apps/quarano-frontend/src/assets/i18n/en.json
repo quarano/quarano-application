@@ -367,8 +367,10 @@
 		"ZU_DEN_INDEXFÄLLEN": "To the index cases",
 		"ZU_DEN_KONTAKTPERSONEN": "To the contacts"
 	},
-  "CASE_DETAILS": {
-    "DIARY": "Diary",
+  "CASE_DETAIL": {
+    "DIARY": "Diary"
+  },
+  "DIARY_ENTRIES_LIST" : {
     "MORGENS": "Morning",
     "ABENDS": "Evening",
     "DATUM": "Date",

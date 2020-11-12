@@ -11,7 +11,7 @@
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <div class="entry-container">
-        <span class="mr-3 label">{{ 'CASE_DETAILS.MORGENS' | translate}}</span>
+        <span class="mr-3 label">{{ 'DIARY_ENTRIES_LIST.MORGENS' | translate}}</span>
         <div class="data-container text-muted" *ngIf="diaryListItem.morning else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
@@ -30,7 +30,7 @@
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
       <div class="entry-container">
-        <span class="mr-3 label">{{ 'CASE_DETAILS.ABENDS' | translate}}</span>
+        <span class="mr-3 label">{{ 'DIARY_ENTRIES_LIST.ABENDS' | translate}}</span>
         <div class="data-container text-muted" *ngIf="diaryListItem.evening else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
@@ -51,5 +51,5 @@
 </div>
 
 <ng-template #missing_data>
-  <span class="text-muted">{{ 'CASE_DETAILS.KEIN_EINTRAG_VORHANDEN' | translate }}</span>
+  <span class="text-muted">{{ 'DIARY_ENTRIES_LIST.KEIN_EINTRAG_VORHANDEN' | translate }}</span>
 </ng-template>
