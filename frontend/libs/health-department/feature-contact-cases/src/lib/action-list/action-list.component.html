@@ -1,7 +1,7 @@
 <ngx-datatable
   class="material fixed-header"
   data-cy="action-data-table"
-  style="max-width: 1335px;"
+  style="max-width: 1335px"
   [count]="actions.length"
   [headerHeight]="50"
   rowHeight="auto"
@@ -60,6 +60,7 @@
         mat-icon-button
         (click)="sendMail($event, value)"
         [matTooltip]="'E-Mail an ' + value"
+        matTooltipClass="qro-tooltip"
         matTooltipPosition="right"
         class="ngx-icon-button"
       >

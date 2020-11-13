@@ -1,8 +1,15 @@
 <div class="questionaire-form-container" [formGroup]="formGroup">
   <div class="bool-question">
-    <mat-label style="display: flex;"
+    <mat-label style="display: flex"
       >{{ 'INITIAL_QUESTIONNAIRE_FORM.HABEN_SIE_BEREITS' | translate }} *
-      <mat-icon class="ml-1" style="cursor: pointer;" [matTooltip]="symptomTooltip$ | async">info</mat-icon></mat-label
+      <mat-icon
+        class="ml-1"
+        style="cursor: pointer"
+        matTooltipClass="qro-tooltip"
+        [matTooltip]="symptomTooltip$ | async"
+        matTooltipPosition="right"
+        >info</mat-icon
+      ></mat-label
     >
     <mat-radio-group
       required
@@ -46,7 +53,7 @@
     ></qro-multiple-autocomplete>
     <mat-error
       *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.symptoms)"
-      style="font-size: 75%;"
+      style="font-size: 75%"
     >
       {{ validationErrorService.getErrorMessage(formGroup.controls.symptoms, error) | async }}
     </mat-error>
@@ -70,12 +77,14 @@
     </mat-form-field>
   </div>
   <div class="bool-question">
-    <mat-label style="display: flex;">
+    <mat-label style="display: flex">
       {{ 'INITIAL_QUESTIONNAIRE_FORM.VORERKRANKUNGEN' | translate }} *
       <mat-icon
         class="ml-1"
-        style="cursor: pointer;"
+        style="cursor: pointer"
         [matTooltip]="'INITIAL_QUESTIONNAIRE_FORM.IN_DIESEM_FALL_SIND_DAS' | translate"
+        matTooltipClass="qro-tooltip"
+        matTooltipPosition="right"
         >info</mat-icon
       >
     </mat-label>

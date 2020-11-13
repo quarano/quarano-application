@@ -1,4 +1,4 @@
-<div style="max-width: 1110px;">
+<div style="max-width: 1110px">
   <button
     class="mb-3"
     mat-raised-button
@@ -11,7 +11,7 @@
 
   <ngx-datatable
     class="material fixed-header"
-    style="max-width: 1110px;"
+    style="max-width: 1110px"
     [count]="accounts.length"
     [headerHeight]="50"
     rowHeight="auto"
@@ -36,7 +36,7 @@
 
     <ngx-datatable-column prop="roles" name="Rollen" width="266">
       <ng-template let-value="value" ngx-datatable-cell-template>
-        <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: column">
           <span *ngFor="let role of value">{{ getRoleDisplayName(role) }}</span>
         </div>
       </ng-template>
@@ -49,6 +49,7 @@
           class="ngx-icon-button"
           mat-icon-button
           [matTooltip]="row.firstName + ' ' + row.lastName + ' löschen'"
+          matTooltipClass="qro-tooltip"
           matTooltipPosition="right"
           (click)="deleteUser($event, row)"
         >

@@ -1,6 +1,6 @@
-<div style="max-width: 1335px;">
-  <div style="display: flex; justify-content: space-between;">
-    <div style="display: flex;">
+<div style="max-width: 1335px">
+  <div style="display: flex; justify-content: space-between">
+    <div style="display: flex">
       <button
         mat-raised-button
         data-cy="new-case-button"
@@ -30,7 +30,7 @@
       #table
       data-cy="case-data-table"
       class="material fixed-header"
-      style="max-width: 1335px;"
+      style="max-width: 1335px"
       [count]="cases.length"
       [headerHeight]="50"
       rowHeight="auto"
@@ -137,6 +137,7 @@
             data-cy="mail-button"
             mat-icon-button
             [matTooltip]="'E-Mail an ' + value"
+            matTooltipClass="qro-tooltip"
             matTooltipPosition="right"
             (click)="sendMail($event, value)"
           >

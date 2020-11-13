@@ -98,7 +98,7 @@
       </fieldset>
       <fieldset class="mb-3">
         <legend>{{ 'CONTACT_PERSON_FORM.ADRESSE' | translate }}</legend>
-        <mat-form-field style="width: 70%;">
+        <mat-form-field style="width: 70%">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.STRASSE' | translate"
@@ -111,7 +111,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 30%;">
+        <mat-form-field style="width: 30%">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.HAUSNUMMER' | translate"
@@ -125,7 +125,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 30%;">
+        <mat-form-field style="width: 30%">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.POSTLEITZAHL' | translate"
@@ -138,7 +138,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 70%;">
+        <mat-form-field style="width: 70%">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.ORT' | translate"
@@ -155,7 +155,7 @@
       <fieldset class="mb-3">
         <legend>{{ 'CONTACT_PERSON_FORM.RISIKOEINSCHÄTZUNG' | translate }}</legend>
         <div class="alert">{{ 'CONTACT_PERSON_FORM.FOLGENDE_AUSSAGEN_ÜBER_KONTAKTPERSON' | translate }}</div>
-        <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: column">
           <div class="risk-question">
             <mat-label id="example-radio-group-label">{{
               'CONTACT_PERSON_FORM.MEDIZINISCHES_UMFELD' | translate
@@ -195,12 +195,13 @@
             </mat-radio-group>
           </div>
           <div class="risk-question">
-            <mat-label id="example-radio-group-label" style="display: flex; align-items: center;"
+            <mat-label id="example-radio-group-label" style="display: flex; align-items: center"
               >{{ 'CONTACT_PERSON_FORM.BEKANNTE_VORERKRANKUNGEN' | translate
               }}<mat-icon
                 class="ml-1"
-                style="cursor: pointer;"
+                style="cursor: pointer"
                 [matTooltip]="'CONTACT_PERSON_FORM.FOLGENDE_VORERKRANKUNGEN' | translate"
+                matTooltipClass="qro-tooltip"
               >
                 info</mat-icon
               ></mat-label
