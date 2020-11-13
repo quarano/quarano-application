@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.5.RELEASE</version>
+		<version>2.3.6.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
@@ -22,7 +22,7 @@
 		<docker.build.userid>1001</docker.build.userid>
 		<jmolecules.version>1.0.0</jmolecules.version>
 		<moduliths.version>1.0.0</moduliths.version>
-		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
+		<spring-hateoas.version>1.2.1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
 		<refdocs.version>0.2.2.RELEASE</refdocs.version>
 		<xmlprojector.version>1.4.17</xmlprojector.version>
