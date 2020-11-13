@@ -15,6 +15,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["file-saver", "lodash"],
             "outputPath": "dist/apps/quarano-frontend/public",
             "index": "apps/quarano-frontend/src/index.html",
             "main": "apps/quarano-frontend/src/main.ts",
@@ -52,7 +53,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "5mb"
                 },
                 {
@@ -219,16 +220,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["apps/quarano-frontend/tsconfig.app.json", "apps/quarano-frontend/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!apps/quarano-frontend/**"]
+            "exclude": ["**/node_modules/**", "!apps/quarano-frontend/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/quarano-frontend/jest.config.js",
-            "tsConfig": "apps/quarano-frontend/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/quarano-frontend/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
@@ -255,7 +254,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["apps/quarano-frontend-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/quarano-frontend-e2e/**"]
+            "exclude": ["**/node_modules/**", "!apps/quarano-frontend-e2e/**/*"]
           }
         }
       }
@@ -270,16 +269,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/auth/domain/tsconfig.lib.json", "libs/auth/domain/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/domain/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/domain/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/domain/jest.config.js",
-            "tsConfig": "libs/auth/domain/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/domain/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -299,16 +296,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-material/tsconfig.lib.json", "libs/shared/ui-material/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-material/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-material/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-material/jest.config.js",
-            "tsConfig": "libs/shared/ui-material/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-material/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -331,16 +326,14 @@
               "libs/health-department/domain/tsconfig.lib.json",
               "libs/health-department/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/domain/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/domain/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/domain/jest.config.js",
-            "tsConfig": "libs/health-department/domain/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/domain/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -363,16 +356,14 @@
               "libs/health-department/ui-action-alert/tsconfig.lib.json",
               "libs/health-department/ui-action-alert/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/ui-action-alert/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/ui-action-alert/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/ui-action-alert/jest.config.js",
-            "tsConfig": "libs/health-department/ui-action-alert/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/ui-action-alert/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -395,16 +386,14 @@
               "libs/health-department/shell/tsconfig.lib.json",
               "libs/health-department/shell/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/shell/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/shell/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/shell/jest.config.js",
-            "tsConfig": "libs/health-department/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/shell/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -424,16 +413,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-tile/tsconfig.lib.json", "libs/shared/ui-tile/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-tile/jest.config.js",
-            "tsConfig": "libs/shared/ui-tile/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-tile/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -453,16 +440,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-button/tsconfig.lib.json", "libs/shared/ui-button/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-button/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-button/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-button/jest.config.js",
-            "tsConfig": "libs/shared/ui-button/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-button/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -482,16 +467,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/administration/shell/tsconfig.lib.json", "libs/administration/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/administration/shell/**"]
+            "exclude": ["**/node_modules/**", "!libs/administration/shell/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/administration/shell/jest.config.js",
-            "tsConfig": "libs/administration/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/shell/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -511,16 +494,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/auth/api/tsconfig.lib.json", "libs/auth/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/api/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/api/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/api/jest.config.js",
-            "tsConfig": "libs/auth/api/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/api/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -543,16 +524,14 @@
               "libs/shared/ui-confirmation-dialog/tsconfig.lib.json",
               "libs/shared/ui-confirmation-dialog/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-confirmation-dialog/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-confirmation-dialog/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-confirmation-dialog/jest.config.js",
-            "tsConfig": "libs/shared/ui-confirmation-dialog/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-confirmation-dialog/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -575,16 +554,14 @@
               "libs/shared/ui-multiple-autocomplete/tsconfig.lib.json",
               "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-multiple-autocomplete/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-multiple-autocomplete/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-multiple-autocomplete/jest.config.js",
-            "tsConfig": "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-multiple-autocomplete/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -604,16 +581,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/auth/shell/tsconfig.lib.json", "libs/auth/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/shell/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/shell/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/shell/jest.config.js",
-            "tsConfig": "libs/auth/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/shell/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -636,16 +611,14 @@
               "libs/administration/domain/tsconfig.lib.json",
               "libs/administration/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/domain/**"]
+            "exclude": ["**/node_modules/**", "!libs/administration/domain/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/administration/domain/jest.config.js",
-            "tsConfig": "libs/administration/domain/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/domain/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -665,16 +638,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/administration/api/tsconfig.lib.json", "libs/administration/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/administration/api/**"]
+            "exclude": ["**/node_modules/**", "!libs/administration/api/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/administration/api/jest.config.js",
-            "tsConfig": "libs/administration/api/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/api/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -697,16 +668,14 @@
               "libs/health-department/api/tsconfig.lib.json",
               "libs/health-department/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/api/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/api/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/api/jest.config.js",
-            "tsConfig": "libs/health-department/api/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/api/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -726,16 +695,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/auth/forbidden/tsconfig.lib.json", "libs/auth/forbidden/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/forbidden/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/forbidden/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/forbidden/jest.config.js",
-            "tsConfig": "libs/auth/forbidden/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/forbidden/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -758,16 +725,14 @@
               "libs/shared/util-progress-bar/tsconfig.lib.json",
               "libs/shared/util-progress-bar/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-progress-bar/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-progress-bar/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-progress-bar/jest.config.js",
-            "tsConfig": "libs/shared/util-progress-bar/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-progress-bar/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -787,16 +752,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/client/domain/tsconfig.lib.json", "libs/client/domain/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/domain/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/domain/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/domain/jest.config.js",
-            "tsConfig": "libs/client/domain/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/domain/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -816,16 +779,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-aside/tsconfig.lib.json", "libs/shared/ui-aside/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-aside/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-aside/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-aside/jest.config.js",
-            "tsConfig": "libs/shared/ui-aside/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-aside/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -845,16 +806,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/client/shell/tsconfig.lib.json", "libs/client/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/shell/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/shell/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/shell/jest.config.js",
-            "tsConfig": "libs/client/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/shell/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -874,16 +833,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/util-symptom/tsconfig.lib.json", "libs/shared/util-symptom/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-symptom/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-symptom/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-symptom/jest.config.js",
-            "tsConfig": "libs/shared/util-symptom/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-symptom/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -906,16 +863,14 @@
               "libs/shared/util-data-access/tsconfig.lib.json",
               "libs/shared/util-data-access/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-data-access/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-data-access/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-data-access/jest.config.js",
-            "tsConfig": "libs/shared/util-data-access/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-data-access/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -935,16 +890,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/client/api/tsconfig.lib.json", "libs/client/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/api/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/api/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/api/jest.config.js",
-            "tsConfig": "libs/client/api/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/api/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -964,16 +917,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/util-date/tsconfig.lib.json", "libs/shared/util-date/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-date/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-date/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-date/jest.config.js",
-            "tsConfig": "libs/shared/util-date/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-date/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -993,16 +944,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/client/feature-diary/tsconfig.lib.json", "libs/client/feature-diary/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-diary/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/feature-diary/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/feature-diary/jest.config.js",
-            "tsConfig": "libs/client/feature-diary/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/feature-diary/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1025,16 +974,14 @@
               "libs/client/feature-enrollment/tsconfig.lib.json",
               "libs/client/feature-enrollment/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-enrollment/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/feature-enrollment/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/feature-enrollment/jest.config.js",
-            "tsConfig": "libs/client/feature-enrollment/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/feature-enrollment/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1057,16 +1004,14 @@
               "libs/client/feature-profile/tsconfig.lib.json",
               "libs/client/feature-profile/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-profile/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/feature-profile/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/feature-profile/jest.config.js",
-            "tsConfig": "libs/client/feature-profile/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/feature-profile/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1089,16 +1034,14 @@
               "libs/client/feature-health-department-contact/tsconfig.lib.json",
               "libs/client/feature-health-department-contact/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-health-department-contact/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/feature-health-department-contact/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/feature-health-department-contact/jest.config.js",
-            "tsConfig": "libs/client/feature-health-department-contact/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/feature-health-department-contact/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1121,16 +1064,14 @@
               "libs/client/feature-contact-persons/tsconfig.lib.json",
               "libs/client/feature-contact-persons/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-contact-persons/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/feature-contact-persons/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/feature-contact-persons/jest.config.js",
-            "tsConfig": "libs/client/feature-contact-persons/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/feature-contact-persons/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1153,16 +1094,14 @@
               "libs/client/ui-personal-data/tsconfig.lib.json",
               "libs/client/ui-personal-data/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-personal-data/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/ui-personal-data/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/ui-personal-data/jest.config.js",
-            "tsConfig": "libs/client/ui-personal-data/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/ui-personal-data/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1185,16 +1124,14 @@
               "libs/client/ui-contact-person-detail/tsconfig.lib.json",
               "libs/client/ui-contact-person-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-contact-person-detail/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/ui-contact-person-detail/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/ui-contact-person-detail/jest.config.js",
-            "tsConfig": "libs/client/ui-contact-person-detail/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/ui-contact-person-detail/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1217,16 +1154,14 @@
               "libs/health-department/feature-contact-cases/tsconfig.lib.json",
               "libs/health-department/feature-contact-cases/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-contact-cases/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/feature-contact-cases/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/feature-contact-cases/jest.config.js",
-            "tsConfig": "libs/health-department/feature-contact-cases/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/feature-contact-cases/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1249,16 +1184,14 @@
               "libs/health-department/feature-index-cases/tsconfig.lib.json",
               "libs/health-department/feature-index-cases/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-index-cases/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/feature-index-cases/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/feature-index-cases/jest.config.js",
-            "tsConfig": "libs/health-department/feature-index-cases/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/feature-index-cases/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1281,16 +1214,14 @@
               "libs/health-department/feature-case-detail/tsconfig.lib.json",
               "libs/health-department/feature-case-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-case-detail/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/feature-case-detail/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/feature-case-detail/jest.config.js",
-            "tsConfig": "libs/health-department/feature-case-detail/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/feature-case-detail/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1313,16 +1244,14 @@
               "libs/general/feature-welcome/tsconfig.lib.json",
               "libs/general/feature-welcome/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-welcome/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-welcome/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/general/feature-welcome/jest.config.js",
-            "tsConfig": "libs/general/feature-welcome/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/general/feature-welcome/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1345,16 +1274,14 @@
               "libs/general/feature-data-protection/tsconfig.lib.json",
               "libs/general/feature-data-protection/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-data-protection/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-data-protection/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/general/feature-data-protection/jest.config.js",
-            "tsConfig": "libs/general/feature-data-protection/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/general/feature-data-protection/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1377,16 +1304,14 @@
               "libs/general/feature-imprint/tsconfig.lib.json",
               "libs/general/feature-imprint/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-imprint/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-imprint/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/general/feature-imprint/jest.config.js",
-            "tsConfig": "libs/general/feature-imprint/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/general/feature-imprint/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1409,16 +1334,14 @@
               "libs/general/feature-terms/tsconfig.lib.json",
               "libs/general/feature-terms/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-terms/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/feature-terms/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/general/feature-terms/jest.config.js",
-            "tsConfig": "libs/general/feature-terms/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/general/feature-terms/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1438,16 +1361,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/general/shell/tsconfig.lib.json", "libs/general/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/general/shell/**"]
+            "exclude": ["**/node_modules/**", "!libs/general/shell/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/general/shell/jest.config.js",
-            "tsConfig": "libs/general/shell/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/general/shell/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1470,16 +1391,14 @@
               "libs/administration/feature-account-detail/tsconfig.lib.json",
               "libs/administration/feature-account-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-detail/**"]
+            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-detail/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/administration/feature-account-detail/jest.config.js",
-            "tsConfig": "libs/administration/feature-account-detail/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/feature-account-detail/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1502,16 +1421,14 @@
               "libs/administration/feature-account-list/tsconfig.lib.json",
               "libs/administration/feature-account-list/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-list/**"]
+            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-list/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/administration/feature-account-list/jest.config.js",
-            "tsConfig": "libs/administration/feature-account-list/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/administration/feature-account-list/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1531,16 +1448,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-error/tsconfig.lib.json", "libs/shared/ui-error/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-error/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-error/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-error/jest.config.js",
-            "tsConfig": "libs/shared/ui-error/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-error/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1563,16 +1478,14 @@
               "libs/auth/feature-change-password/tsconfig.lib.json",
               "libs/auth/feature-change-password/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/auth/feature-change-password/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/feature-change-password/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/feature-change-password/jest.config.js",
-            "tsConfig": "libs/auth/feature-change-password/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/feature-change-password/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1592,16 +1505,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/auth/feature-login/tsconfig.lib.json", "libs/auth/feature-login/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/feature-login/**"]
+            "exclude": ["**/node_modules/**", "!libs/auth/feature-login/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/auth/feature-login/jest.config.js",
-            "tsConfig": "libs/auth/feature-login/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/auth/feature-login/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1621,16 +1532,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/ui-styles/tsconfig.lib.json", "libs/shared/ui-styles/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-styles/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-styles/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-styles/jest.config.js",
-            "tsConfig": "libs/shared/ui-styles/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-styles/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1650,16 +1559,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/util-forms/tsconfig.lib.json", "libs/shared/util-forms/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-forms/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-forms/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-forms/jest.config.js",
-            "tsConfig": "libs/shared/util-forms/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-forms/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1682,16 +1589,14 @@
               "libs/shared/util-common-functions/tsconfig.lib.json",
               "libs/shared/util-common-functions/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-common-functions/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-common-functions/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-common-functions/jest.config.js",
-            "tsConfig": "libs/shared/util-common-functions/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-common-functions/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1711,16 +1616,14 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["libs/shared/util-snackbar/tsconfig.lib.json", "libs/shared/util-snackbar/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-snackbar/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-snackbar/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-snackbar/jest.config.js",
-            "tsConfig": "libs/shared/util-snackbar/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-snackbar/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1743,16 +1646,14 @@
               "libs/shared/util-translation/tsconfig.lib.json",
               "libs/shared/util-translation/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-translation/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/util-translation/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/util-translation/jest.config.js",
-            "tsConfig": "libs/shared/util-translation/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/util-translation/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1775,16 +1676,14 @@
               "libs/shared/ui-static-pages/tsconfig.lib.json",
               "libs/shared/ui-static-pages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-static-pages/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-static-pages/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/ui-static-pages/jest.config.js",
-            "tsConfig": "libs/shared/ui-static-pages/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/shared/ui-static-pages/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1807,16 +1706,14 @@
               "libs/health-department/feature-export/tsconfig.lib.json",
               "libs/health-department/feature-export/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-export/**"]
+            "exclude": ["**/node_modules/**", "!libs/health-department/feature-export/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/feature-export/jest.config.js",
-            "tsConfig": "libs/health-department/feature-export/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/health-department/feature-export/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -1839,16 +1736,14 @@
               "libs/client/ui-forgotten-contact-dialog/tsconfig.lib.json",
               "libs/client/ui-forgotten-contact-dialog/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-forgotten-contact-dialog/**"]
+            "exclude": ["**/node_modules/**", "!libs/client/ui-forgotten-contact-dialog/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client/ui-forgotten-contact-dialog/jest.config.js",
-            "tsConfig": "libs/client/ui-forgotten-contact-dialog/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/client/ui-forgotten-contact-dialog/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
