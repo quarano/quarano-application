@@ -6,7 +6,6 @@ import { HdContactComponent } from './/hd-contact/hd-contact.component';
 
 @NgModule({
   declarations: [HdContactComponent],
-  entryComponents: [HdContactComponent],
   exports: [HdContactComponent],
   imports: [CommonModule, SharedUiMaterialModule, SharedUtilTranslationModule],
 })
