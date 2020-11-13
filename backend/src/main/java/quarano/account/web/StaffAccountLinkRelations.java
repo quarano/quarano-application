@@ -4,6 +4,7 @@ import org.springframework.hateoas.LinkRelation;
 
 /**
  * @author Patrick Otto
+ * @author Jens Kutzsche
  */
 class StaffAccountLinkRelations {
 

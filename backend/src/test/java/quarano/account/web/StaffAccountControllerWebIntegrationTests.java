@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,6 +41,7 @@ class StaffAccountControllerWebIntegrationTests {
 	private final AccountService accounts;
 	private final MessageSourceAccessor messages;
 	private final ObjectMapper jackson;
+	private final LinkDiscoverer links;
 
 	@Test
 	@WithQuaranoUser("admin")
@@ -68,6 +70,10 @@ class StaffAccountControllerWebIntegrationTests {
 		assertThat(usernameEntries).containsOnlyOnce(referenceAdminAccount.get().getUsername());
 		assertThat(usernameEntries).containsOnlyOnce(referenceAgentAccount.get().getUsername());
 		assertThat(usernameEntries).doesNotContain(referenceNonDepartmentAccount.get().getUsername());
+
+		// CORE-436
+		assertThat(document.read("$._embedded.accounts[*]._links." + StaffAccountLinkRelations.RESET_PASSWORD.value(),
+				JSONArray.class)).isNotEmpty();
 	}
 
 	@Test
@@ -188,7 +194,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
+		var foo = mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
