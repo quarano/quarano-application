@@ -18,6 +18,7 @@
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       [matChipInputAddOnBlur]="true"
+      matTooltipClass="qro-tooltip"
       [matTooltip]="
         filteredList$$.value.length === 0
           ? ('MULTIPLE_AUTOCOMPLETE.KEINE_WEITEREN_AUSWAHLMÖGLICHKEITEN' | translate)

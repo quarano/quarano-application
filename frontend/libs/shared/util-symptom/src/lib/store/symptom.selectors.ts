@@ -6,4 +6,8 @@ export const selectSymptpomState = createFeatureSelector<SymptomState>(SYMPTOM_F
 
 export const symptoms = createSelector(selectSymptpomState, (state) => state.symptoms);
 
+export const characteristicSymptoms = createSelector(selectSymptpomState, (state) =>
+  state.symptoms.filter((s) => s.characteristic)
+);
+
 export const loaded = createSelector(selectSymptpomState, (state) => state.loaded);

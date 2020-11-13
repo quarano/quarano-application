@@ -1,7 +1,7 @@
 <span>
   <div class="alert">
     {{ 'CONTACT_PERSONS.HIER_KÖNNEN_SIE_PERSONEN_ERFASSEN' | translate }},
-    <button style="padding: 0;" (click)="openContactDialog()" mat-button color="primary">
+    <button style="padding: 0" (click)="openContactDialog()" mat-button color="primary">
       {{ 'CONTACT_PERSONS.KLICKEN_SIE_HIER' | translate }}</button
     >.
   </div>
@@ -19,6 +19,7 @@
           class="contact-card"
           [routerLink]="['/client/contact-persons/contact-person-detail/edit', contact.id]"
           [matTooltip]="contact.identificationHint"
+          matTooltipClass="qro-tooltip"
         >
           <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
@@ -38,7 +39,7 @@
             </p>
             <p *ngIf="contact.street || contact.zipCode || contact.city">
               <mat-icon>house</mat-icon>
-              <span style="display: flex; flex-direction: column;">
+              <span style="display: flex; flex-direction: column">
                 <span *ngIf="contact.street">{{ contact.street }} {{ contact.houseNumber }}</span>
                 <span *ngIf="contact.zipCode || contact.city">{{ contact.zipCode }} {{ contact.city }}</span></span
               >

@@ -5,6 +5,7 @@
   <button
     *ngIf="canCreate"
     [matTooltip]="'DIARY_ENTRY_WARNING.EINTRAG_NACHTRAGEN' | translate"
+    matTooltipClass="qro-tooltip"
     matTooltipPosition="after"
     mat-mini-fab
     color="basic"
@@ -21,6 +22,7 @@
       disabled
       class="info-button"
       [matTooltip]="'DIARY_ENTRY_WARNING.LEIDER_HABEN_SIE_AN_DEISEM_TAG_VERPASST' | translate"
+      matTooltipClass="qro-tooltip"
       matTooltipPosition="after"
     >
       <span class="info-icon">i</span></button

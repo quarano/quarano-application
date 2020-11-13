@@ -91,7 +91,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
       })
     );
 
-    this.symptoms$ = this.store.pipe(select(SymptomSelectors.symptoms));
+    this.symptoms$ = this.store.pipe(select(SymptomSelectors.characteristicSymptoms));
   }
 
   ngOnDestroy() {

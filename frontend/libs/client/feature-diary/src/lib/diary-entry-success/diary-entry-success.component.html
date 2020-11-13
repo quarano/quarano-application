@@ -10,6 +10,7 @@
         : ('DIARY_ENTRY_SUCCESS.EINTRAG_BEARBEITEN' | translate)
     "
     matTooltipPosition="after"
+    matTooltipClass="qro-tooltip"
   >
     <mat-icon *ngIf="isReadonly; else editable" class="text-muted">visibility</mat-icon>
     <ng-template #editable><mat-icon class="text-muted">create</mat-icon></ng-template>

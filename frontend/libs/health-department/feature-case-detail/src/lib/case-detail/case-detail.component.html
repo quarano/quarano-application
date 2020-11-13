@@ -39,7 +39,10 @@
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
       >
-        <span data-cy="start-tracking-span" [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
+        <span
+          data-cy="start-tracking-span"
+          matTooltipClass="qro-tooltip"
+          [matTooltip]="getStartTrackingTitle(caseDetail, start_tracking_btn.disabled)"
           >Nachverfolgung starten</span
         >
       </button>
@@ -50,7 +53,9 @@
         [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
         mat-button
       >
-        <span [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
+        <span
+          [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
+          matTooltipClass="qro-tooltip"
           >Analog nachverfolgen</span
         >
       </button>
