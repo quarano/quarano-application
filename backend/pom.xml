@@ -24,7 +24,7 @@
 		<moduliths.version>1.0.0</moduliths.version>
 		<spring-hateoas.version>1.2.0-RC1</spring-hateoas.version>
 		<greenmail.version>1.6.0</greenmail.version>
-		<refdocs.version>0.2.4</refdocs.version>
+		<refdocs.version>0.2.2.RELEASE</refdocs.version>
 		<xmlprojector.version>1.4.17</xmlprojector.version>
 		<opencsv.version>5.3</opencsv.version>
 		<refdocs.dir>${project.build.directory}/refdocs</refdocs.dir>
