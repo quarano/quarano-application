@@ -95,7 +95,9 @@ class StaffAccountRepresentations implements AccountRepresentations {
 
 			return super.getLinks()
 					.and(MvcLink.of(controller.getStaffAccount(identifier, null), IanaLinkRelations.SELF))
-					.and(MvcLink.of(controller.deleteStaffAccounts(identifier, null), StaffAccountLinkRelations.DELETE));
+					.and(MvcLink.of(controller.deleteStaffAccounts(identifier, null), StaffAccountLinkRelations.DELETE))
+					.and(MvcLink.of(controller.putStaffAccountPassword(identifier, null, null, null),
+							StaffAccountLinkRelations.RESET_PASSWORD));
 		}
 	}
 

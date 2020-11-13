@@ -192,6 +192,11 @@ class StaffAccountControllerWebIntegrationTests {
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
+
+		agent1 = accounts.findByUsername("agent1").orElseThrow();
+
+		// CORE-436 If an admin sets the password for a staff account this must be changed immediately by the user.
+		assertThat(agent1.getPassword().isExpired()).isTrue();
 	}
 
 	@Test
