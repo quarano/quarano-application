@@ -198,7 +198,7 @@ DELETE FROM public.email_texts WHERE email_text_id = '58541fa0-c68a-4011-9b78-0b
 INSERT INTO public.email_texts VALUES ('58541fa0-c68a-4011-9b78-0b30a8406064', 'registration-index', 'en',
 'Dear Mrs/Mr {lastName},
 
-The health agency Mannheim has just informred you about the fact that you are infected with the new Corona virus SARS-CoV2 and as such you are infectious. The city of Mannheim has issued a general decree that regulates the quarantine. This is valid from 28-Oct-2020 and can be checked under the following link:
+The health agency Mannheim has just informed you about the fact that you are infected with the new Corona virus SARS-CoV2 and as such you are infectious. The city of Mannheim has issued a general decree that regulates the quarantine. This is valid from 28-Oct-2020 and can be checked under the following link:
 https://www.mannheim.de/de/informationen-zu-corona/aktuelle-rechtsvorschriften
 
 People, that are living with you within the same household and that have up to now not been tested positive must adhere to a 14 days quaarantine starting with the day of the first positive test within the household. For additionally people within youtr household that are tested positive the same rules apply as for yourself, meaning a quarantine for at least 10 days staring with the day of the respective test.
