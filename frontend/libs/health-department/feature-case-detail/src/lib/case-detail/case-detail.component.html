@@ -29,7 +29,7 @@
       </mat-card-title>
     </ng-template>
   </mat-card-header>
-  <mat-card-content *ngIf="caseDetail$ | async as caseDetail">
+  <mat-card-content>
     <div class="button-area" *ngIf="caseDetail.caseId">
       <button
         data-cy="start-tracking-button"

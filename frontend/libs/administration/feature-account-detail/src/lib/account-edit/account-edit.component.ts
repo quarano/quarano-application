@@ -1,4 +1,5 @@
-import { AccountService, AccountDto } from '@qro/administration/domain';
+import { cloneDeep } from 'lodash';
+import { AccountDto, AccountEntityService } from '@qro/administration/domain';
 import { AuthService, roles, IRole } from '@qro/auth/api';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { MatInput } from '@angular/material/input';
@@ -7,7 +8,7 @@ import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { tap, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { tap, finalize, distinctUntilChanged, debounceTime, switchMap, shareReplay } from 'rxjs/operators';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import {
   ArrayValidator,
@@ -25,7 +26,7 @@ import {
   styleUrls: ['./account-edit.component.scss'],
 })
 export class AccountEditComponent implements OnInit, OnDestroy {
-  account: AccountDto;
+  account$: Observable<AccountDto>;
   private subs = new SubSink();
   formGroup: FormGroup;
   private usernameIsValid = false;
@@ -33,12 +34,14 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   loading = false;
   public confirmValidParentMatcher = new ConfirmValidPasswordMatcher();
   public passwordIncludesUsernameMatcher = new PasswordIncludesUsernameMatcher();
+  isNew = false;
+  private username = '';
 
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private accountService: AccountService,
+    private entityService: AccountEntityService,
     private snackbarService: SnackbarService,
     private router: Router,
     private badRequestService: BadRequestService,
@@ -46,15 +49,11 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subs.add(
-      this.route.data.subscribe((data) => {
-        this.account = data.account;
-        if (!this.isNew) {
-          this.usernameIsValid = true;
-        }
-      })
+    this.account$ = this.route.parent.paramMap.pipe(
+      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
+      shareReplay(1),
+      tap((data) => this.buildForm(data))
     );
-    this.buildForm();
   }
 
   ngOnDestroy(): void {
@@ -63,31 +62,35 @@ export class AccountEditComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
-    return this.formGroup.pristine;
+    return this.formGroup?.pristine;
   }
 
-  buildForm() {
+  buildForm(account: AccountDto) {
+    this.username = account.username;
+    this.isNew = !account.accountId;
+    this.usernameIsValid = !!account.accountId;
+
     this.formGroup = this.formBuilder.group(
       {
-        firstName: new FormControl(this.account.firstName, [
+        firstName: new FormControl(account.firstName, [
           Validators.required,
           TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
         ]),
-        lastName: new FormControl(this.account.lastName, [
+        lastName: new FormControl(account.lastName, [
           Validators.required,
           TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
         ]),
         password: new FormControl({ value: null, disabled: !this.isNew }, [PasswordValidator.secure]),
         passwordConfirm: new FormControl({ value: null, disabled: !this.isNew }, [Validators.required]),
-        username: new FormControl(this.account.username, [
+        username: new FormControl(account.username, [
           Validators.required,
           () => (this.usernameIsValid ? null : { usernameInvalid: true }),
         ]),
-        email: new FormControl(this.account.email, [
+        email: new FormControl(account.email, [
           Validators.required,
           TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email),
         ]),
-        roles: new FormControl(this.account.roles, [ArrayValidator.minLengthArray(1)]),
+        roles: new FormControl(account.roles, [ArrayValidator.minLengthArray(1)]),
       },
       {
         validators: [PasswordValidator.mustMatch, PasswordValidator.mustNotIncludeUsername],
@@ -98,12 +101,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       .subscribe((value) => this.changeUsername(value));
   }
 
-  get isNew(): boolean {
-    return this.account?.accountId == null;
-  }
-
   public changeUsername(username: string) {
-    if (this.isNew || username !== this.account.username) {
+    if (this.isNew || username !== this.username) {
       this.subs.add(
         this.authService
           .checkUsername(username)
@@ -127,62 +126,68 @@ export class AccountEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  public submitForm(closeAfterSave: boolean) {
+  public submitForm(account: AccountDto, closeAfterSave: boolean) {
     if (this.formGroup.invalid) {
       this.snackbarService.warning('Bitte alle Pflichtfelder ausfüllen.');
       return;
     }
     this.loading = true;
-    Object.assign(this.account, this.formGroup.value);
+    const accountToEdit = cloneDeep(account);
+    Object.assign(accountToEdit, this.formGroup.value);
 
     if (this.isNew) {
-      this.createAccount(closeAfterSave);
+      this.createAccount(accountToEdit, closeAfterSave);
     } else {
-      this.editAccount(closeAfterSave);
+      this.editAccount(accountToEdit, closeAfterSave);
     }
   }
 
-  private createAccount(closeAfterSave: boolean) {
-    this.accountService
-      .createAccount(this.account)
-      .subscribe(
-        (result) => {
-          this.snackbarService.success(
-            `Der Account ${this.account.firstName} ${this.account.lastName} wurde erfolgreich angelegt`
-          );
-          this.account = result;
-          if (closeAfterSave) {
-            this.router.navigate(['/administration/accounts/account-list']);
+  private createAccount(account: AccountDto, closeAfterSave: boolean) {
+    this.subs.add(
+      this.entityService
+        .add(account)
+        .subscribe(
+          (result) => {
+            this.formGroup.markAsPristine();
+            this.snackbarService.success(
+              `Der Account ${account.firstName} ${account.lastName} wurde erfolgreich angelegt`
+            );
+            if (closeAfterSave) {
+              this.router.navigate(['/administration/accounts/account-list']);
+            } else {
+              this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+            }
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
           }
-          this.buildForm();
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-        }
-      )
-      .add(() => (this.loading = false));
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
-  private editAccount(closeAfterSave: boolean) {
-    this.accountService
-      .editAccount(this.account)
-      .subscribe(
-        (result) => {
-          this.snackbarService.success(
-            `Die Accountdaten für ${this.account.firstName} ` +
-              `${this.account.lastName} wurden erfolgreich aktualisiert`
-          );
-          this.account = result;
-          if (closeAfterSave) {
-            this.router.navigate(['/administration/accounts/account-list']);
+  private editAccount(account: AccountDto, closeAfterSave: boolean) {
+    this.subs.add(
+      this.entityService
+        .update(account)
+        .subscribe(
+          (result) => {
+            this.formGroup.markAsPristine();
+            this.snackbarService.success(
+              `Die Accountdaten für ${account.firstName} ` + `${account.lastName} wurden erfolgreich aktualisiert`
+            );
+            if (closeAfterSave) {
+              this.router.navigate(['/administration/accounts/account-list']);
+            } else {
+              this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+            }
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
           }
-          this.buildForm();
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-        }
-      )
-      .add(() => (this.loading = false));
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   trimValue(input: MatInput) {
