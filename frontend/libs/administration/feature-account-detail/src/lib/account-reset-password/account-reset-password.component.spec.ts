@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AccountResetPasswordComponent } from './account-reset-password.component';
 import { SnackbarService } from '@qro/shared/util-snackbar';
 import { ValidationErrorService } from '@qro/shared/util-forms';
+import { of } from 'rxjs';
 
 describe('AccountResetPasswordComponent', () => {
   let component: AccountResetPasswordComponent;
@@ -22,7 +23,7 @@ describe('AccountResetPasswordComponent', () => {
         schemas: [NO_ERRORS_SCHEMA],
         providers: [
           { provide: SnackbarService, useValue: {} },
-          { provide: ActivatedRoute, useValue: {} },
+          { provide: ActivatedRoute, useValue: { parent: { queryParamMap: of({}) } } },
           { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
           { provide: BadRequestService, useValue: {} },
           { provide: ApiService, useValue: {} },
