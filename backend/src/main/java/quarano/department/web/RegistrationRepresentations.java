@@ -6,8 +6,11 @@ import io.jsonwebtoken.lang.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.account.Account;
 import quarano.core.CoreProperties;
+import quarano.core.EmailSender.TemplatedEmail;
 import quarano.core.EmailTemplates;
 import quarano.core.EmailTemplates.Keys;
 import quarano.core.validation.UserName;
@@ -15,6 +18,7 @@ import quarano.core.web.MapperWrapper;
 import quarano.department.RegistrationDetails;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
+import quarano.department.TrackedCaseEmail;
 import quarano.department.activation.ActivationCode;
 
 import java.time.LocalDate;
@@ -27,6 +31,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
@@ -46,10 +51,11 @@ class RegistrationRepresentations {
 	private final EmailTemplates templates;
 	private final CoreProperties configuration;
 	private final MapperWrapper mapper;
+	private final @NonNull MessageSourceAccessor messages;
 
-	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase) {
+	PendingRegistration toRepresentation(ActivationCode code, TrackedCase trackedCase, Account officeStaff) {
 
-		var email = getEmailTemplateFor(trackedCase, code);
+		var email = getEmailTemplateFor(trackedCase, code, officeStaff);
 		var result = PendingRegistration.of(trackedCase.getId(), code, email);
 
 		return result.add(TrackedCaseStatusAware.getDefaultLinks(trackedCase));
@@ -59,11 +65,39 @@ class RegistrationRepresentations {
 		return mapper.map(payload, RegistrationDetails.class);
 	}
 
-	private String getEmailTemplateFor(TrackedCase trackedCase, ActivationCode code) {
+	String getEmailTemplateFor(TrackedCase trackedCase, ActivationCode code, Account officeStaff) {
+
+		var key = determineRegistrationMailKey(trackedCase);
+		var placeholders = createRegistrationMailPlaceholders(trackedCase, code, officeStaff);
+
+		return templates.expandTemplate(key, placeholders, trackedCase.getTrackedPerson().getLocale());
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	TemplatedEmail getTemplatedEmailFor(TrackedCase trackedCase, ActivationCode code, Account officeStaff) {
+
+		var trackedPerson = trackedCase.getTrackedPerson();
+		var subject = messages.getMessage("RegistriationMail.subject",
+				new Object[] { trackedCase.getDepartment().getName() }, trackedPerson.getLocale());
+
+		var key = determineRegistrationMailKey(trackedCase);
+		var placeholders = createRegistrationMailPlaceholders(trackedCase, code, officeStaff);
+
+		return new TrackedCaseEmail(trackedCase, subject, key, placeholders);
+	}
+
+	private HashMap<String, Object> createRegistrationMailPlaceholders(TrackedCase trackedCase, ActivationCode code,
+			Account officeStaff) {
 
 		var placeholders = new HashMap<String, Object>();
 
 		placeholders.put("lastName", trackedCase.getTrackedPerson().getLastName());
+		placeholders.put("departmentName", trackedCase.getDepartment().getName());
+		placeholders.put("staffFullName", officeStaff.getFullName());
+		placeholders.put("staffLastName", officeStaff.getLastname());
+		placeholders.put("staffFirstName", officeStaff.getFirstname());
 		placeholders.put("host", configuration.getHost());
 		placeholders.put("activationCode", code.getId().toString());
 
@@ -73,9 +107,11 @@ class RegistrationRepresentations {
 			placeholders.put("quarantineEndDate", quarantine.getTo().format(FORMATTER));
 		}
 
-		var key = trackedCase.isIndexCase() ? Keys.REGISTRATION_INDEX : Keys.REGISTRATION_CONTACT;
+		return placeholders;
+	}
 
-		return templates.expandTemplate(key, placeholders, trackedCase.getTrackedPerson().getLocale());
+	private Keys determineRegistrationMailKey(TrackedCase trackedCase) {
+		return trackedCase.isIndexCase() ? Keys.REGISTRATION_INDEX : Keys.REGISTRATION_CONTACT;
 	}
 
 	RepresentationModel<?> toNoRegistration(TrackedCase trackedCase) {
@@ -104,6 +140,13 @@ class RegistrationRepresentations {
 			return code.getExpirationTime();
 		}
 
+		/**
+		 * @since 1.4
+		 */
+		public Boolean isMailed() {
+			return code.isMailed();
+		}
+
 		public String getEmail() {
 			return email;
 		}
@@ -122,7 +165,9 @@ class RegistrationRepresentations {
 					Link.of(fromMethodCall(controller.getRegistrationDetails(trackedCaseIdentifier, null)).toUriString(),
 							IanaLinkRelations.SELF),
 					Link.of(fromMethodCall(controller.createRegistration(trackedCaseIdentifier, null)).toUriString(),
-							TrackedCaseLinkRelations.RENEW)));
+							TrackedCaseLinkRelations.RENEW)))
+					.andIf(!isMailed(), Link.of(fromMethodCall(controller.sendMail(trackedCaseIdentifier, null)).toUriString(),
+							TrackedCaseLinkRelations.SEND_MAIL));
 		}
 	}
 

@@ -7,7 +7,7 @@ import quarano.tracking.TrackedPersonReceipient;
 
 import java.util.Map;
 
-class TrackedCaseEmail extends AbstractTemplatedEmail {
+public class TrackedCaseEmail extends AbstractTemplatedEmail {
 
 	public TrackedCaseEmail(TrackedCase trackedCase, String subject, EmailTemplates.Key template,
 			Map<String, ? extends Object> placeholders) {

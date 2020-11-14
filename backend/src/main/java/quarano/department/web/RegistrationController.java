@@ -1,9 +1,16 @@
 package quarano.department.web;
 
+import static java.util.function.Predicate.*;
+
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import quarano.account.Account;
 import quarano.account.web.AccountRepresentations;
+import quarano.core.EmailSender;
+import quarano.core.web.I18nedMessage;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.core.web.MappedPayloads.MappedErrors;
@@ -13,17 +20,21 @@ import quarano.department.RegistrationManagement;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.activation.ActivationCode;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.activation.ActivationCodeException;
 import quarano.department.activation.ActivationCodeService;
 import quarano.department.web.RegistrationRepresentations.RegistrationDto;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -38,6 +49,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class RegistrationController {
 
 	private final @NonNull RegistrationManagement registration;
@@ -45,6 +57,8 @@ public class RegistrationController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull AccountRepresentations accountRepresentations;
 	private final @NonNull RegistrationRepresentations representations;
+	private final @NonNull EmailSender emailSender;
+	private final @NonNull MessageSourceAccessor messages;
 
 	private final AcceptHeaderLocaleResolver requestLocaleResolver = new AcceptHeaderLocaleResolver();
 
@@ -72,7 +86,7 @@ public class RegistrationController {
 		}
 
 		return registration.initiateRegistration(trackedCase)
-				.map(it -> representations.toRepresentation(it, trackedCase))
+				.map(it -> representations.toRepresentation(it, trackedCase, account))
 				.fold(it -> ResponseEntity.badRequest().body(it.getMessage()),
 						it -> ResponseEntity.ok(it));
 	}
@@ -82,8 +96,38 @@ public class RegistrationController {
 
 		return cases.findById(id)
 				.filter(it -> it.belongsTo(account.getDepartmentId()))
-				.map(this::toPendingActivationCode)
+				.map(it -> toPendingActivationCode(it, account))
 				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	/**
+	 * @param id The ID of the tracked case for which the registration mail is to be sent.
+	 * @param account
+	 * @since 1.4
+	 */
+	@PostMapping("/hd/cases/{id}/registration/mail")
+	HttpEntity<?> sendMail(@PathVariable TrackedCaseIdentifier id, @LoggedIn Account account) {
+
+		var trackedCase = cases.findById(id)
+				.filter(it -> it.belongsTo(account.getDepartmentId()))
+				.orElse(null);
+
+		return Option.of(trackedCase)
+				.toEither(ResponseEntity.notFound()::build)
+				.filterOrElse(TrackedCase::isEmailAvailable,
+						__ -> ResponseEntity.unprocessableEntity().body(I18nedMessage.of("NotEmpty.email")))
+				.flatMap(it -> Option.ofOptional(getPendingActivationCode(it))
+						.toEither(ResponseEntity.notFound()::build))
+				.filterOrElse(not(ActivationCode::isMailed),
+						__ -> ResponseEntity.unprocessableEntity().body(I18nedMessage.of("activationCode.alreadyMailed")))
+				.flatMap(code -> {
+
+					return sendActivationMailFor(trackedCase, code, account)
+							.map(__ -> representations.toRepresentation(code, trackedCase, account))
+							.toEither(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+									.body(I18nedMessage.of("mailService.unavailable")));
+				})
+				.fold(it -> it, ResponseEntity::ok);
 	}
 
 	/**
@@ -119,13 +163,18 @@ public class RegistrationController {
 				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
 	}
 
-	private HttpEntity<?> toPendingActivationCode(TrackedCase trackedCase) {
+	private HttpEntity<?> toPendingActivationCode(TrackedCase trackedCase, Account officeStaff) {
+
+		return getPendingActivationCode(trackedCase)
+				.<HttpEntity<?>> map(it -> ResponseEntity.ok(representations.toRepresentation(it, trackedCase, officeStaff)))
+				.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(trackedCase)));
+	}
+
+	private Optional<ActivationCode> getPendingActivationCode(TrackedCase trackedCase) {
 
 		var personId = trackedCase.getTrackedPerson().getId();
 
-		return registration.getPendingActivationCode(personId)
-				.<HttpEntity<?>> map(it -> ResponseEntity.ok(representations.toRepresentation(it, trackedCase)))
-				.orElseGet(() -> ResponseEntity.ok(representations.toNoRegistration(trackedCase)));
+		return registration.getPendingActivationCode(personId);
 	}
 
 	private static HttpEntity<?> recover(RegistrationException it, MappedErrors errors) {
@@ -138,5 +187,20 @@ public class RegistrationController {
 
 	private static HttpEntity<?> recover(ActivationCodeException it, MappedErrors errors) {
 		return errors.rejectField("clientCode", it.getMessageKey()).toBadRequest();
+	}
+
+	private Try<Void> sendActivationMailFor(TrackedCase trackedCase, ActivationCode code, Account officeStaff) {
+
+		var trackedPerson = trackedCase.getTrackedPerson();
+		var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
+				trackedCase.getId().toString() };
+
+		var email = representations.getTemplatedEmailFor(trackedCase, code, officeStaff);
+
+		return emailSender.sendMail(email)
+				.onSuccess(__ -> activationCodes.codeMailed(code.getId()))
+				.onSuccess(__ -> log.info("Contact registration mail sent to {{}; {}; Case-ID {}}", logArgs))
+				.onFailure(e -> log.info("Can't send registration mail to {{}; {}; Case-ID {}}", logArgs))
+				.onFailure(e -> log.info("Exception", e));
 	}
 }
