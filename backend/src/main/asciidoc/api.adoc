@@ -215,15 +215,53 @@ That call will return a 200 OK and contain the CSV data as body.
 
 [[frontend-texts]]
 == Frontend texts
+=== GET
 
 Even without authentication, it is possible to retrieve installation-specific texts from the Quarano REST API via `/api/frontendtexts`.
 
-include::{snippets}/frontend-texts/get-frontend-texts/curl-request.adoc[]
-include::{snippets}/frontend-texts/get-frontend-texts/response-body.adoc[]
+include::{snippets}/frontend-texts/get-texts/curl-request.adoc[]
+include::{snippets}/frontend-texts/get-texts/response-body.adoc[]
 
 The request takes the following attributes. Without parameters all frontend texts are returned.:
 
-include::{snippets}/frontend-texts/get-frontend-texts/auto-request-parameters.adoc[]
+include::{snippets}/frontend-texts/get-texts/auto-request-parameters.adoc[]
+
+=== PUT
+
+With admin authentication, it is possible to reset installation-specific texts with the Quarano REST API via `/api/admin/frontendtexts`.
+
+include::{snippets}/frontend-texts/put-texts/curl-request.adoc[]
+
+The request requires the following path parameters.:
+
+include::{snippets}/frontend-texts/put-texts/auto-path-parameters.adoc[]
+
+In addition, the language of the text must be transmitted via the Content-Language header!
+
+== Email texts
+=== GET
+
+Even without authentication, it is possible to retrieve installation-specific email texts from the Quarano REST API via `/api/emailtexts`.
+The delivered texts are raw texts where the placeholders are not replaced.
+
+include::{snippets}/email-texts/get-texts/curl-request.adoc[]
+include::{snippets}/email-texts/get-texts/response-body.adoc[]
+
+The request takes the following attributes. Without parameters all frontend texts are returned.:
+
+include::{snippets}/email-texts/get-texts/auto-request-parameters.adoc[]
+
+=== PUT
+
+With admin authentication, it is possible to reset installation-specific email texts with the Quarano REST API via `/api/admin/emailtexts`.
+
+include::{snippets}/email-texts/put-texts/curl-request.adoc[]
+
+The request requires the following path parameters.:
+
+include::{snippets}/email-texts/put-texts/auto-path-parameters.adoc[]
+
+In addition, the language of the text must be transmitted via the Content-Language header!
 
 [[actuators]]
 == Actuators
@@ -261,4 +299,3 @@ $ java -Dspring.profiles.active=develop target/*.jar
 A client could then trigger an HTTP POST to `/actuator/restart` (you need an authentication token for that) and then poll `/actuator/health/readiness` until `$.status` in the JSON response returns `UP`.
 It can then proceed with requests that assume the default demo data state.
 Repeat as needed after operations that have changed the application state in way that it'd taint further interactions.
-

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
 import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
@@ -11,9 +12,12 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
@@ -26,69 +30,74 @@ import com.jayway.jsonpath.JsonPath;
  * @author Jens Kutzsche
  */
 @QuaranoWebIntegrationTest
-class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
+@RequiredArgsConstructor
+class EmailTextControllerWebIntegrationTests extends AbstractDocumentation {
+
+	private final LinkDiscoverer discoverer;
 
 	@Test
 	void getAllTexts() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON))
-				.andDo(documentGetFrontendTexts())
+				.andDo(documentGetEmailTexts())
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Sie haben vom Gesundheitsamt Mannheim", "terms", "data-protection", "imprint",
-				"welcome-index",
-				"welcome-contact");
+		assertThatResultContains(result, "Ihr Gesundheitsamt Mannheim", "diary-reminder", "new-contact-case",
+				"registration-index", "registration-contact");
+		assertThatResultHasEditLink(result);
 	}
 
 	@Test
 	void getAllTextsEng() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(Locale.UK))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "You have received", "terms", "data-protection", "imprint", "welcome-index",
-				"welcome-contact");
+		assertThatResultContains(result, "Your Gesundheitsamt Mannheim", "diary-reminder", "new-contact-case",
+				"registration-index", "registration-contact");
+		assertThatResultHasEditLink(result);
 	}
 
 	@Test
 	void getOneText() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.param("key", "welcome-index"))
+				.param("key", "diary-reminder"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Sie haben vom Gesundheitsamt Mannheim", "welcome-index");
+		assertThatResultContains(result, "Ihr Gesundheitsamt Mannheim", "diary-reminder");
+		assertThatResultHasEditLink(result);
 	}
 
 	@Test
 	void getOneTextEn() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(Locale.UK)
-				.param("key", "welcome-index"))
+				.param("key", "diary-reminder"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Your health agency Mannheim", "welcome-index");
+		assertThatResultContains(result, "Your Gesundheitsamt Mannheim", "diary-reminder");
+
+		var document = JsonPath.parse(result);
+		var read = document.read("$._embedded.texts", JSONArray.class);
+		assertThatResultHasEditLink(result);
 	}
 
 	@Test
 	@WithQuaranoUser("agent1")
 	void putOnlyAsAdmin() throws Exception {
 
-		mvc.perform(get("/frontendtexts/terms")
-				.content("Text"))
-				.andExpect(status().isForbidden());
-
-		mvc.perform(get("/admin/frontendtexts/terms")
+		mvc.perform(get("/admin/emailtexts/diary-reminder")
 				.content("Text"))
 				.andExpect(status().isForbidden());
 	}
@@ -97,48 +106,53 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("admin")
 	void putText() throws Exception {
 
-		mvc.perform(put("/admin/frontendtexts/terms")
+		mvc.perform(put("/admin/emailtexts/diary-reminder")
 				.header(HttpHeaders.CONTENT_LANGUAGE, "de")
 				.content("Text"))
-				.andDo(documentPutFrontendTexts())
+				.andDo(documentPutEmailTexts())
 				.andExpect(status().is2xxSuccessful());
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.param("key", "terms"))
+				.param("key", "diary-reminder"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Text", "terms");
+		assertThatResultContains(result, "Text", "diary-reminder");
 	}
 
 	@Test
 	@WithQuaranoUser("admin")
 	void putTextEn() throws Exception {
 
-		mvc.perform(put("/admin/frontendtexts/terms")
+		mvc.perform(put("/admin/emailtexts/diary-reminder")
 				.header(HttpHeaders.CONTENT_LANGUAGE, "en")
 				.content("Text"))
 				.andExpect(status().is2xxSuccessful());
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/emailtexts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.param("key", "terms")
+				.param("key", "diary-reminder")
 				.param("lang", "en"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn().getResponse().getContentAsString();
 
-		assertThatResultContains(result, "Text", "terms");
+		assertThatResultContains(result, "Text", "diary-reminder");
 	}
 
 	@Test
 	@WithQuaranoUser("admin")
 	void putTextWithWrongKey() throws Exception {
 
-		mvc.perform(put("/admin/frontendtexts/abc")
+		mvc.perform(put("/admin/emailtexts/abc")
 				.header(HttpHeaders.CONTENT_LANGUAGE, "de")
 				.content("Text"))
 				.andExpect(status().isNotFound());
+	}
+
+	void assertThatResultHasEditLink(String result) {
+		var firstText = JsonPath.parse(result).read("$._embedded.texts[0]", Map.class);
+		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.EDIT, JsonPath.parse(firstText).jsonString())).isPresent();
 	}
 
 	static void assertThatResultContains(String result, String excampleString, Object... keys) {
@@ -152,16 +166,16 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 				.anyMatch(it -> it.contains(excampleString));
 	}
 
-	static ResultHandler documentGetFrontendTexts() {
+	static ResultHandler documentGetEmailTexts() {
 
-		return DocumentationFlow.of("frontend-texts")
+		return DocumentationFlow.of("email-texts")
 				.withResponsePreprocessor(
 						Preprocessors.replacePattern(Pattern.compile("\"text\" : \".*\""),
-								"\"text\" : \"<h1>Some HTML</h1><p>\u2026</p>\""))
+								"\"text\" : \"Some Text\""))
 				.document("get-texts");
 	}
 
-	static ResultHandler documentPutFrontendTexts() {
-		return DocumentationFlow.of("frontend-texts").document("put-texts");
+	static ResultHandler documentPutEmailTexts() {
+		return DocumentationFlow.of("email-texts").document("put-texts");
 	}
 }

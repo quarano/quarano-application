@@ -5,10 +5,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
 
-public interface FrontendTextRepository extends Repository<FrontendText, UUID> {
+public interface FrontendTextRepository extends CrudRepository<FrontendText, UUID> {
 
 	static final String DEFAULT_SELECT = "select t from FrontendText t where t.locale = :locale";
 

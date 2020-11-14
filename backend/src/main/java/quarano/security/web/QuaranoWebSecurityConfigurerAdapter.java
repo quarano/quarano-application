@@ -82,6 +82,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			it.mvcMatchers("/registration/checkcode/**").permitAll();
 			it.mvcMatchers("/registration/checkusername/**").permitAll();
 			it.mvcMatchers("/frontendtexts").permitAll();
+			it.mvcMatchers("/emailtexts").permitAll();
 			it.mvcMatchers("/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
 			it.mvcMatchers("/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN));
 

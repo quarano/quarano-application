@@ -42,6 +42,12 @@ public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> 
 	private @Getter Locale locale;
 	private @Getter @Lob String text;
 
+	public EmailText setText(String text) {
+
+		this.text = text;
+		return this;
+	}
+
 	/**
 	 * Returns an email text potentially augmented with the one provided by the given fallback provider in case the
 	 * current one is not in the same language as the given {@link Locale}.
