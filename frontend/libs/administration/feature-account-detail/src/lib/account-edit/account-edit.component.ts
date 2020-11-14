@@ -143,47 +143,51 @@ export class AccountEditComponent implements OnInit, OnDestroy {
   }
 
   private createAccount(account: AccountDto, closeAfterSave: boolean) {
-    this.entityService
-      .add(account)
-      .subscribe(
-        (result) => {
-          this.formGroup.markAsPristine();
-          this.snackbarService.success(
-            `Der Account ${account.firstName} ${account.lastName} wurde erfolgreich angelegt`
-          );
-          if (closeAfterSave) {
-            this.router.navigate(['/administration/accounts/account-list']);
-          } else {
-            this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+    this.subs.add(
+      this.entityService
+        .add(account)
+        .subscribe(
+          (result) => {
+            this.formGroup.markAsPristine();
+            this.snackbarService.success(
+              `Der Account ${account.firstName} ${account.lastName} wurde erfolgreich angelegt`
+            );
+            if (closeAfterSave) {
+              this.router.navigate(['/administration/accounts/account-list']);
+            } else {
+              this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+            }
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
           }
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-        }
-      )
-      .add(() => (this.loading = false));
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   private editAccount(account: AccountDto, closeAfterSave: boolean) {
-    this.entityService
-      .update(account)
-      .subscribe(
-        (result) => {
-          this.formGroup.markAsPristine();
-          this.snackbarService.success(
-            `Die Accountdaten für ${account.firstName} ` + `${account.lastName} wurden erfolgreich aktualisiert`
-          );
-          if (closeAfterSave) {
-            this.router.navigate(['/administration/accounts/account-list']);
-          } else {
-            this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+    this.subs.add(
+      this.entityService
+        .update(account)
+        .subscribe(
+          (result) => {
+            this.formGroup.markAsPristine();
+            this.snackbarService.success(
+              `Die Accountdaten für ${account.firstName} ` + `${account.lastName} wurden erfolgreich aktualisiert`
+            );
+            if (closeAfterSave) {
+              this.router.navigate(['/administration/accounts/account-list']);
+            } else {
+              this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
+            }
+          },
+          (error) => {
+            this.badRequestService.handleBadRequestError(error, this.formGroup);
           }
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, this.formGroup);
-        }
-      )
-      .add(() => (this.loading = false));
+        )
+        .add(() => (this.loading = false))
+    );
   }
 
   trimValue(input: MatInput) {

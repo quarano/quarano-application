@@ -26,7 +26,8 @@ export class AccountListComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private entityService: AccountEntityService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -46,14 +47,16 @@ export class AccountListComponent implements OnInit, OnDestroy {
     return this.roles.find((r) => r.name === role).displayName;
   }
 
-  deleteUser(event, user: AccountDto) {
+  deleteUser(event, account: AccountDto) {
     event.stopPropagation();
-    this.confirmDeletion(user).subscribe((result) => {
+    this.confirmDeletion(account).subscribe((result) => {
       if (result) {
-        this.apiService.delete(user._links).subscribe((_) => {
-          this.snackbarService.success(`${user.firstName} ${user.lastName} wurde erfolgreich gelöscht.`);
-          this.accounts = ArrayFunctions.remove(this.accounts, user);
-        });
+        this.apiService
+          .delete(account._links)
+          .pipe(tap((_) => this.entityService.removeOneFromCache(account)))
+          .subscribe((_) => {
+            this.snackbarService.success(`${account.firstName} ${account.lastName} wurde erfolgreich gelöscht.`);
+          });
       }
     });
   }
