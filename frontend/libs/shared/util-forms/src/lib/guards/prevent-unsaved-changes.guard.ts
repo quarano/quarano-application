@@ -16,7 +16,11 @@ export class PreventUnsavedChangesGuard implements CanDeactivate<DeactivatableCo
   constructor(public dialog: MatDialog) {}
 
   canDeactivate(component: DeactivatableComponent) {
-    return component.canDeactivate() ? true : this.confirmProceeding();
+    if (component) {
+      return component.canDeactivate() ? true : this.confirmProceeding();
+    }
+    console.warn('PreventUnsavedChangesGuard is configured but component does not implement DeactivatableComponent');
+    return true;
   }
 
   confirmProceeding(): Observable<boolean> {

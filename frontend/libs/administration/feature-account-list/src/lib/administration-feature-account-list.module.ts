@@ -19,7 +19,7 @@ import { AccountListComponent } from './account-list/account-list.component';
         path: '',
         pathMatch: 'full',
         component: AccountListComponent,
-        resolve: { accounts: AccountListResolver },
+        resolve: { accountsLoaded: AccountListResolver },
       },
     ]),
   ],

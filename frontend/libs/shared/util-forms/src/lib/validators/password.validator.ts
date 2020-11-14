@@ -1,8 +1,8 @@
-import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
+import { FormControl, ValidationErrors, FormGroup } from '@angular/forms';
 
 export class PasswordValidator {
   public static secure(control: FormControl): ValidationErrors {
-    const password: string = control.value?.trim();
+    const password: string = control?.value?.trim();
     const errors: ValidationErrors = {};
 
     if (!password) {
@@ -28,23 +28,44 @@ export class PasswordValidator {
     return errors;
   }
 
-  public static mustMatch(control: AbstractControl): { passwordConfirmWrong: boolean } {
-    if (!control.get('password').value?.trim() || !control.get('passwordConfirm').value?.trim()) {
+  public static mustMatch(formGroup: FormGroup): { passwordConfirmWrong: boolean } {
+    if (!formGroup.get('password')) {
+      throw new Error('mustMatch validator was set, but formGroup does not contain a control named password');
+    }
+    if (!formGroup.get('passwordConfirm')) {
+      throw new Error('mustMatch validator was set, but formGroup does not contain a control named passwordConfirm');
+    }
+    if (!formGroup.get('password').value?.trim() || !formGroup.get('passwordConfirm').value?.trim()) {
       return null;
     }
 
-    if (control.get('password').value?.trim() !== control.get('passwordConfirm').value?.trim()) {
+    if (formGroup.get('password').value?.trim() !== formGroup.get('passwordConfirm').value?.trim()) {
       return { passwordConfirmWrong: true };
     }
   }
 
-  public static mustNotIncludeUsername(control: AbstractControl): { passwordIncludesUsername: boolean } {
-    if (!control.get('password').value?.trim() || !control.get('username').value?.trim()) {
+  public static mustNotIncludeUsername(formGroup: FormGroup): { passwordIncludesUsername: boolean } {
+    if (!formGroup.get('username')) {
+      throw new Error(
+        'mustNotIncludeUsername validator was set, but formGroup does not contain a control named username'
+      );
+    }
+    if (!formGroup.get('password')) {
+      throw new Error(
+        'mustNotIncludeUsername validator was set, but formGroup does not contain a control named password'
+      );
+    }
+
+    if (!formGroup.get('password').value?.trim() || !formGroup.get('username').value?.trim()) {
       return null;
     }
 
     if (
-      control.get('password').value.trim().toLowerCase().includes(control.get('username').value?.trim().toLowerCase())
+      formGroup
+        .get('password')
+        .value?.trim()
+        .toLowerCase()
+        .includes(formGroup.get('username').value?.trim().toLowerCase())
     ) {
       return { passwordIncludesUsername: true };
     }

@@ -1,0 +1,29 @@
+<mat-card class="form__card--small form__card--animated" *ngIf="account$ | async as account">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title *ngIf="account.accountId; else newAccount">
+      <span> Account-Daten für {{ account.firstName }} {{ account.lastName }} bearbeiten </span>
+    </mat-card-title>
+    <ng-template #newAccount>
+      <mat-card-title><span>Neuen Mitarbeiter-Account anlegen</span> </mat-card-title>
+    </ng-template>
+  </mat-card-header>
+  <mat-card-content>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link [routerLink]="['edit']" routerLinkActive #rledit="routerLinkActive" [active]="rledit.isActive">
+        Account-Daten
+      </a>
+      <a
+        mat-tab-link
+        *ngIf="account._links.hasOwnProperty('reset-password')"
+        [routerLink]="['reset-password']"
+        routerLinkActive
+        #rlpassword="routerLinkActive"
+        [active]="rlpassword.isActive"
+      >
+        <span>Passwort zurücksetzen</span>
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

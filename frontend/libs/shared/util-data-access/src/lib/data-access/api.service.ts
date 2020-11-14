@@ -45,7 +45,7 @@ export class ApiService {
     return of();
   }
 
-  delete(deleteLink: DeleteLink) {
+  delete(deleteLink: DeleteLink | any) {
     return this.httpClient.delete(deleteLink.delete.href).pipe(shareReplay());
   }
 }
