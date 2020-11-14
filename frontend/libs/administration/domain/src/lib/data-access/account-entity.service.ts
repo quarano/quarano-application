@@ -11,7 +11,7 @@ const emptyAccount: AccountDto = {
   firstName: null,
   lastName: null,
   username: null,
-  _links: {},
+  _links: { self: { href: '' } },
   email: null,
   roles: [],
 };

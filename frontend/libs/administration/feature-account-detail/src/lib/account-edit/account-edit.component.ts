@@ -147,13 +147,15 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       .add(account)
       .subscribe(
         (result) => {
+          this.formGroup.markAsPristine();
           this.snackbarService.success(
             `Der Account ${account.firstName} ${account.lastName} wurde erfolgreich angelegt`
           );
           if (closeAfterSave) {
             this.router.navigate(['/administration/accounts/account-list']);
+          } else {
+            this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
           }
-          this.buildForm(result);
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);
@@ -167,13 +169,15 @@ export class AccountEditComponent implements OnInit, OnDestroy {
       .update(account)
       .subscribe(
         (result) => {
+          this.formGroup.markAsPristine();
           this.snackbarService.success(
             `Die Accountdaten für ${account.firstName} ` + `${account.lastName} wurden erfolgreich aktualisiert`
           );
           if (closeAfterSave) {
             this.router.navigate(['/administration/accounts/account-list']);
+          } else {
+            this.router.navigate(['/administration/accounts/account-detail', result.accountId]);
           }
-          this.buildForm(account);
         },
         (error) => {
           this.badRequestService.handleBadRequestError(error, this.formGroup);
