@@ -7,6 +7,8 @@ import static quarano.department.activation.ActivationCodeException.Status.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import quarano.AbstractDocumentation;
+import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.I18nProperties;
@@ -21,9 +23,12 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.util.TestEmailServer;
 
 import java.util.Map;
 import java.util.UUID;
+
+import javax.mail.Message.RecipientType;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -31,16 +36,16 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.util.GreenMailUtil;
 import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
-class RegistrationWebIntegrationTests {
+class RegistrationWebIntegrationTests extends AbstractDocumentation {
 
-	private final MockMvc mvc;
 	private final ObjectMapper mapper;
 	private final TrackedPersonRepository people;
 	private final TrackedCaseRepository cases;
@@ -49,6 +54,7 @@ class RegistrationWebIntegrationTests {
 	private final MessageSourceAccessor messages;
 	private final RegistrationManagement registration;
 	private final I18nProperties i18nProperties;
+	private final TestEmailServer mailServer;
 
 	@Test
 	void registerNewAccountForClientSuccess() throws Exception {
@@ -447,6 +453,74 @@ class RegistrationWebIntegrationTests {
 		}).doesNotThrowAnyException();
 	}
 
+	@Test // CORE-585
+	@WithQuaranoUser("agent2")
+	void cantSendRegistrationMail_unknownPerson() throws Exception {
+
+		var caseId = "108a0a90-9768-4ed5-ab7b-cb9f4f02036b";
+
+		mvc.perform(post("/hd/cases/{id}/registration/mail", caseId))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test // CORE-585
+	@WithQuaranoUser("agent2")
+	void cantSendRegistrationMail_noActivationCode() throws Exception {
+
+		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1;
+		var harryCase = cases.findByTrackedPerson(personId)
+				.orElseThrow();
+
+		mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test // CORE-585
+	@WithQuaranoUser("agent2")
+	void sendRegistrationMail() throws Exception {
+
+		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1;
+		var harryCase = cases.findByTrackedPerson(personId)
+				.orElseThrow();
+
+		// start tracking
+
+		var response = mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.mailed", Boolean.class)).isFalse();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.SEND_MAIL, response)).isPresent();
+
+		// send mail
+
+		response = mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
+				.andDo(documentPostSendMail())
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		document = JsonPath.parse(response);
+
+		assertThat(document.read("$.mailed", Boolean.class)).isTrue();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.SEND_MAIL, response)).isNotPresent();
+
+		mailServer.assertEmailSent(message -> {
+
+			assertThat(message.getSubject()).isEqualTo("GA Mannheim: Registration link for Covid-19 Diary");
+			assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs/Mr Hirsch,");
+			assertThat(message.getRecipients(RecipientType.TO)[0].toString())
+					.isEqualTo("Harry Hirsch <harry@hirsch.de>");
+			assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <index-email@gesundheitsamt.de>");
+		});
+
+		// try send again and get an error
+
+		mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
+				.andExpect(status().isUnprocessableEntity());
+	}
+
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {
 
 		String resultDtoStr = mvc.perform(get("/user/me")
@@ -535,5 +609,10 @@ class RegistrationWebIntegrationTests {
 		UUID getCode() {
 			return (UUID) ReflectionTestUtils.getField(code.getId(), "activationCodeId");
 		}
+	}
+
+	private static ResultHandler documentPostSendMail() {
+
+		return DocumentationFlow.of("registration").document("send-mail");
 	}
 }

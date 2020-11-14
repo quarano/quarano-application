@@ -52,7 +52,7 @@ class MailForNewContactCaseEventListenerTests {
 
 		mailServer.assertEmailSent(message -> {
 
-			assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
+			assertThat(message.getSubject()).isEqualTo("GA Mannheim: Information für gemeldeten Kontakt");
 			assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,");
 			assertThat(message.getRecipients(RecipientType.TO)[0].toString())
 					.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");

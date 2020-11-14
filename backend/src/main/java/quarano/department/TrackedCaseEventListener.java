@@ -109,6 +109,7 @@ class TrackedCaseEventListener {
 					.orElseGet(Map::of);
 
 			return emailSender.sendMail(new TrackedCaseEmail(trackedCase, subject, Keys.NEW_CONTACT_CASE, placeholders))
+					.onSuccess(__ -> code.map(ActivationCode::getId).map(activationCodes::codeMailed))
 					.onSuccess(__ -> log.info("Contact case creation mail sent to {{}; {}; Case-ID {}}", logArgs))
 					.onFailure(__ -> code.map(ActivationCode::getId).map(activationCodes::cancelCode))
 					.onFailure(e -> log.info("Can't send contact case creation mail to {{}; {}; Case-ID {}}", logArgs))

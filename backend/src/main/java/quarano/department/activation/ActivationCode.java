@@ -2,6 +2,7 @@ package quarano.department.activation;
 
 import io.vavr.control.Try;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ import org.jmolecules.ddd.types.Identifier;
 @Table(name = "activation_codes")
 @EqualsAndHashCode(callSuper = true, of = {})
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationCodeIdentifier> {
 
 	private @Getter LocalDateTime expirationTime;
@@ -43,6 +45,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	private @Getter @Enumerated(EnumType.STRING) ActivationCodeStatus status;
 	private @Getter int activationTries;
 	private @Getter DepartmentIdentifier departmentId;
+	private @Getter boolean mailed;
 
 	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId,
 			DepartmentIdentifier departmentId) {
@@ -80,6 +83,17 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 
 	public boolean isCancelled() {
 		return status == ActivationCodeStatus.CANCELED;
+	}
+
+	/**
+	 * marks the code as mailed
+	 * 
+	 * @since 1.4
+	 */
+	ActivationCode mailed() {
+
+		mailed = true;
+		return this;
 	}
 
 	/**
