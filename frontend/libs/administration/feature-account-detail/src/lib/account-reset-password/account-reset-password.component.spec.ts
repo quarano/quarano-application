@@ -23,7 +23,7 @@ describe('AccountResetPasswordComponent', () => {
         schemas: [NO_ERRORS_SCHEMA],
         providers: [
           { provide: SnackbarService, useValue: {} },
-          { provide: ActivatedRoute, useValue: { parent: { queryParamMap: of({}) } } },
+          { provide: ActivatedRoute, useValue: { parent: { paramMap: of({}) } } },
           { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
           { provide: BadRequestService, useValue: {} },
           { provide: ApiService, useValue: {} },
