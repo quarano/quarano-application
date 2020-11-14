@@ -32,3 +32,20 @@ include::{snippets}/anomalies/access-anomaly/links.adoc[]
 
 [[agent.anomalies.resolve]]
 == Resolving an anomaly
+
+[[agent.registration.send]]
+== Send registration mail
+
+With the response of a registration (GET on `/hd/cases/{case-id}/registration`) you get a link `send-mail`.
+You can follow this link with a `POST`-Request to send the registration e-mail to the recipient.
+The e-mail can be sent if a case exists for the given ID, it has an e-mail address and a valid activation code that has not yet been sent.
+If the e-mail with the currently valid activation link has already been sent, the link `send-mail` is not included in the response.
+Furthermore, the marker `mailed` is present, which indicates whether the e-mail has already been sent.
+
+include::{snippets}/registration/send-mail/curl-request.adoc[]
+
+include::{snippets}/registration/send-mail/auto-path-parameters.adoc[]
+
+The response is the registration in the current state.
+
+include::{snippets}/registration/send-mail/response-body.adoc[]

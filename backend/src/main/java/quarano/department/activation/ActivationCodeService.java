@@ -1,5 +1,7 @@
 package quarano.department.activation;
 
+import static java.util.function.Predicate.*;
+
 import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,7 @@ public class ActivationCodeService {
 
 		return Try.success(personIdentifier)
 				.map(activationCodes::findByTrackedPersonId)
-				.filter(it -> !it.hasRedeemedCode(), ActivationCodeException::activationConcluded)
+				.filter(not(ActivationCodes::hasRedeemedCode), ActivationCodeException::activationConcluded)
 				.map(it -> it.cancelAll(activationCodes::save))
 				.map(__ -> new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier))
 				.map(activationCodes::save);
@@ -71,6 +73,18 @@ public class ActivationCodeService {
 
 		return findCode(identifier)
 				.flatMap(ActivationCode::cancel)
+				.map(activationCodes::save);
+	}
+
+	/**
+	 * marks the code with the given identifier as mailed
+	 * 
+	 * @since 1.4
+	 */
+	public Try<ActivationCode> codeMailed(ActivationCodeIdentifier identifier) {
+
+		return findCode(identifier)
+				.map(ActivationCode::mailed)
 				.map(activationCodes::save);
 	}
 

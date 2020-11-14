@@ -347,6 +347,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return questionnaire != null;
 	}
 
+	/**
+	 * @since 1.4
+	 */
+	public boolean isEmailAvailable() {
+		return trackedPerson.getEmailAddress() != null;
+	}
+
 	TrackedCase markAsManuallyTracked() {
 
 		assertStatus(Status.OPEN, "Cannot mark case %s as tracked manually as it is in status %s!", id, status);

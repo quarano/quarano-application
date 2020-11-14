@@ -541,6 +541,26 @@ public interface MappedPayloads {
 			return this;
 		}
 
+		/**
+		 * Rejects the field with the given name with the given error code if the given condition predicate returns true.
+		 *
+		 * @param condition the condition predicate under which to reject the given field.
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @return the current instance, never {@literal null}.
+		 * @since 1.4
+		 */
+		public MappedPayload<T> rejectField(Predicate<T> condition, String field, String errorCode) {
+
+			Assert.notNull(condition, "Condition predicate must not be null!");
+			Assert.hasText(field, "Field name must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+
+			return errors.hasErrors() || payload == null || !condition.test(payload)
+					? this
+					: rejectField(field, errorCode);
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * @see quarano.core.web.MappedPayloads.MappedErrors#rejectField(java.lang.String, java.lang.String)
