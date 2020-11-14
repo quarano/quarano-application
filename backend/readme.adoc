@@ -80,3 +80,12 @@ There's a demo deployment available at https://quarano-backend-dev.cfapps.io inc
 No guarantees about the availability and state of data.
 
 If you prefer to use a UI (what? 😳🤔😭) you can use https://quarano.de/internal-dev.
+
+== Build as dependency
+
+To build the application as a dependency, that could be wired by another application, run
+
+[source, bash]
+----
+$ mvn install -Pas-dependency
+----
