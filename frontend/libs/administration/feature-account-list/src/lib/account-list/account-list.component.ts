@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { AccountDto } from '@qro/administration/domain';
+import { finalize, map, shareReplay, tap } from 'rxjs/operators';
+import { AccountDto, AccountEntityService } from '@qro/administration/domain';
 import { IRole, roles } from '@qro/auth/api';
 import { ApiService } from '@qro/shared/util-data-access';
 import { SnackbarService } from '@qro/shared/util-snackbar';
@@ -18,29 +18,20 @@ import { ArrayFunctions } from '@qro/shared/util-common-functions';
 })
 export class AccountListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
-  accounts: AccountDto[] = [];
+  accounts$: Observable<AccountDto[]>;
   loading = false;
   roles: IRole[] = roles;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private apiService: ApiService,
+    private entityService: AccountEntityService,
     private snackbarService: SnackbarService
   ) {}
 
   ngOnInit() {
     this.loading = true;
-    this.subs.add(
-      this.route.data.subscribe(
-        (data) => {
-          this.accounts = data.accounts;
-          this.loading = false;
-        },
-        () => (this.loading = false)
-      )
-    );
+    this.accounts$ = this.entityService.entities$.pipe(tap(() => (this.loading = false)));
   }
 
   ngOnDestroy() {
@@ -48,7 +39,7 @@ export class AccountListComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    this.router.navigate(['/administration/accounts/account-detail/edit', event?.selected[0]?.accountId]);
+    this.router.navigate(['/administration/accounts/account-detail', event?.selected[0]?.accountId]);
   }
 
   getRoleDisplayName(role: string) {

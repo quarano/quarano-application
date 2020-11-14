@@ -10,6 +10,7 @@
   </button>
 
   <ngx-datatable
+    *ngIf="accounts$ | async as accounts"
     class="material fixed-header"
     style="max-width: 1110px"
     [count]="accounts.length"
