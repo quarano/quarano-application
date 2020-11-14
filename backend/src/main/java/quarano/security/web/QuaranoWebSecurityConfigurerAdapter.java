@@ -64,19 +64,20 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter(accountSource));
 
 		httpSecurity.authorizeRequests(it -> {
-			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
-			it.mvcMatchers("/docs/**").permitAll();
-			it.mvcMatchers("/h2_console/**").permitAll();
-			it.mvcMatchers("/login").permitAll();
-			it.mvcMatchers("/registration").permitAll();
-			it.mvcMatchers("/registration/checkcode/**").permitAll();
-			it.mvcMatchers("/registration/checkusername/**").permitAll();
-			it.mvcMatchers("/frontendtexts").permitAll();
-			it.mvcMatchers("/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
-			it.mvcMatchers("/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN));
-			it.mvcMatchers("/user/**").authenticated();
-			it.mvcMatchers("/symptoms").authenticated();
-			it.mvcMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')");
+			it.mvcMatchers("/**").permitAll();
+//			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
+//			it.mvcMatchers("/docs/**").permitAll();
+//			it.mvcMatchers("/h2_console/**").permitAll();
+//			it.mvcMatchers("/login").permitAll();
+//			it.mvcMatchers("/registration").permitAll();
+//			it.mvcMatchers("/registration/checkcode/**").permitAll();
+//			it.mvcMatchers("/registration/checkusername/**").permitAll();
+//			it.mvcMatchers("/frontendtexts").permitAll();
+//			it.mvcMatchers("/hd/accounts/**").access("hasRole('" + RoleType.ROLE_HD_ADMIN + "')");
+//			it.mvcMatchers("/hd/**").access(hasAnyRole(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN));
+//			it.mvcMatchers("/user/**").authenticated();
+//			it.mvcMatchers("/symptoms").authenticated();
+//			it.mvcMatchers("/**").access("hasRole('" + RoleType.ROLE_USER + "')");
 		});
 		// this will ignore only h2-console csrf, spring security 4+
 		httpSecurity.csrf().ignoringAntMatchers("/h2-console/**");

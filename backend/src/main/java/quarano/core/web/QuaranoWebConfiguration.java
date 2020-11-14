@@ -1,6 +1,7 @@
 package quarano.core.web;
 
 import lombok.RequiredArgsConstructor;
+import quarano.Quarano;
 
 import java.io.IOException;
 import java.util.Map;
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerTypePredicate;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -31,6 +35,15 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 class QuaranoWebConfiguration implements WebMvcConfigurer {
+
+	@Override
+	public void configurePathMatch(PathMatchConfigurer configurer) {
+		configurer.addPathPrefix(
+			"api",
+			HandlerTypePredicate.forAnnotation(RestController.class)
+			.and(HandlerTypePredicate.forBasePackageClass(Quarano.class))
+		);
+	}
 
 	@Bean
 	Module quaranoModule(MessageSourceAccessor accessor) {
