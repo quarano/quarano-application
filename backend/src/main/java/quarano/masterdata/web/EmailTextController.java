@@ -2,7 +2,7 @@ package quarano.masterdata.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.masterdata.FrontendTextRepository;
+import quarano.masterdata.EmailTextRepository;
 import quarano.masterdata.web.TextRepresentations.TextDto;
 
 import java.util.Locale;
@@ -26,19 +26,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-class FrontendTextController {
+class EmailTextController {
 
 	private final @NonNull TextRepresentations representations;
-	private final @NonNull FrontendTextRepository texts;
+	private final @NonNull EmailTextRepository texts;
 
 	/**
-	 * @param key The key of a frontend text to get only one special text.
+	 * @param key The key of a email text to get only one special text.
 	 * @param lang The language of the frontend texts.
-	 * @param rawText True, if the placeholders should not be replaced.
 	 */
-	@GetMapping(path = "/frontendtexts")
+	@GetMapping(path = "/emailtexts")
 	public RepresentationModel<?> getText(@RequestParam("key") Optional<String> key,
-			@RequestParam("lang") Optional<Locale> lang, @RequestParam("rawtext") Optional<Boolean> rawText) {
+			@RequestParam("lang") Optional<Locale> lang) {
 
 		var locale = lang.map(Locale::getLanguage)
 				.map(Locale::new)
@@ -47,7 +46,7 @@ class FrontendTextController {
 		var dtos = key
 				.map(it -> texts.findByTextKey(it, locale).stream())
 				.orElseGet(() -> texts.findAll(locale).stream())
-				.map(it -> representations.toRepresentation(it, rawText.orElse(Boolean.FALSE)));
+				.map(it -> representations.toRepresentation(it));
 
 		return HalModelBuilder.emptyHalModel()
 				.embed(dtos, TextDto.class)
@@ -55,11 +54,11 @@ class FrontendTextController {
 	}
 
 	/**
-	 * @param key The key of the frontend text to be replaced.
-	 * @param lang The language of the frontend text.
+	 * @param key The key of the email text to be replaced.
+	 * @param lang The language of the email text.
 	 * @param text The text to be set for the given key.
 	 */
-	@PutMapping(path = "/admin/frontendtexts/{key}")
+	@PutMapping(path = "/admin/emailtexts/{key}")
 	public HttpEntity<?> putText(@PathVariable String key, @RequestHeader("content-language") Locale lang,
 			@RequestBody String text) {
 

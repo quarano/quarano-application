@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
 
-interface EmailTextRepository extends CrudRepository<EmailText, UUID> {
+public interface EmailTextRepository extends CrudRepository<EmailText, UUID> {
 
 	static final String DEFAULT_SELECT = "select t from EmailText t where t.locale = :locale";
 
