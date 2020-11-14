@@ -1,15 +1,13 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
-import { CaseEntityService } from './case-entity.service';
+import { TestBed, inject } from '@angular/core/testing';
 import { EntityCollectionServiceElementsFactory, HttpUrlGenerator } from '@ngrx/data';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AccountEntityService } from './account-entity.service';
 
-describe('Service: IndexCaseEntity', () => {
+describe('Service: AccountEntity', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        CaseEntityService,
+        AccountEntityService,
         { provide: EntityCollectionServiceElementsFactory, useValue: {} },
         { provide: HttpUrlGenerator, useValue: {} },
       ],
@@ -17,7 +15,7 @@ describe('Service: IndexCaseEntity', () => {
     });
   });
 
-  xit('should ...', inject([CaseEntityService], (service: CaseEntityService) => {
+  xit('should ...', inject([AccountEntityService], (service: AccountEntityService) => {
     expect(service).toBeTruthy();
   }));
 });

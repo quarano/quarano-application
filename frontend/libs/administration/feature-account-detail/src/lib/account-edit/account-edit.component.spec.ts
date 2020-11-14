@@ -27,23 +27,7 @@ describe('AccountEditComponent', () => {
           { provide: SnackbarService, useValue: {} },
           { provide: BadRequestService, useValue: {} },
           { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
-          {
-            provide: ActivatedRoute,
-            useValue: {
-              data: of({
-                account: {
-                  accountId: null,
-                  firstName: null,
-                  lastName: null,
-                  username: null,
-                  _links: null,
-                  email: null,
-                  roles: [],
-                },
-              }),
-              snapshot: { paramMap: { get: () => '' } },
-            },
-          },
+          { provide: ActivatedRoute, useValue: { parent: { paramMap: of({}) } } },
         ],
         schemas: [NO_ERRORS_SCHEMA],
       }).compileComponents();
