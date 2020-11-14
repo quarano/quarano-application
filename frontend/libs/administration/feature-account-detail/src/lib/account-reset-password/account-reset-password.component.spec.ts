@@ -1,3 +1,4 @@
+import { AccountEntityService } from '@qro/administration/domain';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '@qro/shared/util-data-access';
 import { BadRequestService } from '@qro/shared/ui-error';
@@ -25,6 +26,7 @@ describe('AccountResetPasswordComponent', () => {
           { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
           { provide: BadRequestService, useValue: {} },
           { provide: ApiService, useValue: {} },
+          { provide: AccountEntityService, useValue: {} },
         ],
       }).compileComponents();
     })
