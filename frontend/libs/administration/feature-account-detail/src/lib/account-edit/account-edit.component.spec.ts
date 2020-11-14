@@ -1,8 +1,8 @@
+import { AccountEntityService } from '@qro/administration/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService } from '@qro/shared/util-forms';
-import { AccountService } from '@qro/administration/domain';
 import { FormBuilder } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AccountEditComponent } from './account-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,38 +15,40 @@ describe('AccountEditComponent', () => {
   let component: AccountEditComponent;
   let fixture: ComponentFixture<AccountEditComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AccountEditComponent],
-      providers: [
-        FormBuilder,
-        { provide: AccountService, useValue: {} },
-        { provide: AuthService, useValue: {} },
-        { provide: SnackbarService, useValue: {} },
-        { provide: BadRequestService, useValue: {} },
-        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            data: of({
-              account: {
-                accountId: null,
-                firstName: null,
-                lastName: null,
-                username: null,
-                _links: null,
-                email: null,
-                roles: [],
-              },
-            }),
-            snapshot: { paramMap: { get: () => '' } },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule],
+        declarations: [AccountEditComponent],
+        providers: [
+          FormBuilder,
+          { provide: AccountEntityService, useValue: {} },
+          { provide: AuthService, useValue: {} },
+          { provide: SnackbarService, useValue: {} },
+          { provide: BadRequestService, useValue: {} },
+          { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              data: of({
+                account: {
+                  accountId: null,
+                  firstName: null,
+                  lastName: null,
+                  username: null,
+                  _links: null,
+                  email: null,
+                  roles: [],
+                },
+              }),
+              snapshot: { paramMap: { get: () => '' } },
+            },
           },
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AccountEditComponent);

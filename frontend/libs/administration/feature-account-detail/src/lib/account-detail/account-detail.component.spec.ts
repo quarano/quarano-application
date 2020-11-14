@@ -1,7 +1,7 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AccountEntityService } from '@qro/administration/domain';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { AccountDetailComponent } from './account-detail.component';
 
@@ -9,11 +9,16 @@ describe('AccountDetailComponent', () => {
   let component: AccountDetailComponent;
   let fixture: ComponentFixture<AccountDetailComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [AccountDetailComponent],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule],
+        declarations: [AccountDetailComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+        providers: [{ provide: AccountEntityService, useValue: {} }],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AccountDetailComponent);
