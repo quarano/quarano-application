@@ -44,10 +44,20 @@ export class DiaryEntriesListComponent implements OnInit {
         bodyTemperature: entry.bodyTemperature,
         timeOfDay: entry.slot.timeOfDay,
         date: entry.slot.date,
-        symptoms: entry.symptoms.map((symtom) => symtom.name),
-        contacts: entry.contacts.map((contact) => contact.firstName + ' ' + contact.lastName),
+        symptoms: entry.symptoms.map((symtom) => symtom.name).join(', '),
+        contacts: entry.contacts.map((contact) => this.buildContactName(contact)).join(', '),
       } as TrackedCaseDiaryEntryDto;
     });
+  }
+
+  private buildContactName(contact) {
+    if (!contact.firstName && !contact.lastName) {
+      return 'unbekannte Kontaktperson';
+    }
+    if (!!contact.firstName && !!contact.lastName) {
+      return `${contact.firstName} ${contact.lastName}`;
+    }
+    return !!contact.firstName ? `${contact.firstName} ?` : `? ${contact.lastName}`;
   }
 
   private mapToListItems(diaryEntriesDto: TrackedCaseDiaryEntryDto[]) {
