@@ -125,7 +125,7 @@ describe('health-department index cases', () => {
 
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('exist');
       cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(1).click();
+      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).click();
 
       cy.wait('@getCase').its('status').should('eq', 200);
       cy.get('@getCase')
