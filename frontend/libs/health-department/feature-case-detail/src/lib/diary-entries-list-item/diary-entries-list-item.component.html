@@ -1,48 +1,46 @@
 <div class="bootstrap-wrapper">
   <div class="row">
     <div class="col-12 col-lg-2 line">
-      <div class="entry-container">
+      <div  class="entry-container">
         <div class="data-container text-muted">
           <div class="row-container">
-            <span>{{ diaryListItem.date | date: 'EEEEEE, dd.MM.y'}}</span>
+            <span data-cy="entry-date">{{ diaryListItem.date | date: 'EEEEEE, dd.MM.y'}}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
-      <div class="entry-container">
-        <span class="mr-3 label">{{ 'DIARY_ENTRIES_LIST.MORGENS' | translate}}</span>
+      <div data-cy="entry-morning" class="entry-container">
         <div class="data-container text-muted" *ngIf="diaryListItem.morning else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
-            <span>{{ diaryListItem.morning.bodyTemperature | number: '1.1-1':'de' }} °C</span>
+            <span data-cy="temperature-morning">{{ diaryListItem.morning.bodyTemperature | number: '1.1-1':'de' }} °C</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.morning.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ format(diaryListItem.morning.contacts) }}</span>
+            <span data-cy="contacts-morning">{{ diaryListItem.morning.contacts }}</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.morning.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ format(diaryListItem.morning.symptoms) }}</span>
+            <span data-cy="symptoms-morning">{{ diaryListItem.morning.symptoms }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6 col-lg-5 line">
-      <div class="entry-container">
-        <span class="mr-3 label">{{ 'DIARY_ENTRIES_LIST.ABENDS' | translate}}</span>
+      <div data-cy="entry-evening" class="entry-container">
         <div class="data-container text-muted" *ngIf="diaryListItem.evening else missing_data">
           <div class="row-container">
             <mat-icon class="icon">timeline</mat-icon>
-            <span>{{ diaryListItem.evening.bodyTemperature | number: '1.1-1':'de' }} °C</span>
+            <span data-cy="temperature-evening">{{ diaryListItem.evening.bodyTemperature | number: '1.1-1':'de' }} °C</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.evening.contacts.length > 0">
             <mat-icon class="icon">group</mat-icon>
-            <span>{{ format(diaryListItem.evening.contacts) }}</span>
+            <span data-cy="contacts-evening">{{ diaryListItem.evening.contacts }}</span>
           </div>
           <div class="row-container" *ngIf="diaryListItem.evening.symptoms.length > 0">
             <mat-icon class="icon">healing</mat-icon>
-            <span>{{ format(diaryListItem.evening.symptoms) }}</span>
+            <span data-cy="symptoms-evening">{{ diaryListItem.evening.symptoms }}</span>
           </div>
         </div>
       </div>
@@ -51,5 +49,5 @@
 </div>
 
 <ng-template #missing_data>
-  <span class="text-muted">{{ 'DIARY_ENTRIES_LIST.KEIN_EINTRAG_VORHANDEN' | translate }}</span>
+  <span data-cy="no-entry" class="text-muted">{{ 'DIARY_ENTRIES_LIST.KEIN_EINTRAG_VORHANDEN' | translate }}</span>
 </ng-template>
