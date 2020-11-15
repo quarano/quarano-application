@@ -23,8 +23,4 @@ export class DiaryEntriesListItemComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
-
-  format(theArray: string[]) {
-    return theArray.join(', ');
-  }
 }
