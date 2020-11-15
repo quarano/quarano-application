@@ -2,15 +2,17 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { SubSink } from 'subsink';
 import { HttpResponse } from '@angular/common/http';
 import { ValidationErrorService } from '@qro/shared/util-forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { filter, take, map, switchMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { MatInput } from '@angular/material/input';
-import { UserService } from '@qro/auth/domain';
+import { AuthSelectors, UserService } from '@qro/auth/domain';
 import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { ChangePasswordComponent } from '@qro/auth/feature-change-password';
 import { MatDialog } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'qro-login',
@@ -34,7 +36,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public validationErrorService: ValidationErrorService,
     private badRequestService: BadRequestService,
     private route: ActivatedRoute,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -60,23 +63,28 @@ export class LoginComponent implements OnInit, OnDestroy {
   public submitForm() {
     this.loading = true;
     this.subs.add(
-      this.userService
-        .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
-        .pipe(
-          switchMap((resData) =>
-            this.translatedSnackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
-          )
-        )
+      combineLatest([
+        this.userService
+          .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
+          .pipe(
+            switchMap((resData) =>
+              this.translatedSnackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
+            )
+          ),
+        this.store.pipe(select(AuthSelectors.user)),
+      ])
         .subscribe(
-          (resData) => {
-            if (this.userService.isHealthDepartmentUser) {
-              if (this.checkIfPasswordChangeNeeded(resData)) {
-                this.openPasswordChangeDialog();
+          ([resData, user]) => {
+            if (user) {
+              if (this.userService.isHealthDepartmentUser) {
+                if (this.checkIfPasswordChangeNeeded(resData)) {
+                  this.openPasswordChangeDialog();
+                } else {
+                  this.router.navigate(['/health-department/index-cases/case-list']);
+                }
               } else {
-                this.router.navigate(['/health-department/index-cases/case-list']);
+                this.router.navigate(['/client/diary/diary-list']);
               }
-            } else {
-              this.router.navigate(['/client/diary/diary-list']);
             }
           },
           (error) => {
