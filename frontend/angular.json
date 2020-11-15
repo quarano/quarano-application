@@ -446,8 +446,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "quarano-frontend:build",
+            "extraWebpackConfig": "./apps/quarano-frontend-e2e/coverage.webpack.ts",
             "proxyConfig": "proxy.conf.json"
-            "extraWebpackConfig": "./apps/quarano-frontend-e2e/coverage.webpack.ts"
           },
           "configurations": {
             "production": {
