@@ -139,6 +139,10 @@ public class UserController {
 				errors.rejectValue("passwordConfirm", "NonMatching.password");
 			}
 
+			if (accounts.matches(UnencryptedPassword.of(password), existing)) {
+				errors.rejectValue("password", "NonNew.password");
+			}
+
 			return this;
 		}
 	}

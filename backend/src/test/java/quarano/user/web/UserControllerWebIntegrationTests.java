@@ -159,7 +159,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	void rejectsPasswordChangeIfNewPasswordsDontMatch() throws Exception {
 
 		var newPassword = "newPassword";
-		var payload = new UserController.NewPassword(USERNAME, newPassword, newPassword + "!");
+		var payload = new UserController.NewPassword(PASSWORD, newPassword, newPassword + "!");
 
 		String result = issuePasswordChange(payload)
 				.andExpect(status().isBadRequest())
@@ -169,6 +169,20 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 		assertThat(document.read("$.password", String.class)).isNotNull();
 		assertThat(document.read("$.passwordConfirm", String.class)).isNotNull();
+	}
+
+	@Test // CORE-436
+	void rejectsPasswordChangeIfNewPasswordIdenticalTheExistingOne() throws Exception {
+
+		var payload = new UserController.NewPassword(PASSWORD, PASSWORD, PASSWORD);
+
+		String result = issuePasswordChange(payload)
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.password", String.class)).isNotBlank();
 	}
 
 	@Test
