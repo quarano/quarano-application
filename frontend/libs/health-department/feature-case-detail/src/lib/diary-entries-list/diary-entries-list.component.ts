@@ -100,8 +100,10 @@ export class DiaryEntriesListComponent implements OnInit {
 
   private sortByDateDescending(items: DiaryListItemModel[]) {
     return items.sort((entryA, entryB) => {
-      if (entryA.date < entryB.date) return -1;
-      if (entryA.date < entryB.date) return 1;
+      const dateA = Date.parse(entryA.date);
+      const dateB = Date.parse(entryB.date);
+      if (dateA > dateB) return -1;
+      if (dateA < dateB) return 1;
       return 0;
     });
   }
