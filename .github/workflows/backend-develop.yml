@@ -40,22 +40,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
 
-      - name: Set up CF CLI
-        if: success()
-        uses: jvalkeal/setup-cf-cli@v0
-        with:
-          version: 6.51.0
-
-      - name: CF Login
-        if: success()
-        run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
-        env:
-          CF_API: ${{ secrets.CF_OTC_API }}
-          CF_ORG: ${{ secrets.CF_OTC_ORG }}
-          CF_SPACE: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
-          CF_USERNAME: ${{ secrets.CF_OTC_BUILD_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
-
       - name: Deploy Backend DEV
         if: success()
-        run: cf push internal-dev-backend -f ./manifest-otc.yml -t 180
+        uses: citizen-of-planet-earth/cf-cli-action@master
+        with:
+          cf_api: ${{ secrets.CF_OTC_API }}
+          cf_username: ${{ secrets.CF_OTC_BUILD_USERNAME }}
+          cf_password: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
+          cf_org: ${{ secrets.CF_OTC_ORG }}
+          cf_space: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
+          command: push internal-dev-backend -f ./manifest-otc.yml -t 180
