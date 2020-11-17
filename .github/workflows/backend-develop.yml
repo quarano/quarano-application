@@ -40,13 +40,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
 
-      - name: Deploy Backend DEV
+      - name: Deploy Backend
         if: success()
         uses: citizen-of-planet-earth/cf-cli-action@master
         with:
           cf_api: ${{ secrets.CF_OTC_API }}
-          cf_username: ${{ secrets.CF_OTC_BUILD_USERNAME }}
-          cf_password: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
           cf_org: ${{ secrets.CF_OTC_ORG }}
           cf_space: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
+          cf_username: ${{ secrets.CF_OTC_BUILD_USERNAME }}
+          cf_password: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
           command: push internal-dev-backend -f ./manifest-otc.yml -t 180
