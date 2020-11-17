@@ -34,22 +34,13 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file backend/pom.xml
 
-    - name: Set up CF CLI
-      if: success()
-      uses: jvalkeal/setup-cf-cli@v0
-      with:
-        version: 6.51.0
-
-    - name: CF Login
-      if: success()
-      run: cf login -a $CF_API -u $CF_USERNAME -o $CF_ORG -s $CF_SPACE -p $CF_PASSWORD
-      env:
-        CF_API: ${{ secrets.CF_API }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-
-    - name: Deploy Backend SECURITY
-      if: success()
-      run: cf push quarano-backend-sec-f ../m
+    - name: Deploy Backend
+        if: success()
+        uses: citizen-of-planet-earth/cf-cli-action@master
+        with:
+          cf_api: ${{ secrets.CF_API }}
+          cf_org: ${{ secrets.CF_ORG }}
+          cf_space: ${{ secrets.CF_SPACE }}
+          cf_username: ${{ secrets.CF_USERNAME }}
+          cf_password: ${{ secrets.CF_PASSWORD }}
+          command: push quarano-backend-sec-f ../m
