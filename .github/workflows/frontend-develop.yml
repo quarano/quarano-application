@@ -48,4 +48,4 @@ jobs:
           cf_space: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
           cf_username: ${{ secrets.CF_OTC_BUILD_USERNAME }}
           cf_password: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
-          command: push internal-dev-frontend -f ../manifest-otc.yml
+          command: push internal-dev-frontend -f ./manifest-otc.yml
