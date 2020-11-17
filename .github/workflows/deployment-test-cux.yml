@@ -85,4 +85,4 @@ jobs:
           cf_space: ${{ secrets.CF_OTC_SPACE_CUSTOMERS }}
           cf_username: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_USERNAME }}
           cf_password: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_PASSWORD }}
-          command: push quarano-cuxhaven-stage-frontend -f ../manifest-otc.yml
+          command: push quarano-cuxhaven-stage-frontend -f ./manifest-otc.yml
