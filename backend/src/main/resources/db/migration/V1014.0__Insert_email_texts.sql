@@ -9,6 +9,7 @@ https://{host}
 
 Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline.
 
+
 Wir bedanken uns für Ihre Mitarbeit.
 
 Ihr {departmentName}
@@ -25,6 +26,7 @@ https://{host}
 
 For general questions regarding Corona please contact the Corona-Hotline.
 
+
 Thank you for your cooperation.
 
 Your {departmentName}
@@ -34,48 +36,30 @@ INSERT INTO public.email_texts VALUES ('a8968b23-6d5e-43e3-a084-3c0890fc61ff', '
 'Sehr geehrte/geehrter Frau/Herr {lastName},
 
 
-Sie wurden von einem bestätigten COVID-19 Fall als Kontaktperson angegeben. Mit 
-dieser Mail möchten wir Sie vorab informieren, dass das {departmentName} 
-Kontakt zu Ihnen aufnehmen wird.
+Sie wurden von einem bestätigten COVID-19 Fall als Kontaktperson angegeben. Mit dieser Mail möchten wir Sie vorab informieren, dass das {departmentName} Kontakt zu Ihnen aufnehmen wird.
 
-Bitte melden Sie sich in der Zwischenzeit umgehend in unserer Online-Anwendung 
-zur Erfassung der Kontakte und Symptome an unter:
+Bitte melden Sie sich in der Zwischenzeit umgehend in unserer Online-Anwendung zur Erfassung der Kontakte und Symptome an unter:
 
 https://{host}/client/enrollment/landing/contact/{activationCode}
 
-Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen 
-ein. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende 
-Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) 
-direkt in das Online-Tool mit aufzunehmen.
+Bitte erfassen Sie dort Ihre Stammdaten und tragen Sie mögliche Kontaktpersonen ein. Zudem bitten wir Sie, täglich zweimal Fieber zu messen sowie auftretende Symptome (wie z.B. Atembeschwerden, Glieder- oder Muskelschmerzen, Durchfall) direkt in das Online-Tool mit aufzunehmen.
 
-Das  weitere  Vorgehen  wird  ein  Mitarbeiter  des  Gesundheitsamtes  persönlich  mit 
-Ihnen per Telefon besprechen. Bis dahin bitten wir Sie um Folgendes: 
+Das  weitere  Vorgehen  wird  ein  Mitarbeiter  des  Gesundheitsamtes  persönlich  mit Ihnen per Telefon besprechen. Bis dahin bitten wir Sie um Folgendes: 
 
 • Bleiben Sie zu Hause und vermeiden Sie Kontakte zu anderen Personen.
-• Sie  und  andere  Personen  in  Ihrem  Haushalt  sollten  regelmäßig,  gründlich  und 
-mindestens 20 Sekunden lang die Hände mit Seife waschen. 
-• Die  Hände  sollten  aus  dem  Gesicht  ferngehalten  werden,  insbesondere  von  Mund, 
-Augen und Nase. 
-• Beachten  Sie  die  Husten-  und  Niesregeln:  Halten  Sie  beim  Husten  oder  Niesen 
-größtmöglichen  Abstand  zu  anderen  und  drehen  Sie  sich  dabei  am  besten  weg. 
-Niesen  oder  husten  Sie  in  die  Armbeuge  oder  in  ein  Einwegtaschentuch,  das  Sie 
-anschließend  entsorgen.  Waschen  Sie  danach  und  auch  nach  dem  Naseputzen 
-gründlich die Hände. 
+• Sie  und  andere  Personen  in  Ihrem  Haushalt  sollten  regelmäßig,  gründlich  und mindestens 20 Sekunden lang die Hände mit Seife waschen. 
+• Die  Hände  sollten  aus  dem  Gesicht  ferngehalten  werden,  insbesondere  von  Mund, Augen und Nase. 
+• Beachten  Sie  die  Husten-  und  Niesregeln:  Halten  Sie  beim  Husten  oder  Niesen größtmöglichen  Abstand  zu  anderen  und  drehen  Sie  sich  dabei  am  besten  weg. Niesen  oder  husten  Sie  in  die  Armbeuge  oder  in  ein  Einwegtaschentuch,  das  Sie anschließend  entsorgen.  Waschen  Sie  danach  und  auch  nach  dem  Naseputzen gründlich die Hände. 
 
-Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-
-Hotline.
+Bei allgemeinen Fragen zum Thema Corona wenden Sie sich bitte an die Corona-Hotline.
 
-Wir bedanken uns für Ihre Mitarbeit und werden in Kürze Kontakt mit Ihnen 
-aufnehmen.
+
+Wir bedanken uns für Ihre Mitarbeit und werden in Kürze Kontakt mit Ihnen aufnehmen.
 
 Ihr {departmentName}
 
-Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. 
-Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in 
-schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten 
-Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen 
-Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf 
-COVID-19 erfolge
+
+Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolge.
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('037beef1-d182-4682-abbf-9ce81ea73ffe', 'new-contact-case', 'en',
@@ -99,9 +83,11 @@ An employee of the health authority will be discuss further procedure with you d
 
 For general questions regarding Corona please contact the Corona-Hotline.
 
+
 Thank you for your cooperation. We will be contacting you shortly.
 
 Your {departmentName}
+
 
 If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.
 ', NULL, NULL, NULL, NULL);
@@ -147,17 +133,19 @@ If you have any questions, please do not hesitate to contact us. For general que
 
 For particular questions about yourself as a contact person, please call the hotline for contact persons (if separately available).
 
-Thank you for your cooperation.
 
+Thank you for your cooperation.
 Best wishes,
 
 Your {departmentName}
+
 
 If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.
 ', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.email_texts VALUES ('94d0a37e-daed-465c-8bcb-ffdaca9062a3', 'registration-index', 'de',
 'Sehr geehrte/geehrter Frau/Herr {lastName},
+
 
 wie Sie bereits wissen, befinden Sie sich bis einschließlich {quarantineEndDate} in Quarantäne.
 
@@ -180,6 +168,7 @@ Ihr {departmentName}
 
 INSERT INTO public.email_texts VALUES ('58541fa0-c68a-4011-9b78-0b30a8406064', 'registration-index', 'en',
 'Dear Mrs/Mr {lastName},
+
 
 As you already know, you are required to remain in quarantine until {quarantineEndDate}.
 
