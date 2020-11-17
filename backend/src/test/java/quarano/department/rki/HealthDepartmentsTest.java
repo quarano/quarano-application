@@ -18,7 +18,7 @@ public class HealthDepartmentsTest {
 
 		var allDepartments = healthDepartments.getAll();
 
-		assertThat(allDepartments).hasSize(399);
+		assertThat(allDepartments).isNotEmpty();
 
 		var first = assertThat(allDepartments).filteredOn(it -> it.getName().equals("Stadt Flensburg")).first();
 		first.extracting(HealthDepartment::getName).isEqualTo("Stadt Flensburg");
