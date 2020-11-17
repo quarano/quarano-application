@@ -3,9 +3,8 @@ package quarano.core;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
@@ -21,7 +20,7 @@ import org.springframework.lang.Nullable;
 @ConfigurationProperties(prefix = "quarano.i18n")
 public class I18nProperties {
 
-	private static final Collection<Locale> DEFAULT_SUPPROTED_LOCALES = Set.of(Locale.GERMAN, Locale.ENGLISH);
+	private static final List<Locale> DEFAULT_SUPPORTED_LOCALES = List.of(Locale.GERMAN, Locale.ENGLISH);
 	private static final Locale FALLBACK_LOCALE = Locale.GERMAN;
 
 	private final Locale defaultLocale;
@@ -29,7 +28,7 @@ public class I18nProperties {
 	/**
 	 * The {@link Locale} to be supported by the application.
 	 */
-	private final Set<Locale> supportedLocales;
+	private final List<Locale> supportedLocales;
 
 	/**
 	 * Returns the default {@link Locale} to be used if none was selected otherwise.
@@ -56,7 +55,20 @@ public class I18nProperties {
 	 *
 	 * @return will never be {@literal null}.
 	 */
-	public Collection<Locale> getSupportedLocales() {
-		return supportedLocales == null ? DEFAULT_SUPPROTED_LOCALES : supportedLocales;
+	public List<Locale> getSupportedLocales() {
+		return supportedLocales == null ? DEFAULT_SUPPORTED_LOCALES : supportedLocales;
+	}
+
+	/**
+	 * Returns a non-default {@link Locale} from all the supported ones.
+	 *
+	 * @return will never be {@literal null}.
+	 */
+	public Locale getNonDefaultLocale() {
+
+		return getSupportedLocales().stream()
+				.filter(it -> !getDefaultLocale().equals(it))
+				.findFirst()
+				.orElseThrow();
 	}
 }

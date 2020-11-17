@@ -164,8 +164,8 @@ class StaffAccountController {
 		NewPassword validate(Errors errors) {
 
 			if (!password.equals(passwordConfirm)) {
-				errors.rejectValue("password", "NonMatching.password");
-				errors.rejectValue("passwordConfirm", "NonMatching.password");
+				errors.rejectValue("password", "Password.nonMatching");
+				errors.rejectValue("passwordConfirm", "Password.nonMatching");
 			}
 
 			return this;

@@ -12,17 +12,16 @@ import quarano.department.TrackedCase.Status;
 import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
+import quarano.util.TestEmailServer;
 
 import java.util.Locale;
 
-import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
 @RequiredArgsConstructor
@@ -32,11 +31,11 @@ class MailForNewContactCaseEventListenerTests {
 	final EmailSendingEvents events;
 	final TrackedPersonRepository persons;
 	final DepartmentRepository departments;
-	final GreenMail greenMail;
+	final TestEmailServer mailServer;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		greenMail.purgeEmailFromAllMailboxes();
+		mailServer.reset();
 	}
 
 	@Test // CORE-61
@@ -50,20 +49,17 @@ class MailForNewContactCaseEventListenerTests {
 		events.on(CaseCreated.of(trackedCase));
 
 		// wait for max 5s for 1 email to arrive
-		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
 
-		Message[] messages = greenMail.getReceivedMessages();
-		assertThat(messages).hasSize(1);
+		mailServer.assertEmailSent(message -> {
 
-		Message message = messages[0];
-
-		assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,");
-		assertThat(message.getRecipients(RecipientType.TO)[0].toString())
-				.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
-		assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
-		assertThat(trackedCase.getStatus()).isEqualTo(Status.IN_REGISTRATION);
+			assertThat(message.getSubject()).isEqualTo("Information vom GA Mannheim");
+			assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,");
+			assertThat(message.getRecipients(RecipientType.TO)[0].toString())
+					.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
+			assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
+			assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
+			assertThat(trackedCase.getStatus()).isEqualTo(Status.IN_REGISTRATION);
+		});
 	}
 
 	@Test // CORE-375
@@ -74,44 +70,33 @@ class MailForNewContactCaseEventListenerTests {
 
 		events.on(CaseCreated.of(trackedCase));
 
-		// wait for max 5s for 1 email to arrive
-		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
-
-		Message message = greenMail.getReceivedMessages()[0];
-
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
-				.doesNotContain("=3D".repeat(10)); // is ==========
-
-		greenMail.purgeEmailFromAllMailboxes();
+		mailServer.assertEmailSentWithBody(it -> {
+			assertThat(it)
+					.startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
+					.doesNotContain("=3D".repeat(10)); // is ==========
+		}).reset();
 
 		// with default language as saved language
 		trackedCase = trackedCase(Locale.GERMANY);
 
 		events.on(CaseCreated.of(trackedCase));
 
-		// wait for max 5s for 1 email to arrive
-		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
-
-		message = greenMail.getReceivedMessages()[0];
-
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
-				.doesNotContain("=3D".repeat(10)); // is ==========
-
-		greenMail.purgeEmailFromAllMailboxes();
+		mailServer.assertEmailSentWithBody(it -> {
+			assertThat(it)
+					.startsWith("Sehr geehrte/geehrter Frau/Herr Mueller,")
+					.doesNotContain("=3D".repeat(10)); // is ==========
+		}).reset();
 
 		// with saved language
 		trackedCase = trackedCase(Locale.ENGLISH);
 
 		events.on(CaseCreated.of(trackedCase));
 
-		// wait for max 5s for 1 email to arrive
-		assertThat(greenMail.waitForIncomingEmail(1)).isTrue();
-
-		message = greenMail.getReceivedMessages()[0];
-
-		assertThat(GreenMailUtil.getBody(message)).startsWith("Dear Mrs/Mr Mueller,")
-				.contains("\r\n\r\n" + "=3D".repeat(10) + "\r\n\r\n") // is ==========
-				.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
+		mailServer.assertEmailSentWithBody(it -> {
+			assertThat(it).startsWith("Dear Mrs/Mr Mueller,")
+					.contains("\r\n\r\n" + "=3D".repeat(10) + "\r\n\r\n") // is ==========
+					.contains("Sehr geehrte/geehrter Frau/Herr Mueller,");
+		}).reset();
 	}
 
 	@Test
@@ -125,19 +110,15 @@ class MailForNewContactCaseEventListenerTests {
 
 		events.on(CaseCreated.of(trackedCase));
 
-		// wait for email
-		assertThat(greenMail.waitForIncomingEmail(1)).isFalse();
+		mailServer.assertNoEmailSent();
 
-		Message[] messages = greenMail.getReceivedMessages();
-
-		assertThat(messages).hasSize(0);
 		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.CANT_SENT);
 		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 	}
 
 	private TrackedCase trackedCase(Locale locale) {
 
-		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow()
+		var person = persons.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.setLocale(locale);
 		var department = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 

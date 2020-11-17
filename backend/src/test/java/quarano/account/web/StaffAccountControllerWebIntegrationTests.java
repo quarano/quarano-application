@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,7 +40,6 @@ class StaffAccountControllerWebIntegrationTests {
 	private final AccountService accounts;
 	private final MessageSourceAccessor messages;
 	private final ObjectMapper jackson;
-	private final LinkDiscoverer links;
 
 	@Test
 	@WithQuaranoUser("admin")
@@ -194,7 +192,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		var foo = mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
+		mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
@@ -235,7 +233,7 @@ class StaffAccountControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(responseBody);
 
-		var nonMatchingPassword = messages.getMessage("NonMatching.password");
+		var nonMatchingPassword = messages.getMessage("Password.nonMatching");
 
 		assertThat(document.read("$.password", String.class)).isEqualTo(nonMatchingPassword);
 		assertThat(document.read("$.passwordConfirm", String.class)).isEqualTo(nonMatchingPassword);

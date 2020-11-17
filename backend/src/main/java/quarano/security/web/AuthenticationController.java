@@ -1,6 +1,7 @@
 package quarano.security.web;
 
 import static io.vavr.API.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
 import static quarano.security.web.AuthenticationController.ForbiddenException.*;
 import static quarano.security.web.AuthenticationController.ForbiddenException.Reason.*;
 
@@ -14,38 +15,42 @@ import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.account.web.AccountRepresentations;
+import quarano.core.web.QuaranoApiRoot;
 import quarano.department.TrackedCaseRepository;
-import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.TrackedPersonManagement;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.server.RepresentationModelProcessor;
+import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-class AuthenticationController {
+public class AuthenticationController {
 
 	private final @NonNull AccountService accounts;
 	private final @NonNull TrackedCaseRepository cases;
-	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull TrackedPersonManagement people;
 	private final @NonNull AccountRepresentations accountRepresentations;
 	private final @NonNull MessageSourceAccessor messages;
 
 	@PostMapping("/login")
-	HttpEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
+	public HttpEntity<?> login(@RequestBody AuthenticationRequest request, Locale locale) {
 
 		UnencryptedPassword password = UnencryptedPassword.of(request.getPassword());
 
@@ -58,10 +63,7 @@ class AuthenticationController {
 				.peek(it -> SecurityContextHolder.getContext()
 						.setAuthentication(new PreAuthenticatedAuthenticationToken(it, null)))
 				// sets the locale to TrackedPerson if none is set yet and saves this entity
-				.peek(account -> people.findByAccount(account)
-						.filter(it -> it.getLocale() == null)
-						.map(it -> it.setLocale(new AcceptHeaderLocaleResolver().resolveLocale(httpRequest)))
-						.ifPresent(people::save))
+				.peek(account -> people.initializePreferredLocale(locale, account))
 				.<HttpEntity<?>> map(accountRepresentations::toTokenResponse)
 				.recover(AccessDeniedException.class,
 						it -> toUnauthorized(messages.getMessage("authentication.trackedCase.failed")))
@@ -126,5 +128,21 @@ class AuthenticationController {
 		public static Try<Account> reject(Reason reason) {
 			return Try.failure(new ForbiddenException(reason));
 		}
+	}
+
+	@Component
+	static class LoginRootResourceProcessor implements RepresentationModelProcessor<QuaranoApiRoot> {
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.springframework.hateoas.server.RepresentationModelProcessor#process(org.springframework.hateoas.RepresentationModel)
+		 */
+		@SuppressWarnings("null")
+		public QuaranoApiRoot process(QuaranoApiRoot model) {
+
+			var controller = on(AuthenticationController.class);
+
+			return model.add(MvcLink.of(controller.login(null, null), AuthenticationLinkRelations.LOGIN));
+		};
 	}
 }

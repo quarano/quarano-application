@@ -53,7 +53,7 @@ public interface EmailTemplates {
 	 */
 	enum Keys implements Key {
 
-		REGISTRATION_INDEX, REGISTRATION_CONTACT, NEW_CONTACT_CASE, DIARY_REMINDER;
+		REGISTRATION_INDEX, REGISTRATION_CONTACT, NEW_CONTACT_CASE, DIARY_REMINDER, RESET_PASSWORD;
 
 		/**
 		 * Returns all {@link Key}s as a {@link Stream}.

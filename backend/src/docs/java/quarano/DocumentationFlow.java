@@ -116,7 +116,6 @@ public class DocumentationFlow {
 		var authenticationProcessor = new AuthenticationHeaderProcessor();
 
 		var preprocessRequest = preprocessRequest(prettyPrint(),
-				replacePattern(Pattern.compile("\"username\" : \".*\""), ellipsisField("username")),
 				replacePattern(Pattern.compile("\"password\" : \".*\""), ellipsisField("password")),
 				replacePattern(Pattern.compile("\"passwordConfirm\" : \".*\""), ellipsisField("passwordConfirm")),
 				authenticationProcessor);
@@ -149,6 +148,10 @@ public class DocumentationFlow {
 		@Override
 		public OperationRequest preprocess(OperationRequest request) {
 
+			if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+				return request;
+			}
+
 			var headers = new HttpHeaders();
 			headers.putAll(request.getHeaders());
 			headers.set(HttpHeaders.AUTHORIZATION, "Bearer $TOKEN");
@@ -162,6 +165,10 @@ public class DocumentationFlow {
 		 */
 		@Override
 		public OperationResponse preprocess(OperationResponse response) {
+
+			if (!response.getHeaders().containsKey(QuaranoHttpHeaders.AUTH_TOKEN)) {
+				return response;
+			}
 
 			var headers = new HttpHeaders();
 			headers.putAll(response.getHeaders());

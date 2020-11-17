@@ -50,6 +50,35 @@ The request takes the following attributes:
 
 include::{snippets}/password-expired/change-password/auto-request-fields.adoc[]
 
+[[authentication.password-reset]]
+=== Resetting the password
+
+A user can set a password request by following the `reset-password` link relation returned by the root resource.
+
+include::{snippets}/password-reset/access-root-resource/curl-request.adoc[]
+include::{snippets}/password-reset/access-root-resource/response-body.adoc[]
+include::{snippets}/password-reset/access-root-resource/links.adoc[]
+
+We can now follow that link and issue a `POST` request to it, to request a reset of our password:
+
+include::{snippets}/password-reset/request-reset/curl-request.adoc[]
+include::{snippets}/password-reset/request-reset/auto-request-fields.adoc[]
+
+If that request is successful, an email containing a link to the user interface will be sent out to the email address just given.
+
+include::{snippets}/password-reset/request-reset/response-body.adoc[]
+include::{snippets}/password-reset/request-reset/links.adoc[]
+
+Also, the password can be finally reset by following the `reset-password` link in turn, providing additional information.
+
+include::{snippets}/password-reset/perform-reset/curl-request.adoc[]
+include::{snippets}/password-reset/perform-reset/auto-request-fields.adoc[]
+
+A successful reset will be confirmed by an HTTP `200 OK` as well as a link pointing to the login resource.
+
+include::{snippets}/password-reset/perform-reset/response-body.adoc[]
+
+
 [[user-details]]
 == User details
 

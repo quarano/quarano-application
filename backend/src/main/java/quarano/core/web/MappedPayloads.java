@@ -221,6 +221,13 @@ public interface MappedPayloads {
 			return new MappedErrors(errors, callback);
 		}
 
+		public MappedErrors onErrors(Supplier<HttpEntity<?>> callback) {
+
+			Assert.notNull(callback, "Callback must not be null!");
+
+			return onErrors(__ -> callback.get());
+		}
+
 		protected Optional<HttpEntity<?>> errorsOrNone() {
 
 			return errors.hasErrors()
@@ -422,6 +429,19 @@ public interface MappedPayloads {
 			return new MappedPayload<>(payload, errors, callback, onAbsence);
 		}
 
+		/*
+		 *
+		 * (non-Javadoc)
+		 * @see quarano.core.web.MappedPayloads.MappedErrors#onErrors(java.util.function.Supplier)
+		 */
+		@Override
+		public MappedPayload<T> onErrors(Supplier<HttpEntity<?>> callback) {
+
+			Assert.notNull(callback, "Callback must not be null!");
+
+			return onErrors(__ -> callback.get());
+		}
+
 		/**
 		 * Registers a {@link Function} to create an {@link HttpEntity} in case the pipeline yields the absence of a
 		 * payload.
@@ -436,6 +456,25 @@ public interface MappedPayloads {
 			Assert.notNull(callback, "Callback must not be null!");
 
 			return new MappedPayload<>(payload, errors, onErrors, callback);
+		}
+
+		/**
+		 * Registers the given field to be rejected on payload absence. Transparently registers the error handler as absence
+		 * handler.
+		 *
+		 * @param field must not be {@literal null} or empty.
+		 * @param errorCode must not be {@literal null} or empty.
+		 * @return will never be {@literal null}.
+		 * @since 1.4
+		 */
+		public MappedPayload<T> onAbsenceReject(String field, String errorCode) {
+
+			Assert.hasText(field, "Field to reject must not be null or empty!");
+			Assert.hasText(errorCode, "Error code must not be null or empty!");
+
+			errors.rejectValue(field, errorCode);
+
+			return new MappedPayload<T>(payload, errors, onErrors, () -> onErrors.apply(errors));
 		}
 
 		/**
@@ -478,6 +517,16 @@ public interface MappedPayloads {
 			Assert.notNull(finalizer, "Finalizer must not be null!");
 
 			return errorsOrNone().orElseGet(() -> finalizer.apply(payload, this));
+		}
+
+		/**
+		 * Terminal operation that produces an empty response with {@link HttpStatus#NO_CONTENT}.
+		 *
+		 * @return
+		 * @since 1.4
+		 */
+		public HttpEntity<?> concludeWithoutContent() {
+			return concludeIfValid(__ -> ResponseEntity.noContent().build());
 		}
 
 		/*

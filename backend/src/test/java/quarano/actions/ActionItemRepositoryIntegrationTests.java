@@ -37,7 +37,7 @@ class ActionItemRepositoryIntegrationTests {
 	@Test
 	void persistsDescriptionArguments() {
 
-		var person = persons.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
+		var person = persons.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
 		var entry = diaries.updateDiaryEntry(DiaryEntry.of(Slot.of(LocalDateTime.now()), person)
 				.setBodyTemperature(BodyTemperature.of(41.0f)));
 

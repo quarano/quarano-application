@@ -11,29 +11,30 @@ import java.util.List;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
 public class DiaryManagement {
 
 	private final @NonNull DiaryEntryRepository diaries;
-	private final @NonNull TrackedPersonRepository persons;
+	private final @NonNull TrackedPersonRepository people;
 
 	/**
-	 * @param entry
+	 * @param entry must not be {@literal null}.
 	 * @return
 	 */
 	@Transactional
 	public DiaryEntry updateDiaryEntry(DiaryEntry entry) {
 
-		var person = persons.findById(entry.getTrackedPersonId())
-				.orElseThrow(() -> new IllegalStateException("No tracked person found for id " + entry.getTrackedPersonId()));
+		Assert.notNull(entry, "Diary entry must not be null!");
 
-		var date = entry.getSlotDate();
+		var person = people.findRequiredById(entry.getTrackedPersonId());
 
-		entry.getContacts().forEach(it -> person.reportContactWith(it, date));
+		entry.getContacts()
+				.forEach(it -> person.reportContactWith(it, entry.getSlotDate()));
 
-		persons.save(person);
+		people.save(person);
 
 		return diaries.save(entry);
 	}

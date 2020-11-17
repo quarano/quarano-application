@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.AuthenticationManager;
 import quarano.core.web.LoggedIn;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.TrackedPersonManagement;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ class LoggedInTrackedPersonArgumentResolver implements HandlerMethodArgumentReso
 
 	private static final String USER_ACCOUNT_EXPECTED = "Expected to find a current %s but none available!";
 	private final @NonNull AuthenticationManager authenticationManager;
-	private final @NonNull TrackedPersonRepository repository;
+	private final @NonNull TrackedPersonManagement people;
 
 	/*
 	 * (non-Javadoc)
@@ -62,7 +62,7 @@ class LoggedInTrackedPersonArgumentResolver implements HandlerMethodArgumentReso
 		Class<?> type = parameter.getParameterType();
 
 		return authenticationManager.getCurrentUser()
-				.flatMap(repository::findByAccount)
+				.flatMap(people::findByAccount)
 				.orElseThrow(
 						() -> new ServletRequestBindingException(String.format(USER_ACCOUNT_EXPECTED, type.getSimpleName())));
 	}

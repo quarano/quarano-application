@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Account.AccountIdentifier;
+import quarano.account.Account.PasswordResetToken;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.EncryptedPassword;
 import quarano.account.Password.UnencryptedPassword;
@@ -12,6 +13,8 @@ import quarano.core.EmailAddress;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
@@ -44,10 +47,11 @@ public class AccountService {
 	 * @return
 	 */
 	public Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname,
-			String lastname, DepartmentIdentifier departmentId) {
+			String lastname, EmailAddress emailAddress, DepartmentIdentifier departmentId) {
 
 		var role = roles.findByType(RoleType.ROLE_USER);
-		var account = accounts.save(new Account(username, encrypt(password), firstname, lastname, departmentId, role));
+		var account = accounts
+				.save(new Account(username, encrypt(password), firstname, lastname, emailAddress, departmentId, List.of(role)));
 
 		return account;
 	}
@@ -94,9 +98,8 @@ public class AccountService {
 		return accounts.findByUsername(username);
 	}
 
-	public boolean isUsernameAvailable(String userName) {
-		return accounts.findByUsername(userName)
-				.isEmpty();
+	public boolean isUsernameAvailable(String username) {
+		return accounts.isUsernameAvailable(username);
 	}
 
 	public boolean matches(@Nullable UnencryptedPassword candidate, EncryptedPassword existing) {
@@ -141,6 +144,48 @@ public class AccountService {
 		log.debug("Reset password for account {}.", account.getUsername());
 
 		return accounts.save(account.setPassword(encrypt(password, account)));
+	}
+
+	/**
+	 * Requests the passwort reset for the account with the given {@link EmailAddress} and username.
+	 *
+	 * @param emailAddress must not be {@literal null}.
+	 * @param username must not be {@literal null} or empty.
+	 * @return a {@link PasswordResetToken} if the combination of parameters identifies an {@link Account} properly.
+	 * @since 1.4
+	 */
+	public Optional<PasswordResetToken> requestPasswordReset(EmailAddress emailAddress, String username) {
+
+		return accounts.findByEmailAddress(emailAddress)
+				.filter(it -> it.getUsername().equals(username))
+				.map(account -> {
+
+					var token = account.requestPasswordReset(LocalDateTime.now().plusHours(2));
+
+					accounts.save(account);
+
+					return token;
+				});
+	}
+
+	/**
+	 * Resets the password for which the given password reset token is set and valid. Also accepts additional
+	 * verifications so that the state of an {@link Account} can be verified before the password will be changed
+	 * eventually.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @param token must not be {@literal null}.
+	 * @param verifications must not be {@literal null}.
+	 * @return the {@link Account} if the password change was successful or an empty {@link Optional} if neither the token
+	 *         was valid, expired nor any of the given verifications failed.
+	 * @since 1.4
+	 */
+	public Optional<Account> resetPasswort(UnencryptedPassword password, UUID token, Predicate<Account> verifications) {
+
+		return accounts.findByResetToken(token)
+				.filter(verifications.and(Account::hasValidPasswordResetToken))
+				.map(it -> it.setPassword(encrypt(password, it)))
+				.map(accounts::save);
 	}
 
 	/**

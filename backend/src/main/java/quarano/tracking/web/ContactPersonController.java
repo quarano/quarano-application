@@ -11,7 +11,7 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonRepository;
+import quarano.tracking.TrackedPersonManagement;
 
 import java.util.stream.Stream;
 
@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContactPersonController {
 
 	private final @NonNull MapperWrapper mapper;
-	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull TrackedPersonManagement people;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull MessageSourceAccessor messages;
 
@@ -63,7 +63,6 @@ public class ContactPersonController {
 				.map(contacts::save)
 				.concludeIfValid(it -> {
 					var uri = fromMethodCall(on(this.getClass()).getContact(person, it.getId())).build().toUri();
-
 
 					return ResponseEntity.created(uri)
 							.body(mapper.map(it, ContactPersonDto.class));

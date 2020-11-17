@@ -33,10 +33,10 @@ public class ActionItemDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		TrackedPerson sandra = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		TrackedPerson jessica = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
-		TrackedPerson gustav = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
-		TrackedPerson nadine = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
+		TrackedPerson sandra = people.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
+		TrackedPerson jessica = people.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+		TrackedPerson gustav = people.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1);
+		TrackedPerson nadine = people.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1);
 
 		items.save(new DiaryEntryMissingActionItem(sandra.getId(), Slot.now().previous()));
 		items.save(new DiaryEntryMissingActionItem(jessica.getId(), Slot.now().previous()));

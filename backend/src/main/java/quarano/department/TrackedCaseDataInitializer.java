@@ -75,24 +75,24 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		var person1 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1).orElseThrow();
-		var person2 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
-		var sandra = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2).orElseThrow();
-		var peter = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP1).orElseThrow();
-		var person4 = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1).orElseThrow();
-		var nadine = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1).orElseThrow();
-		var jessica = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2).orElseThrow();
-		var harry = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1).orElseThrow();
-		var harriette = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1).orElseThrow();
+		var person1 = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1);
+		var person2 = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
+		var sandra = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
+		var peter = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP1);
+		var person4 = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1);
+		var nadine = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1);
+		var jessica = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+		var harry = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1);
+		var harriette = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1);
 
-		var siggi = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
-		var sarah = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1).orElseThrow();
-		var sonja = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC3_ID_DEP1).orElseThrow();
-		var samuel = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC4_ID_DEP1).orElseThrow();
-		var sylvia = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC5_ID_DEP1).orElseThrow();
-		var steve = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC6_ID_DEP1).orElseThrow();
-		var steffen = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC7_ID_DEP1).orElseThrow();
-		var sunny = trackedPeople.findById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1).orElseThrow();
+		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
+		var sarah = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1);
+		var sonja = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC3_ID_DEP1);
+		var samuel = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC4_ID_DEP1);
+		var sylvia = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC5_ID_DEP1);
+		var steve = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC6_ID_DEP1);
+		var steffen = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC7_ID_DEP1);
+		var sunny = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1);
 
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
@@ -160,8 +160,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)))
 				.submitEnrollmentDetails()
-				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt")
-						.withoutContactToVulnerablePeople())
+				.submitQuestionnaire(
+						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Pfleger im Klinikum Darmstadt")
+								.withoutContactToVulnerablePeople())
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
 		cases.save(new TrackedCase(peter, CaseType.INDEX, department1)
