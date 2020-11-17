@@ -47,4 +47,4 @@ jobs:
           cf_space: ${{ secrets.CF_SPACE }}
           cf_username: ${{ secrets.CF_USERNAME }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          command: push quarano-frontend-sec-f ../manifest.yml
+          command: push quarano-frontend-sec-f ./manifest.yml
