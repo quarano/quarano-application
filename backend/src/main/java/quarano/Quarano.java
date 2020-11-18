@@ -48,6 +48,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -76,10 +77,17 @@ public class Quarano {
 
 	@Bean
 	FlywayConfigurationCustomizer getFlywayCustomizer(DepartmentProperties prop) {
-		return configuration -> configuration
-				.locations(
-						configuration.getLocations()[0],
-						new Location("classpath:db/client_migration/" + prop.getDefaultDepartment().getRkiCode() + "RKI"));
+		return configuration -> {
+
+			if (StringUtils.hasText(prop.getDefaultDepartment().getRkiCode())) {
+				configuration
+						.locations(
+								configuration.getLocations()[0],
+								new Location("classpath:db/client_migration/" + prop.getDefaultDepartment().getRkiCode() + "RKI"));
+			} else {
+				log.warn("No RKI code is set with the default department! No department-specific texts are imported.");
+			}
+		};
 	}
 
 	@Bean
