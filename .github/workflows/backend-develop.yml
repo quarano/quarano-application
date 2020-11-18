@@ -10,6 +10,7 @@ on:
     paths:
       - backend/**
       - .github/workflows/backend*.yml
+      - manifest-otc.yml
 
 defaults:
   run:

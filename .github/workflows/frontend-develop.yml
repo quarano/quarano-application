@@ -10,6 +10,7 @@ on:
     paths:
       - frontend/**
       - .github/workflows/frontend*.yml
+      - manifest-otc.yml
 
 defaults:
   run:
