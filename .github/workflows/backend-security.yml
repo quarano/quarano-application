@@ -35,12 +35,12 @@ jobs:
       run: mvn -B package --file backend/pom.xml
 
     - name: Deploy Backend
-        if: success()
-        uses: citizen-of-planet-earth/cf-cli-action@master
-        with:
-          cf_api: ${{ secrets.CF_API }}
-          cf_org: ${{ secrets.CF_ORG }}
-          cf_space: ${{ secrets.CF_SPACE }}
-          cf_username: ${{ secrets.CF_USERNAME }}
-          cf_password: ${{ secrets.CF_PASSWORD }}
-          command: push quarano-backend-sec-f ../m
+      if: success()
+      uses: citizen-of-planet-earth/cf-cli-action@master
+      with:
+        cf_api: ${{ secrets.CF_API }}
+        cf_org: ${{ secrets.CF_ORG }}
+        cf_space: ${{ secrets.CF_SPACE }}
+        cf_username: ${{ secrets.CF_USERNAME }}
+        cf_password: ${{ secrets.CF_PASSWORD }}
+        command: push quarano-backend-sec-f ../m
