@@ -1,6 +1,7 @@
 package quarano;
 
 import lombok.extern.slf4j.Slf4j;
+import quarano.account.DepartmentProperties;
 import quarano.account.Role;
 import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
@@ -10,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
+import org.flywaydb.core.api.Location;
 import org.modelmapper.ModelMapper;
 import org.moduliths.Modulithic;
 import org.springframework.aop.Advisor;
@@ -22,6 +24,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -69,6 +72,14 @@ public class Quarano {
 	@Bean
 	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	FlywayConfigurationCustomizer getFlywayCustomizer(DepartmentProperties prop) {
+		return configuration -> configuration
+				.locations(
+						configuration.getLocations()[0],
+						new Location("classpath:db/client_migration/" + prop.getDefaultDepartment().getRkiCode() + "RKI"));
 	}
 
 	@Bean
