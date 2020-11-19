@@ -3,6 +3,7 @@ package quarano.actions;
 import lombok.RequiredArgsConstructor;
 import quarano.actions.ActionItem.ItemType;
 import quarano.core.DataInitializer;
+import quarano.department.CaseType;
 import quarano.diary.DiaryManagement;
 import quarano.diary.Slot;
 import quarano.tracking.BodyTemperature;
@@ -42,9 +43,11 @@ public class ActionItemDataInitializer implements DataInitializer {
 		items.save(new DiaryEntryMissingActionItem(jessica.getId(), Slot.now().previous()));
 		items.save(new DiaryEntryActionItem(gustav.getId(), diaries.findDiaryFor(gustav).iterator().next(),
 				ItemType.MEDICAL_INCIDENT,
-				Description.forIncreasedTemperature(BodyTemperature.of(40.1f), config.getTemperatureThreshold())));
+				Description.forIncreasedTemperature(BodyTemperature.of(40.1f),
+						config.getTemperatureThreshold(CaseType.CONTACT))));
 		items.save(new DiaryEntryActionItem(nadine.getId(), diaries.findDiaryFor(nadine).iterator().next(),
 				ItemType.MEDICAL_INCIDENT,
-				Description.forIncreasedTemperature(BodyTemperature.of(40.1f), config.getTemperatureThreshold())));
+				Description.forIncreasedTemperature(BodyTemperature.of(40.1f),
+						config.getTemperatureThreshold(CaseType.CONTACT))));
 	}
 }

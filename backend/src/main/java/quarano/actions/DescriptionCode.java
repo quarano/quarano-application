@@ -23,7 +23,9 @@ public enum DescriptionCode {
 
 	INITIAL_CALL_OPEN_INDEX(true),
 
-	INITIAL_CALL_OPEN_CONTACT(true);
+	INITIAL_CALL_OPEN_CONTACT(true),
+
+	SUSPICIOUS_SYMPTOM(4.0f, true);
 
 	private final @Getter float multiplier;
 	private final @Getter boolean manuallyResolvable;

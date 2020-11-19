@@ -25,12 +25,21 @@ import org.springframework.lang.NonNull;
 @Setter(value = AccessLevel.PACKAGE)
 public class Symptom implements Persistable<UUID> {
 
-	@Id @Column(name = "symptom_id") //
+	@Id
+	@Column(name = "symptom_id") //
 	@Getter(onMethod = @__(@NonNull)) //
 	private UUID id;
 	private @Transient boolean isNew = true;
 	private String name;
 	private boolean isCharacteristic;
+	/**
+	 * @since 1.4
+	 */
+	private boolean isSuspiciousAtIndex;
+	/**
+	 * @since 1.4
+	 */
+	private boolean isSuspiciousAtContact;
 
 	Symptom() {
 		this.id = UUID.randomUUID();
