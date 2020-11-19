@@ -1,3 +1,5 @@
+import { SharedUiAgGridModule } from '@qro/shared/ui-ag-grid';
+import { FormsModule } from '@angular/forms';
 import { HealthDepartmentUiActionAlertModule } from '@qro/health-department/ui-action-alert';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
@@ -47,6 +49,8 @@ const routes: Routes = [
     HealthDepartmentUiActionAlertModule,
     HealthDepartmentDomainModule,
     RouterModule.forChild(routes),
+    SharedUiAgGridModule,
+    FormsModule,
   ],
   declarations: [ActionListComponent, CaseListComponent, IndexCasesComponent],
 })

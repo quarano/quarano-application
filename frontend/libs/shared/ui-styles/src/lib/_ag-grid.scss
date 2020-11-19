@@ -1,0 +1,34 @@
+.ag-row {
+  &:not(.ag-row-first) {
+    border: none !important;
+  }
+
+  &.ag-row-even {
+    background-color: #f4f4f4 !important;
+  }
+
+  &.ag-row-hover {
+    cursor: pointer;
+
+    &.ag-row-even {
+      background-color: #f4f4f4 !important;
+    }
+
+    &.ag-row-odd {
+      background-color: transparent !important;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      width: 5px;
+      position: absolute;
+      background-color: $primary-color;
+      height: 100%;
+    }
+  }
+
+  .ag-cell-focus {
+    border: none !important;
+  }
+}

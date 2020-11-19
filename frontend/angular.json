@@ -30,6 +30,8 @@
               "./node_modules/@swimlane/ngx-datatable/index.scss",
               "./node_modules/@swimlane/ngx-datatable/themes/material.scss",
               "./node_modules/@swimlane/ngx-datatable/assets/icons.css",
+              "./node_modules/ag-grid-community/dist/styles/ag-grid.css",
+              "./node_modules/ag-grid-community/dist/styles/ag-theme-material.css",
               "./libs/shared/ui-styles/src/lib/styles.scss"
             ],
             "scripts": []
@@ -1993,6 +1995,33 @@
       },
       "schematics": {
         "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-ui-ag-grid": {
+      "projectType": "library",
+      "root": "libs/shared/ui-ag-grid",
+      "sourceRoot": "libs/shared/ui-ag-grid/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/shared/ag-grid/tsconfig.lib.json", "libs/shared/ag-grid/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/shared/ui-ag-grid/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/ui-ag-grid/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
           "style": "scss"
         }
       }

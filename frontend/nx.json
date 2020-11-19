@@ -181,6 +181,9 @@
     },
     "client-ui-forgotten-contact-dialog": {
       "tags": ["scope:client", "type:ui"]
+    },
+    "shared-ui-ag-grid": {
+      "tags": ["scope:shared", "type:ui"]
     }
   },
   "affected": {
