@@ -40,6 +40,12 @@ public interface TrackedCaseRepository
 	Optional<TrackedCase> findByAccount(Account account);
 
 	/**
+	 * @since 1.4
+	 */
+	@Query("select c.type from TrackedCase c join c.trackedPerson p where p.id = :identifier")
+	Optional<CaseType> findTypeByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	/**
 	 * Returns whether a {@link TrackedCase} exists that's associated with the given {@link ContactPerson}.
 	 *
 	 * @param person must not be {@literal null}.

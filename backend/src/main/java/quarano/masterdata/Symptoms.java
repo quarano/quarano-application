@@ -1,7 +1,6 @@
-package quarano.tracking;
+package quarano.masterdata;
 
 import lombok.RequiredArgsConstructor;
-import quarano.masterdata.Symptom;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.springframework.data.util.Streamable;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 @RequiredArgsConstructor(staticName = "of")
 public class Symptoms implements Streamable<Symptom> {
@@ -18,6 +18,20 @@ public class Symptoms implements Streamable<Symptom> {
 
 	public boolean hasCharacteristicSymptom() {
 		return symptoms.stream().anyMatch(Symptom::isCharacteristic);
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public boolean hasSuspiciousSymptomeAtIndex() {
+		return symptoms.stream().anyMatch(Symptom::isSuspiciousAtIndex);
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public boolean hasSuspiciousSymptomeAtContact() {
+		return symptoms.stream().anyMatch(Symptom::isSuspiciousAtContact);
 	}
 
 	/*

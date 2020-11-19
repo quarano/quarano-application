@@ -17,12 +17,14 @@ package quarano.actions;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import quarano.department.CaseType;
 import quarano.diary.Diary;
 import quarano.diary.DiaryEntry;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.springframework.data.util.Streamable;
@@ -69,6 +71,33 @@ class DiaryEntryActionItems {
 	DiaryEntryActionItems removeFirstCharacteristicSymptomFrom(DiaryEntry entry, Supplier<Diary> diary,
 			Function<DiaryEntry, DiaryEntryActionItem> factory) {
 
+		return removeSymptomFrom(entry, diary, factory, it -> it.getSymptoms().hasCharacteristicSymptom());
+	}
+
+	/**
+	 * Removes the {@link ActionItem} for suspicious symptom from the given {@link DiaryEntry}. If it was previously
+	 * created for that {@link DiaryEntry}, the {@link Diary} lookup is used and all subsequent entries are inspected for
+	 * a suspicious symptom and the {@link ActionItem} is created for the first one found.
+	 *
+	 * @param entry must not be {@literal null}.
+	 * @param diary must not be {@literal null}.
+	 * @param factory must not be {@literal null}.
+	 * @return
+	 * @since 1.4
+	 */
+	DiaryEntryActionItems removeSuspiciousSymptomFrom(DiaryEntry entry, CaseType type, Supplier<Diary> diary,
+			Function<DiaryEntry, DiaryEntryActionItem> factory) {
+
+		Predicate<? super DiaryEntry> symptomFilter = type == CaseType.INDEX
+				? it -> it.getSymptoms().hasSuspiciousSymptomeAtIndex()
+				: it -> it.getSymptoms().hasSuspiciousSymptomeAtContact();
+
+		return removeSymptomFrom(entry, diary, factory, symptomFilter);
+	}
+
+	private DiaryEntryActionItems removeSymptomFrom(DiaryEntry entry, Supplier<Diary> diary,
+			Function<DiaryEntry, DiaryEntryActionItem> factory, Predicate<? super DiaryEntry> symptomFilter) {
+
 		// Resolve current entry
 		var currentEntry = items.filter(it -> it.getEntry().equals(entry));
 
@@ -83,7 +112,7 @@ class DiaryEntryActionItems {
 
 			diary.get().stream()//
 					.sorted(Comparator.comparing(DiaryEntry::getSlot))
-					.filter(it -> it.getSymptoms().hasCharacteristicSymptom())
+					.filter(symptomFilter)
 					.findFirst()
 					.map(factory::apply)
 					.ifPresent(itemHandler);
@@ -114,6 +143,44 @@ class DiaryEntryActionItems {
 		Assert.notNull(entry, "DiaryEntry must not be null!");
 		Assert.state(entry.getSymptoms().hasCharacteristicSymptom(),
 				"Given entry does not contain a characteristic symptom!");
+
+		return adjustSymptomTo(entry, itemFactory);
+	}
+
+	/**
+	 * Adjusts the {@link ActionItem} for a suspicious symptom with the given {@link DiaryEntry} reporting one. The state
+	 * transition rules are as follows:
+	 * <ol>
+	 * <li>If there's no {@link ActionItem} for suspicious symptom, we simply create one for the given
+	 * {@link DiaryEntry}</li>
+	 * <li>If there already is one stemming from a previous entry, we don't do anything.</li>
+	 * <li>If there already is one stemming from a {@link DiaryEntry} later than the given one, we resolve that and create
+	 * a new one for the given {@link DiaryEntry}</li>
+	 * <li>If there's none for the current {@link DiaryEntry}, we create one.</li>
+	 * </ol>
+	 *
+	 * @param entry must not be {@literal null}.
+	 * @param itemFactory must not be {@literal null}.
+	 * @return
+	 * @since 1.4
+	 */
+	DiaryEntryActionItems adjustSuspiciousSymptomTo(DiaryEntry entry, CaseType type,
+			Function<DiaryEntry, DiaryEntryActionItem> itemFactory) {
+
+		Assert.notNull(entry, "DiaryEntry must not be null!");
+
+		boolean expression = type == CaseType.INDEX
+				? entry.getSymptoms().hasSuspiciousSymptomeAtIndex()
+				: entry.getSymptoms().hasSuspiciousSymptomeAtContact();
+		Assert.state(expression,
+				"Given entry does not contain a suspicious symptom!");
+
+		return adjustSymptomTo(entry, itemFactory);
+	}
+
+	private DiaryEntryActionItems adjustSymptomTo(DiaryEntry entry,
+			Function<DiaryEntry, DiaryEntryActionItem> itemFactory) {
+
 		Assert.notNull(itemFactory, "DiaryEntryActionitem factory must not be null!");
 
 		// No entries at all -> create new one
