@@ -35,7 +35,7 @@ applications:
     services:
       - quarano-mannheim-prod-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
   ###############   Mannheim STAGE system #########################
   - name: quarano-mannheim-stage-frontend
     memory: 128M
@@ -72,7 +72,7 @@ applications:
     services:
       - quarano-mannheim-stage-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 ###############   Cuxhaven PROD system #########################
   - name: quarano-cuxhaven-frontend
     memory: 128M
@@ -110,7 +110,7 @@ applications:
     services:
       - quarano-cuxhaven-prod-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
   ###############   Cuxhaven STAGE system #########################
   - name: quarano-cuxhaven-stage-frontend
     memory: 128M
@@ -148,7 +148,7 @@ applications:
     services:
       - quarano-cuxhaven-stage-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ####################################################################
   ########################   INTERNAL  ###############################
@@ -194,7 +194,7 @@ applications:
     services:
       - quarano-internal-demo-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ###############   Internal DEV system #########################
   - name: internal-dev-frontend
@@ -238,7 +238,7 @@ applications:
     services:
       - quarano-internal-dev-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ###############   Internal TEST system #########################
   - name: internal-test-frontend
@@ -281,4 +281,4 @@ applications:
     services:
       - quarano-internal-test-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
