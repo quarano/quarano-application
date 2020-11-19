@@ -12,9 +12,9 @@ import lombok.Value;
 import quarano.core.QuaranoAggregate;
 import quarano.diary.DiaryEntry.DiaryEntryIdentifier;
 import quarano.masterdata.Symptom;
+import quarano.masterdata.Symptoms;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.Symptoms;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
