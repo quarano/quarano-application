@@ -36,6 +36,7 @@
       (rowSelected)="onSelect($event)"
       [quickFilterText]="filterString"
       [getRowHeight]="getRowHeight"
+      (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
   </ng-container>

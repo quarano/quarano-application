@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { map } from 'rxjs/operators';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 import { DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
 
 class CaseRowViewModel {
@@ -115,5 +115,16 @@ export class CaseListComponent implements OnInit {
 
   getRowHeight(params) {
     return params.data.rowHeight;
+  }
+
+  onGridReady(event: { api: GridApi }) {
+    event.api.setFilterModel({
+      status: {
+        filterType: 'text',
+        type: 'notEqual',
+        filter: 'abgeschlossen',
+      },
+    });
+    event.api.onFilterChanged();
   }
 }

@@ -1,6 +1,6 @@
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CaseEntityService, CaseDto } from '@qro/health-department/domain';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -37,6 +37,7 @@ export class CaseListComponent implements OnInit {
   };
   columnDefs: ColDef[] = [];
   locale = DE_LOCALE;
+  private api: GridApi;
 
   constructor(private entityService: CaseEntityService, private router: Router) {
     this.columnDefs = [
@@ -109,5 +110,17 @@ export class CaseListComponent implements OnInit {
     if (event.node.isSelected()) {
       this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId]);
     }
+  }
+
+  onGridReady(event: { api: GridApi }) {
+    this.api = event.api;
+    this.api.setFilterModel({
+      status: {
+        filterType: 'text',
+        type: 'notEqual',
+        filter: 'abgeschlossen',
+      },
+    });
+    this.api.onFilterChanged();
   }
 }

@@ -1,5 +1,4 @@
 import { UnorderedListComponent } from './unordered-list.component';
-import { CheckboxFilterComponent } from './checkbox-filter.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { EmailButtonComponent } from './e-mail-button.component';
@@ -12,7 +11,7 @@ import { CommonModule } from '@angular/common';
     SharedUiMaterialModule,
     AgGridModule.withComponents([EmailButtonComponent, UnorderedListComponent]),
   ],
-  declarations: [EmailButtonComponent, CheckboxFilterComponent, UnorderedListComponent],
-  exports: [EmailButtonComponent, AgGridModule, CheckboxFilterComponent, UnorderedListComponent],
+  declarations: [EmailButtonComponent, UnorderedListComponent],
+  exports: [EmailButtonComponent, AgGridModule, UnorderedListComponent],
 })
 export class SharedUiAgGridModule {}

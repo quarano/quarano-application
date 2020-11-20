@@ -29,7 +29,6 @@ export class UnorderedListComponent implements ICellRendererAngularComp {
 
   agInit(params: any): void {
     this.params = params;
-    console.log(params.value);
   }
 
   refresh(): boolean {
