@@ -6,7 +6,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   template: `
     <button
       *ngIf="params.value"
-      class="ngx-icon-button"
+      class="icon-button"
       data-cy="mail-button"
       mat-icon-button
       [matTooltip]="'E-Mail an ' + params.value"
@@ -19,8 +19,8 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   `,
   styles: [
     `
-      .ngx-icon-button:hover,
-      .ngx-icon-button:focus {
+      .icon-button:hover,
+      .icon-button:focus {
         background-color: #c3c3c3;
         color: white;
         cursor: pointer;

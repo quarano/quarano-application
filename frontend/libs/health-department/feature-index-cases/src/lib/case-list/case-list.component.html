@@ -23,6 +23,7 @@
       />
     </mat-form-field>
     <ag-grid-angular
+      data-cy="case-data-table"
       style="height: 500px"
       class="ag-theme-material"
       [rowData]="cases$ | async"
