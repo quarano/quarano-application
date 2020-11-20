@@ -5,9 +5,9 @@ import { IAfterGuiAttachedParams, IDoesFilterPassParams, IFilterParams, RowNode 
 @Component({
   selector: 'qro-checkbox-filter',
   template: `
-    <mat-select multiple matTooltip="Filtern" (selectionChange)="onAlertFilterChanged($event.value)">
-      <mat-option *ngFor="let key of Object.keys(T)" [value]="params.node.data[key]"> </mat-option>
-    </mat-select>
+    <!-- <mat-select multiple matTooltip="Filtern" (selectionChange)="onAlertFilterChanged($event.value)">
+       <mat-option *ngFor="let key of Object.keys(T)" [value]="params.node.data[key]"> </mat-option>
+    </mat-select> -->
   `,
   styles: [
     `

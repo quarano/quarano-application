@@ -34,6 +34,7 @@
       rowSelection="single"
       (rowSelected)="onSelect($event)"
       [quickFilterText]="filterString"
+      (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
   </ng-container>

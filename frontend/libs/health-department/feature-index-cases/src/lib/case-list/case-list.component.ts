@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
 import { EmailButtonComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 class CaseRowViewModel {
   lastName: string;
@@ -30,9 +30,7 @@ class CaseRowViewModel {
 export class CaseListComponent implements OnInit {
   filterString = '';
   cases$: Observable<CaseRowViewModel[]>;
-  @ViewChild(DatatableComponent) table: DatatableComponent;
   defaultColDef: ColDef = {
-    width: 150,
     editable: false,
     filter: 'agTextColumnFilter',
     sortable: true,
@@ -42,29 +40,26 @@ export class CaseListComponent implements OnInit {
 
   constructor(private entityService: CaseEntityService, private router: Router) {
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', width: 270 },
+      { headerName: 'Status', field: 'status' },
       { headerName: 'Nachname', field: 'lastName' },
       { headerName: 'Vorname', field: 'firstName' },
       {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        width: 160,
         valueFormatter: this.birthDateFormatter,
       },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
-        width: 170,
         valueFormatter: this.quarantineEndDateFormatter,
       },
-      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 115 },
-      { headerName: 'Vorgangsnummer', field: 'extReferenceNumber', width: 200 },
+      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter' },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber' },
       {
         headerName: 'E-Mail',
         field: 'email',
-        width: 120,
         cellRendererFramework: EmailButtonComponent,
         filter: false,
         sortable: false,
@@ -111,5 +106,9 @@ export class CaseListComponent implements OnInit {
     if (event.node.isSelected()) {
       this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId]);
     }
+  }
+
+  onGridReady(event: { api: GridApi }) {
+    event.api.sizeColumnsToFit();
   }
 }
