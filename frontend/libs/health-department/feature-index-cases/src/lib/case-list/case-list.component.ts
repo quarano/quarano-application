@@ -40,29 +40,32 @@ export class CaseListComponent implements OnInit {
 
   constructor(private entityService: CaseEntityService, private router: Router) {
     this.columnDefs = [
-      { headerName: 'Status', field: 'status' },
-      { headerName: 'Nachname', field: 'lastName' },
-      { headerName: 'Vorname', field: 'firstName' },
+      { headerName: 'Status', field: 'status', flex: 3 },
+      { headerName: 'Nachname', field: 'lastName', flex: 2, tooltipField: 'lastName' },
+      { headerName: 'Vorname', field: 'firstName', flex: 2 },
       {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
         valueFormatter: this.birthDateFormatter,
+        width: 170,
       },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
         valueFormatter: this.quarantineEndDateFormatter,
+        width: 170,
       },
-      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter' },
-      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber' },
+      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 100 },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
       {
         headerName: 'E-Mail',
         field: 'email',
         cellRendererFramework: EmailButtonComponent,
         filter: false,
         sortable: false,
+        width: 90,
       },
     ];
   }
@@ -106,9 +109,5 @@ export class CaseListComponent implements OnInit {
     if (event.node.isSelected()) {
       this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId]);
     }
-  }
-
-  onGridReady(event: { api: GridApi }) {
-    event.api.sizeColumnsToFit();
   }
 }

@@ -41,28 +41,31 @@ export class CaseListComponent implements OnInit {
 
   constructor(private entityService: CaseEntityService, private router: Router) {
     this.columnDefs = [
-      { headerName: 'Status', field: 'status' },
-      { headerName: 'Nachname', field: 'lastName' },
-      { headerName: 'Vorname', field: 'firstName' },
+      { headerName: 'Status', field: 'status', flex: 3 },
+      { headerName: 'Nachname', field: 'lastName', flex: 2 },
+      { headerName: 'Vorname', field: 'firstName', flex: 2 },
       { headerName: 'Typ', field: 'typeName' },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
         valueFormatter: this.quarantineEndDateFormatter,
+        width: 170,
       },
       {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
         valueFormatter: this.quarantineEndDateFormatter,
+        width: 170,
       },
-      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber' },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
       {
         headerName: 'Ursprungsfälle',
         field: 'originCases',
         cellRendererFramework: UnorderedListComponent,
         tooltipField: 'firstName',
+        flex: 2,
       },
     ];
   }
@@ -108,10 +111,6 @@ export class CaseListComponent implements OnInit {
     if (event.node.isSelected()) {
       this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId]);
     }
-  }
-
-  onGridReady(event: any) {
-    event.api.sizeColumnsToFit();
   }
 
   getRowHeight(params) {

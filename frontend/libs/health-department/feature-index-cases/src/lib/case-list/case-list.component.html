@@ -1,4 +1,4 @@
-<div style="max-width: 1335px">
+<div style="width: 90vw">
   <div style="display: flex; justify-content: space-between">
     <div style="display: flex">
       <button
@@ -23,7 +23,7 @@
       />
     </mat-form-field>
     <ag-grid-angular
-      style="width: 1335px; height: 500px"
+      style="height: 500px"
       class="ag-theme-material"
       [rowData]="cases$ | async"
       [columnDefs]="columnDefs"
@@ -34,7 +34,6 @@
       rowSelection="single"
       (rowSelected)="onSelect($event)"
       [quickFilterText]="filterString"
-      (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
   </ng-container>
