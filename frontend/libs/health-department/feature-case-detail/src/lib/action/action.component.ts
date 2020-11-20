@@ -1,3 +1,4 @@
+import { ActionDto } from './../../../../domain/src/lib/model/case-action';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +11,7 @@ import { CaseActionDto, HealthDepartmentService } from '@qro/health-department/d
 import { CaseType } from '@qro/auth/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { flatten } from 'lodash';
 
 @Component({
   selector: 'qro-client-action',
@@ -85,5 +87,12 @@ export class ActionComponent implements OnInit {
 
   get returnLink() {
     return `/health-department/${this.caseType}-cases/action-list`;
+  }
+
+  getActionsCount(actions: ActionDto[]): number {
+    if (!actions) {
+      return 0;
+    }
+    return flatten(actions.map((a) => a.items)).length;
   }
 }

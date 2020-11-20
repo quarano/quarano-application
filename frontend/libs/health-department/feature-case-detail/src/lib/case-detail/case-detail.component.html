@@ -88,7 +88,7 @@
         [active]="rlactions.isActive"
       >
         <span
-          *ngIf="true; else has_no_open_anomalies"
+          *ngIf="caseDetail.openAnomaliesCount > 0; else has_no_open_anomalies"
           [matBadge]="caseDetail.openAnomaliesCount"
           matBadgeOverlap="false"
           matBadgeSize="small"
@@ -156,7 +156,8 @@
         #rldiaryentries="routerLinkActive"
         [active]="rldiaryentries.isActive"
       >
-        {{'CASE_DETAIL.DIARY' | translate}}
+        {{ 'CASE_DETAIL.DIARY' | translate }}
       </a>
     </nav>
-    <router-outlet></router-outlet>
+    <router-outlet></router-outlet> </mat-card-content
+></mat-card>
