@@ -189,7 +189,7 @@ applications:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
-    memory: 700M
+    memory: 1G
     disk_quota: 400M
     routes:
       - route: quarano.de/demo/api
@@ -235,7 +235,7 @@ applications:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
-    memory: 700M
+    memory: 1G
     disk_quota: 400M
     routes:
       - route: quarano.de/internal-dev/api
@@ -280,7 +280,7 @@ applications:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
-    memory: 700M
+    memory: 1G
     disk_quota: 400M
     routes:
       - route: quarano.de/internal-test/api
