@@ -1,13 +1,13 @@
 import { map, tap } from 'rxjs/operators';
 import { CaseEntityService, CaseDto } from '@qro/health-department/domain';
-import { SubSink } from 'subsink';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MatSort } from '@angular/material/sort';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
+import { EmailButtonComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 class CaseRowViewModel {
   lastName: string;
@@ -18,7 +18,7 @@ class CaseRowViewModel {
   quarantineEnd: Date;
   caseId: string;
   status: string;
-  zipCode: string;
+  zipCode: number;
   extReferenceNumber: string;
 }
 
@@ -27,57 +27,68 @@ class CaseRowViewModel {
   templateUrl: './case-list.component.html',
   styleUrls: ['./case-list.component.scss'],
 })
-export class CaseListComponent implements OnInit, OnDestroy {
-  private subs = new SubSink();
+export class CaseListComponent implements OnInit {
+  filterString = '';
   cases$: Observable<CaseRowViewModel[]>;
-  loading = false;
-  selectionType = SelectionType.single;
-  @ViewChild(DatatableComponent) table: DatatableComponent;
+  defaultColDef: ColDef = {
+    editable: false,
+    filter: 'agTextColumnFilter',
+    sortable: true,
+  };
+  columnDefs: ColDef[] = [];
+  locale = DE_LOCALE;
+  private api: GridApi;
 
-  get filter(): string {
-    return this._filter.value;
+  constructor(private entityService: CaseEntityService, private router: Router) {
+    this.columnDefs = [
+      { headerName: 'Status', field: 'status', flex: 3 },
+      { headerName: 'Nachname', field: 'lastName', flex: 2, tooltipField: 'lastName' },
+      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      {
+        headerName: 'Geburtsdatum',
+        field: 'dateOfBirth',
+        filter: 'agDateColumnFilter',
+        valueFormatter: this.birthDateFormatter,
+        width: 170,
+      },
+      {
+        headerName: 'Quarantäne bis',
+        field: 'quarantineEnd',
+        filter: 'agDateColumnFilter',
+        valueFormatter: this.quarantineEndDateFormatter,
+        width: 170,
+      },
+      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 100 },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
+      {
+        headerName: 'E-Mail',
+        field: 'email',
+        cellRendererFramework: EmailButtonComponent,
+        filter: false,
+        sortable: false,
+        width: 90,
+      },
+    ];
   }
 
-  set filter(filter: string) {
-    this._filter.next(filter);
+  birthDateFormatter(params: { value: Date }) {
+    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
   }
 
-  private readonly _filter = new BehaviorSubject<string>('');
-  private _filteredData = new BehaviorSubject<CaseRowViewModel[]>([]);
+  quarantineEndDateFormatter(params: { value: Date }) {
+    if (!params.value) {
+      return '-';
+    }
 
-  get filteredData(): CaseRowViewModel[] {
-    return this._filteredData.value;
+    if (DateFunctions.isDateInPast(params.value)) {
+      return 'beendet';
+    }
+
+    return DateFunctions.toCustomLocaleDateString(params.value);
   }
-
-  set filteredData(filteredData: CaseRowViewModel[]) {
-    this._filteredData.next(filteredData);
-  }
-
-  private dateTimeNow = new Date();
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-  constructor(private entityService: CaseEntityService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loading = true;
-
-    this.cases$ = this.entityService.filteredEntities$.pipe(
-      map((dtos) => dtos.map((dto) => this.getRowData(dto))),
-      tap((cases) => (this.filteredData = [...cases])),
-      tap((cases) => (this.loading = false))
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
-
-  public isQuarantineOngoing(endDate: Date | null): boolean {
-    if (!endDate) {
-      return null;
-    }
-    return endDate < this.dateTimeNow;
+    this.cases$ = this.entityService.filteredEntities$.pipe(map((dtos) => dtos.map((dto) => this.getRowData(dto))));
   }
 
   getRowData(c: CaseDto): CaseRowViewModel {
@@ -89,55 +100,27 @@ export class CaseListComponent implements OnInit, OnDestroy {
       email: c.email,
       quarantineEnd: c.quarantineEndDate,
       status: c.status,
-      zipCode: c.zipCode || '-',
+      zipCode: Number.parseInt(c.zipCode, 10) || null,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
     };
   }
 
-  getQuarantineEndString(quarantineEnd: Date): string {
-    if (!quarantineEnd) {
-      return '-';
+  onSelect(event: any) {
+    if (event.node.isSelected()) {
+      this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId]);
     }
-
-    if (DateFunctions.isDateInPast(quarantineEnd)) {
-      return 'beendet';
-    }
-
-    return DateFunctions.toCustomLocaleDateString(quarantineEnd);
   }
 
-  updateFilter(event, cases: CaseRowViewModel[]) {
-    this.filter = event.target.value;
-    this.filteredData = !this.filter ? cases : cases.filter((obj) => this.filterPredicate(obj, this.filter));
-    this.table.offset = 0;
-  }
-
-  filterPredicate(obj: CaseRowViewModel, filter: string): boolean {
-    const dataStr = Object.keys(obj)
-      .reduce((currentTerm: string, key: string) => {
-        if (key === 'caseId') {
-          return currentTerm;
-        }
-        if (obj[key] instanceof Date) {
-          return (
-            currentTerm + DateFunctions.toCustomLocaleDateString((obj as { [key: string]: any })[key] as Date) + '◬'
-          );
-        }
-        return currentTerm + (obj as { [key: string]: any })[key] + '◬';
-      }, '')
-      .toLowerCase();
-    const transformedFilter = filter.trim().toLowerCase();
-
-    return dataStr.indexOf(transformedFilter) !== -1;
-  }
-
-  sendMail(event, to: string) {
-    event.stopPropagation();
-    window.open(`mailto:${to}`);
-  }
-
-  onSelect(event) {
-    this.router.navigate(['/health-department/case-detail', event?.selected[0]?.type, event?.selected[0]?.caseId]);
+  onGridReady(event: { api: GridApi }) {
+    this.api = event.api;
+    this.api.setFilterModel({
+      status: {
+        filterType: 'text',
+        type: 'notEqual',
+        filter: 'abgeschlossen',
+      },
+    });
+    this.api.onFilterChanged();
   }
 }

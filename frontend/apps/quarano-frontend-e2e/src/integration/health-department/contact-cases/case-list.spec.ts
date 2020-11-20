@@ -25,13 +25,17 @@ describe('health-department contact cases case-list', () => {
     it('should get a list of cases and display in table', () => {
       cy.wait('@allcases').its('status').should('eq', 200);
 
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length.greaterThan', 0);
     });
 
     it('should filter cases', () => {
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length.greaterThan', 0);
       cy.get('[data-cy="search-case-input"]').type('drogler');
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length', 1);
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
     });
 
     it('should open new case page on button click', () => {
@@ -40,7 +44,7 @@ describe('health-department contact cases case-list', () => {
     });
 
     it('should open selected case', () => {
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(2).click();
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
       cy.url().should('include', '/health-department/case-detail');
     });
   });

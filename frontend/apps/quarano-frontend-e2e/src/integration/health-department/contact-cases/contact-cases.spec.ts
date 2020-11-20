@@ -14,8 +14,8 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="contact-cases"]').click();
       cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
       cy.get('[data-cy="case-data-table"]').should('exist');
-      cy.get('[data-cy="case-data-table"] .datatable-row-group').eq(1).should('exist');
-      cy.get('[data-cy="case-data-table"] .datatable-row-group').eq(1).click();
+      cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).should('exist');
+      cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).click();
 
       cy.location('pathname').should('include', 'health-department/case-detail/contact');
 
@@ -39,8 +39,8 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="contact-cases"]').click();
       cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
       cy.get('[data-cy="case-data-table"]').should('exist');
-      cy.get('[data-cy="case-data-table"] .datatable-row-group').eq(1).should('exist');
-      cy.get('[data-cy="case-data-table"] .datatable-row-group').eq(1).click();
+      cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).should('exist');
+      cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).click();
 
       cy.location('pathname').should('include', 'health-department/case-detail/contact');
 
