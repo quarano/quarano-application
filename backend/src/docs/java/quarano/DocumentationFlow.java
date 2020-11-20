@@ -66,7 +66,7 @@ import com.jayway.jsonpath.JsonPath;
 public class DocumentationFlow {
 
 	public static DocumentationFlow NONE = new DocumentationFlow(null, new ArrayList<>());
-	private static String ELLIPSIS = "\u2026";
+	private static String ELLIPSIS = "...";
 
 	private final @Nullable String name;
 	private final List<OperationPreprocessor> customResponsePreprocessors;
