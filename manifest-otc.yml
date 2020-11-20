@@ -156,7 +156,7 @@ applications:
   ###############   Internal DEMO system #########################
   - name: internal-demo-frontend
     memory: 128M
-	disk_quota: 200M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -190,7 +190,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 700M
-	disk_quota: 400M
+    disk_quota: 400M
     routes:
       - route: quarano.de/demo/api
     services:
@@ -201,7 +201,7 @@ applications:
   ###############   Internal DEV system #########################
   - name: internal-dev-frontend
     memory: 128M
-	disk_quota: 200M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -236,7 +236,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 700M
-	disk_quota: 400M
+    disk_quota: 400M
     routes:
       - route: quarano.de/internal-dev/api
     services:
@@ -247,7 +247,7 @@ applications:
   ###############   Internal TEST system #########################
   - name: internal-test-frontend
     memory: 128M
-	disk_quota: 200M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -281,7 +281,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
     instances: 1
     memory: 700M
-	disk_quota: 400M
+    disk_quota: 400M
     routes:
       - route: quarano.de/internal-test/api
     services:
