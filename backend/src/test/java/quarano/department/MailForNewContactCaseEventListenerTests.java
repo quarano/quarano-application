@@ -58,7 +58,7 @@ class MailForNewContactCaseEventListenerTests {
 					.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
 			assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
 			assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
-			assertThat(trackedCase.getStatus()).isEqualTo(Status.IN_REGISTRATION);
+			assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 		});
 	}
 
