@@ -123,7 +123,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		LocalDate today = LocalDate.now();
 
 		// get the first case
-		var response = mvc.perform(get("/hd/cases")
+		var response = mvc.perform(get("/api/hd/cases")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
@@ -140,14 +140,14 @@ class TrackedCaseControllerWebIntegrationTests {
 		var payload = createMinimalIndexPayload().setQuarantineEndDate(quarantineEndDate)
 				.setQuarantineStartDate(quarantineStartDate);
 
-		mvc.perform(put("/hd/cases/{id}", trackedCaseId)
+		mvc.perform(put("/api/hd/cases/{id}", trackedCaseId)
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
 		// fetch cases again and check if quarantine start and end dates are shown correctly
-		var readResponseAfterUpdate = mvc.perform(get("/hd/cases")
+		var readResponseAfterUpdate = mvc.perform(get("/api/hd/cases")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
@@ -244,7 +244,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setTestDate(LocalDate.now().minusDays(8))
 				.setInfected(true);
 
-		var response = expectBadRequest(HttpMethod.POST, "/hd/cases?type=contact", payload);
+		var response = expectBadRequest(HttpMethod.POST, "/api/hd/cases?type=contact", payload);
 
 		assertThat(response.read("$.testDate", String.class)).isNotNull();
 	}
@@ -261,7 +261,7 @@ class TrackedCaseControllerWebIntegrationTests {
 						!it.getKey().isBlank() ? "?".concat(it.getKey()) : ""),
 				test -> {
 
-					var baseUri = "/hd/cases";
+					var baseUri = "/api/hd/cases";
 					var uri = baseUri.concat(!test.getKey().isBlank() ? "?".concat(test.getKey()) : "");
 					var response = expectBadRequest(HttpMethod.POST, uri, new TrackedCaseDto());
 					var group = test.getValue() == Default.class ? null : test.getValue();
@@ -286,7 +286,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setStreet("\\")
 				.setExtReferenceNumber("ADF !").setHouseNumber("\\");
 
-		var document = expectBadRequest(HttpMethod.POST, "/hd/cases", payload);
+		var document = expectBadRequest(HttpMethod.POST, "/api/hd/cases", payload);
 
 		var houseNumber = messages.getMessage("Pattern.houseNumber");
 		var firstName = messages.getMessage("Pattern.firstName");
@@ -311,7 +311,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setEmail(null)
 				.setDateOfBirth(null);
 
-		var document = expectBadRequest(HttpMethod.PUT, "/hd/cases/" + trackedCase.getId(), payload);
+		var document = expectBadRequest(HttpMethod.PUT, "/api/hd/cases/" + trackedCase.getId(), payload);
 
 		assertThat(document.read("$.email", String.class)).isNotNull();
 	}
@@ -319,7 +319,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test
 	void getAllCasesOrderedCorrectly() throws Exception {
 
-		var response = mvc.perform(get("/hd/cases")
+		var response = mvc.perform(get("/api/hd/cases")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
@@ -349,7 +349,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var payload = new CommentInput();
 		payload.setComment("Kommentar!");
 
-		var response = mvc.perform(post("/hd/cases/{id}/comments", trackedCase.getId())
+		var response = mvc.perform(post("/api/hd/cases/{id}/comments", trackedCase.getId())
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -404,7 +404,7 @@ class TrackedCaseControllerWebIntegrationTests {
 		var contactCase = createMinimalContactPayload();
 		contactCase.setEmail("");
 
-		mvc.perform(post("/hd/cases")
+		mvc.perform(post("/api/hd/cases")
 				.content(jackson.writeValueAsString(contactCase))
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("type", "contact"))
@@ -512,7 +512,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.setFirstName("Max")
 				.setLastName("Mustermann");
 
-		var response = mvc.perform(put("/hd/cases/{id}", trackedCase.getId())
+		var response = mvc.perform(put("/api/hd/cases/{id}", trackedCase.getId())
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -529,7 +529,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		var response = mvc.perform(get("/hd/cases/{id}", trackingCase.getId()))
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -551,7 +551,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		var response = mvc.perform(get("/hd/cases/{id}", trackingCase.getId()))
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -591,7 +591,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
-		var response = mvc.perform(get("/hd/cases/{id}", trackingCase.getId()))
+		var response = mvc.perform(get("/api/hd/cases/{id}", trackingCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -629,7 +629,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test // CORE-252
 	void filtersCasesIfQueryGiven() throws Exception {
 
-		String response = mvc.perform(get("/hd/cases?q={query}", "ert"))
+		String response = mvc.perform(get("/api/hd/cases?q={query}", "ert"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -640,7 +640,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test // CORE-252
 	void projectsCasesIfProjectionGiven() throws Exception {
 
-		String response = mvc.perform(get("/hd/cases?q={query}&projection={projection}", "ert", "select"))
+		String response = mvc.perform(get("/api/hd/cases?q={query}&projection={projection}", "ert", "select"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -667,7 +667,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		TestUtils.fakeRequest(HttpMethod.GET, "/hd/cases", mvc.getDispatcherServlet().getWebApplicationContext());
 
-		var response = mvc.perform(put("/hd/cases/{id}", contactCase.getId())
+		var response = mvc.perform(put("/api/hd/cases/{id}", contactCase.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(jackson.writeValueAsString(representations.toInputRepresentation(contactCase))))
 				.andExpect(status().isOk())
@@ -688,7 +688,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@Test // CORE-346
 	void returnsOnlyIndexCasesIfFiltered() throws Exception {
 
-		var result = mvc.perform(get("/hd/cases")
+		var result = mvc.perform(get("/api/hd/cases")
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("type", "index"))
 				.andExpect(status().isOk())
@@ -704,7 +704,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	@WithQuaranoUser("admin")
 	void exposesNumberOfOpenAnomalies() throws Exception {
 
-		var result = mvc.perform(get("/hd/cases/{id}", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+		var result = mvc.perform(get("/api/hd/cases/{id}", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
@@ -724,7 +724,7 @@ class TrackedCaseControllerWebIntegrationTests {
 				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
-		var response = mvc.perform(get("/hd/cases")
+		var response = mvc.perform(get("/api/hd/cases")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
@@ -780,7 +780,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(post("/hd/cases")
+			return mvc.perform(post("/api/hd/cases")
 					.param("type", type == CaseType.INDEX ? "index" : "contact")
 					.content(jackson.writeValueAsString(payload))
 					.contentType(MediaType.APPLICATION_JSON))
@@ -797,7 +797,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(post("/hd/cases")
+			return mvc.perform(post("/api/hd/cases")
 					.param("type", type == CaseType.INDEX ? "index" : "contact")
 					.content(jackson.writeValueAsString(payload))
 					.contentType(MediaType.APPLICATION_JSON))
@@ -819,7 +819,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(put("/hd/cases/{id}", caseId)
+			return mvc.perform(put("/api/hd/cases/{id}", caseId)
 					.param("type", type == CaseType.INDEX ? "index" : "contact")
 					.content(jackson.writeValueAsString(payload))
 					.contentType(MediaType.APPLICATION_JSON))
@@ -834,7 +834,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private MockHttpServletResponse issueToIndexCaseTransformation(TrackedCaseDto payload, TrackedCaseIdentifier id)
 			throws Exception, JsonProcessingException {
 
-		return mvc.perform(put("/hd/cases/{id}", id)
+		return mvc.perform(put("/api/hd/cases/{id}", id)
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -844,7 +844,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private MockHttpServletResponse expectBadRequestOnTransformationCall(TrackedCaseDto payload,
 			TrackedCaseIdentifier caseId) throws Exception, JsonProcessingException {
 
-		return mvc.perform(put("/hd/cases/{id}", caseId)
+		return mvc.perform(put("/api/hd/cases/{id}", caseId)
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -858,7 +858,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		try {
 
-			return mvc.perform(put("/hd/cases/{caseId}", trackedCase.getId())
+			return mvc.perform(put("/api/hd/cases/{caseId}", trackedCase.getId())
 					.content(jackson.writeValueAsString(payload))
 					.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().isBadRequest())

@@ -39,7 +39,7 @@ class DiaryControllerWebIntegrationTests {
 		var payload = new DiaryEntryInput(slot)
 				.setBodyTemperature(42.0f);
 
-		var response = mvc.perform(post("/diary")
+		var response = mvc.perform(post("/api/diary")
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
@@ -69,7 +69,7 @@ class DiaryControllerWebIntegrationTests {
 		DiaryEntryInput payload = new DiaryEntryInput(slot)
 				.setBodyTemperature(42.0f);
 
-		String response = mvc.perform(put("/diary/{identifier}", entry.getId())
+		String response = mvc.perform(put("/api/diary/{identifier}", entry.getId())
 				.content(jackson.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())

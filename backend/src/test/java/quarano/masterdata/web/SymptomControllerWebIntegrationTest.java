@@ -44,7 +44,7 @@ class SymptomControllerWebIntegrationTest {
 
 	private DocumentContext getSymptoms(Locale locale) throws Exception {
 
-		var response = mvc.perform(get("/symptoms")
+		var response = mvc.perform(get("/api/symptoms")
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(locale))
 				.andReturn().getResponse().getContentAsString();

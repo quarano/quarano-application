@@ -17,15 +17,15 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { registerLocaleData } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { PlatformLocation, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { environment } from '../environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { reducers } from './reducers';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -100,7 +100,11 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'de-de' },
-    { provide: API_URL, useValue: environment.api.baseUrl },
+    {
+      provide: API_URL,
+      useFactory: (pl) => pl.getBaseHrefFromDOM() + environment.api.baseUrl,
+      deps: [PlatformLocation],
+    },
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }, // @todo SC: CORE-341 - Kann die Default Config von ngrx-data gesetzt werden
   ],
   bootstrap: [AppComponent],

@@ -52,7 +52,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var referenceAgentAccount = accounts.findByUsername("agent1");
 		var referenceNonDepartmentAccount = accounts.findByUsername("DemoAccount");
 
-		var response = mvc.perform(get("/hd/accounts"))
+		var response = mvc.perform(get("/api/hd/accounts"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -80,7 +80,7 @@ class StaffAccountControllerWebIntegrationTests {
 	@WithQuaranoUser("agent1")
 	void getAccountServicesForbiddenForNonAdminHDUser() throws Exception {
 
-		mvc.perform(get("/hd/accounts"))
+		mvc.perform(get("/api/hd/accounts"))
 				.andExpect(status().isForbidden());
 	}
 
@@ -88,7 +88,7 @@ class StaffAccountControllerWebIntegrationTests {
 	@WithQuaranoUser("DemoAccount")
 	void getAccountsForbiddenForTrackedUser() throws Exception {
 
-		mvc.perform(get("/hd/accounts"))
+		mvc.perform(get("/api/hd/accounts"))
 				.andExpect(status().isForbidden())
 				.andReturn().getResponse().getContentAsString();
 	}
@@ -100,7 +100,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var source = createTestUserInput(RoleType.ROLE_HD_CASE_AGENT, RoleType.ROLE_HD_ADMIN);
 
 		// send request
-		var result = mvc.perform(post("/hd/accounts")
+		var result = mvc.perform(post("/api/hd/accounts")
 				.content(jackson.writeValueAsString(source))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
@@ -136,7 +136,7 @@ class StaffAccountControllerWebIntegrationTests {
 				.setLastName("Huber123");
 
 		// send request
-		var responseBody = mvc.perform(post("/hd/accounts")
+		var responseBody = mvc.perform(post("/api/hd/accounts")
 				.content(jackson.writeValueAsString(source))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -167,7 +167,7 @@ class StaffAccountControllerWebIntegrationTests {
 				.setFirstName("Hans123")
 				.setLastName("Huber123");
 
-		var response = mvc.perform(put("/hd/accounts/" + agent1.get().getId())
+		var response = mvc.perform(put("/api/hd/accounts/" + agent1.get().getId())
 				.content(jackson.writeValueAsString(dto))
 				.contentType(MediaType.APPLICATION_JSON)) // )
 				.andExpect(status().isBadRequest())
@@ -194,7 +194,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		var foo = mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
+		var foo = mvc.perform(put("/api/hd/accounts/{id}/password", agent1.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
@@ -213,7 +213,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		mvc.perform(put("/hd/accounts/{id}/password", agent3.getId())
+		mvc.perform(put("/api/hd/accounts/{id}/password", agent3.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
@@ -227,7 +227,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", "-not matching-");
 
-		var responseBody = mvc.perform(put("/hd/accounts/{id}/password", agent1.getId())
+		var responseBody = mvc.perform(put("/api/hd/accounts/{id}/password", agent1.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -248,7 +248,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		mvc.perform(put("/hd/accounts/{id}/password", UUID.randomUUID().toString())
+		mvc.perform(put("/api/hd/accounts/{id}/password", UUID.randomUUID().toString())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
@@ -262,7 +262,7 @@ class StaffAccountControllerWebIntegrationTests {
 		var password = "MyN3wAgentPassw0rD";
 		var newPassword = Map.of("password", password, "passwordConfirm", password);
 
-		mvc.perform(put("/hd/accounts/{id}/password", user1.getId())
+		mvc.perform(put("/api/hd/accounts/{id}/password", user1.getId())
 				.content(jackson.writeValueAsString(newPassword))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());

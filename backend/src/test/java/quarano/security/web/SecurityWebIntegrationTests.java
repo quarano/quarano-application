@@ -23,7 +23,7 @@ public class SecurityWebIntegrationTests {
 	@WithQuaranoUser("admin")
 	void staffAdminCanAccessStaffResources() throws Exception {
 
-		mvc.perform(get("/hd/cases"))
+		mvc.perform(get("/api/hd/cases"))
 				.andExpect(status().isOk());
 	}
 }

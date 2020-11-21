@@ -56,7 +56,7 @@ class GettingStartedDocumentation extends AbstractDocumentation {
 
 		var payload = Map.of("username", "agent1", "password", "agent1");
 
-		var response = mvc.perform(post("/login")
+		var response = mvc.perform(post("/api/login")
 				.content(jackson.writeValueAsString(payload)))
 				.andExpect(status().isOk())
 				.andExpect(header().string(QuaranoHttpHeaders.AUTH_TOKEN, is(notNullValue())))

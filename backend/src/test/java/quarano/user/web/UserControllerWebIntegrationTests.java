@@ -73,7 +73,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 	private String performGet(String token) throws Exception {
 		// check if token is valid for authentication
-		String resultDtoStr = mvc.perform(get("/user/me")
+		String resultDtoStr = mvc.perform(get("/api/user/me")
 				.header("Origin", "*")
 				.header("Authorization", "Bearer " + token)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -110,7 +110,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword(PASSWORD, newPassword, newPassword);
 
-		mvc.perform(put("/user/me/password")
+		mvc.perform(put("/api/user/me/password")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token))
@@ -130,7 +130,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 		var newPassword = "newPassword";
 		var payload = new UserController.NewPassword(password, newPassword, newPassword);
 
-		mvc.perform(put("/user/me/password")
+		mvc.perform(put("/api/user/me/password")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token))
@@ -197,7 +197,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 	private String login(String username, String password) throws Exception {
 
-		return mvc.perform(post("/login")
+		return mvc.perform(post("/api/login")
 				.header("Origin", "*")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(createLoginRequestBody(username, password)))
@@ -208,7 +208,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 	private void expectLoginRejectedFor(String username, String password) throws Exception {
 
-		mvc.perform(post("/login")
+		mvc.perform(post("/api/login")
 				.header("Origin", "*")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(createLoginRequestBody(username, password)))
@@ -219,7 +219,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 
 		var token = login(USERNAME, PASSWORD);
 
-		return mvc.perform(put("/user/me/password")
+		return mvc.perform(put("/api/user/me/password")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(payload))
 				.header("Authorization", "Bearer " + token));

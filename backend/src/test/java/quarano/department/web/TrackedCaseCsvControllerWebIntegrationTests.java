@@ -59,7 +59,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
 
-			var result = mvc.perform(get("/hd/quarantines")
+			var result = mvc.perform(get("/api/hd/quarantines")
 					.contentType(MediaType.valueOf("text/csv"))
 					.param("type", bar.getType())
 					.param("from", bar.getFrom())
@@ -86,7 +86,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
 
-			mvc.perform(get("/hd/quarantines")
+			mvc.perform(get("/api/hd/quarantines")
 					.contentType(MediaType.valueOf("text/csv;charset=UTF-8"))
 					.param("type", foo.getType())
 					.param("from", foo.getFrom())

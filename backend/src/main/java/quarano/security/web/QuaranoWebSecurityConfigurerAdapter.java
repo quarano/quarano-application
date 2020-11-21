@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -87,6 +88,16 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 		httpSecurity.csrf().disable().cors(it -> {
 			it.configurationSource(corsConfigurationSource());
 		});
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring()
+				.mvcMatchers(
+						"/**/**.js",
+						"/**/**.css",
+						"/**/**.html"
+				);
 	}
 
 	@Bean

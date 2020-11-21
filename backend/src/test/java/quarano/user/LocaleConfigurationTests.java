@@ -33,7 +33,7 @@ import com.jayway.jsonpath.JsonPath;
 @RequiredArgsConstructor
 public class LocaleConfigurationTests {
 
-	static final String ME = "/user/me";
+	static final String ME = "/api/user/me";
 
 	final String USERNAME_WITH_LOCALE = "DemoAccount";
 	final String USERNAME_WITHOUT_LOCALE = "test3";
@@ -143,7 +143,7 @@ public class LocaleConfigurationTests {
 
 	private MockHttpServletResponse performWrongPasswordChange(Locale locale) throws Exception {
 
-		return mvc.perform(put("/user/me/password")
+		return mvc.perform(put("/api/user/me/password")
 				.header("Origin", "*")
 				.locale(locale)
 				.contentType(MediaType.APPLICATION_JSON)

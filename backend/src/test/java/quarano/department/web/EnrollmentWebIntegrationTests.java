@@ -282,7 +282,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("test5") // Nadine Ebert
 	void caseWithEnrollmentCompletedDoNotExposeNextLinkPointingToEnrollment() throws Exception {
 
-		var response = mvc.perform(get("/user/me"))
+		var response = mvc.perform(get("/api/user/me"))
 				.andReturn().getResponse().getContentAsString();
 
 		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.NEXT, response)).isEmpty();
@@ -321,14 +321,14 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	private String performRequestToGetEnrollementState() throws UnsupportedEncodingException, Exception {
-		String result = mvc.perform(get("/enrollment"))
+		String result = mvc.perform(get("/api/enrollment"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		return result;
 	}
 
 	private String performRequestToGetQuestionnaire() throws UnsupportedEncodingException, Exception {
-		String result = mvc.perform(get("/enrollment/questionnaire"))
+		String result = mvc.perform(get("/api/enrollment/questionnaire"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 		return result;
@@ -348,7 +348,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 				.setSerializationInclusion(Include.NON_NULL)
 				.writeValueAsString(source);
 
-		var request = mvc.perform(put("/enrollment/details")
+		var request = mvc.perform(put("/api/enrollment/details")
 				.param("confirmed", "true")
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON));
@@ -382,7 +382,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 				.setSerializationInclusion(Include.NON_NULL)
 				.writeValueAsString(source);
 
-		var request = mvc.perform(put("/enrollment/details")
+		var request = mvc.perform(put("/api/enrollment/details")
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON));
 
@@ -395,7 +395,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 
 	private void submitQuestionnaireSuccessfully(QuestionnaireDto source) throws Exception {
 
-		mvc.perform(put("/enrollment/questionnaire")
+		mvc.perform(put("/api/enrollment/questionnaire")
 				.content(jackson.writeValueAsString(source))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -404,7 +404,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 
 	private String submitQuestionnaireExpectBadRequest(QuestionnaireDto source) throws Exception {
 
-		return mvc.perform(put("/enrollment/questionnaire")
+		return mvc.perform(put("/api/enrollment/questionnaire")
 				.content(jackson.writeValueAsString(source))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())

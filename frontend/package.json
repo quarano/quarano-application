@@ -1,7 +1,11 @@
 {
-  "name": "quarano-frontend",
-  "version": "0.0.0",
+  "name": "@quarano/quarano-frontend",
+  "version": "0.0.1",
   "license": "EUPL-1.2-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/quarano/quarano-private-packages.git"
+  },
   "scripts": {
     "ng": "nx",
     "nx": "nx",
@@ -43,7 +47,10 @@
       "pre-commit": "pretty-quick --staged --pattern '**/*.*(ts|scss|html)'"
     }
   },
-  "private": true,
+  "private": false,
+  "files": [
+    "/dist/apps/quarano-frontend/public"
+  ],
   "dependencies": {
     "@angular/animations": "~11.0.0",
     "@angular/cdk": "^11.0.0",

@@ -30,7 +30,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	void getAllTexts() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/api/frontendtexts")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(documentGetFrontendTexts())
 				.andExpect(status().is2xxSuccessful())
@@ -44,7 +44,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	void getAllTextsEng() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/api/frontendtexts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(Locale.UK))
 				.andExpect(status().is2xxSuccessful())
@@ -57,7 +57,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	void getOneText() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/api/frontendtexts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("key", "welcome-index"))
 				.andExpect(status().is2xxSuccessful())
@@ -69,7 +69,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 	@Test
 	void getOneTextEn() throws Exception {
 
-		var result = mvc.perform(get("/frontendtexts")
+		var result = mvc.perform(get("/api/frontendtexts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.locale(Locale.UK)
 				.param("key", "welcome-index"))
@@ -105,7 +105,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 		@Test
 		void getOneText() throws Exception {
 
-			var result = mvc.perform(get("/frontendtexts")
+			var result = mvc.perform(get("/api/frontendtexts")
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("key", "welcome-index"))
 					.andExpect(status().is2xxSuccessful())
@@ -117,7 +117,7 @@ class FrontendTextControllerWebIntegrationTests extends AbstractDocumentation {
 		@Test
 		void getOneTextEn() throws Exception {
 
-			var result = mvc.perform(get("/frontendtexts")
+			var result = mvc.perform(get("/api/frontendtexts")
 					.contentType(MediaType.APPLICATION_JSON)
 					.locale(Locale.UK)
 					.param("key", "welcome-index"))
