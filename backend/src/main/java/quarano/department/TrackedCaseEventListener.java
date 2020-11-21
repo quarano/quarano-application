@@ -9,6 +9,7 @@ import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase.CaseConvertedToIndex;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.activation.ActivationCode;
+import quarano.department.activation.ActivationCodeProperties;
 import quarano.department.activation.ActivationCodeService;
 
 import java.util.Map;
@@ -109,7 +110,7 @@ class TrackedCaseEventListener {
 					.orElseGet(Map::of);
 
 			return emailSender.sendMail(new TrackedCaseEmail(trackedCase, subject, Keys.NEW_CONTACT_CASE, placeholders))
-					.onSuccess(__ -> activationCodes.codeMailed(code.getId()))
+					.onSuccess(__ -> code.map(ActivationCode::getId).map(activationCodes::codeMailed))
 					.onSuccess(__ -> log.info("Contact case creation mail sent to {{}; {}; Case-ID {}}", logArgs))
 					.onFailure(__ -> code.map(ActivationCode::getId).map(activationCodes::cancelCode))
 					.onFailure(e -> log.info("Can't send contact case creation mail to {{}; {}; Case-ID {}}", logArgs))
