@@ -61,10 +61,10 @@ describe('health-department index cases case-list', () => {
     it('should add address', () => {
       cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(0).click();
       cy.location('pathname').should('include', '/index/');
-      cy.get("[data-cy='street-input']").type('Frankfurterstrasse');
-      cy.get("[data-cy='house-number-input']").type('11');
-      cy.get("[data-cy='zip-code-input']").type('60987');
-      cy.get("[data-cy='city-input']").type('Frankfurt');
+      cy.get("[data-cy='street-input']").clear().type('Frankfurterstrasse');
+      cy.get("[data-cy='house-number-input']").clear().type('11');
+      cy.get("[data-cy='zip-code-input']").clear().type('60987');
+      cy.get("[data-cy='city-input']").clear().type('Frankfurt');
       cy.get("[data-cy='client-submit-and-close-button'] button").click();
       cy.wait('@savedetails');
       cy.get('@savedetails').its('status').should('eq', 200);
