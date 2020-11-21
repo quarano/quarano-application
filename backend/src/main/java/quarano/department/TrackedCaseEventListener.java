@@ -9,6 +9,7 @@ import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase.CaseConvertedToIndex;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.activation.ActivationCode;
+import quarano.department.activation.ActivationCodeProperties;
 import quarano.department.activation.ActivationCodeService;
 
 import java.util.Map;
@@ -53,6 +54,7 @@ class TrackedCaseEventListener {
 		private final @NonNull TrackedCaseRepository cases;
 		private final @NonNull MessageSourceAccessor messages;
 		private final @NonNull ActivationCodeService activationCodes;
+		private final @NonNull ActivationCodeProperties activationProperties;
 
 		private boolean initializationFinished = false;
 
@@ -83,14 +85,18 @@ class TrackedCaseEventListener {
 			var trackedCase = event.getTrackedCase();
 
 			cases.save(emailSender.testConnection()
-					.flatMap(__ -> registration.initiateRegistration(trackedCase))
-					.flatMap(code -> sendActivationMailFor(trackedCase, code))
+					.flatMap(__ -> {
+						return activationProperties.isCreateAutomaticForNewContacts()
+								? registration.initiateRegistration(trackedCase)
+								: Try.success(null);
+					})
+					.flatMap(code -> sendActivationMailFor(trackedCase, Optional.ofNullable(code)))
 					.onFailure(__ -> trackedCase.markRegistrationCanceled())
 					.fold(__ -> trackedCase.markNewContactCaseMailCantSent(),
 							__ -> trackedCase.markNewContactCaseMailSent()));
 		}
 
-		private Try<Void> sendActivationMailFor(TrackedCase trackedCase, ActivationCode code) {
+		private Try<Void> sendActivationMailFor(TrackedCase trackedCase, Optional<ActivationCode> code) {
 
 			var trackedPerson = trackedCase.getTrackedPerson();
 			var subject = messages.getMessage("NewContactCaseMail.subject",
@@ -98,11 +104,14 @@ class TrackedCaseEventListener {
 			var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 					trackedCase.getId().toString() };
 
-			var placeholders = Map.of("activationCode", code.getId().toString());
+			Map<String, String> placeholders = code.map(ActivationCode::getId)
+					.map(Object::toString)
+					.map(it -> Map.of("activationCode", it))
+					.orElseGet(Map::of);
 
 			return emailSender.sendMail(new TrackedCaseEmail(trackedCase, subject, Keys.NEW_CONTACT_CASE, placeholders))
 					.onSuccess(__ -> log.info("Contact case creation mail sent to {{}; {}; Case-ID {}}", logArgs))
-					.onFailure(__ -> activationCodes.cancelCode(code.getId()))
+					.onFailure(__ -> code.map(ActivationCode::getId).map(activationCodes::cancelCode))
 					.onFailure(e -> log.info("Can't send contact case creation mail to {{}; {}; Case-ID {}}", logArgs))
 					.onFailure(e -> log.info("Exception", e));
 		}

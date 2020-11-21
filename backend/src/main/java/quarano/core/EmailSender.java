@@ -126,7 +126,7 @@ public class EmailSender {
 		private final @Getter Recipient to;
 		private final @Getter String subject;
 		private final Key template;
-		private final Map<String, ? extends Object> placeholders;
+		private final @Getter Map<String, ? extends Object> placeholders;
 		private final Locale locale;
 
 		/*
