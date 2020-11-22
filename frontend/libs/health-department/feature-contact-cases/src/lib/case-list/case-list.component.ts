@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { map } from 'rxjs/operators';
 import { ColDef, GridApi } from 'ag-grid-community';
-import { DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
+import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
 
 class CaseRowViewModel {
   lastName: string;
@@ -38,13 +38,15 @@ export class CaseListComponent implements OnInit {
   };
   columnDefs: ColDef[] = [];
   locale = DE_LOCALE;
+  frameworkComponents;
 
   constructor(private entityService: CaseEntityService, private router: Router) {
+    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', flex: 3 },
+      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       { headerName: 'Nachname', field: 'lastName', flex: 2 },
       { headerName: 'Vorname', field: 'firstName', flex: 2 },
-      { headerName: 'Typ', field: 'typeName' },
+      { headerName: 'Typ', field: 'typeName', filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
@@ -119,11 +121,12 @@ export class CaseListComponent implements OnInit {
 
   onGridReady(event: { api: GridApi }) {
     event.api.setFilterModel({
-      status: {
-        filterType: 'text',
-        type: 'notEqual',
-        filter: 'abgeschlossen',
-      },
+      status: [
+        {
+          selected: false,
+          label: 'abgeschlossen',
+        },
+      ],
     });
     event.api.onFilterChanged();
   }

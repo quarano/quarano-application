@@ -57,10 +57,14 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
   private initOptions() {
     const field = this.params.colDef.field;
     // @ts-ignore
-    this.options = uniq(this.params.rowModel.rowsToDisplay.map((d) => d.data[field])).map((o) => ({
-      label: o,
-      selected: true,
-    }));
+    this.options = uniq(this.params.rowModel.rowsToDisplay.map((d) => d.data[field]))
+      .sort(function (a: string, b: string) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      })
+      .map((o) => ({
+        label: o,
+        selected: true,
+      }));
     console.log(this.options);
   }
 
@@ -98,11 +102,6 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
   selectAll() {
     this.options.forEach((o) => (o.selected = true));
     this.onChange();
-  }
-
-  // noinspection JSMethodCanBeStatic
-  componentMethod(message: string): void {
-    alert(`Alert from PartialMatchFilterComponent: ${message}`);
   }
 
   onChange(): void {
