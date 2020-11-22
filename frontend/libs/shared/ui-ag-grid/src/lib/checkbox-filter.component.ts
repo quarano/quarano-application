@@ -1,4 +1,3 @@
-import { HeaderLeftComponent } from './../../../../../apps/quarano-frontend/src/app/layout/header-left/header-left.component';
 import { Component } from '@angular/core';
 import { IFilterAngularComp } from 'ag-grid-angular';
 import { IDoesFilterPassParams, IFilterParams, RowNode } from 'ag-grid-community';
@@ -17,7 +16,7 @@ import { uniq } from 'lodash';
           </li>
         </ul>
       </span>
-      <button mat-stroked-button (click)="selectAll()">Alle</button>
+      <button mat-stroked-button (click)="selectAll()" [disabled]="!hasUnselectedOptions()">Alle</button>
     </section>
   `,
   styles: [
@@ -72,7 +71,11 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
     if (!this.options) {
       return false;
     }
-    return this.options.map((o) => o.selected).includes(true);
+    return this.hasUnselectedOptions();
+  }
+
+  hasUnselectedOptions(): boolean {
+    return this.options.map((o) => o.selected).includes(false);
   }
 
   doesFilterPass(params: IDoesFilterPassParams): boolean {
