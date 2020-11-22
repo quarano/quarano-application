@@ -1,12 +1,11 @@
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { CaseEntityService, CaseDto } from '@qro/health-department/domain';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
-import { EmailButtonComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
+import { EmailButtonComponent, DE_LOCALE, CheckboxFilterComponent } from '@qro/shared/ui-ag-grid';
 import { ColDef, GridApi } from 'ag-grid-community';
 
 class CaseRowViewModel {
@@ -38,10 +37,12 @@ export class CaseListComponent implements OnInit {
   columnDefs: ColDef[] = [];
   locale = DE_LOCALE;
   private api: GridApi;
+  frameworkComponents;
 
   constructor(private entityService: CaseEntityService, private router: Router) {
+    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', flex: 3 },
+      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       { headerName: 'Nachname', field: 'lastName', flex: 2, tooltipField: 'lastName' },
       { headerName: 'Vorname', field: 'firstName', flex: 2 },
       {
@@ -115,11 +116,12 @@ export class CaseListComponent implements OnInit {
   onGridReady(event: { api: GridApi }) {
     this.api = event.api;
     this.api.setFilterModel({
-      status: {
-        filterType: 'text',
-        type: 'notEqual',
-        filter: 'abgeschlossen',
-      },
+      status: [
+        {
+          selected: false,
+          label: 'abgeschlossen',
+        },
+      ],
     });
     this.api.onFilterChanged();
   }
