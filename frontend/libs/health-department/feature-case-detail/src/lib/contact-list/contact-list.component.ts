@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CaseEntityService, ContactListItemDto } from '@qro/health-department/domain';
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { CheckboxFilterComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
 import { DateFunctions } from '@qro/shared/util-date';
 
@@ -72,7 +72,7 @@ export class ContactListComponent implements OnInit {
         field: 'lastContact',
         filter: 'agDateColumnFilter',
         valueFormatter: this.lastContactDateFormatter,
-        width: 200,
+        width: 170,
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
     ];
@@ -139,5 +139,17 @@ export class ContactListComponent implements OnInit {
       return 'nein';
     }
     return '?';
+  }
+
+  onGridReady(event: { columnApi: ColumnApi }) {
+    event.columnApi.applyColumnState({
+      state: [
+        {
+          colId: 'lastName',
+          sort: 'desc',
+        },
+      ],
+      defaultState: { sort: null },
+    });
   }
 }

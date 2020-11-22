@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { map } from 'rxjs/operators';
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
 
 class CaseRowViewModel {
@@ -119,7 +119,7 @@ export class CaseListComponent implements OnInit {
     return params.data.rowHeight;
   }
 
-  onGridReady(event: { api: GridApi }) {
+  onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
     event.api.setFilterModel({
       status: [
         {
@@ -129,5 +129,14 @@ export class CaseListComponent implements OnInit {
       ],
     });
     event.api.onFilterChanged();
+    event.columnApi.applyColumnState({
+      state: [
+        {
+          colId: 'lastName',
+          sort: 'desc',
+        },
+      ],
+      defaultState: { sort: null },
+    });
   }
 }

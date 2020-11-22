@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
 import { EmailButtonComponent, DE_LOCALE, CheckboxFilterComponent } from '@qro/shared/ui-ag-grid';
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 class CaseRowViewModel {
   lastName: string;
@@ -113,7 +113,7 @@ export class CaseListComponent implements OnInit {
     }
   }
 
-  onGridReady(event: { api: GridApi }) {
+  onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
     this.api = event.api;
     this.api.setFilterModel({
       status: [
@@ -124,5 +124,14 @@ export class CaseListComponent implements OnInit {
       ],
     });
     this.api.onFilterChanged();
+    event.columnApi.applyColumnState({
+      state: [
+        {
+          colId: 'lastName',
+          sort: 'desc',
+        },
+      ],
+      defaultState: { sort: null },
+    });
   }
 }

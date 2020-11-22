@@ -15,6 +15,7 @@
     rowSelection="single"
     (rowSelected)="onSelect($event)"
     [frameworkComponents]="frameworkComponents"
+    (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>
 </ng-container>
