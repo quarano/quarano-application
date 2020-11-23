@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import quarano.core.EmailTemplates.Key;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailSender {
 
 	private final @NonNull JavaMailSenderImpl emailSender;
@@ -144,6 +146,10 @@ public class EmailSender {
 			message.setSubject(subject);
 			message.setText(getBody(templates, configuration));
 			message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+
+			if (log.isDebugEnabled()) {
+				log.debug("Mail message created: " + message);
+			}
 
 			return message;
 		}
