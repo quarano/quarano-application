@@ -27,6 +27,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_MAIL_PROPERTIES_FIXRECIPIENT: 
       TZ: Europe/Berlin
     instances: 1
     memory: 1G
@@ -102,6 +103,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_MAIL_PROPERTIES_FIXRECIPIENT: 
       TZ: Europe/Berlin
     instances: 1
     memory: 1G
