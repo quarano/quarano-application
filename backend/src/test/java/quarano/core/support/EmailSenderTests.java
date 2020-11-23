@@ -40,7 +40,7 @@ class EmailSenderTests {
 	CoreProperties coreProps;
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	MailProperties mailProps;
-	
+
 	@Mock
 	TrackedPerson trackedPerson;
 	@Mock
@@ -68,7 +68,7 @@ class EmailSenderTests {
 		var sender = createSender();
 		var email = createEmail();
 
-		when(mailProps.getProperties().get("fixRecipient")).thenReturn("testmailbox@quarano.de");
+		when(mailProps.getProperties().get("fix-recipient")).thenReturn("testmailbox@quarano.de");
 
 		var result = sender.sendMail(email);
 
@@ -85,7 +85,7 @@ class EmailSenderTests {
 		var sender = createSender();
 		var email = createEmail();
 
-		when(mailProps.getProperties().get("fixRecipient")).thenReturn("", null);
+		when(mailProps.getProperties().get("fix-recipient")).thenReturn("", null);
 
 		var result = sender.sendMail(email);
 

@@ -115,11 +115,11 @@ public class EmailSender {
 		 * from spam protection. With other sender addresses we get the following error:
 		 * <code>550 5.7.60 SMTP; Client does not
 		 * have permissions to send as this sender</code>. To configure the fix sender address use
-		 * <code>spring.mail.properties.fixSender</code>.
+		 * <code>spring.mail.properties.fix-sender</code>.
 		 */
-		private static final String FIX_SENDER_PROPERTY_KEY = "fixSender";
-		private static final String FIX_SENDER_NAME_PROPERTY_KEY = "fixSenderName";
-		static final String FIX_RECIPIENT_PROPERTY_KEY = "fixRecipient";
+		private static final String FIX_SENDER_PROPERTY_KEY = "fix-sender";
+		private static final String FIX_SENDER_NAME_PROPERTY_KEY = "fix-sender-name";
+		static final String FIX_RECIPIENT_PROPERTY_KEY = "fix-recipient";
 		private static final String QUARANO_DOMAIN = "@quarano.de";
 
 		private final @Getter Sender from;
@@ -153,7 +153,8 @@ public class EmailSender {
 
 		private String determineFrom(MailProperties mailProperties) {
 
-			var fixSender = mailProperties.getProperties().get(FIX_SENDER_PROPERTY_KEY);
+			Map<String, String> properties = mailProperties.getProperties();
+			var fixSender = properties.get(FIX_SENDER_PROPERTY_KEY);
 
 			return StringUtils.hasText(fixSender)
 					? FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress()
@@ -164,12 +165,9 @@ public class EmailSender {
 
 			var fixRecipient = mailProperties.getProperties().get(FIX_RECIPIENT_PROPERTY_KEY);
 
-			if (!StringUtils.hasText(fixRecipient)
-					|| this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)) {
-				return to.toInternetAddress();
-			} else {
-				return FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient), to).toInternetAddress();
-			}
+			return !StringUtils.hasText(fixRecipient) || this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)
+					? to.toInternetAddress()
+					: FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient), to).toInternetAddress();
 		}
 
 		private String getBody(EmailTemplates templates, CoreProperties configuration) {
