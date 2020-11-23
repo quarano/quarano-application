@@ -102,7 +102,12 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     { provide: LOCALE_ID, useValue: 'de-de' },
     {
       provide: API_URL,
-      useFactory: (pl) => pl.getBaseHrefFromDOM() + environment.api.baseUrl,
+      useFactory: (pl) => {
+        console.log(pl.getBaseHrefFromDOM(), environment.api.baseUrl);
+        const apiUrl = pl.getBaseHrefFromDOM() + environment.api.baseUrl;
+        console.log(apiUrl.replace('//', '/'));
+        return apiUrl.replace('//', '/');
+      },
       deps: [PlatformLocation],
     },
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }, // @todo SC: CORE-341 - Kann die Default Config von ngrx-data gesetzt werden
