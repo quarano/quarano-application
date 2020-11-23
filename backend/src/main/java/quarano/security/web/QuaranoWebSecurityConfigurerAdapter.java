@@ -66,6 +66,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 
 		httpSecurity.authorizeRequests(it -> {
 			it.mvcMatchers("/api/login").permitAll();
+			it.mvcMatchers("/api/password/**").permitAll();
 			it.mvcMatchers("/api/registration").permitAll();
 			it.mvcMatchers("/api/registration/checkcode/**").permitAll();
 			it.mvcMatchers("/api/registration/checkusername/**").permitAll();
@@ -76,6 +77,7 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 			it.mvcMatchers("/api/symptoms").authenticated();
 			it.mvcMatchers("/api/**").access("hasRole('" + RoleType.ROLE_USER + "')");
 			it.mvcMatchers(SWAGGER_UI_WHITELIST).permitAll();
+			it.mvcMatchers("/").permitAll();
 			it.mvcMatchers("/docs/**").permitAll();
 			it.mvcMatchers("/h2_console/**").permitAll();
 			it.mvcMatchers("/**").permitAll();

@@ -3,6 +3,7 @@ package quarano.department.web;
 import quarano.account.Password.UnencryptedPassword;
 import quarano.core.web.MappingCustomizer;
 import quarano.department.RegistrationDetails;
+import quarano.department.web.RegistrationRepresentations.RegistrationDto;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.UUID;

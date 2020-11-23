@@ -91,6 +91,6 @@ class AccountDataInitializer implements DataInitializer {
 
 		// user accounts
 		accounts.createTrackedPersonAccount("user1", UnencryptedPassword.of("user1"), "Daniel", "Dilemma",
-				DepartmentDataInitializer.DEPARTMENT_ID_DEP1);
+				EmailAddress.of("daniel@dilemma.de"), DepartmentDataInitializer.DEPARTMENT_ID_DEP1);
 	}
 }

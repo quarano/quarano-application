@@ -27,6 +27,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_MAIL_PROPERTIES_FIX-RECIPIENT: 
       TZ: Europe/Berlin
     instances: 1
     memory: 1G
@@ -35,7 +36,7 @@ applications:
     services:
       - quarano-mannheim-prod-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
   ###############   Mannheim STAGE system #########################
   - name: quarano-mannheim-stage-frontend
     memory: 128M
@@ -72,7 +73,7 @@ applications:
     services:
       - quarano-mannheim-stage-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 ###############   Cuxhaven PROD system #########################
   - name: quarano-cuxhaven-frontend
     memory: 128M
@@ -102,6 +103,7 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_MAIL_PROPERTIES_FIX-RECIPIENT: 
       TZ: Europe/Berlin
     instances: 1
     memory: 1G
@@ -110,7 +112,7 @@ applications:
     services:
       - quarano-cuxhaven-prod-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
   ###############   Cuxhaven STAGE system #########################
   - name: quarano-cuxhaven-stage-frontend
     memory: 128M
@@ -148,7 +150,7 @@ applications:
     services:
       - quarano-cuxhaven-stage-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ####################################################################
   ########################   INTERNAL  ###############################
@@ -156,6 +158,7 @@ applications:
   ###############   Internal DEMO system #########################
   - name: internal-demo-frontend
     memory: 128M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -181,24 +184,26 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       TZ: Europe/Berlin
-      SPRING_MAIL_HOST: smtp.ionos.de
-      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_HOST: smtps.telekom-cloudcenter.de
+      SPRING_MAIL_PORT: 587
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
-      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
+      SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
+    disk_quota: 400M
     routes:
       - route: quarano.de/demo/api
     services:
       - quarano-internal-demo-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ###############   Internal DEV system #########################
   - name: internal-dev-frontend
     memory: 128M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -225,24 +230,26 @@ applications:
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: staging
       TZ: Europe/Berlin
-      SPRING_MAIL_HOST: smtp.ionos.de
-      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_HOST: smtps.telekom-cloudcenter.de
+      SPRING_MAIL_PORT: 587
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
-      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
+      SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
+    disk_quota: 400M
     routes:
       - route: quarano.de/internal-dev/api
     services:
       - quarano-internal-dev-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
 
   ###############   Internal TEST system #########################
   - name: internal-test-frontend
     memory: 128M
+    disk_quota: 200M
     buildpacks:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
@@ -268,17 +275,18 @@ applications:
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       TZ: Europe/Berlin
-      SPRING_MAIL_HOST: smtp.ionos.de
-      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_HOST: smtps.telekom-cloudcenter.de
+      SPRING_MAIL_PORT: 587
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
-      SPRING_MAIL_PROPERTIES_FIXSENDER: quarano@foster-international.de
+      SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
+    disk_quota: 400M
     routes:
       - route: quarano.de/internal-test/api
     services:
       - quarano-internal-test-db
     stack: cflinuxfs3
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar

@@ -4,7 +4,7 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span
-            [matBadge]="caseAction.anomalies.health.length"
+            [matBadge]="getActionsCount(caseAction.anomalies.health)"
             matBadgeOverlap="false"
             matBadgeSize="small"
             matBadgeColor="warn"
@@ -20,7 +20,7 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span
-            [matBadge]="caseAction.anomalies.process.length"
+            [matBadge]="getActionsCount(caseAction.anomalies.process)"
             matBadgeOverlap="false"
             matBadgeSize="small"
             matBadgeColor="warn"
@@ -36,7 +36,7 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span
-            [matBadge]="caseAction.anomalies?.resolved?.length"
+            [matBadge]="getActionsCount(caseAction.anomalies?.resolved)"
             matBadgeOverlap="false"
             matBadgeSize="small"
             matBadgeColor="primary"

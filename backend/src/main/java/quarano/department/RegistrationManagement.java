@@ -126,12 +126,12 @@ public class RegistrationManagement {
 
 	private Account toAccount(RegistrationDetails details) {
 
-		var account = accounts.createTrackedPersonAccount(details.getUsername(), details.getUnencryptedPassword(),
-				details.getFirstname(), details.getLastname(), details.getDepartmentId());
+		var person = trackedPeople.findRequiredById(details.getTrackedPersonId());
 
-		trackedPeople.findById(details.getTrackedPersonId())
-				.map(it -> it.markAccountRegistration(account))
-				.map(trackedPeople::save);
+		var account = accounts.createTrackedPersonAccount(details.getUsername(), details.getUnencryptedPassword(),
+				details.getFirstname(), details.getLastname(), person.getEmailAddress(), details.getDepartmentId());
+
+		person.markAccountRegistration(account);
 
 		cases.findByTrackedPerson(details.getTrackedPersonId())
 				.map(TrackedCase::markRegistrationCompleted)
@@ -145,19 +145,19 @@ public class RegistrationManagement {
 	 * @param password
 	 * @param firstname
 	 * @param lastname
-	 * @param departmentIdDep1
-	 * @param validTrackedPerson2IdDep1
+	 * @param departmentIdentifier
+	 * @param personIdentifier
 	 */
 	Account createTrackedPersonAccount(String username, UnencryptedPassword password, String firstname, String lastname,
-			DepartmentIdentifier departmentIdDep1, TrackedPersonIdentifier validTrackedPerson2IdDep1) {
+			DepartmentIdentifier departmentIdentifier, TrackedPersonIdentifier personIdentifier) {
 
 		var details = new RegistrationDetails()
 				.setUsername(username)
 				.setUnencryptedPassword(password)
 				.setFirstname(firstname)
 				.setLastname(lastname)
-				.setDepartmentId(departmentIdDep1)
-				.setTrackedPersonId(validTrackedPerson2IdDep1);
+				.setDepartmentId(departmentIdentifier)
+				.setTrackedPersonId(personIdentifier);
 
 		return toAccount(details);
 	}

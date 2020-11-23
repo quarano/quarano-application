@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.Value;
 import quarano.account.Account.AccountIdentifier;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.EncryptedPassword;
@@ -15,10 +16,13 @@ import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,12 +30,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
+import org.springframework.util.Assert;
 
 /**
  * An account of a user. Can be connected to a {@link TrackedPerson} by the {@link TrackedPersonIdentifier} or can be a
  * HD employee account
  *
  * @author Patrick Otto
+ * @author Oliver Drotbohm
  * @author Michael J. Simons
  */
 @Entity
@@ -47,8 +54,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 
 	private @Setter(AccessLevel.NONE) DepartmentIdentifier departmentId;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER) //
 	private List<Role> roles = new ArrayList<>();
+
+	private @Setter(AccessLevel.NONE) @Nullable PasswordResetToken passwordResetToken;
 
 	public Account(String username, EncryptedPassword password, String firstname, String lastname, EmailAddress email,
 			DepartmentIdentifier departmentId, List<Role> roles) {
@@ -133,6 +142,103 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		return hasAnyRole(RoleType.ROLE_HD_ADMIN, RoleType.ROLE_QUARANO_ADMIN);
 	}
 
+	/**
+	 * Sets the given password and wipes a potentially existing {@link PasswordResetToken}.
+	 *
+	 * @param password must not be {@literal null}.
+	 * @return
+	 * @since 1.4
+	 */
+	Account setPassword(EncryptedPassword password) {
+
+		Assert.notNull(password, "Password! must not be null!");
+
+		this.password = password;
+		this.passwordResetToken = null;
+
+		return this;
+	}
+
+	/**
+	 * Returns whether a password reset was requested.
+	 *
+	 * @return
+	 * @see #requestPasswordReset(LocalDateTime)
+	 * @since 1.4
+	 */
+	public boolean wasPasswordResetRequested() {
+		return passwordResetToken != null;
+	}
+
+	/**
+	 * Returns whether the {@link Account} has a valid {@link PasswordResetToken}.
+	 *
+	 * @return
+	 * @see #requestPasswordReset(LocalDateTime)
+	 * @since 1.4
+	 */
+	boolean hasValidPasswordResetToken() {
+		return passwordResetToken != null && passwordResetToken.isValid();
+	}
+
+	/**
+	 * Returns whether the given reset token is the one currently registered in {@link PasswordResetToken}.
+	 *
+	 * @param token must not be {@literal null}.
+	 * @return
+	 * @see #requestPasswordReset(LocalDateTime)
+	 * @since 1.4
+	 */
+	boolean isValidResetToken(UUID token) {
+
+		Assert.notNull(token, "Token must not be null!");
+
+		return passwordResetToken != null && passwordResetToken.isValid(token);
+	}
+
+	/**
+	 * Requests a password reset expiring at the given date.
+	 *
+	 * @param expiryDate must not be {@literal null}.
+	 * @return a {@link PasswordResetToken} to authorize the password reset.
+	 * @since 1.4
+	 */
+	PasswordResetToken requestPasswordReset(LocalDateTime expiryDate) {
+
+		Assert.notNull(expiryDate, "Expiry date must not be null!");
+
+		this.passwordResetToken = PasswordResetToken.expiringAt(expiryDate);
+
+		registerEvent(PasswordResetRequested.of(getId()));
+
+		return passwordResetToken;
+	}
+
+	@Value
+	@Embeddable
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	public static class PasswordResetToken {
+
+		@Column(name = "password_reset_token") //
+		UUID token;
+
+		@Column(name = "password_reset_expiry_date") //
+		LocalDateTime expiryDate;
+
+		public static PasswordResetToken expiringAt(LocalDateTime date) {
+			return new PasswordResetToken(UUID.randomUUID(), date);
+		}
+
+		boolean isValid() {
+			return LocalDateTime.now().isBefore(expiryDate);
+		}
+
+		boolean isValid(UUID token) {
+			return isValid() && this.token.equals(token);
+		}
+	}
+
 	private boolean hasAnyRole(RoleType... roles) {
 
 		var candidates = List.of(roles);
@@ -159,5 +265,10 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 		public String toString() {
 			return accountId.toString();
 		}
+	}
+
+	@Value(staticConstructor = "of")
+	public static class PasswordResetRequested implements DomainEvent {
+		AccountIdentifier accountId;
 	}
 }

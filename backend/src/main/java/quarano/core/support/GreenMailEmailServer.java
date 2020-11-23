@@ -2,6 +2,7 @@ package quarano.core.support;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 
@@ -46,6 +47,7 @@ import com.icegreen.greenmail.util.ServerSetup;
 class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, DisposableBean {
 
 	private static final int DELETE_AFTER_SECONDS = 600;
+	private static final Duration STARTUP_TIMEOUT = Duration.ofSeconds(2);
 
 	private final Integer smtpPort;
 	private GreenMail greenMail;
@@ -99,6 +101,7 @@ class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, 
 	public void afterPropertiesSet() throws Exception {
 
 		int imapPort;
+
 		try {
 			imapPort = SocketUtils.findAvailableTcpPort(3993, 3993);
 		} catch (Exception e) {
@@ -107,6 +110,9 @@ class GreenMailEmailServer implements FactoryBean<GreenMail>, InitializingBean, 
 
 		var smtp = new ServerSetup(smtpPort, null, ServerSetup.PROTOCOL_SMTPS);
 		var imap = new ServerSetup(imapPort, null, ServerSetup.PROTOCOL_IMAPS);
+
+		smtp.setServerStartupTimeout(STARTUP_TIMEOUT.toMillis());
+		imap.setServerStartupTimeout(STARTUP_TIMEOUT.toMillis());
 
 		greenMail = new GreenMail(ServerSetup.verbose(new ServerSetup[] { smtp, imap }));
 

@@ -189,6 +189,24 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	}
 
 	/**
+	 * Initializes the {@link TrackedPerson}'s preferred {@link Locale} to the given one unless one is already set.
+	 *
+	 * @param locale must not be {@literal null}.
+	 * @return
+	 * @since 1.4
+	 */
+	TrackedPerson initializeLocale(Locale locale) {
+
+		Assert.notNull(locale, "Locale must not be null!");
+
+		if (this.locale == null) {
+			this.locale = locale;
+		}
+
+		return this;
+	}
+
+	/**
 	 * Sets the language of the given {@link Locale} as preferred {@link Locale} for the current {@link TrackedPerson}.
 	 * I.e. if {@code Locale#GERMANY} is provided, we store {@code Locale.GERMAN}.
 	 *

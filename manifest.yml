@@ -12,7 +12,7 @@ applications:
   - name: quarano-backend-dev
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - quarano-postgres-dev
     env:
@@ -31,7 +31,7 @@ applications:
   - name: quarano-backend
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - quarano-postgres
     env:
@@ -51,7 +51,7 @@ applications:
   - name: quarano-backend-test
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - quarano-postgres-test
     env:
@@ -70,7 +70,7 @@ applications:
   - name: quarano-backend-sec
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - quarano-postgres-security
     env:
@@ -89,7 +89,7 @@ applications:
   - name: quarano-backend-autotest
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - quarano-postgres-autotest
     env:

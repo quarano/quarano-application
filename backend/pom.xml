@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.4.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.quarano</groupId>
 	<artifactId>quarano-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<name>Quarano - Backend</name>
 
 	<properties>
@@ -204,12 +204,12 @@
 
 		<dependency>
 			<groupId>org.jmolecules</groupId>
-			<artifactId>jmolecules-ddd</artifactId>
-			<version>${jmolecules.version}</version>
+            <artifactId>jmolecules-ddd</artifactId>
+            <version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jmolecules</groupId>
-			<artifactId>jmolecules-events</artifactId>
+            <artifactId>jmolecules-events</artifactId>
 			<version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
@@ -277,11 +277,11 @@
 		</dependency>
 
 		<!-- For CSV import/export -->
-		<dependency>
-			<groupId>com.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>${opencsv.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
 
 		<!-- Development-only dependencies -->
 
@@ -309,6 +309,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 
 			<plugin>
@@ -415,9 +416,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>
-								https://repo.spring.io/release/io/spring/docresources/spring-doc-resources/${refdocs.version}/spring-doc-resources-${refdocs.version}.zip
-							</url>
+							<url>https://repo.spring.io/release/io/spring/docresources/spring-doc-resources/${refdocs.version}/spring-doc-resources-${refdocs.version}.zip</url>
 							<unpack>true</unpack>
 							<outputDirectory>${refdocs.dir}</outputDirectory>
 						</configuration>

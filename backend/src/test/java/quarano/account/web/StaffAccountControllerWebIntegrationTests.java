@@ -235,7 +235,7 @@ class StaffAccountControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(responseBody);
 
-		var nonMatchingPassword = messages.getMessage("NonMatching.password");
+		var nonMatchingPassword = messages.getMessage("Password.nonMatching");
 
 		assertThat(document.read("$.password", String.class)).isEqualTo(nonMatchingPassword);
 		assertThat(document.read("$.passwordConfirm", String.class)).isEqualTo(nonMatchingPassword);

@@ -8,10 +8,9 @@ import quarano.account.DepartmentRepository;
 import quarano.core.EmailSender;
 import quarano.core.EmailTemplates.Keys;
 import quarano.core.EnumMessageSourceResolvable;
-import quarano.tracking.ContactTypeLookup;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
-import quarano.tracking.TrackedPersonEmail;
+import quarano.tracking.TrackedPersonEmailFactory;
 import quarano.tracking.TrackedPersonRepository;
 
 import java.time.format.DateTimeFormatter;
@@ -40,10 +39,10 @@ class DiaryEntryReminderMailJob {
 
 	private final @NonNull DiaryManagement diaries;
 	private final @NonNull EmailSender emailSender;
-	private final @NonNull TrackedPersonRepository persons;
+	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull DepartmentRepository departments;
 	private final @NonNull MessageSourceAccessor messages;
-	private final @NonNull ContactTypeLookup lookup;
+	private final @NonNull TrackedPersonEmailFactory emailFactory;
 
 	@Transactional
 	@Scheduled(cron = "0 10 12,23 * * *")
@@ -66,7 +65,7 @@ class DiaryEntryReminderMailJob {
 		var slot = Slot.now().previous();
 
 		collectPersonsMissingEntry(slot)
-				.flatMap(it -> persons.findById(it).stream())
+				.map(people::findRequiredById)
 				.forEach(it -> sendReminderMail(it, slot));
 	}
 
@@ -83,18 +82,18 @@ class DiaryEntryReminderMailJob {
 				.flatMap(it -> departments.findById(it.getDepartmentId()))
 				.ifPresent(it -> {
 
-					var subject = messages.getMessage("DiaryEntryReminderMail.subject", trackedPerson.getLocale());
+					var locale = trackedPerson.getLocale();
+					var subject = messages.getMessage("DiaryEntryReminderMail.subject", locale);
 					var textTemplate = Keys.DIARY_REMINDER;
 					var slotTranslated = messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
 							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) },
-							trackedPerson.getLocale());
+							locale);
 					var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 							trackedPerson.getId().toString() };
 
 					var placeholders = Map.of("slot", slotTranslated);
 
-					Try.success(new TrackedPersonEmail(trackedPerson, it, lookup.getBy(trackedPerson), subject, textTemplate,
-							placeholders))
+					Try.success(emailFactory.getEmailFor(trackedPerson, subject, textTemplate, placeholders))
 							.flatMap(emailSender::sendMail)
 							.onSuccess(__ -> log.debug("Reminder mail sended to {{}; {}; Person-ID {}}", logArgs))
 							.onFailure(e -> log.debug("Can't send reminder mail to {{}; {}; Person-ID {}}", logArgs))

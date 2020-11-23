@@ -1,6 +1,7 @@
 package quarano;
 
 import lombok.extern.slf4j.Slf4j;
+import quarano.account.DepartmentProperties;
 import quarano.account.Role;
 import quarano.core.web.IdentifierProcessor;
 import quarano.core.web.MappingCustomizer;
@@ -10,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
+import org.flywaydb.core.api.Location;
 import org.modelmapper.ModelMapper;
 import org.moduliths.Modulithic;
 import org.springframework.aop.Advisor;
@@ -22,6 +24,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -39,12 +42,14 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -52,6 +57,7 @@ import org.springframework.util.ReflectionUtils;
 @Slf4j
 @Modulithic(sharedModules = "core")
 @SpringBootApplication
+@EnableAsync
 @EnableJpaAuditing(dateTimeProviderRef = "quaranoDateTimeProvider")
 @ConfigurationPropertiesScan
 public class Quarano {
@@ -69,6 +75,21 @@ public class Quarano {
 	@Bean
 	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	FlywayConfigurationCustomizer getFlywayCustomizer(DepartmentProperties prop) {
+		return configuration -> {
+
+			if (StringUtils.hasText(prop.getDefaultDepartment().getRkiCode())) {
+				configuration
+						.locations(
+								configuration.getLocations()[0],
+								new Location("classpath:db/client_migration/" + prop.getDefaultDepartment().getRkiCode() + "RKI"));
+			} else {
+				log.warn("No RKI code is set with the default department! No department-specific texts are imported.");
+			}
+		};
 	}
 
 	@Bean

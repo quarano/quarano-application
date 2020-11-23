@@ -252,7 +252,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("DemoAccount")
 	void rejectsInvalidCharactersForStringFields() throws Exception {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
+		var person = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
 		var source = mapper.map(person, TrackedPersonDto.class);
 
 		source.setFirstName("Michael 123")
@@ -414,7 +414,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 	@SuppressWarnings("null")
 	private TrackedPersonDto createValidDetailsInput() {
 
-		var person = repository.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1).orElseThrow();
+		var person = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
 		return mapper.map(person, TrackedPersonDto.class)
 				.setStreet("Street")
 				.setZipCode("68199")
@@ -426,7 +426,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 	@SuppressWarnings("null")
 	private TrackedPersonDto givenTestPersonForZipCodeHandling(TrackedPersonIdentifier personIdentifier, String zipCode) {
 
-		var person = repository.findById(personIdentifier).orElseThrow();
+		var person = repository.findRequiredById(personIdentifier);
 		var source = mapper.map(person, TrackedPersonDto.class);
 
 		return source.setStreet("Test")

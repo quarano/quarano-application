@@ -12,7 +12,7 @@ applications:
   - name: quarano-backend-dev
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     env:
       JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
       SPRING_PROFILES_ACTIVE: develop
@@ -31,7 +31,7 @@ applications:
   - name: quarano-backend-test
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     env:
       JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
       SPRING_PROFILES_ACTIVE: prod, test
@@ -51,7 +51,7 @@ applications:
   - name: quarano-backend-sec
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     routes:
       - route: quarano-backend-sec.cf.evoila.io
     env:
@@ -75,7 +75,7 @@ applications:
   - name: quarano-backend
     buildpacks:
       - java_buildpack
-    path: ./backend/target/quarano-backend-0.0.1-SNAPSHOT.jar
+    path: ./backend/target/quarano-backend.jar
     services:
       - database
     routes:

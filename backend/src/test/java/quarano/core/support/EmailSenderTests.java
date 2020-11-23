@@ -21,12 +21,12 @@ import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -38,10 +38,8 @@ class EmailSenderTests {
 	EmailTemplates templates;
 	@Mock
 	CoreProperties coreProps;
-	@Mock
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	MailProperties mailProps;
-	@Mock
-	Environment env;
 
 	@Mock
 	TrackedPerson trackedPerson;
@@ -70,6 +68,8 @@ class EmailSenderTests {
 		var sender = createSender();
 		var email = createEmail();
 
+		when(mailProps.getProperties().get("fix-recipient")).thenReturn("testmailbox@quarano.de");
+
 		var result = sender.sendMail(email);
 
 		assertThat(result).isInstanceOf(Success.class);
@@ -85,7 +85,7 @@ class EmailSenderTests {
 		var sender = createSender();
 		var email = createEmail();
 
-		when(env.getActiveProfiles()).thenReturn(new String[] { "develop" }).thenReturn(new String[] { "prod" });
+		when(mailProps.getProperties().get("fix-recipient")).thenReturn("", null);
 
 		var result = sender.sendMail(email);
 
@@ -104,7 +104,7 @@ class EmailSenderTests {
 	}
 
 	private EmailSender createSender() {
-		var sender = new EmailSender(emailSender, templates, coreProps, mailProps, env);
+		var sender = new EmailSender(emailSender, templates, coreProps, mailProps);
 		return sender;
 	}
 

@@ -12,6 +12,7 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.account.AccountService;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.core.I18nProperties;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.security.web.AuthenticationController.AuthenticationRequest;
@@ -44,7 +45,8 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 	private final ObjectMapper jackson;
 	private final AccountService accounts;
 	private final LinkDiscoverers discoverers;
-	final TrackedPersonRepository people;
+	private final TrackedPersonRepository people;
+	private final I18nProperties i18n;
 
 	@Test
 	void rejectsLoginForPersonWithCaseConcluded() throws Exception {
@@ -105,7 +107,7 @@ class AuthenticationControllerWebIntegrationTests extends AbstractDocumentation 
 	@Test // CORE-355
 	void adoptionOfLanguage() throws Exception {
 
-		var newLocale = Locale.FRENCH;
+		var newLocale = i18n.getNonDefaultLocale();
 
 		var person = people.findById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON3_ID_DEP2);
 		assertThat(person).isPresent()

@@ -16,11 +16,11 @@ import quarano.department.TrackedCaseRepository;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.department.activation.ActivationCodeException;
 import quarano.department.activation.ActivationCodeService;
+import quarano.department.web.RegistrationRepresentations.RegistrationDto;
 
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
@@ -44,14 +44,17 @@ public class RegistrationController {
 	private final @NonNull ActivationCodeService activationCodes;
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull AccountRepresentations accountRepresentations;
-
 	private final @NonNull RegistrationRepresentations representations;
+
+	private final AcceptHeaderLocaleResolver requestLocaleResolver = new AcceptHeaderLocaleResolver();
 
 	@PostMapping("/registration")
 	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors,
-			HttpServletRequest request) {
+			Locale locale) {
 
-		var locale = new AcceptHeaderLocaleResolver().resolveLocale(request);
+		// Use locale solely from the request to potentially set it as preferred
+		// one on the account to be created. A Locale method parameter would
+		// Locale locale = requestLocaleResolver.resolveLocale(request);
 
 		return MappedPayloads.of(payload, errors)
 				.alwaysMap(RegistrationDto::validate)

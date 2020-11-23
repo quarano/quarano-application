@@ -29,7 +29,6 @@ import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
@@ -119,14 +118,16 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 
 		private final TrackedPersonLocaleLookup lookup;
 		private final AuthenticationManager accounts;
+		private final I18nProperties i18n;
 
-		public LocaleResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts, I18nProperties properties) {
+		public LocaleResolver(TrackedPersonLocaleLookup lookup, AuthenticationManager accounts, I18nProperties i18n) {
 
 			this.lookup = lookup;
 			this.accounts = accounts;
+			this.i18n = i18n;
 
-			setDefaultLocale(properties.getDefaultLocale());
-			setSupportedLocales(LOCALES);
+			setDefaultLocale(i18n.getDefaultLocale());
+			setSupportedLocales(i18n.getSupportedLocales());
 			Locale.setDefault(getDefaultLocale());
 		}
 
@@ -141,7 +142,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 
 			// For users who are not tracked persons, German should always be used.
 			if (currentUser.isPresent() && currentUser.filter(Account::isTrackedPerson).isEmpty()) {
-				return getDefaultLocale();
+				return i18n.getDefaultLocale();
 			}
 
 			return currentUser
@@ -164,15 +165,19 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 	/**
 	 * Sets the used language to the response header <code>Content-Language</code>.
 	 */
-	class SetContentHeaderInterceptor extends HandlerInterceptorAdapter {
+	class SetContentHeaderInterceptor implements HandlerInterceptor {
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.springframework.web.servlet.HandlerInterceptor#preHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+		 */
 		@Override
 		public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 				throws Exception {
 
 			response.setLocale(LocaleContextHolder.getLocale());
 
-			return super.preHandle(request, response, handler);
+			return true;
 		}
 	}
 }
