@@ -20,7 +20,7 @@ Use the API (using https://httpie.org/[HTTPie]). First, login with a demo admini
 
 [source, bash]
 ----
-$ http POST :8080/api/login username="admin" password="admin"
+$ http POST :8080/login username="admin" password="admin"
 
 HTTP/1.1 200
 …
@@ -31,7 +31,7 @@ Use the value returned in the `X-Auth-Token` for subsequent requests to authenti
 
 [source, bash]
 ----
-$ http GET :8080/api/hd/cases "Authorization:Bearer $token"
+$ http GET :8080/hd/cases "Authorization:Bearer $token"
 
 HTTP/1.1 200
 
