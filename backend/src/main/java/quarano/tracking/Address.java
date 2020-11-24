@@ -1,16 +1,10 @@
 package quarano.tracking;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import javax.persistence.Embeddable;
-
+import lombok.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+
+import javax.persistence.Embeddable;
 
 /**
  * @author Oliver Drotbohm
@@ -18,7 +12,7 @@ import org.springframework.util.StringUtils;
 @Embeddable
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(force = true, access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 public class Address {
 
 	private String street;
