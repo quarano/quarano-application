@@ -12,6 +12,8 @@ import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -49,6 +51,11 @@ class QuaranoWebConfiguration {
 		module.addDeserializer(String.class, new EmptyStringDeserializer());
 
 		return module;
+	}
+
+	@Bean
+	ProjectionFactory projectionFactory() {
+		return new SpelAwareProxyProjectionFactory();
 	}
 
 	@JsonSerialize(using = ToStringSerializer.class)
