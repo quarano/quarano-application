@@ -12,6 +12,8 @@ import quarano.masterdata.EmailText.EmailTextIdentifier;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -22,6 +24,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.jmolecules.ddd.types.Identifier;
+import org.springframework.util.Assert;
 
 /**
  * @author Jens Kutzsche
@@ -31,6 +34,7 @@ import org.jmolecules.ddd.types.Identifier;
 @Setter(AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = true, of = {})
 @ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> implements Templated {
 
 	static final String SEPARATOR = "\r\n\r\n==========\r\n\r\n";
@@ -38,6 +42,16 @@ public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> 
 	private @Getter String textKey;
 	private @Getter Locale locale;
 	private @Getter @Lob String text;
+
+	private transient EmailText secondEmailText;
+
+	private EmailText(EmailText originEmailText, EmailText secondEmailText) {
+		super();
+		this.textKey = originEmailText.getTextKey();
+		this.locale = originEmailText.getLocale();
+		this.text = originEmailText.getText();
+		this.secondEmailText = secondEmailText;
+	}
 
 	/**
 	 * Returns an email text potentially augmented with the one provided by the given fallback provider in case the
@@ -52,11 +66,44 @@ public class EmailText extends QuaranoAggregate<EmailText, EmailTextIdentifier> 
 		if (!isSameLanguageAs(defaultLocale)) {
 
 			var templateDefault = fallBackProvider.apply(textKey).orElseThrow();
-			return Templated.of(String.join(SEPARATOR, getText(), templateDefault.getText()));
+
+			// Muss eine neue Instanz sein, da sonst Zyklen durch gecachte Werte entstehen können.
+			return new EmailText(this, templateDefault);
 
 		} else {
-			return Templated.of(getText());
+			return this;
 		}
+	}
+
+	/**
+	 * Expands the underlying text with the given parameters. If a parameter is a function then it will be applied with
+	 * the {@link #locale} of this {@link EmailText} to create a localized replacement.
+	 * 
+	 * @param parameters must not be {@literal null}.
+	 * @since 1.4
+	 */
+	@Override
+	public String expand(Map<String, ? extends Object> parameters) {
+
+		Assert.notNull(parameters, "Parameters must not be null!");
+
+		var text = getText();
+
+		for (Entry<String, ? extends Object> replacement : parameters.entrySet()) {
+
+			if (replacement.getValue() instanceof Function) {
+				text = text.replace(String.format("{%s}", replacement.getKey()),
+						((Function) replacement.getValue()).apply(locale).toString());
+			} else {
+				text = text.replace(String.format("{%s}", replacement.getKey()), replacement.getValue().toString());
+			}
+		}
+
+		if (secondEmailText != null) {
+			text = String.join(SEPARATOR, text, secondEmailText.expand(parameters));
+		}
+
+		return text;
 	}
 
 	private boolean isSameLanguageAs(Locale reference) {

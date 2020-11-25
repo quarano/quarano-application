@@ -43,7 +43,10 @@ class DiaryEntryReminderMailJobTests {
 		assertThat(messages).extracting(it -> it.getSubject())
 				.containsOnly("Erinnerung an Covid-19 Symptomtagebuch");
 		assertThat(messages).extracting(it -> GreenMailUtil.getBody(it))
-				.allMatch(it -> it.startsWith("Sehr geehrte/geehrter Frau/Herr"));
+				.allMatch(it -> it.startsWith("Sehr geehrte/geehrter Frau/Herr"))
+				// CORE-621 - checks if a placeholder is replaced in correct language
+				.allMatch(it -> it.contains(isSlotMorning() ? "Morgen des" : "Abend des")
+						&& it.contains(isSlotMorning() ? "Morning of" : "Evening of"));
 
 		assertThat(messages).extracting(it -> it.getRecipients(RecipientType.TO)[0].toString())
 				.containsOnly("Siggi Seufert <siggi@testtest.de>",
@@ -53,5 +56,9 @@ class DiaryEntryReminderMailJobTests {
 		assertThat(messages).extracting(it -> it.getFrom()[0].toString()).containsOnly(
 				"GA Mannheim <index-email@gesundheitsamt.de>",
 				"GA Darmstadt <index-email@gadarmstadt.de>");
+	}
+
+	private boolean isSlotMorning() {
+		return Slot.now().previous().isMorning();
 	}
 }
