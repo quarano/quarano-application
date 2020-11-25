@@ -16,7 +16,9 @@ import quarano.tracking.TrackedPersonRepository;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -85,13 +87,16 @@ class DiaryEntryReminderMailJob {
 					var locale = trackedPerson.getLocale();
 					var subject = messages.getMessage("DiaryEntryReminderMail.subject", locale);
 					var textTemplate = Keys.DIARY_REMINDER;
-					var slotTranslated = messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
-							new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) },
-							locale);
+					Function<Locale, String> slotFunction = slotLocale -> {
+
+						return messages.getMessage(EnumMessageSourceResolvable.of(slot.getTimeOfDay()).getCodes()[0],
+								new Object[] { slot.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) },
+								slotLocale);
+					};
 					var logArgs = new Object[] { trackedPerson.getFullName(), String.valueOf(trackedPerson.getEmailAddress()),
 							trackedPerson.getId().toString() };
 
-					var placeholders = Map.of("slot", slotTranslated);
+					var placeholders = Map.of("slot", slotFunction);
 
 					Try.success(emailFactory.getEmailFor(trackedPerson, subject, textTemplate, placeholders))
 							.flatMap(emailSender::sendMail)
