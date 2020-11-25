@@ -1,2 +1,2 @@
 @org.springframework.lang.NonNullApi
-package quarano.event;
+package quarano.occasion;
