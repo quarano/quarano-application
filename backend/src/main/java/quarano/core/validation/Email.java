@@ -18,6 +18,7 @@ import javax.validation.constraints.Pattern.Flag;
 /**
  * @author Oliver Drotbohm
  * @author Felix Schultze
+ * @see EmailAddress#PATTERN
  */
 @ReportAsSingleViolation
 @Pattern(regexp = EmailAddress.PATTERN, flags = Flag.CASE_INSENSITIVE)

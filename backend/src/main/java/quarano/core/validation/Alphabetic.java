@@ -15,6 +15,7 @@ import javax.validation.constraints.Pattern;
 /**
  * @author Oliver Drotbohm
  * @author Felix Schultze
+ * @see Strings#LETTERS
  */
 @ReportAsSingleViolation
 @Pattern(regexp = Strings.LETTERS)
