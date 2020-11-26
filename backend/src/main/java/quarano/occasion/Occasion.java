@@ -1,27 +1,17 @@
 package quarano.occasion;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.jmolecules.ddd.types.Identifier;
 import quarano.core.QuaranoAggregate;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.occasion.Occasion.OccasionIdentifier;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.jmolecules.ddd.types.Identifier;
 
 @Getter
 @Entity
@@ -34,8 +24,10 @@ public class Occasion extends QuaranoAggregate<Occasion, OccasionIdentifier> {
 	private @Setter LocalDateTime start, end;
 	private @Setter String title;
 	private OccasionCode occasionCode;
+	private TrackedCaseIdentifier trackedCaseId;
 
-	Occasion(String title, LocalDateTime start, LocalDateTime end, OccasionCode eventCode) {
+	Occasion(String title, LocalDateTime start, LocalDateTime end, OccasionCode eventCode,
+			TrackedCaseIdentifier trackedCaseId) {
 
 		this.id = OccasionIdentifier.of(UUID.randomUUID());
 		this.start = start;
@@ -43,6 +35,7 @@ public class Occasion extends QuaranoAggregate<Occasion, OccasionIdentifier> {
 		this.title = title;
 		this.visitorGroups = new ArrayList<>();
 		this.occasionCode = eventCode;
+		this.trackedCaseId = trackedCaseId;
 	}
 
 	Occasion registerVisitorGroup(VisitorGroup visitorGroup) {

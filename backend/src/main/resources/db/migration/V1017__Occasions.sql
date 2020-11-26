@@ -8,7 +8,9 @@ CREATE TABLE occasions (
 	end timestamp NULL,
 	title varchar(255) NULL,
 	occasion_code varchar(8) NULL,
-	CONSTRAINT occasion_pkey PRIMARY KEY (occasion_id)
+    tracked_case_id uuid NOT NULL,
+	CONSTRAINT occasions_pkey PRIMARY KEY (occasion_id),
+    CONSTRAINT occasions_tracked_case_fk FOREIGN KEY (tracked_case_id) REFERENCES tracked_cases(tracked_case_id)
 );
 
 CREATE TABLE visitor_groups (
@@ -22,8 +24,8 @@ CREATE TABLE visitor_groups (
 	comment varchar(255) NULL,
 	location_name varchar(255) NULL,
 	occasion_code varchar(8) NULL,
-	CONSTRAINT visitor_group_pkey PRIMARY KEY (visitor_group_id),
-	CONSTRAINT visitor_group_occasion_fk FOREIGN KEY (occasion_code) REFERENCES occasions(occasion_code)
+	CONSTRAINT visitor_groups_pkey PRIMARY KEY (visitor_group_id),
+	CONSTRAINT visitor_groups_occasion_fk FOREIGN KEY (occasion_code) REFERENCES occasions(occasion_code)
 );
 
 
@@ -42,8 +44,8 @@ CREATE TABLE visitors (
 	last_name varchar(255) NULL,
 	phone_number varchar(255) NULL,
 	visitor_group_id uuid NULL,
-	CONSTRAINT visitor_pkey PRIMARY KEY (visitor_id),
-	CONSTRAINT visitor_visitor_group_fk FOREIGN KEY (visitor_group_id) REFERENCES visitor_groups(visitor_group_id)
+	CONSTRAINT visitors_pkey PRIMARY KEY (visitor_id),
+	CONSTRAINT visitors_visitor_group_fk FOREIGN KEY (visitor_group_id) REFERENCES visitor_groups(visitor_group_id)
 );
 
 

@@ -1,6 +1,8 @@
 package quarano.department;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
 import quarano.core.DataInitializer;
@@ -12,9 +14,6 @@ import quarano.tracking.TrackedPersonRepository;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Oliver Drotbohm
@@ -42,6 +41,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_HARRY = TrackedCaseIdentifier
 			.of(UUID.fromString("bb2ff79c-f06c-418a-975c-03ea69537d41"));
+
+	public static final TrackedCaseIdentifier TRACKED_CASE_MARKUS = TrackedCaseIdentifier
+			.of(UUID.fromString("cc2ef69d-f12d-8874-975c-03ea69537d41"));
 
 	// security test cases
 	public static final TrackedCaseIdentifier TRACKED_CASE_SARAH = TrackedCaseIdentifier
@@ -101,7 +103,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		cases.save(new TrackedCase(TRACKED_CASE_TANJA, person1, CaseType.CONTACT, department1, null));
 
 		// CASE Markus
-		cases.save(new TrackedCase(person2, CaseType.INDEX, department1)
+		cases.save(new TrackedCase(TRACKED_CASE_MARKUS, person2, CaseType.INDEX, department1, null)
 				.setQuarantine(Quarantine.of(LocalDate.now(), LocalDate.now().plusWeeks(2)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2))));
 
