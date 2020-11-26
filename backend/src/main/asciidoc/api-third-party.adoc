@@ -1,0 +1,18 @@
+= Third party integration
+
+:snippets: ../../../target/generated-snippets
+
+== Third party authentication
+
+TODO
+
+== Visitor groups for occasion
+
+To submit visitor groups for occasion issue an http post request to `/ext/occasions/{occasions-code}`
+and expanded with the occasions-code given from the health department:
+
+include::{snippets}/submit-visitors/submit-visitors/curl-request.adoc[]
+
+Request body has to have the following structure:
+
+include::{snippets}/submit-visitors/submit-visitors/auto-request-fields.adoc[]
