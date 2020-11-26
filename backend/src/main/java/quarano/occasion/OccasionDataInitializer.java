@@ -2,11 +2,12 @@ package quarano.occasion;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import quarano.core.DataInitializer;
 import quarano.department.TrackedCaseDataInitializer;
 
 import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
 
 /**
  * @author David Bauknecht

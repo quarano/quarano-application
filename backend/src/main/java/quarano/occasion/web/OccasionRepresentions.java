@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
@@ -18,15 +15,27 @@ import quarano.occasion.OccasionCode;
 import quarano.occasion.VisitorGroup;
 import quarano.tracking.ZipCode;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * @author David Bauknecht
+ * @author Oliver Drotbohm
+ * @since 1.4
+ */
 @RequiredArgsConstructor
 @Component
 class OccasionRepresentions {
@@ -114,13 +123,33 @@ class OccasionRepresentions {
 	@AllArgsConstructor
 	public static class VisitorGroupDto {
 
+		/**
+		 * A list of visitors.
+		 */
 		private @NotEmpty List<VisitorDto> visitors;
 		private @Pattern(regexp = OccasionCode.REGEX) String occcasionCode;
 		private @NotBlank @Textual String locationName;
 		private @Textual String comment;
+
+		/**
+		 * The start date of the time frame for which the visitors are submitted. Submit only this fiel if you want to
+		 * indicate you submit visitors for the entire day and can't or don't want to be more specific than that.
+		 */
 		private @NotNull LocalDate startDate;
+
+		/**
+		 * The start time for which the visitors are submitted. Defaults to midnight of the start date submitted.
+		 */
 		private LocalTime startTime;
+
+		/**
+		 * The end date of the time frame for which the visitors are submitted. Defaults to the day after the start date.
+		 */
 		private LocalDate endDate;
+
+		/**
+		 * The end time for which the visitors are submitted.
+		 */
 		private LocalTime endTime;
 
 		VisitorGroupDto validate(Errors errors) {
@@ -134,6 +163,7 @@ class OccasionRepresentions {
 			return this;
 		}
 
+		@JsonIgnore
 		public LocalDateTime getStart() {
 
 			var timeToUse = startTime == null ? LocalTime.MIDNIGHT : startTime;
@@ -141,6 +171,7 @@ class OccasionRepresentions {
 			return LocalDateTime.of(startDate, timeToUse);
 		}
 
+		@JsonIgnore
 		public LocalDateTime getEnd() {
 
 			var timeToUse = endTime == null ? LocalTime.MIDNIGHT.minusMinutes(1) : endTime;

@@ -1,5 +1,4 @@
 = Third party integration
-
 :snippets: ../../../target/generated-snippets
 
 == Third party authentication
@@ -8,8 +7,7 @@ TODO
 
 == Visitor groups for occasion
 
-To submit visitor groups for occasion issue an http post request to `/ext/occasions/{occasions-code}`
-and expanded with the occasions-code given from the health department:
+To submit visitor groups for occasions, issue an HTTP `POST` request to `/ext/occasions/{occasions-code}` and expand it with the occasion code given by the health department:
 
 include::{snippets}/submit-visitors/submit-visitors/curl-request.adoc[]
 

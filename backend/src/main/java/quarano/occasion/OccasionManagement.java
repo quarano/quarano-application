@@ -1,14 +1,16 @@
 package quarano.occasion;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Streamable;
-import org.springframework.stereotype.Service;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.data.util.Streamable;
+import org.springframework.stereotype.Service;
 
 /**
  * Application service to manage {@link Occasion}s.
@@ -30,15 +32,16 @@ public class OccasionManagement {
 	 * @param title must not be {@literal null} or empty.
 	 * @param start must not be {@literal null}.
 	 * @param end must not be {@literal null}.
-	 * @param trackedCaseId
+	 * @param trackedCaseId the {@link TrackedCaseIdentifier} for the case which the {@link Occasion} to be created shall
+	 *          be associated with. Must not be {@literal null}.
 	 * @return will never be {@literal null}.
 	 */
 	public Optional<Occasion> createOccasion(String title, LocalDateTime start, LocalDateTime end,
 			TrackedCaseIdentifier trackedCaseId) {
+
 		return !trackedCaseRepository.existsById(trackedCaseId)
 				? Optional.empty()
 				: Optional.of(occasions.save(new Occasion(title, start, end, findValidOccasionCode(), trackedCaseId)));
-
 	}
 
 	/**
