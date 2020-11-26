@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class OccasionsDto {
+class OccasionsDto {
+
 	@Textual String title;
 	LocalDateTime start;
 	LocalDateTime end;
-
 }

@@ -10,11 +10,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.LinkDiscoverers;
@@ -22,10 +25,12 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.constraints.ResourceBundleConstraintDescriptionResolver;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.ResponseBodySnippet;
 import org.springframework.restdocs.snippet.TemplatedSnippet;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -42,6 +47,7 @@ public abstract class AbstractDocumentation {
 	@Autowired WebApplicationContext context;
 	@Autowired LinkDiscoverers links;
 	@Autowired ObjectMapper jackson;
+	@Autowired ResourceBundleMessageSource messages;
 
 	protected MockMvc mvc;
 	protected DocumentationFlow flow;
@@ -49,9 +55,13 @@ public abstract class AbstractDocumentation {
 	@BeforeEach
 	void setUp(RestDocumentationContextProvider restDocumentation) {
 
+		ResourceBundle bundle = ReflectionTestUtils.invokeMethod(messages, "getResourceBundle", "messages", Locale.ENGLISH);
+
+		var resolver = new ResourceBundleConstraintDescriptionResolver(bundle);
+
 		mvc = MockMvcBuilders.webAppContextSetup(context)
 				.apply(springSecurity())
-				.alwaysDo(JacksonResultHandlers.prepareJackson(jackson))
+				.alwaysDo(JacksonResultHandlers.prepareJackson(jackson, resolver))
 				.apply(documentationConfiguration(restDocumentation)
 						.operationPreprocessors()
 						.withRequestDefaults(Preprocessors.prettyPrint())

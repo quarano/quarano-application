@@ -1,14 +1,15 @@
 package quarano.occasion;
 
+import static org.assertj.core.api.Assertions.*;
+
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Test;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.department.TrackedCaseDataInitializer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author David Bauknecht

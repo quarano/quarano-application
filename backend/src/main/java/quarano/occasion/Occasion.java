@@ -1,17 +1,28 @@
 package quarano.occasion;
 
-import lombok.*;
-import org.jmolecules.ddd.types.Identifier;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.occasion.Occasion.OccasionIdentifier;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.jmolecules.ddd.types.Identifier;
 
 @Getter
 @Entity
