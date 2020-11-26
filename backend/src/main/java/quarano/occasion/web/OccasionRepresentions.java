@@ -5,26 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.core.web.MapperWrapper;
 import quarano.occasion.Occasion;
+import quarano.occasion.OccasionCode;
 import quarano.occasion.VisitorGroup;
-import quarano.tracking.Address;
 import quarano.tracking.ZipCode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
-import javax.validation.constraints.Pattern;
-
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
 @RequiredArgsConstructor
 @Component
@@ -48,6 +49,8 @@ class OccasionRepresentions {
 		LocalDateTime getStart();
 
 		LocalDateTime getEnd();
+
+		String getOccasionCode();
 
 		List<VisitorGroupSummary> getVisitorGroups();
 
@@ -82,13 +85,22 @@ class OccasionRepresentions {
 	@AllArgsConstructor
 	public static class VisitorDto {
 
-		private @Pattern(regexp = Strings.NAMES) String lastName, firstName;
-		private @Pattern(regexp = Strings.STREET) String street;
-		private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
-		private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
-		private @Pattern(regexp = Strings.CITY) String city;
+		private @NotBlank @Pattern(regexp = Strings.NAMES) String lastName, firstName;
+		private @NotBlank @Pattern(regexp = Strings.STREET) String street;
+		private @NotBlank @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
+		private @NotBlank @Pattern(regexp = ZipCode.PATTERN) String zipCode;
+		private @NotBlank @Pattern(regexp = Strings.CITY) String city;
+		/**
+		 * If not given, email must be given.
+		 **/
 		private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
+		/**
+		 * If not given, phone must be given.
+		 **/
 		private @Email String email;
+		/**
+		 * Can be used to give additional seating information (table...)
+		 **/
 		private @Textual String qualifier;
 
 		VisitorDto validate(Errors errors) {
@@ -102,11 +114,11 @@ class OccasionRepresentions {
 	@AllArgsConstructor
 	public static class VisitorGroupDto {
 
-		private List<VisitorDto> visitors;
-		private @Textual String eventCode;
-		private @Textual String locationName;
+		private @NotEmpty List<VisitorDto> visitors;
+		private @Pattern(regexp = OccasionCode.REGEX) String occcasionCode;
+		private @NotBlank @Textual String locationName;
 		private @Textual String comment;
-		private LocalDate startDate;
+		private @NotNull LocalDate startDate;
 		private LocalTime startTime;
 		private LocalDate endDate;
 		private LocalTime endTime;

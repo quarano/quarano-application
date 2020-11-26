@@ -1,14 +1,14 @@
 package quarano.occasion;
 
-import static org.assertj.core.api.Assertions.*;
-
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.department.TrackedCaseDataInitializer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author David Bauknecht
@@ -25,15 +25,17 @@ class OccasionManagementIntegrationTests {
 	@Test // CORE-631
 	void testCreateEvent() {
 
-		var event = occasions.createOccasion("TestEvent", today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+		var event = occasions.createOccasion("TestEvent", today.atStartOfDay(), today.plusDays(1).atStartOfDay(),
+				TrackedCaseDataInitializer.TRACKED_CASE_MARKUS);
 
-		assertThat(event.getOccasionCode()).isNotNull();
+		assertThat(event).map(Occasion::getOccasionCode).isPresent();
 	}
 
 	@Test // CORE-631
 	void testCreateEventAndAddGroup() {
 
-		var event = occasions.createOccasion("TestEvent 2", today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+		var event = occasions.createOccasion("TestEvent 2", today.atStartOfDay(), today.plusDays(1).atStartOfDay(),
+				TrackedCaseDataInitializer.TRACKED_CASE_MARKUS).orElseThrow();
 
 		var visitorGroup = new VisitorGroup(today.atStartOfDay(), event.getOccasionCode())
 				.setComment("Comment")

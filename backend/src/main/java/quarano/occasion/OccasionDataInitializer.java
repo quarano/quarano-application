@@ -2,11 +2,11 @@ package quarano.occasion;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import quarano.core.DataInitializer;
+import quarano.department.TrackedCaseDataInitializer;
 
 import java.time.LocalDate;
-
-import org.springframework.stereotype.Component;
 
 /**
  * @author David Bauknecht
@@ -29,6 +29,6 @@ public class OccasionDataInitializer implements DataInitializer {
 	public void initialize() {
 
 		occasions.save(new Occasion("Sample event", LocalDate.now().atStartOfDay(),
-				LocalDate.now().plusDays(1).atStartOfDay(), OCCASION_CODE_1));
+				LocalDate.now().plusDays(1).atStartOfDay(), OCCASION_CODE_1, TrackedCaseDataInitializer.TRACKED_CASE_MARKUS));
 	}
 }

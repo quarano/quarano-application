@@ -39,7 +39,7 @@ class OccasionMappingConfiguration implements MappingCustomizer {
 
 			var source = (VisitorGroupDto) ctx.getSource();
 
-			return new VisitorGroup(source.getEnd(), OccasionCode.of(source.getEventCode()));
+			return new VisitorGroup(source.getEnd(), OccasionCode.of(source.getOcccasionCode()));
 		});
 	}
 }

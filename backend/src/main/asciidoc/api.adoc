@@ -93,6 +93,7 @@ include::{snippets}/getting-started/agent-user-home/links.adoc[]
 
 include::api-agent.adoc[leveloffset=+1]
 include::api-user.adoc[leveloffset=+1]
+include::api-third-party.adoc[leveloffset=+1]
 
 == CSV Import/Export
 
