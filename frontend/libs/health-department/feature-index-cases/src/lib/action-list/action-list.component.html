@@ -1,4 +1,22 @@
-<ngx-datatable
+<ag-grid-angular
+  data-cy="action-data-table"
+  style="height: 500px; width: 100%"
+  class="ag-theme-material"
+  [rowData]="rows$ | async"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [pagination]="true"
+  [paginationAutoPageSize]="false"
+  [paginationPageSize]="10"
+  [localeText]="locale"
+  rowSelection="single"
+  (rowSelected)="onSelect($event)"
+  [getRowHeight]="getRowHeight"
+  (gridReady)="onGridReady($event)"
+  [frameworkComponents]="frameworkComponents"
+>
+</ag-grid-angular>
+<!-- <ngx-datatable
   class="material fixed-header"
   data-cy="action-data-table"
   style="max-width: 1335px"
@@ -64,4 +82,4 @@
       </a>
     </ng-template>
   </ngx-datatable-column>
-</ngx-datatable>
+</ngx-datatable> -->

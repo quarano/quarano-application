@@ -64,7 +64,6 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
         label: o,
         selected: true,
       }));
-    console.log(this.options);
   }
 
   isFilterActive(): boolean {
