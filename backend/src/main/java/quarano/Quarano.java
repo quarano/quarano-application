@@ -25,6 +25,7 @@ import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -90,6 +91,24 @@ public class Quarano {
 				log.warn("No RKI code is set with the default department! No department-specific texts are imported.");
 			}
 		};
+	}
+
+	@Bean
+	FlywayMigrationStrategy getFlywayMigrationStrategy() {
+
+		if (log.isDebugEnabled()) {
+			return flyway -> {
+
+				var results = flyway.validateWithResult();
+
+				results.invalidMigrations.forEach(it -> log.debug("ValidateOutput: " + it.description + " | ErrorCode: "
+						+ it.errorDetails.errorCode + " | ErrorMessage: " + it.errorDetails.errorMessage));
+
+				flyway.migrate();
+			};
+		} else {
+			return null;
+		}
 	}
 
 	@Bean
