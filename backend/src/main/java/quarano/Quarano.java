@@ -101,8 +101,15 @@ public class Quarano {
 
 				var results = flyway.validateWithResult();
 
-				results.invalidMigrations.forEach(it -> log.debug("ValidateOutput: " + it.description + " | ErrorCode: "
-						+ it.errorDetails.errorCode + " | ErrorMessage: " + it.errorDetails.errorMessage));
+				results.invalidMigrations.forEach(it -> {
+
+					var errorDetails = it.errorDetails;
+
+					log.debug("ValidateOutput: " + it.description
+							+ errorDetails != null
+									? " | ErrorCode: " + errorDetails.errorCode + " | ErrorMessage: " + errorDetails.errorMessage
+									: "");
+				});
 
 				flyway.migrate();
 			};
