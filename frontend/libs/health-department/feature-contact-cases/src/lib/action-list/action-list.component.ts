@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
-import { ActionAlertComponent } from '@qro/health-department/ui-action-alert';
+import { ActionAlertComponent, ActionAlertFilterComponent } from '@qro/health-department/ui-action-alert';
 
 export class ActionRowViewModel {
   lastName: string;
@@ -44,13 +44,17 @@ export class ActionListComponent implements OnInit {
   frameworkComponents;
 
   constructor(private route: ActivatedRoute, private router: Router) {
-    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent, actionAlertComponent: ActionAlertComponent };
+    this.frameworkComponents = {
+      checkboxFilter: CheckboxFilterComponent,
+      actionAlertComponent: ActionAlertComponent,
+      actionAlertFilter: ActionAlertFilterComponent,
+    };
     this.columnDefs = [
       {
         headerName: 'Auffälligkeiten',
         field: 'alerts',
         flex: 4,
-        filter: 'checkboxFilter',
+        filter: 'actionAlertFilter',
         cellRenderer: 'actionAlertComponent',
       },
       { headerName: 'Nachname', field: 'lastName', flex: 2 },

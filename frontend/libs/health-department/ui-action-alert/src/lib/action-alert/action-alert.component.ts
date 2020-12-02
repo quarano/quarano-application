@@ -13,8 +13,7 @@ export class ActionAlertComponent implements ICellRendererAngularComp {
 
   agInit(params: any): void {
     this.params = params;
-    console.log(params.value);
-    params.value.forEach((element) => {
+    params?.value.forEach((element) => {
       this.alerts.push(this.alertConfigurationFor(element));
     });
   }
