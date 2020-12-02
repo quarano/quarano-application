@@ -1,17 +1,29 @@
-import { AlertConfiguration } from '@qro/health-department/domain';
-import { Component, OnInit, Input } from '@angular/core';
+import { Alert, AlertConfiguration, getAlertConfigurations } from '@qro/health-department/domain';
+import { Component } from '@angular/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'qro-action-alert',
   templateUrl: './action-alert.component.html',
-  styleUrls: ['./action-alert.component.scss']
+  styleUrls: ['./action-alert.component.scss'],
 })
-export class ActionAlertComponent implements OnInit {
-  @Input() alert: AlertConfiguration;
+export class ActionAlertComponent implements ICellRendererAngularComp {
+  public params: any;
+  public alerts: AlertConfiguration[] = [];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  agInit(params: any): void {
+    this.params = params;
+    console.log(params.value);
+    params.value.forEach((element) => {
+      this.alerts.push(this.alertConfigurationFor(element));
+    });
   }
 
+  refresh(): boolean {
+    return false;
+  }
+
+  private alertConfigurationFor(alert: Alert) {
+    return getAlertConfigurations().find((c) => c.alert === alert);
+  }
 }

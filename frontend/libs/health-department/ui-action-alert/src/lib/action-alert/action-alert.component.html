@@ -1,6 +1,6 @@
-<div class="action-alert-container">
-  <i class="material-icons mr-3" [style.color]="alert.color">{{
-    alert.icon
-  }}</i>
-  <span class="action-alert-text">{{ alert.displayName | uppercase }}</span>
+<div class="action-alert-main-container">
+  <div class="action-alert-container" *ngFor="let alert of alerts">
+    <i class="material-icons mr-3" [style.color]="alert.color">{{ alert.icon }}</i>
+    <span class="action-alert-text">{{ alert.displayName | uppercase }}</span>
+  </div>
 </div>

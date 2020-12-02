@@ -1,17 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActionListItemDto, AlertConfiguration, getAlertConfigurations, Alert } from '@qro/health-department/domain';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
 import { Observable } from 'rxjs';
-import {
-  CheckboxFilterComponent,
-  DE_LOCALE,
-  EmailButtonComponent,
-  UnorderedListComponent,
-} from '@qro/shared/ui-ag-grid';
+import { CheckboxFilterComponent, DE_LOCALE, EmailButtonComponent } from '@qro/shared/ui-ag-grid';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { map } from 'rxjs/operators';
+import { ActionAlertComponent } from '@qro/health-department/ui-action-alert';
 
 class ActionRowViewModel {
   lastName: string;
@@ -46,9 +42,15 @@ export class ActionListComponent implements OnInit {
   frameworkComponents;
 
   constructor(private route: ActivatedRoute, private router: Router) {
-    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
+    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent, actionAlertComponent: ActionAlertComponent };
     this.columnDefs = [
-      { headerName: 'Auffälligkeiten', field: 'alerts', flex: 3, filter: 'checkboxFilter' },
+      {
+        headerName: 'Auffälligkeiten',
+        field: 'alerts',
+        flex: 3,
+        filter: 'checkboxFilter',
+        cellRenderer: 'actionAlertComponent',
+      },
       { headerName: 'Nachname', field: 'lastName', flex: 2 },
       { headerName: 'Vorname', field: 'firstName', flex: 2 },
       {
@@ -123,7 +125,7 @@ export class ActionListComponent implements OnInit {
       status: action.status,
       alerts: action.alerts || [],
       caseId: action.caseId,
-      rowHeight: Math.min(50 + action.originCases.length * 9),
+      rowHeight: Math.min(50 + action.alerts.length * 9),
     };
   }
 
@@ -141,10 +143,6 @@ export class ActionListComponent implements OnInit {
 
   onSelect(event) {
     this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId, 'actions']);
-  }
-
-  alertConfigurationFor(alert: Alert) {
-    return getAlertConfigurations().find((c) => c.alert === alert);
   }
 
   getRowHeight(params) {

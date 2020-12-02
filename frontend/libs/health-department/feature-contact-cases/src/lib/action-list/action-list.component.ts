@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
+import { ActionAlertComponent } from '@qro/health-department/ui-action-alert';
 
 export class ActionRowViewModel {
   lastName: string;
@@ -43,9 +44,15 @@ export class ActionListComponent implements OnInit {
   frameworkComponents;
 
   constructor(private route: ActivatedRoute, private router: Router) {
-    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
+    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent, actionAlertComponent: ActionAlertComponent };
     this.columnDefs = [
-      { headerName: 'Auffälligkeiten', field: 'alerts', flex: 3, filter: 'checkboxFilter' },
+      {
+        headerName: 'Auffälligkeiten',
+        field: 'alerts',
+        flex: 4,
+        filter: 'checkboxFilter',
+        cellRenderer: 'actionAlertComponent',
+      },
       { headerName: 'Nachname', field: 'lastName', flex: 2 },
       { headerName: 'Vorname', field: 'firstName', flex: 2 },
       {
@@ -129,7 +136,7 @@ export class ActionListComponent implements OnInit {
       caseId: action.caseId,
       createdAt: action.createdAt,
       originCases: action.originCases.map((c) => `${c.firstName} ${c.lastName}`),
-      rowHeight: Math.min(50 + action.originCases.length * 9),
+      rowHeight: Math.min(50 + Math.max(action.originCases.length, action.alerts.length) * 9),
     };
   }
 
