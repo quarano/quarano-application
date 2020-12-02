@@ -1,4 +1,4 @@
-<div style="max-width: 1110px">
+<div style="width: 90vw; height: 80vh">
   <button
     class="mb-3"
     mat-raised-button
@@ -8,55 +8,21 @@
   >
     <mat-icon>add</mat-icon>Neuen Account anlegen
   </button>
-
-  <ngx-datatable
-    *ngIf="accounts$ | async as accounts"
-    class="material fixed-header"
-    style="max-width: 1110px"
-    [count]="accounts.length"
-    [headerHeight]="50"
-    rowHeight="auto"
-    [rows]="accounts"
-    [messages]="{
-      emptyMessage: 'Keine Daten zum Anzeigen vorhanden',
-      selectedMessage: 'ausgewählt',
-      totalMessage: accounts.length === 1 ? 'Account' : 'Accounts'
-    }"
-    [loadingIndicator]="loading"
-    [footerHeight]="50"
-    selectionType="single"
-    (select)="onSelect($event)"
+  <ag-grid-angular
+    data-cy="action-data-table"
+    style="height: 500px"
+    class="ag-theme-material"
+    [rowData]="accounts$ | async"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [pagination]="true"
+    [paginationAutoPageSize]="false"
+    [paginationPageSize]="10"
+    [localeText]="locale"
+    rowSelection="single"
+    (rowSelected)="onSelect($event)"
+    [frameworkComponents]="frameworkComponents"
+    [getRowHeight]="getRowHeight"
   >
-    <ngx-datatable-column prop="lastName" name="Nachname" width="181"> </ngx-datatable-column>
-
-    <ngx-datatable-column prop="firstName" name="Vorname" width="181"> </ngx-datatable-column>
-
-    <ngx-datatable-column prop="username" name="Username" width="181"> </ngx-datatable-column>
-
-    <ngx-datatable-column prop="email" name="E-Mail" width="221"> </ngx-datatable-column>
-
-    <ngx-datatable-column prop="roles" name="Rollen" width="266">
-      <ng-template let-value="value" ngx-datatable-cell-template>
-        <div style="display: flex; flex-direction: column">
-          <span *ngFor="let role of value">{{ getRoleDisplayName(role) }}</span>
-        </div>
-      </ng-template>
-    </ngx-datatable-column>
-
-    <ngx-datatable-column prop="_links" name="Löschen" width="80" [sortable]="false">
-      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
-        <button
-          *ngIf="value.delete"
-          class="ngx-icon-button"
-          mat-icon-button
-          [matTooltip]="row.firstName + ' ' + row.lastName + ' löschen'"
-          matTooltipClass="qro-tooltip"
-          matTooltipPosition="right"
-          (click)="deleteUser($event, row)"
-        >
-          <mat-icon>delete_outline</mat-icon>
-        </button>
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
+  </ag-grid-angular>
 </div>

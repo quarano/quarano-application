@@ -156,7 +156,7 @@ export class ActionListComponent implements OnInit {
     event.api.onFilterChanged();
   }
 
-  onSelect(event) {
+  onSelect(event: any) {
     this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId, 'actions']);
   }
 
