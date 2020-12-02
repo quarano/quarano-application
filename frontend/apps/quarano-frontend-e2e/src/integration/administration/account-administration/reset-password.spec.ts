@@ -11,7 +11,7 @@ describe('reset account password', () => {
     cy.loginAdmin();
 
     cy.visit('administration/accounts/account-list');
-    cy.get('datatable-scroller datatable-row-wrapper:first').click();
+    cy.get('.ag-center-cols-container > .ag-row').eq(1).click();
     cy.get('.mat-tab-links a:nth-child(2)').click();
   });
 
