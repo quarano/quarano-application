@@ -1,5 +1,3 @@
-@import '../../../../../../libs/shared/ui-styles/src/lib/ngx-table';
-
 ::ng-deep {
   div.mat-select-value {
     display: none;
@@ -8,11 +6,6 @@
   .mat-select {
     width: initial !important;
   }
-}
-
-.action-alert-container {
-  display: flex;
-  flex-direction: column;
 }
 
 #filter-button {
