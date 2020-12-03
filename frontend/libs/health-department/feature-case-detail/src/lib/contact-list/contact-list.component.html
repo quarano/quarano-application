@@ -4,13 +4,11 @@
   </h3>
   <ag-grid-angular
     data-cy="case-data-table"
-    style="height: 500px"
+    style="height: 50vh"
     class="ag-theme-material"
     [rowData]="rows$ | async"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
-    [pagination]="true"
-    [paginationAutoPageSize]="true"
     [localeText]="locale"
     rowSelection="single"
     (rowSelected)="onSelect($event)"

@@ -1,4 +1,4 @@
-<div style="width: 90vw; height: 80vh">
+<mat-card style="width: 90vw">
   <button
     class="mb-3"
     mat-raised-button
@@ -9,15 +9,12 @@
     <mat-icon>add</mat-icon>Neuen Account anlegen
   </button>
   <ag-grid-angular
+    style="height: 60vh"
     data-cy="action-data-table"
-    style="height: 500px"
     class="ag-theme-material"
     [rowData]="accounts$ | async"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
-    [pagination]="true"
-    [paginationAutoPageSize]="false"
-    [paginationPageSize]="10"
     [localeText]="locale"
     rowSelection="single"
     (rowSelected)="onSelect($event)"
@@ -25,4 +22,4 @@
     [getRowHeight]="getRowHeight"
   >
   </ag-grid-angular>
-</div>
+</mat-card>
