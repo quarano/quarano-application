@@ -1,43 +1,39 @@
-<div style="width: 90vw">
-  <div style="display: flex; justify-content: space-between">
-    <div style="display: flex">
-      <button
-        mat-raised-button
-        data-cy="new-case-button"
-        color="primary"
-        [routerLink]="['/health-department/case-detail/new', 'index']"
-      >
-        <mat-icon>add</mat-icon>Neuen Indexfall anlegen
-      </button>
-    </div>
-  </div>
-  <ng-container *ngIf="cases$ | async as cases">
-    <mat-form-field appearance="outline" class="full-width mt-3">
-      <input
-        matInput
-        data-cy="search-case-input"
-        type="text"
-        placeholder="Suchen..."
-        [(ngModel)]="filterString"
-        name="filterString"
-      />
-    </mat-form-field>
-    <ag-grid-angular
-      data-cy="case-data-table"
-      style="height: 500px"
-      class="ag-theme-material"
-      [rowData]="cases$ | async"
-      [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef"
-      [pagination]="true"
-      [paginationAutoPageSize]="true"
-      [localeText]="locale"
-      rowSelection="single"
-      (rowSelected)="onSelect($event)"
-      [quickFilterText]="filterString"
-      (gridReady)="onGridReady($event)"
-      [frameworkComponents]="frameworkComponents"
+<div style="display: flex; justify-content: space-between">
+  <div style="display: flex">
+    <button
+      mat-raised-button
+      data-cy="new-case-button"
+      color="primary"
+      [routerLink]="['/health-department/case-detail/new', 'index']"
     >
-    </ag-grid-angular>
-  </ng-container>
+      <mat-icon>add</mat-icon>Neuen Indexfall anlegen
+    </button>
+  </div>
 </div>
+<ng-container *ngIf="cases$ | async as cases">
+  <mat-form-field appearance="outline" class="full-width mt-3">
+    <input
+      matInput
+      data-cy="search-case-input"
+      type="text"
+      placeholder="Suchen..."
+      [(ngModel)]="filterString"
+      name="filterString"
+    />
+  </mat-form-field>
+  <ag-grid-angular
+    style="height: 50vh"
+    data-cy="case-data-table"
+    class="ag-theme-material"
+    [rowData]="cases$ | async"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [localeText]="locale"
+    rowSelection="single"
+    (rowSelected)="onSelect($event)"
+    [quickFilterText]="filterString"
+    (gridReady)="onGridReady($event)"
+    [frameworkComponents]="frameworkComponents"
+  >
+  </ag-grid-angular>
+</ng-container>

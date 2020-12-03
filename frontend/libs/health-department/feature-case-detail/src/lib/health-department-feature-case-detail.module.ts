@@ -1,7 +1,7 @@
+import { SharedUiAgGridModule } from '@qro/shared/ui-ag-grid';
 import { SharedUiErrorModule } from '@qro/shared/ui-error';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -117,9 +117,9 @@ const routes: Routes = [
     SharedUiButtonModule,
     HealthDepartmentDomainModule,
     SharedUtilSymptomModule,
-    NgxDatatableModule,
     SharedUiMultipleAutocompleteModule,
     SharedUtilTranslationModule,
+    SharedUiAgGridModule,
   ],
 })
 export class HealthDepartmentFeatureCaseDetailModule {}

@@ -3,7 +3,8 @@
 const newPassword = 'Pa$$w0rd';
 const username = 'secAdmin2';
 
-describe('reset account password', () => {
+// ToDo: https://quarano.atlassian.net/browse/CORE-635
+xdescribe('reset account password', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', `/hd/accounts/*/password`).as('resetpassword');
@@ -11,7 +12,7 @@ describe('reset account password', () => {
     cy.loginAdmin();
 
     cy.visit('administration/accounts/account-list');
-    cy.get('datatable-scroller datatable-row-wrapper:first').click();
+    cy.get('.ag-center-cols-container > .ag-row').eq(1).click();
     cy.get('.mat-tab-links a:nth-child(2)').click();
   });
 
@@ -140,7 +141,8 @@ describe('reset account password', () => {
   });
 });
 
-describe('login with new password', () => {
+// ToDo: https://quarano.atlassian.net/browse/CORE-635
+xdescribe('login with new password', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', '/user/me/password').as('changepassword');

@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
+import { Alert, getAlertConfigurations } from '@qro/health-department/domain';
 import { IFilterAngularComp } from 'ag-grid-angular';
 import { IDoesFilterPassParams, IFilterParams, RowNode } from 'ag-grid-community';
-import { uniq } from 'lodash';
+import { uniq, flatten, intersection } from 'lodash';
 
 @Component({
-  selector: 'qro-checkbox-filter',
+  selector: 'qro-action-alert-filter',
   template: `
     <section class="example-section">
       <span class="example-list-section">
         <ul>
           <li *ngFor="let option of options">
             <mat-checkbox [(ngModel)]="option.selected" (ngModelChange)="onChange()">
-              {{ option.label }}
+              {{ alertConfigurationFor(option.label).displayName }}
             </mat-checkbox>
           </li>
         </ul>
@@ -42,7 +43,7 @@ import { uniq } from 'lodash';
     `,
   ],
 })
-export class CheckboxFilterComponent implements IFilterAngularComp {
+export class ActionAlertFilterComponent implements IFilterAngularComp {
   private params: IFilterParams;
   private valueGetter: (rowNode: RowNode) => any;
   public options: { label: string; selected: boolean }[] = [];
@@ -56,7 +57,7 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
   private initOptions() {
     const field = this.params.colDef.field;
     // @ts-ignore
-    this.options = uniq(this.params.rowModel.rowsToDisplay.map((d) => d.data[field]))
+    this.options = uniq(flatten(this.params.rowModel.rowsToDisplay.map((d) => d.data[field])))
       .sort(function (a: string, b: string) {
         return a.toLowerCase().localeCompare(b.toLowerCase());
       })
@@ -78,10 +79,11 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
   }
 
   doesFilterPass(params: IDoesFilterPassParams): boolean {
-    return this.options
-      .filter((o) => o.selected)
-      .map((o) => o.label.toLowerCase())
-      .includes(this.valueGetter(params.node).toString().toLowerCase());
+    const selectedOptions = this.options.filter((o) => o.selected).map((o) => o.label.toLowerCase());
+
+    const optionsInNode = this.valueGetter(params.node).map((e) => e.toLowerCase());
+
+    return intersection(selectedOptions, optionsInNode).length > 0;
   }
 
   getModel(): any {
@@ -108,5 +110,9 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
 
   onChange(): void {
     this.params.filterChangedCallback();
+  }
+
+  alertConfigurationFor(alert: Alert) {
+    return getAlertConfigurations().find((c) => c.alert === alert);
   }
 }

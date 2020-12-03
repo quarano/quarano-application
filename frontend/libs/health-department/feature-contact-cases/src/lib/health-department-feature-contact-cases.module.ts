@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { ActionListComponent } from './action-list/action-list.component';
 import { CaseListComponent } from './case-list/case-list.component';
 import { ContactCasesComponent } from './contact-cases/contact-cases.component';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {
   HealthDepartmentDomainModule,
   ContactCaseActionListResolver,
@@ -45,7 +44,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedUiMaterialModule,
-    NgxDatatableModule,
     HealthDepartmentUiActionAlertModule,
     HealthDepartmentDomainModule,
     RouterModule.forChild(routes),

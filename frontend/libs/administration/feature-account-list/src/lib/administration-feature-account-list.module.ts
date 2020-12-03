@@ -1,5 +1,6 @@
+import { DeleteButtonComponent } from './account-list/delete-button.component';
+import { SharedUiAgGridModule } from '@qro/shared/ui-ag-grid';
 import { AdministrationDomainModule } from '@qro/administration/domain';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { AccountListResolver } from '@qro/administration/domain';
 import { RouterModule } from '@angular/router';
@@ -8,11 +9,11 @@ import { CommonModule } from '@angular/common';
 import { AccountListComponent } from './account-list/account-list.component';
 
 @NgModule({
-  declarations: [AccountListComponent],
+  declarations: [AccountListComponent, DeleteButtonComponent],
   imports: [
     CommonModule,
     SharedUiMaterialModule,
-    NgxDatatableModule,
+    SharedUiAgGridModule,
     AdministrationDomainModule,
     RouterModule.forChild([
       {

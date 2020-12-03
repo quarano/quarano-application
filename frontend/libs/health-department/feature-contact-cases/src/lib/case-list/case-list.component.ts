@@ -5,8 +5,13 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
 import { map } from 'rxjs/operators';
-import { ColDef, GridApi } from 'ag-grid-community';
-import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import {
+  CheckboxFilterComponent,
+  DE_LOCALE,
+  EmailButtonComponent,
+  UnorderedListComponent,
+} from '@qro/shared/ui-ag-grid';
 
 class CaseRowViewModel {
   lastName: string;
@@ -58,7 +63,7 @@ export class CaseListComponent implements OnInit {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.quarantineEndDateFormatter,
+        valueFormatter: this.createdAtFormatter,
         width: 170,
       },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
@@ -66,8 +71,14 @@ export class CaseListComponent implements OnInit {
         headerName: 'Ursprungsfälle',
         field: 'originCases',
         cellRendererFramework: UnorderedListComponent,
-        tooltipField: 'firstName',
         flex: 2,
+      },
+      {
+        headerName: 'E-Mail',
+        field: 'email',
+        cellRendererFramework: EmailButtonComponent,
+        filter: false,
+        width: 90,
       },
     ];
   }
@@ -119,7 +130,7 @@ export class CaseListComponent implements OnInit {
     return params.data.rowHeight;
   }
 
-  onGridReady(event: { api: GridApi }) {
+  onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
     event.api.setFilterModel({
       status: [
         {
@@ -129,5 +140,14 @@ export class CaseListComponent implements OnInit {
       ],
     });
     event.api.onFilterChanged();
+    event.columnApi.applyColumnState({
+      state: [
+        {
+          colId: 'lastName',
+          sort: 'desc',
+        },
+      ],
+      defaultState: { sort: null },
+    });
   }
 }

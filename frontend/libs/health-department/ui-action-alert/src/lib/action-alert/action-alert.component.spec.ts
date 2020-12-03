@@ -12,15 +12,13 @@ describe('ActionAlertComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ActionAlertComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ActionAlertComponent);
     component = fixture.componentInstance;
-    component.alert = getAlertConfigurations()[0];
     fixture.detectChanges();
   });
 

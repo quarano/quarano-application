@@ -65,7 +65,6 @@
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@nrwl/angular": "10.3.3",
-    "@swimlane/ngx-datatable": "^18.0.0",
     "ag-grid-angular": "^24.1.0",
     "ag-grid-community": "^24.1.0",
     "bootstrap-grid-only-css": "^4.1.3",

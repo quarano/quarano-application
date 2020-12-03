@@ -1,23 +1,26 @@
-import { SubSink } from 'subsink';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActionListItemDto, AlertConfiguration, getAlertConfigurations, Alert } from '@qro/health-department/domain';
-import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatOption } from '@angular/material/core';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
+import { Observable } from 'rxjs';
+import { CheckboxFilterComponent, DE_LOCALE, EmailButtonComponent } from '@qro/shared/ui-ag-grid';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { map } from 'rxjs/operators';
+import { ActionAlertComponent, ActionAlertFilterComponent } from '@qro/health-department/ui-action-alert';
 
 class ActionRowViewModel {
   lastName: string;
   firstName: string;
   type: CaseType;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   email: string;
   phone: string;
-  quarantineStart: string;
+  quarantineStart: Date;
   status: string;
   alerts: string[];
   caseId: string;
+  rowHeight: number;
 }
 
 @Component({
@@ -25,62 +28,93 @@ class ActionRowViewModel {
   templateUrl: './action-list.component.html',
   styleUrls: ['./action-list.component.scss'],
 })
-export class ActionListComponent implements OnInit, OnDestroy {
-  actions: ActionListItemDto[] = [];
-  private subs = new SubSink();
-  loading = false;
-  rows: ActionRowViewModel[] = [];
-  filteredRows: ActionRowViewModel[] = [];
-  alertConfigs: AlertConfiguration[] = [];
-  @ViewChild(MatSelect) filterSelect: MatSelect;
+export class ActionListComponent implements OnInit {
+  actions$: Observable<ActionListItemDto[]>;
+  rows$: Observable<ActionRowViewModel[]>;
+  alertConfigs$: Observable<AlertConfiguration[]>;
+  defaultColDef: ColDef = {
+    editable: false,
+    filter: 'agTextColumnFilter',
+    sortable: false,
+  };
+  columnDefs: ColDef[] = [];
+  locale = DE_LOCALE;
+  frameworkComponents;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
-
-  ngOnInit() {
-    this.loading = true;
-
-    this.subs.add(
-      this.route.data.subscribe(
-        (data) => {
-          this.actions = data.actions;
-          this.rows = this.actions.map((action) => this.getRowData(action));
-          this.filteredRows = [...this.rows];
-          this.loading = false;
-
-          this.alertConfigs = this.actions
-            .reduce((acc, next) => {
-              next.alerts.forEach((alert) => {
-                if (!acc.includes(alert)) {
-                  acc.push(alert);
-                }
-              });
-
-              return acc;
-            }, [])
-            .map((alert) => {
-              return (
-                getAlertConfigurations().find((c) => c.alert === alert) ||
-                ({
-                  alert: Alert.UNDEFINED,
-                  color: 'black',
-                  icon: '',
-                  displayName: 'undefined',
-                  order: 0,
-                } as AlertConfiguration)
-              );
-            })
-            .sort((a, b) => a.order - b.order);
-        },
-        () => (this.loading = false)
-      )
-    );
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.frameworkComponents = {
+      checkboxFilter: CheckboxFilterComponent,
+      actionAlertComponent: ActionAlertComponent,
+      actionAlertFilter: ActionAlertFilterComponent,
+    };
+    this.columnDefs = [
+      {
+        headerName: 'Auffälligkeiten',
+        field: 'alerts',
+        flex: 3,
+        filter: 'actionAlertFilter',
+        cellRenderer: 'actionAlertComponent',
+      },
+      { headerName: 'Nachname', field: 'lastName', flex: 2 },
+      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      {
+        headerName: 'Geburtsdatum',
+        field: 'dateOfBirth',
+        filter: 'agDateColumnFilter',
+        valueFormatter: this.dateFormatter,
+        width: 170,
+      },
+      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
+      {
+        headerName: 'Quarantäne seit',
+        field: 'quarantineStart',
+        filter: 'agDateColumnFilter',
+        valueFormatter: this.dateFormatter,
+        width: 170,
+      },
+      {
+        headerName: 'Telefon',
+        field: 'phone',
+        width: 140,
+      },
+      {
+        headerName: 'E-Mail',
+        field: 'email',
+        cellRendererFramework: EmailButtonComponent,
+        filter: false,
+        sortable: false,
+        width: 90,
+      },
+    ];
   }
 
-  get isFiltered(): boolean {
-    if (this.filterSelect) {
-      return (this.filterSelect.selected as MatOption[]).length > 0;
-    }
-    return false;
+  dateFormatter(params: { value: Date }) {
+    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
+  }
+
+  ngOnInit() {
+    this.actions$ = this.route.data.pipe(map((data) => data.actions));
+
+    this.rows$ = this.actions$.pipe(map((actions) => actions.map((action) => this.getRowData(action))));
+
+    this.alertConfigs$ = this.actions$.pipe(
+      map((actions) =>
+        actions
+          .reduce((acc, next) => {
+            next.alerts.forEach((alert) => {
+              if (!acc.includes(alert)) {
+                acc.push(alert);
+              }
+            });
+
+            return acc;
+          }, [])
+          .map((alert) => {
+            return getAlertConfigurations().find((c) => c.alert === alert);
+          })
+          .sort((a, b) => a.order - b.order)
+      )
+    );
   }
 
   getRowData(action: ActionListItemDto): ActionRowViewModel {
@@ -88,48 +122,34 @@ export class ActionListComponent implements OnInit, OnDestroy {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
       type: action.caseType,
-      dateOfBirth: action.dateOfBirth ? DateFunctions.toCustomLocaleDateString(action.dateOfBirth) : '-',
+      dateOfBirth: action.dateOfBirth,
       email: action.email,
       phone: action.phone || '-',
-      quarantineStart: action.quarantineStart ? DateFunctions.toCustomLocaleDateString(action.quarantineStart) : '-',
+      quarantineStart: action.quarantineStart,
       status: action.status,
       alerts: action.alerts || [],
       caseId: action.caseId,
+      rowHeight: Math.min(50 + action.alerts.length * 9),
     };
   }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
-
-  sendMail(event, to: string) {
-    event.stopPropagation();
-    window.location.href = `mailto:${to}`;
+  onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
+    event.api.setFilterModel({
+      status: [
+        {
+          selected: false,
+          label: 'abgeschlossen',
+        },
+      ],
+    });
+    event.api.onFilterChanged();
   }
 
   onSelect(event) {
-    this.router.navigate([
-      '/health-department/case-detail',
-      event?.selected[0]?.type,
-      event?.selected[0]?.caseId,
-      'actions',
-    ]);
+    this.router.navigate(['/health-department/case-detail', event.node.data.type, event.node.data.caseId, 'actions']);
   }
 
-  onAlertFilterChanged(selectedValues: string[]) {
-    if (selectedValues.length === 0) {
-      this.filteredRows = this.rows;
-      return;
-    }
-    this.filteredRows = this.rows.filter((r) => r.alerts.filter((a) => selectedValues.includes(a)).length > 0);
-  }
-
-  resetFilter() {
-    this.filterSelect.value = null;
-    this.onAlertFilterChanged([]);
-  }
-
-  alertConfigurationFor(alert: Alert) {
-    return getAlertConfigurations().find((c) => c.alert === alert);
+  getRowHeight(params) {
+    return params.data.rowHeight;
   }
 }

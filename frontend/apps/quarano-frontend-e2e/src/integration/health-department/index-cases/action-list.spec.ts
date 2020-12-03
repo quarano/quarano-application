@@ -23,11 +23,13 @@ describe('health-department index cases action-list', () => {
   describe('case list', () => {
     it('should get a list of cases and display in table', () => {
       cy.wait('@allactions').its('status').should('eq', 200);
-      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
+      cy.get('[data-cy="action-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length.greaterThan', 0);
     });
 
     it('should open selected case', () => {
-      cy.get('[data-cy="action-data-table"]').find('datatable-row-wrapper').eq(2).click();
+      cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
       cy.url().should('include', '/health-department/case-detail/');
     });
   });

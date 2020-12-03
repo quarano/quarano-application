@@ -123,9 +123,11 @@ describe('health-department index cases', () => {
     it.skip('should show diary entries', () => {
       cy.location('pathname').should('include', 'health-department/index-cases/case-list');
 
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('exist');
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(1).click();
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length.greaterThan', 0);
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(1).click();
 
       cy.wait('@getCase').its('status').should('eq', 200);
       cy.get('@getCase')
@@ -203,9 +205,11 @@ describe('health-department index cases', () => {
     it.skip('should display message if no diary entries exist', () => {
       cy.location('pathname').should('include', 'health-department/index-cases/case-list');
 
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('exist');
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').should('have.length.greaterThan', 0);
-      cy.get('[data-cy="case-data-table"]').find('datatable-row-wrapper').eq(0).click();
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length.greaterThan', 0);
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
 
       cy.wait('@getCase').its('status').should('eq', 200);
       cy.get('@getCase')

@@ -5,6 +5,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CaseEntityService, ContactListItemDto } from '@qro/health-department/domain';
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
+import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { CheckboxFilterComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
+import { DateFunctions } from '@qro/shared/util-date';
 
 interface RowViewModel {
   firstName: string;
@@ -26,6 +29,14 @@ interface RowViewModel {
 export class ContactListComponent implements OnInit {
   caseName$: Observable<string>;
   rows$: Observable<RowViewModel[]>;
+  defaultColDef: ColDef = {
+    editable: false,
+    filter: 'agTextColumnFilter',
+    sortable: true,
+  };
+  columnDefs: ColDef[] = [];
+  locale = DE_LOCALE;
+  frameworkComponents;
 
   constructor(
     private router: Router,
@@ -33,7 +44,43 @@ export class ContactListComponent implements OnInit {
     private route: ActivatedRoute,
     private apiService: ApiService,
     private entityService: CaseEntityService
-  ) {}
+  ) {
+    this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
+    this.columnDefs = [
+      { headerName: 'Nachname', field: 'lastName', flex: 2 },
+      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      {
+        headerName: 'Med.',
+        field: 'isHealthStaff',
+        width: 100,
+        filter: 'checkboxFilter',
+      },
+      {
+        headerName: 'Ü60',
+        field: 'isSenior',
+        width: 100,
+        filter: 'checkboxFilter',
+      },
+      {
+        headerName: 'Vorerkrank.',
+        field: 'hasPreExistingConditions',
+        width: 150,
+        filter: 'checkboxFilter',
+      },
+      {
+        headerName: 'Letzter Kontakt',
+        field: 'lastContact',
+        filter: 'agDateColumnFilter',
+        valueFormatter: this.lastContactDateFormatter,
+        width: 170,
+      },
+      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
+    ];
+  }
+
+  lastContactDateFormatter(params: { value: Date }) {
+    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
+  }
 
   ngOnInit() {
     const caseDetail$ = combineLatest([
@@ -59,8 +106,8 @@ export class ContactListComponent implements OnInit {
     );
   }
 
-  onSelect(event) {
-    const selectedItem = event?.selected[0] as RowViewModel;
+  onSelect(event: any) {
+    const selectedItem = event.node.data as RowViewModel;
     if (selectedItem?.caseId && selectedItem?.caseType) {
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
       this.router.onSameUrlNavigation = 'reload';
@@ -72,8 +119,8 @@ export class ContactListComponent implements OnInit {
 
   private getRowData(listItem: ContactListItemDto): RowViewModel {
     return {
-      firstName: listItem.firstName,
-      lastName: listItem.lastName,
+      firstName: listItem.firstName || '-',
+      lastName: listItem.lastName || '-',
       status: listItem.caseStatusLabel,
       isHealthStaff: this.getBooleanText(listItem.isHealthStaff),
       isSenior: this.getBooleanText(listItem.isSenior),
@@ -92,5 +139,17 @@ export class ContactListComponent implements OnInit {
       return 'nein';
     }
     return '?';
+  }
+
+  onGridReady(event: { columnApi: ColumnApi }) {
+    event.columnApi.applyColumnState({
+      state: [
+        {
+          colId: 'lastName',
+          sort: 'desc',
+        },
+      ],
+      defaultState: { sort: null },
+    });
   }
 }
