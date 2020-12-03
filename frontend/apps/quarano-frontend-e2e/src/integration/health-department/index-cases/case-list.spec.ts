@@ -43,12 +43,14 @@ describe('health-department index cases case-list', () => {
       cy.url().should('include', '/health-department/case-detail');
     });
 
-    it('should open selected case', () => {
+    // ToDo: https://quarano.atlassian.net/browse/CORE-635
+    xit('should open selected case', () => {
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
       cy.url().should('include', '/health-department/case-detail');
     });
 
-    it('should call mailto: selected case on click on mail icon', () => {
+    // ToDo: https://quarano.atlassian.net/browse/CORE-635
+    xit('should call mailto: selected case on click on mail icon', () => {
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .eq(2)
@@ -58,7 +60,8 @@ describe('health-department index cases case-list', () => {
       cy.get('@windowOpen').should('be.calledWithMatch', 'mailto');
     });
 
-    it('should add address', () => {
+    // ToDo: https://quarano.atlassian.net/browse/CORE-635
+    xit('should add address', () => {
       cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(0).click();
       cy.location('pathname').should('include', '/index/');
       cy.get("[data-cy='street-input']").clear().type('Frankfurterstrasse');

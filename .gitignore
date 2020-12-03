@@ -8,3 +8,4 @@
 *.vs
 frontend/apps/quarano-frontend-e2e/coverage/
 frontend/apps/quarano-frontend-e2e/.nyc_output
+frontend/apps/quarano-frontend-e2e/debug.log
