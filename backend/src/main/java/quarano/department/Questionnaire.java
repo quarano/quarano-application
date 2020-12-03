@@ -1,29 +1,21 @@
 package quarano.department;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.jmolecules.ddd.types.Identifier;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 import quarano.core.QuaranoEntity;
 import quarano.department.Questionnaire.QuestionnaireIdentifier;
 import quarano.masterdata.Symptom;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import org.jmolecules.ddd.types.Identifier;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Oliver Drotbohm
@@ -44,6 +36,7 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 
 	private String familyDoctor;
 	private String guessedOriginOfInfection;
+	private LocalDate guessedDateOfInfection;
 
 	private @Setter(value = AccessLevel.NONE) boolean hasPreExistingConditions;
 	private String hasPreExistingConditionsDescription;

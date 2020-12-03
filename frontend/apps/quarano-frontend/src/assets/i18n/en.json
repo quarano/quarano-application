@@ -235,7 +235,10 @@
 		"WELCHE_SYMPTOME": "Which symptoms did you notice?",
 		"WELCHE_VORERKRANKUNGEN": "Which underlying conditions do you have?",
 		"WIE_UND_ZU_WEM_KONTAKT": "To whom have you had contact and in what form?",
-		"WO_ARBEITEN_SIE": "Where do you work?"
+		"WO_ARBEITEN_SIE": "Where do you work?",
+		"HAUSARZT": "General practitioner",
+		"ORT": "Place of infection",
+		"DATUM": "Date of infection"
 	},
 	"LANDING": {
 		"AKUT_ÄRZTLICHE_BEHANDLUNG": "If you need urgent medical treatment, please contact your general practitioner (GP). During the night and at weekends please contact the GP on-call service (116 117) or in severe cases the emergency room at the clinics. In case of acute emergency do not hesitate to call the ambulance service under the number 112. Before going to see your GP or going to the hospital in person, you must first call and tell them you have COVID-19 and are currently in quarantine.",

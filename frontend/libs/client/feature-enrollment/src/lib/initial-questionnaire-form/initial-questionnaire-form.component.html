@@ -61,7 +61,7 @@
   <div class="question">
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.BEHANDELNDEN_HAUSARZT' | translate }}</mat-label>
     <mat-form-field class="full-width">
-      <input matInput formControlName="familyDoctor" />
+      <input matInput formControlName="familyDoctor" [placeholder]=" 'INITIAL_QUESTIONNAIRE_FORM.HAUSARZT' | translate"/>
       <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.familyDoctor)">
         {{ validationErrorService.getErrorMessage(formGroup.controls.familyDoctor, error) | async }}
       </mat-error>
@@ -69,10 +69,24 @@
   </div>
   <div class="question">
     <mat-label>{{ 'INITIAL_QUESTIONNAIRE_FORM.ORT_DER_ANSTECKUNG' | translate }}</mat-label>
-    <mat-form-field class="full-width">
-      <input matInput formControlName="guessedOriginOfInfection" />
+    <mat-form-field style="width: 70%">
+      <input matInput formControlName="guessedOriginOfInfection" [placeholder]="'INITIAL_QUESTIONNAIRE_FORM.ORT' | translate" />
       <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.guessedOriginOfInfection)">
         {{ validationErrorService.getErrorMessage(formGroup.controls.guessedOriginOfInfection, error) | async }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 30%">
+      <input
+        matInput
+        [max]="today"
+        [matDatepicker]="guessedDateOfInfectionDatePicker"
+        formControlName="guessedDateOfInfection"
+        [placeholder]="'INITIAL_QUESTIONNAIRE_FORM.DATUM' | translate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="guessedDateOfInfectionDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #guessedDateOfInfectionDatePicker></mat-datepicker>
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.guessedDateOfInfection)">
+        {{ validationErrorService.getErrorMessage(formGroup.controls.guessedDateOfInfection, error) | async }}
       </mat-error>
     </mat-form-field>
   </div>

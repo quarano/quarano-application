@@ -1,15 +1,19 @@
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static quarano.department.web.TrackedCaseLinkRelations.*;
-
 import capital.scalable.restdocs.AutoDocumentation;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultHandler;
 import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
@@ -28,23 +32,16 @@ import quarano.tracking.web.TrackedPersonDto;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.client.LinkDiscoverer;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultHandler;
-
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static quarano.department.web.TrackedCaseLinkRelations.CONFIRM;
+import static quarano.department.web.TrackedCaseLinkRelations.ENROLLMENT;
 
 /**
  * @author Oliver Drotbohm
@@ -316,6 +313,8 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		questionnaire.setHasSymptoms(Boolean.TRUE);
 		questionnaire.setSymptoms(Arrays.asList(cough.getId(), neckProblems.getId()));
 		questionnaire.setHasPreExistingConditions(Boolean.FALSE);
+		questionnaire.setGuessedOriginOfInfection("Omas 80. Geburtstag");
+		questionnaire.setGuessedDateOfInfection(LocalDate.now().minusDays(7));
 
 		return questionnaire;
 	}
