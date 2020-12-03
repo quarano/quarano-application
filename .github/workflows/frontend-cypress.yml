@@ -46,11 +46,13 @@ jobs:
 
       - name: Install node_modules
         run: cd frontend && npm install
+
       - name: Start backend and Run e2e tests
         run: |
           export LANG="de_DE.UTF-8"
           export TZ="Europe/Berlin"
-          mvn -B spring-boot:run -PlocalDev -f backend/pom.xml &
+          mvn -B package -PlocalDev -DskipTests -f backend/pom.xml &&
+          java -Dspring.profiles.active=develop -jar backend/target/*.jar &
           sleep 60
           cd frontend && npm run e2e
           kill -2 `lsof -i:8080 -t`

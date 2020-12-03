@@ -39,9 +39,21 @@
 				</file>
 			</activation>
 			<properties>
-				<docker.build.skip>true</docker.build.skip>
 				<spring.profile.active>develop</spring.profile.active>
+				<spring.cloud-version>2020.0.0-M6</spring.cloud-version>
 			</properties>
+
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.cloud</groupId>
+						<artifactId>spring-cloud-dependencies</artifactId>
+						<version>${spring.cloud-version}</version>
+						<type>pom</type>
+						<scope>import</scope>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
 			<dependencies>
 				<dependency>
 					<groupId>com.h2database</groupId>
@@ -51,22 +63,37 @@
 					<groupId>com.icegreen</groupId>
 					<artifactId>greenmail</artifactId>
 				</dependency>
+				<!-- Restart actuator -->
+				<dependency>
+					<groupId>org.springframework.cloud</groupId>
+					<artifactId>spring-cloud-starter</artifactId>
+				</dependency>
 			</dependencies>
-		</profile>
-
-		<profile>
-			<id>develop</id>
-			<properties>
-				<docker.build.skip>false</docker.build.skip>
-				<docker.build.userid>1001</docker.build.userid>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<docker.build.skip>false</docker.build.skip>
-				<docker.build.userid>1001</docker.build.userid>
-			</properties>
+			<build>
+				<!-- Skipping plugin executions if tests are skipped -->
+				<plugins>
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<version>2.1.0</version>
+						<configuration>
+							<skip>${skipTests}</skip>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<skip>${skipTests}</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<repositories>
+				<repository>
+					<id>spring-milestone</id>
+					<url>https://repo.spring.io/milestone</url>
+				</repository>
+			</repositories>
 		</profile>
 
 	</profiles>
@@ -375,9 +402,6 @@
 					<profiles>
 						<profile>${spring.profile.active}</profile>
 					</profiles>
-					<layers>
-						<enabled>true</enabled>
-					</layers>
 					<excludes>
 						<exclude>
 							<groupId>org.springframework.boot</groupId>

@@ -12,7 +12,9 @@ public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.requestMatcher(EndpointRequest.toAnyEndpoint())
-				.authorizeRequests((requests) -> requests.anyRequest().permitAll());
+				.authorizeRequests((requests) -> requests.anyRequest().permitAll())
+				.csrf().disable();
 	}
 }
