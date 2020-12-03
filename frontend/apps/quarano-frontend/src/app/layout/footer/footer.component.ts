@@ -7,8 +7,16 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
   pictureUris = new Map<string, string>([
-    ['https://www.intersoft.de/', 'assets/images/sponsored_by_intersoft.png'],
-    ['https://wirvsvirushackathon.org/', 'assets/images/Logo_Projekt_01_weiss.png'],
+    ['https://beyond-crisis.de/quarano-e-v', 'assets/images/beyondcrisis.png'],
+    [
+      'https://telekomhilft.telekom.de/t5/Unsere-Startups/quarano/ba-p/4651421/jump-to/first-unread-message',
+      'assets/images/Logo_TECHBOOST_Startup.jpg',
+    ],
     ['https://opensource.org/', 'assets/images/open_source.png'],
+    ['https://wirvsvirus.org/solution-builder/', 'assets/images/Solution-Builder.png'],
+    [
+      'https://www.bmbf.de/de/uebersicht-der-bmbf-gefoerderten-projekte-aus-dem-hackathon-11634.html',
+      'assets/images/BMBF.jpg',
+    ],
   ]);
 }
