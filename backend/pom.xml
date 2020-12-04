@@ -95,6 +95,13 @@
 				</repository>
 			</repositories>
 		</profile>
+		
+		<profile>
+			<id>distribute</id>
+			<properties>
+				<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+			</properties>
+		</profile>
 
 	</profiles>
 
