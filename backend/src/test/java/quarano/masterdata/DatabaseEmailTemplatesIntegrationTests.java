@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
  * Integration tests for {@link DatabaseEmailTemplates}.
  *
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 @RequiredArgsConstructor
 @QuaranoIntegrationTest
@@ -26,10 +27,10 @@ public class DatabaseEmailTemplatesIntegrationTests {
 	void addsGermanTranslationIfLocaleIsNotTheDefaultOne() {
 
 		assertThat(templates.expandTemplate(EmailTemplates.Keys.DIARY_REMINDER, Map.of(), Locale.GERMAN))
-				.contains(EmailText.SEPARATOR); // temporary change because of CORE-550
+				.contains(TemplatedWithFallback.SEPARATOR); // temporary change because of CORE-550
 		// .doesNotContain(EmailText.SEPARATOR);
 
 		assertThat(templates.expandTemplate(EmailTemplates.Keys.DIARY_REMINDER, Map.of(), Locale.ENGLISH))
-				.contains(EmailText.SEPARATOR);
+				.contains(TemplatedWithFallback.SEPARATOR);
 	}
 }

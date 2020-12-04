@@ -52,9 +52,10 @@ class DatabaseEmailTemplates implements EmailTemplates {
 
 		// CORE-550: Temporary solution to avoid having to implement a language selection in the frontend at the moment.
 		// With only two languages, e-mails should always contain both.
-		var defaultLocale = i18n.getSupportedLocales().stream().filter(it -> !it.equals(locale)).findFirst()
+		var defaultLocale = i18n.getSupportedLocales().stream()
+				.filter(it -> !it.equals(locale))
+				.findFirst()
 				.orElse(i18n.getDefaultLocale());
-		// var defaultLocale = i18n.getDefaultLocale();
 
 		return texts.findByTextKey(key, locale).orElseThrow()
 				.withDefault(defaultLocale, it -> texts.findByTextKey(it, defaultLocale));
