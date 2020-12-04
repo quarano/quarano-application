@@ -225,12 +225,12 @@
 
 		<dependency>
 			<groupId>org.jmolecules</groupId>
-            <artifactId>jmolecules-ddd</artifactId>
-            <version>${jmolecules.version}</version>
+			<artifactId>jmolecules-ddd</artifactId>
+			<version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jmolecules</groupId>
-            <artifactId>jmolecules-events</artifactId>
+			<artifactId>jmolecules-events</artifactId>
 			<version>${jmolecules.version}</version>
 		</dependency>
 		<dependency>
@@ -298,11 +298,11 @@
 		</dependency>
 
 		<!-- For CSV import/export -->
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>${opencsv.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
+		</dependency>
 
 		<!-- Development-only dependencies -->
 
@@ -533,14 +533,13 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>
-								${project.build.outputDirectory}/static/docs
-							</outputDirectory>
+							<outputDirectory>${project.build.outputDirectory}/static/docs</outputDirectory>
 							<resources>
 								<resource>
-									<directory>
-										${project.build.directory}/generated-docs
-									</directory>
+									<directory>${project.build.directory}/generated-docs	</directory>
+									<excludes>
+										<exclude>**/.*/**</exclude>
+									</excludes>
 								</resource>
 							</resources>
 						</configuration>
@@ -549,7 +548,6 @@
 			</plugin>
 
 		</plugins>
-
 
 	</build>
 
