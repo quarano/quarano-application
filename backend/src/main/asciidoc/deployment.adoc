@@ -4,7 +4,25 @@
 
 === Building a deployable JAR
 
+[source, bash]
+----
+$ ./mvnw clean package
+----
+
+The Spring Boot plugin contained in the build instruction will create a runnable artifact that can just be run with `java -jar target/*.jar`.
+
 === Building a Docker container
+
+To build a Docker container, you have to have Docker running on your machine.
+If that's set, run the following command:
+
+[source, bash]
+----
+$ ./mvnw clean spring-boot:build-image
+----
+
+That building a layered Docker image based on Paketo buildpacks.
+More details on that https://spring.io/blog/2020/01/27/creating-docker-images-with-spring-boot-2-3-0-m1[here].
 
 == Spring profiles
 
