@@ -2,6 +2,8 @@
 = Quarano REST API
 :snippets: ../../../target/generated-snippets
 
+This section contains the documentation for the Quarano REST API for tracking people, health department staff, administrators and third-party integrators.
+
 == Fundamentals
 
 === Use of hypermedia
@@ -118,4 +120,39 @@ include::{snippets}/frontend-texts/get-frontend-texts/response-body.adoc[]
 The request takes the following attributes. Without parameters all frontend texts are returned.:
 
 include::{snippets}/frontend-texts/get-frontend-texts/auto-request-parameters.adoc[]
+
+== Actuators
+
+Quarano uses Spring Boot actuators to expose technical and health information about the running instance.
+The most interesting ones are:
+
+* `/actuator/health`
+* `/actuator/info`
+
+=== Development APIs
+
+When an application is built using the `localDev` profile, it can be run with the `develop` profile activated and will expose additional actuator endpoints.
+One use case for those APIs is resetting the application during end-to-end integration tests.
+The following HTTP resources come in handy for that:
+
+* `GET /actuator/health/readiness` -- Exposing whether the application is ready to serve requests.
+* `POST /actuator/restart` -- Triggering an application restart that will reset the database to it's original state containing demo data.
+
+NOTE: The latter actuator is *only* available if the application is built and run with the `localDev` and `develop` Spring profile.
+Actual deployments will never actually activate those profiles so that we can't trigger that database reset by accident.
+
+To prepare a Quarano instance for such activities build and start the application as follows:
+
+[source, bash]
+----
+# Build the JAR skipping the tests for speedup
+$ ./mvnw clean package -PlocalDev -DskipTests
+…
+# Run the app with the develop profile enabled (in-memory database and email server enabled)
+$ java -Dspring.profiles.active=develop target/*.jar
+----
+
+A client could then trigger an HTTP POST to `/actuator/restart` (you need an authentication token for that) and then poll `/actuator/health/readiness` until `$.status` in the JSON response returns `UP`.
+It can then proceed with requests that assume the default demo data state.
+Repeat as needed after operations that have changed the application state in way that it'd taint further interactions.
 
