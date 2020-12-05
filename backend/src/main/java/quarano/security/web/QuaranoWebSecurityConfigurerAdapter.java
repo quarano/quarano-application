@@ -15,6 +15,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +34,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * @author Oliver Drotbohm
  */
 @Slf4j
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
@@ -91,7 +94,8 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	}
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
+	@Primary
+	public CorsConfigurationSource corsConfigurationSource() {
 
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOriginPatterns(this.configuration.getAllowedOrigins());
