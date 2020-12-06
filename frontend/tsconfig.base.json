@@ -69,7 +69,9 @@
       "@qro/shared/ui-static-pages": ["libs/shared/ui-static-pages/src/index.ts"],
       "@qro/health-department/feature-export": ["libs/health-department/feature-export/src/index.ts"],
       "@qro/client/ui-forgotten-contact-dialog": ["libs/client/ui-forgotten-contact-dialog/src/index.ts"],
-      "@qro/shared/ui-ag-grid": ["libs/shared/ui-ag-grid/src/index.ts"]
+      "@qro/shared/ui-ag-grid": ["libs/shared/ui-ag-grid/src/index.ts"],
+      "@qro/general/domain": ["libs/general/domain/src/index.ts"],
+      "@qro/general/api": ["libs/general/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -13,9 +13,19 @@
     </ng-container>
   </ng-container>
 
-  <button data-cy="profile-user-button" mat-button [matMenuTriggerFor]="profilemenu">
+  <button mat-icon-button [matMenuTriggerFor]="infomenu" (menuOpened)="loadVersion()">
+    <mat-icon style="color: white">info</mat-icon>
+  </button>
+  <mat-menu #infomenu="matMenu"
+    ><div style="padding: 0 12px" *ngIf="version$ | async as version">
+      <p style="margin: 12px 0">{{ version.build.version }}</p>
+      <p style="margin: 12px 0">{{ version.git.commit.id }}</p>
+    </div></mat-menu
+  >
+
+  <button data-cy="profile-user-button" mat-button [matMenuTriggerFor]="profilemenu" style="padding: 0">
     <span>{{ currentUserName$ | async }} </span>
-    <mat-icon style="color: white;">arrow_drop_down</mat-icon>
+    <mat-icon style="color: white">arrow_drop_down</mat-icon>
   </button>
   <mat-menu #profilemenu="matMenu">
     <ng-container *ngIf="!userService.isHealthDepartmentUser">
@@ -50,7 +60,7 @@
     <button *ngIf="selectedLanguage$ | async as selectedLanguage" mat-button [matMenuTriggerFor]="languages">
       <i [class]="'language-icon fa-fw flag:' + selectedLanguage.flagIconKey"></i>
       <span>{{ selectedLanguage.name }}</span>
-      <mat-icon style="color: white;">arrow_drop_down</mat-icon>
+      <mat-icon style="color: white">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #languages="matMenu">
       <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguageAnonymous(lang)">

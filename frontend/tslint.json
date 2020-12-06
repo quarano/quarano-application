@@ -58,7 +58,8 @@
               "scope:auth",
               "scope:client",
               "scope:administration",
-              "scope:shared"
+              "scope:shared",
+              "scope:general"
             ]
           },
           {

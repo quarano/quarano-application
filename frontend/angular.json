@@ -2022,6 +2022,60 @@
           "style": "scss"
         }
       }
+    },
+    "general-domain": {
+      "projectType": "library",
+      "root": "libs/general/domain",
+      "sourceRoot": "libs/general/domain/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/general/domain/tsconfig.lib.json", "libs/general/domain/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/general/domain/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/general/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "general-api": {
+      "projectType": "library",
+      "root": "libs/general/api",
+      "sourceRoot": "libs/general/api/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/general/api/tsconfig.lib.json", "libs/general/api/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/general/api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/general/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {
