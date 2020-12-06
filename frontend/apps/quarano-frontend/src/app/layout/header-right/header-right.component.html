@@ -2,60 +2,48 @@
   <button mat-icon-button [matMenuTriggerFor]="infomenu" (menuOpened)="loadVersion()">
     <mat-icon style="color: white">info</mat-icon>
   </button>
-  <mat-menu #infomenu="matMenu"
-    ><div class="info-menu-container" *ngIf="version$ | async as version">
-      <div>{{ 'HEADER_RIGHT.VERSION' | translate }}</div>
-      <div style="text-align: right">{{ version.build.version }} ({{ version.git.commit.id }})</div>
-    </div></mat-menu
-  >
+  <mat-menu #infomenu="matMenu"><ng-container *ngTemplateOutlet="VERSION_DIV"></ng-container></mat-menu>
 
   <ng-container *ngIf="userService.isLoggedIn$ | async; else NOT_LOGGED_IN">
-    <ng-container *ngIf="!userService.isHealthDepartmentUser">
-      <ng-container *ngIf="(clientStore.enrollmentStatus$ | async)?.complete">
-        <button
-          *ngIf="healthDepartment$ | async as healthDepartment"
-          mat-stroked-button
-          data-cy="contact-button"
-          class="contact-button"
-          (click)="showContact(healthDepartment)"
-        >
-          {{ 'HEADER_RIGHT.KONTAKT_ZUM_AMT' | translate }}
-        </button>
-      </ng-container>
-    </ng-container>
+    <ng-container *ngTemplateOutlet="CONTACT_BUTTON"></ng-container>
 
     <button data-cy="profile-user-button" mat-button [matMenuTriggerFor]="profilemenu" style="padding: 0">
       <span>{{ currentUserName$ | async }} </span>
       <mat-icon style="color: white">arrow_drop_down</mat-icon>
     </button>
     <mat-menu #profilemenu="matMenu">
-      <ng-container *ngIf="!userService.isHealthDepartmentUser">
-        <button *ngIf="selectedLanguage$ | async as selectedLanguage" mat-menu-item [matMenuTriggerFor]="languages">
-          <i [class]="'language-icon fa-fw flag:' + selectedLanguage.flagIconKey"></i> {{ selectedLanguage.name }}
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
-        <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
-          <mat-icon>person</mat-icon> {{ 'HEADER_RIGHT.BENUTZERPROFIL' | translate }}
-        </button>
-      </ng-container>
-
-      <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
-        <mat-icon>vpn_key</mat-icon> {{ 'HEADER_RIGHT.PASSWORT_ÄNDERN' | translate }}
-      </button>
-
-      <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon> {{ 'HEADER_RIGHT.ABMELDEN' | translate }}
-      </button>
-    </mat-menu>
-
-    <mat-menu #languages="matMenu">
-      <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguageAuthenticated(lang)">
-        <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
-      </button>
+      <ng-container *ngTemplateOutlet="PROFILE_MENU_CONTENT"></ng-container>
     </mat-menu>
   </ng-container>
+</div>
+
+<div class="mobile-container">
+  <button mat-icon-button [matMenuTriggerFor]="mobilemenu" (menuOpened)="loadVersion()">
+    <mat-icon style="color: white">account_circle</mat-icon>
+  </button>
+  <mat-menu #mobilemenu="matMenu">
+    <ng-container *ngIf="userService.isLoggedIn$ | async; else NOT_LOGGED_IN">
+      <button mat-menu-item disabled>{{ currentUserName$ | async }}</button>
+
+      <mat-divider></mat-divider>
+
+      <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
+        <button
+          *ngIf="healthDepartment$ | async as healthDepartment"
+          mat-menu-item
+          data-cy="contact-button"
+          class="contact-button"
+          (click)="showContact(healthDepartment)"
+        >
+          <mat-icon>perm_phone_msg</mat-icon> {{ 'HEADER_RIGHT.KONTAKT_ZUM_AMT' | translate }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngTemplateOutlet="PROFILE_MENU_CONTENT"></ng-container>
+    </ng-container>
+    <mat-divider></mat-divider>
+    <ng-container *ngTemplateOutlet="VERSION_DIV"></ng-container>
+  </mat-menu>
 </div>
 
 <ng-template #NOT_LOGGED_IN>
@@ -69,4 +57,52 @@
       <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
     </button>
   </mat-menu>
+</ng-template>
+
+<ng-template #VERSION_DIV>
+  <div class="info-menu-container" *ngIf="version$ | async as version">
+    <div style="width: 30%">{{ 'HEADER_RIGHT.VERSION' | translate }}</div>
+    <div style="text-align: right">{{ version.build.version }} ({{ version.git.commit.id }})</div>
+  </div>
+</ng-template>
+
+<ng-template #CONTACT_BUTTON>
+  <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
+    <button
+      *ngIf="healthDepartment$ | async as healthDepartment"
+      mat-stroked-button
+      data-cy="contact-button"
+      class="contact-button"
+      (click)="showContact(healthDepartment)"
+    >
+      {{ 'HEADER_RIGHT.KONTAKT_ZUM_AMT' | translate }}
+    </button>
+  </ng-container>
+</ng-template>
+
+<ng-template #PROFILE_MENU_CONTENT>
+  <ng-container *ngIf="!userService.isHealthDepartmentUser">
+    <button *ngIf="selectedLanguage$ | async as selectedLanguage" mat-menu-item [matMenuTriggerFor]="languages">
+      <i [class]="'language-icon fa-fw flag:' + selectedLanguage.flagIconKey"></i> {{ selectedLanguage.name }}
+    </button>
+    <mat-menu #languages="matMenu">
+      <button mat-menu-item *ngFor="let lang of languages$ | async" (click)="changeLanguageAuthenticated(lang)">
+        <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
+      </button>
+    </mat-menu>
+  </ng-container>
+
+  <ng-container *ngIf="!userService.isHealthDepartmentUser && (clientStore.enrollmentStatus$ | async)?.complete">
+    <button data-cy="profile-button" mat-menu-item [routerLink]="['/client/profile']">
+      <mat-icon>person</mat-icon> {{ 'HEADER_RIGHT.BENUTZERPROFIL' | translate }}
+    </button>
+  </ng-container>
+
+  <button data-cy="change-password-button" mat-menu-item [routerLink]="['/auth/change-password']">
+    <mat-icon>vpn_key</mat-icon> {{ 'HEADER_RIGHT.PASSWORT_ÄNDERN' | translate }}
+  </button>
+
+  <button data-cy="logout-button" id="tenant-admin-logout" mat-menu-item (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon> {{ 'HEADER_RIGHT.ABMELDEN' | translate }}
+  </button>
 </ng-template>

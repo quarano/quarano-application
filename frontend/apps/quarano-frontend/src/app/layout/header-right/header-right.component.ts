@@ -66,4 +66,8 @@ export class HeaderRightComponent implements OnInit {
   changeLanguageAnonymous(language: ILanguageConfig) {
     this.store.dispatch(LanguageActions.languageSelectedAnonymousUser({ selectedLanguage: language }));
   }
+
+  isMobile() {
+    return window.innerWidth <= 993;
+  }
 }
