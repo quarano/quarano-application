@@ -1,6 +1,7 @@
 @import '../../../../../../libs/shared/ui-styles/src/lib/variables';
 
-.container {
+.container,
+.mobile-container {
   display: flex;
   align-items: center;
   align-content: center;
@@ -18,12 +19,12 @@
       max-height: 32px;
       line-height: 18px;
     }
-  }
-}
 
-span {
-  color: white;
-  font-size: large;
+    span {
+      color: white;
+      font-size: large;
+    }
+  }
 }
 
 .language-icon {
@@ -31,14 +32,22 @@ span {
   vertical-align: middle;
 }
 
-@media all and (max-width: $break-sm) {
-  .container {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+.info-menu-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 12px;
+  min-height: 48px;
+}
 
-    button:not(:last-of-type) {
-      margin-bottom: 10px;
-    }
+@media all and (max-width: $break-lg) {
+  .container {
+    display: none;
+  }
+}
+
+@media all and (min-width: 993px) {
+  .mobile-container {
+    display: none;
   }
 }

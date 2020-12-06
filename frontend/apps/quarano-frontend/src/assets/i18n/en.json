@@ -33,6 +33,9 @@
 		"WEITER": "Continue",
 		"ZURÜCK": "Back"
 	},
+	"CASE_DETAIL": {
+		"DIARY": "Diary"
+	},
 	"CHANGE_PASSWORD": {
 		"BISHERIGES_PASSWORT": "Previous password",
 		"NEUES_PASSWORT": "New password",
@@ -103,6 +106,13 @@
 		"KONTAKT_NACHTRAGEN": "Add contact",
 		"MORGENS": "Morning",
 		"SYMPTOMTAGEBUCH": "Symptom diary"
+	},
+	"DIARY_ENTRIES_LIST": {
+		"ABENDS": "Evening",
+		"DATUM": "Date",
+		"KEINE_EINTRAEGE_VORHANDEN": "No entries",
+		"KEIN_EINTRAG_VORHANDEN": "No entry",
+		"MORGENS": "Morning"
 	},
 	"DIARY_ENTRY": {
 		"ABBRECHEN": "Cancel",
@@ -198,7 +208,8 @@
 		"ABMELDEN": "Log out",
 		"BENUTZERPROFIL": "User profile",
 		"KONTAKT_ZUM_AMT": "Contact health authority",
-		"PASSWORT_ÄNDERN": "Change password"
+		"PASSWORT_ÄNDERN": "Change password",
+		"VERSION": "Version"
 	},
 	"HEALTH_DEPARTMENT_ADDRESS": {
 		"ANRUFEN": "Call",
@@ -366,15 +377,5 @@
 		"ZUM_TAGEBUCH": "To the diary",
 		"ZU_DEN_INDEXFÄLLEN": "To the index cases",
 		"ZU_DEN_KONTAKTPERSONEN": "To the contacts"
-	},
-  "CASE_DETAIL": {
-    "DIARY": "Diary"
-  },
-  "DIARY_ENTRIES_LIST" : {
-    "MORGENS": "Morning",
-    "ABENDS": "Evening",
-    "DATUM": "Date",
-    "KEIN_EINTRAG_VORHANDEN": "No entry",
-    "KEINE_EINTRAEGE_VORHANDEN": "No entries"
-  }
+	}
 }

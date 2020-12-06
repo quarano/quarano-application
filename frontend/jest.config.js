@@ -54,5 +54,7 @@ module.exports = {
     '<rootDir>/libs/health-department/feature-export',
     '<rootDir>/libs/client/ui-forgotten-contact-dialog',
     '<rootDir>/libs/shared/ag-grid',
+    '<rootDir>/libs/general/domain',
+    '<rootDir>/libs/general/api',
   ],
 };

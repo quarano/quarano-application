@@ -184,6 +184,12 @@
     },
     "shared-ui-ag-grid": {
       "tags": ["scope:shared", "type:ui"]
+    },
+    "general-domain": {
+      "tags": ["scope:general", "type:domain"]
+    },
+    "general-api": {
+      "tags": ["scope:general", "type:api"]
     }
   },
   "affected": {
