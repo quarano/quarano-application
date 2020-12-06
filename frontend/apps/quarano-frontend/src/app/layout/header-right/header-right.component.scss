@@ -19,16 +19,23 @@
       line-height: 18px;
     }
   }
-}
 
-span {
-  color: white;
-  font-size: large;
+  span {
+    color: white;
+    font-size: large;
+  }
 }
 
 .language-icon {
   margin-right: 19px;
   vertical-align: middle;
+}
+
+.info-menu-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 12px;
 }
 
 @media all and (max-width: $break-sm) {

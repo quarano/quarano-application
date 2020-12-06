@@ -33,6 +33,9 @@
 		"WEITER": "Weiter",
 		"ZURÜCK": "Zurück"
 	},
+	"CASE_DETAIL": {
+		"DIARY": "Tagebuch"
+	},
 	"CHANGE_PASSWORD": {
 		"BISHERIGES_PASSWORT": "Bisheriges Passwort",
 		"NEUES_PASSWORT": "Neues Passwort",
@@ -103,6 +106,13 @@
 		"KONTAKT_NACHTRAGEN": "Kontakt nachtragen",
 		"MORGENS": "Morgens",
 		"SYMPTOMTAGEBUCH": "Symptomtagebuch"
+	},
+	"DIARY_ENTRIES_LIST": {
+		"ABENDS": "Abends",
+		"DATUM": "Datum",
+		"KEINE_EINTRAEGE_VORHANDEN": "Keine Einträge vorhanden",
+		"KEIN_EINTRAG_VORHANDEN": "Kein Eintrag vorhanden",
+		"MORGENS": "Morgens"
 	},
 	"DIARY_ENTRY": {
 		"ABBRECHEN": "Abbrechen",
@@ -198,7 +208,8 @@
 		"ABMELDEN": "Abmelden",
 		"BENUTZERPROFIL": "Benutzerprofil",
 		"KONTAKT_ZUM_AMT": "Kontakt zum Amt",
-		"PASSWORT_ÄNDERN": "Passwort ändern"
+		"PASSWORT_ÄNDERN": "Passwort ändern",
+		"VERSION": "Version"
 	},
 	"HEALTH_DEPARTMENT_ADDRESS": {
 		"ANRUFEN": "Anrufen",
@@ -366,15 +377,5 @@
 		"ZUM_TAGEBUCH": "Zum Tagebuch",
 		"ZU_DEN_INDEXFÄLLEN": "Zu den Indexfällen",
 		"ZU_DEN_KONTAKTPERSONEN": "Zu den Kontaktpersonen"
-	},
-  "CASE_DETAIL": {
-    "DIARY": "Tagebuch"
-  },
-  "DIARY_ENTRIES_LIST": {
-    "MORGENS": "Morgens",
-    "ABENDS": "Abends",
-    "DATUM": "Datum",
-    "KEIN_EINTRAG_VORHANDEN": "Kein Eintrag vorhanden",
-    "KEINE_EINTRAEGE_VORHANDEN": "Keine Einträge vorhanden"
-  }
+	}
 }
