@@ -128,7 +128,7 @@ export class CaseListComponent implements OnInit {
       state: [
         {
           colId: 'lastName',
-          sort: 'desc',
+          sort: 'asc',
         },
       ],
       defaultState: { sort: null },
