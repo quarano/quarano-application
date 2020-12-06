@@ -1,5 +1,6 @@
+import { VersionService } from '@qro/general/api';
 import { provideMockStore } from '@ngrx/store/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HeaderRightComponent } from './header-right.component';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,25 +15,28 @@ describe('HeaderRightComponent', () => {
   let component: HeaderRightComponent;
   let fixture: ComponentFixture<HeaderRightComponent>;
 
-  beforeEach(async(() => {
-    const userService = {
-      logout: () => {},
-    } as any;
-    userService.isLoggedIn$ = of();
+  beforeEach(
+    waitForAsync(() => {
+      const userService = {
+        logout: () => {},
+      } as any;
+      userService.isLoggedIn$ = of();
 
-    TestBed.configureTestingModule({
-      imports: [MatMenuModule, TranslateTestingModule],
-      declarations: [HeaderRightComponent],
-      providers: [
-        { provide: UserService, useValue: userService },
-        { provide: MatDialog, useValue: {} },
-        { provide: HealthDepartmentService, useValue: {} },
-        { provide: ClientStore, useValue: {} },
-        provideMockStore({}),
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [MatMenuModule, TranslateTestingModule],
+        declarations: [HeaderRightComponent],
+        providers: [
+          { provide: UserService, useValue: userService },
+          { provide: MatDialog, useValue: {} },
+          { provide: HealthDepartmentService, useValue: {} },
+          { provide: ClientStore, useValue: {} },
+          { provide: VersionService, useValue: {} },
+          provideMockStore({}),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderRightComponent);

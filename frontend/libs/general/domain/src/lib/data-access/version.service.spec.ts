@@ -1,12 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
+import { API_URL } from '@qro/shared/util-data-access';
 import { VersionService } from './version.service';
 
 describe('Service: Version', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [VersionService],
+      imports: [HttpClientTestingModule],
+      providers: [VersionService, { provide: API_URL, useValue: '' }],
     });
   });
 
