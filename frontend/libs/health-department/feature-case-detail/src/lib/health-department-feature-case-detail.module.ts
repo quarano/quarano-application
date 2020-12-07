@@ -26,6 +26,7 @@ import { AnomalyComponent } from './anomaly/anomaly.component';
 import { ActionComponent } from './action/action.component';
 import { DiaryEntriesListComponent } from './diary-entries-list/diary-entries-list.component';
 import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-entries-list-item.component';
+import { EventListComponent } from './event-list/event-list.component';
 
 const routes: Routes = [
   {
@@ -88,6 +89,10 @@ const routes: Routes = [
         path: 'diary',
         component: DiaryEntriesListComponent,
       },
+      {
+        path: 'events',
+        component: EventListComponent,
+      },
     ],
   },
 ];
@@ -106,6 +111,7 @@ const routes: Routes = [
     ContactListComponent,
     DiaryEntriesListComponent,
     DiaryEntriesListItemComponent,
+    EventListComponent,
   ],
   imports: [
     CommonModule,

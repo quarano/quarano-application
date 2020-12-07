@@ -34,7 +34,8 @@
 		"ZURÜCK": "Zurück"
 	},
 	"CASE_DETAIL": {
-		"DIARY": "Tagebuch"
+		"DIARY": "Tagebuch",
+    "EVENTS": "Ereignisse"
 	},
 	"CHANGE_PASSWORD": {
 		"BISHERIGES_PASSWORT": "Bisheriges Passwort",
