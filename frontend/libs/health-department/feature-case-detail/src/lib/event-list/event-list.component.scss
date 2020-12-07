@@ -1,0 +1,11 @@
+.events-grid {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, auto);
+}
+
+.new-event-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
