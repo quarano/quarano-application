@@ -2,7 +2,7 @@
   *ngIf="clientStore.enrollmentStatus$ | async as enrollmentStatus"
   [linear]="true"
   #stepper
-  style="position: relative;"
+  style="position: relative"
   (selectionChange)="onTabChanged($event, enrollmentStatus)"
 >
   <ng-template matStepperIcon="edit">
@@ -58,7 +58,7 @@
     </div>
     <div class="info-text">
       <h2>
-        {{ 'BASIC_DATA.KONTAKTPERSONEN_DER_KATEGORIE_I' | translate }}
+        {{ 'BASIC_DATA.BEISPIELHAFTE_KONSTELLATIONEN' | translate }}
       </h2>
       <ul>
         <li>
@@ -67,9 +67,12 @@
         <li>
           {{ 'BASIC_DATA.PERSONEN_MIT_DIREKTEM_KONTAKT' | translate }}
         </li>
-        <li>{{ 'BASIC_DATA.PERSONEN_DIE_AEROSOLBILDENDEN_MASSNAHMEN' | translate }}</li>
+        <li>{{ 'BASIC_DATA.PERSONEN_DIE_MIT_HOHER_WAHRSCHEINLICHKEIT' | translate }}</li>
         <li>
-          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL' | translate }}
+          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL_KONTAKT' | translate }}
+        </li>
+        <li>
+          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL_RAUM' | translate }}
         </li>
       </ul>
     </div>
@@ -87,7 +90,7 @@
           (added)="onContactAdded(date, $event)"
           (removed)="onContactRemoved(date, $event)"
         ></qro-multiple-contact-autocomplete>
-        <div style="display: flex; flex-direction: row; align-items: center;">
+        <div style="display: flex; flex-direction: row; align-items: center">
           <span class="text-muted">{{ 'BASIC_DATA.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
           <button
             mat-button
@@ -95,7 +98,7 @@
             type="button"
             (click)="openContactDialog(date)"
             class="p-2 mr-0"
-            style="line-height: normal;"
+            style="line-height: normal"
           >
             {{ 'BASIC_DATA.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
           </button>
