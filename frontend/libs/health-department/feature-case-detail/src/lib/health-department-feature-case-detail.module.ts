@@ -27,6 +27,7 @@ import { ActionComponent } from './action/action.component';
 import { DiaryEntriesListComponent } from './diary-entries-list/diary-entries-list.component';
 import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-entries-list-item.component';
 import { EventListComponent } from './event-list/event-list.component';
+import { EventCardComponent } from './event-card/event-card.component';
 
 const routes: Routes = [
   {
@@ -112,6 +113,7 @@ const routes: Routes = [
     DiaryEntriesListComponent,
     DiaryEntriesListItemComponent,
     EventListComponent,
+    EventCardComponent,
   ],
   imports: [
     CommonModule,
