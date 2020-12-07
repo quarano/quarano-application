@@ -1,4 +1,4 @@
-package quarano.department.activation;
+package quarano.department;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,21 +11,21 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
  * @author Oliver Drotbohm
+ * @author Jens Kutzsche
  */
 @ConstructorBinding
-@ConfigurationProperties("quarano.account-activation")
+@ConfigurationProperties("quarano.registration")
 @RequiredArgsConstructor
-public class ActivationCodeProperties {
+public class RegistrationProperties {
 
 	private final Duration expiration;
 
 	/**
-	 * When a new contact person is created, an automatic notification is sent to them. With this switch it can be
-	 * determined whether an activation code is also generated.
-	 * 
+	 * Whether to automatically initiate a new registration for contact cases on creation.
+	 *
 	 * @since 1.4
 	 */
-	private final @Getter boolean createAutomaticForNewContacts;
+	private final @Getter boolean automaticallyInitiateRegistrationForContactCases;
 
 	public LocalDateTime getExpiryDate() {
 		return LocalDateTime.now().plus(expiration);

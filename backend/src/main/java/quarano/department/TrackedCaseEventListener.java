@@ -9,7 +9,6 @@ import quarano.core.EmailTemplates.Keys;
 import quarano.department.TrackedCase.CaseConvertedToIndex;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.activation.ActivationCode;
-import quarano.department.activation.ActivationCodeProperties;
 import quarano.department.activation.ActivationCodeService;
 
 import java.util.Map;
@@ -54,7 +53,7 @@ class TrackedCaseEventListener {
 		private final @NonNull TrackedCaseRepository cases;
 		private final @NonNull MessageSourceAccessor messages;
 		private final @NonNull ActivationCodeService activationCodes;
-		private final @NonNull ActivationCodeProperties activationProperties;
+		private final @NonNull RegistrationProperties registrationProperties;
 
 		private boolean initializationFinished = false;
 
@@ -86,7 +85,7 @@ class TrackedCaseEventListener {
 
 			cases.save(emailSender.testConnection()
 					.flatMap(__ -> {
-						return activationProperties.isCreateAutomaticForNewContacts()
+						return registrationProperties.isAutomaticallyInitiateRegistrationForContactCases()
 								? registration.initiateRegistration(trackedCase)
 								: Try.success(null);
 					})

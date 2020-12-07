@@ -4,6 +4,7 @@ import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Department.DepartmentIdentifier;
+import quarano.department.RegistrationProperties;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -23,7 +24,7 @@ import org.springframework.util.Assert;
 public class ActivationCodeService {
 
 	private final @NonNull ActivationCodeRepository activationCodes;
-	private final @NonNull ActivationCodeProperties configuration;
+	private final @NonNull RegistrationProperties configuration;
 
 	/**
 	 * Creates a new {@link ActivationCode} for the {@link TrackedPerson} with the given identifier and department.

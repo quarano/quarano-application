@@ -15,7 +15,6 @@ import quarano.core.EmailSender.AbstractTemplatedEmail;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.department.activation.ActivationCode;
-import quarano.department.activation.ActivationCodeProperties;
 import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson;
 
@@ -33,21 +32,24 @@ import org.mockito.Mock;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.support.MessageSourceAccessor;
 
+/**
+ * @author Jens Kutzsche
+ * @author Oliver Drotbohm
+ */
 @QuaranoUnitTest
 @TestInstance(Lifecycle.PER_METHOD)
-public class CreateActivationCodeForNewContactCaseTests {
+public class CreateRegistrationForNewContactCaseUnitTests {
 
 	private @Mock EmailSender emailSender;
 	private @Mock RegistrationManagement registration;
 	private @Mock TrackedCaseRepository cases;
 	private @Mock MessageSourceAccessor messages;
 	private @Mock ActivationCodeService activationCodes;
-	private @Mock ActivationCodeProperties activationProperties;
+	private @Mock RegistrationProperties activationProperties;
 
 	private @InjectMocks EmailSendingEvents events;
 
-	@Captor
-	ArgumentCaptor<AbstractTemplatedEmail> templateCaptor;
+	@Captor ArgumentCaptor<AbstractTemplatedEmail> templateCaptor;
 
 	@BeforeEach
 	public void initTests() {
@@ -62,7 +64,7 @@ public class CreateActivationCodeForNewContactCaseTests {
 
 		var trackedCase = trackedCase();
 
-		when(activationProperties.isCreateAutomaticForNewContacts()).thenReturn(false);
+		when(activationProperties.isAutomaticallyInitiateRegistrationForContactCases()).thenReturn(false);
 
 		events.on(CaseCreated.of(trackedCase));
 
@@ -80,18 +82,17 @@ public class CreateActivationCodeForNewContactCaseTests {
 		var code = new ActivationCode(LocalDateTime.now(), trackedCase.getTrackedPerson().getId(),
 				trackedCase.getDepartment().getId());
 
-		when(activationProperties.isCreateAutomaticForNewContacts()).thenReturn(true);
+		when(activationProperties.isAutomaticallyInitiateRegistrationForContactCases()).thenReturn(true);
 		when(registration.initiateRegistration(trackedCase)).thenReturn(Try.success(code));
 		when(emailSender.sendMail(any())).thenReturn(Try.success(null));
 
 		events.on(CaseCreated.of(trackedCase));
 
 		verify(registration).initiateRegistration(trackedCase);
-		verify(activationCodes).codeMailed(code.getId());
-
 		verify(emailSender).sendMail(templateCaptor.capture());
 
-		assertThat(templateCaptor.getValue().getPlaceholders()).extractingByKey("activationCode")
+		assertThat(templateCaptor.getValue().getPlaceholders())
+				.extractingByKey("activationCode")
 				.isEqualTo(code.getId().toString());
 	}
 
