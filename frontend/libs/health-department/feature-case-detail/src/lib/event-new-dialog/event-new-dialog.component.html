@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Neues Ereignis anlegen</h2>
+
+<mat-dialog-content>
+  <form class="example-form">
+    <div class="event-sub-content">
+      <mat-form-field class="example-full-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Datum</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Adresse</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+    </div>
+
+    <div class="event-sub-content">
+      <mat-form-field class="example-full-width">
+        <mat-label>Vorgangsnummer</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Bekannte Teilnehmerzahl</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Ansprechpartner</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Zusaetzliche Beschreibung</mat-label>
+        <input matInput placeholder="Name" />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Anlegen</button>
+</mat-dialog-actions>
