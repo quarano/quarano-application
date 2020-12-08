@@ -4,33 +4,48 @@
 
 This section contains the documentation for the Quarano REST API for tracking people, health department staff, administrators and third-party integrators.
 
+[[fundamentals]]
 == Fundamentals
 
+[[fundamentals.hypermedia]]
 === Use of hypermedia
 
 The Quarano REST API makes use of hypermedia elements in its responses to guide clients through business processes, indicate the availability of related resources and actions.
 Clients are encouraged to make use of those control to signal that availability to users via UI controls and use the metadata exposed via the API to avoid semantic coupling to the representations.
 The media type we use as foundation of our representations is http://stateless.co/hal_specification.html[HAL].
 
+[[fundamentals.status-codes]]
 === Status codes
 
+[[fundamentals.error-responses]]
 === Error responses
 
 TODO
 
+[[authentication]]
 == Authentication
 
 The Quarano REST API uses JWT token based authentication.
-An authenticating HTTP resource is available via `/api/login`.
+To authenticate with Quarano, access the API root resource and follow the `login` link returned.
+
+include::{snippets}/root-resource/access-root-resource/curl-request.adoc[]
+
+The login resource takes a `username` and `password` field
 
 include::{snippets}/getting-started/login/curl-request.adoc[]
 
-A successful login will contain a simple `next` link to point to which resource access to gather information about the currently logged in user, navigation options, etc.
+A successful login will contain an `X-Auth-Token` header.
+
+include::{snippets}/getting-started/login/http-response.adoc[]
+
+That token can be used to authenticate subsequent requests by including an `Authorization` header with the value `Bearer: $TOKEN`.
+Also, the response will contain a simple `next` link to point to which resource access to gather information about the currently logged in user, navigation options, etc.
 However, in case a password is expired, there'll also appear a `change-password` link pointing to a resource to change the password to a new one.
 At this point, clients should not allow any other operation than changing the password.
 
 include::{snippets}/password-expired/login/links.adoc[]
 
+[[authentication.error-scenarios]]
 === Error scenarios
 
 As the login may fail for a variety of reasons, the resource returns different HTTP status codes in case of failures:
@@ -95,8 +110,10 @@ include::api-agent.adoc[leveloffset=+1]
 include::api-user.adoc[leveloffset=+1]
 include::api-third-party.adoc[leveloffset=+1]
 
+[[csv]]
 == CSV Import/Export
 
+[[csv.quarantine]]
 === Quarantine Export
 
 include::{snippets}/csv-import-export/quarantine-order/auto-description.adoc[]
@@ -111,6 +128,7 @@ That call will return a 200 OK and contain the CSV data as body.
 
 include::{snippets}/csv-import-export/quarantine-order/response-body.adoc[]
 
+[[frontend-texts]]
 == Frontend texts
 
 Even without authentication, it is possible to retrieve installation-specific texts from the Quarano REST API via `/api/frontendtexts`.
@@ -122,6 +140,7 @@ The request takes the following attributes. Without parameters all frontend text
 
 include::{snippets}/frontend-texts/get-frontend-texts/auto-request-parameters.adoc[]
 
+[[actuators]]
 == Actuators
 
 Quarano uses Spring Boot actuators to expose technical and health information about the running instance.
@@ -130,6 +149,7 @@ The most interesting ones are:
 * `/actuator/health`
 * `/actuator/info`
 
+[[actuators.development]]
 === Development APIs
 
 When an application is built using the `localDev` profile, it can be run with the `develop` profile activated and will expose additional actuator endpoints.

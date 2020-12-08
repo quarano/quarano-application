@@ -1,5 +1,6 @@
 package quarano.occasion.web;
 
+import static capital.scalable.restdocs.AutoDocumentation.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,7 +46,8 @@ class OccasionControllerWebIntegrationTests extends AbstractDocumentation {
 				.content(objectMapper.writeValueAsString(payload))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andDo(flow.document("create-occasion"))
+				.andDo(flow.document("create-occasion",
+						responseFields().responseBodyAsType(OccasionRepresentions.OccasionSummary.class)))
 				.andReturn().getResponse().getContentAsString();
 
 		var parseDoc = JsonPath.parse(respones);

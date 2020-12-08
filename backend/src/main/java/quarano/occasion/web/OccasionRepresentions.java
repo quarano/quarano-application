@@ -56,8 +56,19 @@ class OccasionRepresentions {
 	@AllArgsConstructor
 	public static class OccasionsDto {
 
+		/**
+		 * The title of the occasion.
+		 */
 		@Textual String title;
+
+		/**
+		 * The start date and time of the occasion.
+		 */
 		LocalDateTime start;
+
+		/**
+		 * The end date and time of the occasion.
+		 */
 		LocalDateTime end;
 	}
 
@@ -69,6 +80,12 @@ class OccasionRepresentions {
 
 		LocalDateTime getEnd();
 
+		/**
+		 * An 8-digit occasion code to be handed to location owners or third-party software to report visitor groups. Note
+		 * the absence of characters that might be ambiguous when transmitted verbally or in hand writing (I, J, 1, O, 0).
+		 * See <<third-party.visitor-groups>> for details.
+		 */
+		@Pattern(regexp = OccasionCode.REGEX)
 		String getOccasionCode();
 
 		List<VisitorGroupSummary> getVisitorGroups();
