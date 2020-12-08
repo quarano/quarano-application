@@ -1,8 +1,30 @@
 = The case agent API
 :snippets: ../../../target/generated-snippets
 
+Interacting with the case agent API requires permissions of the roles `CASE_AGENT` or `ADMIN`.
+Please make sure you have authenticated as such as described in <<authentication>>.
+
 [[agent.cases]]
 == Managing cases
+
+[[agent.cases.occasions]]
+=== Creating occasions
+
+When tracking down contacts for a case, the tracked person might report having been to a restaurant, attended a family gathering or the like.
+To capture contact information for people that attended those occasions, the occasions can be registered for a given case.
+
+An occasion can be created by posting to `/hd/cases/{id}/occasions`, expanding the template with a case identifier.
+
+include::{snippets}/create-occasions/create-occasion/curl-request.adoc[]
+
+The request takes the following properties:
+
+include::{snippets}/create-occasions/create-occasion/auto-request-fields.adoc[]
+
+The response will contain an 8-digit `occasionCode` that's supposed to be handed out to location owners and potentially third party APIs to submit visitor groups for that occasion.
+See <<third-party.visitor-groups>> for details.
+
+include::{snippets}/create-occasions/create-occasion/response-body.adoc[]
 
 [[agent.anomalies]]
 == Working with anomalies
@@ -13,7 +35,7 @@ It can be followed to get an overview of all cases ordered by a priority calcula
 include::{snippets}/anomalies/access-anomalies/curl-request.adoc[]
 include::{snippets}/anomalies/access-anomalies/response-body.adoc[]
 
-== Response structure
+=== Response structure
 
 include::{snippets}/anomalies/access-anomalies/auto-response-fields.adoc[]
 
