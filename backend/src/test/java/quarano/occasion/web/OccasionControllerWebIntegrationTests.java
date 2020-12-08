@@ -10,6 +10,7 @@ import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.department.TrackedCaseDataInitializer;
+import quarano.occasion.web.OccasionRepresentions.OccasionsDto;
 
 import java.time.LocalDateTime;
 

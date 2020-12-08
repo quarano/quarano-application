@@ -11,6 +11,8 @@ import quarano.core.QuaranoAggregate;
 import quarano.tracking.Address;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Embeddable;
@@ -18,6 +20,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.jmolecules.ddd.types.Identifier;
+import org.springframework.lang.Nullable;
 
 @Entity
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
@@ -29,6 +32,9 @@ public class Visitor extends QuaranoAggregate<Visitor, Visitor.VisitorIdentifier
 	private String firstName, lastName;
 	private EmailAddress emailAddress;
 	private PhoneNumber phoneNumber;
+	private @Nullable LocalDateTime checkin, checkout;
+	private @Nullable LocalDate positiveTestDate, negativeTestDate;
+	private boolean verified;
 	private Address address = new Address();
 
 	public Visitor(String firstName, String lastName, Address address) {
