@@ -1,21 +1,29 @@
 package quarano.department;
 
-import lombok.*;
-import org.jmolecules.ddd.types.Identifier;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import quarano.core.QuaranoEntity;
 import quarano.department.Questionnaire.QuestionnaireIdentifier;
 import quarano.masterdata.Symptom;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+
+import org.jmolecules.ddd.types.Identifier;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * @author Oliver Drotbohm

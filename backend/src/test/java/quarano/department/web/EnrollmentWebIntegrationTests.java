@@ -1,19 +1,18 @@
 package quarano.department.web;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static quarano.department.web.TrackedCaseLinkRelations.CONFIRM;
+import static quarano.department.web.TrackedCaseLinkRelations.ENROLLMENT;
+
 import capital.scalable.restdocs.AutoDocumentation;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.client.LinkDiscoverer;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultHandler;
 import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
@@ -32,16 +31,23 @@ import quarano.tracking.web.TrackedPersonDto;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static quarano.department.web.TrackedCaseLinkRelations.CONFIRM;
-import static quarano.department.web.TrackedCaseLinkRelations.ENROLLMENT;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultHandler;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 /**
  * @author Oliver Drotbohm
@@ -165,6 +171,41 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.belongToMedicalStaff", Boolean.class)).isNull();
 		assertThat(document.read("$.hasPreExistingConditions", Boolean.class)).isNull();
 		assertThat(document.read("$.hasSymptoms", Boolean.class)).isNull();
+
+	}
+
+	@Test // CORE-631
+	@WithQuaranoUser("DemoAccount")
+	void wrongDateOfInfectionInQuestionnaireIsRefused() throws Exception {
+
+		var source = createValidDetailsInput();
+		submitDetailsSuccessfully(source);
+
+		var questionnaireSource = createValidQuestionnaireInput();
+
+		// make input-data incomplete
+		questionnaireSource.setGuessedDateOfInfection(LocalDate.now());
+
+		String result = submitQuestionnaireExpectBadRequest(questionnaireSource);
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNotNull();
+
+		// The first enrollment step is completed
+		result = performRequestToGetEnrollementState();
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
+
+		// check if questionnaire data is still empty, because it should not have been saved
+		result = performRequestToGetQuestionnaire();
+
+		expectResponseCarriesEmptyQuestionnaire(result);
+
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNull();
 
 	}
 
@@ -297,6 +338,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.symptoms", JSONArray.class)).isNull();
 		assertThat(document.read("$.familyDoctor", String.class)).isNull();
 		assertThat(document.read("$.guessedOriginOfInfection", String.class)).isNull();
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNull();
 		assertThat(document.read("$.hasContactToVulnerablePeople", Boolean.class)).isNull();
 		assertThat(document.read("$.hasContactToVulnerablePeopleDescription", String.class)).isNull();
 	}

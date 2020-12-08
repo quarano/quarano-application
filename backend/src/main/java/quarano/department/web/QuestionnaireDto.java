@@ -2,19 +2,21 @@ package quarano.department.web;
 
 import lombok.Data;
 import lombok.Setter;
-import org.springframework.validation.Errors;
 import quarano.core.validation.Textual;
 import quarano.department.Questionnaire;
 import quarano.masterdata.Symptom;
 import quarano.masterdata.SymptomRepository;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+
+import org.springframework.validation.Errors;
 
 @Data
 public class QuestionnaireDto {
@@ -117,7 +119,7 @@ public class QuestionnaireDto {
 		}
 
 		if (dayOfFirstSymptoms != null && guessedDateOfInfection != null
-				&& !guessedDateOfInfection.isAfter(dayOfFirstSymptoms)) {
+				&& (guessedDateOfInfection.isEqual(dayOfFirstSymptoms) || guessedDateOfInfection.isAfter(dayOfFirstSymptoms))) {
 			errors.rejectValue("guessedDateOfInfection", "Invalid.IntialReportDto.guessedDateOfInfection");
 		}
 
