@@ -1,0 +1,14 @@
+form {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.event-sub-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+mat-form-field {
+  margin: 5px;
+}
