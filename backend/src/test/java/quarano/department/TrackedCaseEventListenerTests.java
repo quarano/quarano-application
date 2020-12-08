@@ -36,14 +36,17 @@ class TrackedCaseEventListenerTests {
 	private static final String LAST_NAME = "trackedPerson.lastName";
 	private static final String DEPARTMENT_NAME = "department.name";
 
-	TrackedCaseEventListener listener;
-
 	@Mock TrackedCaseRepository cases;
+	@Mock RegistrationManagement registration;
+	@Mock RegistrationProperties configuration;
+	@Mock CommentFactory comments;
 	@Captor ArgumentCaptor<TrackedCase> captor;
+
+	TrackedCaseEventListener listener;
 
 	@BeforeEach
 	void setup() {
-		listener = new TrackedCaseEventListener(cases);
+		listener = new TrackedCaseEventListener(cases, registration, configuration, comments);
 	}
 
 	@Test // CORE-258
@@ -57,7 +60,7 @@ class TrackedCaseEventListenerTests {
 
 		var trackedCase = createCaseFor(person, CaseType.CONTACT);
 
-		listener.on(CaseConvertedToIndex.of(trackedCase));
+		listener.onCaseConvertedToIndex(CaseConvertedToIndex.of(trackedCase));
 
 		verify(cases, never()).save(any());
 	}
@@ -72,7 +75,7 @@ class TrackedCaseEventListenerTests {
 		createEncounterWithMaxFor(person, contactDate);
 		createEncounterWithMoritzFor(person, contactDate);
 
-		listener.on(CaseConvertedToIndex.of(trackedCase));
+		listener.onCaseConvertedToIndex(CaseConvertedToIndex.of(trackedCase));
 
 		verify(cases, times(2)).save(captor.capture());
 
@@ -97,7 +100,7 @@ class TrackedCaseEventListenerTests {
 
 		when(cases.existsByOriginContacts(encounter.getContact())).thenReturn(false, true, true);
 
-		listener.on(CaseConvertedToIndex.of(trackedCase));
+		listener.onCaseConvertedToIndex(CaseConvertedToIndex.of(trackedCase));
 
 		verify(cases, times(1)).save(captor.capture());
 		verify(cases, times(1)).existsByOriginContacts(encounter.getContact());

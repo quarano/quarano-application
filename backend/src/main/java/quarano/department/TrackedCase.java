@@ -82,9 +82,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	@Column(nullable = false) @Enumerated(EnumType.STRING) private @Getter Status status;
 
-	@Column(
-			nullable = true) @Enumerated(EnumType.STRING) private @Getter MailStatus newContactCaseMailStatus = MailStatus.NOT_SENT;
-
 	@OneToMany private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(CaseSource source) {
@@ -127,18 +124,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.trackedPerson = person;
 		this.type = type;
 		this.department = department;
-		this.status = Status.OPEN;
+		this.status = person.hasAccount() ? Status.REGISTERED : Status.OPEN;
 		this.originCases = new ArrayList<>();
 
-		this.registerEvent(CaseCreated.of(this));
+		this.registerEvent(CaseCreated.of(id));
 
 		if (originContact != null) {
 			this.originContacts.add(originContact);
-		}
-
-		if (person.hasAccount()) {
-			markInRegistration();
-			markRegistrationCompleted();
 		}
 	}
 
@@ -267,7 +259,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	public TrackedCase markEdited() {
 
-		registerEvent(CaseUpdated.of(this));
+		registerEvent(CaseUpdated.of(id));
 
 		return this;
 	}
@@ -283,7 +275,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.enrollment.markEnrollmentCompleted();
 		this.status = Status.TRACKING;
 
-		this.registerEvent(CaseStatusUpdated.of(this));
+		this.registerEvent(CaseStatusUpdated.of(id));
 
 		return this;
 	}
@@ -293,7 +285,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		this.enrollment.reopenEnrollment();
 		this.status = Status.REGISTERED;
 
-		this.registerEvent(CaseStatusUpdated.of(this));
+		this.registerEvent(CaseStatusUpdated.of(id));
 
 		return this;
 	}
@@ -302,7 +294,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.EXTERNAL_ZIP;
 
-		this.registerEvent(CaseStatusUpdated.of(this));
+		this.registerEvent(CaseStatusUpdated.of(id));
 
 		return this;
 	}
@@ -359,7 +351,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		assertStatus(Status.OPEN, "Cannot mark case %s as tracked manually as it is in status %s!", id, status);
 
 		this.status = Status.TRACKED_MANUALLY;
-		this.registerEvent(CaseStatusUpdated.of(this));
+		this.registerEvent(CaseStatusUpdated.of(id));
 
 		return this;
 	}
@@ -379,7 +371,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		}
 
 		this.status = Status.IN_REGISTRATION;
-		this.registerEvent(CaseStatusUpdated.of(this));
+		this.registerEvent(RegistrationInitiated.of(getId()));
 
 		return this;
 	}
@@ -392,7 +384,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 			this.status = Status.OPEN;
 
-			this.registerEvent(CaseStatusUpdated.of(this));
+			this.registerEvent(CaseStatusUpdated.of(id));
 		}
 
 		return this;
@@ -404,21 +396,7 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		this.status = Status.REGISTERED;
 
-		this.registerEvent(CaseStatusUpdated.of(this));
-
-		return this;
-	}
-
-	TrackedCase markNewContactCaseMailSent() {
-
-		this.newContactCaseMailStatus = MailStatus.SENT;
-
-		return this;
-	}
-
-	TrackedCase markNewContactCaseMailCantSent() {
-
-		this.newContactCaseMailStatus = MailStatus.CANT_SENT;
+		this.registerEvent(CaseStatusUpdated.of(id));
 
 		return this;
 	}
@@ -451,28 +429,24 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		EXTERNAL_ZIP;
 	}
 
-	public enum MailStatus {
-
-		NOT_SENT,
-
-		CANT_SENT,
-
-		SENT
-	}
-
 	@Value(staticConstructor = "of")
 	public static class CaseCreated implements DomainEvent {
-		TrackedCase trackedCase;
+		TrackedCaseIdentifier trackedCase;
 	}
 
 	@Value(staticConstructor = "of")
 	public static class CaseUpdated implements DomainEvent {
-		TrackedCase trackedCase;
+		TrackedCaseIdentifier trackedCase;
 	}
 
 	@Value(staticConstructor = "of")
 	public static class CaseStatusUpdated implements DomainEvent {
-		TrackedCase trackedCase;
+		TrackedCaseIdentifier trackedCase;
+	}
+
+	@Value(staticConstructor = "of")
+	static class RegistrationInitiated implements DomainEvent {
+		TrackedCaseIdentifier caseIdentifier;
 	}
 
 	@Value(staticConstructor = "of")

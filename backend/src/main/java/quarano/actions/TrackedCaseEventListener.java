@@ -3,11 +3,11 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.CaseConcluded;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCase.CaseStatusUpdated;
 import quarano.department.TrackedCase.CaseUpdated;
+import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 
 import org.springframework.context.event.EventListener;
@@ -60,7 +60,9 @@ class TrackedCaseEventListener {
 				});
 	}
 
-	private void handleCreatedOrUpdatedCase(TrackedCase trackedCase) {
+	private void handleCreatedOrUpdatedCase(TrackedCaseIdentifier identifier) {
+
+		var trackedCase = cases.findById(identifier).orElseThrow();
 
 		initialCallHandler.handleInitialCallOpen(trackedCase);
 		missingDetailsHandler.handleTrackedCaseMissingDetails(trackedCase);

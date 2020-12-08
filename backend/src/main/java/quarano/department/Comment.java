@@ -39,6 +39,7 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 	public Comment(String text, String author) {
 
 		Assert.hasText(text, "Comment text must not be null or empty!");
+		Assert.hasText(author, "Author must not be null or empty!");
 
 		this.id = CommentIdentifier.of(UUID.randomUUID());
 		this.date = LocalDateTime.now();

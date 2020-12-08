@@ -17,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -37,12 +39,14 @@ import org.springframework.util.StringUtils;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EmailSender {
+public class EmailSender implements ApplicationListener<ApplicationReadyEvent> {
 
 	private final @NonNull JavaMailSenderImpl emailSender;
 	private final @NonNull EmailTemplates templates;
 	private final @NonNull CoreProperties configuration;
 	private final @NonNull MailProperties mailProperties;
+
+	private boolean initialized = false;
 
 	/**
 	 * Verifies the connection to the actual email server.
@@ -74,7 +78,21 @@ public class EmailSender {
 
 		Assert.notNull(email, "Email must not be null!");
 
-		return Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration, mailProperties)));
+		return !initialized
+				? Try.success(null)
+				: Try.run(() -> emailSender.send(email.toMailMessage(templates, configuration, mailProperties)));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
+	 */
+	@Override
+	public void onApplicationEvent(ApplicationReadyEvent event) {
+
+		log.info("Email sender initialized and ready to send out emails.");
+
+		this.initialized = true;
 	}
 
 	/**
@@ -87,6 +105,8 @@ public class EmailSender {
 	 */
 	public interface TemplatedEmail {
 
+		Key getTemplate();
+
 		/**
 		 * Composes a {@link SimpleMailMessage} using the given {@link EmailTemplates} and {@link CoreProperties}.
 		 *
@@ -96,8 +116,10 @@ public class EmailSender {
 		 * @param environment
 		 * @return
 		 */
-		SimpleMailMessage toMailMessage(EmailTemplates templates, @NonNull CoreProperties configuration,
-				@NonNull MailProperties mailProperties);
+		SimpleMailMessage toMailMessage(EmailTemplates templates, CoreProperties configuration,
+				MailProperties mailProperties);
+
+		String getBody(EmailTemplates templates, CoreProperties properties);
 	}
 
 	/**
@@ -125,7 +147,7 @@ public class EmailSender {
 		private final @Getter Sender from;
 		private final @Getter Recipient to;
 		private final @Getter String subject;
-		private final Key template;
+		private final @Getter Key template;
 		private final @Getter Map<String, ? extends Object> placeholders;
 		private final Locale locale;
 
@@ -138,8 +160,8 @@ public class EmailSender {
 				@NonNull MailProperties mailProperties) {
 
 			var message = new SimpleMailMessage();
-			message.setFrom(determineFrom(mailProperties));
-			message.setTo(determineTo(mailProperties));
+			message.setFrom(determineSender(mailProperties));
+			message.setTo(determineReceipient(mailProperties));
 			message.setSubject(subject);
 			message.setText(getBody(templates, configuration));
 			message.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
@@ -151,26 +173,12 @@ public class EmailSender {
 			return message;
 		}
 
-		private String determineFrom(MailProperties mailProperties) {
-
-			Map<String, String> properties = mailProperties.getProperties();
-			var fixSender = properties.get(FIX_SENDER_PROPERTY_KEY);
-
-			return StringUtils.hasText(fixSender)
-					? FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress()
-					: this.from.toInternetAddress();
-		}
-
-		private String determineTo(@NonNull MailProperties mailProperties) {
-
-			var fixRecipient = mailProperties.getProperties().get(FIX_RECIPIENT_PROPERTY_KEY);
-
-			return !StringUtils.hasText(fixRecipient) || this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)
-					? to.toInternetAddress()
-					: FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient), to).toInternetAddress();
-		}
-
-		private String getBody(EmailTemplates templates, CoreProperties configuration) {
+		/*
+		 * (non-Javadoc)
+		 * @see quarano.core.EmailSender.TemplatedEmail#getBody(quarano.core.EmailTemplates, quarano.core.CoreProperties)
+		 */
+		@Override
+		public String getBody(EmailTemplates templates, CoreProperties configuration) {
 
 			var placeholders = new HashMap<String, Object>();
 			var toLastName = to.getLastName();
@@ -180,6 +188,25 @@ public class EmailSender {
 			placeholders.putAll(this.placeholders);
 
 			return templates.expandTemplate(template, placeholders, locale);
+		}
+
+		private String determineSender(MailProperties mailProperties) {
+
+			Map<String, String> properties = mailProperties.getProperties();
+			var fixSender = properties.get(FIX_SENDER_PROPERTY_KEY);
+
+			return StringUtils.hasText(fixSender)
+					? FixedConfiguredSender.of(mailProperties, this.from).toInternetAddress()
+					: this.from.toInternetAddress();
+		}
+
+		private String determineReceipient(@NonNull MailProperties mailProperties) {
+
+			var fixRecipient = mailProperties.getProperties().get(FIX_RECIPIENT_PROPERTY_KEY);
+
+			return !StringUtils.hasText(fixRecipient) || this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)
+					? to.toInternetAddress()
+					: FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient), to).toInternetAddress();
 		}
 
 		private interface InternetAdressSource {
