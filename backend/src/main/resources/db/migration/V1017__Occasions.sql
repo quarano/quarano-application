@@ -28,7 +28,6 @@ CREATE TABLE visitor_groups (
 	CONSTRAINT visitor_groups_occasion_fk FOREIGN KEY (occasion_code) REFERENCES occasions(occasion_code)
 );
 
-
 CREATE TABLE visitors (
 	visitor_id uuid NOT NULL,
 	created timestamp NULL,
@@ -43,9 +42,12 @@ CREATE TABLE visitors (
 	first_name varchar(255) NULL,
 	last_name varchar(255) NULL,
 	phone_number varchar(255) NULL,
+	checkin timestamp NULL,
+	checkout timestamp NULL,
+	negative_test_date date NULL,
+	positive_test_date date NULL,
+	verified bool NULL,
 	visitor_group_id uuid NULL,
 	CONSTRAINT visitors_pkey PRIMARY KEY (visitor_id),
 	CONSTRAINT visitors_visitor_group_fk FOREIGN KEY (visitor_group_id) REFERENCES visitor_groups(visitor_group_id)
 );
-
-

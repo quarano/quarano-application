@@ -10,6 +10,7 @@ import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.occasion.Occasion;
 import quarano.occasion.OccasionCode;
 import quarano.occasion.OccasionManagement;
+import quarano.occasion.web.OccasionRepresentions.OccasionsDto;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
