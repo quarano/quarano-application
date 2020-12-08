@@ -35,14 +35,22 @@ class VisitorControllerWebIntegrationTests extends AbstractDocumentation {
 	void submitsVisitorGroup() throws Exception {
 
 		var occasionCode = OccasionDataInitializer.OCCASION_CODE_1;
-		var visitor = new VisitorDto("Musterman", "Max", "Musterstraße", "1", "12346", "Musterstadt", "0123458796",
-				"mail@mail.de", "Tisch 3");
+		var visitor = new VisitorDto()
+				.setFirstName("Max")
+				.setLastName("Mustermann")
+				.setStreet("Musterstraße")
+				.setHouseNumber("1")
+				.setZipCode("12346")
+				.setCity("Musterstadt")
+				.setPhone("0123458796")
+				.setEmail("mail@mail.de")
+				.setQualifier("Tisch 3");
 
-		var payLoad = new VisitorGroupDto(Collections.emptyList(), occasionCode.getOccasionCode(), "Musterbar",
+		var group = new VisitorGroupDto(Collections.emptyList(), occasionCode.getOccasionCode(), "Musterbar",
 				"comment", today, now, today.plusDays(1), now).setVisitors(List.of(visitor));
 
 		mvc.perform(post("/ext/occasions/{occasionCode}", occasionCode)
-				.content(objectMapper.writeValueAsString(payLoad))
+				.content(objectMapper.writeValueAsString(group))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent())
 				.andDo(flow.document("submit-visitors"))

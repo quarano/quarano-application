@@ -23,6 +23,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.data.projection.ProjectionFactory;
@@ -49,6 +50,15 @@ class OccasionRepresentions {
 
 	OccasionSummary toSummary(Occasion occasion) {
 		return projections.createProjection(OccasionSummary.class, occasion);
+	}
+
+	@Data
+	@AllArgsConstructor
+	public static class OccasionsDto {
+
+		@Textual String title;
+		LocalDateTime start;
+		LocalDateTime end;
 	}
 
 	interface OccasionSummary {
@@ -99,23 +109,47 @@ class OccasionRepresentions {
 		private @NotBlank @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
 		private @NotBlank @Pattern(regexp = ZipCode.PATTERN) String zipCode;
 		private @NotBlank @Pattern(regexp = Strings.CITY) String city;
+
+		/**
+		 * The date the visitor entered the occasion, if known.
+		 */
+		private @Past LocalDateTime checkin;
+
+		/**
+		 * The date the visitor left the occasion, if known.
+		 */
+		private @Past LocalDateTime checkout;
+
 		/**
 		 * If not given, email must be given.
 		 **/
 		private @Pattern(regexp = PhoneNumber.PATTERN) String phone;
+
 		/**
 		 * If not given, phone must be given.
 		 **/
 		private @Email String email;
+
 		/**
 		 * Can be used to give additional seating information (table...)
 		 **/
 		private @Textual String qualifier;
 
-		VisitorDto validate(Errors errors) {
+		/**
+		 * If the visitor has been verified by the submitting application. I.e. the contact information given by the visitor
+		 * can be given more trust.
+		 */
+		private boolean verified;
 
-			return this;
-		}
+		/**
+		 * The date of a positive test result a visitor had submitted, if known.
+		 */
+		private @Past LocalDate positiveTestDate;
+
+		/**
+		 * The date of a negative test result a visitor had submitted, if known.
+		 */
+		private @Past LocalDate negativeTestDate;
 	}
 
 	@Data
@@ -127,8 +161,21 @@ class OccasionRepresentions {
 		 * A list of visitors.
 		 */
 		private @NotEmpty List<VisitorDto> visitors;
+
+		/**
+		 * An 8-digit occasion code provided by the health authorities. Note the absence of characters that might be
+		 * ambiguous when transmitted verbally or in hand writing (I, J, 1, O, 0).
+		 */
 		private @Pattern(regexp = OccasionCode.REGEX) String occcasionCode;
+
+		/**
+		 * The name of the location associated with the occasion.
+		 */
 		private @NotBlank @Textual String locationName;
+
+		/**
+		 * A general comment.
+		 */
 		private @Textual String comment;
 
 		/**
@@ -180,5 +227,4 @@ class OccasionRepresentions {
 			return LocalDateTime.of(dateToUse, timeToUse);
 		}
 	}
-
 }
