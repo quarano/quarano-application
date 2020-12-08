@@ -1,10 +1,12 @@
 = Third party integration
 :snippets: ../../../target/generated-snippets
 
+[[third-party.authentication]]
 == Third party authentication
 
 TODO
 
+[[third-party.visitor-groups]]
 == Visitor groups for occasion
 
 To submit visitor groups for occasions, issue an HTTP `POST` request to `/ext/occasions/{occasions-code}` and expand it with the occasion code given by the health department:
