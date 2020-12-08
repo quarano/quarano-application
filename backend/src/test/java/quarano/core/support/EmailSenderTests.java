@@ -27,29 +27,26 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+/**
+ * @author Jens Kutzsche
+ * @author Oliver Drotbohm
+ */
 class EmailSenderTests {
 
-	@Mock
-	JavaMailSenderImpl emailSender;
-	@Mock
-	EmailTemplates templates;
-	@Mock
-	CoreProperties coreProps;
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
-	MailProperties mailProps;
+	@Mock JavaMailSenderImpl emailSender;
+	@Mock EmailTemplates templates;
+	@Mock CoreProperties coreProps;
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS) MailProperties mailProps;
 
-	@Mock
-	TrackedPerson trackedPerson;
-	@Mock
-	Department department;
-	@Mock
-	DepartmentContact depContact;
+	@Mock TrackedPerson trackedPerson;
+	@Mock Department department;
+	@Mock DepartmentContact depContact;
 
-	@Captor
-	ArgumentCaptor<SimpleMailMessage> captor;
+	@Captor ArgumentCaptor<SimpleMailMessage> captor;
 
 	@BeforeEach
 	public void openMocks() {
@@ -104,7 +101,11 @@ class EmailSenderTests {
 	}
 
 	private EmailSender createSender() {
+
 		var sender = new EmailSender(emailSender, templates, coreProps, mailProps);
+
+		sender.onApplicationEvent(mock(ApplicationReadyEvent.class));
+
 		return sender;
 	}
 

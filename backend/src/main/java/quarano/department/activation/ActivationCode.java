@@ -45,7 +45,6 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	private @Getter @Enumerated(EnumType.STRING) ActivationCodeStatus status;
 	private @Getter int activationTries;
 	private @Getter DepartmentIdentifier departmentId;
-	private @Getter boolean mailed;
 
 	public ActivationCode(LocalDateTime expirationTime, TrackedPersonIdentifier trackedPersonId,
 			DepartmentIdentifier departmentId) {
@@ -83,17 +82,6 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 
 	public boolean isCancelled() {
 		return status == ActivationCodeStatus.CANCELED;
-	}
-
-	/**
-	 * marks the code as mailed
-	 * 
-	 * @since 1.4
-	 */
-	ActivationCode mailed() {
-
-		mailed = true;
-		return this;
 	}
 
 	/**
@@ -157,8 +145,6 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 	}
 
 	public enum ActivationCodeStatus {
-		WAITING_FOR_ACTIVATION,
-		REDEEMED,
-		CANCELED
+		WAITING_FOR_ACTIVATION, REDEEMED, CANCELED
 	}
 }

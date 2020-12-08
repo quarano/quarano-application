@@ -2,6 +2,7 @@ package quarano.department;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import quarano.department.activation.ActivationCodeProperties;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @ConfigurationProperties("quarano.registration")
 @RequiredArgsConstructor
-public class RegistrationProperties {
+public class RegistrationProperties implements ActivationCodeProperties {
 
 	private final Duration expiration;
 
@@ -27,6 +28,10 @@ public class RegistrationProperties {
 	 */
 	private final @Getter boolean automaticallyInitiateRegistrationForContactCases;
 
+	/*
+	 * (non-Javadoc)
+	 * @see quarano.department.activation.ActivationCodeProperties#getExpiryDate()
+	 */
 	public LocalDateTime getExpiryDate() {
 		return LocalDateTime.now().plus(expiration);
 	}

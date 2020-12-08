@@ -29,19 +29,14 @@ import org.mockito.Mock;
  * @author Patrick Otto
  */
 @QuaranoUnitTest
-// @MockitoSettings(strictness = Strictness.LENIENT)
 class TrackingEventListenerUnitTests {
 
-	@Mock
-	TrackedCaseRepository cases;
-	@Mock
-	TrackedPersonRepository people;
-	@Mock
-	DiaryManagement diaries;
-	@Mock
-	Diary diary;
+	@Mock TrackedCaseRepository cases;
+	@Mock TrackedPersonRepository people;
+	@Mock DiaryManagement diaries;
+	@Mock Diary diary;
 
-	private TrackingEventListener listener;
+	TrackingEventListener listener;
 
 	@BeforeEach
 	public void setup() {

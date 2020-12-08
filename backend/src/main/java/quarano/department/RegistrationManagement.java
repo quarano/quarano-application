@@ -8,6 +8,8 @@ import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.department.CommentFactory.CommentKey;
+import quarano.department.RegistrationException.RegistrationPreconditionFailed;
 import quarano.department.activation.ActivationCode;
 import quarano.department.activation.ActivationCodeService;
 import quarano.tracking.TrackedPerson;
@@ -30,6 +32,7 @@ public class RegistrationManagement {
 	private final @NonNull ActivationCodeService activationCodes;
 	private final @NonNull TrackedPersonRepository trackedPeople;
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull CommentFactory comments;
 
 	/**
 	 * Initiates the registration for the given {@link TrackedCase}.
@@ -37,15 +40,27 @@ public class RegistrationManagement {
 	 * @param trackedCase must not be {@literal null}.
 	 * @return
 	 */
+	@Transactional(noRollbackFor = RegistrationPreconditionFailed.class)
 	public Try<ActivationCode> initiateRegistration(TrackedCase trackedCase) {
 
 		Assert.notNull(trackedCase, "TrackedCase must not be null!");
+
+		if (!trackedCase.isEmailAvailable()) {
+
+			var comment = comments.failureComment(CommentKey.REGISTRATION__NO_EMAIL);
+			cases.save(trackedCase.addComment(comment));
+
+			return RegistrationException.preconditionFailed("No email for tracked case %s!", trackedCase.getId());
+		}
 
 		var departmentId = trackedCase.getDepartment().getId();
 		var personId = trackedCase.getTrackedPerson().getId();
 
 		return activationCodes.createActivationCode(personId, departmentId)
-				.andThen(() -> cases.save(trackedCase.markInRegistration()));
+				.onSuccess(code -> {
+					var comment = comments.successComment(CommentKey.REGISTRATION__INITIATED, code.getId());
+					cases.save(trackedCase.markInRegistration().addComment(comment));
+				});
 	}
 
 	public Optional<ActivationCode> getPendingActivationCode(TrackedPersonIdentifier id) {

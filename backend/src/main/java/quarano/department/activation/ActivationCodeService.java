@@ -6,7 +6,6 @@ import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Department.DepartmentIdentifier;
-import quarano.department.RegistrationProperties;
 import quarano.department.activation.ActivationCode.ActivationCodeIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
@@ -26,7 +25,7 @@ import org.springframework.util.Assert;
 public class ActivationCodeService {
 
 	private final @NonNull ActivationCodeRepository activationCodes;
-	private final @NonNull RegistrationProperties configuration;
+	private final @NonNull ActivationCodeProperties configuration;
 
 	/**
 	 * Creates a new {@link ActivationCode} for the {@link TrackedPerson} with the given identifier and department.
@@ -73,18 +72,6 @@ public class ActivationCodeService {
 
 		return findCode(identifier)
 				.flatMap(ActivationCode::cancel)
-				.map(activationCodes::save);
-	}
-
-	/**
-	 * marks the code with the given identifier as mailed
-	 * 
-	 * @since 1.4
-	 */
-	public Try<ActivationCode> codeMailed(ActivationCodeIdentifier identifier) {
-
-		return findCode(identifier)
-				.map(ActivationCode::mailed)
 				.map(activationCodes::save);
 	}
 

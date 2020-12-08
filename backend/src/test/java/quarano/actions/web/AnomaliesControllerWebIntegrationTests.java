@@ -80,7 +80,6 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.comments", JSONArray.class)).isEmpty();
 		assertThat(document.read("$.anomalies.health", JSONArray.class)).hasSize(1);
 		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).hasSize(1);
 		assertThat(document.read("$.anomalies.resolved[0].items", JSONArray.class)).hasSize(2);
@@ -133,7 +132,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 
 		var document = JsonPath.parse(response);
 
-		assertThat(document.read("$.comments[0].comment", String.class)).isEqualTo(reviewed.getComment());
+		assertThat(document.read("$.comments[*].comment", String[].class)).contains(reviewed.getComment());
 		assertThat(document.read("$.anomalies.resolved", JSONArray.class)).isEmpty();
 		assertThat(document.read("$.anomalies.process", JSONArray.class)).isNotEmpty();
 		assertThat(document.read("$.anomalies.health", JSONArray.class)).isEmpty();

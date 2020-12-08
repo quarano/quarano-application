@@ -12,6 +12,8 @@ import quarano.department.TrackedCase.CaseUpdated;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPerson;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -35,7 +37,9 @@ class TrackedCaseEventListenerTests {
 	void testTrackedCaseCreated() {
 
 		TrackedCase trackedCase = trackedCase(CaseType.INDEX);
-		listener.on(CaseCreated.of(trackedCase));
+		when(cases.findById(trackedCase.getId())).thenReturn(Optional.of(trackedCase));
+
+		listener.on(CaseCreated.of(trackedCase.getId()));
 
 		verify(initialCallHandler, times(1)).handleInitialCallOpen(trackedCase);
 		verify(missingDetailsHandler, times(1)).handleTrackedCaseMissingDetails(trackedCase);
@@ -45,7 +49,9 @@ class TrackedCaseEventListenerTests {
 	void testTrackedCaseUpdated() {
 
 		TrackedCase trackedCase = trackedCase(CaseType.INDEX);
-		listener.on(CaseUpdated.of(trackedCase));
+		when(cases.findById(trackedCase.getId())).thenReturn(Optional.of(trackedCase));
+
+		listener.on(CaseUpdated.of(trackedCase.getId()));
 
 		verify(initialCallHandler, times(1)).handleInitialCallOpen(trackedCase);
 		verify(missingDetailsHandler, times(1)).handleTrackedCaseMissingDetails(trackedCase);
@@ -55,13 +61,15 @@ class TrackedCaseEventListenerTests {
 	void testTrackedCaseStatusUpdated() {
 
 		TrackedCase trackedCase = trackedCase(CaseType.INDEX);
-		listener.on(CaseStatusUpdated.of(trackedCase));
+		when(cases.findById(trackedCase.getId())).thenReturn(Optional.of(trackedCase));
+
+		listener.on(CaseStatusUpdated.of(trackedCase.getId()));
 
 		verify(initialCallHandler, times(1)).handleInitialCallOpen(trackedCase);
 		verify(missingDetailsHandler, times(1)).handleTrackedCaseMissingDetails(trackedCase);
 	}
 
-	private TrackedCase trackedCase(CaseType caseType) {
+	private static TrackedCase trackedCase(CaseType caseType) {
 		return new TrackedCase(new TrackedPerson("firstName", "lastName"), CaseType.INDEX, new Department("test"));
 	}
 }

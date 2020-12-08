@@ -32,11 +32,16 @@ import javax.mail.Message.RecipientType;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.util.GreenMailUtil;
@@ -44,6 +49,7 @@ import com.jayway.jsonpath.JsonPath;
 
 @QuaranoWebIntegrationTest
 @RequiredArgsConstructor
+@TestInstance(Lifecycle.PER_METHOD)
 class RegistrationWebIntegrationTests extends AbstractDocumentation {
 
 	private final ObjectMapper mapper;
@@ -179,11 +185,12 @@ class RegistrationWebIntegrationTests extends AbstractDocumentation {
 				.getContentAsString();
 
 		var document = JsonPath.parse(response);
+		var email = document.read("$.email", String.class);
 		var harry = harryCase.getTrackedPerson();
 
-		assertThat(document.read("$.email", String.class)).contains(harry.getLastName());
-		assertThat(document.read("$.email", String.class)).contains("\r\n\r\n==========\r\n\r\n");
-		assertThat(document.read("$.email", String.class)).startsWith("Dear Mrs/Mr " + harry.getLastName() + ",");
+		assertThat(email).contains(harry.getLastName());
+		assertThat(email).contains("\r\n\r\n==========\r\n\r\n");
+		assertThat(email).startsWith("Dear Mrs/Mr " + harry.getLastName() + ",");
 		assertThat(document.read("$.expirationDate", String.class)).isNotBlank();
 		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
 
@@ -455,28 +462,8 @@ class RegistrationWebIntegrationTests extends AbstractDocumentation {
 
 	@Test // CORE-585
 	@WithQuaranoUser("agent2")
-	void cantSendRegistrationMail_unknownPerson() throws Exception {
-
-		var caseId = "108a0a90-9768-4ed5-ab7b-cb9f4f02036b";
-
-		mvc.perform(post("/hd/cases/{id}/registration/mail", caseId))
-				.andExpect(status().isNotFound());
-	}
-
-	@Test // CORE-585
-	@WithQuaranoUser("agent2")
-	void cantSendRegistrationMail_noActivationCode() throws Exception {
-
-		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1;
-		var harryCase = cases.findByTrackedPerson(personId)
-				.orElseThrow();
-
-		mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
-				.andExpect(status().isNotFound());
-	}
-
-	@Test // CORE-585
-	@WithQuaranoUser("agent2")
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	@DirtiesContext
 	void sendRegistrationMail() throws Exception {
 
 		var personId = TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1;
@@ -485,26 +472,9 @@ class RegistrationWebIntegrationTests extends AbstractDocumentation {
 
 		// start tracking
 
-		var response = mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
+		mvc.perform(put("/hd/cases/{id}/registration", harryCase.getId()))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
-
-		var document = JsonPath.parse(response);
-
-		assertThat(document.read("$.mailed", Boolean.class)).isFalse();
-		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.SEND_MAIL, response)).isPresent();
-
-		// send mail
-
-		response = mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
-				.andDo(documentPostSendMail())
-				.andExpect(status().isOk())
-				.andReturn().getResponse().getContentAsString();
-
-		document = JsonPath.parse(response);
-
-		assertThat(document.read("$.mailed", Boolean.class)).isTrue();
-		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.SEND_MAIL, response)).isNotPresent();
 
 		mailServer.assertEmailSent(message -> {
 
@@ -514,11 +484,6 @@ class RegistrationWebIntegrationTests extends AbstractDocumentation {
 					.isEqualTo("Harry Hirsch <harry@hirsch.de>");
 			assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <index-email@gesundheitsamt.de>");
 		});
-
-		// try send again and get an error
-
-		mvc.perform(post("/hd/cases/{id}/registration/mail", harryCase.getId()))
-				.andExpect(status().isUnprocessableEntity());
 	}
 
 	private void callUserMeAndCheckSuccess(String token, TrackedPerson person) throws Exception {

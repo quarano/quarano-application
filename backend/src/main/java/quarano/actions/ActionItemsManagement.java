@@ -10,6 +10,7 @@ import quarano.department.TrackedCaseRepository;
 
 import javax.transaction.Transactional;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,13 +27,16 @@ public class ActionItemsManagement {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull ActionItemRepository items;
 	private final @NonNull AuthenticationManager authentication;
+	private final @NonNull ApplicationContext context;
 
 	@SuppressWarnings("null")
 	public void resolveItemsFor(TrackedCase trackedCase, @Nullable String comment) {
 
 		if (StringUtils.hasText(comment)) {
 
-			var author = authentication.getCurrentUser().map(Account::getFullName).orElse("");
+			var author = authentication.getCurrentUser()
+					.map(Account::getFullName)
+					.orElse(context.getId()); // Application name
 
 			trackedCase = cases.save(trackedCase.addComment(new Comment(comment, author)));
 		}

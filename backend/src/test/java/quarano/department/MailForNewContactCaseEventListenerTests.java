@@ -7,7 +7,6 @@ import quarano.QuaranoIntegrationTest;
 import quarano.account.DepartmentDataInitializer;
 import quarano.account.DepartmentRepository;
 import quarano.department.TrackedCase.CaseCreated;
-import quarano.department.TrackedCase.MailStatus;
 import quarano.department.TrackedCase.Status;
 import quarano.department.TrackedCaseEventListener.EmailSendingEvents;
 import quarano.tracking.TrackedPersonDataInitializer;
@@ -21,6 +20,7 @@ import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.lang.Nullable;
 
 import com.icegreen.greenmail.util.GreenMailUtil;
 
@@ -29,6 +29,7 @@ import com.icegreen.greenmail.util.GreenMailUtil;
 class MailForNewContactCaseEventListenerTests {
 
 	final EmailSendingEvents events;
+	final TrackedCaseRepository cases;
 	final TrackedPersonRepository persons;
 	final DepartmentRepository departments;
 	final TestEmailServer mailServer;
@@ -43,10 +44,9 @@ class MailForNewContactCaseEventListenerTests {
 
 		var trackedCase = trackedCase(null);
 
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
 		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 
-		events.on(CaseCreated.of(trackedCase));
+		events.onInternal(CaseCreated.of(trackedCase.getId()));
 
 		// wait for max 5s for 1 email to arrive
 
@@ -57,7 +57,6 @@ class MailForNewContactCaseEventListenerTests {
 			assertThat(message.getRecipients(RecipientType.TO)[0].toString())
 					.isEqualTo("Tanja Mueller <tanja.mueller@testtest.de>");
 			assertThat(message.getFrom()[0].toString()).isEqualTo("GA Mannheim <contact-email@gesundheitsamt.de>");
-			assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.SENT);
 			assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 		});
 	}
@@ -68,7 +67,7 @@ class MailForNewContactCaseEventListenerTests {
 		// without saved language
 		var trackedCase = trackedCase(null);
 
-		events.on(CaseCreated.of(trackedCase));
+		events.onInternal(CaseCreated.of(trackedCase.getId()));
 
 		mailServer.assertEmailSentWithBody(it -> {
 			assertThat(it)
@@ -79,7 +78,7 @@ class MailForNewContactCaseEventListenerTests {
 		// with default language as saved language
 		trackedCase = trackedCase(Locale.GERMANY);
 
-		events.on(CaseCreated.of(trackedCase));
+		events.onInternal(CaseCreated.of(trackedCase.getId()));
 
 		mailServer.assertEmailSentWithBody(it -> {
 			assertThat(it)
@@ -90,7 +89,7 @@ class MailForNewContactCaseEventListenerTests {
 		// with saved language
 		trackedCase = trackedCase(Locale.ENGLISH);
 
-		events.on(CaseCreated.of(trackedCase));
+		events.onInternal(CaseCreated.of(trackedCase.getId()));
 
 		mailServer.assertEmailSentWithBody(it -> {
 			assertThat(it).startsWith("Dear Mrs/Mr Mueller,")
@@ -105,23 +104,21 @@ class MailForNewContactCaseEventListenerTests {
 		var trackedCase = trackedCase(null);
 		trackedCase.getTrackedPerson().setEmailAddress(null);
 
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.NOT_SENT);
 		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 
-		events.on(CaseCreated.of(trackedCase));
+		events.onInternal(CaseCreated.of(trackedCase.getId()));
 
 		mailServer.assertNoEmailSent();
 
-		assertThat(trackedCase.getNewContactCaseMailStatus()).isEqualTo(MailStatus.CANT_SENT);
 		assertThat(trackedCase.getStatus()).isEqualTo(Status.OPEN);
 	}
 
-	private TrackedCase trackedCase(Locale locale) {
+	private TrackedCase trackedCase(@Nullable Locale locale) {
 
 		var person = persons.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
 				.setLocale(locale);
 		var department = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 
-		return new TrackedCase(person, CaseType.CONTACT, department);
+		return cases.save(new TrackedCase(person, CaseType.CONTACT, department));
 	}
 }

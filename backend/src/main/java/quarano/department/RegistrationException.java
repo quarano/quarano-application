@@ -1,5 +1,6 @@
 package quarano.department;
 
+import io.vavr.control.Try;
 import lombok.Getter;
 
 /**
@@ -31,7 +32,21 @@ public class RegistrationException extends RuntimeException {
 		return new RegistrationException(Problem.INVALID_BIRTHDAY, "Invalid.accountRegistration.wrongBirthDate");
 	}
 
+	public static <T> Try<T> preconditionFailed(String message, Object... args) {
+		return Try.failure(new RegistrationPreconditionFailed(String.format(message, args)));
+	}
+
 	public enum Problem {
 		INVALID_USERNAME, INVALID_BIRTHDAY, GENERIC;
+	}
+
+	static class RegistrationPreconditionFailed extends RegistrationException {
+
+		/**
+		 * @param message
+		 */
+		public RegistrationPreconditionFailed(String message) {
+			super(message);
+		}
 	}
 }
