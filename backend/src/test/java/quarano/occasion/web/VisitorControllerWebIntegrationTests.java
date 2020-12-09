@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,6 +33,7 @@ class VisitorControllerWebIntegrationTests extends AbstractDocumentation {
 	private final DocumentationFlow flow = DocumentationFlow.of("submit-visitors");
 
 	@Test // CORE-631
+	@WithMockUser(roles = "THIRD_PARTY")
 	void submitsVisitorGroup() throws Exception {
 
 		var occasionCode = OccasionDataInitializer.OCCASION_CODE_1;
