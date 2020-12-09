@@ -1,8 +1,19 @@
 <div class="container">
-  <div class="link-wrapper">
-    <a [routerLink]="['/general/terms']">{{ 'FOOTER.AGB' | translate }}</a>
-    <a [routerLink]="['/general/data-protection']">{{ 'FOOTER.DATENSCHUTZ' | translate }}</a>
-    <a [routerLink]="['/general/imprint']">{{ 'FOOTER.IMPRESSUM' | translate }}</a>
+  <div class="left-container">
+    <div class="link-wrapper">
+      <a [routerLink]="['/general/terms']">{{ 'FOOTER.AGB' | translate }}</a>
+      <a [routerLink]="['/general/data-protection']">{{ 'FOOTER.DATENSCHUTZ' | translate }}</a>
+      <a [routerLink]="['/general/imprint']">{{ 'FOOTER.IMPRESSUM' | translate }}</a>
+    </div>
+    <button mat-icon-button [matMenuTriggerFor]="infomenu" (menuOpened)="loadVersion()">
+      <mat-icon style="color: white">info</mat-icon>
+    </button>
+    <mat-menu #infomenu="matMenu">
+      <div class="info-menu-container" *ngIf="version$ | async as version">
+        <div style="width: 30%">{{ 'HEADER_RIGHT.VERSION' | translate }}</div>
+        <div style="text-align: right">{{ version.build.version }} ({{ version.git.commit.id }})</div>
+      </div></mat-menu
+    >
   </div>
 
   <div class="anchor-wrapper" *ngFor="let item of pictureUris | keyvalue">

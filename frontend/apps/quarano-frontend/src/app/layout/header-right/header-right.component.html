@@ -1,9 +1,4 @@
 <div class="container">
-  <button mat-icon-button [matMenuTriggerFor]="infomenu" (menuOpened)="loadVersion()">
-    <mat-icon style="color: white">info</mat-icon>
-  </button>
-  <mat-menu #infomenu="matMenu"><ng-container *ngTemplateOutlet="VERSION_DIV"></ng-container></mat-menu>
-
   <ng-container *ngIf="userService.isLoggedIn$ | async; else NOT_LOGGED_IN">
     <ng-container *ngTemplateOutlet="CONTACT_BUTTON"></ng-container>
 
@@ -57,13 +52,6 @@
       <i [class]="'language-icon fa-fw flag:' + lang.flagIconKey"></i> {{ lang.name }}
     </button>
   </mat-menu>
-</ng-template>
-
-<ng-template #VERSION_DIV>
-  <div class="info-menu-container" *ngIf="version$ | async as version">
-    <div style="width: 30%">{{ 'HEADER_RIGHT.VERSION' | translate }}</div>
-    <div style="text-align: right">{{ version.build.version }} ({{ version.git.commit.id }})</div>
-  </div>
 </ng-template>
 
 <ng-template #CONTACT_BUTTON>
