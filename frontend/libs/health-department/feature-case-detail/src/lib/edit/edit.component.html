@@ -54,96 +54,6 @@
           </div>
           <div class="col-sm-4">
             <fieldset>
-              <legend>Krankheitsdaten</legend>
-              <mat-form-field class="full-width" data-cy="input-testdate">
-                <mat-label>Abstrichdatum (Test)</mat-label>
-                <input
-                  data-cy="input-field-test-date"
-                  matInput
-                  [required]="isIndexCase"
-                  [max]="today"
-                  [matDatepicker]="testDatePicker"
-                  formControlName="testDate"
-                  #test_date_input
-                  (blur)="trimValue(test_date_input)"
-                />
-                <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #testDatePicker></mat-datepicker>
-                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.testDate)">
-                  {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
-                </mat-error>
-              </mat-form-field>
-              <div *ngIf="formGroup.controls.testDate.value" class="full-width form-field form-field-radio">
-                <label class="example-margin">Covid-19 Test:</label>
-                <mat-radio-group
-                  [selected]="isIndexCase ? infectedTrue : infectedFalse"
-                  [disabled]="isIndexCase"
-                  formControlName="infected"
-                >
-                  <mat-radio-button
-                    #infectedTrue
-                    class="example-margin"
-                    data-cy="covid-test-result-true"
-                    [value]="true"
-                  >
-                    Positiv
-                  </mat-radio-button>
-                  <mat-radio-button #infectedFalse class="example-margin" [value]="false"> Negativ </mat-radio-button>
-                </mat-radio-group>
-              </div>
-              <mat-form-field class="full-width" data-cy="input-quarantinestart">
-                <mat-label>Beginn häusliche Isolation</mat-label>
-                <input
-                  data-cy="quarantine-start-input"
-                  matInput
-                  [required]="isIndexCase || formGroup.controls.quarantineEndDate.value"
-                  [max]="today"
-                  [matDatepicker]="quarantineStartPicker"
-                  formControlName="quarantineStartDate"
-                  #quarantine_start_input
-                  (blur)="trimValue(quarantine_start_input)"
-                />
-                <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
-                <mat-datepicker #quarantineStartPicker></mat-datepicker>
-                <mat-error
-                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineStartDate)"
-                >
-                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineStartDate, error) | async }}
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field class="full-width" data-cy="input-quarantineend">
-                <mat-label>Ende häusliche Isolation</mat-label>
-                <input
-                  data-cy="quarantine-end-input"
-                  matInput
-                  [required]="isIndexCase || formGroup.controls.quarantineStartDate.value"
-                  [matDatepicker]="quarantineEndDatePicker"
-                  formControlName="quarantineEndDate"
-                  #quarantine_end_input
-                  (blur)="trimValue(quarantine_end_input)"
-                  [min]="formGroup.controls.quarantineStartDate.value"
-                />
-                <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
-                <mat-error
-                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineEndDate)"
-                >
-                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineEndDate, error) | async }}
-                </mat-error>
-              </mat-form-field>
-
-              <legend>Ursprungsfälle</legend>
-              <qro-lazy-autocomplete
-                (completeMethod)="onIndexCaseSearch($event)"
-                [selectableItems]="selectableIndexCases"
-                [displayWith]="showIndexCaseItem"
-                [control]="formGroup.controls.originCases"
-                placeholder="Ursprungsfälle wählen"
-              ></qro-lazy-autocomplete>
-            </fieldset>
-          </div>
-          <div class="col-sm-4">
-            <fieldset>
               <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>
               <mat-error
                 *ngIf="
@@ -197,6 +107,95 @@
                   {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
                 </mat-error>
               </mat-form-field>
+            </fieldset>
+          </div>
+          <div class="col-sm-4">
+            <fieldset>
+              <legend>Krankheitsdaten</legend>
+              <mat-form-field class="full-width" data-cy="input-testdate">
+                <mat-label>Abstrichdatum (Test)</mat-label>
+                <input
+                  data-cy="input-field-test-date"
+                  matInput
+                  [required]="isIndexCase"
+                  [max]="today"
+                  [matDatepicker]="testDatePicker"
+                  formControlName="testDate"
+                  #test_date_input
+                  (blur)="trimValue(test_date_input)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #testDatePicker></mat-datepicker>
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.testDate)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <div
+                *ngIf="formGroup.controls.testDate.value"
+                class="full-width form-field form-field-radio"
+                style="padding-bottom: 1.25em"
+              >
+                <label style="margin: 0">Covid-19 Test:</label>
+                <mat-radio-group
+                  [selected]="isIndexCase ? infectedTrue : infectedFalse"
+                  [disabled]="isIndexCase"
+                  formControlName="infected"
+                >
+                  <mat-radio-button #infectedTrue data-cy="covid-test-result-true" [value]="true">
+                    Positiv
+                  </mat-radio-button>
+                  <mat-radio-button #infectedFalse class="example-margin" [value]="false"> Negativ </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-form-field class="full-width" data-cy="input-quarantinestart">
+                <mat-label>Beginn häusliche Isolation</mat-label>
+                <input
+                  data-cy="quarantine-start-input"
+                  matInput
+                  [required]="isIndexCase || formGroup.controls.quarantineEndDate.value"
+                  [max]="today"
+                  [matDatepicker]="quarantineStartPicker"
+                  formControlName="quarantineStartDate"
+                  #quarantine_start_input
+                  (blur)="trimValue(quarantine_start_input)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
+                <mat-datepicker #quarantineStartPicker></mat-datepicker>
+                <mat-error
+                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineStartDate)"
+                >
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineStartDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-quarantineend">
+                <mat-label>Ende häusliche Isolation</mat-label>
+                <input
+                  data-cy="quarantine-end-input"
+                  matInput
+                  [required]="isIndexCase || formGroup.controls.quarantineStartDate.value"
+                  [matDatepicker]="quarantineEndDatePicker"
+                  formControlName="quarantineEndDate"
+                  #quarantine_end_input
+                  (blur)="trimValue(quarantine_end_input)"
+                  [min]="formGroup.controls.quarantineStartDate.value"
+                />
+                <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
+                <mat-error
+                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineEndDate)"
+                >
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineEndDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-label style="font-size: 11px">Ursprungsfälle</mat-label>
+              <qro-lazy-autocomplete
+                (completeMethod)="onIndexCaseSearch($event)"
+                [selectableItems]="selectableIndexCases"
+                [displayWith]="showIndexCaseItem"
+                [control]="formGroup.controls.originCases"
+                placeholder="Ursprungsfälle wählen"
+              ></qro-lazy-autocomplete>
             </fieldset>
           </div>
         </div>

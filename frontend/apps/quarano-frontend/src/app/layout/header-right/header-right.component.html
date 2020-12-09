@@ -13,7 +13,7 @@
 </div>
 
 <div class="mobile-container">
-  <button mat-icon-button [matMenuTriggerFor]="mobilemenu" (menuOpened)="loadVersion()">
+  <button mat-icon-button [matMenuTriggerFor]="mobilemenu">
     <mat-icon style="color: white">account_circle</mat-icon>
   </button>
   <mat-menu #mobilemenu="matMenu">
@@ -36,8 +36,6 @@
 
       <ng-container *ngTemplateOutlet="PROFILE_MENU_CONTENT"></ng-container>
     </ng-container>
-    <mat-divider></mat-divider>
-    <ng-container *ngTemplateOutlet="VERSION_DIV"></ng-container>
   </mat-menu>
 </div>
 
