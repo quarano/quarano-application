@@ -7,7 +7,7 @@ import {
   ValidationErrorService,
 } from '@qro/shared/util-forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import * as moment from 'moment';
@@ -25,7 +25,7 @@ import { BadRequestService } from '@qro/shared/ui-error';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss'],
 })
-export class EditComponent implements OnInit, OnDestroy {
+export class EditComponent implements OnInit, OnDestroy, AfterViewInit {
   private subs: SubSink = new SubSink();
   today = new Date();
   selectableIndexCases: CaseSearchItem[] = [];
@@ -41,6 +41,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup;
   @ViewChild('editForm') editFormElement: NgForm;
+  @ViewChild('first_name_input') firstNameField: ElementRef;
 
   constructor(
     private dialog: MatDialog,
@@ -92,6 +93,10 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.firstNameField.nativeElement.focus();
   }
 
   createFormGroup(type: CaseType) {
