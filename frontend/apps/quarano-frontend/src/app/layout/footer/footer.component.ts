@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { VersionDto, VersionService } from '@qro/general/api';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'qro-footer',
@@ -19,4 +21,11 @@ export class FooterComponent {
       'assets/images/BMBF.jpg',
     ],
   ]);
+  version$: Observable<VersionDto>;
+
+  constructor(private versionService: VersionService) {}
+
+  loadVersion() {
+    this.version$ = this.versionService.getVersion();
+  }
 }

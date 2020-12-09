@@ -8,7 +8,6 @@ import { HealthDepartmentService } from '@qro/health-department/api';
 import { HealthDepartmentDto, UserService } from '@qro/auth/api';
 import { ClientStore } from '@qro/client/api';
 import { ILanguageConfig, LanguageSelectors, LanguageActions } from '@qro/shared/util-translation';
-import { VersionDto, VersionService } from '@qro/general/api';
 
 @Component({
   selector: 'qro-header-right',
@@ -20,15 +19,13 @@ export class HeaderRightComponent implements OnInit {
   public currentUserName$ = this.userService.nameOfCurrentUser$;
   selectedLanguage$: Observable<ILanguageConfig>;
   languages$: Observable<ILanguageConfig[]>;
-  version$: Observable<VersionDto>;
 
   constructor(
     public userService: UserService,
     private healthDepartmentService: HealthDepartmentService,
     public clientStore: ClientStore,
     private matDialog: MatDialog,
-    private store: Store,
-    private versionService: VersionService
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -45,10 +42,6 @@ export class HeaderRightComponent implements OnInit {
         return null;
       })
     );
-  }
-
-  loadVersion() {
-    this.version$ = this.versionService.getVersion();
   }
 
   logout() {

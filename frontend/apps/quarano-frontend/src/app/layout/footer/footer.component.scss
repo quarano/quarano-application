@@ -11,7 +11,9 @@
 .link-wrapper {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  margin-right: 1rem;
+  padding-right: 1rem;
+  border-right: 1px solid #f4f4f4;
 
   a {
     text-decoration: none;
@@ -70,4 +72,18 @@ anchor-wrapper a {
   img {
     margin-left: 0;
   }
+}
+
+.info-menu-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 12px;
+  min-height: 48px;
+}
+
+.left-container {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
 }
