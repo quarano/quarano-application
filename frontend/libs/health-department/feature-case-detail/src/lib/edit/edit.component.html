@@ -1,294 +1,322 @@
 <form [formGroup]="formGroup" (ngSubmit)="submitForm(editForm, false)" class="mt-3" #editForm="ngForm">
   <ng-container *ngIf="caseDetail$ | async as caseDetail">
-    <fieldset class="mb-3">
-      <legend>Basisdaten</legend>
-      <mat-form-field class="half-width" data-cy="input-firstname">
-        <input
-          required
-          matInput
-          placeholder="Vorname"
-          formControlName="firstName"
-          type="text"
-          #first_name_input
-          (blur)="trimValue(first_name_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="half-width" data-cy="input-lastname">
-        <input
-          matInput
-          required
-          placeholder="Nachname"
-          formControlName="lastName"
-          type="text"
-          #last_name_input
-          (blur)="trimValue(last_name_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="half-width" data-cy="input-dayofbirth">
-        <mat-label>Geburtsdatum</mat-label>
-        <input
-          matInput
-          [max]="today"
-          [matDatepicker]="dateOfBirthPicker"
-          formControlName="dateOfBirth"
-          #date_of_birth_input
-          (blur)="trimValue(date_of_birth_input)"
-        />
-        <mat-datepicker-toggle matSuffix [for]="dateOfBirthPicker"></mat-datepicker-toggle>
-        <mat-datepicker #dateOfBirthPicker></mat-datepicker>
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.dateOfBirth)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.dateOfBirth, error) | async }}
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <fieldset class="mb-3">
-      <legend>Krankheitsdaten</legend>
-      <div class="form-flex">
-        <mat-form-field class="half-width" data-cy="input-testdate">
-          <mat-label>Abstrichdatum (Test)</mat-label>
-          <input
-            data-cy="input-field-test-date"
-            matInput
-            [required]="isIndexCase"
-            [max]="today"
-            [matDatepicker]="testDatePicker"
-            formControlName="testDate"
-            #test_date_input
-            (blur)="trimValue(test_date_input)"
-          />
-          <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #testDatePicker></mat-datepicker>
-          <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.testDate)">
-            {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
-          </mat-error>
-        </mat-form-field>
-        <div *ngIf="formGroup.controls.testDate.value" class="half-width form-field form-field-radio">
-          <label class="example-margin">Covid-19 Test:</label>
-          <mat-radio-group
-            [selected]="isIndexCase ? infectedTrue : infectedFalse"
-            [disabled]="isIndexCase"
-            formControlName="infected"
-          >
-            <mat-radio-button #infectedTrue class="example-margin" data-cy="covid-test-result-true" [value]="true">
-              Positiv
-            </mat-radio-button>
-            <mat-radio-button #infectedFalse class="example-margin" [value]="false">
-              Negativ
-            </mat-radio-button>
-          </mat-radio-group>
+    <div class="bootstrap-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-4">
+            <fieldset>
+              <legend>Basisdaten</legend>
+              <mat-form-field class="full-width" data-cy="input-firstname">
+                <input
+                  required
+                  matInput
+                  placeholder="Vorname"
+                  formControlName="firstName"
+                  type="text"
+                  #first_name_input
+                  (blur)="trimValue(first_name_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.firstName)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-lastname">
+                <input
+                  matInput
+                  required
+                  placeholder="Nachname"
+                  formControlName="lastName"
+                  type="text"
+                  #last_name_input
+                  (blur)="trimValue(last_name_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-dayofbirth">
+                <mat-label>Geburtsdatum</mat-label>
+                <input
+                  matInput
+                  [max]="today"
+                  [matDatepicker]="dateOfBirthPicker"
+                  formControlName="dateOfBirth"
+                  #date_of_birth_input
+                  (blur)="trimValue(date_of_birth_input)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="dateOfBirthPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateOfBirthPicker></mat-datepicker>
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.dateOfBirth)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.dateOfBirth, error) | async }}
+                </mat-error>
+              </mat-form-field>
+            </fieldset>
+          </div>
+          <div class="col-sm-4">
+            <fieldset>
+              <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>
+              <mat-error
+                *ngIf="
+                  formGroup.getError('phoneMissing') &&
+                  (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
+                "
+              >
+                Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
+              >
+              <mat-form-field class="full-width" data-cy="input-phone">
+                <input
+                  data-cy="phone-number-input"
+                  matInput
+                  maxlength="17"
+                  minlength="5"
+                  placeholder="Telefonnummer (Festnetz)"
+                  formControlName="phone"
+                  type="phone"
+                  #phone_input
+                  (blur)="trimValue(phone_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.phone)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.phone, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-mobile">
+                <input
+                  matInput
+                  maxlength="17"
+                  minlength="5"
+                  placeholder="Telefonnummer (mobil)"
+                  formControlName="mobilePhone"
+                  type="phone"
+                  #mobile_phone_input
+                  (blur)="trimValue(mobile_phone_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.mobilePhone)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.mobilePhone, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-email">
+                <input
+                  matInput
+                  placeholder="E-Mail"
+                  formControlName="email"
+                  type="email"
+                  #email_input
+                  (blur)="trimValue(email_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
+                </mat-error>
+              </mat-form-field>
+            </fieldset>
+          </div>
+          <div class="col-sm-4">
+            <fieldset>
+              <legend>Krankheitsdaten</legend>
+              <mat-form-field class="full-width" data-cy="input-testdate">
+                <mat-label>Abstrichdatum (Test)</mat-label>
+                <input
+                  data-cy="input-field-test-date"
+                  matInput
+                  [required]="isIndexCase"
+                  [max]="today"
+                  [matDatepicker]="testDatePicker"
+                  formControlName="testDate"
+                  #test_date_input
+                  (blur)="trimValue(test_date_input)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #testDatePicker></mat-datepicker>
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.testDate)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.testDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <div
+                *ngIf="formGroup.controls.testDate.value"
+                class="full-width form-field form-field-radio"
+                style="padding-bottom: 1.25em"
+              >
+                <label style="margin: 0">Covid-19 Test:</label>
+                <mat-radio-group
+                  [selected]="isIndexCase ? infectedTrue : infectedFalse"
+                  [disabled]="isIndexCase"
+                  formControlName="infected"
+                >
+                  <mat-radio-button #infectedTrue data-cy="covid-test-result-true" [value]="true">
+                    Positiv
+                  </mat-radio-button>
+                  <mat-radio-button #infectedFalse class="example-margin" [value]="false"> Negativ </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-form-field class="full-width" data-cy="input-quarantinestart">
+                <mat-label>Beginn häusliche Isolation</mat-label>
+                <input
+                  data-cy="quarantine-start-input"
+                  matInput
+                  [required]="isIndexCase || formGroup.controls.quarantineEndDate.value"
+                  [max]="today"
+                  [matDatepicker]="quarantineStartPicker"
+                  formControlName="quarantineStartDate"
+                  #quarantine_start_input
+                  (blur)="trimValue(quarantine_start_input)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
+                <mat-datepicker #quarantineStartPicker></mat-datepicker>
+                <mat-error
+                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineStartDate)"
+                >
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineStartDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width" data-cy="input-quarantineend">
+                <mat-label>Ende häusliche Isolation</mat-label>
+                <input
+                  data-cy="quarantine-end-input"
+                  matInput
+                  [required]="isIndexCase || formGroup.controls.quarantineStartDate.value"
+                  [matDatepicker]="quarantineEndDatePicker"
+                  formControlName="quarantineEndDate"
+                  #quarantine_end_input
+                  (blur)="trimValue(quarantine_end_input)"
+                  [min]="formGroup.controls.quarantineStartDate.value"
+                />
+                <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
+                <mat-error
+                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineEndDate)"
+                >
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineEndDate, error) | async }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-label style="font-size: 11px">Ursprungsfälle</mat-label>
+              <qro-lazy-autocomplete
+                (completeMethod)="onIndexCaseSearch($event)"
+                [selectableItems]="selectableIndexCases"
+                [displayWith]="showIndexCaseItem"
+                [control]="formGroup.controls.originCases"
+                placeholder="Ursprungsfälle wählen"
+              ></qro-lazy-autocomplete>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <fieldset>
+              <legend>Adresse</legend>
+              <mat-form-field style="width: 70%">
+                <input
+                  data-cy="street-input"
+                  matInput
+                  placeholder="Straße"
+                  formControlName="street"
+                  type="text"
+                  #street_input
+                  (blur)="trimValue(first_name_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.street)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 30%">
+                <input
+                  data-cy="house-number-input"
+                  matInput
+                  placeholder="Hausnummer"
+                  maxlength="6"
+                  formControlName="houseNumber"
+                  type="text"
+                  #house_number_input
+                  (blur)="trimValue(house_number_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.houseNumber)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 30%" data-cy="input-zipcode">
+                <input
+                  data-cy="zip-code-input"
+                  matInput
+                  placeholder="Postleitzahl"
+                  formControlName="zipCode"
+                  type="text"
+                  #zip_code_input
+                  (blur)="trimValue(zip_code_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.zipCode)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 70%">
+                <input
+                  data-cy="city-input"
+                  matInput
+                  placeholder="Ort"
+                  formControlName="city"
+                  type="text"
+                  #city_input
+                  (blur)="trimValue(city_input)"
+                />
+                <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.city)">
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.city, error) | async }}
+                </mat-error>
+              </mat-form-field>
+            </fieldset>
+          </div>
+          <div class="col-sm-6">
+            <fieldset>
+              <legend>Interne Informationen</legend>
+              <mat-form-field class="full-width" data-cy="input-ext-ref-number">
+                <input
+                  matInput
+                  placeholder="Vorgangsnr."
+                  formControlName="extReferenceNumber"
+                  type="text"
+                  #ext_ref_number_input
+                  (blur)="trimValue(first_name_input)"
+                  maxlength="40"
+                />
+                <mat-error
+                  *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.extReferenceNumber)"
+                >
+                  {{ validationErrorService.getErrorMessage(formGroup.controls.extReferenceNumber, error) | async }}
+                </mat-error>
+              </mat-form-field>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="button-area">
+              <qro-button
+                data-cy="client-submit-button"
+                [disabled]="formGroup.invalid || formGroup.pristine"
+                [loading]="loading$ | async"
+              >
+                Speichern
+              </qro-button>
+              <qro-button
+                data-cy="client-submit-and-close-button"
+                style="margin-left: 8px"
+                type="button"
+                [disabled]="formGroup.invalid || formGroup.pristine"
+                [loading]="loading$ | async"
+                (buttonClicked)="submitForm(editForm, true)"
+              >
+                Speichern und schließen
+              </qro-button>
+              <button
+                data-cy="client-cancel-button"
+                type="button"
+                mat-raised-button
+                color="secondary"
+                [routerLink]="[returnLink]"
+              >
+                Abbrechen
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <mat-form-field class="half-width" data-cy="input-quarantinestart">
-        <mat-label>Beginn häusliche Isolation</mat-label>
-        <input
-          data-cy="quarantine-start-input"
-          matInput
-          [required]="isIndexCase || formGroup.controls.quarantineEndDate.value"
-          [max]="today"
-          [matDatepicker]="quarantineStartPicker"
-          formControlName="quarantineStartDate"
-          #quarantine_start_input
-          (blur)="trimValue(quarantine_start_input)"
-        />
-        <mat-datepicker-toggle matSuffix [for]="quarantineStartPicker"></mat-datepicker-toggle>
-        <mat-datepicker #quarantineStartPicker></mat-datepicker>
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineStartDate)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineStartDate, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="half-width" data-cy="input-quarantineend">
-        <mat-label>Ende häusliche Isolation</mat-label>
-        <input
-          data-cy="quarantine-end-input"
-          matInput
-          [required]="isIndexCase || formGroup.controls.quarantineStartDate.value"
-          [matDatepicker]="quarantineEndDatePicker"
-          formControlName="quarantineEndDate"
-          #quarantine_end_input
-          (blur)="trimValue(quarantine_end_input)"
-          [min]="formGroup.controls.quarantineStartDate.value"
-        />
-        <mat-datepicker-toggle matSuffix [for]="quarantineEndDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #quarantineEndDatePicker></mat-datepicker>
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.quarantineEndDate)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.quarantineEndDate, error) | async }}
-        </mat-error>
-      </mat-form-field>
-
-      <legend>Ursprungsfälle</legend>
-      <qro-lazy-autocomplete
-        (completeMethod)="onIndexCaseSearch($event)"
-        [selectableItems]="selectableIndexCases"
-        [displayWith]="showIndexCaseItem"
-        [control]="formGroup.controls.originCases"
-        placeholder="Ursprungsfälle wählen"
-      ></qro-lazy-autocomplete>
-    </fieldset>
-    <fieldset class="mb-3">
-      <legend>Kontaktmöglichkeiten {{ isIndexCase ? '*' : '' }}</legend>
-      <mat-error
-        *ngIf="
-          formGroup.getError('phoneMissing') &&
-          (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
-        "
-      >
-        Bitte geben Sie mindestens eine Telefonnummer ein</mat-error
-      >
-      <mat-form-field class="half-width" data-cy="input-phone">
-        <input
-          data-cy="phone-number-input"
-          matInput
-          maxlength="17"
-          minlength="5"
-          placeholder="Telefonnummer (Festnetz)"
-          formControlName="phone"
-          type="phone"
-          #phone_input
-          (blur)="trimValue(phone_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.phone)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.phone, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="half-width" data-cy="input-mobile">
-        <input
-          matInput
-          maxlength="17"
-          minlength="5"
-          placeholder="Telefonnummer (mobil)"
-          formControlName="mobilePhone"
-          type="phone"
-          #mobile_phone_input
-          (blur)="trimValue(mobile_phone_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.mobilePhone)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.mobilePhone, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="full-width" data-cy="input-email">
-        <input
-          matInput
-          placeholder="E-Mail"
-          formControlName="email"
-          type="email"
-          #email_input
-          (blur)="trimValue(email_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.email)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <fieldset class="mb-3">
-      <legend>Adresse</legend>
-      <mat-form-field style="width: 70%;">
-        <input
-          data-cy="street-input"
-          matInput
-          placeholder="Straße"
-          formControlName="street"
-          type="text"
-          #street_input
-          (blur)="trimValue(first_name_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.street)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field style="width: 30%;">
-        <input
-          data-cy="house-number-input"
-          matInput
-          placeholder="Hausnummer"
-          maxlength="6"
-          formControlName="houseNumber"
-          type="text"
-          #house_number_input
-          (blur)="trimValue(house_number_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.houseNumber)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field style="width: 30%;" data-cy="input-zipcode">
-        <input
-          data-cy="zip-code-input"
-          matInput
-          placeholder="Postleitzahl"
-          formControlName="zipCode"
-          type="text"
-          #zip_code_input
-          (blur)="trimValue(zip_code_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.zipCode)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field style="width: 70%;">
-        <input
-          data-cy="city-input"
-          matInput
-          placeholder="Ort"
-          formControlName="city"
-          type="text"
-          #city_input
-          (blur)="trimValue(city_input)"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.city)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.city, error) | async }}
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <fieldset class="mb-3">
-      <legend>Interne Informationen</legend>
-      <mat-form-field class="full-width" data-cy="input-ext-ref-number">
-        <input
-          matInput
-          placeholder="Vorgangsnr."
-          formControlName="extReferenceNumber"
-          type="text"
-          #ext_ref_number_input
-          (blur)="trimValue(first_name_input)"
-          maxlength="40"
-        />
-        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.extReferenceNumber)">
-          {{ validationErrorService.getErrorMessage(formGroup.controls.extReferenceNumber, error) | async }}
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-    <div class="button-area">
-      <qro-button
-        data-cy="client-submit-button"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading$ | async"
-      >
-        Speichern
-      </qro-button>
-      <qro-button
-        data-cy="client-submit-and-close-button"
-        style="margin-left: 8px;"
-        type="button"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-        [loading]="loading$ | async"
-        (buttonClicked)="submitForm(editForm, true)"
-      >
-        Speichern und schließen
-      </qro-button>
-      <button
-        data-cy="client-cancel-button"
-        type="button"
-        mat-raised-button
-        color="secondary"
-        [routerLink]="[returnLink]"
-      >
-        Abbrechen
-      </button>
     </div>
   </ng-container>
 </form>

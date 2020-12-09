@@ -1,4 +1,3 @@
-import { VersionService } from '@qro/general/api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HeaderRightComponent } from './header-right.component';
@@ -30,7 +29,6 @@ describe('HeaderRightComponent', () => {
           { provide: MatDialog, useValue: {} },
           { provide: HealthDepartmentService, useValue: {} },
           { provide: ClientStore, useValue: {} },
-          { provide: VersionService, useValue: {} },
           provideMockStore({}),
         ],
         schemas: [NO_ERRORS_SCHEMA],
