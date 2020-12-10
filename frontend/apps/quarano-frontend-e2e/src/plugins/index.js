@@ -11,7 +11,8 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const { preprocessTypescript } = require('@nrwl/cypress/plugins/preprocessor');
+const {preprocessTypescript} = require('@nrwl/cypress/plugins/preprocessor');
+const clipboardy = require('clipboardy');
 
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
@@ -25,7 +26,7 @@ module.exports = (on, config) => {
   // https://docs.cypress.io/api/plugins/browser-launch-api.html#Modify-browser-launch-arguments-preferences-and-extensions
   on('before:browser:launch', (browser, launchOptions) => {
     if (browser.family === 'chromium' && browser.name !== 'electron') {
-      launchOptions.preferences.default.intl = { accept_languages: 'de' };
+      launchOptions.preferences.default.intl = {accept_languages: 'de'};
       return launchOptions;
     }
 
@@ -34,5 +35,12 @@ module.exports = (on, config) => {
       return launchOptions;
     }
   });
+
+  on('task', {
+    getClipboard() {
+      return clipboardy.readSync();
+    }
+  });
+
   return config;
 };
