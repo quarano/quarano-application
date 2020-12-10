@@ -415,7 +415,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		private final TrackedCaseSummary summary;
 		private final @Getter(onMethod = @__(@JsonUnwrapped)) TrackedCaseDto dto;
 		private final @Getter List<Contact> indexContacts;
-		private final @Getter long contactCount;
+		private final @Getter Long contactCount;
 		private final @Getter(onMethod = @__(@JsonAnyGetter)) Map<String, Object> additionalProperty;
 
 		public TrackedCaseDetails(TrackedCase trackedCase, TrackedCaseDto dto, MessageSourceAccessor messages,
@@ -425,7 +425,9 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 			this.trackedCase = trackedCase;
 			this.dto = dto;
-			this.contactCount = trackedCase.getTrackedPerson().getEncounters().getNumberOfUniqueContacts();
+			this.contactCount = trackedCase.isIndexCase()
+					? trackedCase.getTrackedPerson().getEncounters().getNumberOfUniqueContacts()
+					: null;
 			this.summary = new TrackedCaseSummary(trackedCase, messages);
 			this.indexContacts = indexContacts;
 			this.additionalProperty = new HashMap<>();
