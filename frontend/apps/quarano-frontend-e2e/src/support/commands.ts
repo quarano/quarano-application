@@ -10,6 +10,8 @@ declare namespace Cypress {
     loginAgent: () => void;
     loginAdmin: () => void;
     loginClient: () => void;
+
+    restart: (done: (err?: any) => void) => void;
     loginNotEnrolledClient: () => void;
     loginNotEnrolledClient2: () => void;
   }
@@ -57,4 +59,29 @@ Cypress.Commands.add('loginNotEnrolledClient', () => {
 });
 Cypress.Commands.add('loginNotEnrolledClient2', () => {
   login('secUser2', 'secur1tyTest!');
+});
+
+Cypress.Commands.add('restart', (done: (err?: any) => void) => {
+  const req = () => {
+    return fetch('http://localhost:8080/actuator/health/readiness')
+      .then((response) => response.json())
+      .then((response: any) => {
+        if (response.status === 'UP') {
+          Cypress.config('defaultCommandTimeout', 4000);
+
+          done();
+          return;
+        }
+
+        req();
+      })
+      .catch(() => {
+        req();
+      });
+  };
+
+  fetch('http://localhost:8080/actuator/restart', { method: 'POST' }).then(() => {
+    cy.log('restart server');
+    req();
+  });
 });
