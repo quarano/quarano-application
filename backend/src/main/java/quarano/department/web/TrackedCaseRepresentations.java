@@ -367,7 +367,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 
 			verifyQuarantine(errors);
 
-			if (type.equals(CaseType.CONTACT)) {
+			if (type.getPrimaryCaseType().equals(CaseType.CONTACT)) {
 				return errors;
 			}
 
