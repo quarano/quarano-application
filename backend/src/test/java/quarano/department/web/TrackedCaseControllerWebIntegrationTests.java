@@ -547,7 +547,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 	@Test // CORE-119
 	@SuppressWarnings("unchecked")
-	void exposesContactsForCase() throws Exception {
+	void exposesContactsForIndexCase() throws Exception {
 
 		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1).orElseThrow();
 
@@ -584,6 +584,26 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(contact.read("$.contactDates", List.class)).contains(LocalDate.now().minusDays(1).toString());
 
 		assertThat(discoverer.findLinkWithRel(TrackedCaseContactSummary.TRACKED_CASE, contact.jsonString())).isPresent();
+	}
+
+	@Test // CORE-643
+	@SuppressWarnings("unchecked")
+	void dontExposesContactsForContactCase() throws Exception {
+
+		var trackingCase = cases.findByTrackedPerson(TrackedPersonDataInitializer.VALID_TRACKED_PERSON1_ID_DEP1)
+				.orElseThrow();
+
+		var response = mvc.perform(get("/hd/cases/{id}", trackingCase.getId()))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+		assertThat(document.read("$.contactCount", Integer.class)).isNull();
+
+		assertThat(discoverer.findLinkWithRel(TrackedCaseLinkRelations.CONTACTS, response)).isNotPresent();
+
+		mvc.perform(get("/hd/cases/{id}/contacts", trackingCase.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test // CORE-120

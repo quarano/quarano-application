@@ -43,9 +43,9 @@ public class TrackedCaseStatusAware<T extends RepresentationModel<T>> extends Re
 		Supplier<Object> uri = () -> on(RegistrationController.class).createRegistration(caseId, null);
 
 		return Links.of(MvcLink.of(controller.concludeCase(caseId, null), CONCLUDE))
-				.and(MvcLink.of(controller.getContactsOfCase(caseId, null), CONTACTS))
 				.and(MvcLink.of(controller.getDiaryOfCase(caseId, null), DIARY))
 				.and(MvcLink.of(controller.getCase(caseId, null), IanaLinkRelations.SELF))
+				.andIf(trackedCase.isIndexCase(), MvcLink.of(controller.getContactsOfCase(caseId, null), CONTACTS))
 				.andIf(trackedCase.getStatus().equals(Status.IN_REGISTRATION), () -> MvcLink.of(uri, RENEW))
 				.andIf(trackedCase.isEligibleForTracking(), () -> MvcLink.of(uri, START_TRACKING))
 				.andIf(trackedCase.hasQuestionnaire(),

@@ -174,6 +174,8 @@ public class TrackedCaseController {
 
 		if (trackedCase == null) {
 			return ResponseEntity.notFound().build();
+		} else if (!trackedCase.isIndexCase()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
 
 		return ResponseEntity.ok(HalModelBuilder.halModel()
