@@ -10,5 +10,11 @@ form {
 }
 
 mat-form-field {
-  margin: 5px;
+  margin: 20px;
+}
+
+.new-event-form {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(2, auto);
 }
