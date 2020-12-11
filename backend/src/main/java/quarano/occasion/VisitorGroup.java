@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -33,7 +34,8 @@ public class VisitorGroup extends QuaranoAggregate<VisitorGroup, VisitorGroupIde
 	@OneToMany(cascade = CascadeType.ALL) //
 	@JoinColumn(name = "visitor_group_id") //
 	private List<Visitor> visitors;
-	private LocalDateTime start, end;
+	private @Column(name = "start_date") LocalDateTime start;
+	private @Column(name = "end_date") LocalDateTime end;
 	private OccasionCode occasionCode;
 	private String comment;
 	private String locationName;

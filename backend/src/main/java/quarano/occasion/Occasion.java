@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -32,7 +33,8 @@ public class Occasion extends QuaranoAggregate<Occasion, OccasionIdentifier> {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "occasionCode") //
 	private List<VisitorGroup> visitorGroups;
-	private @Setter LocalDateTime start, end;
+	private @Setter @Column(name = "start_date") LocalDateTime start;
+	private @Setter @Column(name = "end_date") LocalDateTime end;
 	private @Setter String title;
 	private OccasionCode occasionCode;
 	private TrackedCaseIdentifier trackedCaseId;

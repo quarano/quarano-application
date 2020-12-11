@@ -4,12 +4,13 @@ CREATE TABLE occasions (
 	created_by uuid NULL,
 	last_modified timestamp NULL,
 	last_modified_by uuid NULL,
-	start timestamp NULL,
-	end timestamp NULL,
+	start_date timestamp NULL,
+	end_date timestamp NULL,
 	title varchar(255) NULL,
 	occasion_code varchar(8) NULL,
     tracked_case_id uuid NOT NULL,
 	CONSTRAINT occasions_pkey PRIMARY KEY (occasion_id),
+	CONSTRAINT occasion_code_unique UNIQUE (occasion_code),
     CONSTRAINT occasions_tracked_case_fk FOREIGN KEY (tracked_case_id) REFERENCES tracked_cases(tracked_case_id)
 );
 
@@ -19,8 +20,8 @@ CREATE TABLE visitor_groups (
 	created_by uuid NULL,
 	last_modified timestamp NULL,
 	last_modified_by uuid NULL,
-	start timestamp NULL,
-	end timestamp NULL,
+	start_date timestamp NULL,
+	end_date timestamp NULL,
 	comment varchar(255) NULL,
 	location_name varchar(255) NULL,
 	occasion_code varchar(8) NULL,
