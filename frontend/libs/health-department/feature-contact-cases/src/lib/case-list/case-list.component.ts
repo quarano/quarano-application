@@ -1,3 +1,4 @@
+import { MatInput } from '@angular/material/input';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseDto, CaseEntityService } from '@qro/health-department/domain';
 import { Component, OnInit } from '@angular/core';
@@ -44,6 +45,7 @@ export class CaseListComponent implements OnInit {
   columnDefs: ColDef[] = [];
   locale = DE_LOCALE;
   frameworkComponents;
+  gridApi: GridApi;
 
   constructor(private entityService: CaseEntityService, private router: Router) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
@@ -131,7 +133,8 @@ export class CaseListComponent implements OnInit {
   }
 
   onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
-    event.api.setFilterModel({
+    this.gridApi = event.api;
+    this.gridApi.setFilterModel({
       status: [
         {
           selected: false,
@@ -139,7 +142,7 @@ export class CaseListComponent implements OnInit {
         },
       ],
     });
-    event.api.onFilterChanged();
+    this.gridApi.onFilterChanged();
     event.columnApi.applyColumnState({
       state: [
         {
@@ -149,5 +152,11 @@ export class CaseListComponent implements OnInit {
       ],
       defaultState: { sort: null },
     });
+  }
+
+  clearAllFilters() {
+    this.gridApi.setFilterModel(null);
+    this.filterString = null;
+    this.gridApi.setQuickFilter(null);
   }
 }
