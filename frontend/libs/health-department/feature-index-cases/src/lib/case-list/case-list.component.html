@@ -11,16 +11,36 @@
   </div>
 </div>
 <ng-container *ngIf="cases$ | async as cases">
-  <mat-form-field appearance="outline" class="full-width mt-3">
-    <input
-      matInput
-      data-cy="search-case-input"
-      type="text"
-      placeholder="Suchen..."
-      [(ngModel)]="filterString"
-      name="filterString"
-    />
-  </mat-form-field>
+  <div class="bootstrap-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-11 pl-0">
+          <mat-form-field appearance="outline" class="full-width mt-3">
+            <input
+              matInput
+              data-cy="search-case-input"
+              type="text"
+              placeholder="Suchen..."
+              [(ngModel)]="filterString"
+              name="filterString"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1" style="display: flex; align-items: center; justify-content: flex-end">
+          <button
+            mat-mini-fab
+            color="primary"
+            matTooltip="Alle Filter löschen"
+            type="button"
+            [disabled]="!gridApi?.isAnyFilterPresent()"
+            (click)="clearAllFilters()"
+          >
+            <mat-icon>delete_sweep</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <ag-grid-angular
     style="height: 50vh"
     data-cy="case-data-table"

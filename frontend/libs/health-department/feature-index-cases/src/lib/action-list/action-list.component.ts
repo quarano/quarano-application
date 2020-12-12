@@ -63,6 +63,9 @@ export class ActionListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.dateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       {
@@ -71,6 +74,9 @@ export class ActionListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.dateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       {
         headerName: 'Telefon',

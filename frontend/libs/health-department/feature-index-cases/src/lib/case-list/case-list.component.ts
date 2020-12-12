@@ -36,7 +36,7 @@ export class CaseListComponent implements OnInit {
   };
   columnDefs: ColDef[] = [];
   locale = DE_LOCALE;
-  private api: GridApi;
+  gridApi: GridApi;
   frameworkComponents;
 
   constructor(private entityService: CaseEntityService, private router: Router) {
@@ -51,6 +51,9 @@ export class CaseListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.birthDateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       {
         headerName: 'Quarantäne bis',
@@ -58,6 +61,9 @@ export class CaseListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.quarantineEndDateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 100 },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
@@ -114,8 +120,8 @@ export class CaseListComponent implements OnInit {
   }
 
   onGridReady(event: { api: GridApi; columnApi: ColumnApi }) {
-    this.api = event.api;
-    this.api.setFilterModel({
+    this.gridApi = event.api;
+    this.gridApi.setFilterModel({
       status: [
         {
           selected: false,
@@ -123,7 +129,7 @@ export class CaseListComponent implements OnInit {
         },
       ],
     });
-    this.api.onFilterChanged();
+    this.gridApi.onFilterChanged();
     event.columnApi.applyColumnState({
       state: [
         {
@@ -133,5 +139,11 @@ export class CaseListComponent implements OnInit {
       ],
       defaultState: { sort: null },
     });
+  }
+
+  clearAllFilters() {
+    this.gridApi.setFilterModel(null);
+    this.filterString = null;
+    this.gridApi.setQuickFilter(null);
   }
 }
