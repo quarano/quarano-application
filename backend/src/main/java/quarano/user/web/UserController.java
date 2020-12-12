@@ -72,15 +72,14 @@ public class UserController {
 			var trackedCase = person.flatMap(cases::findByTrackedPerson);
 
 			trackedCase
-					.map(TrackedCase::getEnrollment)
+					.map(representations::toEnrollmentRepresentation)
 					.ifPresent(it -> {
 
-						var enrollmentDto = representations.toRepresentation(it);
 						var enrollmentLink = MvcLink.of(caseController.enrollment(null), ENROLLMENT);
 
-						userDto.setEnrollment(enrollmentDto)
+						userDto.setEnrollment(it)
 								.add(enrollmentLink)
-								.addIf(!it.isComplete(),
+								.addIf(!it.getEnrollment().isComplete(),
 										() -> MvcLink.of(caseController.enrollment(null), ENROLLMENT).withRel(IanaLinkRelations.NEXT));
 					});
 

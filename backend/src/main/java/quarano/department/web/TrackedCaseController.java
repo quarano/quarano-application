@@ -229,19 +229,15 @@ public class TrackedCaseController {
 	Stream<?> allEnrollments() {
 
 		return cases.findAll()
-				.map(TrackedCase::getEnrollment)
-				.map(representations::toRepresentation)
+				.map(representations::toEnrollmentRepresentation)
 				.stream();
 	}
 
 	@GetMapping("/enrollment")
 	public HttpEntity<?> enrollment(@LoggedIn TrackedPerson person) {
 
-		var map = cases.findByTrackedPerson(person)
-				.map(TrackedCase::getEnrollment)
-				.map(representations::toRepresentation);
-
-		return ResponseEntity.of(map);
+		return ResponseEntity.of(cases.findByTrackedPerson(person)
+				.map(representations::toEnrollmentRepresentation));
 	}
 
 	@PutMapping("/enrollment/details")
@@ -317,6 +313,14 @@ public class TrackedCaseController {
 				.map(QuestionnaireDto::validate)
 				.map(it -> representations.from(it, trackedCase.getQuestionnaire()))
 				.map(trackedCase::submitQuestionnaire)
+				.map(it -> {
+
+					if (!(configuration.isExecuteContactRetroForContactCases() || it.isIndexCase())) {
+						it.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS);
+					}
+
+					return it;
+				})
 				.map(cases::save)
 				.concludeIfValid(__ -> {
 					return ResponseEntity.ok()

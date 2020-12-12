@@ -29,7 +29,6 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,8 +95,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		reviewed.setComment("Comment!");
 
 		var response = mvc.perform(put("/hd/actions/{id}/resolve", trackedCase.getId())
-				.content(jackson.writeValueAsString(reviewed))
-				.contentType(MediaType.APPLICATION_JSON))
+				.content(jackson.writeValueAsString(reviewed)))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -113,7 +111,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	@WithQuaranoUser("agent3")
 	void resolvesAnomaliesManuallyDoesNotWorkForSystemAnomalies() throws Exception {
 
-		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andDo(documentAnomalies())
 				.andReturn().getResponse().getContentAsString();
@@ -125,8 +123,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.setComment("Comment!");
 
 		var response = mvc.perform(put("/hd/actions/{id}/resolve", contactCaseId)
-				.content(jackson.writeValueAsString(reviewed))
-				.contentType(MediaType.APPLICATION_JSON))
+				.content(jackson.writeValueAsString(reviewed)))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -150,8 +147,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 		var reviewed = new ActionsReviewed().setComment("Comment!");
 
 		mvc.perform(put("/hd/actions/{id}/resolve", trackedCase.getId())
-				.content(jackson.writeValueAsString(reviewed))
-				.contentType(MediaType.APPLICATION_JSON))
+				.content(jackson.writeValueAsString(reviewed)))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -176,7 +172,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 	void getActionsDoesNotReturnConcludedCases() throws Exception {
 
 		// get an active case with open actions
-		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -210,8 +206,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.filter(it -> it.originatesFrom(originCase))
 				.stream().findFirst().orElseThrow();
 
-		var response = mvc.perform(get("/hd/actions")
-				.accept("application/hal+json"))
+		var response = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -250,7 +245,7 @@ class AnomaliesControllerWebIntegrationTests extends AbstractDocumentation {
 				.orElseThrow();
 
 		// get an active case with open actions
-		var actionsResponse = mvc.perform(get("/hd/actions").accept("application/json"))
+		var actionsResponse = mvc.perform(get("/hd/actions"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 

@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties("quarano.cases")
 public class TrackedCaseProperties {
 
+	private final boolean executeContactRetroForContactCases;
 	private final Period quarantinePeriod;
 
 	public Period getQuarantinePeriod() {
