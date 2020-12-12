@@ -17,7 +17,8 @@ import { uniq, flatten, intersection } from 'lodash';
           </li>
         </ul>
       </span>
-      <button mat-stroked-button (click)="selectAll()" [disabled]="!hasUnselectedOptions()">Alle</button>
+      <button mat-stroked-button (click)="selectAll()" *ngIf="hasUnselectedOptions()">Alle</button>
+      <button mat-stroked-button (click)="deselectAll()" *ngIf="areAllOptionsSelected()">Alle abwählen</button>
     </section>
   `,
   styles: [
@@ -78,6 +79,10 @@ export class ActionAlertFilterComponent implements IFilterAngularComp {
     return this.options.map((o) => o.selected).includes(false);
   }
 
+  areAllOptionsSelected(): boolean {
+    return this.options.every((o) => !!o.selected);
+  }
+
   doesFilterPass(params: IDoesFilterPassParams): boolean {
     const selectedOptions = this.options.filter((o) => o.selected).map((o) => o.label.toLowerCase());
 
@@ -105,6 +110,11 @@ export class ActionAlertFilterComponent implements IFilterAngularComp {
 
   selectAll() {
     this.options.forEach((o) => (o.selected = true));
+    this.onChange();
+  }
+
+  deselectAll() {
+    this.options.forEach((o) => (o.selected = false));
     this.onChange();
   }
 

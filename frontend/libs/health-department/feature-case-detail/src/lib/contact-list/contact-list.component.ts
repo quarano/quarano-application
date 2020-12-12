@@ -73,6 +73,9 @@ export class ContactListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.lastContactDateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
     ];
