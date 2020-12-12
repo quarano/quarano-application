@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'qro-event-card',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent implements OnInit {
+  @Input()
+  occasion: any;
+
   constructor() {}
 
   ngOnInit(): void {}

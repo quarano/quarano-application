@@ -7,5 +7,7 @@
     </button>
     <p class="new-event-subtitle">{{ 'EREIGNISSE.NEUES_EREIGNIS' | translate }}</p>
   </mat-card>
-  <qro-event-card *ngFor="let number of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"></qro-event-card>
+  <div *ngFor="let occasion of $occasions | async">
+    <qro-event-card [occasion]="occasion"></qro-event-card>
+  </div>
 </div>

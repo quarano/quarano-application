@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SubSink } from 'subsink';
 import { HealthDepartmentService } from '@qro/health-department/domain';
-import { take, tap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
+import { Observable, of } from 'rxjs';
+import { map } from 'ag-grid-community/dist/lib/utils/array';
 
 export interface Event {
   title: string;
@@ -21,6 +23,8 @@ export class EventListComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   caseId = null;
 
+  $occasions: Observable<any[]>;
+
   constructor(
     private dialog: MatDialog,
     private healthDepartmentService: HealthDepartmentService,
@@ -32,6 +36,11 @@ export class EventListComponent implements OnInit, OnDestroy {
         tap((params) => (this.caseId = params.get('id')))
       )
       .subscribe();
+
+    this.$occasions = this.healthDepartmentService.getEvents().pipe(
+      tap((occasionsDTO) => console.log(occasionsDTO)),
+      switchMap((occasions) => of(occasions?._embedded?.occasions))
+    );
   }
 
   ngOnInit(): void {}
