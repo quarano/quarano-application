@@ -8,22 +8,19 @@ import { SubSink } from 'subsink';
   templateUrl: './event-new-dialog.component.html',
   styleUrls: ['./event-new-dialog.component.scss'],
 })
-export class EventNewDialogComponent implements OnInit {
-  subs = new SubSink();
-
+export class EventNewDialogComponent {
   eventFormGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<EventNewDialogComponent>) {
-    this.subscribeToDialogCloseAndPassFormValueToParent();
     this.initializeEventForm();
   }
 
-  private subscribeToDialogCloseAndPassFormValueToParent() {
-    this.subs.add(
-      this.dialogRef.beforeClosed().subscribe(() => {
-        this.dialogRef.close(this.eventFormGroup.getRawValue());
-      })
-    );
+  close() {
+    this.dialogRef.close();
+  }
+
+  closeAndSubmit() {
+    this.dialogRef.close(this.eventFormGroup.getRawValue());
   }
 
   private initializeEventForm() {
@@ -39,6 +36,4 @@ export class EventNewDialogComponent implements OnInit {
       id: new FormControl(''),
     });
   }
-
-  ngOnInit(): void {}
 }

@@ -84,8 +84,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
+  <button mat-button (click)="close()">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
+  <button mat-button cdkFocusInitial (click)="closeAndSubmit()">
     {{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANLEGEN' | translate }}
   </button>
 </mat-dialog-actions>
