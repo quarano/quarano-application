@@ -1,45 +1,65 @@
 <h2 mat-dialog-title>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NEU' | translate }}</h2>
 
 <mat-dialog-content>
-  <form class="new-event-form">
+  <form class="new-event-form" [formGroup]="eventFormGroup">
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
+      <input formControlName="name" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.DATUM' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.Datum' | translate }}" />
+      <input formControlName="date" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.Datum' | translate }}" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ADRESSE' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ADRESSE' | translate }}" />
+      <input
+        formControlName="address"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ADRESSE' | translate }}"
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STATUS' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STATUS' | translate }}" />
+      <input formControlName="status" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STATUS' | translate }}" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VORGANGSNUMMER' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VORGANGSNUMMER' | translate }}" />
+      <input
+        formControlName="id"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VORGANGSNUMMER' | translate }}"
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANSPRECHPARTNER' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANSPRECHPARTNER' | translate }}" />
+      <input
+        formControlName="contactPerson"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANSPRECHPARTNER' | translate }}"
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}" />
+      <input
+        formControlName="description"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}"
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BEKANNTE_TEILNEHMERZAHL' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BEKANNTE_TEILNEHMERZAHL' | translate }}" />
+      <input
+        formControlName="participants"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BEKANNTE_TEILNEHMERZAHL' | translate }}"
+      />
     </mat-form-field>
   </form>
 </mat-dialog-content>
