@@ -2,11 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SubSink } from 'subsink';
 import { HealthDepartmentService } from '@qro/health-department/domain';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
 import { Observable, of } from 'rxjs';
-import { map } from 'ag-grid-community/dist/lib/utils/array';
 
 export interface Event {
   title: string;
@@ -50,19 +49,21 @@ export class EventListComponent implements OnInit, OnDestroy {
       this.dialog
         .open(EventNewDialogComponent)
         .afterClosed()
+        .pipe(filter((eventData) => eventData))
         .subscribe((value) => this.saveNewEvent(value))
     );
   }
 
-  private saveNewEvent(value) {
-    debugger;
+  private saveNewEvent(event) {
     //todo richtig typisieren
     const newEvent: Event = {
-      title: value.name,
-      start: value.dateFrom,
-      end: value.dateTo,
+      title: event?.name,
+      start: event?.dateFrom,
+      end: event?.dateTo,
     };
-    this.healthDepartmentService.addEvent(this.caseId, newEvent).subscribe((value1) => console.log(value1));
+    this.healthDepartmentService
+      .addEvent(this.caseId, newEvent)
+      .subscribe((response) => console.log('backendResponse:', response));
   }
 
   ngOnDestroy(): void {
