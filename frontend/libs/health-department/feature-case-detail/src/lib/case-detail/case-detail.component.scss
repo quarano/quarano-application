@@ -6,8 +6,7 @@
   background-position-y: center;
 }
 mat-card {
-  width: 1142px;
-  max-width: 1142px;
+  width: 90vw;
 
   mat-card-content > .button-area {
     display: flex;
@@ -45,8 +44,14 @@ p.hint {
 }
 
 ::ng-deep {
-  mat-tab-header {
-    margin-bottom: 1rem !important;
+  mat-card.case-detail-card {
+    mat-tab-header {
+      margin-bottom: 1rem !important;
+    }
+
+    .mat-card-header-text {
+      width: 100%;
+    }
   }
 }
 
