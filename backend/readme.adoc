@@ -10,7 +10,7 @@ Run the backend application.
 ----
 $ git clone https://github.com/coronareportteam/coronareport quarano <1>
 $ cd quarano/backend <2>
-$ mvn spring-boot:run -Pinmemory <3>
+$ mvn spring-boot:run -PlocalDev <3>
 ----
 <1> Clone the repository.
 <2> Switch to the `backend` folder.
