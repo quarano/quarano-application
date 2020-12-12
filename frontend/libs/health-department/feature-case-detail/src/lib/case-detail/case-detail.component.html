@@ -1,4 +1,4 @@
-<mat-card class="form__card--small form__card--animated" *ngIf="caseDetail$ | async as caseDetail">
+<mat-card class="case-detail-card form__card--animated" *ngIf="caseDetail$ | async as caseDetail">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
     <mat-card-title *ngIf="caseDetail.caseId; else newCase">
@@ -38,6 +38,7 @@
         color="primary"
         [disabled]="!caseDetail._links?.hasOwnProperty('start-tracking')"
         mat-button
+        class="mr-3"
       >
         <span
           data-cy="start-tracking-span"
