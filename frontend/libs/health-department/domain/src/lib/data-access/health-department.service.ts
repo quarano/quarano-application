@@ -62,6 +62,10 @@ export class HealthDepartmentService {
     return this.httpClient.get<string>(`${this.apiUrl}/hd/quarantines`, options).pipe(shareReplay());
   }
 
+  addEvent(caseId: string, event: any): Observable<any> {
+    return this.httpClient.post(`${this.apiUrl}/hd/cases/${caseId}/occasions`, event).pipe(shareReplay());
+  }
+
   public get healthDepartment$(): Observable<HealthDepartmentDto> {
     return this.authStore.user$.pipe(
       distinctUntilChanged(),
