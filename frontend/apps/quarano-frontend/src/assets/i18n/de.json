@@ -419,7 +419,8 @@
     "EREIGNIS_NEU_MODAL": {
       "NEU": "Neues Ereignis anlegen",
       "NAME": "Name",
-      "DATUM": "Datum",
+      "VON": "Startdatum",
+      "BIS": "Enddatum",
       "ADRESSE": "Adresse",
       "STATUS": "Status",
       "VORGANGSNUMMER": "Vorgangsnummer",

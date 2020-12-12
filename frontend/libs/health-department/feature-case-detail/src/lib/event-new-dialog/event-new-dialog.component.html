@@ -8,8 +8,27 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.DATUM' | translate }}</mat-label>
-      <input formControlName="date" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.Datum' | translate }}" />
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}</mat-label>
+      <input
+        formControlName="dateFrom"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}"
+        [matDatepicker]="dateFrom"
+      />
+      <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+      <mat-datepicker #dateFrom></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}</mat-label>
+      <input
+        formControlName="dateTo"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}"
+        [matDatepicker]="dateTo"
+      />
+      <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
+      <mat-datepicker #dateTo></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field>

@@ -29,7 +29,8 @@ export class EventNewDialogComponent implements OnInit {
   private initializeEventForm() {
     this.eventFormGroup = new FormGroup({
       name: new FormControl(''),
-      date: new FormControl(''),
+      dateFrom: new FormControl(''),
+      dateTo: new FormControl(''),
       address: new FormControl(''),
       status: new FormControl(''),
       participants: new FormControl(''),
