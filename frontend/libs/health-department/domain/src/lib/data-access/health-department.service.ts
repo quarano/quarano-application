@@ -97,6 +97,10 @@ export class HealthDepartmentService {
     return this.httpClient.post(`${this.apiUrl}/hd/cases/${caseId}/occasions`, event).pipe(shareReplay());
   }
 
+  getEvents(): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/hd/occasions`).pipe(shareReplay());
+  }
+
   public get healthDepartment$(): Observable<HealthDepartmentDto> {
     return this.authStore.user$.pipe(
       distinctUntilChanged(),

@@ -412,7 +412,8 @@
     "NEUES_EREIGNIS": "Neues Ereignis anlegen",
     "EREIGNIS_CARD" : {
       "NAME_EREIGNIS": "Name des Ereignisses",
-      "DATUM": "Datum",
+      "START": "Start",
+      "ENDE": "Ende",
       "ANZAHL_TEILNEHMER": "Anzahl Teilnehmer",
       "STATUS": "Status"
     },

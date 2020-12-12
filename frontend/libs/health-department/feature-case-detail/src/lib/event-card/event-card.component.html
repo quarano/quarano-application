@@ -1,11 +1,12 @@
 <mat-card>
   <mat-card-header>
-    <h2 class="text-left w-100">{{ 'EREIGNISSE.EREIGNIS_CARD.NAME_EREIGNIS' | translate }}</h2>
+    <h2 class="text-left w-100">{{ 'EREIGNISSE.EREIGNIS_CARD.NAME_EREIGNIS' | translate }}: {{ occasion.title }}</h2>
   </mat-card-header>
 
   <mat-card-content>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.DATUM' | translate }}</div>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.ANZAHL_TEILNEHMER' | translate }}</div>
+    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.START' | translate }}: {{ occasion.start }}</div>
+    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.ENDE' | translate }}: {{ occasion.end }}</div>
+    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.ANZAHL_TEILNEHMER' | translate }}: {{ occasion.title }}</div>
     <div>{{ 'EREIGNISSE.EREIGNIS_CARD.STATUS' | translate }}</div>
   </mat-card-content>
 
