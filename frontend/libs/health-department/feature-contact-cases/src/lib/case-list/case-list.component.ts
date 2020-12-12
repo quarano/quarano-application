@@ -60,6 +60,9 @@ export class CaseListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.quarantineEndDateFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       {
         headerName: 'Angelegt am',
@@ -67,6 +70,9 @@ export class CaseListComponent implements OnInit {
         filter: 'agDateColumnFilter',
         valueFormatter: this.createdAtFormatter,
         width: 170,
+        filterParams: {
+          buttons: ['reset'],
+        },
       },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
       {
