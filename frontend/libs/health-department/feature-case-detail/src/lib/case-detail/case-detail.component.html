@@ -146,6 +146,7 @@
         routerLinkActive
         #rlcontacts="routerLinkActive"
         [active]="rlcontacts.isActive"
+        *ngIf="caseDetail._links.hasOwnProperty('contacts')"
       >
         Kontakte <span class="info-badge">{{ caseDetail.contactCount }}</span>
       </a>
