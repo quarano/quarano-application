@@ -1,0 +1,6 @@
+= IMPORTANT
+
+The private key contained in this folder lives here *deliberately*.
+It lives here, so that we can have tests for the X.509 authentication for third-party integrators.
+It's a pure playground setup.
+That key is *not* used to secure any production deployments.

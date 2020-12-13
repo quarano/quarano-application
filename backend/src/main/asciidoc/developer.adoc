@@ -54,6 +54,7 @@ Everything related to the medical diary a <<modules.tracking, `TrackedPerson`>> 
 plantuml::{moduliths-docs}/module-diary.uml[,,svg]
 include::{moduliths-docs}/module-diary.adoc[]
 
+[[modules.anomalies]]
 === Actions
 
 Abstractions to capture anomalies detected in the life cycle of a <<modules.department, `TrackedCase`>>.
@@ -62,6 +63,7 @@ Can be either be related to the process of tracking (e.g. missing diary entries)
 plantuml::{moduliths-docs}/module-actions.uml[,,svg]
 include::{moduliths-docs}/module-actions.adoc[]
 
+[[modules.security]]
 === Security
 
 Implementation of JWT based security for the system, the expose of certain configuration properties related to that.
@@ -69,6 +71,7 @@ Implementation of JWT based security for the system, the expose of certain confi
 plantuml::{moduliths-docs}/module-security.uml[,,svg]
 include::{moduliths-docs}/module-security.adoc[]
 
+[[modules.master-data]]
 === Master data
 
 Contains reference data like an abstraction of symptoms, frontend texts and email templates.
@@ -76,8 +79,52 @@ Contains reference data like an abstraction of symptoms, frontend texts and emai
 plantuml::{moduliths-docs}/module-masterdata.uml[,,svg]
 include::{moduliths-docs}/module-masterdata.adoc[]
 
+[[security]]
+=== Security considerations
+
+This section contains documentation about fundamental security considerations of Quarano.
+
+[[security.authentication]]
+==== Authentication mechanisms
+
+Quarano uses two primary authentication mechanisms.
+Human users use the <<security.authentication.tokens, token based authentication>>, external systems authenticate via <<security.authentication.x509, X509 certificates>>.
+
+[[security.authentication.tokens]]
+===== Token based authentication
+
+The primary authentication mechanism for API clients is JWT token based authentication.
+The API is described <<authentication, here>>.
+The implementation can be found in <<modules.security>>.
+
+[[security.authentication.x509]]
+===== X.509 authentication
+
+The X.509 based authentication for third-party software is using Spring Security's support for that authentication mechanism.
+A sample trust store, public and private key for testing purposes is available in `src/test/security`.
+When running or packaging the application with the `localDev` profile, that trust store is also copied into the runnable so that the demo trust store can be used on a running application.
+
+== Handling passwords
+
+Quarano of course stores passwords using state-of-the art BCrypt encryption provided by Spring Security. See `Quarano.passwordEncoder()`.
+That said, there's also emphasis on password security right within the domain model to avoid accidental storage of unencrypted passwords.
+This is primarily achieved through the `Password` domain primitive abstraction with its two flavors `EncryptedPassword` and `UnencryptedPassword`.
+The former is used in the `Account` aggregate, so that on the code level, no `Account` instances with unencrypted passwords can be created in the first place.
+The existence of those types also allows method signatures to clearly communicate which of the two they expect (see `AccountService.createStaffAccount(…)`).
+
+[[security.emails]]
+==== Sending out emails
+
+When sending out emails, it's important that we do not include information that is part of authentication, registration or password reset processes.
+In particular this includes:
+
+* Passwords -- obviously. Hardly possible to get wrong as the code rarely sees plain text passwords at all.
+Current passwords are held in encrypted fashion only anyway.
+* User names -- used in password reset process.
+* Date of birth -- used in user registration and password reset process.
+
 [[third-party-integration]]
-== Third party integration
+== Third-party integration
 
 [[third-party-integration.rki]]
 === Health department verification information

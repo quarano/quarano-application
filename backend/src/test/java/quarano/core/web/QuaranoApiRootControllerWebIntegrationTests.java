@@ -18,11 +18,11 @@ import org.junit.jupiter.api.Test;
  * @author Oliver Drotbohm
  */
 @QuaranoWebIntegrationTest
-public class QuaranoApiRootControllerWebIntegrationTests extends AbstractDocumentation {
+class QuaranoApiRootControllerWebIntegrationTests extends AbstractDocumentation {
 
 	DocumentationFlow flow = DocumentationFlow.of("root-resource");
 
-	@Test
+	@Test // CORE-613
 	void accessRootResource() throws Exception {
 
 		var loginLink = linkWithRel(AuthenticationLinkRelations.LOGIN.value())
@@ -32,6 +32,6 @@ public class QuaranoApiRootControllerWebIntegrationTests extends AbstractDocumen
 
 		mvc.perform(get("/"))
 				.andExpect(status().isOk())
-				.andDo(flow.document("access-root-resource", links(loginLink, resetPasswordLink)));
+				.andDo(flow.document("access-root-resource", relaxedLinks(loginLink, resetPasswordLink)));
 	}
 }

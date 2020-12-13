@@ -74,7 +74,7 @@ public class Quarano {
 	}
 
 	@Bean
-	PasswordEncoder getPasswordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 

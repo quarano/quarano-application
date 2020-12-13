@@ -1,7 +1,19 @@
 package quarano.security.web;
 
+import static quarano.core.web.QuaranoHttpHeaders.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.account.Account;
+import quarano.account.AccountService;
+import quarano.account.RoleType;
+import quarano.security.JwtConfiguration;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -14,17 +26,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import quarano.account.Account;
-import quarano.account.AccountService;
-import quarano.account.RoleType;
-import quarano.security.JwtConfiguration;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static quarano.core.web.QuaranoHttpHeaders.AUTH_TOKEN;
 
 /**
  * Configures security settings and defines which url pattern can be accessed by which role
@@ -61,6 +62,10 @@ public class QuaranoWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 		Function<String, Account> accountSource = username -> accounts.findByUsername(username)
 				.orElseThrow(
 						() -> new UsernameNotFoundException(String.format("Couldn't find account for username %s!", username)));
+
+		// Enable certificate authentication for third-party software
+		httpSecurity.x509()
+				.authenticationUserDetailsService(ThirdPartyUserDetailsSource.INSTANCE);
 
 		httpSecurity.oauth2ResourceServer()
 				.jwt().jwtAuthenticationConverter(configuration.getJwtConverter(accountSource));

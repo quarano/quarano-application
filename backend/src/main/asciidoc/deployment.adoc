@@ -1,7 +1,10 @@
+[[deployment]]
 = Deployment information
 
+[[deployment.deployables]]
 == Building deployable units
 
+[[deployment.deployables.jar]]
 === Building a deployable JAR
 
 [source, bash]
@@ -11,6 +14,7 @@ $ ./mvnw clean package
 
 The Spring Boot plugin contained in the build instruction will create a runnable artifact that can just be run with `java -jar target/*.jar`.
 
+[[deployment.deployables.docker]]
 === Building a Docker container
 
 To build a Docker container, you have to have Docker running on your machine.
@@ -24,6 +28,7 @@ $ ./mvnw clean spring-boot:build-image
 That building a layered Docker image based on Paketo buildpacks.
 More details on that https://spring.io/blog/2020/01/27/creating-docker-images-with-spring-boot-2-3-0-m1[here].
 
+[[deployment.spring-profiles]]
 == Spring profiles
 
 The application uses Spring application profiles that allow configuration to carry different values and different features activated based on the profiles selected on startup.
@@ -48,3 +53,17 @@ The profile configuration for the different deployment environments looks as fol
 * _Development_ - `staging`, triggers database (wipe and test data) reset on startup.
 * _Test_ - TODO: investigate
 * _Production_ - `prod`
+
+[[deployment.security]]
+== Security considerations
+
+=== Third-party certificates
+
+The <<third-party, API for third parties>> is <<third-party.authentication, secured>> by X509 certificates.
+To allow this, the certificates provided by those applications need to be held in a trust store and configured with the application.
+Deployments need to specify the following properties:
+
+* `server.ssl.key-store` -- the path to the key store to be used.
+* `server.ssl.key-store-password` -- the password to access the key store.
+* `server.ssl.trust-store` -- the path to the trust store to be used containing the trusted certificates.
+* `server.ssl.trust-store-password` -- the password to access the trust store.
