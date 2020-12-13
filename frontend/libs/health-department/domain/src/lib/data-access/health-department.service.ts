@@ -72,12 +72,16 @@ export class HealthDepartmentService {
     return this.httpClient.post<string>(`${this.apiUrl}/hd/export/quarantines`, dto, options).pipe(shareReplay());
   }
 
-  addEvent(caseId: string, event: any): Observable<any> {
+  addOccasion(caseId: string, event: any): Observable<any> {
     return this.httpClient.post(`${this.apiUrl}/hd/cases/${caseId}/occasions`, event).pipe(shareReplay());
   }
 
-  getEvents(): Observable<any> {
+  getOccasion(): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/hd/occasions`).pipe(shareReplay());
+  }
+
+  deleteOccasion(occasion: any): Observable<any> {
+    return this.httpClient.delete(occasion._links.self.href).pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {

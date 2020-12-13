@@ -36,7 +36,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.$occasions = this.healthDepartmentService.getEvents().pipe(
+    this.$occasions = this.healthDepartmentService.getOccasion().pipe(
       tap((occasionsDTO) => console.log(occasionsDTO)),
       switchMap((occasions) => of(occasions?._embedded?.occasions))
     );
@@ -62,7 +62,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       end: event?.dateTo,
     };
     this.healthDepartmentService
-      .addEvent(this.caseId, newEvent)
+      .addOccasion(this.caseId, newEvent)
       .subscribe((response) => console.log('backendResponse:', response));
   }
 
