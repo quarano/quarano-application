@@ -1,0 +1,5 @@
+// event solution provider: generate private and signed public cert
+openssl req -x509 -sha256 -nodes -days 1365 -newkey rsa:2048 -keyout privateKey.key -out acme-event-manager.cert
+
+// quarano: create truststore (PKCS12) from signed public key
+keytool -import -file C:\acme-event-manager.cert -alias acme-event-manager -keystore quaranoTruststore

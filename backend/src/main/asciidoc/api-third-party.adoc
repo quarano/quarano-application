@@ -1,15 +1,91 @@
+[[third-party]]
 = Third party integration
 :snippets: ../../../target/generated-snippets
+:github: https://github.com/quarano/quarano-application/tree/develop/backend/
+
+This section contains general information on third party integration that exists for Quarano.
 
 [[third-party.authentication]]
 == Third party authentication
 
-TODO
+Third-party software systems that want to interact with Quarano have to authenticate with its API.
+That authentication is done signing requests with a https://en.wikipedia.org/wiki/X.509[X.509 compatible certificate] signed requests.
+That means, to integrate with Quarano, client software vendors will have to get in touch with Quarano and submit their public key to be integrated with Quarano in the first place.
+
+A demo certificate, trust and key store live in our link:{github}/src/test/resources/security/client[repository].
+
+We expose an HTTP resource `/ext/auth` that accepts authenticated GET requests doing nothing but returning `204 No Content` on success to verify the authentication working.
+
+[[third-party.authentication.preparation]]
+=== Prerequistes
+
+Third parties can create a key and certificate using the following command:
+
+[source, bash]
+----
+$ openssl req -x509 -sha256 -nodes -days 1365 -newkey rsa:2048 -keyout acme-event-manager.key -out acme-event-manager.cert
+----
+
+`acme-event-manager.key` is the file you keep for yourself and use to sign the requests when interacting with Quarano.
+`acme-event-manager.cert` is the certificate you hand over to Quarano.
+It will be integrated into the deployments of the individual health departments so that it accepts requests signed with your private key.
+
+[[third-party.authentication.java-client]]
+=== Using the certificate when building a Java client
+
+If your client is written in Java, you also need to create p12 file to use with your client:
+
+[source, bash]
+----
+$ openssl pkcs12 -export -out acme-event-manager.p12 -inkey acme-event-manager.key -in acme-event-manager.crt
+----
+
+With those files in place, you can create a Spring `RestTemplate` instance authenticating via the generated certificate using Apache HTTP Client as follows:
+
+[source, java]
+----
+RestOperations createClient(ResourceLoader resources) {
+
+  var password = "quarano".toCharArray();
+  var keystore = "path/to/acme-event-manager.p12";
+  var ks = KeyStore.getInstance("JKS");
+
+  try (var stream = resources.getResource(keystore).getInputStream()) {
+    ks.load(stream, password);
+  }
+
+  var sslContext = new SSLContextBuilder()
+    .loadTrustMaterial((chain, authType) -> true); // trust all server certificates
+    .loadKeyMaterial(ks, password) // use key store to authenticate with server
+    .build();
+
+  var socketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+  var httpClient = HttpClientBuilder.create()
+    .setSSLSocketFactory(socketFactory)
+    .build();
+
+  return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+}
+----
+
+[[third-party.root-resource]]
+== Accessing the root resource
+
+Clients are encouraged to access the root API URI first and discover and follow links from there.
+That ensures that Quarano can change URIs and URI structures at will and clients will pick up those changes by re-traversing the URIs.
+
+When accessing the API root using certificate authentication, clients will be presented with a list of links to identify the resources they can work with.
+
+include::{snippets}/submit-visitors/access-root-resource/curl-request.adoc[]
+
+include::{snippets}/submit-visitors/access-root-resource/links.adoc[]
 
 [[third-party.visitor-groups]]
 == Visitor groups for occasion
 
-To submit visitor groups for occasions, issue an HTTP `POST` request to `/ext/occasions/{occasions-code}` and expand it with the occasion code given by the health department:
+Third-party software to submit visitor lists will find a link
+
+To submit visitor groups for occasions, clients issue an HTTP `POST` request to to the `submit-visitors` link found at the <<third-party.root-resource, API root>> and expand it with the occasion code given by the health department:
 
 include::{snippets}/submit-visitors/submit-visitors/curl-request.adoc[]
 

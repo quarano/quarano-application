@@ -86,6 +86,38 @@
 							<skip>${skipTests}</skip>
 						</configuration>
 					</plugin>
+
+					<!--
+						Copy the testing truststore into the production classpath
+						to allow third party software to use the demo certificate
+						to authenticate requests.
+
+						See https://quarano.de/internal-dev/api/docs/index.html#third-party.authentication
+					-->
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-truststore</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/target/classes</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/src/test/resources</directory>
+											<includes>
+												<include>security/server/*.jks</include>
+												<include>security/server/*.p12</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 			<repositories>
@@ -267,6 +299,11 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>

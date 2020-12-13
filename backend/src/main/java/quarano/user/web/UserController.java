@@ -8,9 +8,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AccountService;
+import quarano.account.AuthenticationManager;
 import quarano.account.DepartmentContact.ContactType;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.account.RoleType;
 import quarano.actions.web.AnomaliesController;
 import quarano.core.web.I18nedMessage;
 import quarano.core.web.LoggedIn;
@@ -179,7 +181,10 @@ public class UserController {
 	}
 
 	@Component
+	@RequiredArgsConstructor
 	static class PasswordResetProcessor implements RepresentationModelProcessor<QuaranoApiRoot> {
+
+		private final AuthenticationManager authentication;
 
 		/*
 		 * (non-Javadoc)
@@ -190,7 +195,9 @@ public class UserController {
 
 			var controller = on(UserController.class);
 
-			return model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD));
+			return authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman)
+					? model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD))
+					: model;
 		};
 	}
 }

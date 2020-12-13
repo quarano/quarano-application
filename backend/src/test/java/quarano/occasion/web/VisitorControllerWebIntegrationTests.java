@@ -1,5 +1,6 @@
 package quarano.occasion.web;
 
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,6 +32,17 @@ class VisitorControllerWebIntegrationTests extends AbstractDocumentation {
 	private final LocalDate today = LocalDate.now();
 	private final LocalTime now = LocalTime.now();
 	private final DocumentationFlow flow = DocumentationFlow.of("submit-visitors");
+
+	@Test // CORE-631
+	@WithMockUser(roles = "THIRD_PARTY")
+	void accessRootResource() throws Exception {
+
+		mvc.perform(get("/"))
+				.andExpect(status().isOk())
+				.andDo(flow.document("access-root-resource",
+						relaxedLinks(linkWithRel(VisitorsLinkRelations.SUBMIT_VISITORS.value())
+								.description("<<third-party.visitor-groups, Submit visitor groups for an occasion.>>"))));
+	}
 
 	@Test // CORE-631
 	@WithMockUser(roles = "THIRD_PARTY")

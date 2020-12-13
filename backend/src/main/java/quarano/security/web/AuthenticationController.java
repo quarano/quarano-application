@@ -13,17 +13,21 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.account.Account;
 import quarano.account.AccountService;
+import quarano.account.AuthenticationManager;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.account.RoleType;
 import quarano.account.web.AccountRepresentations;
 import quarano.core.web.QuaranoApiRoot;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.TrackedPersonManagement;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.hateoas.server.mvc.MvcLink;
 import org.springframework.http.HttpEntity;
@@ -33,6 +37,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +74,17 @@ public class AuthenticationController {
 						it -> toUnauthorized(messages.getMessage("authentication.trackedCase.failed")))
 				.recover(ForbiddenException.class, it -> toForbidden(it.getMessage()))
 				.get();
+	}
+
+	/**
+	 * HTTP resource to verify the authentication for third-party software.
+	 *
+	 * @return
+	 * @see QuaranoWebSecurityConfigurerAdapter
+	 */
+	@GetMapping("/ext/auth")
+	HttpEntity<?> authTest() {
+		return ResponseEntity.noContent().build();
 	}
 
 	/**
@@ -131,7 +147,10 @@ public class AuthenticationController {
 	}
 
 	@Component
+	@RequiredArgsConstructor
 	static class LoginRootResourceProcessor implements RepresentationModelProcessor<QuaranoApiRoot> {
+
+		private final AuthenticationManager authentication;
 
 		/*
 		 * (non-Javadoc)
@@ -140,9 +159,10 @@ public class AuthenticationController {
 		@SuppressWarnings("null")
 		public QuaranoApiRoot process(QuaranoApiRoot model) {
 
-			var controller = on(AuthenticationController.class);
+			Supplier<Link> loginLink = () -> MvcLink.of(on(AuthenticationController.class).login(null, null),
+					AuthenticationLinkRelations.LOGIN);
 
-			return model.add(MvcLink.of(controller.login(null, null), AuthenticationLinkRelations.LOGIN));
+			return model.addIf(authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman), loginLink);
 		};
 	}
 }
