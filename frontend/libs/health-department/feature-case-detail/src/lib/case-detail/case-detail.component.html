@@ -87,6 +87,7 @@
         routerLinkActive
         #rlactions="routerLinkActive"
         [active]="rlactions.isActive"
+        *ngIf="!isNew"
       >
         <span
           *ngIf="caseDetail.openAnomaliesCount > 0; else has_no_open_anomalies"
@@ -146,11 +147,12 @@
         routerLinkActive
         #rlcontacts="routerLinkActive"
         [active]="rlcontacts.isActive"
-        *ngIf="caseDetail._links.hasOwnProperty('contacts')"
+        *ngIf="caseDetail._links?.hasOwnProperty('contacts')"
       >
         Kontakte <span class="info-badge">{{ caseDetail.contactCount }}</span>
       </a>
       <a
+        *ngIf="!isNew"
         data-cy="case-detail-diary-link"
         mat-tab-link
         [routerLink]="['diary']"
