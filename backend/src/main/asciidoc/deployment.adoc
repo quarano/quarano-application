@@ -65,5 +65,8 @@ Deployments need to specify the following properties:
 
 * `server.ssl.key-store` -- the path to the key store to be used.
 * `server.ssl.key-store-password` -- the password to access the key store.
+* `server.ssl.key-store-type` -- set to `JKS`
 * `server.ssl.trust-store` -- the path to the trust store to be used containing the trusted certificates.
 * `server.ssl.trust-store-password` -- the password to access the trust store.
+* `server.ssl.trust-store-type` -- set to `JKS`
+* `server.ssl.client-auth` -- set to `want` to enable client certificate authentication
