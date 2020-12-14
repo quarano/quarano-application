@@ -2,8 +2,10 @@ package quarano.occasion;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.tracking.Address;
 import quarano.core.DataInitializer;
 import quarano.department.TrackedCaseDataInitializer;
+import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;
 
@@ -28,8 +30,7 @@ public class OccasionDataInitializer implements DataInitializer {
 	 */
 	@Override
 	public void initialize() {
-
 		occasions.save(new Occasion("Sample event", LocalDate.now().atStartOfDay(),
-				LocalDate.now().plusDays(1).atStartOfDay(), OCCASION_CODE_1, TrackedCaseDataInitializer.TRACKED_CASE_MARKUS));
+				LocalDate.now().plusDays(1).atStartOfDay(), new Address("Musterstraße", Address.HouseNumber.of("2"), "Musterstadt", ZipCode.of("12345")),"","", OCCASION_CODE_1, TrackedCaseDataInitializer.TRACKED_CASE_MARKUS));
 	}
 }

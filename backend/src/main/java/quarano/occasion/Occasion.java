@@ -9,6 +9,7 @@ import lombok.Setter;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.occasion.Occasion.OccasionIdentifier;
+import quarano.tracking.Address;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,16 +37,22 @@ public class Occasion extends QuaranoAggregate<Occasion, OccasionIdentifier> {
 	private @Setter @Column(name = "start_date") LocalDateTime start;
 	private @Setter @Column(name = "end_date") LocalDateTime end;
 	private @Setter String title;
+	private @Setter String additionalInformation;
+	private @Setter String contactPerson;
 	private OccasionCode occasionCode;
 	private TrackedCaseIdentifier trackedCaseId;
+	private Address address;
 
-	Occasion(String title, LocalDateTime start, LocalDateTime end, OccasionCode eventCode,
+	Occasion(String title, LocalDateTime start, LocalDateTime end, Address address, String additionalInformation, String contactPerson, OccasionCode eventCode,
 			TrackedCaseIdentifier trackedCaseId) {
 
 		this.id = OccasionIdentifier.of(UUID.randomUUID());
 		this.start = start;
 		this.end = end;
 		this.title = title;
+		this.address = address;
+		this.additionalInformation = additionalInformation;
+		this.contactPerson = contactPerson;
 		this.visitorGroups = new ArrayList<>();
 		this.occasionCode = eventCode;
 		this.trackedCaseId = trackedCaseId;
