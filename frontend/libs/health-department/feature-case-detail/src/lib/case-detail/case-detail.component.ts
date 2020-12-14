@@ -109,14 +109,12 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   startTracking(caseDetail: CaseDto) {
-    this.subs.sink = this.apiService.putApiCall<StartTracking>(caseDetail, 'start-tracking').subscribe((data) => {
-      this.entityService.updateOneInCache({
-        ...cloneDeep(caseDetail),
-        _links: data._links,
-        status: CaseStatus.InRegistrierung,
+    this.subs.sink = this.apiService
+      .putApiCall<StartTracking>(caseDetail, 'start-tracking')
+      .pipe(switchMap((result) => this.entityService.getByKey(caseDetail.caseId)))
+      .subscribe((caseDto) => {
+        this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDto.caseId}/comments`]);
       });
-      this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDetail.caseId}/email`]);
-    });
   }
 
   checkForClose(halResponse: HalResponse) {
