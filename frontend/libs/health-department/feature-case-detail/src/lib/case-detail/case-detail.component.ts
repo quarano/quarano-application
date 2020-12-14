@@ -46,6 +46,10 @@ export class CaseDetailComponent implements OnDestroy {
     this.setCaseLabel();
   }
 
+  get isNew(): boolean {
+    return !this.caseId;
+  }
+
   private setCaseLabel() {
     this.caseLabel$ = this.type$.pipe(
       map((type: CaseType) => {
