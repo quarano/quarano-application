@@ -109,12 +109,7 @@ describe('health-department index cases', () => {
           cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
 
           cy.get('[data-cy="start-tracking-button"]').click();
-          cy.location('pathname').should('include', 'health-department/case-detail/index/' + caseId + '/email');
-          cy.get('div.mail-text pre').should('exist');
-          cy.get('div.mail-text pre').contains('Sehr geehrte/geehrter Frau/Herr Fraser');
-          cy.get('[data-cy="copy-to-clipboard"]').should('exist');
-          cy.get('[data-cy="copy-to-clipboard"]').click();
-          cy.get('simple-snack-bar').should('exist');
+          cy.location('pathname').should('include', 'health-department/case-detail/index/' + caseId + '/comments');
         });
     });
   });
