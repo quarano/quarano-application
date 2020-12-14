@@ -25,7 +25,6 @@ public class TrackedCaseLinkRelations {
 
 	static final LinkRelation DETAILS = LinkRelation.of("details");
 	static final LinkRelation ENCOUNTERS = LinkRelation.of("encounters");
-	static final LinkRelation REOPEN = LinkRelation.of("reopen");
 
 	public static final LinkRelation CONFIRM = LinkRelation.of("confirm");
 }

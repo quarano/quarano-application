@@ -346,18 +346,6 @@ public class TrackedCaseController {
 				.build();
 	}
 
-	@DeleteMapping("/enrollment/completion")
-	HttpEntity<?> reopenEnrollment(@LoggedIn TrackedPerson person) {
-
-		cases.findByTrackedPerson(person)
-				.map(TrackedCase::reopenEnrollment)
-				.map(cases::save);
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.LOCATION, getEnrollmentLink())
-				.build();
-	}
-
 	private Collection<TrackedCaseContactSummary> createContactSummaries(TrackedCase trackedCase) {
 
 		var encounters = trackedCase.getTrackedPerson().getEncounters();
