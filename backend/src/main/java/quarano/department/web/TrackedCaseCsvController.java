@@ -41,6 +41,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,7 +50,8 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,24 +79,17 @@ class TrackedCaseCsvController {
 	 * </p>
 	 *
 	 * @param department
-	 * @param quarantineFrom The date (YYYY-MM-DD) of the last quarantine modification from which (inclusive) the cases
-	 *          should be included in the export.
-	 * @param quarantineTo The date (YYYY-MM-DD) of the last quarantine modification up to which (inclusive) the cases
-	 *          should be included in the export.
-	 * @param type The case type (INDEX or CONTACT) of the cases to be exported.
+	 * @param query
 	 * @param response
 	 * @throws IOException
 	 */
-	@GetMapping(path = "/hd/quarantines", produces = "text/csv")
-	public void getQuarantineOrder(@LoggedIn Department department,
-			@RequestParam("from") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> quarantineFrom,
-			@RequestParam("to") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> quarantineTo,
-			@RequestParam("type") Optional<String> type,
+	@PostMapping(path = "/hd/export/quarantines", produces = "text/csv")
+	public void getQuarantineOrder(@LoggedIn Department department, @RequestBody QuarantineOrderQuery query,
 			HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var cases = caseRepo.findFilteredByQuarantine(quarantineFrom, quarantineTo, type, department.getId());
+		var cases = caseRepo.findFilteredByQuarantine(query.getFrom(), query.getTo(), query.getType(), department.getId());
 
 		representations.writeQuarantineOrderCsv(response.getWriter(), cases.stream());
 	}
@@ -105,23 +100,23 @@ class TrackedCaseCsvController {
 	 * This is mainly intended for creating quarantine orders.
 	 * </p>
 	 * <p>
-	 * The cases to be exported must be specified using a list of their IDs.
+	 * The cases to be exported must be specified using a list of their Self links.
 	 * </p>
 	 * 
 	 * @param department
-	 * @param ids The list of IDs whose cases should be exported.
+	 * @param selfUris The list of Self links whose cases should be exported.
 	 * @param response
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/quarantinesForIds", produces = "text/csv")
-	public void getQuarantineOrderForIds(@LoggedIn Department department,
-			@RequestBody List<String> ids,
+	@PostMapping(path = "/hd/export/quarantines/by-ids", produces = "text/csv")
+	public void getQuarantineOrderByIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
 			HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var idList = ids.stream()
+		var idList = selfUris.stream()
+				.map(this::extractedUUID)
 				.map(UUID::fromString)
 				.map(TrackedCaseIdentifier::of)
 				.collect(Collectors.toList());
@@ -143,34 +138,23 @@ class TrackedCaseCsvController {
 	 * </p>
 	 *
 	 * @param department
-	 * @param createdFrom The date (YYYY-MM-DD) of the creation from which (inclusive) the cases should be included in the
-	 *          export.
-	 * @param createdTo The date (YYYY-MM-DD) of the creation up to which (inclusive) the cases should be included in the
-	 *          export.
-	 * @param onlyWithoutSormasId True ignores cases with Sormas ID and false does not do this. False is default.
-	 * @param type The case type (INDEX or CONTACT) of the cases to be exported.
+	 * @param query
 	 * @param response
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/sormas", produces = "text/csv")
-	public void getCasesForSormas(@LoggedIn Department department,
-			@RequestParam("createdfrom") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> createdFrom,
-			@RequestParam("createdto") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> createdTo,
-			@RequestParam("onlywithoutsormasid") Optional<Boolean> onlyWithoutSormasId,
-			@RequestParam("type") String type,
+	@PostMapping(path = "/hd/export/sormas", produces = "text/csv")
+	public void getCasesForSormas(@LoggedIn Department department, @Validated @RequestBody SormasQuery query,
 			HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var sormasId = onlyWithoutSormasId.map(it -> it ? EXCLUDE_ONLY : IRRELEVANT).orElse(IRRELEVANT);
+		var sormasId = query.getOnlyWithoutSormasId().map(it -> it ? EXCLUDE_ONLY : IRRELEVANT).orElse(IRRELEVANT);
 
-		var cases = caseRepo.findFiltered(createdFrom, createdTo, Optional.empty(), Optional.empty(),
-				sormasId, EXCLUDE_ONLY, Optional.of(type), Optional.empty(), department.getId());
+		var cases = caseRepo.findFiltered(query.getFrom(), query.getTo(), Optional.empty(), Optional.empty(),
+				sormasId, EXCLUDE_ONLY, Optional.of(query.getType()), Optional.empty(), department.getId());
 
-		var caseType = CaseType.valueOf(type.toUpperCase());
-
-		representations.writeSormasCsv(response.getWriter(), cases.stream(), caseType);
+		representations.writeSormasCsv(response.getWriter(), cases.stream(), query.getType());
 	}
 
 	/**
@@ -179,23 +163,24 @@ class TrackedCaseCsvController {
 	 * import them there.
 	 * </p>
 	 * <p>
-	 * The cases to be exported must be specified using a list of their IDs.
+	 * The cases to be exported must be specified using a list of their Self links.
 	 * </p>
 	 * 
 	 * @param department
-	 * @param ids The list of IDs whose cases should be exported. All cases must be of the same type (index or contact).
+	 * @param selfUris The list of Self links whose cases should be exported. All cases must be of the same type (index or
+	 *          contact).
 	 * @param response
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/sormasForIds", produces = "text/csv")
-	public void getCasesForSormasForIds(@LoggedIn Department department,
-			@RequestBody List<String> ids,
+	@PostMapping(path = "/hd/export/sormas/by-ids", produces = "text/csv")
+	public void getCasesForSormasForIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
 			HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var idList = ids.stream()
+		var idList = selfUris.stream()
+				.map(this::extractedUUID)
 				.map(UUID::fromString)
 				.map(TrackedCaseIdentifier::of)
 				.collect(Collectors.toList());
@@ -233,20 +218,16 @@ class TrackedCaseCsvController {
 	 * </p>
 	 * 
 	 * @param department
-	 * @param modifiedFrom The date (YYYY-MM-DD) of the last modification from which (inclusive) the cases should be
-	 *          included in the export.
-	 * @param modifiedTo The date (YYYY-MM-DD) of the last modification up to which (inclusive) the cases should be
-	 *          included in the export.
+	 * @param query
 	 * @return
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/externalcases")
-	public RepresentationModel<?> getExternalCases(@LoggedIn Department department,
-			@RequestParam("from") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> modifiedFrom,
-			@RequestParam("to") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> modifiedTo) throws IOException {
+	@PostMapping(path = "/hd/export/externalcases")
+	public RepresentationModel<?> getExternalCases(@LoggedIn Department department, @RequestBody ExternalCasesQuery query)
+			throws IOException {
 
-		var cases = caseRepo.findFiltered(Optional.empty(), Optional.empty(), modifiedFrom, modifiedTo,
+		var cases = caseRepo.findFiltered(Optional.empty(), Optional.empty(), query.getFrom(), query.getTo(),
 				IRRELEVANT, INCLUDE_ONLY, Optional.empty(), Optional.empty(), department.getId());
 
 		var groups = cases.stream().collect(Collectors.groupingBy(this::determineHealthDepartment));
@@ -274,34 +255,32 @@ class TrackedCaseCsvController {
 	 * </p>
 	 * 
 	 * @param department
-	 * @param createdFrom The date (YYYY-MM-DD) of the creation from which (inclusive) the cases should be included in the
-	 *          export.
-	 * @param createdTo The date (YYYY-MM-DD) of the creation up to which (inclusive) the cases should be included in the
-	 *          export.
-	 * @param withoutExternalCases True ignores external cases and false does not do this. True is default.
-	 * @param type The case type (INDEX or CONTACT) of the cases to be exported.
-	 * @param status The status ({@link Status}) of the cases to be exported.
+	 * @param query
 	 * @param withOriginCase True includes data on the original case and false does not do this.
 	 * @param response
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/cases", produces = "text/csv")
-	public void getCases(@LoggedIn Department department,
-			@RequestParam("from") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> createdFrom,
-			@RequestParam("to") @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> createdTo,
-			@RequestParam("withoutexternalcases") Optional<Boolean> withoutExternalCases,
-			@RequestParam("type") Optional<String> type,
-			@RequestParam("status") Optional<String> status,
-			@RequestParam("withorigincase") Optional<Boolean> withOriginCase,
-			HttpServletResponse response) throws IOException {
+	@PostMapping(path = "/hd/export/cases", produces = "text/csv")
+	public void getCases(@LoggedIn Department department, @RequestBody CasesQuery query,
+			@RequestParam("withorigincase") Optional<Boolean> withOriginCase, HttpServletResponse response)
+			throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var externalCases = withoutExternalCases.map(it -> it ? EXCLUDE_ONLY : IRRELEVANT).orElse(EXCLUDE_ONLY);
+		var externalCases = query.getCasesRealm().map(it -> {
+			switch (it) {
+				case EXTERNAL:
+					return INCLUDE_ONLY;
+				case INTERNAL:
+					return EXCLUDE_ONLY;
+				default:
+					return IRRELEVANT;
+			}
+		}).orElse(EXCLUDE_ONLY);
 
-		var cases = caseRepo.findFiltered(createdFrom, createdTo, Optional.empty(), Optional.empty(),
-				IRRELEVANT, externalCases, type, status, department.getId());
+		var cases = caseRepo.findFiltered(query.getFrom(), query.getTo(), Optional.empty(), Optional.empty(),
+				IRRELEVANT, externalCases, query.getType(), query.getStatus(), department.getId());
 
 		representations.writeCaseTransferCsv(response.getWriter(), cases.stream(), withOriginCase.orElse(Boolean.FALSE));
 	}
@@ -312,27 +291,28 @@ class TrackedCaseCsvController {
 	 * intended e.g. for third-party applications and also Excel evaluations.
 	 * </p>
 	 * <p>
-	 * The cases to be exported must be specified using a list of their IDs.
+	 * The cases to be exported must be specified using a list of their Self links.
 	 * </p>
 	 * <p>
 	 * It can be specified whether the CSV contains data on the original case or not.
 	 * </p>
 	 * 
 	 * @param department
-	 * @param ids The list of IDs whose cases should be exported.
+	 * @param selfUris The list of Self links whose cases should be exported.
 	 * @param withOriginCase True includes data on the original case and false does not do this.
 	 * @param response
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/hd/casesForIds", produces = "text/csv")
-	public void getCasesForIds(@LoggedIn Department department,
-			@RequestBody List<String> ids, @RequestParam("withorigincase") Optional<Boolean> withOriginCase,
-			HttpServletResponse response) throws IOException {
+	@PostMapping(path = "/hd/export/cases/by-ids", produces = "text/csv")
+	public void getCasesForIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
+			@RequestParam("withorigincase") Optional<Boolean> withOriginCase, HttpServletResponse response)
+			throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
-		var idList = ids.stream()
+		var idList = selfUris.stream()
+				.map(this::extractedUUID)
 				.map(UUID::fromString)
 				.map(TrackedCaseIdentifier::of)
 				.collect(Collectors.toList());
@@ -352,12 +332,16 @@ class TrackedCaseCsvController {
 	 * @throws IOException
 	 * @since 1.4
 	 */
-	@GetMapping(path = "/admin/cases/template", produces = "text/csv")
+	@PostMapping(path = "/admin/cases/template", produces = "text/csv")
 	public void getTemplate(HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
 
 		representations.writeCaseTransferCsv(response.getWriter(), createExcampleCase(), false);
+	}
+
+	private String extractedUUID(String uri) {
+		return uri.substring(uri.lastIndexOf("/") + 1);
 	}
 
 	private Optional<HealthDepartment> determineHealthDepartment(TrackedCase trackedCase) {
@@ -415,6 +399,103 @@ class TrackedCaseCsvController {
 		}
 
 		return Stream.of(trackedCase);
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class QuarantineOrderQuery {
+
+		/**
+		 * The date (YYYY-MM-DD) of the last quarantine modification from which (inclusive) the cases should be included in
+		 * the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> from;
+
+		/**
+		 * The date (YYYY-MM-DD) of the last quarantine modification up to which (inclusive) the cases should be included in
+		 * the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> to;
+
+		/**
+		 * The case type of the cases to be exported. CONTACT includes all types of contact.
+		 */
+		private Optional<CaseType> type;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class SormasQuery {
+
+		/**
+		 * The case type of the cases to be exported. CONTACT includes all types of contact.
+		 */
+		private @NotNull CaseType type;
+
+		/**
+		 * The date (YYYY-MM-DD) of the creation from which (inclusive) the cases should be included in the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> from;
+
+		/**
+		 * The date (YYYY-MM-DD) of the creation up to which (inclusive) the cases should be included in the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> to;
+
+		/**
+		 * True ignores cases with Sormas ID and false does not do this. False is default.
+		 */
+		private Optional<Boolean> onlyWithoutSormasId;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class CasesQuery {
+
+		/**
+		 * The date (YYYY-MM-DD) of the creation from which (inclusive) the cases should be included in the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> from;
+
+		/**
+		 * The date (YYYY-MM-DD) of the creation up to which (inclusive) the cases should be included in the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> to;
+
+		/**
+		 * Specifies whether EXTERNAL or INTERNAL cases or both should be considered. INTERNAL is default.
+		 */
+		private Optional<CasesRealm> casesRealm;
+
+		/**
+		 * The case type of the cases to be exported. CONTACT includes all types of contact.
+		 */
+		private Optional<CaseType> type;
+
+		/**
+		 * The status of the cases to be exported.
+		 */
+		private Optional<Status> status;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class ExternalCasesQuery {
+
+		/**
+		 * The date (YYYY-MM-DD) of the last modification from which (inclusive) the cases should be included in the export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> from;
+
+		/**
+		 * The date (YYYY-MM-DD) of the last modification up to which (inclusive) the cases should be included in the
+		 * export.
+		 */
+		private @DateTimeFormat(iso = ISO.DATE) Optional<LocalDate> to;
+	}
+
+	static enum CasesRealm {
+		EXTERNAL, INTERNAL, INTERNAL_AND_EXTERNAL
 	}
 
 	@Getter

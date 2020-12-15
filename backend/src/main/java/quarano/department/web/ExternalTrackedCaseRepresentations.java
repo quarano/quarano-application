@@ -110,7 +110,7 @@ public interface ExternalTrackedCaseRepresentations {
 		 * @since 1.4
 		 */
 		public String getSormasCaseId() {
-			return trackedCase.getSormasCaseId();
+			return trackedCase.getSormasCaseId() != null ? trackedCase.getSormasCaseId().toString() : null;
 		}
 
 		public String getPrimaryPhoneNumber() {

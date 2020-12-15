@@ -122,7 +122,7 @@ include::{snippets}/csv-import-export/quarantine-order/curl-request.adoc[]
 
 The request takes the following attributes:
 
-include::{snippets}/csv-import-export/quarantine-order/auto-request-parameters.adoc[]
+include::{snippets}/csv-import-export/quarantine-order/auto-request-fields.adoc[]
 
 That call will return a 200 OK and contain the CSV data as body.
 
@@ -131,10 +131,6 @@ That call will return a 200 OK and contain the CSV data as body.
 include::{snippets}/csv-import-export/quarantine-order-for-ids/auto-description.adoc[]
 
 include::{snippets}/csv-import-export/quarantine-order-for-ids/curl-request.adoc[]
-
-The request takes the following attributes:
-
-include::{snippets}/csv-import-export/quarantine-order-for-ids/auto-request-parameters.adoc[]
 
 The request takes the following content:
 
@@ -150,9 +146,11 @@ include::{snippets}/csv-import-export/external-cases/curl-request.adoc[]
 
 The request takes the following attributes:
 
-include::{snippets}/csv-import-export/external-cases/auto-request-parameters.adoc[]
+include::{snippets}/csv-import-export/external-cases/auto-request-fields.adoc[]
 
-That call will return a 200 OK and contain the CSV data as body.
+That call will return a 200 OK and contain a JSON with one object with a CSV and additional informations for every health department with exported cases.
+
+include::{snippets}/csv-import-export/external-cases/response-body.adoc[]
 
 === Case Export
 
@@ -162,7 +160,8 @@ include::{snippets}/csv-import-export/cases/curl-request.adoc[]
 
 The request takes the following attributes:
 
-include::{snippets}/csv-import-export/cases/auto-request-parameters.adoc[]
+include::{snippets}/csv-import-export/cases-for-ids/auto-request-parameters.adoc[]
+include::{snippets}/csv-import-export/cases/auto-request-fields.adoc[]
 
 That call will return a 200 OK and contain the CSV data as body.
 
@@ -190,7 +189,7 @@ include::{snippets}/csv-import-export/sormas-csv/curl-request.adoc[]
 
 The request takes the following attributes:
 
-include::{snippets}/csv-import-export/sormas-csv/auto-request-parameters.adoc[]
+include::{snippets}/csv-import-export/sormas-csv/auto-request-fields.adoc[]
 
 That call will return a 200 OK and contain the CSV data as body.
 
@@ -199,10 +198,6 @@ That call will return a 200 OK and contain the CSV data as body.
 include::{snippets}/csv-import-export/sormas-csv-for-ids/auto-description.adoc[]
 
 include::{snippets}/csv-import-export/sormas-csv-for-ids/curl-request.adoc[]
-
-The request takes the following attributes:
-
-include::{snippets}/csv-import-export/sormas-csv-for-ids/auto-request-parameters.adoc[]
 
 The request takes the following content:
 
