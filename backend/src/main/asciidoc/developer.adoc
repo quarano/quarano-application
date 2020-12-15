@@ -104,7 +104,8 @@ The X.509 based authentication for third-party software is using Spring Security
 A sample trust store, public and private key for testing purposes is available in `src/test/security`.
 When running or packaging the application with the `localDev` profile, that trust store is also copied into the runnable so that the demo trust store can be used on a running application.
 
-== Handling passwords
+[[security.passwords]]
+==== Handling passwords
 
 Quarano of course stores passwords using state-of-the art BCrypt encryption provided by Spring Security. See `Quarano.passwordEncoder()`.
 That said, there's also emphasis on password security right within the domain model to avoid accidental storage of unencrypted passwords.
