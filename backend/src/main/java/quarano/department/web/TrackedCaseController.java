@@ -16,7 +16,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.rki.HealthDepartments;
+import quarano.core.rki.HealthDepartments;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
@@ -189,7 +189,6 @@ public class TrackedCaseController {
 	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
 			@RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
-
 		var existing = cases.findById(identifier).orElse(null);
 
 		return MappedPayloads.of(payload, errors)
@@ -251,7 +250,7 @@ public class TrackedCaseController {
 			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam(required = false) boolean confirmed,
 			@LoggedIn TrackedPerson user) {
 
-		var zipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
+		var zipCode = checkZipCodeMatchSupportedDepartment(dto.getZipCode(), errors);
 		var field = "zipCode";
 		var needToRejectDeviatingZipCode = !errors.hasFieldErrors(field) && zipCode.isPresent() && !confirmed;
 		var mappedPayload = MappedPayloads.of(dto, errors);
@@ -377,7 +376,7 @@ public class TrackedCaseController {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}
 
-	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
+	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(String zipCode,
 			Errors errors) {
 
 		String field = "zipCode";
@@ -386,8 +385,7 @@ public class TrackedCaseController {
 			return Optional.empty();
 		}
 
-		var zipCode = dto.getZipCode();
-		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode.toString());
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
 
 		return findDepartmentWithExact
 				.or(() -> {
@@ -398,8 +396,7 @@ public class TrackedCaseController {
 				.map(representations::toRepresentation)
 				.map(it -> new DeviatingZipCode(zipCode, it));
 	}
-
-	private boolean isDepartmentUnsupportedByThisQuarano(quarano.department.rki.HealthDepartments.HealthDepartment it) {
+	private boolean isDepartmentUnsupportedByThisQuarano(HealthDepartments.HealthDepartment it) {
 		return departments.findByRkiCode(it.getCode()).isEmpty();
 	}
 }

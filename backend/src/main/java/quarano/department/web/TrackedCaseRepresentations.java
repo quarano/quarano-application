@@ -30,13 +30,14 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.rki.HealthDepartments.HealthDepartment;
-import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
+import quarano.core.rki.HealthDepartments;
+import quarano.core.rki.HealthDepartments.HealthDepartment;
+import quarano.core.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.masterdata.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
@@ -98,6 +99,7 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 	private final @NonNull MessageSourceAccessor messages;
 	private final @NonNull SymptomRepository symptoms;
 	private final @NonNull ContactChaser contactChaser;
+	private final @NonNull HealthDepartments rkiDepartments;
 
 	private final @NonNull List<TrackedCaseDetailsEnricher> enrichers;
 
@@ -320,6 +322,10 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		validator.validate(payload, errors, validationGroups.toArray());
 		payload.validate(errors, type);
 
+		if (payload.getZipCode() != null) {
+			checkZipCodeMatchRKI(payload.getZipCode(), errors);
+		}
+
 		return errors;
 	}
 
@@ -328,6 +334,21 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 		TrackedPersonDto dto = mapper.map(source, TrackedPersonDto.class);
 
 		validator.validate(dto, errors);
+	}
+
+	private void checkZipCodeMatchRKI(String zipCode, Errors errors) {
+
+		String field = "zipCode";
+
+		if (errors.hasFieldErrors(field)) {
+			return;
+		}
+
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
+
+		if (findDepartmentWithExact.isEmpty()) {
+			errors.rejectValue(field, "wrong.trackedPersonDto.zipCode", new Object[] { zipCode }, "");
+		}
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)

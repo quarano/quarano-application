@@ -3,12 +3,12 @@ package quarano.tracking.web;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.web.MappingCustomizer;
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;

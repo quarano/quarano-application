@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.QuaranoIntegrationTest;
 import quarano.core.EmailAddress;
 import quarano.core.web.MapperWrapper;
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPersonRepository;
 

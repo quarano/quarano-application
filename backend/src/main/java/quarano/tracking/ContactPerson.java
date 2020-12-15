@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
+import quarano.core.Address;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;

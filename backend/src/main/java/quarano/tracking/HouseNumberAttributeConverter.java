@@ -1,6 +1,6 @@
 package quarano.tracking;
 
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.Address.HouseNumber;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

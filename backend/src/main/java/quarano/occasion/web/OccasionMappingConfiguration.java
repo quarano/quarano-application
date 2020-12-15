@@ -7,7 +7,7 @@ import quarano.occasion.Visitor;
 import quarano.occasion.VisitorGroup;
 import quarano.occasion.web.OccasionRepresentions.VisitorDto;
 import quarano.occasion.web.OccasionRepresentions.VisitorGroupDto;
-import quarano.tracking.Address;
+import quarano.core.Address;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

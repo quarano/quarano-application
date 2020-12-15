@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.account.DepartmentContact.ContactType;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
+import quarano.core.rki.FederalStates;
 
 import java.util.List;
 import java.util.stream.Collectors;

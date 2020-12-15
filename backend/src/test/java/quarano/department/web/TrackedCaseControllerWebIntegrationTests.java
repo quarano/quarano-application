@@ -1,6 +1,7 @@
 package quarano.department.web;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.isEquals;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
@@ -436,6 +437,25 @@ class TrackedCaseControllerWebIntegrationTests {
 				.orElseThrow();
 		issueCaseUpdate(createMinimalContactPayload(), CaseType.CONTACT, trackedCase);
 
+	}
+
+	@Test // CORE-582
+	void zipCodeNotFoundInRKIData() throws Exception {
+
+		var contactCase = createMinimalContactPayload();
+		contactCase.setZipCode("12345");
+
+		var response = mvc.perform(post("/hd/cases")
+				.content(jackson.writeValueAsString(contactCase))
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("type", "contact"))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse();
+		
+		var document = JsonPath.parse(response.getContentAsString());
+		
+		Object[] placeHolderForZipCode = {"12345"};
+		assertThat(document.read("zipCode", String.class)).isEqualTo(messages.getMessage("wrong.trackedPersonDto.zipCode", placeHolderForZipCode, "Message not loaded"));
 	}
 
 	@lombok.Value(staticConstructor = "of")

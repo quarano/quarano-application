@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.core.web.MapperWrapper;
+import quarano.core.rki.HealthDepartments;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
@@ -40,9 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContactPersonController {
 
 	private final @NonNull MapperWrapper mapper;
-	private final @NonNull TrackedPersonManagement people;
 	private final @NonNull ContactPersonRepository contacts;
-	private final @NonNull MessageSourceAccessor messages;
+	private final @NonNull HealthDepartments rkiDepartments;
 
 	@GetMapping
 	Stream<ContactPersonDto> allContacts(@LoggedIn TrackedPerson person) {
@@ -58,6 +58,7 @@ public class ContactPersonController {
 
 		return MappedPayloads.of(dto, errors)
 				.alwaysMap(ContactPersonDto::validate)
+				.map(it -> checkZipCodeMatchRKI(it, errors))
 				.map(it -> mapper.map(it, ContactPerson.class))
 				.map(it -> it.assignOwner(person))
 				.map(contacts::save)
@@ -96,5 +97,21 @@ public class ContactPersonController {
 							.map(it -> mapper.map(it, ContactPersonDto.class));
 
 				}).concludeIfValid(ResponseEntity::of);
+	}
+
+	private ContactPersonDto checkZipCodeMatchRKI(ContactPersonDto contactPersonDto, Errors errors){
+		if(contactPersonDto.getZipCode() == null){
+			return contactPersonDto;
+		}
+
+		String zipCode = contactPersonDto.getZipCode();
+
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
+
+		if (findDepartmentWithExact.isEmpty()) {
+			errors.rejectValue("zipCode", "wrong.trackedPersonDto.zipCode", new Object[] { zipCode }, "");
+		}
+
+		return contactPersonDto;
 	}
 }

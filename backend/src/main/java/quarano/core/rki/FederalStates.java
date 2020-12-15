@@ -1,6 +1,6 @@
-package quarano.account;
+package quarano.core.rki;
 
-import quarano.account.FederalStates.FederalState;
+import quarano.core.rki.FederalStates.FederalState;
 
 import java.util.Map;
 import java.util.Optional;

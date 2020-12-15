@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
-import quarano.tracking.Address;
+import quarano.core.Address;
 
 import java.io.Serializable;
 import java.time.LocalDate;

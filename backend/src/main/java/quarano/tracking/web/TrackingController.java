@@ -15,7 +15,7 @@ import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.time.LocalDate;
 import java.util.Map;

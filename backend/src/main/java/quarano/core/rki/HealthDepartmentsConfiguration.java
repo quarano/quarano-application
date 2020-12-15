@@ -1,9 +1,8 @@
-package quarano.department.rki;
+package quarano.core.rki;
 
-import quarano.account.FederalStates;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -32,7 +31,7 @@ public class HealthDepartmentsConfiguration {
 	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
 
 	@Bean
-	HealthDepartments healthDepartments() {
+	public HealthDepartments healthDepartments() {
 
 		var config = new DefaultXMLFactoriesConfig().setNamespacePhilosophy(NamespacePhilosophy.AGNOSTIC);
 		var projector = new XBProjector(config);

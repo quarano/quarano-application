@@ -13,7 +13,7 @@ import quarano.core.web.MapperWrapper;
 import quarano.occasion.Occasion;
 import quarano.occasion.OccasionCode;
 import quarano.occasion.VisitorGroup;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
