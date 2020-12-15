@@ -1,6 +1,7 @@
 package quarano.department.web;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -109,6 +110,10 @@ public class TrackedCaseController {
 
 	HttpEntity<?> createTrackedCase(TrackedCaseDto payload, CaseType type, Department department, Errors errors) {
 
+		if (payload.getZipCode() != null) {
+			checkZipCodeMatchRKI(payload.getZipCode(), errors);
+		}
+
 		var trackedCase = representations.from(payload, department, type, errors);
 
 		return MappedPayloads.of(trackedCase, errors)
@@ -186,9 +191,12 @@ public class TrackedCaseController {
 	// PUT Mapping for transformation into index case
 
 	@PutMapping("/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
-			@RequestBody TrackedCaseDto.Input payload,
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, @RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
+
+		if (payload.getZipCode() != null) {
+			checkZipCodeMatchRKI(payload.getZipCode(), errors);
+		}
 
 		var existing = cases.findById(identifier).orElse(null);
 
@@ -251,7 +259,7 @@ public class TrackedCaseController {
 			@Validated @RequestBody TrackedPersonDto dto, Errors errors, @RequestParam(required = false) boolean confirmed,
 			@LoggedIn TrackedPerson user) {
 
-		var zipCode = checkZipCodeMatchSupportedDepartment(dto, errors);
+		var zipCode = checkZipCodeMatchSupportedDepartment(dto.getZipCode(), errors);
 		var field = "zipCode";
 		var needToRejectDeviatingZipCode = !errors.hasFieldErrors(field) && zipCode.isPresent() && !confirmed;
 		var mappedPayload = MappedPayloads.of(dto, errors);
@@ -377,7 +385,7 @@ public class TrackedCaseController {
 		return fromMethodCall(on(TrackedCaseController.class).enrollment(null)).toUriString();
 	}
 
-	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(TrackedPersonDto dto,
+	private Optional<DeviatingZipCode> checkZipCodeMatchSupportedDepartment(String zipCode,
 			Errors errors) {
 
 		String field = "zipCode";
@@ -386,8 +394,7 @@ public class TrackedCaseController {
 			return Optional.empty();
 		}
 
-		var zipCode = dto.getZipCode();
-		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode.toString());
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
 
 		return findDepartmentWithExact
 				.or(() -> {
@@ -397,6 +404,20 @@ public class TrackedCaseController {
 				.filter(this::isDepartmentUnsupportedByThisQuarano)
 				.map(representations::toRepresentation)
 				.map(it -> new DeviatingZipCode(zipCode, it));
+	}
+
+	private void checkZipCodeMatchRKI(String zipCode, Errors errors) {
+
+		String field = "zipCode";
+
+		if (errors.hasFieldErrors(field)) {
+			return;
+		}
+
+		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
+		if (findDepartmentWithExact.isEmpty()) {
+			errors.rejectValue(field, "wrong.trackedPersonDto.zipCode", new Object[] { zipCode }, "");
+		}
 	}
 
 	private boolean isDepartmentUnsupportedByThisQuarano(quarano.department.rki.HealthDepartments.HealthDepartment it) {
