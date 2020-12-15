@@ -74,11 +74,11 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private LocalDateTime quarantineLastModified = null;
 
 	private @Getter @Setter String extReferenceNumber;
-	
+
 	/**
 	 * @since 1.4
 	 */
-	private @Getter @Setter String sormasCaseId;
+	private @Getter @Setter SormasCaseIdentifier sormasCaseId;
 
 	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
@@ -481,6 +481,26 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		@Override
 		public String toString() {
 			return trackedCaseId.toString();
+		}
+	}
+
+	@Embeddable
+	@EqualsAndHashCode
+	@RequiredArgsConstructor(staticName = "of")
+	@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+	public static class SormasCaseIdentifier implements Identifier, Serializable {
+
+		private static final long serialVersionUID = 5512222218561608908L;
+
+		final String sormasCaseId;
+
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return sormasCaseId;
 		}
 	}
 }

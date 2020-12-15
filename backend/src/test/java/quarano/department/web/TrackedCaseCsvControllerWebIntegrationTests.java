@@ -17,12 +17,14 @@ import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCase.SormasCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
 import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,6 +37,7 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.test.web.servlet.ResultHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 /**
@@ -66,6 +69,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	private static final String SORMAS_CONTACT_HEADER_LINE = "\"caseIdExternalSystem\";\"caseOrEventInformation\";\"disease\";\"diseaseDetails\";\"reportDateTime\";\"reportLat\";\"reportLon\";\"reportLatLonAccuracy\";\"region\";\"district\";\"community\";\"lastContactDate\";\"contactIdentificationSource\";\"contactIdentificationSourceDetails\";\"tracingApp\";\"tracingAppDetails\";\"contactProximity\";\"contactProximityDetails\";\"contactCategory\";\"contactClassification\";\"contactStatus\";\"followUpStatus\";\"followUpComment\";\"followUpUntil\";\"overwriteFollowUpUntil\";\"description\";\"relationToCase\";\"relationDescription\";\"externalID\";\"highPriority\";\"immunosuppressiveTherapyBasicDisease\";\"immunosuppressiveTherapyBasicDiseaseDetails\";\"careForPeopleOver60\";\"quarantine\";\"quarantineTypeDetails\";\"quarantineFrom\";\"quarantineTo\";\"person.firstName\";\"person.lastName\";\"person.nickname\";\"person.mothersName\";\"person.mothersMaidenName\";\"person.fathersName\";\"person.sex\";\"person.birthdateDD\";\"person.birthdateMM\";\"person.birthdateYYYY\";\"person.approximateAge\";\"person.approximateAgeType\";\"person.approximateAgeReferenceDate\";\"person.placeOfBirthRegion\";\"person.placeOfBirthDistrict\";\"person.placeOfBirthCommunity\";\"person.placeOfBirthFacilityType\";\"person.placeOfBirthFacility\";\"person.placeOfBirthFacilityDetails\";\"person.gestationAgeAtBirth\";\"person.birthWeight\";\"person.presentCondition\";\"person.deathDate\";\"person.causeOfDeath\";\"person.causeOfDeathDisease\";\"person.causeOfDeathDetails\";\"person.deathPlaceType\";\"person.deathPlaceDescription\";\"person.burialDate\";\"person.burialPlaceDescription\";\"person.burialConductor\";\"person.phone\";\"person.phoneOwner\";\"person.address.region\";\"person.address.district\";\"person.address.community\";\"person.address.details\";\"person.address.city\";\"person.address.areaType\";\"person.address.latitude\";\"person.address.longitude\";\"person.address.latLonAccuracy\";\"person.address.postalCode\";\"person.address.street\";\"person.address.houseNumber\";\"person.address.additionalInformation\";\"person.address.addressType\";\"person.address.addressTypeDetails\";\"person.address.facilityType\";\"person.address.facility\";\"person.address.facilityDetails\";\"person.emailAddress\";\"person.educationType\";\"person.educationDetails\";\"person.occupationType\";\"person.occupationDetails\";\"person.generalPractitionerDetails\";\"person.passportNumber\";\"person.nationalHealthId\";\"person.hasCovidApp\";\"person.covidCodeDelivered\";\"person.symptomJournalStatus\";\"person.externalId\";\"quarantineHelpNeeded\";\"quarantineOrderedVerbally\";\"quarantineOrderedOfficialDocument\";\"quarantineOrderedVerballyDate\";\"quarantineOrderedOfficialDocumentDate\";\"quarantineHomePossible\";\"quarantineHomePossibleComment\";\"quarantineHomeSupplyEnsured\";\"quarantineHomeSupplyEnsuredComment\";\"quarantineExtended\";\"quarantineReduced\";\"quarantineOfficialOrderSent\";\"quarantineOfficialOrderSentDate\";\"additionalDetails\";\"epiData.directContactConfirmedCase\";\"epiData.directContactProbableCase\";\"epiData.closeContactProbableCase\";\"epiData.areaConfirmedCases\";\"epiData.processingConfirmedCaseFluidUnsafe\";\"epiData.percutaneousCaseBlood\";\"epiData.directContactDeadUnsafe\";\"epiData.processingSuspectedCaseSampleUnsafe\";\"epiData.areaInfectedAnimals\";\"epiData.sickDeadAnimals\";\"epiData.sickDeadAnimalsDetails\";\"epiData.sickDeadAnimalsDate\";\"epiData.sickDeadAnimalsLocation\";\"epiData.eatingRawAnimalsInInfectedArea\";\"epiData.eatingRawAnimals\";\"epiData.eatingRawAnimalsDetails\";\"epiData.rodents\";\"epiData.bats\";\"epiData.primates\";\"epiData.swine\";\"epiData.birds\";\"epiData.rabbits\";\"epiData.cattle\";\"epiData.dogs\";\"epiData.cats\";\"epiData.canidae\";\"epiData.otherAnimals\";\"epiData.otherAnimalsDetails\";\"epiData.waterSource\";\"epiData.waterSourceOther\";\"epiData.waterBody\";\"epiData.waterBodyDetails\";\"epiData.tickBite\";\"epiData.fleaBite\";\"epiData.kindOfExposureBite\";\"epiData.kindOfExposureTouch\";\"epiData.kindOfExposureScratch\";\"epiData.kindOfExposureLick\";\"epiData.kindOfExposureOther\";\"epiData.kindOfExposureDetails\";\"epiData.dateOfLastExposure\";\"epiData.placeOfLastExposure\";\"epiData.animalCondition\";\"epiData.animalVaccinationStatus\";\"epiData.prophylaxisStatus\";\"epiData.dateOfProphylaxis\";\"epiData.visitedHealthFacility\";\"epiData.contactWithSourceRespiratoryCase\";\"epiData.visitedAnimalMarket\";\"epiData.camels\";\"epiData.snakes\";\"healthConditions.tuberculosis\";\"healthConditions.asplenia\";\"healthConditions.hepatitis\";\"healthConditions.diabetes\";\"healthConditions.hiv\";\"healthConditions.hivArt\";\"healthConditions.chronicLiverDisease\";\"healthConditions.malignancyChemotherapy\";\"healthConditions.chronicHeartFailure\";\"healthConditions.chronicPulmonaryDisease\";\"healthConditions.chronicKidneyDisease\";\"healthConditions.chronicNeurologicCondition\";\"healthConditions.downSyndrome\";\"healthConditions.congenitalSyphilis\";\"healthConditions.immunodeficiencyOtherThanHiv\";\"healthConditions.cardiovascularDiseaseIncludingHypertension\";\"healthConditions.obesity\";\"healthConditions.currentSmoker\";\"healthConditions.formerSmoker\";\"healthConditions.asthma\";\"healthConditions.sickleCellDisease\";\"healthConditions.immunodeficiencyIncludingHiv\";\"healthConditions.otherConditions\";\"sormasToSormasOriginInfo.organizationId\";\"sormasToSormasOriginInfo.senderName\";\"sormasToSormasOriginInfo.senderEmail\";\"sormasToSormasOriginInfo.senderPhoneNumber\";\"sormasToSormasOriginInfo.ownershipHandedOver\";\"sormasToSormasOriginInfo.comment\";\"ownershipHandedOver\";\"returningTraveler\";\"endOfQuarantineReason\";\"endOfQuarantineReasonDetails\"";
 
 	private final @NonNull TrackedCaseRepository cases;
+	private final @NonNull ObjectMapper jackson;
 
 	@TestFactory
 	Stream<DynamicTest> getQuarantineOrdersSuccessful() throws Exception {
@@ -76,7 +80,6 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 				new ValidOrder(null, null, null, 15, false),
 				new ValidOrder("index", null, null, 15, false),
 				new ValidOrder("contact", null, null, 0, false),
-				new ValidOrder("wrongType", null, null, 15, false),
 				new ValidOrder("index", now, null, 15, false),
 				new ValidOrder("index", now.plusDays(1), null, 0, false),
 				new ValidOrder("index", null, now, 15, false),
@@ -87,11 +90,14 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
 
-			var result = mvc.perform(get("/hd/quarantines")
+			var query = new HashMap<String, Object>();
+			query.put("type", bar.getType());
+			query.put("from", bar.getFrom());
+			query.put("to", bar.getTo());
+
+			var result = mvc.perform(post("/hd/export/quarantines")
 					.accept(MediaType.valueOf("text/csv"))
-					.param("type", bar.getType())
-					.param("from", bar.getFrom())
-					.param("to", bar.getTo()))
+					.content(jackson.writeValueAsString(query)))
 					.andDo(documentGetQuarantines(bar.isDocument()))
 					.andExpect(status().is2xxSuccessful())
 					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
@@ -109,29 +115,34 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	Stream<DynamicTest> getQuarantineOrderWith400() throws Exception {
 
 		var sources = Stream.of(
+				new InvalidOrder("wrongType", null, null),
 				new InvalidOrder(null, LocalDate.now(), null),
 				new InvalidOrder(null, null, LocalDate.now()));
 
 		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
 
-			mvc.perform(get("/hd/quarantines")
+			var query = new HashMap<String, Object>();
+			query.put("type", foo.getType());
+			query.put("from", foo.getFrom());
+			query.put("to", foo.getTo());
+
+			mvc.perform(post("/hd/export/quarantines")
 					.accept(MediaType.valueOf("text/csv"))
-					.param("type", foo.getType())
-					.param("from", foo.getFrom())
-					.param("to", foo.getTo()))
-					.andExpect(status().is4xxClientError());
+					.content(jackson.writeValueAsString(query)))
+					.andExpect(status().isBadRequest());
 		});
 	}
 
 	@Test
-	void getQuarantinesForIds() throws Exception {
+	void getQuarantinesByIds() throws Exception {
 
-		var ids = "[\n\"" + String.join("\",\"", TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
+		var ids = "[\n\"http://localhost:8080/hd/cases/" + String.join("\",\"http://localhost:8080/hd/cases/",
+				TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
 
-		var result = mvc.perform(get("/hd/quarantinesForIds")
+		var result = mvc.perform(post("/hd/export/quarantines/by-ids")
 				.accept(MediaType.valueOf("text/csv"))
 				.content(ids))
-				.andDo(documentGetQuarantinesForIds())
+				.andDo(documentGetQuarantinesByIds())
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
 				.andReturn().getResponse().getContentAsString();
@@ -141,163 +152,10 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	}
 
 	@TestFactory
-	Stream<DynamicTest> getExternalCasesSuccessful() throws Exception {
-
-		cases.findById(TRACKED_CASE_GUSTAV).map(it -> {
-
-			it.getTrackedPerson().getAddress().setZipCode(ZipCode.of("01665"));
-
-			return it;
-		}).map(TrackedCase::markAsExternalZip).map(cases::save).orElseThrow();
-
-		var now = LocalDate.now();
-
-		var source = Stream.of(
-				new ValidExternalCase(null, null, 2, false),
-				new ValidExternalCase(now, null, 2, false),
-				new ValidExternalCase(now.plusDays(1), null, 0, false),
-				new ValidExternalCase(null, now, 2, false),
-				new ValidExternalCase(null, now.minusDays(1), 0, false),
-				new ValidExternalCase(now, now, 2, false),
-				new ValidExternalCase(now.minusDays(1), now.plusDays(1), 2, true),
-				new ValidExternalCase(now.plusDays(1), now.minusDays(1), 0, false));
-
-		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
-
-			var result = mvc.perform(get("/hd/externalcases")
-					.param("from", bar.getFrom())
-					.param("to", bar.getTo()))
-					.andDo(documentGetExternalCases(bar.isDocument()))
-					.andExpect(status().is2xxSuccessful())
-					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("application/hal+json")))
-					.andReturn().getResponse().getContentAsString();
-
-			if (bar.getResultSize() != 0) {
-
-				var document = JsonPath.parse(result);
-
-				assertThat(document.read("$._embedded.departmentCsvGroups[0].rkiCode", String.class))
-						.isEqualTo("1.14.6.27.01.");
-
-				var csv = document.read("$._embedded.departmentCsvGroups[0].casesCsv", String.class);
-
-				assertThat(csv.lines()).size().isEqualTo(bar.getResultSize());
-				assertThat(csv.lines()).first().isEqualTo(CASE_TRANSFER_CSV_HEADER);
-			}
-		});
-	}
-
-	@TestFactory
-	Stream<DynamicTest> getExternalCasesWith400() throws Exception {
-
-		var sources = Stream.of(
-				new InvalidExternalCase(LocalDate.now(), null),
-				new InvalidExternalCase(null, LocalDate.now()));
-
-		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
-
-			mvc.perform(get("/hd/externalcases")
-					.param("from", foo.getFrom())
-					.param("to", foo.getTo()))
-					.andExpect(status().is4xxClientError());
-		});
-	}
-
-	@TestFactory
-	Stream<DynamicTest> getCasesSuccessful() throws Exception {
-
-		cases.findById(TRACKED_CASE_GUSTAV).map(TrackedCase::markAsExternalZip).map(cases::save).orElseThrow();
-
-		var now = LocalDate.now();
-
-		var source = Stream.of(
-				new ValidCase(null, null, null, null, null, null, 22, false),
-				new ValidCase("index", null, null, null, null, null, 14, false),
-				new ValidCase("contact", null, null, null, null, null, 9, false),
-				new ValidCase("wrongType", null, null, null, null, null, 22, false),
-				new ValidCase("index", "OPEN", null, null, null, null, 8, false),
-				new ValidCase("index", "wrongStatus", null, null, null, null, 14, false),
-				new ValidCase("index", null, "false", null, null, null, 15, false),
-				new ValidCase("index", null, null, "true", null, null, 14, false),
-				new ValidCase("index", null, null, "false", null, null, 14, false),
-				new ValidCase("index", null, null, null, now, null, 14, false),
-				new ValidCase("index", null, null, null, now.plusDays(1), null, 0, false),
-				new ValidCase("index", null, null, null, null, now, 14, false),
-				new ValidCase("index", null, null, null, null, now.minusDays(1), 0, false),
-				new ValidCase("index", null, null, null, now, now, 14, false),
-				new ValidCase("index", null, null, null, now.minusDays(1), now.plusDays(1), 14, false),
-				new ValidCase("index", "OPEN", "false", "true", now.minusDays(1), now.plusDays(1), 8, true),
-				new ValidCase("index", null, null, null, now.plusDays(1), now.minusDays(1), 0, false));
-
-		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
-
-			var result = mvc.perform(get("/hd/cases")
-					.accept(MediaType.valueOf("text/csv"))
-					.param("type", bar.getType())
-					.param("status", bar.getStatus())
-					.param("withorigincase", bar.getWithOriginCase())
-					.param("withoutexternalcases", bar.getWithoutExternalCases())
-					.param("from", bar.getFrom())
-					.param("to", bar.getTo()))
-					.andDo(documentGetCases(bar.isDocument()))
-					.andExpect(status().is2xxSuccessful())
-					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
-					.andReturn().getResponse().getContentAsString();
-
-			assertThat(result.lines()).size().isEqualTo(bar.getResultSize());
-
-			if (bar.getResultSize() != 0) {
-				assertThat(result.lines()).first().isEqualTo(StringUtils.equals(bar.getWithOriginCase(), "true")
-						? CASE_TRANSFER_CSV_HEADER
-						: CASE_TRANSFER_WITHOUT_ORIGIN_CSV_HEADER);
-			}
-		});
-	}
-
-	@TestFactory
-	Stream<DynamicTest> getCasesWith400() throws Exception {
-
-		var sources = Stream.of(
-				new InvalidCase(null, null, null, null, LocalDate.now(), null),
-				new InvalidCase(null, null, null, null, null, LocalDate.now()),
-				new InvalidCase(null, null, "wrongBoolean", null, null, null));
-
-		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
-
-			mvc.perform(get("/hd/cases")
-					.accept(MediaType.valueOf("text/csv"))
-					.param("type", foo.getType())
-					.param("status", foo.getStatus())
-					.param("withorigincase", foo.getWithoutExternalCases())
-					.param("withoutexternalcases", foo.getWithoutExternalCases())
-					.param("from", foo.getFrom())
-					.param("to", foo.getTo()))
-					.andExpect(status().is4xxClientError());
-		});
-	}
-
-	@Test
-	void getCasesForIds() throws Exception {
-
-		var ids = "[\n\"" + String.join("\",\"", TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
-
-		var result = mvc.perform(get("/hd/casesForIds")
-				.accept(MediaType.valueOf("text/csv"))
-				.param("withorigincase", "true")
-				.content(ids))
-				.andDo(documentGetCasesForIds())
-				.andExpect(status().is2xxSuccessful())
-				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
-				.andReturn().getResponse().getContentAsString();
-
-		assertThat(result.lines()).size().isEqualTo(3);
-		assertThat(result.lines()).first().isEqualTo(CASE_TRANSFER_CSV_HEADER);
-	}
-
-	@TestFactory
 	Stream<DynamicTest> getSormasCsv() throws Exception {
 
-		cases.findById(TRACKED_CASE_GUSTAV).map(it -> it.setSormasCaseId("Sormas-ID")).map(cases::save).orElseThrow();
+		cases.findById(TRACKED_CASE_GUSTAV).map(it -> it.setSormasCaseId(SormasCaseIdentifier.of("Sormas-ID")))
+				.map(cases::save).orElseThrow();
 
 		var now = LocalDate.now();
 
@@ -316,12 +174,15 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
 
-			var result = mvc.perform(get("/hd/sormas")
-					.contentType(MediaType.valueOf("text/csv"))
-					.param("createdfrom", bar.getFrom())
-					.param("createdto", bar.getTo())
-					.param("onlywithoutsormasid", bar.getOnlyWithoutSormasId())
-					.param("type", bar.getType()))
+			var query = new HashMap<String, Object>();
+			query.put("type", bar.getType());
+			query.put("from", bar.getFrom());
+			query.put("to", bar.getTo());
+			query.put("onlyWithoutSormasId", bar.getOnlyWithoutSormasId());
+
+			var result = mvc.perform(post("/hd/export/sormas")
+					.accept(MediaType.valueOf("text/csv"))
+					.content(jackson.writeValueAsString(query)))
 					.andDo(documentGetSormasCsv(bar.isDocument()))
 					.andExpect(status().is2xxSuccessful())
 					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
@@ -356,37 +217,29 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
 
-			mvc.perform(get("/hd/sormas")
-					.contentType(MediaType.valueOf("text/csv;charset=UTF-8"))
-					.param("createdfrom", foo.getType())
-					.param("createdto", foo.getFrom())
-					.param("onlywithoutsormasid", foo.getTo())
-					.param("type", foo.getType()))
+			var query = new HashMap<String, Object>();
+			query.put("type", foo.getType());
+			query.put("from", foo.getFrom());
+			query.put("to", foo.getTo());
+			query.put("onlyWithoutSormasId", foo.getOnlyWithoutSormasId());
+
+			mvc.perform(post("/hd/export/sormas")
+					.accept(MediaType.valueOf("text/csv"))
+					.content(jackson.writeValueAsString(query)))
 					.andExpect(status().is4xxClientError());
 		});
 	}
 
 	@Test
-	void getSormasCsvForIdsWith400ForNotUniqueTypes() throws Exception {
+	void getSormasCsvByIds() throws Exception {
 
-		var ids = "[\n\"" + String.join("\",\"", TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
+		var ids = "[\n\"http://localhost:8080/hd/cases/" + String.join("\",\"http://localhost:8080/hd/cases/",
+				TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_SIGGI.toString()) + "\"\n]";
 
-		mvc.perform(get("/hd/sormasForIds")
+		var result = mvc.perform(post("/hd/export/sormas/by-ids")
 				.accept(MediaType.valueOf("text/csv"))
 				.content(ids))
-				.andDo(documentGetQuarantinesForIds())
-				.andExpect(status().is4xxClientError());
-	}
-
-	@Test
-	void getSormasCsvForIds() throws Exception {
-
-		var ids = "[\n\"" + String.join("\",\"", TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_SIGGI.toString()) + "\"\n]";
-
-		var result = mvc.perform(get("/hd/sormasForIds")
-				.accept(MediaType.valueOf("text/csv"))
-				.content(ids))
-				.andDo(documentGetSormasForIds())
+				.andDo(documentGetSormasByIds())
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
 				.andReturn().getResponse().getContentAsString();
@@ -400,7 +253,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		ids = "[\n\"" + String.join("\",\"", TRACKED_CASE_TANJA.toString()) + "\"\n]";
 
-		result = mvc.perform(get("/hd/sormasForIds")
+		result = mvc.perform(post("/hd/export/sormas/by-ids")
 				.accept(MediaType.valueOf("text/csv"))
 				.content(ids))
 				.andExpect(status().is2xxSuccessful())
@@ -415,9 +268,192 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	}
 
 	@Test
+	void getSormasCsvByIdsWith400ForNotUniqueTypes() throws Exception {
+
+		var ids = "[\n\"http://localhost:8080/hd/cases/" + String.join("\",\"http://localhost:8080/hd/cases/",
+				TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
+
+		mvc.perform(post("/hd/export/sormas/by-ids")
+				.accept(MediaType.valueOf("text/csv"))
+				.content(ids))
+				.andDo(documentGetQuarantinesByIds())
+				.andExpect(status().isBadRequest());
+	}
+
+	@TestFactory
+	Stream<DynamicTest> getExternalCasesSuccessful() throws Exception {
+
+		cases.findById(TRACKED_CASE_GUSTAV).map(it -> {
+
+			it.getTrackedPerson().getAddress().setZipCode(ZipCode.of("01665"));
+
+			return it;
+		}).map(TrackedCase::markAsExternalZip).map(cases::save).orElseThrow();
+
+		var now = LocalDate.now();
+
+		var source = Stream.of(
+				new ValidExternalCase(null, null, 2, false),
+				new ValidExternalCase(now, null, 2, false),
+				new ValidExternalCase(now.plusDays(1), null, 0, false),
+				new ValidExternalCase(null, now, 2, false),
+				new ValidExternalCase(null, now.minusDays(1), 0, false),
+				new ValidExternalCase(now, now, 2, false),
+				new ValidExternalCase(now.minusDays(1), now.plusDays(1), 2, true),
+				new ValidExternalCase(now.plusDays(1), now.minusDays(1), 0, false));
+
+		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
+
+			var query = new HashMap<String, Object>();
+			query.put("from", bar.getFrom());
+			query.put("to", bar.getTo());
+
+			var result = mvc.perform(post("/hd/export/externalcases")
+					.content(jackson.writeValueAsString(query)))
+					.andDo(documentGetExternalCases(bar.isDocument()))
+					.andExpect(status().is2xxSuccessful())
+					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("application/hal+json")))
+					.andReturn().getResponse().getContentAsString();
+
+			if (bar.getResultSize() != 0) {
+
+				var document = JsonPath.parse(result);
+
+				assertThat(document.read("$._embedded.departmentCsvGroups[0].rkiCode", String.class))
+						.isEqualTo("1.14.6.27.01.");
+
+				var csv = document.read("$._embedded.departmentCsvGroups[0].casesCsv", String.class);
+
+				assertThat(csv.lines()).size().isEqualTo(bar.getResultSize());
+				assertThat(csv.lines()).first().isEqualTo(CASE_TRANSFER_CSV_HEADER);
+			}
+		});
+	}
+
+	@TestFactory
+	Stream<DynamicTest> getExternalCasesWith400() throws Exception {
+
+		var sources = Stream.of(
+				new InvalidExternalCase(LocalDate.now(), null),
+				new InvalidExternalCase(null, LocalDate.now()));
+
+		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
+
+			var query = new HashMap<String, Object>();
+			query.put("from", foo.getFrom());
+			query.put("to", foo.getTo());
+
+			mvc.perform(post("/hd/export/externalcases")
+					.content(jackson.writeValueAsString(query)))
+					.andExpect(status().isBadRequest());
+		});
+	}
+
+	@TestFactory
+	Stream<DynamicTest> getCasesSuccessful() throws Exception {
+
+		cases.findById(TRACKED_CASE_GUSTAV).map(TrackedCase::markAsExternalZip).map(cases::save).orElseThrow();
+
+		var now = LocalDate.now();
+
+		var source = Stream.of(
+				new ValidCase(null, null, null, null, null, null, 22, false),
+				new ValidCase("index", null, null, null, null, null, 14, false),
+				new ValidCase("contact", null, null, null, null, null, 9, false),
+				new ValidCase("index", "OPEN", null, null, null, null, 8, false),
+				new ValidCase("index", null, "INTERNAL_AND_EXTERNAL", null, null, null, 15, false),
+				new ValidCase("index", null, "INTERNAL", null, null, null, 14, false),
+				new ValidCase("index", null, "EXTERNAL", null, null, null, 2, false),
+				new ValidCase("index", null, null, "true", null, null, 14, false),
+				new ValidCase("index", null, null, "false", null, null, 14, false),
+				new ValidCase("index", null, null, null, now, null, 14, false),
+				new ValidCase("index", null, null, null, now.plusDays(1), null, 0, false),
+				new ValidCase("index", null, null, null, null, now, 14, false),
+				new ValidCase("index", null, null, null, null, now.minusDays(1), 0, false),
+				new ValidCase("index", null, null, null, now, now, 14, false),
+				new ValidCase("index", null, null, null, now.minusDays(1), now.plusDays(1), 14, false),
+				new ValidCase("index", "OPEN", "INTERNAL_AND_EXTERNAL", "true", now.minusDays(1), now.plusDays(1), 8, true),
+				new ValidCase("index", null, null, null, now.plusDays(1), now.minusDays(1), 0, false));
+
+		return DynamicTest.stream(source.iterator(), Object::toString, bar -> {
+
+			var query = new HashMap<String, Object>();
+			query.put("type", bar.getType());
+			query.put("from", bar.getFrom());
+			query.put("to", bar.getTo());
+			query.put("status", bar.getStatus());
+			query.put("casesRealm", bar.getRealm());
+
+			var result = mvc.perform(post("/hd/export/cases")
+					.accept(MediaType.valueOf("text/csv"))
+					.param("withorigincase", bar.getWithOriginCase())
+					.content(jackson.writeValueAsString(query)))
+					.andDo(documentGetCases(bar.isDocument()))
+					.andExpect(status().is2xxSuccessful())
+					.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
+					.andReturn().getResponse().getContentAsString();
+
+			assertThat(result.lines()).size().isEqualTo(bar.getResultSize());
+
+			if (bar.getResultSize() != 0) {
+				assertThat(result.lines()).first().isEqualTo(StringUtils.equals(bar.getWithOriginCase(), "true")
+						? CASE_TRANSFER_CSV_HEADER
+						: CASE_TRANSFER_WITHOUT_ORIGIN_CSV_HEADER);
+			}
+		});
+	}
+
+	@TestFactory
+	Stream<DynamicTest> getCasesWith400() throws Exception {
+
+		var sources = Stream.of(
+				new InvalidCase(null, null, null, null, LocalDate.now(), null),
+				new InvalidCase(null, null, null, null, null, LocalDate.now()),
+				new InvalidCase("wrongType", null, null, null, null, null),
+				new InvalidCase(null, "wrongStatus", null, null, null, null),
+				new InvalidCase(null, null, "wrongRealm", null, null, null),
+				new InvalidCase(null, null, null, "wrongBoolean", null, null));
+
+		return DynamicTest.stream(sources.iterator(), Object::toString, foo -> {
+
+			var query = new HashMap<String, Object>();
+			query.put("type", foo.getType());
+			query.put("from", foo.getFrom());
+			query.put("to", foo.getTo());
+			query.put("status", foo.getStatus());
+			query.put("casesRealm", foo.getRealm());
+
+			mvc.perform(post("/hd/export/cases")
+					.accept(MediaType.valueOf("text/csv"))
+					.param("withorigincase", foo.getWithOriginCase())
+					.content(jackson.writeValueAsString(query)))
+					.andExpect(status().isBadRequest());
+		});
+	}
+
+	@Test
+	void getCasesByIds() throws Exception {
+
+		var ids = "[\n\"http://localhost:8080/hd/cases/" + String.join("\",\"http://localhost:8080/hd/cases/",
+				TRACKED_CASE_SANDRA.toString(), TRACKED_CASE_TANJA.toString()) + "\"\n]";
+
+		var result = mvc.perform(post("/hd/export/cases/by-ids")
+				.accept(MediaType.valueOf("text/csv"))
+				.param("withorigincase", "true")
+				.content(ids))
+				.andDo(documentGetCasesByIds())
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
+				.andReturn().getResponse().getContentAsString();
+
+		assertThat(result.lines()).size().isEqualTo(3);
+		assertThat(result.lines()).first().isEqualTo(CASE_TRANSFER_CSV_HEADER);
+	}
+
+	@Test
 	void getTemplate() throws Exception {
 
-		var result = mvc.perform(get("/admin/cases/template")
+		var result = mvc.perform(post("/admin/cases/template")
 				.accept(MediaType.valueOf("text/csv")))
 				.andDo(documentGetTemplate())
 				.andExpect(status().is2xxSuccessful())
@@ -435,7 +471,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 				: result -> {};
 	}
 
-	private static ResultHandler documentGetQuarantinesForIds() {
+	private static ResultHandler documentGetQuarantinesByIds() {
 		return DocumentationFlow.of("csv-import-export").document("quarantine-order-for-ids");
 	}
 
@@ -453,7 +489,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 				: result -> {};
 	}
 
-	private static ResultHandler documentGetCasesForIds() {
+	private static ResultHandler documentGetCasesByIds() {
 		return DocumentationFlow.of("csv-import-export").document("cases-for-ids");
 	}
 
@@ -464,7 +500,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 				: result -> {};
 	}
 
-	private static ResultHandler documentGetSormasForIds() {
+	private static ResultHandler documentGetSormasByIds() {
 		return DocumentationFlow.of("csv-import-export").document("sormas-csv-for-ids");
 	}
 
@@ -537,7 +573,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 	private static class InvalidCase {
 
 		@Nullable
-		String type, status, withoutExternalCases, withOriginCase;
+		String type, status, realm, withOriginCase;
 		@Nullable
 		LocalDate from, to;
 
@@ -557,8 +593,8 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		 */
 		@Override
 		public String toString() {
-			return String.format("Get cases for type %s status %s from %s to %s withoutExternalCases %s withOriginCase %s",
-					type, status, from, to, withoutExternalCases, withOriginCase);
+			return String.format("Get cases for type %s status %s from %s to %s casesRealm %s withorigincase %s",
+					type, status, from, to, realm, withOriginCase);
 		}
 
 		@Nullable
@@ -573,11 +609,11 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		int resultSize;
 		boolean document;
 
-		public ValidCase(@Nullable String type, @Nullable String status, @Nullable String withoutExternalCases,
+		public ValidCase(@Nullable String type, @Nullable String status, @Nullable String realm,
 				@Nullable String withOriginCase,
 				@Nullable LocalDate from, @Nullable LocalDate to, int resultSize, boolean document) {
 
-			super(type, status, withoutExternalCases, withOriginCase, from, to);
+			super(type, status, realm, withOriginCase, from, to);
 
 			this.resultSize = resultSize;
 			this.document = document;

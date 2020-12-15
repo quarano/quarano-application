@@ -29,15 +29,15 @@ public interface TrackedCaseQuerydslFilters {
 	Streamable<TrackedCase> findFiltered(Optional<String> query, Optional<String> type, DepartmentIdentifier id);
 
 	Streamable<TrackedCase> findFilteredByQuarantine(Optional<LocalDate> quarantineChangedFrom,
-			Optional<LocalDate> quarantineChangedTo, Optional<String> type, DepartmentIdentifier id);
+			Optional<LocalDate> quarantineChangedTo, Optional<CaseType> type, DepartmentIdentifier id);
 
 	/**
 	 * @since 1.4
 	 */
 	Streamable<TrackedCase> findFiltered(Optional<LocalDate> createdFrom, Optional<LocalDate> createdTo,
 			Optional<LocalDate> lastModifiedFrom, Optional<LocalDate> lastModifiedTo,
-			IncludeFilterOptions sormasId, IncludeFilterOptions externalCases, Optional<String> type,
-			Optional<String> status, DepartmentIdentifier id);
+			IncludeFilterOptions sormasId, IncludeFilterOptions externalCases, Optional<CaseType> type,
+			Optional<Status> status, DepartmentIdentifier id);
 
 	static class TrackedCaseQuerydslFiltersImpl extends QuerydslRepositorySupport implements TrackedCaseQuerydslFilters {
 
@@ -60,7 +60,7 @@ public interface TrackedCaseQuerydslFilters {
 			var predicate = query.map(it -> builder.and($casePerson.firstName.containsIgnoreCase(it)
 					.or($casePerson.lastName.containsIgnoreCase(it))))
 					.orElseGet(() -> builder)
-					.and(applyCaseType(type))
+					.and(applyCaseTypeString(type))
 					.and($case.department.id.eq(id));
 
 			var jpql = queryBase().where(predicate)
@@ -82,7 +82,7 @@ public interface TrackedCaseQuerydslFilters {
 		 */
 		@Override
 		public Streamable<TrackedCase> findFilteredByQuarantine(Optional<LocalDate> quarantineChangedFrom,
-				Optional<LocalDate> quarantineChangedTo, Optional<String> type, DepartmentIdentifier id) {
+				Optional<LocalDate> quarantineChangedTo, Optional<CaseType> type, DepartmentIdentifier id) {
 
 			Assert.notNull(quarantineChangedFrom, "Quarantine changed from must not be null!");
 			Assert.notNull(quarantineChangedTo, "Quarantine changed to must not be null!");
@@ -122,7 +122,7 @@ public interface TrackedCaseQuerydslFilters {
 		public Streamable<TrackedCase> findFiltered(Optional<LocalDate> createdFrom,
 				Optional<LocalDate> createdTo, Optional<LocalDate> lastModifiedFrom,
 				Optional<LocalDate> lastModifiedTo, IncludeFilterOptions sormasId,
-				IncludeFilterOptions onlyExternalCases, Optional<String> type, Optional<String> status,
+				IncludeFilterOptions onlyExternalCases, Optional<CaseType> type, Optional<Status> status,
 				DepartmentIdentifier id) {
 
 			Assert.notNull(createdFrom, "Created from must not be null!");
@@ -203,7 +203,7 @@ public interface TrackedCaseQuerydslFilters {
 		 * @param type must not be {@literal null}.
 		 * @return
 		 */
-		private static Predicate applyCaseType(Optional<String> type) {
+		private static Predicate applyCaseTypeString(Optional<String> type) {
 
 			var $case = QTrackedCase.trackedCase;
 			var none = new BooleanBuilder();
@@ -223,26 +223,41 @@ public interface TrackedCaseQuerydslFilters {
 		}
 
 		/**
+		 * Returns a {@link Predicate} to filter for the {@link CaseType} referred to using the given type token.
+		 *
+		 * @param type must not be {@literal null}.
+		 * @return
+		 */
+		private static Predicate applyCaseType(Optional<CaseType> type) {
+
+			var $case = QTrackedCase.trackedCase;
+			var none = new BooleanBuilder();
+
+			return type.<Predicate> map(it -> {
+
+				switch (it) {
+					case CONTACT:
+						return $case.type.in(CaseType.CONTACT.getAllTypes());
+					default:
+						return $case.type.eq(it);
+				}
+
+			}).orElse(none);
+		}
+
+		/**
 		 * Returns a {@link Predicate} to filter for the {@link Status} referred to using the given status token.
 		 *
 		 * @param status must not be {@literal null}.
 		 * @return
 		 * @since 1.4
 		 */
-		private static Predicate applyStatus(Optional<String> status) {
+		private static Predicate applyStatus(Optional<Status> status) {
 
 			var $case = QTrackedCase.trackedCase;
 			var none = new BooleanBuilder();
 
-			return status.map(it -> {
-
-				try {
-					return $case.status.eq(Status.valueOf(it.toUpperCase()));
-				} catch (Exception e) {
-					return none;
-				}
-
-			}).orElse(none);
+			return status.<Predicate> map($case.status::eq).orElse(none);
 		}
 	}
 

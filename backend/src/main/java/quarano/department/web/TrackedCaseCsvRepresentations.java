@@ -494,7 +494,7 @@ class TrackedCaseCsvRepresentations {
 			status = trackedCase.getStatus();
 			caseId = trackedCase.getId().toString();
 			comments = trackedCase.getComments();
-			sormasCaseId = trackedCase.getSormasCaseId();
+			sormasCaseId = trackedCase.getSormasCaseId() != null ? trackedCase.getSormasCaseId().toString() : null;
 
 			var lastContact = contactChaser.findLastIndexCaseContactFor(trackedCase);
 			originCaseLastContactDate = lastContact.map(Contact::getContactAt).orElse(null);
@@ -503,7 +503,10 @@ class TrackedCaseCsvRepresentations {
 			originCaseDateOfBirth = lastContact.map(Contact::getPerson).map(TrackedPerson::getDateOfBirth).orElse(null);
 			originCaseZipCode = lastContact.map(Contact::getPerson).map(TrackedPerson::getAddress).map(Address::getZipCode)
 					.map(ZipCode::toString).orElse(null);
-			originCaseSormasId = lastContact.map(Contact::getTrackedCase).map(TrackedCase::getSormasCaseId).orElse(null);
+			originCaseSormasId = lastContact.map(Contact::getTrackedCase)
+					.map(TrackedCase::getSormasCaseId)
+					.map(Object::toString)
+					.orElse(null);
 
 			var metadata = trackedCase.getMetadata();
 			created = metadata.getCreated();
