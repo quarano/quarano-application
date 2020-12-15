@@ -102,7 +102,7 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
         }
       });
     } else {
-      this.options = [];
+      this.options = this.options || [];
     }
   }
 
