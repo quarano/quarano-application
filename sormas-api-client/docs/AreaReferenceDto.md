@@ -1,8 +1,7 @@
 # AreaReferenceDto
 
 ## Properties
-
-| Name        | Type       | Description | Notes      |
-| ----------- | ---------- | ----------- | ---------- |
-| **uuid**    | **String** |             | [optional] |
-| **caption** | **String** |             | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**uuid** | **String** |  | 
+**caption** | **String** |  |  [optional]

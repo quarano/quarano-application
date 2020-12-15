@@ -1,22 +1,21 @@
 # PrescriptionControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                      | HTTP request                       | Description |
-| --------------------------------------------------------------------------- | ---------------------------------- | ----------- |
-| [**getAllActiveUuids6**](PrescriptionControllerApi.md#getAllActiveUuids6)   | **GET** /prescriptions/uuids       |
-| [**getAllPrescriptions**](PrescriptionControllerApi.md#getAllPrescriptions) | **GET** /prescriptions/all/{since} |
-| [**getByUuids15**](PrescriptionControllerApi.md#getByUuids15)               | **POST** /prescriptions/query      |
-| [**postPrescriptions**](PrescriptionControllerApi.md#postPrescriptions)     | **POST** /prescriptions/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids6**](PrescriptionControllerApi.md#getAllActiveUuids6) | **GET** /prescriptions/uuids | 
+[**getAllPrescriptions**](PrescriptionControllerApi.md#getAllPrescriptions) | **GET** /prescriptions/all/{since} | 
+[**getByUuids20**](PrescriptionControllerApi.md#getByUuids20) | **POST** /prescriptions/query | 
+[**postPrescriptions**](PrescriptionControllerApi.md#postPrescriptions) | **POST** /prescriptions/push | 
 
 <a name="getAllActiveUuids6"></a>
-
 # **getAllActiveUuids6**
-
 > List&lt;String&gt; getAllActiveUuids6()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,10 +25,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.PrescriptionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PrescriptionControllerApi apiInstance = new PrescriptionControllerApi();
 try {
@@ -42,7 +41,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -51,21 +49,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllPrescriptions"></a>
-
 # **getAllPrescriptions**
-
 > List&lt;PrescriptionDto&gt; getAllPrescriptions(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -75,13 +72,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.PrescriptionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PrescriptionControllerApi apiInstance = new PrescriptionControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<PrescriptionDto> result = apiInstance.getAllPrescriptions(since);
     System.out.println(result);
@@ -93,9 +90,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -103,21 +100,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids15"></a>
+<a name="getByUuids20"></a>
+# **getByUuids20**
+> List&lt;PrescriptionDto&gt; getByUuids20(body)
 
-# **getByUuids15**
 
-> List&lt;PrescriptionDto&gt; getByUuids15(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ try {
 //import de.quarano.sormas.client.api.PrescriptionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PrescriptionControllerApi apiInstance = new PrescriptionControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<PrescriptionDto> result = apiInstance.getByUuids15(body);
+    List<PrescriptionDto> result = apiInstance.getByUuids20(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PrescriptionControllerApi#getByUuids15");
+    System.err.println("Exception when calling PrescriptionControllerApi#getByUuids20");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postPrescriptions"></a>
-
 # **postPrescriptions**
-
 > List&lt;PushResult&gt; postPrescriptions(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.PrescriptionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PrescriptionControllerApi apiInstance = new PrescriptionControllerApi();
-List<PrescriptionDto> body = Arrays.asList(new PrescriptionDto()); // List<PrescriptionDto> |
+List<PrescriptionDto> body = Arrays.asList(new PrescriptionDto()); // List<PrescriptionDto> | 
 try {
     List<PushResult> result = apiInstance.postPrescriptions(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                  | Description | Notes      |
-| -------- | ----------------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;PrescriptionDto&gt;**](PrescriptionDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;PrescriptionDto&gt;**](PrescriptionDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

@@ -23,7 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.OutbreakControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.OutbreakControllerApi")
 public class OutbreakControllerApi {
     private ApiClient apiClient;
 
@@ -74,7 +74,7 @@ public class OutbreakControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<OutbreakDto>> returnType = new ParameterizedTypeReference<List<OutbreakDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -101,7 +101,7 @@ public class OutbreakControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -136,7 +136,7 @@ public class OutbreakControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

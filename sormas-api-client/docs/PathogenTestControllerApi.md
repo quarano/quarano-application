@@ -1,24 +1,23 @@
 # PathogenTestControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                          | HTTP request                           | Description |
-| ------------------------------------------------------------------------------- | -------------------------------------- | ----------- |
-| [**getAllActiveUuids5**](PathogenTestControllerApi.md#getAllActiveUuids5)       | **GET** /pathogentests/uuids           |
-| [**getAllPathogenTests**](PathogenTestControllerApi.md#getAllPathogenTests)     | **GET** /pathogentests/all/{since}     |
-| [**getBySampleUuids**](PathogenTestControllerApi.md#getBySampleUuids)           | **POST** /pathogentests/query/samples  |
-| [**getByUuids12**](PathogenTestControllerApi.md#getByUuids12)                   | **POST** /pathogentests/query          |
-| [**getDeletedUuidsSince3**](PathogenTestControllerApi.md#getDeletedUuidsSince3) | **GET** /pathogentests/deleted/{since} |
-| [**postPathogenTests**](PathogenTestControllerApi.md#postPathogenTests)         | **POST** /pathogentests/push           |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids5**](PathogenTestControllerApi.md#getAllActiveUuids5) | **GET** /pathogentests/uuids | 
+[**getAllPathogenTests**](PathogenTestControllerApi.md#getAllPathogenTests) | **GET** /pathogentests/all/{since} | 
+[**getBySampleUuids**](PathogenTestControllerApi.md#getBySampleUuids) | **POST** /pathogentests/query/samples | 
+[**getByUuids17**](PathogenTestControllerApi.md#getByUuids17) | **POST** /pathogentests/query | 
+[**getDeletedUuidsSince4**](PathogenTestControllerApi.md#getDeletedUuidsSince4) | **GET** /pathogentests/deleted/{since} | 
+[**postPathogenTests**](PathogenTestControllerApi.md#postPathogenTests) | **POST** /pathogentests/push | 
 
 <a name="getAllActiveUuids5"></a>
-
 # **getAllActiveUuids5**
-
 > List&lt;String&gt; getAllActiveUuids5()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -28,10 +27,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
 try {
@@ -44,7 +43,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -53,21 +51,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllPathogenTests"></a>
-
 # **getAllPathogenTests**
-
 > List&lt;PathogenTestDto&gt; getAllPathogenTests(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,13 +74,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<PathogenTestDto> result = apiInstance.getAllPathogenTests(since);
     System.out.println(result);
@@ -95,9 +92,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -105,21 +102,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getBySampleUuids"></a>
-
 # **getBySampleUuids**
-
 > List&lt;PathogenTestDto&gt; getBySampleUuids(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -129,13 +125,13 @@ try {
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
     List<PathogenTestDto> result = apiInstance.getBySampleUuids(body);
     System.out.println(result);
@@ -147,9 +143,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -157,21 +153,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids12"></a>
+<a name="getByUuids17"></a>
+# **getByUuids17**
+> List&lt;PathogenTestDto&gt; getByUuids17(body)
 
-# **getByUuids12**
 
-> List&lt;PathogenTestDto&gt; getByUuids12(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -181,27 +176,27 @@ try {
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<PathogenTestDto> result = apiInstance.getByUuids12(body);
+    List<PathogenTestDto> result = apiInstance.getByUuids17(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PathogenTestControllerApi#getByUuids12");
+    System.err.println("Exception when calling PathogenTestControllerApi#getByUuids17");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -209,21 +204,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getDeletedUuidsSince3"></a>
+<a name="getDeletedUuidsSince4"></a>
+# **getDeletedUuidsSince4**
+> List&lt;String&gt; getDeletedUuidsSince4(since)
 
-# **getDeletedUuidsSince3**
 
-> List&lt;String&gt; getDeletedUuidsSince3(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -233,27 +227,27 @@ try {
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<String> result = apiInstance.getDeletedUuidsSince3(since);
+    List<String> result = apiInstance.getDeletedUuidsSince4(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PathogenTestControllerApi#getDeletedUuidsSince3");
+    System.err.println("Exception when calling PathogenTestControllerApi#getDeletedUuidsSince4");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -261,21 +255,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postPathogenTests"></a>
-
 # **postPathogenTests**
-
 > List&lt;PushResult&gt; postPathogenTests(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -285,13 +278,13 @@ try {
 //import de.quarano.sormas.client.api.PathogenTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PathogenTestControllerApi apiInstance = new PathogenTestControllerApi();
-List<PathogenTestDto> body = Arrays.asList(new PathogenTestDto()); // List<PathogenTestDto> |
+List<PathogenTestDto> body = Arrays.asList(new PathogenTestDto()); // List<PathogenTestDto> | 
 try {
     List<PushResult> result = apiInstance.postPathogenTests(body);
     System.out.println(result);
@@ -303,9 +296,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                  | Description | Notes      |
-| -------- | ----------------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;PathogenTestDto&gt;**](PathogenTestDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;PathogenTestDto&gt;**](PathogenTestDto.md)|  | [optional]
 
 ### Return type
 
@@ -313,9 +306,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

@@ -1,22 +1,21 @@
 # PersonControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                    | HTTP request                 | Description |
-| --------------------------------------------------------- | ---------------------------- | ----------- |
-| [**getAllPersons**](PersonControllerApi.md#getAllPersons) | **GET** /persons/all/{since} |
-| [**getAllUuids7**](PersonControllerApi.md#getAllUuids7)   | **GET** /persons/uuids       |
-| [**getByUuids13**](PersonControllerApi.md#getByUuids13)   | **POST** /persons/query      |
-| [**postPersons**](PersonControllerApi.md#postPersons)     | **POST** /persons/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllPersons**](PersonControllerApi.md#getAllPersons) | **GET** /persons/all/{since} | 
+[**getAllUuids12**](PersonControllerApi.md#getAllUuids12) | **GET** /persons/uuids | 
+[**getByUuids18**](PersonControllerApi.md#getByUuids18) | **POST** /persons/query | 
+[**postPersons**](PersonControllerApi.md#postPersons) | **POST** /persons/push | 
 
 <a name="getAllPersons"></a>
-
 # **getAllPersons**
-
 > List&lt;PersonDto&gt; getAllPersons(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,13 +25,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.PersonControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PersonControllerApi apiInstance = new PersonControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<PersonDto> result = apiInstance.getAllPersons(since);
     System.out.println(result);
@@ -44,9 +43,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -54,21 +53,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids7"></a>
+<a name="getAllUuids12"></a>
+# **getAllUuids12**
+> List&lt;String&gt; getAllUuids12()
 
-# **getAllUuids7**
 
-> List&lt;String&gt; getAllUuids7()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -78,23 +76,22 @@ try {
 //import de.quarano.sormas.client.api.PersonControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PersonControllerApi apiInstance = new PersonControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids7();
+    List<String> result = apiInstance.getAllUuids12();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PersonControllerApi#getAllUuids7");
+    System.err.println("Exception when calling PersonControllerApi#getAllUuids12");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -103,21 +100,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids13"></a>
+<a name="getByUuids18"></a>
+# **getByUuids18**
+> List&lt;PersonDto&gt; getByUuids18(body)
 
-# **getByUuids13**
 
-> List&lt;PersonDto&gt; getByUuids13(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.PersonControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PersonControllerApi apiInstance = new PersonControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<PersonDto> result = apiInstance.getByUuids13(body);
+    List<PersonDto> result = apiInstance.getByUuids18(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PersonControllerApi#getByUuids13");
+    System.err.println("Exception when calling PersonControllerApi#getByUuids18");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postPersons"></a>
-
 # **postPersons**
-
 > List&lt;PushResult&gt; postPersons(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.PersonControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PersonControllerApi apiInstance = new PersonControllerApi();
-List<PersonDto> body = Arrays.asList(new PersonDto()); // List<PersonDto> |
+List<PersonDto> body = Arrays.asList(new PersonDto()); // List<PersonDto> | 
 try {
     List<PushResult> result = apiInstance.postPersons(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                      | Description | Notes      |
-| -------- | ----------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;PersonDto&gt;**](PersonDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;PersonDto&gt;**](PersonDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

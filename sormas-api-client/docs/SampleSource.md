@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `HUMAN` (value: `"HUMAN"`)
-- `ANIMAL` (value: `"ANIMAL"`)
-- `ENVIRONMENT` (value: `"ENVIRONMENT"`)
+* `HUMAN` (value: `"HUMAN"`)
+* `ANIMAL` (value: `"ANIMAL"`)
+* `ENVIRONMENT` (value: `"ENVIRONMENT"`)

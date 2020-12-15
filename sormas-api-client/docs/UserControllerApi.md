@@ -1,21 +1,20 @@
 # UserControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                  | HTTP request               | Description |
-| ------------------------------------------------------- | -------------------------- | ----------- |
-| [**getAll6**](UserControllerApi.md#getAll6)             | **GET** /users/all/{since} |
-| [**getAllUuids10**](UserControllerApi.md#getAllUuids10) | **GET** /users/uuids       |
-| [**getByUuids20**](UserControllerApi.md#getByUuids20)   | **POST** /users/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll8**](UserControllerApi.md#getAll8) | **GET** /users/all/{since} | 
+[**getAllUuids15**](UserControllerApi.md#getAllUuids15) | **GET** /users/uuids | 
+[**getByUuids25**](UserControllerApi.md#getByUuids25) | **POST** /users/query | 
 
-<a name="getAll6"></a>
+<a name="getAll8"></a>
+# **getAll8**
+> List&lt;UserDto&gt; getAll8(since)
 
-# **getAll6**
 
-> List&lt;UserDto&gt; getAll6(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.UserControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserControllerApi apiInstance = new UserControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<UserDto> result = apiInstance.getAll6(since);
+    List<UserDto> result = apiInstance.getAll8(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserControllerApi#getAll6");
+    System.err.println("Exception when calling UserControllerApi#getAll8");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids10"></a>
+<a name="getAllUuids15"></a>
+# **getAllUuids15**
+> List&lt;String&gt; getAllUuids15()
 
-# **getAllUuids10**
 
-> List&lt;String&gt; getAllUuids10()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.UserControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserControllerApi apiInstance = new UserControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids10();
+    List<String> result = apiInstance.getAllUuids15();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserControllerApi#getAllUuids10");
+    System.err.println("Exception when calling UserControllerApi#getAllUuids15");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids20"></a>
+<a name="getByUuids25"></a>
+# **getByUuids25**
+> List&lt;UserDto&gt; getByUuids25(body)
 
-# **getByUuids20**
 
-> List&lt;UserDto&gt; getByUuids20(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.UserControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserControllerApi apiInstance = new UserControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<UserDto> result = apiInstance.getByUuids20(body);
+    List<UserDto> result = apiInstance.getByUuids25(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserControllerApi#getByUuids20");
+    System.err.println("Exception when calling UserControllerApi#getByUuids25");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

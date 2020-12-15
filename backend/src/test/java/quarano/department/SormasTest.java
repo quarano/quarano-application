@@ -2,8 +2,8 @@ package quarano.department;
 
 import static org.assertj.core.api.Assertions.*;
 
+import de.quarano.sormas.client.SormasIntegrationConfig;
 import de.quarano.sormas.client.api.CaseControllerApi;
-import de.quarano.sormas.client.invoker.SormasIntegrationConfig;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import quarano.QuaranoWebIntegrationTest;

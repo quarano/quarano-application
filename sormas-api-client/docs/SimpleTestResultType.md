@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `POSITIVE` (value: `"POSITIVE"`)
-- `NEGATIVE` (value: `"NEGATIVE"`)
-- `INDETERMINATE` (value: `"INDETERMINATE"`)
+* `POSITIVE` (value: `"POSITIVE"`)
+* `NEGATIVE` (value: `"NEGATIVE"`)
+* `INDETERMINATE` (value: `"INDETERMINATE"`)

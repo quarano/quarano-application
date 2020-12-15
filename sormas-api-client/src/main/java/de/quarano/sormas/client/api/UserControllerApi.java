@@ -23,7 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.UserControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.UserControllerApi")
 public class UserControllerApi {
     private ApiClient apiClient;
 
@@ -52,11 +52,11 @@ public class UserControllerApi {
      * @return List&lt;UserDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UserDto> getAll6(Long since) throws RestClientException {
+    public List<UserDto> getAll8(Long since) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'since' is set
         if (since == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getAll6");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getAll8");
         }
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
@@ -74,7 +74,7 @@ public class UserControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<UserDto>> returnType = new ParameterizedTypeReference<List<UserDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -86,7 +86,7 @@ public class UserControllerApi {
      * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<String> getAllUuids10() throws RestClientException {
+    public List<String> getAllUuids15() throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/users/uuids").build().toUriString();
         
@@ -101,7 +101,7 @@ public class UserControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -114,7 +114,7 @@ public class UserControllerApi {
      * @return List&lt;UserDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UserDto> getByUuids20(List<String> body) throws RestClientException {
+    public List<UserDto> getByUuids25(List<String> body) throws RestClientException {
         Object postBody = body;
         String path = UriComponentsBuilder.fromPath("/users/query").build().toUriString();
         
@@ -131,7 +131,7 @@ public class UserControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<UserDto>> returnType = new ParameterizedTypeReference<List<UserDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

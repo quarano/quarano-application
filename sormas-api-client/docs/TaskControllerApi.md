@@ -1,22 +1,21 @@
 # TaskControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                            | HTTP request               | Description |
-| ----------------------------------------------------------------- | -------------------------- | ----------- |
-| [**getAll5**](TaskControllerApi.md#getAll5)                       | **GET** /tasks/all/{since} |
-| [**getAllActiveUuids8**](TaskControllerApi.md#getAllActiveUuids8) | **GET** /tasks/uuids       |
-| [**getByUuids18**](TaskControllerApi.md#getByUuids18)             | **POST** /tasks/query      |
-| [**postTasks**](TaskControllerApi.md#postTasks)                   | **POST** /tasks/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll7**](TaskControllerApi.md#getAll7) | **GET** /tasks/all/{since} | 
+[**getAllActiveUuids8**](TaskControllerApi.md#getAllActiveUuids8) | **GET** /tasks/uuids | 
+[**getByUuids23**](TaskControllerApi.md#getByUuids23) | **POST** /tasks/query | 
+[**postTasks**](TaskControllerApi.md#postTasks) | **POST** /tasks/push | 
 
-<a name="getAll5"></a>
+<a name="getAll7"></a>
+# **getAll7**
+> List&lt;TaskDto&gt; getAll7(since)
 
-# **getAll5**
 
-> List&lt;TaskDto&gt; getAll5(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,27 +25,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.TaskControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TaskControllerApi apiInstance = new TaskControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<TaskDto> result = apiInstance.getAll5(since);
+    List<TaskDto> result = apiInstance.getAll7(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling TaskControllerApi#getAll5");
+    System.err.println("Exception when calling TaskControllerApi#getAll7");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -54,21 +53,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllActiveUuids8"></a>
-
 # **getAllActiveUuids8**
-
 > List&lt;String&gt; getAllActiveUuids8()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -78,10 +76,10 @@ try {
 //import de.quarano.sormas.client.api.TaskControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TaskControllerApi apiInstance = new TaskControllerApi();
 try {
@@ -94,7 +92,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -103,21 +100,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids18"></a>
+<a name="getByUuids23"></a>
+# **getByUuids23**
+> List&lt;TaskDto&gt; getByUuids23(body)
 
-# **getByUuids18**
 
-> List&lt;TaskDto&gt; getByUuids18(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.TaskControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TaskControllerApi apiInstance = new TaskControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<TaskDto> result = apiInstance.getByUuids18(body);
+    List<TaskDto> result = apiInstance.getByUuids23(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling TaskControllerApi#getByUuids18");
+    System.err.println("Exception when calling TaskControllerApi#getByUuids23");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postTasks"></a>
-
 # **postTasks**
-
 > List&lt;PushResult&gt; postTasks(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.TaskControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TaskControllerApi apiInstance = new TaskControllerApi();
-List<TaskDto> body = Arrays.asList(new TaskDto()); // List<TaskDto> |
+List<TaskDto> body = Arrays.asList(new TaskDto()); // List<TaskDto> | 
 try {
     List<PushResult> result = apiInstance.postTasks(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                  | Description | Notes      |
-| -------- | ------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;TaskDto&gt;**](TaskDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;TaskDto&gt;**](TaskDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

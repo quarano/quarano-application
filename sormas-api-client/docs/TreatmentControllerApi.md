@@ -1,22 +1,21 @@
 # TreatmentControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                 | HTTP request                    | Description |
-| ---------------------------------------------------------------------- | ------------------------------- | ----------- |
-| [**getAllActiveUuids9**](TreatmentControllerApi.md#getAllActiveUuids9) | **GET** /treatments/uuids       |
-| [**getAllTreatments**](TreatmentControllerApi.md#getAllTreatments)     | **GET** /treatments/all/{since} |
-| [**getByUuids19**](TreatmentControllerApi.md#getByUuids19)             | **POST** /treatments/query      |
-| [**postTreatments**](TreatmentControllerApi.md#postTreatments)         | **POST** /treatments/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids9**](TreatmentControllerApi.md#getAllActiveUuids9) | **GET** /treatments/uuids | 
+[**getAllTreatments**](TreatmentControllerApi.md#getAllTreatments) | **GET** /treatments/all/{since} | 
+[**getByUuids24**](TreatmentControllerApi.md#getByUuids24) | **POST** /treatments/query | 
+[**postTreatments**](TreatmentControllerApi.md#postTreatments) | **POST** /treatments/push | 
 
 <a name="getAllActiveUuids9"></a>
-
 # **getAllActiveUuids9**
-
 > List&lt;String&gt; getAllActiveUuids9()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,10 +25,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.TreatmentControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TreatmentControllerApi apiInstance = new TreatmentControllerApi();
 try {
@@ -42,7 +41,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -51,21 +49,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllTreatments"></a>
-
 # **getAllTreatments**
-
 > List&lt;TreatmentDto&gt; getAllTreatments(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -75,13 +72,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.TreatmentControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TreatmentControllerApi apiInstance = new TreatmentControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<TreatmentDto> result = apiInstance.getAllTreatments(since);
     System.out.println(result);
@@ -93,9 +90,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -103,21 +100,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids19"></a>
+<a name="getByUuids24"></a>
+# **getByUuids24**
+> List&lt;TreatmentDto&gt; getByUuids24(body)
 
-# **getByUuids19**
 
-> List&lt;TreatmentDto&gt; getByUuids19(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ try {
 //import de.quarano.sormas.client.api.TreatmentControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TreatmentControllerApi apiInstance = new TreatmentControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<TreatmentDto> result = apiInstance.getByUuids19(body);
+    List<TreatmentDto> result = apiInstance.getByUuids24(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling TreatmentControllerApi#getByUuids19");
+    System.err.println("Exception when calling TreatmentControllerApi#getByUuids24");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postTreatments"></a>
-
 # **postTreatments**
-
 > List&lt;PushResult&gt; postTreatments(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.TreatmentControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 TreatmentControllerApi apiInstance = new TreatmentControllerApi();
-List<TreatmentDto> body = Arrays.asList(new TreatmentDto()); // List<TreatmentDto> |
+List<TreatmentDto> body = Arrays.asList(new TreatmentDto()); // List<TreatmentDto> | 
 try {
     List<PushResult> result = apiInstance.postTreatments(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                            | Description | Notes      |
-| -------- | ----------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;TreatmentDto&gt;**](TreatmentDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;TreatmentDto&gt;**](TreatmentDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

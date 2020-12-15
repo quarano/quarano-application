@@ -1,22 +1,21 @@
 # FeatureConfigurationControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                                              | HTTP request                                   | Description |
-| --------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
-| [**getAllFeatureConfigurations**](FeatureConfigurationControllerApi.md#getAllFeatureConfigurations) | **GET** /featureconfigurations/all/{since}     |
-| [**getAllUuids6**](FeatureConfigurationControllerApi.md#getAllUuids6)                               | **GET** /featureconfigurations/uuids           |
-| [**getByUuids11**](FeatureConfigurationControllerApi.md#getByUuids11)                               | **POST** /featureconfigurations/query          |
-| [**getDeletedUuids**](FeatureConfigurationControllerApi.md#getDeletedUuids)                         | **GET** /featureconfigurations/deleted/{since} |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllFeatureConfigurations**](FeatureConfigurationControllerApi.md#getAllFeatureConfigurations) | **GET** /featureconfigurations/all/{since} | 
+[**getAllUuids11**](FeatureConfigurationControllerApi.md#getAllUuids11) | **GET** /featureconfigurations/uuids | 
+[**getByUuids16**](FeatureConfigurationControllerApi.md#getByUuids16) | **POST** /featureconfigurations/query | 
+[**getDeletedUuids**](FeatureConfigurationControllerApi.md#getDeletedUuids) | **GET** /featureconfigurations/deleted/{since} | 
 
 <a name="getAllFeatureConfigurations"></a>
-
 # **getAllFeatureConfigurations**
-
 > List&lt;FeatureConfigurationDto&gt; getAllFeatureConfigurations(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,13 +25,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.FeatureConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FeatureConfigurationControllerApi apiInstance = new FeatureConfigurationControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<FeatureConfigurationDto> result = apiInstance.getAllFeatureConfigurations(since);
     System.out.println(result);
@@ -44,9 +43,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -54,21 +53,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids6"></a>
+<a name="getAllUuids11"></a>
+# **getAllUuids11**
+> List&lt;String&gt; getAllUuids11()
 
-# **getAllUuids6**
 
-> List&lt;String&gt; getAllUuids6()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -78,23 +76,22 @@ try {
 //import de.quarano.sormas.client.api.FeatureConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FeatureConfigurationControllerApi apiInstance = new FeatureConfigurationControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids6();
+    List<String> result = apiInstance.getAllUuids11();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FeatureConfigurationControllerApi#getAllUuids6");
+    System.err.println("Exception when calling FeatureConfigurationControllerApi#getAllUuids11");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -103,21 +100,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids11"></a>
+<a name="getByUuids16"></a>
+# **getByUuids16**
+> List&lt;FeatureConfigurationDto&gt; getByUuids16(body)
 
-# **getByUuids11**
 
-> List&lt;FeatureConfigurationDto&gt; getByUuids11(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.FeatureConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FeatureConfigurationControllerApi apiInstance = new FeatureConfigurationControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<FeatureConfigurationDto> result = apiInstance.getByUuids11(body);
+    List<FeatureConfigurationDto> result = apiInstance.getByUuids16(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FeatureConfigurationControllerApi#getByUuids11");
+    System.err.println("Exception when calling FeatureConfigurationControllerApi#getByUuids16");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getDeletedUuids"></a>
-
 # **getDeletedUuids**
-
 > List&lt;String&gt; getDeletedUuids(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.FeatureConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FeatureConfigurationControllerApi apiInstance = new FeatureConfigurationControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getDeletedUuids(since);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
+

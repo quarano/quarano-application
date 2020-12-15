@@ -1,21 +1,20 @@
 # PointOfEntryControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                        | HTTP request                       | Description |
-| ------------------------------------------------------------- | ---------------------------------- | ----------- |
-| [**getAll3**](PointOfEntryControllerApi.md#getAll3)           | **GET** /pointsofentry/all/{since} |
-| [**getAllUuids8**](PointOfEntryControllerApi.md#getAllUuids8) | **GET** /pointsofentry/uuids       |
-| [**getByUuids14**](PointOfEntryControllerApi.md#getByUuids14) | **POST** /pointsofentry/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll5**](PointOfEntryControllerApi.md#getAll5) | **GET** /pointsofentry/all/{since} | 
+[**getAllUuids13**](PointOfEntryControllerApi.md#getAllUuids13) | **GET** /pointsofentry/uuids | 
+[**getByUuids19**](PointOfEntryControllerApi.md#getByUuids19) | **POST** /pointsofentry/query | 
 
-<a name="getAll3"></a>
+<a name="getAll5"></a>
+# **getAll5**
+> List&lt;PointOfEntryDto&gt; getAll5(since)
 
-# **getAll3**
 
-> List&lt;PointOfEntryDto&gt; getAll3(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.PointOfEntryControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PointOfEntryControllerApi apiInstance = new PointOfEntryControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<PointOfEntryDto> result = apiInstance.getAll3(since);
+    List<PointOfEntryDto> result = apiInstance.getAll5(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PointOfEntryControllerApi#getAll3");
+    System.err.println("Exception when calling PointOfEntryControllerApi#getAll5");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids8"></a>
+<a name="getAllUuids13"></a>
+# **getAllUuids13**
+> List&lt;String&gt; getAllUuids13()
 
-# **getAllUuids8**
 
-> List&lt;String&gt; getAllUuids8()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.PointOfEntryControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PointOfEntryControllerApi apiInstance = new PointOfEntryControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids8();
+    List<String> result = apiInstance.getAllUuids13();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PointOfEntryControllerApi#getAllUuids8");
+    System.err.println("Exception when calling PointOfEntryControllerApi#getAllUuids13");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids14"></a>
+<a name="getByUuids19"></a>
+# **getByUuids19**
+> List&lt;PointOfEntryDto&gt; getByUuids19(body)
 
-# **getByUuids14**
 
-> List&lt;PointOfEntryDto&gt; getByUuids14(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.PointOfEntryControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 PointOfEntryControllerApi apiInstance = new PointOfEntryControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<PointOfEntryDto> result = apiInstance.getByUuids14(body);
+    List<PointOfEntryDto> result = apiInstance.getByUuids19(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling PointOfEntryControllerApi#getByUuids14");
+    System.err.println("Exception when calling PointOfEntryControllerApi#getByUuids19");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

@@ -2,5 +2,7 @@
 
 ## Enum
 
-- `MALE` (value: `"MALE"`)
-- `FEMALE` (value: `"FEMALE"`)
+* `MALE` (value: `"MALE"`)
+* `FEMALE` (value: `"FEMALE"`)
+* `OTHER` (value: `"OTHER"`)
+* `UNKNOWN` (value: `"UNKNOWN"`)

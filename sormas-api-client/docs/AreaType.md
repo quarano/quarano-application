@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `URBAN` (value: `"URBAN"`)
-- `RURAL` (value: `"RURAL"`)
-- `UNKNOWN` (value: `"UNKNOWN"`)
+* `URBAN` (value: `"URBAN"`)
+* `RURAL` (value: `"RURAL"`)
+* `UNKNOWN` (value: `"UNKNOWN"`)

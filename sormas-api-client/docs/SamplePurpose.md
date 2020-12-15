@@ -2,5 +2,5 @@
 
 ## Enum
 
-- `EXTERNAL` (value: `"EXTERNAL"`)
-- `INTERNAL` (value: `"INTERNAL"`)
+* `EXTERNAL` (value: `"EXTERNAL"`)
+* `INTERNAL` (value: `"INTERNAL"`)

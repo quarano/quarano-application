@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `ACTIVE` (value: `"ACTIVE"`)
-- `CONVERTED` (value: `"CONVERTED"`)
-- `DROPPED` (value: `"DROPPED"`)
+* `ACTIVE` (value: `"ACTIVE"`)
+* `CONVERTED` (value: `"CONVERTED"`)
+* `DROPPED` (value: `"DROPPED"`)

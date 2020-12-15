@@ -24,7 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.PersonControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.PersonControllerApi")
 public class PersonControllerApi {
     private ApiClient apiClient;
 
@@ -75,7 +75,7 @@ public class PersonControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<PersonDto>> returnType = new ParameterizedTypeReference<List<PersonDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -87,7 +87,7 @@ public class PersonControllerApi {
      * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<String> getAllUuids7() throws RestClientException {
+    public List<String> getAllUuids12() throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/persons/uuids").build().toUriString();
         
@@ -102,7 +102,7 @@ public class PersonControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -115,7 +115,7 @@ public class PersonControllerApi {
      * @return List&lt;PersonDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<PersonDto> getByUuids13(List<String> body) throws RestClientException {
+    public List<PersonDto> getByUuids18(List<String> body) throws RestClientException {
         Object postBody = body;
         String path = UriComponentsBuilder.fromPath("/persons/query").build().toUriString();
         
@@ -132,7 +132,7 @@ public class PersonControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<PersonDto>> returnType = new ParameterizedTypeReference<List<PersonDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -162,7 +162,7 @@ public class PersonControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<PushResult>> returnType = new ParameterizedTypeReference<List<PushResult>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

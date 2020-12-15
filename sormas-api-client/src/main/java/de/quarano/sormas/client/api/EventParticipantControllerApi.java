@@ -24,7 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.EventParticipantControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.EventParticipantControllerApi")
 public class EventParticipantControllerApi {
     private ApiClient apiClient;
 
@@ -67,7 +67,7 @@ public class EventParticipantControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -102,7 +102,7 @@ public class EventParticipantControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<EventParticipantDto>> returnType = new ParameterizedTypeReference<List<EventParticipantDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -115,7 +115,7 @@ public class EventParticipantControllerApi {
      * @return List&lt;EventParticipantDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<EventParticipantDto> getByUuids8(List<String> body) throws RestClientException {
+    public List<EventParticipantDto> getByUuids13(List<String> body) throws RestClientException {
         Object postBody = body;
         String path = UriComponentsBuilder.fromPath("/eventparticipants/query").build().toUriString();
         
@@ -132,10 +132,45 @@ public class EventParticipantControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<EventParticipantDto>> returnType = new ParameterizedTypeReference<List<EventParticipantDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>0</b> - default response
+     * @param since The since parameter
+     * @return List&lt;String&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<String> getDeletedUuidsSince2(Long since) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'since' is set
+        if (since == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getDeletedUuidsSince2");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("since", since);
+        String path = UriComponentsBuilder.fromPath("/eventparticipants/deleted/{since}").buildAndExpand(uriVariables).toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json; charset&#x3D;UTF-8"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] { "basicAuth" };
+
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -162,7 +197,7 @@ public class EventParticipantControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<PushResult>> returnType = new ParameterizedTypeReference<List<PushResult>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

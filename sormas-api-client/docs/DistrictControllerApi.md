@@ -1,21 +1,20 @@
 # DistrictControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                    | HTTP request                   | Description |
-| --------------------------------------------------------- | ------------------------------ | ----------- |
-| [**getAll2**](DistrictControllerApi.md#getAll2)           | **GET** /districts/all/{since} |
-| [**getAllUuids4**](DistrictControllerApi.md#getAllUuids4) | **GET** /districts/uuids       |
-| [**getByUuids7**](DistrictControllerApi.md#getByUuids7)   | **POST** /districts/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll4**](DistrictControllerApi.md#getAll4) | **GET** /districts/all/{since} | 
+[**getAllUuids9**](DistrictControllerApi.md#getAllUuids9) | **GET** /districts/uuids | 
+[**getByUuids12**](DistrictControllerApi.md#getByUuids12) | **POST** /districts/query | 
 
-<a name="getAll2"></a>
+<a name="getAll4"></a>
+# **getAll4**
+> List&lt;DistrictDto&gt; getAll4(since)
 
-# **getAll2**
 
-> List&lt;DistrictDto&gt; getAll2(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.DistrictControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DistrictControllerApi apiInstance = new DistrictControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<DistrictDto> result = apiInstance.getAll2(since);
+    List<DistrictDto> result = apiInstance.getAll4(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DistrictControllerApi#getAll2");
+    System.err.println("Exception when calling DistrictControllerApi#getAll4");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids4"></a>
+<a name="getAllUuids9"></a>
+# **getAllUuids9**
+> List&lt;String&gt; getAllUuids9()
 
-# **getAllUuids4**
 
-> List&lt;String&gt; getAllUuids4()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.DistrictControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DistrictControllerApi apiInstance = new DistrictControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids4();
+    List<String> result = apiInstance.getAllUuids9();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DistrictControllerApi#getAllUuids4");
+    System.err.println("Exception when calling DistrictControllerApi#getAllUuids9");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids7"></a>
+<a name="getByUuids12"></a>
+# **getByUuids12**
+> List&lt;DistrictDto&gt; getByUuids12(body)
 
-# **getByUuids7**
 
-> List&lt;DistrictDto&gt; getByUuids7(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.DistrictControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DistrictControllerApi apiInstance = new DistrictControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<DistrictDto> result = apiInstance.getByUuids7(body);
+    List<DistrictDto> result = apiInstance.getByUuids12(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DistrictControllerApi#getByUuids7");
+    System.err.println("Exception when calling DistrictControllerApi#getByUuids12");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

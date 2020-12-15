@@ -1,19 +1,18 @@
 # InfrastructureControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                                    | HTTP request                  | Description |
-| ----------------------------------------------------------------------------------------- | ----------------------------- | ----------- |
-| [**getInfrastructureSyncData**](InfrastructureControllerApi.md#getInfrastructureSyncData) | **POST** /infrastructure/sync |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getInfrastructureSyncData**](InfrastructureControllerApi.md#getInfrastructureSyncData) | **POST** /infrastructure/sync | 
 
 <a name="getInfrastructureSyncData"></a>
-
 # **getInfrastructureSyncData**
-
 > InfrastructureSyncDto getInfrastructureSyncData(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -23,13 +22,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.InfrastructureControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 InfrastructureControllerApi apiInstance = new InfrastructureControllerApi();
-InfrastructureChangeDatesDto body = new InfrastructureChangeDatesDto(); // InfrastructureChangeDatesDto |
+InfrastructureChangeDatesDto body = new InfrastructureChangeDatesDto(); // InfrastructureChangeDatesDto | 
 try {
     InfrastructureSyncDto result = apiInstance.getInfrastructureSyncData(body);
     System.out.println(result);
@@ -41,9 +40,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                                | Description | Notes      |
-| -------- | ------------------------------------------------------------------- | ----------- | ---------- |
-| **body** | [**InfrastructureChangeDatesDto**](InfrastructureChangeDatesDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**InfrastructureChangeDatesDto**](InfrastructureChangeDatesDto.md)|  | [optional]
 
 ### Return type
 
@@ -51,9 +50,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

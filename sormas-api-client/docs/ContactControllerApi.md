@@ -1,23 +1,22 @@
 # ContactControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                     | HTTP request                      | Description |
-| -------------------------------------------------------------------------- | --------------------------------- | ----------- |
-| [**getAllActiveUuids2**](ContactControllerApi.md#getAllActiveUuids2)       | **GET** /contacts/uuids           |
-| [**getAllContacts**](ContactControllerApi.md#getAllContacts)               | **GET** /contacts/all/{since}     |
-| [**getByUuids5**](ContactControllerApi.md#getByUuids5)                     | **POST** /contacts/query          |
-| [**getDeletedUuidsSince1**](ContactControllerApi.md#getDeletedUuidsSince1) | **GET** /contacts/deleted/{since} |
-| [**postContacts**](ContactControllerApi.md#postContacts)                   | **POST** /contacts/push           |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids2**](ContactControllerApi.md#getAllActiveUuids2) | **GET** /contacts/uuids | 
+[**getAllContacts**](ContactControllerApi.md#getAllContacts) | **GET** /contacts/all/{since} | 
+[**getByUuids9**](ContactControllerApi.md#getByUuids9) | **POST** /contacts/query | 
+[**getDeletedUuidsSince1**](ContactControllerApi.md#getDeletedUuidsSince1) | **GET** /contacts/deleted/{since} | 
+[**postContacts**](ContactControllerApi.md#postContacts) | **POST** /contacts/push | 
 
 <a name="getAllActiveUuids2"></a>
-
 # **getAllActiveUuids2**
-
 > List&lt;String&gt; getAllActiveUuids2()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -27,10 +26,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.ContactControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ContactControllerApi apiInstance = new ContactControllerApi();
 try {
@@ -43,7 +42,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -52,21 +50,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllContacts"></a>
-
 # **getAllContacts**
-
 > List&lt;ContactDto&gt; getAllContacts(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -76,13 +73,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.ContactControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ContactControllerApi apiInstance = new ContactControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<ContactDto> result = apiInstance.getAllContacts(since);
     System.out.println(result);
@@ -94,9 +91,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -104,21 +101,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids5"></a>
+<a name="getByUuids9"></a>
+# **getByUuids9**
+> List&lt;ContactDto&gt; getByUuids9(body)
 
-# **getByUuids5**
 
-> List&lt;ContactDto&gt; getByUuids5(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -128,27 +124,27 @@ try {
 //import de.quarano.sormas.client.api.ContactControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ContactControllerApi apiInstance = new ContactControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<ContactDto> result = apiInstance.getByUuids5(body);
+    List<ContactDto> result = apiInstance.getByUuids9(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ContactControllerApi#getByUuids5");
+    System.err.println("Exception when calling ContactControllerApi#getByUuids9");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -156,21 +152,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getDeletedUuidsSince1"></a>
-
 # **getDeletedUuidsSince1**
-
 > List&lt;String&gt; getDeletedUuidsSince1(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -180,13 +175,13 @@ try {
 //import de.quarano.sormas.client.api.ContactControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ContactControllerApi apiInstance = new ContactControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getDeletedUuidsSince1(since);
     System.out.println(result);
@@ -198,9 +193,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -208,21 +203,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postContacts"></a>
-
 # **postContacts**
-
 > List&lt;PushResult&gt; postContacts(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -232,13 +226,13 @@ try {
 //import de.quarano.sormas.client.api.ContactControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ContactControllerApi apiInstance = new ContactControllerApi();
-List<ContactDto> body = Arrays.asList(new ContactDto()); // List<ContactDto> |
+List<ContactDto> body = Arrays.asList(new ContactDto()); // List<ContactDto> | 
 try {
     List<PushResult> result = apiInstance.postContacts(body);
     System.out.println(result);
@@ -250,9 +244,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                        | Description | Notes      |
-| -------- | ------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;ContactDto&gt;**](ContactDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;ContactDto&gt;**](ContactDto.md)|  | [optional]
 
 ### Return type
 
@@ -260,9 +254,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

@@ -1,22 +1,21 @@
 # ClinicalVisitControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                     | HTTP request                        | Description |
-| -------------------------------------------------------------------------- | ----------------------------------- | ----------- |
-| [**getAllActiveUuids1**](ClinicalVisitControllerApi.md#getAllActiveUuids1) | **GET** /clinicalvisits/uuids       |
-| [**getAllVisits**](ClinicalVisitControllerApi.md#getAllVisits)             | **GET** /clinicalvisits/all/{since} |
-| [**getByUuids3**](ClinicalVisitControllerApi.md#getByUuids3)               | **POST** /clinicalvisits/query      |
-| [**postVisits**](ClinicalVisitControllerApi.md#postVisits)                 | **POST** /clinicalvisits/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids1**](ClinicalVisitControllerApi.md#getAllActiveUuids1) | **GET** /clinicalvisits/uuids | 
+[**getAllVisits**](ClinicalVisitControllerApi.md#getAllVisits) | **GET** /clinicalvisits/all/{since} | 
+[**getByUuids7**](ClinicalVisitControllerApi.md#getByUuids7) | **POST** /clinicalvisits/query | 
+[**postVisits**](ClinicalVisitControllerApi.md#postVisits) | **POST** /clinicalvisits/push | 
 
 <a name="getAllActiveUuids1"></a>
-
 # **getAllActiveUuids1**
-
 > List&lt;String&gt; getAllActiveUuids1()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,10 +25,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.ClinicalVisitControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ClinicalVisitControllerApi apiInstance = new ClinicalVisitControllerApi();
 try {
@@ -42,7 +41,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -51,21 +49,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllVisits"></a>
-
 # **getAllVisits**
-
 > List&lt;ClinicalVisitDto&gt; getAllVisits(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -75,13 +72,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.ClinicalVisitControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ClinicalVisitControllerApi apiInstance = new ClinicalVisitControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<ClinicalVisitDto> result = apiInstance.getAllVisits(since);
     System.out.println(result);
@@ -93,9 +90,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -103,21 +100,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids3"></a>
+<a name="getByUuids7"></a>
+# **getByUuids7**
+> List&lt;ClinicalVisitDto&gt; getByUuids7(body)
 
-# **getByUuids3**
 
-> List&lt;ClinicalVisitDto&gt; getByUuids3(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ try {
 //import de.quarano.sormas.client.api.ClinicalVisitControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ClinicalVisitControllerApi apiInstance = new ClinicalVisitControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<ClinicalVisitDto> result = apiInstance.getByUuids3(body);
+    List<ClinicalVisitDto> result = apiInstance.getByUuids7(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ClinicalVisitControllerApi#getByUuids3");
+    System.err.println("Exception when calling ClinicalVisitControllerApi#getByUuids7");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postVisits"></a>
-
 # **postVisits**
-
 > List&lt;PushResult&gt; postVisits(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.ClinicalVisitControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ClinicalVisitControllerApi apiInstance = new ClinicalVisitControllerApi();
-List<ClinicalVisitDto> body = Arrays.asList(new ClinicalVisitDto()); // List<ClinicalVisitDto> |
+List<ClinicalVisitDto> body = Arrays.asList(new ClinicalVisitDto()); // List<ClinicalVisitDto> | 
 try {
     List<PushResult> result = apiInstance.postVisits(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                    | Description | Notes      |
-| -------- | ------------------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;ClinicalVisitDto&gt;**](ClinicalVisitDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;ClinicalVisitDto&gt;**](ClinicalVisitDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

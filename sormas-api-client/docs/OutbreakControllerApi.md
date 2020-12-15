@@ -1,21 +1,20 @@
 # OutbreakControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                      | HTTP request                        | Description |
-| --------------------------------------------------------------------------- | ----------------------------------- | ----------- |
-| [**getActiveSince**](OutbreakControllerApi.md#getActiveSince)               | **GET** /outbreaks/active/{since}   |
-| [**getActiveUuids**](OutbreakControllerApi.md#getActiveUuids)               | **GET** /outbreaks/uuids            |
-| [**getInactiveUuidsSince**](OutbreakControllerApi.md#getInactiveUuidsSince) | **GET** /outbreaks/inactive/{since} |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getActiveSince**](OutbreakControllerApi.md#getActiveSince) | **GET** /outbreaks/active/{since} | 
+[**getActiveUuids**](OutbreakControllerApi.md#getActiveUuids) | **GET** /outbreaks/uuids | 
+[**getInactiveUuidsSince**](OutbreakControllerApi.md#getInactiveUuidsSince) | **GET** /outbreaks/inactive/{since} | 
 
 <a name="getActiveSince"></a>
-
 # **getActiveSince**
-
 > List&lt;OutbreakDto&gt; getActiveSince(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,13 +24,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.OutbreakControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 OutbreakControllerApi apiInstance = new OutbreakControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<OutbreakDto> result = apiInstance.getActiveSince(since);
     System.out.println(result);
@@ -43,9 +42,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getActiveUuids"></a>
-
 # **getActiveUuids**
-
 > List&lt;String&gt; getActiveUuids()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,10 +75,10 @@ try {
 //import de.quarano.sormas.client.api.OutbreakControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 OutbreakControllerApi apiInstance = new OutbreakControllerApi();
 try {
@@ -93,7 +91,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getInactiveUuidsSince"></a>
-
 # **getInactiveUuidsSince**
-
 > List&lt;String&gt; getInactiveUuidsSince(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,13 +122,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.OutbreakControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 OutbreakControllerApi apiInstance = new OutbreakControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getInactiveUuidsSince(since);
     System.out.println(result);
@@ -144,9 +140,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
+

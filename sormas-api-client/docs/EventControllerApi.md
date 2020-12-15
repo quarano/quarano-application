@@ -1,24 +1,23 @@
 # EventControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                     | HTTP request                     | Description |
-| -------------------------------------------------------------------------- | -------------------------------- | ----------- |
-| [**getAllActiveUuids4**](EventControllerApi.md#getAllActiveUuids4)         | **GET** /events/uuids            |
-| [**getAllEvents**](EventControllerApi.md#getAllEvents)                     | **GET** /events/all/{since}      |
-| [**getArchivedUuidsSince1**](EventControllerApi.md#getArchivedUuidsSince1) | **GET** /events/archived/{since} |
-| [**getByUuids9**](EventControllerApi.md#getByUuids9)                       | **POST** /events/query           |
-| [**getDeletedUuidsSince2**](EventControllerApi.md#getDeletedUuidsSince2)   | **GET** /events/deleted/{since}  |
-| [**postEvents**](EventControllerApi.md#postEvents)                         | **POST** /events/push            |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids4**](EventControllerApi.md#getAllActiveUuids4) | **GET** /events/uuids | 
+[**getAllEvents**](EventControllerApi.md#getAllEvents) | **GET** /events/all/{since} | 
+[**getArchivedUuidsSince1**](EventControllerApi.md#getArchivedUuidsSince1) | **GET** /events/archived/{since} | 
+[**getByUuids14**](EventControllerApi.md#getByUuids14) | **POST** /events/query | 
+[**getDeletedUuidsSince3**](EventControllerApi.md#getDeletedUuidsSince3) | **GET** /events/deleted/{since} | 
+[**postEvents**](EventControllerApi.md#postEvents) | **POST** /events/push | 
 
 <a name="getAllActiveUuids4"></a>
-
 # **getAllActiveUuids4**
-
 > List&lt;String&gt; getAllActiveUuids4()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -28,10 +27,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
 try {
@@ -44,7 +43,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -53,21 +51,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllEvents"></a>
-
 # **getAllEvents**
-
 > List&lt;EventDto&gt; getAllEvents(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,13 +74,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<EventDto> result = apiInstance.getAllEvents(since);
     System.out.println(result);
@@ -95,9 +92,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -105,21 +102,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getArchivedUuidsSince1"></a>
-
 # **getArchivedUuidsSince1**
-
 > List&lt;String&gt; getArchivedUuidsSince1(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -129,13 +125,13 @@ try {
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getArchivedUuidsSince1(since);
     System.out.println(result);
@@ -147,9 +143,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -157,21 +153,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids9"></a>
+<a name="getByUuids14"></a>
+# **getByUuids14**
+> List&lt;EventDto&gt; getByUuids14(body)
 
-# **getByUuids9**
 
-> List&lt;EventDto&gt; getByUuids9(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -181,27 +176,27 @@ try {
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<EventDto> result = apiInstance.getByUuids9(body);
+    List<EventDto> result = apiInstance.getByUuids14(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventControllerApi#getByUuids9");
+    System.err.println("Exception when calling EventControllerApi#getByUuids14");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -209,21 +204,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getDeletedUuidsSince2"></a>
+<a name="getDeletedUuidsSince3"></a>
+# **getDeletedUuidsSince3**
+> List&lt;String&gt; getDeletedUuidsSince3(since)
 
-# **getDeletedUuidsSince2**
 
-> List&lt;String&gt; getDeletedUuidsSince2(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -233,27 +227,27 @@ try {
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<String> result = apiInstance.getDeletedUuidsSince2(since);
+    List<String> result = apiInstance.getDeletedUuidsSince3(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling EventControllerApi#getDeletedUuidsSince2");
+    System.err.println("Exception when calling EventControllerApi#getDeletedUuidsSince3");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -261,21 +255,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postEvents"></a>
-
 # **postEvents**
-
 > List&lt;PushResult&gt; postEvents(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -285,13 +278,13 @@ try {
 //import de.quarano.sormas.client.api.EventControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 EventControllerApi apiInstance = new EventControllerApi();
-List<EventDto> body = Arrays.asList(new EventDto()); // List<EventDto> |
+List<EventDto> body = Arrays.asList(new EventDto()); // List<EventDto> | 
 try {
     List<PushResult> result = apiInstance.postEvents(body);
     System.out.println(result);
@@ -303,9 +296,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                    | Description | Notes      |
-| -------- | --------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;EventDto&gt;**](EventDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;EventDto&gt;**](EventDto.md)|  | [optional]
 
 ### Return type
 
@@ -313,9 +306,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

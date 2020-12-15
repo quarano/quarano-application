@@ -1,21 +1,20 @@
 # DiseaseConfigurationControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                                              | HTTP request                               | Description |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------- |
-| [**getAllDiseaseConfigurations**](DiseaseConfigurationControllerApi.md#getAllDiseaseConfigurations) | **GET** /diseaseconfigurations/all/{since} |
-| [**getAllUuids3**](DiseaseConfigurationControllerApi.md#getAllUuids3)                               | **GET** /diseaseconfigurations/uuids       |
-| [**getByUuids6**](DiseaseConfigurationControllerApi.md#getByUuids6)                                 | **POST** /diseaseconfigurations/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllDiseaseConfigurations**](DiseaseConfigurationControllerApi.md#getAllDiseaseConfigurations) | **GET** /diseaseconfigurations/all/{since} | 
+[**getAllUuids8**](DiseaseConfigurationControllerApi.md#getAllUuids8) | **GET** /diseaseconfigurations/uuids | 
+[**getByUuids11**](DiseaseConfigurationControllerApi.md#getByUuids11) | **POST** /diseaseconfigurations/query | 
 
 <a name="getAllDiseaseConfigurations"></a>
-
 # **getAllDiseaseConfigurations**
-
 > List&lt;DiseaseConfigurationDto&gt; getAllDiseaseConfigurations(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,13 +24,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.DiseaseConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DiseaseConfigurationControllerApi apiInstance = new DiseaseConfigurationControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<DiseaseConfigurationDto> result = apiInstance.getAllDiseaseConfigurations(since);
     System.out.println(result);
@@ -43,9 +42,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids3"></a>
+<a name="getAllUuids8"></a>
+# **getAllUuids8**
+> List&lt;String&gt; getAllUuids8()
 
-# **getAllUuids3**
 
-> List&lt;String&gt; getAllUuids3()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.DiseaseConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DiseaseConfigurationControllerApi apiInstance = new DiseaseConfigurationControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids3();
+    List<String> result = apiInstance.getAllUuids8();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DiseaseConfigurationControllerApi#getAllUuids3");
+    System.err.println("Exception when calling DiseaseConfigurationControllerApi#getAllUuids8");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids6"></a>
+<a name="getByUuids11"></a>
+# **getByUuids11**
+> List&lt;DiseaseConfigurationDto&gt; getByUuids11(body)
 
-# **getByUuids6**
 
-> List&lt;DiseaseConfigurationDto&gt; getByUuids6(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.DiseaseConfigurationControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 DiseaseConfigurationControllerApi apiInstance = new DiseaseConfigurationControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<DiseaseConfigurationDto> result = apiInstance.getByUuids6(body);
+    List<DiseaseConfigurationDto> result = apiInstance.getByUuids11(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling DiseaseConfigurationControllerApi#getByUuids6");
+    System.err.println("Exception when calling DiseaseConfigurationControllerApi#getByUuids11");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `VACCINATED` (value: `"VACCINATED"`)
-- `UNVACCINATED` (value: `"UNVACCINATED"`)
-- `UNKNOWN` (value: `"UNKNOWN"`)
+* `VACCINATED` (value: `"VACCINATED"`)
+* `UNVACCINATED` (value: `"UNVACCINATED"`)
+* `UNKNOWN` (value: `"UNKNOWN"`)

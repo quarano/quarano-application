@@ -1,8 +1,7 @@
 # ClassificationPersonAgeBetweenYearsCriteriaDto
 
 ## Properties
-
-| Name               | Type        | Description | Notes      |
-| ------------------ | ----------- | ----------- | ---------- |
-| **lowerThreshold** | **Integer** |             | [optional] |
-| **upperThreshold** | **Integer** |             | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**lowerThreshold** | **Integer** |  |  [optional]
+**upperThreshold** | **Integer** |  |  [optional]

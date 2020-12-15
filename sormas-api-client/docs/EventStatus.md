@@ -2,6 +2,8 @@
 
 ## Enum
 
-- `POSSIBLE` (value: `"POSSIBLE"`)
-- `CONFIRMED` (value: `"CONFIRMED"`)
-- `NO_EVENT` (value: `"NO_EVENT"`)
+* `SIGNAL` (value: `"SIGNAL"`)
+* `EVENT` (value: `"EVENT"`)
+* `SCREENING` (value: `"SCREENING"`)
+* `CLUSTER` (value: `"CLUSTER"`)
+* `DROPPED` (value: `"DROPPED"`)

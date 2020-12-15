@@ -1,7 +1,6 @@
 # ClassificationNoneOfCriteriaDto
 
 ## Properties
-
-| Name             | Type       | Description | Notes      |
-| ---------------- | ---------- | ----------- | ---------- |
-| **criteriaName** | **String** |             | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**criteriaName** | **String** |  |  [optional]

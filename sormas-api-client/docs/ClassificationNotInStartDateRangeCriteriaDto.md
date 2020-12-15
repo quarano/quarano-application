@@ -1,7 +1,6 @@
 # ClassificationNotInStartDateRangeCriteriaDto
 
 ## Properties
-
-| Name                    | Type        | Description | Notes      |
-| ----------------------- | ----------- | ----------- | ---------- |
-| **daysBeforeStartDate** | **Integer** |             | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**daysBeforeStartDate** | **Integer** |  |  [optional]

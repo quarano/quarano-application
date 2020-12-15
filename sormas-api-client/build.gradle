@@ -2,7 +2,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 group = 'de.quarano'
-version = '0.0.1-SNAPSHOT'
+version = '1.52.1-SNAPSHOT'
 
 buildscript {
     repositories {

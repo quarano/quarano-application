@@ -2,8 +2,10 @@
 
 ## Enum
 
-- `NOT_CLASSIFIED` (value: `"NOT_CLASSIFIED"`)
-- `SUSPECT` (value: `"SUSPECT"`)
-- `PROBABLE` (value: `"PROBABLE"`)
-- `CONFIRMED` (value: `"CONFIRMED"`)
-- `NO_CASE` (value: `"NO_CASE"`)
+* `NOT_CLASSIFIED` (value: `"NOT_CLASSIFIED"`)
+* `SUSPECT` (value: `"SUSPECT"`)
+* `PROBABLE` (value: `"PROBABLE"`)
+* `CONFIRMED` (value: `"CONFIRMED"`)
+* `CONFIRMED_NO_SYMPTOMS` (value: `"CONFIRMED_NO_SYMPTOMS"`)
+* `CONFIRMED_UNKNOWN_SYMPTOMS` (value: `"CONFIRMED_UNKNOWN_SYMPTOMS"`)
+* `NO_CASE` (value: `"NO_CASE"`)

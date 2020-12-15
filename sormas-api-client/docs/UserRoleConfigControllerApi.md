@@ -1,21 +1,20 @@
 # UserRoleConfigControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                  | HTTP request                       | Description |
-| ----------------------------------------------------------------------- | ---------------------------------- | ----------- |
-| [**getAll7**](UserRoleConfigControllerApi.md#getAll7)                   | **GET** /userroles/all/{since}     |
-| [**getAllUuids11**](UserRoleConfigControllerApi.md#getAllUuids11)       | **GET** /userroles/uuids           |
-| [**getDeletedUuids1**](UserRoleConfigControllerApi.md#getDeletedUuids1) | **GET** /userroles/deleted/{since} |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll9**](UserRoleConfigControllerApi.md#getAll9) | **GET** /userroles/all/{since} | 
+[**getAllUuids16**](UserRoleConfigControllerApi.md#getAllUuids16) | **GET** /userroles/uuids | 
+[**getDeletedUuids1**](UserRoleConfigControllerApi.md#getDeletedUuids1) | **GET** /userroles/deleted/{since} | 
 
-<a name="getAll7"></a>
+<a name="getAll9"></a>
+# **getAll9**
+> List&lt;UserRoleConfigDto&gt; getAll9(since)
 
-# **getAll7**
 
-> List&lt;UserRoleConfigDto&gt; getAll7(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.UserRoleConfigControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserRoleConfigControllerApi apiInstance = new UserRoleConfigControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<UserRoleConfigDto> result = apiInstance.getAll7(since);
+    List<UserRoleConfigDto> result = apiInstance.getAll9(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserRoleConfigControllerApi#getAll7");
+    System.err.println("Exception when calling UserRoleConfigControllerApi#getAll9");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids11"></a>
+<a name="getAllUuids16"></a>
+# **getAllUuids16**
+> List&lt;String&gt; getAllUuids16()
 
-# **getAllUuids11**
 
-> List&lt;String&gt; getAllUuids11()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.UserRoleConfigControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserRoleConfigControllerApi apiInstance = new UserRoleConfigControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids11();
+    List<String> result = apiInstance.getAllUuids16();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UserRoleConfigControllerApi#getAllUuids11");
+    System.err.println("Exception when calling UserRoleConfigControllerApi#getAllUuids16");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getDeletedUuids1"></a>
-
 # **getDeletedUuids1**
-
 > List&lt;String&gt; getDeletedUuids1(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,13 +122,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.UserRoleConfigControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 UserRoleConfigControllerApi apiInstance = new UserRoleConfigControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getDeletedUuids1(since);
     System.out.println(result);
@@ -144,9 +140,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
+

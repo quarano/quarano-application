@@ -1,25 +1,23 @@
 # CaseControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                                                        | HTTP request                                            | Description |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ----------- |
-| [**getAllCases**](CaseControllerApi.md#getAllCases)                                                           | **GET** /cases/all/{since}                              |
-| [**getAllCasesWithExtendedChangeDateFilters**](CaseControllerApi.md#getAllCasesWithExtendedChangeDateFilters) | **GET** /cases/allWithExtendedChangeDateFilters/{since} |
-| [**getAllUuids1**](CaseControllerApi.md#getAllUuids1)                                                         | **GET** /cases/uuids                                    |
-| [**getArchivedUuidsSince**](CaseControllerApi.md#getArchivedUuidsSince)                                       | **GET** /cases/archived/{since}                         |
-| [**getByUuids2**](CaseControllerApi.md#getByUuids2)                                                           | **POST** /cases/query                                   |
-| [**getDeletedUuidsSince**](CaseControllerApi.md#getDeletedUuidsSince)                                         | **GET** /cases/deleted/{since}                          |
-| [**postCases**](CaseControllerApi.md#postCases)                                                               | **POST** /cases/push                                    |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllCases**](CaseControllerApi.md#getAllCases) | **GET** /cases/all/{since} | 
+[**getAllUuids5**](CaseControllerApi.md#getAllUuids5) | **GET** /cases/uuids | 
+[**getArchivedUuidsSince**](CaseControllerApi.md#getArchivedUuidsSince) | **GET** /cases/archived/{since} | 
+[**getByUuids6**](CaseControllerApi.md#getByUuids6) | **POST** /cases/query | 
+[**getDeletedUuidsSince**](CaseControllerApi.md#getDeletedUuidsSince) | **GET** /cases/deleted/{since} | 
+[**postCases**](CaseControllerApi.md#postCases) | **POST** /cases/push | 
 
 <a name="getAllCases"></a>
-
 # **getAllCases**
-
 > List&lt;CaseDataDto&gt; getAllCases(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -29,13 +27,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<CaseDataDto> result = apiInstance.getAllCases(since);
     System.out.println(result);
@@ -47,9 +45,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -57,21 +55,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllCasesWithExtendedChangeDateFilters"></a>
+<a name="getAllUuids5"></a>
+# **getAllUuids5**
+> List&lt;String&gt; getAllUuids5()
 
-# **getAllCasesWithExtendedChangeDateFilters**
 
-> List&lt;CaseDataDto&gt; getAllCasesWithExtendedChangeDateFilters(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -81,75 +78,22 @@ try {
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-Long since = 789L; // Long |
 try {
-    List<CaseDataDto> result = apiInstance.getAllCasesWithExtendedChangeDateFilters(since);
+    List<String> result = apiInstance.getAllUuids5();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CaseControllerApi#getAllCasesWithExtendedChangeDateFilters");
+    System.err.println("Exception when calling CaseControllerApi#getAllUuids5");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
-
-### Return type
-
-[**List&lt;CaseDataDto&gt;**](CaseDataDto.md)
-
-### Authorization
-
-[http-basic](../README.md#http-basic)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
-
-<a name="getAllUuids1"></a>
-
-# **getAllUuids1**
-
-> List&lt;String&gt; getAllUuids1()
-
-### Example
-
-```java
-// Import classes:
-//import de.quarano.sormas.client.invoker.ApiClient;
-//import de.quarano.sormas.client.invoker.ApiException;
-//import de.quarano.sormas.client.invoker.Configuration;
-//import de.quarano.sormas.client.invoker.auth.*;
-//import de.quarano.sormas.client.api.CaseControllerApi;
-
-ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
-
-CaseControllerApi apiInstance = new CaseControllerApi();
-try {
-    List<String> result = apiInstance.getAllUuids1();
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling CaseControllerApi#getAllUuids1");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -158,21 +102,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getArchivedUuidsSince"></a>
-
 # **getArchivedUuidsSince**
-
 > List&lt;String&gt; getArchivedUuidsSince(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -182,13 +125,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getArchivedUuidsSince(since);
     System.out.println(result);
@@ -200,9 +143,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -210,21 +153,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids2"></a>
+<a name="getByUuids6"></a>
+# **getByUuids6**
+> List&lt;CaseDataDto&gt; getByUuids6(body)
 
-# **getByUuids2**
 
-> List&lt;CaseDataDto&gt; getByUuids2(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -234,27 +176,27 @@ try {
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<CaseDataDto> result = apiInstance.getByUuids2(body);
+    List<CaseDataDto> result = apiInstance.getByUuids6(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CaseControllerApi#getByUuids2");
+    System.err.println("Exception when calling CaseControllerApi#getByUuids6");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -262,21 +204,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getDeletedUuidsSince"></a>
-
 # **getDeletedUuidsSince**
-
 > List&lt;String&gt; getDeletedUuidsSince(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -286,13 +227,13 @@ try {
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<String> result = apiInstance.getDeletedUuidsSince(since);
     System.out.println(result);
@@ -304,9 +245,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -314,21 +255,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postCases"></a>
-
 # **postCases**
-
 > List&lt;PushResult&gt; postCases(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -338,13 +278,13 @@ try {
 //import de.quarano.sormas.client.api.CaseControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CaseControllerApi apiInstance = new CaseControllerApi();
-List<CaseDataDto> body = Arrays.asList(new CaseDataDto()); // List<CaseDataDto> |
+List<CaseDataDto> body = Arrays.asList(new CaseDataDto()); // List<CaseDataDto> | 
 try {
     List<PushResult> result = apiInstance.postCases(body);
     System.out.println(result);
@@ -356,9 +296,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                          | Description | Notes      |
-| -------- | --------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;CaseDataDto&gt;**](CaseDataDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;CaseDataDto&gt;**](CaseDataDto.md)|  | [optional]
 
 ### Return type
 
@@ -366,9 +306,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

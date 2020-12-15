@@ -1,22 +1,21 @@
 # FacilityControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                  | HTTP request                                    | Description |
-| ----------------------------------------------------------------------- | ----------------------------------------------- | ----------- |
-| [**getAllByRegion**](FacilityControllerApi.md#getAllByRegion)           | **GET** /facilities/region/{regionUuid}/{since} |
-| [**getAllUuids5**](FacilityControllerApi.md#getAllUuids5)               | **GET** /facilities/uuids                       |
-| [**getAllWithoutRegion**](FacilityControllerApi.md#getAllWithoutRegion) | **GET** /facilities/general/{since}             |
-| [**getByUuids10**](FacilityControllerApi.md#getByUuids10)               | **POST** /facilities/query                      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllByRegion**](FacilityControllerApi.md#getAllByRegion) | **GET** /facilities/region/{regionUuid}/{since} | 
+[**getAllUuids10**](FacilityControllerApi.md#getAllUuids10) | **GET** /facilities/uuids | 
+[**getAllWithoutRegion**](FacilityControllerApi.md#getAllWithoutRegion) | **GET** /facilities/general/{since} | 
+[**getByUuids15**](FacilityControllerApi.md#getByUuids15) | **POST** /facilities/query | 
 
 <a name="getAllByRegion"></a>
-
 # **getAllByRegion**
-
 > List&lt;FacilityDto&gt; getAllByRegion(regionUuid, since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,14 +25,14 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.FacilityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FacilityControllerApi apiInstance = new FacilityControllerApi();
-String regionUuid = "regionUuid_example"; // String |
-Long since = 789L; // Long |
+String regionUuid = "regionUuid_example"; // String | 
+Long since = 789L; // Long | 
 try {
     List<FacilityDto> result = apiInstance.getAllByRegion(regionUuid, since);
     System.out.println(result);
@@ -45,10 +44,10 @@ try {
 
 ### Parameters
 
-| Name           | Type       | Description | Notes |
-| -------------- | ---------- | ----------- | ----- |
-| **regionUuid** | **String** |             |
-| **since**      | **Long**   |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **regionUuid** | **String**|  |
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -56,21 +55,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids5"></a>
+<a name="getAllUuids10"></a>
+# **getAllUuids10**
+> List&lt;String&gt; getAllUuids10()
 
-# **getAllUuids5**
 
-> List&lt;String&gt; getAllUuids5()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -80,23 +78,22 @@ try {
 //import de.quarano.sormas.client.api.FacilityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FacilityControllerApi apiInstance = new FacilityControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids5();
+    List<String> result = apiInstance.getAllUuids10();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FacilityControllerApi#getAllUuids5");
+    System.err.println("Exception when calling FacilityControllerApi#getAllUuids10");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -105,21 +102,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllWithoutRegion"></a>
-
 # **getAllWithoutRegion**
-
 > List&lt;FacilityDto&gt; getAllWithoutRegion(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -129,13 +125,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.FacilityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FacilityControllerApi apiInstance = new FacilityControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<FacilityDto> result = apiInstance.getAllWithoutRegion(since);
     System.out.println(result);
@@ -147,9 +143,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -157,21 +153,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids10"></a>
+<a name="getByUuids15"></a>
+# **getByUuids15**
+> List&lt;FacilityDto&gt; getByUuids15(body)
 
-# **getByUuids10**
 
-> List&lt;FacilityDto&gt; getByUuids10(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -181,27 +176,27 @@ try {
 //import de.quarano.sormas.client.api.FacilityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 FacilityControllerApi apiInstance = new FacilityControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<FacilityDto> result = apiInstance.getByUuids10(body);
+    List<FacilityDto> result = apiInstance.getByUuids15(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling FacilityControllerApi#getByUuids10");
+    System.err.println("Exception when calling FacilityControllerApi#getByUuids15");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -209,9 +204,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

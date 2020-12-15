@@ -23,7 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.UserRoleConfigControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.UserRoleConfigControllerApi")
 public class UserRoleConfigControllerApi {
     private ApiClient apiClient;
 
@@ -52,11 +52,11 @@ public class UserRoleConfigControllerApi {
      * @return List&lt;UserRoleConfigDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<UserRoleConfigDto> getAll7(Long since) throws RestClientException {
+    public List<UserRoleConfigDto> getAll9(Long since) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'since' is set
         if (since == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getAll7");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getAll9");
         }
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
@@ -74,7 +74,7 @@ public class UserRoleConfigControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<UserRoleConfigDto>> returnType = new ParameterizedTypeReference<List<UserRoleConfigDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -86,7 +86,7 @@ public class UserRoleConfigControllerApi {
      * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<String> getAllUuids11() throws RestClientException {
+    public List<String> getAllUuids16() throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/userroles/uuids").build().toUriString();
         
@@ -101,7 +101,7 @@ public class UserRoleConfigControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -136,7 +136,7 @@ public class UserRoleConfigControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

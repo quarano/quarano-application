@@ -1,21 +1,20 @@
 # CommunityControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                     | HTTP request                     | Description |
-| ---------------------------------------------------------- | -------------------------------- | ----------- |
-| [**getAll1**](CommunityControllerApi.md#getAll1)           | **GET** /communities/all/{since} |
-| [**getAllUuids2**](CommunityControllerApi.md#getAllUuids2) | **GET** /communities/uuids       |
-| [**getByUuids4**](CommunityControllerApi.md#getByUuids4)   | **POST** /communities/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll2**](CommunityControllerApi.md#getAll2) | **GET** /communities/all/{since} | 
+[**getAllUuids6**](CommunityControllerApi.md#getAllUuids6) | **GET** /communities/uuids | 
+[**getByUuids8**](CommunityControllerApi.md#getByUuids8) | **POST** /communities/query | 
 
-<a name="getAll1"></a>
+<a name="getAll2"></a>
+# **getAll2**
+> List&lt;CommunityDto&gt; getAll2(since)
 
-# **getAll1**
 
-> List&lt;CommunityDto&gt; getAll1(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.CommunityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CommunityControllerApi apiInstance = new CommunityControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<CommunityDto> result = apiInstance.getAll1(since);
+    List<CommunityDto> result = apiInstance.getAll2(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunityControllerApi#getAll1");
+    System.err.println("Exception when calling CommunityControllerApi#getAll2");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids2"></a>
+<a name="getAllUuids6"></a>
+# **getAllUuids6**
+> List&lt;String&gt; getAllUuids6()
 
-# **getAllUuids2**
 
-> List&lt;String&gt; getAllUuids2()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.CommunityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CommunityControllerApi apiInstance = new CommunityControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids2();
+    List<String> result = apiInstance.getAllUuids6();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunityControllerApi#getAllUuids2");
+    System.err.println("Exception when calling CommunityControllerApi#getAllUuids6");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids4"></a>
+<a name="getByUuids8"></a>
+# **getByUuids8**
+> List&lt;CommunityDto&gt; getByUuids8(body)
 
-# **getByUuids4**
 
-> List&lt;CommunityDto&gt; getByUuids4(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.CommunityControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 CommunityControllerApi apiInstance = new CommunityControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<CommunityDto> result = apiInstance.getByUuids4(body);
+    List<CommunityDto> result = apiInstance.getByUuids8(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling CommunityControllerApi#getByUuids4");
+    System.err.println("Exception when calling CommunityControllerApi#getByUuids8");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

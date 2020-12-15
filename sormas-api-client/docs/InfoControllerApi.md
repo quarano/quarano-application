@@ -1,22 +1,21 @@
 # InfoControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                          | HTTP request                     | Description |
-| --------------------------------------------------------------- | -------------------------------- | ----------- |
-| [**getAppUrl**](InfoControllerApi.md#getAppUrl)                 | **GET** /info/appurl             |
-| [**getLocale**](InfoControllerApi.md#getLocale)                 | **GET** /info/locale             |
-| [**getVersion1**](InfoControllerApi.md#getVersion1)             | **GET** /info/version            |
-| [**isCompatibleToApi**](InfoControllerApi.md#isCompatibleToApi) | **GET** /info/checkcompatibility |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAppUrl**](InfoControllerApi.md#getAppUrl) | **GET** /info/appurl | 
+[**getLocale**](InfoControllerApi.md#getLocale) | **GET** /info/locale | 
+[**getVersion1**](InfoControllerApi.md#getVersion1) | **GET** /info/version | 
+[**isCompatibleToApi**](InfoControllerApi.md#isCompatibleToApi) | **GET** /info/checkcompatibility | 
 
 <a name="getAppUrl"></a>
-
 # **getAppUrl**
-
 > String getAppUrl(appVersion)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,13 +25,13 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.InfoControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 InfoControllerApi apiInstance = new InfoControllerApi();
-String appVersion = "appVersion_example"; // String |
+String appVersion = "appVersion_example"; // String | 
 try {
     String result = apiInstance.getAppUrl(appVersion);
     System.out.println(result);
@@ -44,9 +43,9 @@ try {
 
 ### Parameters
 
-| Name           | Type       | Description | Notes      |
-| -------------- | ---------- | ----------- | ---------- |
-| **appVersion** | **String** |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **appVersion** | **String**|  | [optional]
 
 ### Return type
 
@@ -54,21 +53,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getLocale"></a>
-
 # **getLocale**
-
 > String getLocale()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -78,10 +76,10 @@ try {
 //import de.quarano.sormas.client.api.InfoControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 InfoControllerApi apiInstance = new InfoControllerApi();
 try {
@@ -94,7 +92,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -103,21 +100,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getVersion1"></a>
-
 # **getVersion1**
-
 > String getVersion1()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,10 +123,10 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.InfoControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 InfoControllerApi apiInstance = new InfoControllerApi();
 try {
@@ -143,7 +139,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -152,21 +147,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="isCompatibleToApi"></a>
-
 # **isCompatibleToApi**
-
 > CompatibilityCheckResponse isCompatibleToApi(appVersion)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -176,13 +170,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.InfoControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 InfoControllerApi apiInstance = new InfoControllerApi();
-String appVersion = "appVersion_example"; // String |
+String appVersion = "appVersion_example"; // String | 
 try {
     CompatibilityCheckResponse result = apiInstance.isCompatibleToApi(appVersion);
     System.out.println(result);
@@ -194,9 +188,9 @@ try {
 
 ### Parameters
 
-| Name           | Type       | Description | Notes      |
-| -------------- | ---------- | ----------- | ---------- |
-| **appVersion** | **String** |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **appVersion** | **String**|  | [optional]
 
 ### Return type
 
@@ -204,9 +198,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
+

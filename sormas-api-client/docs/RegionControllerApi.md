@@ -1,21 +1,20 @@
 # RegionControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                  | HTTP request                 | Description |
-| ------------------------------------------------------- | ---------------------------- | ----------- |
-| [**getAll4**](RegionControllerApi.md#getAll4)           | **GET** /regions/all/{since} |
-| [**getAllUuids9**](RegionControllerApi.md#getAllUuids9) | **GET** /regions/uuids       |
-| [**getByUuids16**](RegionControllerApi.md#getByUuids16) | **POST** /regions/query      |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAll6**](RegionControllerApi.md#getAll6) | **GET** /regions/all/{since} | 
+[**getAllUuids14**](RegionControllerApi.md#getAllUuids14) | **GET** /regions/uuids | 
+[**getByUuids21**](RegionControllerApi.md#getByUuids21) | **POST** /regions/query | 
 
-<a name="getAll4"></a>
+<a name="getAll6"></a>
+# **getAll6**
+> List&lt;RegionDto&gt; getAll6(since)
 
-# **getAll4**
 
-> List&lt;RegionDto&gt; getAll4(since)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -25,27 +24,27 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.RegionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 RegionControllerApi apiInstance = new RegionControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<RegionDto> result = apiInstance.getAll4(since);
+    List<RegionDto> result = apiInstance.getAll6(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling RegionControllerApi#getAll4");
+    System.err.println("Exception when calling RegionControllerApi#getAll6");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -53,21 +52,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getAllUuids9"></a>
+<a name="getAllUuids14"></a>
+# **getAllUuids14**
+> List&lt;String&gt; getAllUuids14()
 
-# **getAllUuids9**
 
-> List&lt;String&gt; getAllUuids9()
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -77,23 +75,22 @@ try {
 //import de.quarano.sormas.client.api.RegionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 RegionControllerApi apiInstance = new RegionControllerApi();
 try {
-    List<String> result = apiInstance.getAllUuids9();
+    List<String> result = apiInstance.getAllUuids14();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling RegionControllerApi#getAllUuids9");
+    System.err.println("Exception when calling RegionControllerApi#getAllUuids14");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,21 +99,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids16"></a>
+<a name="getByUuids21"></a>
+# **getByUuids21**
+> List&lt;RegionDto&gt; getByUuids21(body)
 
-# **getByUuids16**
 
-> List&lt;RegionDto&gt; getByUuids16(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -126,27 +122,27 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.RegionControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 RegionControllerApi apiInstance = new RegionControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<RegionDto> result = apiInstance.getByUuids16(body);
+    List<RegionDto> result = apiInstance.getByUuids21(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling RegionControllerApi#getByUuids16");
+    System.err.println("Exception when calling RegionControllerApi#getByUuids21");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -154,9 +150,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: _/_
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: */*
+ - **Accept**: application/json; charset=UTF-8
+

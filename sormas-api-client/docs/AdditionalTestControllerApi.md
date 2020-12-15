@@ -1,22 +1,21 @@
 # AdditionalTestControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                            | HTTP request                         | Description |
-| --------------------------------------------------------------------------------- | ------------------------------------ | ----------- |
-| [**getAllActiveUuids**](AdditionalTestControllerApi.md#getAllActiveUuids)         | **GET** /additionaltests/uuids       |
-| [**getAllAdditionalTests**](AdditionalTestControllerApi.md#getAllAdditionalTests) | **GET** /additionaltests/all/{since} |
-| [**getByUuids**](AdditionalTestControllerApi.md#getByUuids)                       | **POST** /additionaltests/query      |
-| [**postAdditionalTests**](AdditionalTestControllerApi.md#postAdditionalTests)     | **POST** /additionaltests/push       |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getAllActiveUuids**](AdditionalTestControllerApi.md#getAllActiveUuids) | **GET** /additionaltests/uuids | 
+[**getAllAdditionalTests**](AdditionalTestControllerApi.md#getAllAdditionalTests) | **GET** /additionaltests/all/{since} | 
+[**getByUuids1**](AdditionalTestControllerApi.md#getByUuids1) | **POST** /additionaltests/query | 
+[**postAdditionalTests**](AdditionalTestControllerApi.md#postAdditionalTests) | **POST** /additionaltests/push | 
 
 <a name="getAllActiveUuids"></a>
-
 # **getAllActiveUuids**
-
 > List&lt;String&gt; getAllActiveUuids()
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,10 +25,10 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.AdditionalTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 AdditionalTestControllerApi apiInstance = new AdditionalTestControllerApi();
 try {
@@ -42,7 +41,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -51,21 +49,20 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="getAllAdditionalTests"></a>
-
 # **getAllAdditionalTests**
-
 > List&lt;AdditionalTestDto&gt; getAllAdditionalTests(since)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -75,13 +72,13 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.AdditionalTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 AdditionalTestControllerApi apiInstance = new AdditionalTestControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
     List<AdditionalTestDto> result = apiInstance.getAllAdditionalTests(since);
     System.out.println(result);
@@ -93,9 +90,9 @@ try {
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
@@ -103,21 +100,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getByUuids"></a>
+<a name="getByUuids1"></a>
+# **getByUuids1**
+> List&lt;AdditionalTestDto&gt; getByUuids1(body)
 
-# **getByUuids**
 
-> List&lt;AdditionalTestDto&gt; getByUuids(body)
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,27 +123,27 @@ try {
 //import de.quarano.sormas.client.api.AdditionalTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 AdditionalTestControllerApi apiInstance = new AdditionalTestControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> |
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    List<AdditionalTestDto> result = apiInstance.getByUuids(body);
+    List<AdditionalTestDto> result = apiInstance.getByUuids1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling AdditionalTestControllerApi#getByUuids");
+    System.err.println("Exception when calling AdditionalTestControllerApi#getByUuids1");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name     | Type                                | Description | Notes      |
-| -------- | ----------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;String&gt;**](String.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
 
 ### Return type
 
@@ -155,21 +151,20 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postAdditionalTests"></a>
-
 # **postAdditionalTests**
-
 > List&lt;PushResult&gt; postAdditionalTests(body)
 
-### Example
 
+
+### Example
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,13 +174,13 @@ try {
 //import de.quarano.sormas.client.api.AdditionalTestControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 AdditionalTestControllerApi apiInstance = new AdditionalTestControllerApi();
-List<AdditionalTestDto> body = Arrays.asList(new AdditionalTestDto()); // List<AdditionalTestDto> |
+List<AdditionalTestDto> body = Arrays.asList(new AdditionalTestDto()); // List<AdditionalTestDto> | 
 try {
     List<PushResult> result = apiInstance.postAdditionalTests(body);
     System.out.println(result);
@@ -197,9 +192,9 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                      | Description | Notes      |
-| -------- | --------------------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;AdditionalTestDto&gt;**](AdditionalTestDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;AdditionalTestDto&gt;**](AdditionalTestDto.md)|  | [optional]
 
 ### Return type
 
@@ -207,9 +202,10 @@ try {
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

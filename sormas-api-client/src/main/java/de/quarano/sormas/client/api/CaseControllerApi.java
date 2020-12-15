@@ -24,7 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-07-09T17:56:16.099120+02:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.CaseControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-12-15T22:47:05.366577+01:00[Europe/Berlin]")@Component("de.quarano.sormas.client.api.CaseControllerApi")
 public class CaseControllerApi {
     private ApiClient apiClient;
 
@@ -75,42 +75,7 @@ public class CaseControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
-
-        ParameterizedTypeReference<List<CaseDataDto>> returnType = new ParameterizedTypeReference<List<CaseDataDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
-    }
-    /**
-     * 
-     * 
-     * <p><b>0</b> - default response
-     * @param since The since parameter
-     * @return List&lt;CaseDataDto&gt;
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public List<CaseDataDto> getAllCasesWithExtendedChangeDateFilters(Long since) throws RestClientException {
-        Object postBody = null;
-        // verify the required parameter 'since' is set
-        if (since == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'since' when calling getAllCasesWithExtendedChangeDateFilters");
-        }
-        // create path and map variables
-        final Map<String, Object> uriVariables = new HashMap<String, Object>();
-        uriVariables.put("since", since);
-        String path = UriComponentsBuilder.fromPath("/cases/allWithExtendedChangeDateFilters/{since}").buildAndExpand(uriVariables).toUriString();
-        
-        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-        final HttpHeaders headerParams = new HttpHeaders();
-        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-
-        final String[] accepts = { 
-            "application/json; charset&#x3D;UTF-8"
-         };
-        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
-        final String[] contentTypes = {  };
-        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
-
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<CaseDataDto>> returnType = new ParameterizedTypeReference<List<CaseDataDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -122,7 +87,7 @@ public class CaseControllerApi {
      * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<String> getAllUuids1() throws RestClientException {
+    public List<String> getAllUuids5() throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/cases/uuids").build().toUriString();
         
@@ -137,7 +102,7 @@ public class CaseControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -172,7 +137,7 @@ public class CaseControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -185,7 +150,7 @@ public class CaseControllerApi {
      * @return List&lt;CaseDataDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<CaseDataDto> getByUuids2(List<String> body) throws RestClientException {
+    public List<CaseDataDto> getByUuids6(List<String> body) throws RestClientException {
         Object postBody = body;
         String path = UriComponentsBuilder.fromPath("/cases/query").build().toUriString();
         
@@ -202,7 +167,7 @@ public class CaseControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<CaseDataDto>> returnType = new ParameterizedTypeReference<List<CaseDataDto>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -237,7 +202,7 @@ public class CaseControllerApi {
         final String[] contentTypes = {  };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
@@ -267,7 +232,7 @@ public class CaseControllerApi {
          };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
-        String[] authNames = new String[] { "http-basic" };
+        String[] authNames = new String[] { "basicAuth" };
 
         ParameterizedTypeReference<List<PushResult>> returnType = new ParameterizedTypeReference<List<PushResult>>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);

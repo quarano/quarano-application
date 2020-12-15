@@ -1,22 +1,25 @@
 # ExternalVisitsControllerApi
 
-All URIs are relative to _/sormas-rest_
+All URIs are relative to */sormas-rest*
 
-| Method                                                                                        | HTTP request                                         | Description |
-| --------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ----------- |
-| [**getLatestQuarantineEndDates**](ExternalVisitsControllerApi.md#getLatestQuarantineEndDates) | **GET** /visits-external/quarantineEndDates/{since}  |
-| [**getVersion**](ExternalVisitsControllerApi.md#getVersion)                                   | **GET** /visits-external/version                     |
-| [**isValidPersonUuid**](ExternalVisitsControllerApi.md#isValidPersonUuid)                     | **GET** /visits-external/person/{personUuid}/isValid |
-| [**postExternalVisits**](ExternalVisitsControllerApi.md#postExternalVisits)                   | **POST** /visits-external                            |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getLatestFollowUpEndDates**](ExternalVisitsControllerApi.md#getLatestFollowUpEndDates) | **GET** /visits-external/followUpEndDates/{since} | Get follow up end dates
+[**getPersonByUuid**](ExternalVisitsControllerApi.md#getPersonByUuid) | **GET** /visits-external/person/{personUuid} | Get person information
+[**getVersion**](ExternalVisitsControllerApi.md#getVersion) | **GET** /visits-external/version | Get API version
+[**isValidPersonUuid**](ExternalVisitsControllerApi.md#isValidPersonUuid) | **GET** /visits-external/person/{personUuid}/isValid | Check person validity
+[**postExternalVisits**](ExternalVisitsControllerApi.md#postExternalVisits) | **POST** /visits-external | Save visits
+[**postSymptomJournalStatus**](ExternalVisitsControllerApi.md#postSymptomJournalStatus) | **POST** /visits-external/person/{personUuid}/status | Save symptom journal status
 
-<a name="getLatestQuarantineEndDates"></a>
+<a name="getLatestFollowUpEndDates"></a>
+# **getLatestFollowUpEndDates**
+> String getLatestFollowUpEndDates(since)
 
-# **getLatestQuarantineEndDates**
+Get follow up end dates
 
-> List&lt;PersonQuarantineEndDto&gt; getLatestQuarantineEndDates(since)
+Get latest follow up end date assigned to the specified person. Note: Only returns values for persons who have their symptom journal status set to ACCEPTED! Only returns values changed after {since}, which is interpreted as a UNIX timestamp.
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -26,49 +29,50 @@ All URIs are relative to _/sormas-rest_
 //import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
-Long since = 789L; // Long |
+Long since = 789L; // Long | 
 try {
-    List<PersonQuarantineEndDto> result = apiInstance.getLatestQuarantineEndDates(since);
+    String result = apiInstance.getLatestFollowUpEndDates(since);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling ExternalVisitsControllerApi#getLatestQuarantineEndDates");
+    System.err.println("Exception when calling ExternalVisitsControllerApi#getLatestFollowUpEndDates");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
 
-| Name      | Type     | Description | Notes |
-| --------- | -------- | ----------- | ----- |
-| **since** | **Long** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **since** | **Long**|  |
 
 ### Return type
 
-[**List&lt;PersonQuarantineEndDto&gt;**](PersonQuarantineEndDto.md)
+**String**
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
-<a name="getVersion"></a>
+<a name="getPersonByUuid"></a>
+# **getPersonByUuid**
+> String getPersonByUuid(personUuid)
 
-# **getVersion**
+Get person information
 
-> String getVersion()
+Get some personal data for a specific person
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -78,10 +82,61 @@ try {
 //import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
+
+ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
+String personUuid = "personUuid_example"; // String | 
+try {
+    String result = apiInstance.getPersonByUuid(personUuid);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ExternalVisitsControllerApi#getPersonByUuid");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **personUuid** | **String**|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getVersion"></a>
+# **getVersion**
+> String getVersion()
+
+Get API version
+
+### Example
+```java
+// Import classes:
+//import de.quarano.sormas.client.invoker.ApiClient;
+//import de.quarano.sormas.client.invoker.ApiException;
+//import de.quarano.sormas.client.invoker.Configuration;
+//import de.quarano.sormas.client.invoker.auth.*;
+//import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
 try {
@@ -94,7 +149,6 @@ try {
 ```
 
 ### Parameters
-
 This endpoint does not need any parameter.
 
 ### Return type
@@ -103,21 +157,22 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="isValidPersonUuid"></a>
-
 # **isValidPersonUuid**
+> String isValidPersonUuid(personUuid)
 
-> Boolean isValidPersonUuid(personUuid)
+Check person validity
+
+Check if a the Uuid given as parameter exists in SORMAS.
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -127,15 +182,15 @@ This endpoint does not need any parameter.
 //import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
-String personUuid = "personUuid_example"; // String |
+String personUuid = "personUuid_example"; // String | 
 try {
-    Boolean result = apiInstance.isValidPersonUuid(personUuid);
+    String result = apiInstance.isValidPersonUuid(personUuid);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ExternalVisitsControllerApi#isValidPersonUuid");
@@ -145,31 +200,32 @@ try {
 
 ### Parameters
 
-| Name           | Type       | Description | Notes |
-| -------------- | ---------- | ----------- | ----- |
-| **personUuid** | **String** |             |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **personUuid** | **String**|  |
 
 ### Return type
 
-**Boolean**
+**String**
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=UTF-8
 
 <a name="postExternalVisits"></a>
-
 # **postExternalVisits**
+> String postExternalVisits(body)
 
-> List&lt;PushResult&gt; postExternalVisits(body)
+Save visits
+
+Upload visits with all symptom and disease related data to SORMAS.
 
 ### Example
-
 ```java
 // Import classes:
 //import de.quarano.sormas.client.invoker.ApiClient;
@@ -179,15 +235,15 @@ try {
 //import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
-// Configure HTTP basic authorization: http-basic
-HttpBasicAuth http-basic = (HttpBasicAuth) defaultClient.getAuthentication("http-basic");
-http-basic.setUsername("YOUR USERNAME");
-http-basic.setPassword("YOUR PASSWORD");
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
 
 ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
-List<ExternalVisitDto> body = Arrays.asList(new ExternalVisitDto()); // List<ExternalVisitDto> |
+List<ExternalVisitDto> body = Arrays.asList(new ExternalVisitDto()); // List<ExternalVisitDto> | 
 try {
-    List<PushResult> result = apiInstance.postExternalVisits(body);
+    String result = apiInstance.postExternalVisits(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ExternalVisitsControllerApi#postExternalVisits");
@@ -197,19 +253,73 @@ try {
 
 ### Parameters
 
-| Name     | Type                                                    | Description | Notes      |
-| -------- | ------------------------------------------------------- | ----------- | ---------- |
-| **body** | [**List&lt;ExternalVisitDto&gt;**](ExternalVisitDto.md) |             | [optional] |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;ExternalVisitDto&gt;**](ExternalVisitDto.md)|  | [optional]
 
 ### Return type
 
-[**List&lt;PushResult&gt;**](PushResult.md)
+**String**
 
 ### Authorization
 
-[http-basic](../README.md#http-basic)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=UTF-8
-- **Accept**: application/json; charset=UTF-8
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+
+<a name="postSymptomJournalStatus"></a>
+# **postSymptomJournalStatus**
+> String postSymptomJournalStatus(personUuid, body)
+
+Save symptom journal status
+
+### Example
+```java
+// Import classes:
+//import de.quarano.sormas.client.invoker.ApiClient;
+//import de.quarano.sormas.client.invoker.ApiException;
+//import de.quarano.sormas.client.invoker.Configuration;
+//import de.quarano.sormas.client.invoker.auth.*;
+//import de.quarano.sormas.client.api.ExternalVisitsControllerApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
+
+ExternalVisitsControllerApi apiInstance = new ExternalVisitsControllerApi();
+String personUuid = "personUuid_example"; // String | 
+String body = "body_example"; // String | status may be one of the following:<br/>UNREGISTERED: User has not yet sent any state<br/>REGISTERED: After successful registration in SymptomJournal<br/>ACCEPTED: User has accepted a confirmation<br/>REJECTED: User has rejected (declined) a confirmation<br/>DELETED: User was deleted
+try {
+    String result = apiInstance.postSymptomJournalStatus(personUuid, body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ExternalVisitsControllerApi#postSymptomJournalStatus");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **personUuid** | **String**|  |
+ **body** | [**String**](String.md)| status may be one of the following:&lt;br/&gt;UNREGISTERED: User has not yet sent any state&lt;br/&gt;REGISTERED: After successful registration in SymptomJournal&lt;br/&gt;ACCEPTED: User has accepted a confirmation&lt;br/&gt;REJECTED: User has rejected (declined) a confirmation&lt;br/&gt;DELETED: User was deleted | [optional]
+
+### Return type
+
+**String**
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json; charset=UTF-8
+ - **Accept**: application/json; charset=UTF-8
+

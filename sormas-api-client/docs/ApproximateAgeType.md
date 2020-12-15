@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `YEARS` (value: `"YEARS"`)
-- `MONTHS` (value: `"MONTHS"`)
-- `DAYS` (value: `"DAYS"`)
+* `YEARS` (value: `"YEARS"`)
+* `MONTHS` (value: `"MONTHS"`)
+* `DAYS` (value: `"DAYS"`)

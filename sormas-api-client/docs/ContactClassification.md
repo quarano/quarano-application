@@ -2,6 +2,6 @@
 
 ## Enum
 
-- `UNCONFIRMED` (value: `"UNCONFIRMED"`)
-- `CONFIRMED` (value: `"CONFIRMED"`)
-- `NO_CONTACT` (value: `"NO_CONTACT"`)
+* `UNCONFIRMED` (value: `"UNCONFIRMED"`)
+* `CONFIRMED` (value: `"CONFIRMED"`)
+* `NO_CONTACT` (value: `"NO_CONTACT"`)
