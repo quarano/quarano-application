@@ -173,7 +173,41 @@ The content of the XML document is exposed by some API contained in `quarano.dep
 * Prefer reusing already existing tests. If none are suitable, create a separate one in `src/docs/java`.
 * Equip DTOs with Javadoc and JSR-330 annotations if possible as that information will automatically make it into the auto-generated documentation snippets.
 
+[[develop-backend]]
 == Developing the backend
+
+[[develop-backend.run]]
+=== Running the application locally
+
+The Quarano backend can be run by simply executing:
+
+[source, bash]
+----
+$ ./mvnw spring-boot:run -PlocalDev
+----
+
+The `localDev` profile is activated automatically if you have a file named `application-local.properties` living in `src/main/resources`.
+For more details on that see <<deployment.spring-profiles>>.
+
+In that profile, the application is configured to serve both HTTP and HTTPS traffic on ports 8080 and 8443 respectively.
+The HTTPS connector is needed when accessing the <<third-party, APIs for third parties>>.
+If you want to use all other APIs via HTTPS, make sure that your client disables server certificate verification as we only use a self-signed certificate for development purposes.
+Here are some sample HTTP client interactions using https://httpie.io/[HTTPie].
+
+[source, bash]
+----
+# Access the root resource via HTTP
+$ http :8080
+
+# Access the root resource via HTTPS
+$ http --verify=no https://localhost:8443
+
+# Access the root resource authenticating via the sample client certificate
+$ http --verify=no \
+    --cert=src/test/resources/security/client/acme-event-manager.crt \
+    --certkey=src/test/resources/security/client/acme-event-manager.key \
+    https://localhost:8443
+----
 
 === Code formatting
 
