@@ -58,10 +58,11 @@
         </mat-error>
       </mat-form-field>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions style="display: flex; justify-content: space-between">
       <qro-button id="submitBtn" [disabled]="loginFormGroup.invalid" [loading]="loading">
         {{ 'LOGIN.ANMELDEN' | translate }}
       </qro-button>
+      <button mat-button [routerLink]="['/auth/reset-password']">{{ 'LOGIN.PASSWORT_VERGESSEN' | translate }}</button>
     </mat-card-actions>
   </form>
 </mat-card>
