@@ -190,6 +190,9 @@
     },
     "general-api": {
       "tags": ["scope:general", "type:api"]
+    },
+    "auth-feature-reset-password": {
+      "tags": []
     }
   },
   "affected": {

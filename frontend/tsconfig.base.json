@@ -71,7 +71,8 @@
       "@qro/client/ui-forgotten-contact-dialog": ["libs/client/ui-forgotten-contact-dialog/src/index.ts"],
       "@qro/shared/ui-ag-grid": ["libs/shared/ui-ag-grid/src/index.ts"],
       "@qro/general/domain": ["libs/general/domain/src/index.ts"],
-      "@qro/general/api": ["libs/general/api/src/index.ts"]
+      "@qro/general/api": ["libs/general/api/src/index.ts"],
+      "@qro/auth/feature-reset-password": ["libs/auth/feature-reset-password/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
