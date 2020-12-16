@@ -3,6 +3,7 @@ package quarano.department;
 import quarano.account.Account;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoRepository;
+import quarano.department.TrackedCase.SormasCaseIdentifier;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
@@ -54,4 +55,9 @@ public interface TrackedCaseRepository
 	 * @return
 	 */
 	Optional<TrackedCase> findByOriginContacts(ContactPerson person);
+
+	/**
+	 * @since 1.4
+	 */
+	Optional<TrackedCase> findBySormasCaseId(SormasCaseIdentifier id);
 }

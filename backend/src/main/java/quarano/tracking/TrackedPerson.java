@@ -15,6 +15,7 @@ import quarano.core.Address;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
+import quarano.core.SormasIdentifier;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -70,6 +71,11 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "tracked_person_id")
 	private List<Encounter> encounters;
+
+	/**
+	 * @since 1.4
+	 */
+	private @Getter @Setter SormasIdentifier sormasId;
 
 	public TrackedPerson(String firstName, String lastName) {
 		this(new TrackedPersonIdentifier(UUID.randomUUID()), firstName, lastName, null, null, null);

@@ -1,4 +1,4 @@
-package quarano.department;
+package quarano.sormas_integration;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -90,11 +90,12 @@ public class SormasTest {
 		String str = "SurvOff:SurvOff";
 		headers.add(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(str.getBytes(StandardCharsets.UTF_8)));
 
-		var payload = template.exchange("https://sormas-docker-test.com/sormas-rest/cases/all/0", HttpMethod.GET,
+		var payload = template.exchange("http://localhost:6080/sormas-rest/cases/all/0", HttpMethod.GET,
 				new HttpEntity<Void>(headers), UserPayload.class).getBody();
+		// var payload = template.exchange("https://sormas-docker-test.com/sormas-rest/cases/all/0", HttpMethod.GET,
+		// new HttpEntity<Void>(headers), UserPayload.class).getBody();
 
 		var users = payload.users();
-		System.out.println(users.size());
 
 		assertThat(payload).isNotNull();
 	}

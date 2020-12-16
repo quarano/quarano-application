@@ -1,6 +1,8 @@
 package de.quarano.sormas.client;
 
 import de.quarano.sormas.client.api.CaseControllerApi;
+import de.quarano.sormas.client.api.PersonControllerApi;
+import de.quarano.sormas.client.api.TaskControllerApi;
 import de.quarano.sormas.client.invoker.ApiClient;
 
 import java.security.KeyManagementException;
@@ -27,10 +29,23 @@ public class SormasIntegrationConfig {
 	}
 
 	@Bean
+	public PersonControllerApi personControllerApi() {
+
+		return new PersonControllerApi(apiClient());
+	}
+
+	@Bean
+	public TaskControllerApi taskControllerApi() {
+
+		return new TaskControllerApi(apiClient());
+	}
+
+	@Bean
 	public ApiClient apiClient() {
 
 		ApiClient apiClient = new QuaranoApiClient();
-		apiClient.setBasePath("https://sormas-docker-test.com/sormas-rest");
+		// apiClient.setBasePath("https://sormas-docker-test.com/sormas-rest");
+		apiClient.setBasePath("http://localhost:6080/sormas-rest");
 		apiClient.setUsername("SurvOff");
 		apiClient.setPassword("SurvOff");
 

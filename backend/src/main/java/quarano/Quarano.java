@@ -1,5 +1,6 @@
 package quarano;
 
+import de.quarano.sormas.client.SormasIntegrationConfig;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.DepartmentProperties;
 import quarano.account.Role;
@@ -34,6 +35,7 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
@@ -65,6 +67,7 @@ import org.springframework.util.StringUtils;
 @EnableAsync
 @EnableJpaAuditing(dateTimeProviderRef = "quaranoDateTimeProvider")
 @ConfigurationPropertiesScan
+@Import(SormasIntegrationConfig.class)
 public class Quarano {
 
 	public static void main(String... args) throws Exception {
