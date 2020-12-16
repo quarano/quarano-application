@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.catalina.connector.Connector;
 import org.flywaydb.core.api.Location;
 import org.modelmapper.ModelMapper;
 import org.moduliths.Modulithic;
@@ -19,6 +20,7 @@ import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.interceptor.CustomizableTraceInterceptor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
 import org.springframework.boot.ResourceBanner;
@@ -27,6 +29,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -137,6 +141,43 @@ public class Quarano {
 				.forEach(it -> it.customize(mapper));
 
 		return mapper;
+	}
+
+	/**
+	 * Additional configuration needed to also serve non-HTTPS traffic to avoid having to mess with server certificate
+	 * checks during development.
+	 *
+	 * @author Oliver Drotbohm
+	 * @since 1.4
+	 */
+	@Profile("develop")
+	@Configuration(proxyBeanMethods = false)
+	private static class DevelopmentConfiguration {
+
+		private @Value("${http.port}") int httpPort;
+
+		/**
+		 * Configures a plain HTTP connector in addition to the HTTPS one created due to the application properties defined.
+		 *
+		 * @return
+		 * @see application-develop.properties
+		 */
+		@Bean
+		public ServletWebServerFactory servletContainer() {
+
+			var tomcat = new TomcatServletWebServerFactory();
+			tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+
+			return tomcat;
+		}
+
+		private Connector createStandardConnector() {
+
+			var connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+			connector.setPort(httpPort);
+
+			return connector;
+		}
 	}
 
 	/**
