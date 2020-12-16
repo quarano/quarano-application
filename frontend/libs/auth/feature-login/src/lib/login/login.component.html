@@ -62,7 +62,9 @@
       <qro-button id="submitBtn" [disabled]="loginFormGroup.invalid" [loading]="loading">
         {{ 'LOGIN.ANMELDEN' | translate }}
       </qro-button>
-      <button mat-button [routerLink]="['/auth/reset-password']">{{ 'LOGIN.PASSWORT_VERGESSEN' | translate }}</button>
+      <button mat-button [routerLink]="['/auth/reset-password']" type="button">
+        {{ 'LOGIN.PASSWORT_VERGESSEN' | translate }}
+      </button>
     </mat-card-actions>
   </form>
 </mat-card>
