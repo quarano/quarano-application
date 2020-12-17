@@ -9,6 +9,7 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService } from '@qro/shared/util-forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -28,11 +29,7 @@ describe('PasswordResetComponent', () => {
           {
             provide: ActivatedRoute,
             useValue: {
-              snapshot: {
-                paramMap: {
-                  get: () => '',
-                },
-              },
+              paramMap: of({}),
             },
           },
         ],
