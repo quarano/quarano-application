@@ -3,8 +3,7 @@ import { BadRequestService } from '@qro/shared/ui-error';
 import { TranslateTestingModule } from '@qro/shared/util-translation';
 import { AuthStore } from '@qro/auth/domain';
 import { AuthService } from '@qro/auth/api';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,33 +17,35 @@ describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
-      imports: [RouterTestingModule, TranslateTestingModule],
-      providers: [
-        { provide: EnrollmentService, useValue: {} },
-        { provide: AuthService, useValue: {} },
-        { provide: BadRequestService, useValue: {} },
-        { provide: TokenService, useValue: {} },
-        { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
-        { provide: AuthStore, useValue: {} },
-        { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: () => '',
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RegisterComponent],
+        imports: [RouterTestingModule, TranslateTestingModule],
+        providers: [
+          { provide: EnrollmentService, useValue: {} },
+          { provide: AuthService, useValue: {} },
+          { provide: BadRequestService, useValue: {} },
+          { provide: TokenService, useValue: {} },
+          { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
+          { provide: AuthStore, useValue: {} },
+          { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              snapshot: {
+                paramMap: {
+                  get: () => '',
+                },
               },
             },
           },
-        },
-        { provide: MatDialog, useValue: {} },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+          { provide: MatDialog, useValue: {} },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);

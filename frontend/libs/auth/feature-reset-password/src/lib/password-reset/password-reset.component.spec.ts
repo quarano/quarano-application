@@ -1,19 +1,43 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PasswordResetComponent } from './password-reset.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateTestingModule } from '@qro/shared/util-translation';
+import { AuthService } from '@qro/auth/domain';
+import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { BadRequestService } from '@qro/shared/ui-error';
+import { ValidationErrorService } from '@qro/shared/util-forms';
+import { ActivatedRoute } from '@angular/router';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
   let fixture: ComponentFixture<PasswordResetComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PasswordResetComponent],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PasswordResetComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [RouterTestingModule, TranslateTestingModule],
+        providers: [
+          { provide: AuthService, useValue: {} },
+          { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
+          { provide: BadRequestService, useValue: {} },
+          { provide: ValidationErrorService, useValue: { getErrorKeys: () => [] } },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              snapshot: {
+                paramMap: {
+                  get: () => '',
+                },
+              },
+            },
+          },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PasswordResetComponent);
