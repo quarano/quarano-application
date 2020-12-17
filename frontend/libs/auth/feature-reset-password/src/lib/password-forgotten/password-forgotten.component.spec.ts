@@ -10,6 +10,7 @@ import { AuthService } from '@qro/auth/domain';
 import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService } from '@qro/shared/util-forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('PasswordForgottenComponent', () => {
   let component: PasswordForgottenComponent;
@@ -20,7 +21,7 @@ describe('PasswordForgottenComponent', () => {
       TestBed.configureTestingModule({
         declarations: [PasswordForgottenComponent],
         schemas: [NO_ERRORS_SCHEMA],
-        imports: [RouterTestingModule, TranslateTestingModule],
+        imports: [ReactiveFormsModule, RouterTestingModule, TranslateTestingModule],
         providers: [
           { provide: AuthService, useValue: {} },
           { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },

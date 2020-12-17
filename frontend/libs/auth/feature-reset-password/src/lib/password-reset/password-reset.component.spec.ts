@@ -8,6 +8,7 @@ import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService } from '@qro/shared/util-forms';
 import { ActivatedRoute } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -18,7 +19,7 @@ describe('PasswordResetComponent', () => {
       TestBed.configureTestingModule({
         declarations: [PasswordResetComponent],
         schemas: [NO_ERRORS_SCHEMA],
-        imports: [RouterTestingModule, TranslateTestingModule],
+        imports: [ReactiveFormsModule, RouterTestingModule, TranslateTestingModule],
         providers: [
           { provide: AuthService, useValue: {} },
           { provide: TranslatedSnackbarService, useValue: { warning: () => {}, success: () => {} } },
