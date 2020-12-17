@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangePasswordDto } from './../model/change-password';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserDto } from '../model/user';
-import { map, shareReplay } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +23,9 @@ export class AuthService {
     return this.httpClient
       .post(`${this.apiUrl}/login`, { username, password }, { observe: 'response' })
       .pipe(shareReplay());
+  }
+
+  requestPasswordResetToken(username: string, email: string): Observable<any> {
+    return this.httpClient.post(`${this.apiUrl}/password/reset`, { username, email }).pipe(shareReplay());
   }
 }

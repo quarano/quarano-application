@@ -192,7 +192,7 @@
       "tags": ["scope:general", "type:api"]
     },
     "auth-feature-reset-password": {
-      "tags": []
+      "tags": ["scope:auth", "type:feature"]
     }
   },
   "affected": {

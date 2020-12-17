@@ -288,6 +288,16 @@
 		"SEITE_NICHT_GEFUNDEN": "Page not found",
 		"ZURÜCK_ZUR_STARTSEITE": "Return to start page"
 	},
+	"PASSWORD_FORGOTTEN": {
+		"ABSENDEN": "Submit",
+		"BENUTZERNAME": "Username",
+    "E_MAIL": "E-Mail",
+    "EMAIL_GESENDET": "The email to reset your password has been sent",
+		"GEBEN_SIE_HIER": "Please enter your user name and your e-mail address here. You will then receive a link to reset your password by e-mail.",
+		"PASSWORT_VERGESSEN": "Forgot Password",
+		"PFLICHTEINGABEN_SIND_MARKIERT": "Required fields are marked with an *",
+		"ZURÜCK_ZUM_LOGIN": "Back to login"
+	},
 	"PERSONAL_DATA_FORM": {
 		"ADRESSE": "Address",
 		"E_MAIL": "E-Mail",
