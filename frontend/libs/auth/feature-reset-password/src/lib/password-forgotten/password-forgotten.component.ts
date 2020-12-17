@@ -74,6 +74,7 @@ export class PasswordForgottenComponent implements OnInit, OnDestroy {
             this.badRequestService.handleBadRequestError(error, this.formGroup);
           }
         )
+        .add(() => (this.loading = false))
     );
   }
 }

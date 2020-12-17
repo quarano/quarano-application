@@ -291,10 +291,24 @@
 	"PASSWORD_FORGOTTEN": {
 		"ABSENDEN": "Absenden",
 		"BENUTZERNAME": "Benutzername",
-    "E_MAIL": "E-Mail",
-    "EMAIL_GESENDET": "Die E-Mail zum Zurücksetzen Ihres Passworts wurde versendet",
+		"EMAIL_GESENDET": "Die E-Mail zum Zurücksetzen Ihres Passworts wurde versendet",
+		"E_MAIL": "E-Mail",
 		"GEBEN_SIE_HIER": "Bitte geben Sie hier Ihren Benutzernamen und Ihre E-Mail-Adresse an. Sie erhalten anschließend per E-Mail einen Link zum Zurücksetzen Ihres Passworts.",
 		"PASSWORT_VERGESSEN": "Passwort vergessen",
+		"PFLICHTEINGABEN_SIND_MARKIERT": "Pflichtangaben sind mit * markiert",
+		"ZURÜCK_ZUM_LOGIN": "Zurück zum Login"
+	},
+	"PASSWORD_RESET": {
+		"BENUTZERNAME": "Benutzername",
+		"GEBEN_SIE_HIER": "Fast geschafft. Wählen Sie nun Ihr neues Passwort. Aus Sicherheitsgründen benötigen wir zusätzlich Ihren Benutzernamen und Ihr Geburtsdatum, um diese mit den Angaben in Ihrem Benutzerkonto abgleichen zu können.",
+		"GEBURTSDATUM": "Geburtsdatum",
+		"PASSWORT": "Passwort",
+		"PASSWORT_BESTÄTIGEN": "Passwort bestätigen",
+		"PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "Das Passwort darf nicht den Benutzernamen beinhalten",
+    "PASSWORT_NEU_GESETZT": "Ihr Passwort wurde neu gesetzt. Sie können sich nun mit dem neuen Passwort anmelden",
+    "PASSWORT_NEU_SETZEN": "Passwort neu setzen",
+		"PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Das Passwort und die Bestätigung müssen übereinstimmen",
+		"PASSWORT_VERGESSEN": "Passwort zurücksetzen",
 		"PFLICHTEINGABEN_SIND_MARKIERT": "Pflichtangaben sind mit * markiert",
 		"ZURÜCK_ZUM_LOGIN": "Zurück zum Login"
 	},
