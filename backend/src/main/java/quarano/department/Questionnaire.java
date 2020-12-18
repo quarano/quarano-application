@@ -44,6 +44,7 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 
 	private String familyDoctor;
 	private String guessedOriginOfInfection;
+	private LocalDate guessedDateOfInfection;
 
 	private @Setter(value = AccessLevel.NONE) boolean hasPreExistingConditions;
 	private String hasPreExistingConditionsDescription;

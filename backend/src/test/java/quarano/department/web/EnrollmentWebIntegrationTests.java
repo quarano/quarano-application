@@ -171,6 +171,41 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 
 	}
 
+	@Test // CORE-631
+	@WithQuaranoUser("DemoAccount")
+	void wrongDateOfInfectionInQuestionnaireIsRefused() throws Exception {
+
+		var source = createValidDetailsInput();
+		submitDetailsSuccessfully(source);
+
+		var questionnaireSource = createValidQuestionnaireInput();
+
+		// make input-data incomplete
+		questionnaireSource.setGuessedDateOfInfection(LocalDate.now());
+
+		String result = submitQuestionnaireExpectBadRequest(questionnaireSource);
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNotNull();
+
+		// The first enrollment step is completed
+		result = performRequestToGetEnrollementState();
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
+
+		// check if questionnaire data is still empty, because it should not have been saved
+		result = performRequestToGetQuestionnaire();
+
+		expectResponseCarriesEmptyQuestionnaire(result);
+
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNull();
+
+	}
+
 	@Test
 	@WithQuaranoUser("DemoAccount")
 	void getInitialEmptyQuestionnaireSuccessfully() throws Exception {
@@ -300,6 +335,7 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.symptoms", JSONArray.class)).isNull();
 		assertThat(document.read("$.familyDoctor", String.class)).isNull();
 		assertThat(document.read("$.guessedOriginOfInfection", String.class)).isNull();
+		assertThat(document.read("$.guessedDateOfInfection", String.class)).isNull();
 		assertThat(document.read("$.hasContactToVulnerablePeople", Boolean.class)).isNull();
 		assertThat(document.read("$.hasContactToVulnerablePeopleDescription", String.class)).isNull();
 	}
@@ -316,6 +352,8 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		questionnaire.setHasSymptoms(Boolean.TRUE);
 		questionnaire.setSymptoms(Arrays.asList(cough.getId(), neckProblems.getId()));
 		questionnaire.setHasPreExistingConditions(Boolean.FALSE);
+		questionnaire.setGuessedOriginOfInfection("Omas 80. Geburtstag");
+		questionnaire.setGuessedDateOfInfection(LocalDate.now().minusDays(7));
 
 		return questionnaire;
 	}

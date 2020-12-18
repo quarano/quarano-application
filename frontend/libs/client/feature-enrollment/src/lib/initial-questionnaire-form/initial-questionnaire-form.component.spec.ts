@@ -29,6 +29,7 @@ describe('InitialQuestionaireFormComponent', () => {
       symptoms: new FormControl([]),
       familyDoctor: new FormControl('', []),
       guessedOriginOfInfection: new FormControl('', []),
+      guessedDateOfInfection: new FormControl('', []),
       hasPreExistingConditions: new FormControl(null, [Validators.required]),
       hasPreExistingConditionsDescription: new FormControl(null),
       belongToMedicalStaff: new FormControl(null, [Validators.required]),

@@ -4,6 +4,7 @@ export interface QuestionnaireDto {
   symptoms?: string[];
   familyDoctor: string;
   guessedOriginOfInfection: string;
+  guessedDateOfInfection: string;
   hasPreExistingConditions: boolean;
   hasPreExistingConditionsDescription?: string;
   belongToMedicalStaff: boolean;

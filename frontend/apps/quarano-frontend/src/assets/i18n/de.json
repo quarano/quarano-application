@@ -230,13 +230,16 @@
 		"KONTAKT_ZU_RISIKOPERSONEN": "Haben Sie Kontakt zu Risikopersonen?",
 		"MEDIZINISCHES_UMFELD": "Arbeiten Sie im medizinischen Umfeld oder in der Pflege?",
 		"NEIN": "Nein",
-		"ORT_DER_ANSTECKUNG": "Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung",
+		"ORT_DER_ANSTECKUNG": "Nennen Sie uns bitte den (vermuteten) Ort und Datum der Ansteckung",
 		"VORERKRANKUNGEN": "Haben Sie eine oder mehrere relevante Vorerkrankungen?",
 		"WANN_HABEN_SIE_DIE_ERSTEN_SYMPTOME": "Wann haben Sie die ersten Symptome festgestellt?",
 		"WELCHE_SYMPTOME": "Welche Symptome haben Sie bei sich festgestellt?",
 		"WELCHE_VORERKRANKUNGEN": "Welche Vorerkrankungen haben Sie?",
 		"WIE_UND_ZU_WEM_KONTAKT": "Wie und zu wem haben Sie Kontakt?",
-		"WO_ARBEITEN_SIE": "Wo arbeiten Sie?"
+		"WO_ARBEITEN_SIE": "Wo arbeiten Sie?",
+		"HAUSARZT": "Hausarzt",
+		"ORT": "Ort",
+		"DATUM": "Datum"
 	},
 	"LANDING": {
 		"AKUT_ÄRZTLICHE_BEHANDLUNG": "Wenn Sie akut ärztliche Behandlung benötigen, wenden Sie sich an Ihren Hausarzt/Ihre Hausärztin. Nachts und am Wochenende stehen der hausärztliche Bereitschaftsdienst (116 117) oder in schwerwiegenden Fällen die Notaufnahmen der Kliniken als Anlaufstelle zur Verfügung. In akuten Notfällen zögern Sie bitte nicht, den Rettungsdienst unter der 112 zu rufen. Vor einer persönlichen Vorstellung beim Arzt oder im Krankenhaus muss die telefonische Ankündigung mit Hinweis auf COVID-19 erfolgen und dass Sie aktuell unter Quarantäne stehen.",

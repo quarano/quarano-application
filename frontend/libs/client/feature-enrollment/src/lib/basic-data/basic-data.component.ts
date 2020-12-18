@@ -290,6 +290,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
       guessedOriginOfInfection: new FormControl(this.firstQuery.guessedOriginOfInfection, [
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
       ]),
+      guessedDateOfInfection: new FormControl(this.firstQuery.guessedDateOfInfection),
       hasPreExistingConditions: new FormControl(this.firstQuery.hasPreExistingConditions, [Validators.required]),
       hasPreExistingConditionsDescription: new FormControl(this.firstQuery.hasPreExistingConditionsDescription),
       belongToMedicalStaff: new FormControl(this.firstQuery.belongToMedicalStaff, [Validators.required]),
