@@ -28,6 +28,10 @@
     <div>{{ questionnaire.guessedOriginOfInfection ? questionnaire.guessedOriginOfInfection : 'Nicht angegeben' }}</div>
   </fieldset>
   <fieldset>
+    <legend>Vermutetes Datum der Ansteckung</legend>
+    <div>{{ questionnaire.guessedDateOfInfection ? questionnaire.guessedDateOfInfection : 'Nicht angegeben' }}</div>
+  </fieldset>
+  <fieldset>
     <legend>Vorerkrankungen</legend>
     <div>
       {{ questionnaire.hasPreExistingConditions ? questionnaire.hasPreExistingConditionsDescription : 'Nicht bekannt' }}

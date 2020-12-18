@@ -27,6 +27,7 @@ public class QuestionnaireDto {
 
 	private @Textual String familyDoctor;
 	private @Textual String guessedOriginOfInfection;
+	private @PastOrPresent LocalDate guessedDateOfInfection;
 
 	private @NotNull @Setter Boolean hasPreExistingConditions;
 	private @Textual String hasPreExistingConditionsDescription;
@@ -115,6 +116,11 @@ public class QuestionnaireDto {
 
 		if (Boolean.TRUE.equals(hasSymptoms) && dayOfFirstSymptoms == null) {
 			errors.rejectValue("dayOfFirstSymptoms", "NotNull.IntialReportDto.dayOfFirstSymptoms");
+		}
+
+		if (dayOfFirstSymptoms != null && guessedDateOfInfection != null
+				&& !guessedDateOfInfection.isBefore(dayOfFirstSymptoms)) {
+			errors.rejectValue("guessedDateOfInfection", "Invalid.IntialReportDto.guessedDateOfInfection");
 		}
 
 		return this;
