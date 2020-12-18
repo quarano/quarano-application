@@ -5,16 +5,16 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
-import { EmailButtonComponent, DE_LOCALE, CheckboxFilterComponent } from '@qro/shared/ui-ag-grid';
+import { EmailButtonComponent, DE_LOCALE, CheckboxFilterComponent, DATE_FILTER_PARAMS } from '@qro/shared/ui-ag-grid';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 
 class CaseRowViewModel {
   lastName: string;
   firstName: string;
   type: CaseType;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   email: string;
-  quarantineEnd: Date;
+  quarantineEnd: string;
   caseId: string;
   status: string;
   zipCode: number;
@@ -49,21 +49,15 @@ export class CaseListComponent implements OnInit {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.birthDateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.quarantineEndDateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 100 },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
@@ -82,16 +76,16 @@ export class CaseListComponent implements OnInit {
     return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
   }
 
-  quarantineEndDateFormatter(params: { value: Date }) {
-    if (!params.value) {
+  getQuarantineEndDate(value: Date): string {
+    if (!value) {
       return '-';
     }
 
-    if (DateFunctions.isDateInPast(params.value)) {
+    if (DateFunctions.isDateInPast(value)) {
       return 'beendet';
     }
 
-    return DateFunctions.toCustomLocaleDateString(params.value);
+    return DateFunctions.toCustomLocaleDateString(value);
   }
 
   ngOnInit(): void {
@@ -103,9 +97,9 @@ export class CaseListComponent implements OnInit {
       lastName: c.lastName || '-',
       firstName: c.firstName || '-',
       type: c.caseType,
-      dateOfBirth: c.dateOfBirth,
+      dateOfBirth: c.dateOfBirth ? DateFunctions.toCustomLocaleDateString(c.dateOfBirth) : '-',
       email: c.email,
-      quarantineEnd: c.quarantineEndDate,
+      quarantineEnd: this.getQuarantineEndDate(c.quarantineEndDate),
       status: c.status,
       zipCode: Number.parseInt(c.zipCode, 10) || null,
       caseId: c.caseId,

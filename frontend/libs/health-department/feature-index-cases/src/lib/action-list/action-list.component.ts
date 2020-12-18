@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
 import { Observable } from 'rxjs';
-import { CheckboxFilterComponent, DE_LOCALE, EmailButtonComponent } from '@qro/shared/ui-ag-grid';
+import { CheckboxFilterComponent, DE_LOCALE, EmailButtonComponent, DATE_FILTER_PARAMS } from '@qro/shared/ui-ag-grid';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import { map } from 'rxjs/operators';
 import { ActionAlertComponent, ActionAlertFilterComponent } from '@qro/health-department/ui-action-alert';
@@ -13,10 +13,10 @@ class ActionRowViewModel {
   lastName: string;
   firstName: string;
   type: CaseType;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   email: string;
   phone: string;
-  quarantineStart: Date;
+  quarantineStart: string;
   status: string;
   alerts: string[];
   caseId: string;
@@ -61,22 +61,16 @@ export class ActionListComponent implements OnInit {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.dateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne seit',
         field: 'quarantineStart',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.dateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Telefon',
@@ -94,8 +88,8 @@ export class ActionListComponent implements OnInit {
     ];
   }
 
-  dateFormatter(params: { value: Date }) {
-    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
+  dateFormatter(value: Date): string {
+    return value ? DateFunctions.toCustomLocaleDateString(value) : '-';
   }
 
   ngOnInit() {
@@ -128,10 +122,10 @@ export class ActionListComponent implements OnInit {
       lastName: action.lastName || '-',
       firstName: action.firstName || '-',
       type: action.caseType,
-      dateOfBirth: action.dateOfBirth,
+      dateOfBirth: this.dateFormatter(action.dateOfBirth),
       email: action.email,
       phone: action.phone || '-',
-      quarantineStart: action.quarantineStart,
+      quarantineStart: this.dateFormatter(action.quarantineStart),
       status: action.status,
       alerts: action.alerts || [],
       caseId: action.caseId,
