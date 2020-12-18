@@ -20,6 +20,7 @@ import quarano.user.web.UserRepresentations.PasswordResetRequest;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -214,6 +215,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	@Test // CORE-92
+	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	void requestsPasswordReset() throws Exception {
 
 		requestPasswordReset();
@@ -226,6 +228,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	@TestFactory // CORE-92
+	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	Stream<DynamicTest> rejectsInvalidPasswordResetRequests() {
 
 		var validUsername = "DemoAccount";
@@ -247,10 +250,10 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 					assertThat(response.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.TEXT_PLAIN_VALUE);
 					assertThat(response.getContentAsString()).isNotEmpty();
 				});
-
 	}
 
 	@Test // CORE-92
+	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	void resetsPasswordSuccessfully() throws Exception {
 
 		var resetPassword = UserLinkRelations.RESET_PASSWORD;
