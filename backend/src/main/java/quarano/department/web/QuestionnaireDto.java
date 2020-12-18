@@ -119,7 +119,7 @@ public class QuestionnaireDto {
 		}
 
 		if (dayOfFirstSymptoms != null && guessedDateOfInfection != null
-				&& (guessedDateOfInfection.isEqual(dayOfFirstSymptoms) || guessedDateOfInfection.isAfter(dayOfFirstSymptoms))) {
+				&& !guessedDateOfInfection.isBefore(dayOfFirstSymptoms)) {
 			errors.rejectValue("guessedDateOfInfection", "Invalid.IntialReportDto.guessedDateOfInfection");
 		}
 

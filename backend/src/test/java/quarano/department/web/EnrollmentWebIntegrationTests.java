@@ -1,13 +1,10 @@
 package quarano.department.web;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.relaxedLinks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static quarano.department.web.TrackedCaseLinkRelations.CONFIRM;
-import static quarano.department.web.TrackedCaseLinkRelations.ENROLLMENT;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import capital.scalable.restdocs.AutoDocumentation;
 import lombok.NonNull;
