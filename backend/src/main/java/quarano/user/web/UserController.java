@@ -12,7 +12,6 @@ import quarano.account.AuthenticationManager;
 import quarano.account.DepartmentContact.ContactType;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.UnencryptedPassword;
-import quarano.account.RoleType;
 import quarano.actions.web.AnomaliesController;
 import quarano.core.web.I18nedMessage;
 import quarano.core.web.LoggedIn;
@@ -44,7 +43,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -133,7 +131,8 @@ public class UserController {
 	 * @return will never be {@literal null}.
 	 * @since 1.4
 	 */
-	@PostMapping("/password/reset")
+	// @PostMapping("/password/reset")
+	// Temporarily deactivated for the release because of an open vulnerability.
 	HttpEntity<?> requestPasswordReset(@Valid @RequestBody PasswordResetRequest request, Errors errors) {
 
 		Supplier<HttpEntity<?>> errorResponse = () -> ResponseEntity.badRequest()
@@ -190,14 +189,17 @@ public class UserController {
 		 * (non-Javadoc)
 		 * @see org.springframework.hateoas.server.RepresentationModelProcessor#process(org.springframework.hateoas.RepresentationModel)
 		 */
+		@Override
 		@SuppressWarnings("null")
 		public QuaranoApiRoot process(QuaranoApiRoot model) {
 
 			var controller = on(UserController.class);
 
-			return authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman)
-					? model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD))
-					: model;
+			return model;
+			// Temporarily deactivated for the release because of an open vulnerability.
+			// return authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman)
+			// ? model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD))
+			// : model;
 		};
 	}
 }
