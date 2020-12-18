@@ -1,3 +1,4 @@
+import { DATE_FILTER_PARAMS } from './../../../../../shared/ui-ag-grid/src/lib/date-filter-params';
 import { MatInput } from '@angular/material/input';
 import { DateFunctions } from '@qro/shared/util-date';
 import { CaseDto, CaseEntityService } from '@qro/health-department/domain';
@@ -19,9 +20,9 @@ class CaseRowViewModel {
   firstName: string;
   type: CaseType;
   typeName: string;
-  dateOfBirth: Date;
-  createdAt: Date;
-  quarantineEnd: Date;
+  dateOfBirth: string;
+  createdAt: string;
+  quarantineEnd: string;
   caseId: string;
   status: string;
   extReferenceNumber: string;
@@ -58,21 +59,15 @@ export class CaseListComponent implements OnInit {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.quarantineEndDateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.createdAtFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
       {
@@ -91,20 +86,20 @@ export class CaseListComponent implements OnInit {
     ];
   }
 
-  createdAtFormatter(params: { value: Date }) {
-    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
+  dateFormatter(value: Date): string {
+    return value ? DateFunctions.toCustomLocaleDateString(value) : '-';
   }
 
-  quarantineEndDateFormatter(params: { value: Date }) {
-    if (!params.value) {
+  quarantineEndDateFormatter(value: Date): string {
+    if (!value) {
       return '-';
     }
 
-    if (DateFunctions.isDateInPast(params.value)) {
+    if (DateFunctions.isDateInPast(value)) {
       return 'beendet';
     }
 
-    return DateFunctions.toCustomLocaleDateString(params.value);
+    return DateFunctions.toCustomLocaleDateString(value);
   }
 
   ngOnInit(): void {
@@ -117,9 +112,9 @@ export class CaseListComponent implements OnInit {
       firstName: c.firstName || '-',
       type: c.caseType,
       typeName: c.caseTypeLabel,
-      dateOfBirth: c.dateOfBirth,
-      createdAt: c.createdAt,
-      quarantineEnd: c.quarantineEndDate,
+      dateOfBirth: this.dateFormatter(c.dateOfBirth),
+      createdAt: this.dateFormatter(c.createdAt),
+      quarantineEnd: this.quarantineEndDateFormatter(c.quarantineEndDate),
       status: c.status,
       caseId: c.caseId,
       extReferenceNumber: c.extReferenceNumber || '-',
