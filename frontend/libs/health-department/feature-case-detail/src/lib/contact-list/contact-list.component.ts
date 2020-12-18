@@ -6,7 +6,7 @@ import { CaseEntityService, ContactListItemDto } from '@qro/health-department/do
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap, shareReplay } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { CheckboxFilterComponent, DE_LOCALE } from '@qro/shared/ui-ag-grid';
+import { CheckboxFilterComponent, DE_LOCALE, DATE_FILTER_PARAMS } from '@qro/shared/ui-ag-grid';
 import { DateFunctions } from '@qro/shared/util-date';
 
 interface RowViewModel {
@@ -15,7 +15,7 @@ interface RowViewModel {
   isHealthStaff: string;
   isSenior: string;
   hasPreExistingConditions: string;
-  lastContact: Date;
+  lastContact: string;
   status: string;
   caseType: string;
   caseId: string;
@@ -71,18 +71,11 @@ export class ContactListComponent implements OnInit {
         headerName: 'Letzter Kontakt',
         field: 'lastContact',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.lastContactDateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
     ];
-  }
-
-  lastContactDateFormatter(params: { value: Date }) {
-    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
   }
 
   ngOnInit() {
@@ -130,8 +123,12 @@ export class ContactListComponent implements OnInit {
       hasPreExistingConditions: this.getBooleanText(listItem.hasPreExistingConditions),
       caseId: listItem.caseId,
       caseType: listItem.caseType,
-      lastContact: listItem.contactDates.length > 0 ? new Date(listItem.contactDates[0]) : null,
+      lastContact: this.getDateString(listItem.contactDates.length > 0 ? new Date(listItem.contactDates[0]) : null),
     };
+  }
+
+  private getDateString(date: Date): string {
+    return date ? DateFunctions.toCustomLocaleDateString(date) : '-';
   }
 
   private getBooleanText(value: boolean): string {

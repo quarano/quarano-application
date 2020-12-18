@@ -6,7 +6,7 @@ import { CaseType } from '@qro/auth/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent } from '@qro/shared/ui-ag-grid';
+import { CheckboxFilterComponent, DE_LOCALE, UnorderedListComponent, DATE_FILTER_PARAMS } from '@qro/shared/ui-ag-grid';
 import { ActionAlertComponent, ActionAlertFilterComponent } from '@qro/health-department/ui-action-alert';
 
 export class ActionRowViewModel {
@@ -14,13 +14,13 @@ export class ActionRowViewModel {
   firstName: string;
   type: CaseType;
   typeName: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   email: string;
-  quarantineStart: Date;
+  quarantineStart: string;
   status: string;
   alerts: string[];
   caseId: string;
-  createdAt: Date;
+  createdAt: string;
   originCases: string[];
   rowHeight: number;
 }
@@ -63,11 +63,8 @@ export class ActionListComponent implements OnInit {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.dateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Typ',
@@ -79,22 +76,16 @@ export class ActionListComponent implements OnInit {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.dateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne seit',
         field: 'quarantineStart',
         filter: 'agDateColumnFilter',
-        valueFormatter: this.dateFormatter,
         width: 170,
-        filterParams: {
-          buttons: ['reset'],
-        },
+        filterParams: DATE_FILTER_PARAMS,
       },
       { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
       {
@@ -106,8 +97,8 @@ export class ActionListComponent implements OnInit {
     ];
   }
 
-  dateFormatter(params: { value: Date }) {
-    return params.value ? DateFunctions.toCustomLocaleDateString(params.value) : '-';
+  dateFormatter(value: Date) {
+    return value ? DateFunctions.toCustomLocaleDateString(value) : '-';
   }
 
   ngOnInit() {
@@ -141,13 +132,13 @@ export class ActionListComponent implements OnInit {
       firstName: action.firstName || '-',
       type: action.caseType,
       typeName: action.caseTypeLabel,
-      dateOfBirth: action.dateOfBirth,
+      dateOfBirth: this.dateFormatter(action.dateOfBirth),
       email: action.email,
-      quarantineStart: action.quarantineStart,
+      quarantineStart: this.dateFormatter(action.quarantineStart),
       status: action.status,
       alerts: action.alerts || [],
       caseId: action.caseId,
-      createdAt: action.createdAt,
+      createdAt: this.dateFormatter(action.createdAt),
       originCases: action.originCases.map((c) => `${c.firstName} ${c.lastName}`),
       rowHeight: Math.min(50 + Math.max(action.originCases.length, action.alerts.length) * 9),
     };
