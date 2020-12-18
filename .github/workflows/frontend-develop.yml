@@ -37,8 +37,6 @@ jobs:
       - run: npm install
       - run: npm run build-internal-dev-otc
       - run: npm run prepare-deployment-otc
-      - run: npm run ci-test
-      - run: npm run lint
 
       - name: Deploy Frontend STAGE        
         if: success()
