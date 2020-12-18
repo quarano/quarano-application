@@ -35,8 +35,6 @@ jobs:
       - run: npm install
       - run: npm run build-sec
       - run: npm run prepare-deployment
-      - run: npm run ci-test
-      - run: npm run lint
 
       - name: Deploy Frontend SECURITY
         if: success()
