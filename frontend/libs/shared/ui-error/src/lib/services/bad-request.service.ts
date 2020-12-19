@@ -18,15 +18,21 @@ export class BadRequestService {
     }
 
     if (error.status === HttpStatusCode.badRequest.valueOf()) {
-      const requestErrors = error.errors;
-      Object.keys(form.controls).forEach((key) => {
-        if (requestErrors.hasOwnProperty(key)) {
-          handled = true;
-          form.get(key).setErrors({ error400: { errorMessage: requestErrors[key] } });
-        }
-      });
+      let requestErrors = error.errors;
+      if (requestErrors instanceof String || typeof requestErrors === 'string') {
+        requestErrors = JSON.parse(requestErrors as string);
+      }
+      if (form) {
+        Object.keys(form.controls).forEach((key) => {
+          if (requestErrors.hasOwnProperty(key)) {
+            handled = true;
+            form.get(key).setErrors({ error400: { errorMessage: requestErrors[key] } });
+          }
+        });
+      }
+
       if (!handled) {
-        this.translatedSnackbar.error('BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
+        this.translatedSnackbar.error(requestErrors?.message || 'BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
       }
     }
 
