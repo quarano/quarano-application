@@ -109,6 +109,8 @@ class TrackedCaseCsvRepresentations {
 			ZIP_CODE_ORIGIN, QUARANTINE_CHANGED, CREATED, LAST_MODIFIED, HEALH_DEPARTMENT,
 			HEALH_DEPARTMENT_MAIL, RKI_CODE, CASE_ID, PERSON_ID);
 
+	private static final String COMMENT_SEPERATOR = " ### ";
+
 	private final ObjectProvider<ICSVWriter> csvWriterProvider;
 	private final ObjectProvider<StatefulBeanToCsv<TrackedCaseCsv>> beanToCsvProvider;
 	private final ObjectProvider<Comparator<String>> columnOrderComperator;
@@ -418,9 +420,11 @@ class TrackedCaseCsvRepresentations {
 		@SormasCsv(export = "healthFacility", group = CaseData, ignoreForContacts = true)
 		private String healthFacility = "NO_FACILITY";
 
-		@SormasCsv(export = "additionalDetails", group = CaseData, importDe = "Kommentare", importEn = "Comments")
+		@SormasCsv(export = "additionalDetails", group = CaseData, importDe = "Kommentare", importEn = "Comments",
+				converter = CommentConverter.class)
 		@CaseTransfer
-		@CsvBindAndSplitByName(column = COMMENTS, elementType = Comment.class, converter = CommentConverter.class)
+		@CsvBindAndSplitByName(column = COMMENTS, elementType = Comment.class, splitOn = COMMENT_SEPERATOR,
+				writeDelimiter = COMMENT_SEPERATOR,				converter = CommentConverter.class)
 		private List<Comment> comments;
 
 		@SormasCsv(export = "person.generalPractitionerDetails", group = Person)
@@ -878,44 +882,73 @@ class TrackedCaseCsvRepresentations {
 		@Override
 		public Object convertToRead(String value) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
 
-			if (value.contains("|")) {
+			if (StringUtils.isBlank(value)) {
+				return null;
+			}
 
-				var parts = value.split("|");
+			var retList = new ArrayList<Comment>();
 
-				try {
+			var comments = value.split(COMMENT_SEPERATOR);
 
-					LocalDateTime date = LocalDateTime.parse(parts[0]);
+			for (String comment : comments) {
 
-					return new Comment(parts[2], parts[1], date);
+				var parts = comment.split("|");
 
-				} catch (DateTimeParseException e) {
+				if (parts.length == 3) {
+					try {
 
-					CsvDataTypeMismatchException csve = new CsvDataTypeMismatchException(
-							value, type, ResourceBundle
-									.getBundle("messages", errorLocale)
-									.getString("csv.input.not.datetime"));
-					csve.initCause(e);
-					throw csve;
+						LocalDateTime date = LocalDateTime.parse(parts[0]);
+
+						retList.add(new Comment(parts[2], parts[1], date));
+
+					} catch (DateTimeParseException e) {
+
+						CsvDataTypeMismatchException csve = new CsvDataTypeMismatchException(
+								value, type, ResourceBundle
+										.getBundle("messages", errorLocale)
+										.getString("csv.input.not.datetime"));
+						csve.initCause(e);
+						throw csve;
+					}
+
+				} else {
+					retList.add(new Comment(comment, null, LocalDateTime.now()));
 				}
 			}
 
-			return StringUtils.isBlank(value) ? null : new Comment(value, null, LocalDateTime.now());
+			return List.class.isAssignableFrom(type) ? retList : retList.get(0);
 		}
 
 		@Override
 		public String convertToWrite(Object value) throws CsvDataTypeMismatchException {
 
-			if (value instanceof Comment) {
+			if (value == null) {
+				return "";
+			} else if (value instanceof List) {
 
-				Comment comment = (Comment) value;
+				if (((List) value).isEmpty()) {
+					return "";
+				} else if (((List) value).get(0) instanceof Comment) {
 
-				return String.join("|", comment.getDate().toString(), comment.getAuthor(), comment.getText());
-			} else {
+					return ((List<Object>) value).stream()
+							.map(this::convertToString)
+							.collect(Collectors.joining(COMMENT_SEPERATOR));
 
-				throw new CsvDataTypeMismatchException(ResourceBundle
-						.getBundle("messages", errorLocale)
-						.getString("csv.field.not.comment"));
+				}
+			} else if (value instanceof Comment) {
+				return convertToString(value);
 			}
+
+			throw new CsvDataTypeMismatchException(ResourceBundle
+					.getBundle("messages", errorLocale)
+					.getString("csv.field.not.comment"));
+		}
+
+		private String convertToString(Object value) {
+
+			Comment comment = (Comment) value;
+
+			return String.join("|", comment.getDate().toString(), comment.getAuthor(), comment.getText());
 		}
 	}
 
