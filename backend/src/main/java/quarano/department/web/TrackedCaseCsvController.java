@@ -174,7 +174,7 @@ class TrackedCaseCsvController {
 	 * @since 1.4
 	 */
 	@PostMapping(path = "/hd/export/sormas/by-ids", produces = "text/csv")
-	public void getCasesForSormasForIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
+	public void getCasesForSormasByIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
 			HttpServletResponse response) throws IOException {
 
 		response.setContentType("text/csv;charset=UTF-8");
@@ -188,7 +188,7 @@ class TrackedCaseCsvController {
 		var cases = caseRepo.findAllById(idList);
 
 		var differentTypes = StreamSupport.stream(cases.spliterator(), false)
-				.collect(Collectors.groupingBy(TrackedCase::getType))
+				.collect(Collectors.groupingBy(it -> it.getType().getPrimaryCaseType()))
 				.keySet();
 
 		if (differentTypes.size() > 1) {
@@ -305,7 +305,7 @@ class TrackedCaseCsvController {
 	 * @since 1.4
 	 */
 	@PostMapping(path = "/hd/export/cases/by-ids", produces = "text/csv")
-	public void getCasesForIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
+	public void getCasesByIds(@LoggedIn Department department, @RequestBody List<String> selfUris,
 			@RequestParam("withorigincase") Optional<Boolean> withOriginCase, HttpServletResponse response)
 			throws IOException {
 
