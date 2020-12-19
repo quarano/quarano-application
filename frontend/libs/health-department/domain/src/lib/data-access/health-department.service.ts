@@ -51,26 +51,25 @@ export class HealthDepartmentService {
   }
 
   getQuarantineCsvData(caseType: CaseType, start: Moment, end: Moment): Observable<any> {
-    const params: { [param: string]: string | string[] } = {};
+    const dto = {};
 
     if (caseType) {
-      params['type'] = caseType;
+      dto['type'] = caseType;
     }
     if (start && end) {
-      params['from'] = start.format('YYYY-MM-DD');
-      params['to'] = end.format('YYYY-MM-DD');
+      dto['from'] = start.format('YYYY-MM-DD');
+      dto['to'] = end.format('YYYY-MM-DD');
     }
 
     const options: Object = {
       headers: new HttpHeaders({
-        'Content-Type': 'text/csv',
+        'Content-Type': 'application/json',
       }),
-      responseType: 'text',
-      params,
+      responseType: 'text/csv',
       observe: 'response',
     };
 
-    return this.httpClient.get<string>(`${this.apiUrl}/hd/quarantines`, options).pipe(shareReplay());
+    return this.httpClient.post<string>(`${this.apiUrl}/hd/export/quarantines`, dto, options).pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {
