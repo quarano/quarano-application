@@ -1,3 +1,4 @@
+import { SharedUiButtonModule } from '@qro/shared/ui-button';
 import { SharedUiAgGridModule } from '@qro/shared/ui-ag-grid';
 import { FormsModule } from '@angular/forms';
 import { HealthDepartmentUiActionAlertModule } from '@qro/health-department/ui-action-alert';
@@ -48,6 +49,7 @@ const routes: Routes = [
     HealthDepartmentDomainModule,
     RouterModule.forChild(routes),
     SharedUiAgGridModule,
+    SharedUiButtonModule,
     FormsModule,
   ],
   declarations: [ActionListComponent, CaseListComponent, IndexCasesComponent],

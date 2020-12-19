@@ -88,7 +88,7 @@ export class ExportComponent implements OnInit {
     this.loading = true;
     const { from, to, type } = this.formGroup.getRawValue();
     this.healthDepartmentService
-      .getCsvData(type, from, to)
+      .getQuarantineCsvData(type, from, to)
       .pipe(
         map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
         tap((blob) => {

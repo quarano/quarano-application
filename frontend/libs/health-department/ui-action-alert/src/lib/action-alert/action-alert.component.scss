@@ -1,8 +1,6 @@
 .action-alert-container {
   display: flex;
   align-items: center;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
   line-height: normal;
 }
 
@@ -17,4 +15,9 @@
   flex-direction: column;
   justify-content: center;
   height: 100%;
+}
+
+.action-alert-icon {
+  font-size: 18px;
+  line-height: 0.9;
 }
