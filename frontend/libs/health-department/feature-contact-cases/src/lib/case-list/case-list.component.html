@@ -1,5 +1,5 @@
 <div style="display: flex; justify-content: space-between">
-  <div style="display: flex">
+  <div style="display: flex; justify-content: space-between; width: 100%">
     <button
       data-cy="new-case-button"
       mat-raised-button
@@ -8,6 +8,14 @@
     >
       <mat-icon>add</mat-icon>Neue Kontaktperson anlegen
     </button>
+    <qro-button
+      color="secondary"
+      type="button"
+      [loading]="loading"
+      (buttonClicked)="exportFilteredCases()"
+      [disabled]="!areCasesVisible"
+      ><mat-icon>get_app</mat-icon>Angezeigte Fälle exportieren</qro-button
+    >
   </div>
 </div>
 <ng-container *ngIf="cases$ | async as cases">

@@ -1,12 +1,12 @@
+import { BadRequestService } from '@qro/shared/ui-error';
 import { DATE_FILTER_PARAMS } from './../../../../../shared/ui-ag-grid/src/lib/date-filter-params';
-import { MatInput } from '@angular/material/input';
 import { DateFunctions } from '@qro/shared/util-date';
-import { CaseDto, CaseEntityService } from '@qro/health-department/domain';
+import { CaseDto, CaseEntityService, HealthDepartmentService } from '@qro/health-department/domain';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CaseType } from '@qro/auth/api';
-import { map } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
 import {
   CheckboxFilterComponent,
@@ -14,6 +14,10 @@ import {
   EmailButtonComponent,
   UnorderedListComponent,
 } from '@qro/shared/ui-ag-grid';
+import { HttpResponse } from '@angular/common/http';
+import * as fileSaver from 'file-saver';
+import * as moment from 'moment';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 class CaseRowViewModel {
   lastName: string;
@@ -28,6 +32,7 @@ class CaseRowViewModel {
   extReferenceNumber: string;
   originCases: string[];
   rowHeight: number;
+  selfLink: string;
 }
 
 @Component({
@@ -47,8 +52,15 @@ export class CaseListComponent implements OnInit {
   locale = DE_LOCALE;
   frameworkComponents;
   gridApi: GridApi;
+  loading = false;
 
-  constructor(private entityService: CaseEntityService, private router: Router) {
+  constructor(
+    private entityService: CaseEntityService,
+    private router: Router,
+    private healthDepartmentService: HealthDepartmentService,
+    private snackbar: SnackbarService,
+    private badRequestService: BadRequestService
+  ) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
@@ -120,6 +132,7 @@ export class CaseListComponent implements OnInit {
       extReferenceNumber: c.extReferenceNumber || '-',
       originCases: c?._embedded?.originCases?.map((originCase) => `${originCase?.firstName} ${originCase?.lastName}`),
       rowHeight: Math.min(50 + c?._embedded?.originCases?.length * 9),
+      selfLink: c?._links?.self?.href,
     };
   }
 
@@ -159,5 +172,36 @@ export class CaseListComponent implements OnInit {
     this.gridApi.setFilterModel(null);
     this.filterString = null;
     this.gridApi.setQuickFilter(null);
+  }
+
+  get areCasesVisible(): boolean {
+    if (!this.gridApi) {
+      return false;
+    }
+    // @ts-ignore
+    return this.gridApi.getModel().rowsToDisplay.length > 0;
+  }
+
+  exportFilteredCases() {
+    this.loading = true;
+    // @ts-ignore
+    const ids = this.gridApi.getModel().rowsToDisplay.map((r) => r.data.selfLink);
+    this.healthDepartmentService
+      .getCsvDataByIdList(ids)
+      .pipe(
+        map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
+        tap((blob) => {
+          fileSaver.saveAs(blob, `csvexport_kontakt_gefiltert_${moment().format('YYYYMMDDHHmmss')}.csv`);
+        }),
+        finalize(() => (this.loading = false))
+      )
+      .subscribe(
+        (_) => {
+          this.snackbar.success('CSV-Export erfolgreich ausgeführt');
+        },
+        (error) => {
+          this.badRequestService.handleBadRequestError(error, null);
+        }
+      );
   }
 }

@@ -1,23 +1,33 @@
 import { RouterTestingModule } from '@angular/router/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CaseListComponent } from './case-list.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { HealthDepartmentService } from '@qro/health-department/domain';
+import { BadRequestService } from '@qro/shared/ui-error';
+import { SnackbarService } from '@qro/shared/util-snackbar';
 
 describe('CaseListComponent', () => {
   let component: CaseListComponent;
   let fixture: ComponentFixture<CaseListComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [CaseListComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: ActivatedRoute, useValue: { data: of({ cases: [] }) } }],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule],
+        declarations: [CaseListComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+        providers: [
+          { provide: ActivatedRoute, useValue: { data: of({ cases: [] }) } },
+          { provide: HealthDepartmentService, useValue: {} },
+          { provide: BadRequestService, useValue: {} },
+          { provide: SnackbarService, useValue: {} },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CaseListComponent);
