@@ -136,6 +136,27 @@ class TrackedCaseCsvController {
 	 * days can be exported. It can also be determined whether cases with Sormas ID (from an import) are also exported or
 	 * not. The selection of the type (Index or Contact) is mandatory!
 	 * </p>
+	 * <p>
+	 * In the cloud environments, the federal state and district of the health department must be configured to match the
+	 * respective instance of Sormas so that the CSV can be imported correctly.
+	 * </p>
+	 * <p>
+	 * The state is determined from the RKI code, but may have to be set manually, especially in test environments
+	 * (default is "Preset states").
+	 * </p>
+	 * <p>
+	 * The county cannot be determined at the moment and must always be set in the environment.
+	 * </p>
+	 * <p>
+	 * It is essential that these entries exist in the Sormas!
+	 * </p>
+	 * <p>
+	 * The parameters:
+	 * <ul>
+	 * <li>QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_FEDERAL-STATE: Preset federal states</li>
+	 * <li>QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_DISTRICT: Preset county</li>
+	 * </ul>
+	 * </p>
 	 *
 	 * @param department
 	 * @param query
@@ -164,6 +185,9 @@ class TrackedCaseCsvController {
 	 * </p>
 	 * <p>
 	 * The cases to be exported must be specified using a list of their Self links.
+	 * </p>
+	 * <p>
+	 * See {@link #getCasesForSormas(Department, SormasQuery, HttpServletResponse)} for more informations.
 	 * </p>
 	 * 
 	 * @param department
