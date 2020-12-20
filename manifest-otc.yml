@@ -97,7 +97,6 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Cuxhaven
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
-      SPRING_FLYWAY_LOCATIONS: classpath:db/migration,classpath:db/client_migration/1.03.3.52.RKI
       SERVER_SERVLET_CONTEXTPATH: "/cuxhaven/api"
       QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/cuxhaven/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
@@ -136,7 +135,6 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Cuxhaven
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
-      SPRING_FLYWAY_LOCATIONS: classpath:db/migration,classpath:db/client_migration/1.03.3.52.RKI
       SERVER_SERVLET_CONTEXTPATH: "/cuxhaven-stage/api"
       QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/cuxhaven-stage/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
@@ -224,7 +222,6 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Cuxhaven
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
-      SPRING_FLYWAY_LOCATIONS: classpath:db/migration,classpath:db/client_migration/1.03.3.52.RKI
       SERVER_SERVLET_CONTEXTPATH: "/internal-dev/api"
       QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-dev/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
