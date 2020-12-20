@@ -424,7 +424,7 @@ class TrackedCaseCsvRepresentations {
 				converter = CommentConverter.class)
 		@CaseTransfer
 		@CsvBindAndSplitByName(column = COMMENTS, elementType = Comment.class, splitOn = COMMENT_SEPERATOR,
-				writeDelimiter = COMMENT_SEPERATOR,				converter = CommentConverter.class)
+				writeDelimiter = COMMENT_SEPERATOR, converter = CommentConverter.class)
 		private List<Comment> comments;
 
 		@SormasCsv(export = "person.generalPractitionerDetails", group = Person)
@@ -435,19 +435,6 @@ class TrackedCaseCsvRepresentations {
 
 		@SormasCsv(export = "symptoms.onsetSymptom", group = Symptoms, ignoreForContacts = true)
 		private String firstSymptoms;
-
-		@SormasCsv(export = "epiData.directContactConfirmedCase", group = EpiData,
-				importDe = "Direkter Kontakt mit einem bestätigten Fall", importEn = "Direct contact with a confirmed case",
-				converter = ConvertYesNoBoolean.class)
-		private boolean directContactConfirmedCase = true;
-
-		@SormasCsv(export = "epiData.directContactProbableCase", group = EpiData,
-				importDe = "Direkter Kontakt mit einem wahrscheinlichen oder bestätigten Fall",
-				importEn = "Direct contact with a probable or confirmed case", converter = ConvertYesNoBoolean.class)
-		private boolean directContactProbableCase = true;
-
-		@SormasCsv(export = "epiData.closeContactProbableCase", group = EpiData, converter = ConvertYesNoBoolean.class)
-		private boolean closeContactProbableCase = true;
 
 		@SormasCsv(exportContact = "tracingApp")
 		private String tracingApp = "OTHER";
