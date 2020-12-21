@@ -10,6 +10,7 @@ on:
     paths:
       - backend/**
       - frontend/**
+	  - manifest-otc.yml
       - .github/workflows/deployment-test-cux.yml
 
 defaults:
