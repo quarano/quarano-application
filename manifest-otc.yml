@@ -156,7 +156,7 @@ applications:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
       SPRING_MAIL_PROPERTIES_FIX-SENDER: quarano-test@landkreis-cuxhaven.de
-      SPRING_MAIL_PROPERTIES_FIX-RECIPIENT: testmailbox@quarano.de
+      SPRING_MAIL_PROPERTIES_FIX-RECIPIENT: quarano-test@landkreis-cuxhaven.de
       TZ: Europe/Berlin
     instances: 1
     memory: 1G
