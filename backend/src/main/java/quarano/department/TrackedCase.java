@@ -371,10 +371,6 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		assertStatus(Streamable.of(Status.OPEN, Status.IN_REGISTRATION),
 				"Cannot start registration for case %s in status %s!", id, status);
 
-		if (isInRegistration()) {
-			return this;
-		}
-
 		this.status = Status.IN_REGISTRATION;
 		this.registerEvent(RegistrationInitiated.of(getId()));
 
