@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, distinctUntilChanged, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import {
   PhoneOrMobilePhoneValidator,
   TrimmedPatternValidator,
@@ -9,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { SubSink } from 'subsink';
 import { MatInput } from '@angular/material/input';
@@ -68,9 +68,14 @@ export class EditComponent implements OnInit, OnDestroy, AfterViewInit {
         type === CaseType.Index ? (this.caseType = CaseType.Index) : (this.caseType = CaseType.Contact);
       });
 
-    this.caseDetail$ = this.route.parent.paramMap.pipe(
-      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
-      shareReplay(1),
+    this.caseDetail$ = combineLatest([this.route.parent.paramMap, this.entityService.entityMap$]).pipe(
+      map(([params, entityMap]) => {
+        const id = params.get('id');
+        if (id) {
+          return entityMap[id];
+        }
+        return this.entityService.emptyCase;
+      }),
       tap((data) => this.updateFormGroup(data)),
       filter(() => !!this.formGroup),
       tap(() => this.setValidators()),
@@ -298,6 +303,7 @@ export class EditComponent implements OnInit, OnDestroy, AfterViewInit {
     if (closeAfterSave) {
       this.router.navigate([this.returnLink]);
     } else {
+      this.formGroup.markAsPristine();
       this.formGroup.markAsPristine();
       this.router.navigate([this.getCaseLink(caseDto.caseId)]);
     }

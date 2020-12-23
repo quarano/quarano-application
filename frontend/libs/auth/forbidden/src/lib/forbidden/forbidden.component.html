@@ -1,8 +1,10 @@
 <mat-card>
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title>{{ 'FORBIDDEN.DA_IST_ETWAS_SCHIEF_GELAUFEN' | translate }}...</mat-card-title>
-    <mat-card-subtitle>{{ 'FORBIDDEN.ZUGRIFF_VERWEIGERT' | translate }}</mat-card-subtitle>
+    <mat-card-title data-cy="forbidden-title"
+      >{{ 'FORBIDDEN.DA_IST_ETWAS_SCHIEF_GELAUFEN' | translate }}...</mat-card-title
+    >
+    <mat-card-subtitle data-cy="forbidden-subtitle">{{ 'FORBIDDEN.ZUGRIFF_VERWEIGERT' | translate }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <h2 data-cy="forbidden-message">{{ message$ | async | translate }}</h2>
