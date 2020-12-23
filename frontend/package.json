@@ -20,6 +20,7 @@
     "ci-test": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng test -- --silent --verbose",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
+    "e2e:watch": "ng e2e --watch",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",

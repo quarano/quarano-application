@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { CaseDto } from '../model/case';
@@ -10,6 +10,9 @@ export class CaseDetailResolver implements Resolve<CaseDto> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<CaseDto> {
     const id = route.paramMap.get('id');
-    return this.entityService.getByKey(id);
+    if (id) {
+      return this.entityService.getByKey(id);
+    }
+    return of(this.entityService.emptyCase);
   }
 }
