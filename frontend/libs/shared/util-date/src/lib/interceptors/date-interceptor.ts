@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import * as moment from 'moment';
@@ -11,7 +12,7 @@ export class DateInterceptor implements HttpInterceptor {
   iso8601 = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/;
 
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    return next.handle(request.clone({ body: this.recursiveTransform(request.body) })).pipe(
+    return next.handle(request.clone({ body: this.recursiveTransform(cloneDeep(request.body)) })).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           const body = event.body;

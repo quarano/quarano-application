@@ -6,7 +6,7 @@ describe('csv export', () => {
   beforeEach(() => {
     cy.server();
     const dateString = moment().format('YYYY-MM-DD');
-    cy.route('GET', `/hd/quarantines?from=${dateString}&to=${dateString}`).as('getcsv');
+    cy.route('GET', '/hd/export/quarantines').as('getcsv');
 
     cy.loginAgent();
     cy.visit('health-department/export');
