@@ -5,6 +5,7 @@ declare namespace Cypress {
      * Custom command to select DOM element by data-cy attribute.
      * @example cy.dataCy('greeting')
      */
+    logOut: () => void;
     login: (username: string, password: string) => void;
     loginAgent: () => void;
     loginAdmin: () => void;
@@ -31,6 +32,15 @@ const login = (username: string, password: string) => {
   cy.wait('@login');
 };
 
+const logOut = () => {
+  cy.get('[data-cy="profile-user-button"]').click();
+  cy.get('[data-cy="logout-button"]').should('exist');
+  cy.get('[data-cy="logout-button"]').click();
+  cy.location('pathname').should('include', 'auth/login');
+};
+Cypress.Commands.add('logOut', () => {
+  logOut();
+});
 Cypress.Commands.add('login', (username: string, password: string) => {
   login(username, password);
 });

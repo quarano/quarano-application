@@ -1,7 +1,7 @@
 <mat-card style="width: 90vw">
   <mat-card-header class="mb-4">
     <nav mat-tab-nav-bar>
-      <a mat-tab-link [routerLink]="['case-list']" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+      <a data-cy="case-list" mat-tab-link [routerLink]="['case-list']" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
         Fallübersicht
       </a>
       <a

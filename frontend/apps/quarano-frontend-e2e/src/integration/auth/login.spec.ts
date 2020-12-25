@@ -1,7 +1,5 @@
 describe('login', () => {
   const login = (username: string, password: string) => {
-    cy.server();
-    cy.route('POST', '/login').as('login');
     cy.get('#submitBtn button').should('be.disabled');
     cy.get('#username').type(username);
 
@@ -13,50 +11,66 @@ describe('login', () => {
   };
 
   beforeEach(() => {
+    cy.server();
+    cy.route('POST', '/login').as('logIn');
+    cy.route('GET', '/user/me').as('me');
+    cy.route('GET', '/hd/cases').as('cases');
+    cy.route('GET', '/enrollment').as('enrollment');
+    cy.route('GET', '/diary').as('diary');
+
     cy.visit('/');
   });
 
   describe('client login', () => {
-    it('should successful login to client page', () => {
-      // Go to login page
+    it('should successfully log in to client page', () => {
+      cy.location('pathname').should('eq', '/auth/login');
 
       login('test3', 'test123');
 
-      cy.wait('@login').its('status').should('eq', 200);
-      cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
+      cy.wait('@logIn').its('status').should('eq', 200);
+      cy.get('simple-snack-bar > span').should('have.text', 'Willkommen bei quarano');
+      cy.wait('@me').its('status').should('eq', 200);
+      cy.wait('@enrollment').its('status').should('eq', 200);
+      cy.wait('@diary').its('status').should('eq', 200);
 
-      cy.url().should('include', '/client/diary/diary-list');
+      cy.location('pathname').should('eq', '/client/diary/diary-list');
     });
 
-    it('should fail to login', () => {
+    it('should fail to log in with incorrect credentials', () => {
+      cy.location('pathname').should('eq', '/auth/login');
+
       login('test3', 'test1234');
 
-      cy.wait('@login').its('status').should('eq', 401);
-      cy.get('simple-snack-bar').children('span').should('contain', 'Benutzername oder Passwort falsch');
+      cy.wait('@logIn').its('status').should('eq', 401);
+      cy.get('simple-snack-bar > span').should('have.text', 'Benutzername oder Passwort falsch');
 
-      cy.wait(5);
-      cy.url().should('not.include', '/client/diary/diary-list');
+      cy.location('pathname').should('not.eq', '/client/diary/diary-list');
     });
   });
 
   describe('agent login', () => {
-    it('should successful login to agent page', () => {
+    it('should successfully log in to agent page', () => {
+      cy.location('pathname').should('eq', '/auth/login');
+
       login('agent1', 'agent1');
 
-      cy.wait('@login').its('status').should('eq', 200);
-      cy.get('simple-snack-bar').children('span').should('contain', 'Willkommen bei quarano');
+      cy.wait('@logIn').its('status').should('eq', 200);
+      cy.get('simple-snack-bar > span').should('have.text', 'Willkommen bei quarano');
+      cy.wait('@me').its('status').should('eq', 200);
+      cy.wait('@cases').its('status').should('eq', 200);
 
-      cy.wait(5);
-      cy.url().should('include', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
     });
 
-    it('should fail to login', () => {
+    it('should fail to log in with incorrect credentials', () => {
+      cy.location('pathname').should('eq', '/auth/login');
+
       login('agent1', 'agent2');
 
-      cy.wait('@login').its('status').should('eq', 401);
-      cy.get('simple-snack-bar').children('span').should('contain', 'Benutzername oder Passwort falsch');
+      cy.wait('@logIn').its('status').should('eq', 401);
+      cy.get('simple-snack-bar > span').should('have.text', 'Benutzername oder Passwort falsch');
 
-      cy.url().should('not.include', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('not.eq', '/health-department/index-cases/case-list');
     });
   });
 });

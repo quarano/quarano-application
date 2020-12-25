@@ -11,7 +11,7 @@ describe('health-department contact cases case-list', () => {
 
   describe('preconditions', () => {
     it('should be on the correct url', () => {
-      cy.url().should('include', '/health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
     });
 
     it('should have correct page components', () => {
@@ -40,12 +40,12 @@ describe('health-department contact cases case-list', () => {
 
     it('should open new case page on button click', () => {
       cy.get('[data-cy="new-case-button"]').click();
-      cy.url().should('include', '/health-department/case-detail');
+      cy.location('pathname').should('eq', '/health-department/case-detail/new/contact/edit');
     });
 
     it('should open selected case', () => {
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
-      cy.url().should('include', '/health-department/case-detail');
+      cy.location('pathname').should('include', '/health-department/case-detail/contact/');
     });
   });
 });

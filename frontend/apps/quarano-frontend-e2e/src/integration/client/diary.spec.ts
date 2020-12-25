@@ -8,7 +8,7 @@ describe('Adding new symptom to symptom diary', () => {
   });
 
   it('not possible, when no body temperature is selected.', () => {
-    cy.location('pathname').should('include', 'client/diary/diary-list');
+    cy.location('pathname').should('eq', '/client/diary/diary-list');
     cy.get('[data-cy="add-diary-entry"]').click();
     cy.get('[data-cy="body-temperature"]').should('exist');
     cy.get('[data-cy="symptoms-select"]').should('exist');
@@ -21,7 +21,7 @@ describe('Adding new symptom to symptom diary', () => {
   });
 
   it('happy path', () => {
-    cy.location('pathname').should('include', 'client/diary/diary-list');
+    cy.location('pathname').should('eq', '/client/diary/diary-list');
     cy.get('[data-cy="add-diary-entry"]').click();
     cy.get('[data-cy="body-temperature"]').should('exist');
     cy.get('[data-cy="symptoms-select"]').should('exist');
@@ -31,7 +31,6 @@ describe('Adding new symptom to symptom diary', () => {
     cy.get('[data-cy="save-diary-entry"] button').should('be.disabled');
 
     cy.get('[data-cy="body-temperature"]').trigger('mousedown', 'center', { button: 0 });
-    cy.wait(1000);
 
     cy.get('mat-slide-toggle').should('have.length', 8);
     cy.get('#mat-slide-toggle-1').should('exist');
@@ -66,6 +65,6 @@ describe('Adding new symptom to symptom diary', () => {
         expect(entryId).to.eq(null);
       });
 
-    cy.location('pathname').should('include', 'client/diary/diary-list');
+    cy.location('pathname').should('eq', '/client/diary/diary-list');
   });
 });

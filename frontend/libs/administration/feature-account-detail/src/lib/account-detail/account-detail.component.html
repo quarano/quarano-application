@@ -14,6 +14,7 @@
         Account-Daten
       </a>
       <a
+        data-cy="reset-account-password"
         mat-tab-link
         *ngIf="account._links.hasOwnProperty('reset-password')"
         [routerLink]="['reset-password']"

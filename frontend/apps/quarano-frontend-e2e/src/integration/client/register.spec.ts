@@ -4,7 +4,7 @@ describe('registration form', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/registration').as('registration');
-    cy.visit('http://localhost:4200/client/enrollment/register');
+    cy.visit('client/enrollment/register');
   });
 
   describe('submit button is disabled', () => {
@@ -198,7 +198,7 @@ describe('registration form', () => {
   //      cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
   //      cy.get('[data-cy="registration-submit-button"] button').click();
   //      cy.wait('@registration').its('status').should('eq', 200);
-  //      cy.url().should('include', '/client/enrollment/basic-data');
+  //      cy.location('pathname').should('eq', '/client/enrollment/basic-data');
   //    });
   //  });
 });

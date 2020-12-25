@@ -9,15 +9,15 @@ describe('health-department contact cases', () => {
 
   describe('converting to index case ', () => {
     it('should not be possible if required fields are missing', () => {
-      cy.location('pathname').should('include', 'health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
-      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
       cy.get('[data-cy="case-data-table"]').should('exist');
       cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).should('exist');
       cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).click();
 
-      cy.location('pathname').should('include', 'health-department/case-detail/contact');
+      cy.location('pathname').should('include', '/health-department/case-detail/contact/');
 
       cy.get('[data-cy="input-field-test-date"]').should('exist');
       cy.get('[data-cy="input-field-test-date"]').type('5.6.2020').blur();
@@ -34,15 +34,14 @@ describe('health-department contact cases', () => {
     });
 
     it('happy path', () => {
-      cy.location('pathname').should('include', 'health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
-      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
       cy.get('[data-cy="case-data-table"]').should('exist');
-      cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).should('exist');
       cy.get('[data-cy="case-data-table"] .ag-center-cols-container > .ag-row').eq(1).click();
 
-      cy.location('pathname').should('include', 'health-department/case-detail/contact');
+      cy.location('pathname').should('include', '/health-department/case-detail/contact/');
 
       cy.get('[data-cy="input-field-test-date"]').should('exist');
       cy.get('[data-cy="input-field-test-date"]').type('5.6.2020').blur();
@@ -85,17 +84,17 @@ describe('health-department contact cases', () => {
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
 
-          cy.location('pathname').should('include', 'health-department/case-detail/index/' + caseId + '/edit');
+          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/edit');
         });
     });
   });
 
   describe('create new contact case', () => {
     it('happy path save and close', () => {
-      cy.location('pathname').should('include', 'health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
-      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
       cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
@@ -129,14 +128,14 @@ describe('health-department contact cases', () => {
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
         });
-      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
     });
 
     it('happy path save and return to detail page', () => {
-      cy.location('pathname').should('include', 'health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
-      cy.location('pathname').should('include', 'health-department/contact-cases/case-list');
+      cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
       cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
@@ -170,10 +169,10 @@ describe('health-department contact cases', () => {
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
 
-          cy.location('pathname').should('include', 'health-department/case-detail/contact/' + caseId + '/edit');
+          cy.location('pathname').should('eq', '/health-department/case-detail/contact/' + caseId + '/edit');
         });
 
-      cy.get('[data-cy="start-tracking-button"]').should('be.disabled');
+      cy.get('[data-cy="start-tracking-button"]').should('be.enabled');
       cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
     });
   });
