@@ -1,154 +1,53 @@
 /// <reference types="cypress" />
 
-const newPassword = 'Pa$$w0rd';
-const username = 'secAdmin2';
-
-// ToDo: https://quarano.atlassian.net/browse/CORE-635
-xdescribe('reset account password', () => {
+describe('Account administration', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('PUT', `/hd/accounts/*/password`).as('resetpassword');
+    cy.route('PUT', `/hd/accounts/*/password`).as('resetPassword');
+    cy.route('GET', `/hd/accounts`).as('fetchAccounts');
+    cy.route('GET', `/hd/accounts/*`).as('fetchAccount');
+    cy.route('PUT', '/user/me/password').as('changePassword');
 
     cy.loginAdmin();
-
-    cy.visit('administration/accounts/account-list');
-    cy.get('.ag-center-cols-container > .ag-row').eq(1).click();
-    cy.get('.mat-tab-links a:nth-child(2)').click();
   });
 
-  describe('field validations: required', () => {
-    describe('enabled submit button', () => {
-      it('valid form', () => {
-        cy.get('[data-cy="input-password"] input[matInput]').type(newPassword);
-        cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type(newPassword);
-        cy.get('[data-cy="account-submitandclose-button"] button').should('be.enabled');
+  it('should reset password and change during next log-in', () => {
+    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.get('[data-cy="account-administration"]').click();
+    cy.location('pathname').should('eq', '/administration/accounts/account-list');
+    cy.wait('@fetchAccounts').its('status').should('eq', 200);
+    cy.get('.ag-row').should('have.length.gt', 0);
+    cy.get('[row-index="0"] > [aria-colindex="1"]')
+      .should('exist')
+      .then(($elem) => {
+        $elem.click();
       });
-    });
-
-    describe('disabled submit button', () => {
-      it('empty form', () => {
-        cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
-        cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
-      });
-
-      it('missing password', () => {
-        cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type(newPassword);
-
-        cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
-        cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
+    cy.wait('@fetchAccount').its('status').should('eq', 200);
+    cy.get('@fetchAccount')
+      .its('response.body')
+      .then((body) => {
+        const accountId = body.accountId;
+        expect(accountId).not.to.eq(null);
       });
 
-      it('missing password confirm', () => {
-        cy.get('[data-cy="input-password"] input[matInput]').type(newPassword);
+    cy.location('pathname').should('include', '/edit');
+    cy.get('[data-cy="reset-account-password"]').click();
+    cy.location('pathname').should('include', '/reset-password');
 
-        cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
-        cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
-      });
-    });
-  });
+    const username = 'secAdmin2';
+    const newPassword = 'Pa$$w0rd';
 
-  describe('field tests', () => {
-    describe('password', () => {
-      it('too few characters', () => {
-        cy.get('[data-cy="input-password"] input[matInput]')
-          .type('short')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-password"] mat-error')
-              .should('exist')
-              .and('contain.text', 'Dieses Feld erfordert eine Eingabe von mindestens 7 Zeichen')
-              .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten')
-              .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten')
-              .and(
-                'contain.text',
-                'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >'
-              );
-          });
-      });
+    cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
+    cy.get('[data-cy="input-password"] input[matInput]').type(newPassword);
+    cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type(newPassword);
+    cy.get('[data-cy="account-submitandclose-button"] button').should('be.enabled');
+    cy.get('[data-cy="account-submitandclose-button"] button').click();
 
-      it('no capital letters', () => {
-        cy.get('[data-cy="input-password"] input[matInput]')
-          .type('thisispassword1!')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-password"] mat-error')
-              .should('exist')
-              .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten');
-          });
-      });
+    cy.wait('@resetPassword').its('status').should('eq', 204);
+    cy.location('pathname').should('eq', `/administration/accounts/account-list`);
+    // TODO: Meldung "erfolgreich aktualisiert"
+    cy.logOut();
 
-      it('no numbers', () => {
-        cy.get('[data-cy="input-password"] input[matInput]')
-          .type('thisIsMyPassword!')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-password"] mat-error')
-              .should('exist')
-              .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten');
-          });
-      });
-
-      it('no special characters', () => {
-        cy.get('[data-cy="input-password"] input[matInput]')
-          .type('thisIsMyPassword1')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-password"] mat-error')
-              .should('exist')
-              .and(
-                'contain.text',
-                'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >'
-              );
-          });
-      });
-
-      it('password and confirmation have to match', () => {
-        cy.get('[data-cy="input-password"] input[matInput]')
-          .type('thisIsMyPassword1!')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('ng-valid');
-            cy.get('[data-cy="input-password"] mat-error').should('not.exist');
-          });
-
-        cy.get('[data-cy="input-passwordconfirm"] input[matInput]')
-          .type('thisIsMyPassword12!')
-          .blur()
-          .then(($input) => {
-            $input.hasClass('mat-form-field-invalid');
-            cy.get('[data-cy="input-passwordconfirm"] mat-error')
-              .should('exist')
-              .and('contain.text', 'Das Passwort und die Bestätigung müssen übereinstimmen');
-          });
-      });
-    });
-  });
-
-  describe('password reset', () => {
-    it('valid form', () => {
-      cy.get('[data-cy="input-password"] input[matInput]').type(newPassword);
-      cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type(newPassword);
-      cy.get('[data-cy="account-submitandclose-button"] button').should('be.enabled');
-      cy.get('[data-cy="account-submitandclose-button"] button').click();
-
-      cy.wait('@resetpassword').its('status').should('eq', 204);
-      cy.url().should('include', `/administration/accounts/account-list`);
-    });
-  });
-});
-
-// ToDo: https://quarano.atlassian.net/browse/CORE-635
-xdescribe('login with new password', () => {
-  beforeEach(() => {
-    cy.server();
-    cy.route('PUT', '/user/me/password').as('changepassword');
-  });
-
-  it('login with new account should open change password dialog', () => {
     cy.login(username, newPassword);
     cy.get('mat-dialog-container').should('exist');
     cy.get('mat-dialog-container mat-card-title h1').should('exist').should('have.text', 'Passwort ändern');
@@ -160,7 +59,105 @@ xdescribe('login with new password', () => {
     cy.get('[data-cy="changepassword-submit-button"] button').should('be.enabled');
     cy.get('[data-cy="changepassword-submit-button"] button').click();
 
-    cy.wait('@changepassword').its('status').should('eq', 204);
-    cy.url().should('include', '/health-department/index-cases/case-list');
+    cy.wait('@changePassword').its('status').should('eq', 204);
+    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
   });
+
+  // TODO: unit tests
+  //
+  // it('empty form', () => {
+  //   cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
+  //   cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
+  // });
+  //
+  // it('missing password', () => {
+  //   cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type(newPassword);
+  //
+  //   cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
+  //   cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
+  // });
+  //
+  // it('missing password confirm', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]').type(newPassword);
+  //
+  //   cy.get('[data-cy="account-submit-button"] button').should('be.disabled');
+  //   cy.get('[data-cy="account-submitandclose-button"] button').should('be.disabled');
+  // });
+  //
+  // it('too few characters', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]')
+  //     .type('short')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('mat-form-field-invalid');
+  //       cy.get('[data-cy="input-password"] mat-error')
+  //         .should('exist')
+  //         .and('contain.text', 'Dieses Feld erfordert eine Eingabe von mindestens 7 Zeichen')
+  //         .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten')
+  //         .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten')
+  //         .and(
+  //           'contain.text',
+  //           'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >'
+  //         );
+  //     });
+  // });
+  //
+  // it('no capital letters', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]')
+  //     .type('thisispassword1!')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('mat-form-field-invalid');
+  //       cy.get('[data-cy="input-password"] mat-error')
+  //         .should('exist')
+  //         .and('contain.text', 'Dieses Feld muss mindestens einen Großbuchstaben enthalten');
+  //     });
+  // });
+  //
+  // it('no numbers', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]')
+  //     .type('thisIsMyPassword!')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('mat-form-field-invalid');
+  //       cy.get('[data-cy="input-password"] mat-error')
+  //         .should('exist')
+  //         .and('contain.text', 'Dieses Feld muss mindestens eine Zahl enthalten');
+  //     });
+  // });
+  //
+  // it('no special characters', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]')
+  //     .type('thisIsMyPassword1')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('mat-form-field-invalid');
+  //       cy.get('[data-cy="input-password"] mat-error')
+  //         .should('exist')
+  //         .and(
+  //           'contain.text',
+  //           'Dieses Feld muss mindestens eines der folgenden Sonderzeichen beinhalten: @ # $ % ^ & * ( ) , . ? : | & < >'
+  //         );
+  //     });
+  // });
+  //
+  // it('password and confirmation have to match', () => {
+  //   cy.get('[data-cy="input-password"] input[matInput]')
+  //     .type('thisIsMyPassword1!')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('ng-valid');
+  //       cy.get('[data-cy="input-password"] mat-error').should('not.exist');
+  //     });
+  //
+  //   cy.get('[data-cy="input-passwordconfirm"] input[matInput]')
+  //     .type('thisIsMyPassword12!')
+  //     .blur()
+  //     .then(($input) => {
+  //       $input.hasClass('mat-form-field-invalid');
+  //       cy.get('[data-cy="input-passwordconfirm"] mat-error')
+  //         .should('exist')
+  //         .and('contain.text', 'Das Passwort und die Bestätigung müssen übereinstimmen');
+  //     });
+  // });
 });

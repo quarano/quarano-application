@@ -12,7 +12,7 @@ describe('health-department index cases action-list', () => {
 
   describe('preconditions', () => {
     it('should be on the correct url', () => {
-      cy.url().should('include', '/health-department/index-cases/action-list');
+      cy.location('pathname').should('eq', '/health-department/index-cases/action-list');
     });
 
     it('should have correct page components', () => {
@@ -30,7 +30,7 @@ describe('health-department index cases action-list', () => {
 
     it('should open selected case', () => {
       cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
-      cy.url().should('include', '/health-department/case-detail/');
+      cy.location('pathname').should('include', '/actions');
     });
   });
 });

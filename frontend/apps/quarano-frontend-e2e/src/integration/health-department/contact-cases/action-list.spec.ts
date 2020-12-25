@@ -3,35 +3,39 @@
 describe('health-department contact cases action-list', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/hd/actions' /*, 'fixture:get-api-hd-cases.json'*/).as('allactions');
-
+    cy.route('GET', '/hd/actions').as('allActions');
+    cy.route('GET', '/user/me').as('me');
+    cy.route('GET', '/hd/cases/').as('cases');
+    cy.route('GET', '/hd/actions/*').as('action');
+    cy.route('GET', '/hd/cases/*').as('case');
     cy.loginAgent();
+  });
+
+  it('load actions', () => {
+    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.wait('@me').its('status').should('eq', 200);
+    cy.wait('@cases').its('status').should('eq', 200);
     cy.get('[data-cy="contact-cases"]').click();
-    cy.get('[data-cy="action-list"]').should('exist');
+    cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
     cy.get('[data-cy="action-list"]').click();
-  });
-
-  describe('preconditions', () => {
-    it('should be on the correct url', () => {
-      cy.url().should('include', '/health-department/contact-cases/action-list');
-    });
-
-    it('should have correct page components', () => {
-      cy.get('[data-cy="action-data-table"]').should('exist');
-    });
-  });
-
-  describe('case list', () => {
-    it('should get a list of cases and display in table', () => {
-      cy.wait('@allactions').its('status').should('eq', 200);
-      cy.get('[data-cy="action-data-table"]')
-        .find('.ag-center-cols-container > .ag-row')
-        .should('have.length.greaterThan', 0);
-    });
-
-    it('should open selected case', () => {
-      cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
-      cy.url().should('include', '/health-department/case-detail/');
-    });
+    cy.location('pathname').should('eq', '/health-department/contact-cases/action-list');
+    cy.wait('@allActions').its('status').should('eq', 200);
+    cy.get('[data-cy="action-data-table"]')
+      .find('.ag-center-cols-container > .ag-row')
+      .should('have.length.greaterThan', 0);
+    cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
+    cy.location('pathname').should('include', '/health-department/case-detail/contact');
+    cy.wait('@action').its('status').should('eq', 200);
+    cy.wait('@case').its('status').should('eq', 200);
+    cy.get('qro-client-action').should('exist');
+    cy.get('@action')
+      .its('response.body')
+      .then((body) => {
+        expect(body.caseId).not.to.eq(null);
+        expect(body.comments).to.be.an('array').that.does.have.length(0);
+        expect(body.numberOfResolvedAnomalies).to.eq(0);
+        expect(body.numberOfUnresolvedAnomalies).to.eq(1);
+      });
+    cy.get('qro-client-action-anomaly').contains('Fehlende Stammdaten (KP).');
   });
 });
