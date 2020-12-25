@@ -30,13 +30,18 @@
  CHECK: Rechts oben wird der name des Benutzers angezeigt: "Jamie Fraser"
  */
 describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
-  Cypress.config('defaultCommandTimeout', 20000);
-  before((done) => {
-    cy.restart(done);
-  });
+  // before((done) => {
+  //   cy.restart(done);
+  // });
   it('should run', () => {
     cy.loginAgent();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
+
+    /**
+     * CHECK 1: Neue Tabs erscheinen (1/2)
+     */
+    cy.get('[data-cy="action-list"]').should('exist');
+    cy.get('[data-cy="case-list"]').should('exist');
 
     /**
      *  1-Click auf  ‚"neuen Indexfalle anlegen"
@@ -44,13 +49,7 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
     cy.get('[data-cy="new-case-button"]').should('exist');
     cy.get('[data-cy="new-case-button"]').click();
 
-    cy.wait(100);
-    /**
-     * CHECK 1: Neue Tabs erscheinen (1/2)
-     */
-    cy.get('.mat-tab-links').children().should('have.length', 4);
-
-    cy.location('pathname').should('include', 'health-department/case-detail/new/index/edit');
+    cy.location('pathname').should('eq', '/health-department/case-detail/new/index/edit');
 
     cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
     cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
@@ -95,8 +94,8 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
         const caseId = body.caseId;
         expect(caseId).not.to.eq(null);
         expect(caseId).not.to.eq('');
+        cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/edit');
       });
-    cy.location('pathname').should('include', 'health-department/case-detail/index');
 
     /**
      * CHECK 2: "Nachverfolung starten" Button wird aktiv
@@ -115,14 +114,12 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
      */
     cy.get('[data-cy="start-tracking-button"]').click();
 
-    cy.wait(100);
-
     /**
      * CHECK 2: "Tab Emailvorlage" wird automatisch angezeigt (2/2)
      */
     cy.get('.mat-tab-links').children().should('have.length', 6);
 
-    cy.location('pathname').should('include', 'email');
+    cy.location('pathname').should('eq', '/email');
 
     /**
      * 9- click on 'in die zwischenablage kopieren' Button
@@ -130,7 +127,7 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
     cy.get('[data-cy="copy-to-clipboard"]').click();
 
     cy.get('[data-cy="mail-text"]').then((elem) => {
-      const regex = /https:\/\/.*\/client\/enrollment\/landing\/index\/.*/gm;
+      const regex = /http:\/\/.*\/client\/enrollment\/landing\/index\/.*/gm;
       let content;
       let url = '';
 
@@ -150,8 +147,6 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
       if (urls && urls.length !== 0) {
         url = urls[0];
       }
-
-      // cy.task('getClipboard').should('eq', content);
 
       expect(url).to.contain('client/enrollment/landing/index');
       cy.get('simple-snack-bar').should('exist');
@@ -177,7 +172,7 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
       /**
        * CHECK: Benutzer ist auf Login Seite
        */
-      cy.location('pathname').should('include', '/auth/login');
+      cy.location('pathname').should('eq', '/auth/login');
 
       /**
        * CHECK: Rechts oben wird kein Name mehr angezeigt (2/2)
@@ -187,14 +182,14 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
       /**
        * 12. Anmeldelink aufrufen
        */
-      cy.visit(url.replace('https', 'http'));
+      cy.visit(url);
 
       /**
-       * CHECK: Benutzer seiht Willkommensseite für Indexfälle "Herzlich Willkommen bei quarano..."
+       * CHECK: Benutzer sieht Willkommensseite für Indexfälle "Herzlich Willkommen bei quarano..."
        */
       cy.get('h1 strong').should('contain.text', 'quarano');
       cy.location().should((loc) => {
-        expect(loc.toString()).to.eq(url.replace('https', 'http'));
+        expect(loc.toString()).to.eq(url);
       });
 
       cy.get('[data-cy="cta-button-index"]').should('exist');
@@ -244,7 +239,7 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
       /**
        * CHECK: Benutzer ist auf der ersten Seiter der Initialen Datenerfassung
        */
-      cy.location('pathname').should('include', '/client/enrollment/basic-data');
+      cy.location('pathname').should('eq', '/client/enrollment/basic-data');
 
       /**
        * CHECK: Rechts oben wird der name des Benutzers angezeigt: "Jamie Fraser"

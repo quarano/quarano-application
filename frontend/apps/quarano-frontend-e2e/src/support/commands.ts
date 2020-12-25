@@ -5,7 +5,6 @@ declare namespace Cypress {
      * Custom command to select DOM element by data-cy attribute.
      * @example cy.dataCy('greeting')
      */
-    logOut: () => void;
     login: (username: string, password: string) => void;
     loginAgent: () => void;
     loginAdmin: () => void;
@@ -14,10 +13,21 @@ declare namespace Cypress {
     restart: (done: (err?: any) => void) => void;
     loginNotEnrolledClient: () => void;
     loginNotEnrolledClient2: () => void;
+
+    logOut: () => void;
+
+    restart: (done: (err?: any) => void) => void;
   }
 }
 
-const login = (username: string, password: string) => {
+const logOut = () => {
+  cy.get('[data-cy="profile-user-button"]').click();
+  cy.get('[data-cy="logout-button"]').should('exist');
+  cy.get('[data-cy="logout-button"]').click();
+  cy.location('pathname').should('include', 'auth/login');
+};
+
+const logIn = (username: string, password: string) => {
   cy.server();
   cy.route('POST', '/login').as('login');
 
@@ -34,11 +44,6 @@ const login = (username: string, password: string) => {
   cy.wait('@login');
 };
 
-const logOut = () => {
-  cy.get('[data-cy="profile-user-button"]').click();
-  cy.get('[data-cy="logout-button"]').should('exist').click();
-  cy.location('pathname').should('include', 'auth/login');
-};
 Cypress.Commands.add('logOut', () => {
   logOut();
 });
@@ -62,12 +67,13 @@ Cypress.Commands.add('loginNotEnrolledClient2', () => {
 });
 
 Cypress.Commands.add('restart', (done: (err?: any) => void) => {
+  Cypress.config('defaultCommandTimeout', 20000); // temporarily increase defaultCommandTimeout
   const req = () => {
     return fetch('http://localhost:8080/actuator/health/readiness')
       .then((response) => response.json())
       .then((response: any) => {
         if (response.status === 'UP') {
-          Cypress.config('defaultCommandTimeout', 4000);
+          Cypress.config('defaultCommandTimeout', 4000); // reset defaultCommandTimeout to default value
 
           done();
           return;
