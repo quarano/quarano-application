@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import quarano.core.Address;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
-import quarano.core.Address;
 
 import java.io.Serializable;
 import java.time.LocalDate;

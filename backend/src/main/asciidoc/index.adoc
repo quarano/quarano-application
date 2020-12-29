@@ -5,6 +5,8 @@ include::intro.adoc[]
 
 include::api.adoc[]
 
+include::runtime.adoc[]
+
 include::deployment.adoc[]
 
 include::developer.adoc[]

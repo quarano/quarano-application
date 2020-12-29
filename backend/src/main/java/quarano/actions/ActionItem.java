@@ -1,5 +1,7 @@
 package quarano.actions;
 
+import static org.apache.commons.lang3.ObjectUtils.*;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,6 +21,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jmolecules.ddd.types.Identifier;
 
 /**
@@ -59,6 +62,35 @@ public abstract class ActionItem extends QuaranoAggregate<ActionItem, ActionItem
 
 	public boolean isManuallyResolvable() {
 		return getDescription().getCode().isManuallyResolvable();
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	public ActionItem anonymize() {
+
+		description = Description.of(description.getCode(), "###");
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public ActionItem fillSampleData() {
+
+		var fallback = Description.of(description.getCode(), "arguments");
+
+		description = defaultIfNull(description, fallback);
+
+		if (description.getArguments() == null || ArrayUtils.contains(description.getArguments(), "")) {
+			description = fallback;
+		}
+
+		return this;
 	}
 
 	public float getWeight() {

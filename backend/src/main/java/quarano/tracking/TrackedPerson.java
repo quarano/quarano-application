@@ -1,6 +1,7 @@
 package quarano.tracking;
 
 import static java.util.Comparator.*;
+import static org.apache.commons.lang3.ObjectUtils.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,11 @@ import lombok.Setter;
 import lombok.Value;
 import quarano.account.Account;
 import quarano.core.Address;
+import quarano.core.Address.HouseNumber;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
+import quarano.core.ZipCode;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -217,6 +220,53 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	public TrackedPerson setLocale(@Nullable Locale locale) {
 
 		this.locale = locale == null ? null : LocaleUtils.toLocale(locale.getLanguage());
+
+		return this;
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	public TrackedPerson anonymize() {
+
+		setFirstName("###");
+		setLastName("###");
+		setDateOfBirth(null);
+		setPhoneNumber(null);
+		setMobilePhoneNumber(null);
+		setEmailAddress(null);
+
+		Address address = getAddress();
+		if (address != null) {
+			address.setStreet(null);
+			address.setHouseNumber(null);
+		}
+
+		getAccount().ifPresent(Account::anonymize);
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public TrackedPerson fillSampleData() {
+
+		firstName = defaultIfNull(firstName, "firstName");
+		lastName = defaultIfNull(lastName, "lastName");
+		dateOfBirth = defaultIfNull(dateOfBirth, LocalDate.now());
+		phoneNumber = defaultIfNull(phoneNumber, PhoneNumber.of("12345"));
+		mobilePhoneNumber = defaultIfNull(mobilePhoneNumber, PhoneNumber.of("67890"));
+		emailAddress = defaultIfNull(emailAddress, EmailAddress.of("email@address.xx"));
+
+		address = defaultIfNull(address, new Address());
+		address.setCity(defaultIfNull(address.getCity(), "city"));
+		address.setZipCode(defaultIfNull(address.getZipCode(), ZipCode.of("11111")));
+		address.setStreet(defaultIfNull(address.getStreet(), "street"));
+		address.setHouseNumber(defaultIfNull(address.getHouseNumber(), HouseNumber.of("111")));
 
 		return this;
 	}

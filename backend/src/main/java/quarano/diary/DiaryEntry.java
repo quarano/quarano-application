@@ -1,5 +1,7 @@
 package quarano.diary;
 
+import static org.apache.commons.lang3.ObjectUtils.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -131,6 +133,29 @@ public class DiaryEntry extends QuaranoAggregate<DiaryEntry, DiaryEntryIdentifie
 
 	public boolean isBefore(DiaryEntry entry) {
 		return this.slot.isBefore(entry.slot);
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	DiaryEntry anonymize() {
+
+		setNote("###");
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public DiaryEntry fillSampleData() {
+
+		note = defaultIfNull(note, "note");
+
+		return this;
 	}
 
 	/*

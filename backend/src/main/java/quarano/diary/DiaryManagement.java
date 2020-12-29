@@ -50,4 +50,14 @@ public class DiaryManagement {
 	public Streamable<TrackedPersonIdentifier> findMissingDiaryEntryPersons(List<Slot> slots) {
 		return diaries.findMissingDiaryEntryPersons(slots);
 	}
+
+	/**
+	 * anonymized personal data of all diary entries of the given {@link TrackedPerson}
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	public void anonymizeDiaryFor(TrackedPerson trackedPerson) {
+		diaries.saveAll(findDiaryFor(trackedPerson).map(it -> it.anonymize()).toList());
+	}
 }

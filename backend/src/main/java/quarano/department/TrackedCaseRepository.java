@@ -8,6 +8,7 @@ import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -25,10 +26,10 @@ public interface TrackedCaseRepository
 					+ "join fetch c.trackedPerson p "
 					+ "join fetch c.department d ";
 
-	@Query(DEFAULT_SELECT + " where d.id = :identifier")
+	@Query(DEFAULT_SELECT + " where c.status != 'ANONYMIZED' and d.id = :identifier")
 	Streamable<TrackedCase> findByDepartmentId(DepartmentIdentifier identifier);
 
-	@Query(DEFAULT_SELECT + " where d.id = :id order by p.lastName")
+	@Query(DEFAULT_SELECT + " where c.status != 'ANONYMIZED' and d.id = :id order by p.lastName")
 	Streamable<TrackedCase> findByDepartmentIdOrderByLastNameAsc(DepartmentIdentifier id);
 
 	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
@@ -54,4 +55,14 @@ public interface TrackedCaseRepository
 	 * @return
 	 */
 	Optional<TrackedCase> findByOriginContacts(ContactPerson person);
+
+	/**
+	 * Returns the {@link TrackedCase}s which are not yet anonymized and created before the given {@link LocalDateTime}.
+	 * 
+	 * @param refDate must not be {@literal null}.
+	 * @return
+	 * @since 1.4
+	 */
+	@Query(DEFAULT_SELECT + " where c.status != 'ANONYMIZED' and c.metadata.created < :refDate")
+	Streamable<TrackedCase> findByMetadataCreatedIsBefore(LocalDateTime refDate);
 }
