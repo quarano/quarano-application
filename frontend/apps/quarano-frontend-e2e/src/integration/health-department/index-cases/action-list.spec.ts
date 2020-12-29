@@ -29,7 +29,11 @@ describe('health-department index cases action-list', () => {
     });
 
     it('should open selected case', () => {
-      cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
+      cy.get('[data-cy="action-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .then(($elems) => {
+          $elems[1].click();
+        });
       cy.location('pathname').should('include', '/actions');
     });
   });

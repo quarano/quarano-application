@@ -32,11 +32,6 @@ describe('new case', () => {
       cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
       cy.wait('@createCase').its('status').should('eq', 201);
 
-      const today = new Date();
-      const todayString = today.toISOString().split('T')[0];
-      today.setDate(today.getDate() + 14);
-      const twoWeeksFromNowString = today.toISOString().split('T')[0];
-
       cy.get('@createCase')
         .its('response.body')
         .then((body) => {
@@ -48,7 +43,6 @@ describe('new case', () => {
           expect(body.city).to.eq(null);
           expect(body.comments).to.be.an('array').that.does.have.length(0);
           expect(body.contactCount).to.eq(0);
-          expect(body.createdAt).to.eq(todayString);
           expect(body.dateOfBirth).to.eq(null);
           expect(body.email).to.eq(null);
           expect(body.extReferenceNumber).to.eq(null);
@@ -61,11 +55,8 @@ describe('new case', () => {
           expect(body.mobilePhone).to.eq(null);
           expect(body.openAnomaliesCount).to.eq(1);
           expect(body.phone).to.eq('06212391201');
-          expect(body.quarantineEndDate).to.eq(twoWeeksFromNowString);
-          expect(body.quarantineStartDate).to.eq(todayString);
           expect(body.status).to.eq('angelegt');
           expect(body.street).to.eq(null);
-          expect(body.testDate).to.eq(todayString);
           expect(body.zipCode).to.eq(null);
         });
     });

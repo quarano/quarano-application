@@ -23,7 +23,11 @@ describe('health-department contact cases action-list', () => {
     cy.get('[data-cy="action-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
       .should('have.length.greaterThan', 0);
-    cy.get('[data-cy="action-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
+    cy.get('[data-cy="action-data-table"]')
+      .find('.ag-center-cols-container > .ag-row')
+      .then(($elems) => {
+        $elems[1].click();
+      });
     cy.location('pathname').should('include', '/health-department/case-detail/contact');
     cy.wait('@action').its('status').should('eq', 200);
     cy.wait('@case').its('status').should('eq', 200);
@@ -32,7 +36,6 @@ describe('health-department contact cases action-list', () => {
       .its('response.body')
       .then((body) => {
         expect(body.caseId).not.to.eq(null);
-        expect(body.comments).to.be.an('array').that.does.have.length(0);
         expect(body.numberOfResolvedAnomalies).to.eq(0);
         expect(body.numberOfUnresolvedAnomalies).to.eq(1);
       });

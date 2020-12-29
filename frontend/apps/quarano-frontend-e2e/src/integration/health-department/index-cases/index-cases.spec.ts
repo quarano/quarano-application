@@ -122,7 +122,11 @@ describe('health-department index cases', () => {
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(1).click();
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .then(($elems) => {
+          $elems[1].click();
+        });
 
       cy.wait('@getCase').its('status').should('eq', 200);
       cy.get('@getCase')
@@ -204,7 +208,11 @@ describe('health-department index cases', () => {
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .then(($elems) => {
+          $elems[1].click();
+        });
 
       cy.wait('@getCase').its('status').should('eq', 200);
       cy.get('@getCase')
