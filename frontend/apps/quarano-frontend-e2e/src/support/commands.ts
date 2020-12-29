@@ -34,8 +34,7 @@ const login = (username: string, password: string) => {
 
 const logOut = () => {
   cy.get('[data-cy="profile-user-button"]').click();
-  cy.get('[data-cy="logout-button"]').should('exist');
-  cy.get('[data-cy="logout-button"]').click();
+  cy.get('[data-cy="logout-button"]').should('exist').click();
   cy.location('pathname').should('include', 'auth/login');
 };
 Cypress.Commands.add('logOut', () => {

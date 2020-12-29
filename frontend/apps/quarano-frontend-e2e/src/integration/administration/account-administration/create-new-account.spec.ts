@@ -35,7 +35,7 @@ describe('Account administration', () => {
     cy.get('[data-cy="input-passwordconfirm"] input[matInput]').type('Test123!');
     cy.get('[data-cy="select-role"] div.mat-select-trigger').click();
     cy.get('[id="mat-option-0"]').then(($elem) => {
-      $elem.click();
+      $elem.trigger('click');
       cy.get('.cdk-overlay-backdrop').click();
       cy.get('[data-cy="account-submitandclose-button"] button').should('be.enabled');
       cy.get('[data-cy="account-submit-button"] button').should('be.enabled');
