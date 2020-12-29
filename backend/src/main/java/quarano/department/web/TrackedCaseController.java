@@ -186,7 +186,8 @@ public class TrackedCaseController {
 	// PUT Mapping for transformation into index case
 
 	@PutMapping("/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, @RequestBody TrackedCaseDto.Input payload,
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
+			@RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
 		var existing = cases.findById(identifier).orElse(null);
 
