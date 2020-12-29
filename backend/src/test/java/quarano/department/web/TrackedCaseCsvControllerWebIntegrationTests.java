@@ -16,10 +16,10 @@ import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
+import quarano.core.ZipCode;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.SormasCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
-import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

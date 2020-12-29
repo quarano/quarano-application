@@ -3,10 +3,12 @@ package quarano.tracking;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.core.Address;
 import quarano.core.DataInitializer;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.ZipCode;
+import quarano.core.Address.HouseNumber;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.time.LocalDate;

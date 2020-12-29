@@ -9,7 +9,7 @@ import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.util.Collections;
 import java.util.Map;

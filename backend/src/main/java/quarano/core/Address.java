@@ -1,6 +1,8 @@
-package quarano.tracking;
+package quarano.core;
 
 import lombok.*;
+import quarano.core.ZipCode;
+
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
@@ -20,7 +22,7 @@ public class Address {
 	private String city;
 	private ZipCode zipCode;
 
-	boolean isComplete() {
+	public boolean isComplete() {
 
 		return StringUtils.hasText(street)
 				&& StringUtils.hasText(city)

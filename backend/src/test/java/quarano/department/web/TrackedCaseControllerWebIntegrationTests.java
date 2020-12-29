@@ -451,7 +451,9 @@ class TrackedCaseControllerWebIntegrationTests {
 				.param("type", "contact"))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse();
+		
 		var document = JsonPath.parse(response.getContentAsString());
+		
 		Object[] placeHolderForZipCode = {"12345"};
 		assertThat(document.read("zipCode", String.class)).isEqualTo(messages.getMessage("wrong.trackedPersonDto.zipCode", placeHolderForZipCode, "Message not loaded"));
 	}

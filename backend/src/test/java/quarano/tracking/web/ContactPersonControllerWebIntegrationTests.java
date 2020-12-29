@@ -81,6 +81,30 @@ class ContactPersonControllerWebIntegrationTests {
 	}
 
 	@Test
+	void rejectsWrongZipCode() throws Exception {
+
+		var payload = new ContactPersonDto();
+		payload.setFirstName("TestNameFirst");
+		payload.setLastName("TestName");
+		payload.setIsHealthStaff(true);
+		payload.setEmail("test@testtest.de");
+		payload.setMobilePhone("0123910");
+		payload.setZipCode("12345");
+
+		String response = mvc.perform(post("/contacts")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		Object[] placeHolderForZipCode = {"12345"};
+		assertThat(document.read("zipCode", String.class)).isEqualTo(messages.getMessage("wrong.trackedPersonDto.zipCode", placeHolderForZipCode, "Message not loaded"));
+
+	}
+
+	@Test
 	void rejectsInvalidCharactersForStringFields() throws Exception {
 
 		var payload = new ContactPersonDto();

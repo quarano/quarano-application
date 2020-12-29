@@ -2,8 +2,9 @@ package quarano.department.rki;
 
 import static org.assertj.core.api.Assertions.*;
 
-import quarano.department.rki.HealthDepartments.HealthDepartment;
-import quarano.department.rki.HealthDepartments.HealthDepartment.Address;
+import quarano.core.rki.HealthDepartments.HealthDepartment;
+import quarano.core.rki.HealthDepartments.HealthDepartment.Address;
+import quarano.core.rki.HealthDepartmentsConfiguration;
 
 import org.junit.jupiter.api.Test;
 

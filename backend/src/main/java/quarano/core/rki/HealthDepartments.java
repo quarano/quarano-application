@@ -1,8 +1,8 @@
-package quarano.department.rki;
+package quarano.core.rki;
 
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.util.List;
 import java.util.Optional;

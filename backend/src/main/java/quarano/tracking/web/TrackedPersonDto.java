@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import quarano.core.PhoneNumber;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import java.net.URI;
 import java.time.LocalDate;

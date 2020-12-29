@@ -3,12 +3,12 @@ package quarano.tracking.web;
 import static org.assertj.core.api.Assertions.*;
 
 import quarano.QuaranoUnitTest;
-import quarano.tracking.Address;
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.Address;
+import quarano.core.Address.HouseNumber;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.ZipCode;
+import quarano.core.ZipCode;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

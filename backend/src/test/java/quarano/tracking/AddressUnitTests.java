@@ -2,7 +2,9 @@ package quarano.tracking;
 
 import static org.assertj.core.api.Assertions.*;
 
-import quarano.tracking.Address.HouseNumber;
+import quarano.core.Address;
+import quarano.core.ZipCode;
+import quarano.core.Address.HouseNumber;
 
 import org.junit.jupiter.api.Test;
 
