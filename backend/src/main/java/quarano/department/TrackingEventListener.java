@@ -53,7 +53,7 @@ public class TrackingEventListener {
 
 		try {
 
-			if (event.isFirstEncounterWithTargetPerson()) {
+			if (event.isFirstEncounterWithTargetPerson() && !contactPerson.isAnonymized()) {
 				createContactCase(event.getPersonIdentifier(), contactPerson);
 			}
 

@@ -33,7 +33,7 @@ class RegistrationDataInitializer implements DataInitializer {
 	 */
 	@Override
 	public void preInitialize() {
-		dateTimeProvider.setDelta(Period.ofDays(-3));
+		dateTimeProvider.setDelta(Period.from(dateTimeProvider.getDelta()).minusDays(3));
 	}
 
 	/*

@@ -55,7 +55,7 @@ public interface TrackedCaseQuerydslFilters {
 
 			var $case = QTrackedCase.trackedCase;
 			var $casePerson = $case.trackedPerson;
-			var builder = new BooleanBuilder();
+			var builder = new BooleanBuilder().and($case.status.ne(Status.ANONYMIZED));
 
 			var predicate = query.map(it -> builder.and($casePerson.firstName.containsIgnoreCase(it)
 					.or($casePerson.lastName.containsIgnoreCase(it))))
@@ -94,7 +94,8 @@ public interface TrackedCaseQuerydslFilters {
 			var $address = $casePerson.address;
 			var $zipCode = $address.zipCode;
 
-			var builder = new BooleanBuilder($case.quarantineLastModified.isNotNull());
+			var builder = new BooleanBuilder($case.quarantineLastModified.isNotNull())
+					.and($case.status.ne(Status.ANONYMIZED));
 
 			if (Optionals.isAnyPresent(quarantineChangedFrom, quarantineChangedTo)) {
 
@@ -136,10 +137,9 @@ public interface TrackedCaseQuerydslFilters {
 			var $caseMetadata = $case.metadata;
 			var person = $case.trackedPerson;
 			var $personMetadata = person.metadata;
-			var $address = person.address;
-			var $zipCode = $address.zipCode;
 
-			var builder = new BooleanBuilder($caseMetadata.lastModified.isNotNull());
+			var builder = new BooleanBuilder($caseMetadata.lastModified.isNotNull())
+					.and($case.status.ne(Status.ANONYMIZED));
 
 			if (Optionals.isAnyPresent(createdFrom, createdTo)) {
 

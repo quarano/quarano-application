@@ -13,7 +13,7 @@ import org.springframework.data.util.Streamable;
 /**
  * @author Oliver Drotbohm
  */
-interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEntryIdentifier> {
+public interface DiaryEntryRepository extends CrudRepository<DiaryEntry, DiaryEntryIdentifier> {
 
 	/**
 	 * We can only prefetch one of the related collections during a query. We resolve the symptoms with the first query as

@@ -1,0 +1,69 @@
+[[runtime]]
+= Runtime information
+
+[[runtime.gdpr-jobs]]
+== GDPR Delete/Anonymization Jobs
+
+The idea with GDPR implementation is to only overwrite the personal data (### for text makes anonymization clear or Null for other data types) and not delete the whole records. By anonymizing, we avoid some problems with dependencies between data that have to be taken into account in different places if anything is to be deleted. Besides, the possibility for statistical analysis e.g. on the level of the postal code or the city remains.
+
+The following three domains in the data are handled separately as follows:
+
+1. Once a day during the night, a job runs that deletes all occasions that were created more than 6 months ago. Furthermore, for all occasions created more than 16 days ago, the associated visitors are deleted. This data is so loosely connected to the rest of the data model that deletion is easy to implement.
+
+1. Once a day during the night, a job runs that anonymizes (for what exactly see later overview) all contacts (not contact persons or contact cases) that were created more than 16 days ago. Only from non-anonymized contacts cases are created, in case of later conversion.
+
+1. Once a day during the night, a job runs that anonymizes all cases created more than 6 months ago. Thereby all relevant referenced data (e.g. account, person, ...) are anonymized (what exactly see later overview). Anonymized cases are no longer included in the overviews and exports. Therefore the cases get a corresponding status.
+
+When to delete is adjustable (<<deployment.properties,Properties>>).
+
+To enable tests of these time-related functions, it is now possible to specify a delta for the creation and modification time of the data via the property `quarano.date-time.delta` (<<deployment.properties,Properties>>). This only works in non-production environments.
+
+The following data will be anonymized (these are tables and columns in the DB). The data from the tables occasions, visitor_groups and visitors will be deleted (*DB version v1020*):
+
+* accounts
+    ** username
+    ** firstname
+    ** lastname
+    ** email
+    ** password
+
+* tracked_people
+    ** first_name
+    ** last_name
+    ** date_of_birth
+    ** phone_number
+    ** mobile_phone_number
+    ** email
+    ** street
+    ** house_number
+
+* tracked_cases
+    ** ext_reference_number
+
+* comments
+    ** author
+    ** text
+
+* questionnaires
+    ** family_doctor
+    ** guessed_origin_of_infection
+    ** has_pre_existing_conditions_description
+    ** belong_to_medical_staff_description
+    ** has_contact_to_vulnerable_people_description
+
+* diary_entries
+    ** note
+
+* action_items
+    ** arguments
+
+* contact_people
+    ** first_name
+    ** last_name
+    ** phone_number
+    ** mobile_phone_number
+    ** email
+    ** street
+    ** house_number
+    ** identification_hint
+    ** remark

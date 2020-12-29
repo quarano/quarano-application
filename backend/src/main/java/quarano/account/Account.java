@@ -1,5 +1,7 @@
 package quarano.account;
 
+import static org.apache.commons.lang3.ObjectUtils.*;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -168,6 +170,37 @@ public class Account extends QuaranoAggregate<Account, AccountIdentifier> {
 	 */
 	public boolean wasPasswordResetRequested() {
 		return passwordResetToken != null;
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	public Account anonymize() {
+
+		setUsername("###");
+		setFirstname("###");
+		setLastname("###");
+		setEmail(null);
+		setPassword(EncryptedPassword.of("###"));
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	Account fillSampleData() {
+
+		firstname = defaultIfNull(firstname, "firstname");
+		lastname = defaultIfNull(lastname, "lastname");
+		email = defaultIfNull(email, EmailAddress.of("email@address.xx"));
+		username = defaultIfNull(username, "username");
+		password = defaultIfNull(password, EncryptedPassword.of("password"));
+
+		return this;
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package quarano.department;
 
+import static org.apache.commons.lang3.ObjectUtils.*;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -52,6 +54,28 @@ public class Comment extends QuaranoEntity<TrackedCase, CommentIdentifier> imple
 	 */
 	public Comment(String text, String author) {
 		this(text, author, LocalDateTime.now());
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	Comment anonymize() {
+
+		author = "###";
+		text = "###";
+
+		return this;
+	}
+
+	Comment fillSampleData() {
+
+		author = defaultIfNull(author, "author");
+		text = defaultIfNull(text, "text");
+
+		return this;
 	}
 
 	/*

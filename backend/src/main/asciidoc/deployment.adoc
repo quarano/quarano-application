@@ -70,3 +70,17 @@ Deployments need to specify the following properties:
 * `server.ssl.trust-store-password` -- the password to access the trust store.
 * `server.ssl.trust-store-type` -- set to `JKS`
 * `server.ssl.client-auth` -- set to `want` to enable client certificate authentication
+
+[[deployment.properties]]
+== Properties
+
+[options="header",cols="1,3,1"]
+|===
+|Property   |Description |Value
+//-------------
+|`quarano.date-time.delta` |A delta as a period to the current date, which is used especially when saving data in the database for creation and modification dates. |example = `-6m-1d`   
+|`quarano.gdpr.cases.anonymization-after`   |Defines the period after that a case will be anonymized starting from the creation date. |default = `6m`
+|`quarano.gdpr.contacts.anonymization-after`|Defines the period after that a contact will be anonymized starting from the creation date. |default = `16d`
+|`quarano.gdpr.occations.delete-occasions-after`   |Defines the period after that a occation will be deleted starting from the creation date. |default = `6m`
+|`quarano.gdpr.occations.delete-visitors-after`|Defines the period after that a visitor group with its visitors will be deleted starting from the creation date of its occation. |default = `16d`
+|===

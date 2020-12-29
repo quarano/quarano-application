@@ -3,6 +3,8 @@ package quarano.actions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import quarano.department.GDPRAnonymizationJob.CasesAnonymized;
+import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.CaseConcluded;
 import quarano.department.TrackedCase.CaseCreated;
 import quarano.department.TrackedCase.CaseStatusUpdated;
@@ -58,6 +60,20 @@ class TrackedCaseEventListener {
 
 					openItems.resolveManually(items::save);
 				});
+	}
+
+	@EventListener
+	void on(CasesAnonymized event) {
+
+		var cases = event.getCases();
+
+		log.debug("actions of {} cases are anonymized!", cases.size());
+
+		for (TrackedCase trackedCase : cases) {
+			items.saveAll(items.findByCase(trackedCase).map(ActionItem::anonymize).toList());
+		}
+
+		log.info("actions of {} cases were anonymized!", cases.size());
 	}
 
 	private void handleCreatedOrUpdatedCase(TrackedCaseIdentifier identifier) {

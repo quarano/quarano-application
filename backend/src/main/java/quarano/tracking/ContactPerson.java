@@ -1,5 +1,7 @@
 package quarano.tracking;
 
+import static org.apache.commons.lang3.ObjectUtils.*;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
 import quarano.core.Address;
+import quarano.core.Address.HouseNumber;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.QuaranoAggregate;
+import quarano.core.ZipCode;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
@@ -56,6 +60,7 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	private @Getter @Setter Boolean isHealthStaff;
 	private @Getter @Setter Boolean isSenior;
 	private @Getter @Setter Boolean hasPreExistingConditions;
+	private @Getter @Setter boolean anonymized;
 
 	@Column(nullable = false)
 	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
@@ -97,6 +102,54 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 		this.phoneNumber = contactWays.getPhoneNumber();
 		this.mobilePhoneNumber = contactWays.getMobilePhoneNumber();
 		this.identificationHint = contactWays.getIdentificationHint();
+
+		return this;
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	ContactPerson anonymize() {
+
+		firstName = "###";
+		lastName = "###";
+		phoneNumber = null;
+		mobilePhoneNumber = null;
+		emailAddress = null;
+		identificationHint = "###";
+		remark = "###";
+
+		if (address != null) {
+			address.setStreet(null);
+			address.setHouseNumber(null);
+		}
+
+		anonymized = true;
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	ContactPerson fillSampleData() {
+
+		firstName = defaultIfNull(firstName, "firstName");
+		lastName = defaultIfNull(lastName, "lastName");
+		phoneNumber = defaultIfNull(phoneNumber, PhoneNumber.of("12345"));
+		mobilePhoneNumber = defaultIfNull(mobilePhoneNumber, PhoneNumber.of("67890"));
+		emailAddress = defaultIfNull(emailAddress, EmailAddress.of("email@address.xx"));
+		identificationHint = defaultIfNull(identificationHint, "identificationHint");
+		remark = defaultIfNull(remark, "remark");
+
+		address = defaultIfNull(address, new Address());
+		address.setCity(defaultIfNull(address.getCity(), "city"));
+		address.setZipCode(defaultIfNull(address.getZipCode(), ZipCode.of("11111")));
+		address.setStreet(defaultIfNull(address.getStreet(), "street"));
+		address.setHouseNumber(defaultIfNull(address.getHouseNumber(), HouseNumber.of("111")));
 
 		return this;
 	}

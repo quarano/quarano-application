@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.core.QuaranoAggregate;
+import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.Quarantine;
@@ -22,10 +23,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.jmolecules.ddd.types.Identifier;
 import org.jmolecules.event.types.DomainEvent;
 import org.springframework.data.util.Streamable;
@@ -59,17 +62,24 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 	private @Getter TestResult testResult;
 
-	@Setter(AccessLevel.NONE) @OneToOne(cascade = CascadeType.ALL,
-			orphanRemoval = true) @JoinColumn(name = "questionnaire_id") private @Getter Questionnaire questionnaire;
+	@Setter(AccessLevel.NONE)
+	@OneToOne(cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	@JoinColumn(name = "questionnaire_id")
+	private @Getter Questionnaire questionnaire;
 
-	@Setter(AccessLevel.NONE) private Enrollment enrollment = new Enrollment();
+	@Setter(AccessLevel.NONE)
+	private Enrollment enrollment = new Enrollment();
 
-	@Column(name = "case_type") @Enumerated(EnumType.STRING) private @Getter @Setter CaseType type = CaseType.INDEX;
+	@Column(name = "case_type")
+	@Enumerated(EnumType.STRING)
+	private @Getter @Setter CaseType type = CaseType.INDEX;
 
 	@Nullable //
 	private Quarantine quarantine = null;
 
-	@Nullable @Setter(AccessLevel.NONE) //
+	@Nullable
+	@Setter(AccessLevel.NONE) //
 	@Column(name = "quarantine_last_modified") //
 	private LocalDateTime quarantineLastModified = null;
 
@@ -80,14 +90,20 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	 */
 	private @Getter @Setter SormasCaseIdentifier sormasCaseId;
 
-	@OneToMany(cascade = { CascadeType.ALL }) private @Getter List<ContactPerson> originContacts = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL })
+	private @Getter List<ContactPerson> originContacts = new ArrayList<>();
 
-	@OneToMany(cascade = { CascadeType.ALL }) @JoinColumn(
-			name = "tracked_case_id") private @Getter List<Comment> comments = new ArrayList<>();
+	@OneToMany(cascade = { CascadeType.ALL })
+	@JoinColumn(
+			name = "tracked_case_id")
+	private @Getter List<Comment> comments = new ArrayList<>();
 
-	@Column(nullable = false) @Enumerated(EnumType.STRING) private @Getter Status status;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private @Getter Status status;
 
-	@OneToMany private @Getter List<TrackedCase> originCases = new ArrayList<>();
+	@OneToMany
+	private @Getter List<TrackedCase> originCases = new ArrayList<>();
 
 	public static TrackedCase of(CaseSource source) {
 
@@ -406,6 +422,43 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 		return this;
 	}
 
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	TrackedCase anonymize() {
+
+		setExtReferenceNumber(null);
+
+		getTrackedPerson().anonymize();
+		getComments().forEach(Comment::anonymize);
+		Optional.ofNullable(getQuestionnaire()).ifPresent(Questionnaire::anonymize);
+
+		setStatus(Status.ANONYMIZED);
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	TrackedCase fillSampleData() {
+
+		extReferenceNumber = ObjectUtils.defaultIfNull(extReferenceNumber, "extReferenceNumber");
+
+		trackedPerson.fillSampleData();
+		comments.forEach(Comment::fillSampleData);
+		comments.add(new Comment("text", "author"));
+
+		Optional.ofNullable(getQuestionnaire())
+				.orElse(new Questionnaire(SymptomInformation.withoutSymptoms(), null, null))
+				.fillSampleData();
+
+		return this;
+	}
+
 	private void assertStatus(Status status, String message, Object... args) {
 		assertStatus(Streamable.of(status), message, args);
 	}
@@ -431,7 +484,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 
 		CONCLUDED,
 
-		EXTERNAL_ZIP;
+		EXTERNAL_ZIP,
+
+		ANONYMIZED;
 	}
 
 	@Value(staticConstructor = "of")

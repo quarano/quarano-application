@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.jmolecules.ddd.types.Identifier;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -153,6 +154,40 @@ public class Questionnaire extends QuaranoEntity<TrackedCase, QuestionnaireIdent
 
 	public boolean belongsToMedicalStaff() {
 		return belongToMedicalStaff;
+	}
+
+	/**
+	 * anonymized personal data
+	 * 
+	 * @return
+	 * @since 1.4
+	 */
+	Questionnaire anonymize() {
+
+		setFamilyDoctor("###");
+		setGuessedOriginOfInfection("###");
+		setHasPreExistingConditionsDescription("###");
+		setBelongToMedicalStaffDescription("###");
+		setHasContactToVulnerablePeopleDescription("###");
+
+		return this;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	Questionnaire fillSampleData() {
+
+		familyDoctor = ObjectUtils.defaultIfNull(familyDoctor, "familyDoctor");
+		guessedOriginOfInfection = ObjectUtils.defaultIfNull(guessedOriginOfInfection, "guessedOriginOfInfection");
+		hasPreExistingConditionsDescription = ObjectUtils.defaultIfNull(hasPreExistingConditionsDescription,
+				"hasPreExistingConditionsDescription");
+		belongToMedicalStaffDescription = ObjectUtils.defaultIfNull(belongToMedicalStaffDescription,
+				"belongToMedicalStaffDescription");
+		hasContactToVulnerablePeopleDescription = ObjectUtils.defaultIfNull(hasContactToVulnerablePeopleDescription,
+				"hasContactToVulnerablePeopleDescription");
+
+		return this;
 	}
 
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)

@@ -45,6 +45,7 @@ class TrackedCaseEventListener {
 				.stream()
 				.flatMap(CaseSource::forAllContacts)
 				.filter(it -> !cases.existsByOriginContacts(it.getPerson()))
+				.filter(it -> !it.getPerson().isAnonymized())
 				.peek(it -> log.info("Created automatic contact case from contact " + it.getPerson().getId()))
 				.map(TrackedCase::of)
 				.forEach(cases::save);
