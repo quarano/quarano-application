@@ -31,7 +31,7 @@ public class HealthDepartmentsConfiguration {
 	private static final ZoneId ZONE_BERLIN = ZoneId.of("Europe/Berlin");
 
 	@Bean
-	public HealthDepartments healthDepartments() {
+	HealthDepartments healthDepartments() {
 
 		var config = new DefaultXMLFactoriesConfig().setNamespacePhilosophy(NamespacePhilosophy.AGNOSTIC);
 		var projector = new XBProjector(config);

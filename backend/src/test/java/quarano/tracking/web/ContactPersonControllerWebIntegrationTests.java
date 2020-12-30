@@ -35,7 +35,6 @@ class ContactPersonControllerWebIntegrationTests {
 	private final ObjectMapper mapper;
 	private final MessageSourceAccessor messages;
 
-
 	@Test
 	void addContactPersonSuccess() throws Exception {
 
@@ -80,7 +79,7 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.identificationHint", String.class)).isNotNull();
 	}
 
-	@Test
+	@Test // CORE-582
 	void rejectsWrongZipCode() throws Exception {
 
 		var payload = new ContactPersonDto();
@@ -99,9 +98,9 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var document = JsonPath.parse(response);
 
-		Object[] placeHolderForZipCode = {"12345"};
-		assertThat(document.read("zipCode", String.class)).isEqualTo(messages.getMessage("wrong.trackedPersonDto.zipCode", placeHolderForZipCode, "Message not loaded"));
-
+		Object[] placeHolderForZipCode = { "12345" };
+		assertThat(document.read("zipCode", String.class))
+				.isEqualTo(messages.getMessage("wrong.zipCode", placeHolderForZipCode, "Message not loaded"));
 	}
 
 	@Test
@@ -109,11 +108,11 @@ class ContactPersonControllerWebIntegrationTests {
 
 		var payload = new ContactPersonDto();
 		payload.setFirstName("Test121231 ")
-		.setLastName("TestN121231 ")
-		.setPhone("012356789A")
-		.setCity("city 123")
-		.setStreet("\\")
-		.setHouseNumber("\\");
+				.setLastName("TestN121231 ")
+				.setPhone("012356789A")
+				.setCity("city 123")
+				.setStreet("\\")
+				.setHouseNumber("\\");
 
 		String response = mvc.perform(post("/contacts")
 				.content(mapper.writeValueAsString(payload))
@@ -133,7 +132,6 @@ class ContactPersonControllerWebIntegrationTests {
 		assertThat(document.read("$.street", String.class)).contains("gültige Straße");
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
-
 
 	@TestFactory
 	Stream<DynamicTest> acceptsRequestIfOneContactWayIsGiven() {

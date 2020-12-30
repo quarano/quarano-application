@@ -8,6 +8,7 @@ import quarano.account.Account;
 import quarano.account.Department;
 import quarano.account.Department.DepartmentIdentifier;
 import quarano.account.DepartmentRepository;
+import quarano.core.rki.HealthDepartments;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
@@ -16,7 +17,6 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
-import quarano.core.rki.HealthDepartments;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
@@ -186,8 +186,7 @@ public class TrackedCaseController {
 	// PUT Mapping for transformation into index case
 
 	@PutMapping("/hd/cases/{identifier}")
-	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier,
-			@RequestBody TrackedCaseDto.Input payload,
+	HttpEntity<?> putCase(@PathVariable TrackedCaseIdentifier identifier, @RequestBody TrackedCaseDto.Input payload,
 			Errors errors) {
 		var existing = cases.findById(identifier).orElse(null);
 
@@ -389,13 +388,14 @@ public class TrackedCaseController {
 
 		return findDepartmentWithExact
 				.or(() -> {
-					errors.rejectValue(field, "wrong", new Object[] { zipCode }, "");
+					errors.rejectValue(field, "wrong.zipCode", new Object[] { zipCode }, "");
 					return Optional.empty();
 				})
 				.filter(this::isDepartmentUnsupportedByThisQuarano)
 				.map(representations::toRepresentation)
 				.map(it -> new DeviatingZipCode(zipCode, it));
 	}
+
 	private boolean isDepartmentUnsupportedByThisQuarano(HealthDepartments.HealthDepartment it) {
 		return departments.findByRkiCode(it.getCode()).isEmpty();
 	}

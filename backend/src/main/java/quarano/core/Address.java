@@ -1,12 +1,16 @@
 package quarano.core;
 
-import lombok.*;
-import quarano.core.ZipCode;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+import javax.persistence.Embeddable;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
-
-import javax.persistence.Embeddable;
 
 /**
  * @author Oliver Drotbohm
