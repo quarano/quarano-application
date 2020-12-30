@@ -8,6 +8,7 @@ export interface ContactListItemDto extends HalResponse {
   isHealthStaff: boolean;
   contactId: string;
   hasPreExistingConditions: boolean;
+  remark: string;
   isSenior: boolean;
   caseId: string;
   caseType: string;
