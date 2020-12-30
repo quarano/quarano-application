@@ -271,6 +271,7 @@
 		"MIT_DEM_CODE": "using the code you received from your responsible authority",
 		"NOCH_KEIN_KONTO": "No account yet?",
 		"PASSWORT": "Password",
+		"PASSWORT_VERGESSEN": "Forgotten your password?",
 		"REGISTRIEREN": "Register",
 		"REGISTRIEREN_SIE_SICH": "Please register",
 		"SIE_HABEN_NOCH_KEIN_BENUTZERKONTO": "You don't have an account?",
@@ -286,6 +287,30 @@
 		"DEFAULT_MESSAGE": "Unfortunately we could not find the requested resource",
 		"SEITE_NICHT_GEFUNDEN": "Page not found",
 		"ZURÜCK_ZUR_STARTSEITE": "Return to start page"
+	},
+	"PASSWORD_FORGOTTEN": {
+		"ABSENDEN": "Submit",
+		"BENUTZERNAME": "Username",
+		"EMAIL_GESENDET": "The email to reset your password has been sent",
+		"E_MAIL": "E-Mail",
+		"GEBEN_SIE_HIER": "Please enter your user name and your e-mail address here. You will then receive a link to reset your password by e-mail.",
+		"PASSWORT_VERGESSEN": "Forgot Password",
+		"PFLICHTEINGABEN_SIND_MARKIERT": "Required fields are marked with an *",
+		"ZURÜCK_ZUM_LOGIN": "Back to login"
+	},
+	"PASSWORD_RESET": {
+		"BENUTZERNAME": "Username",
+		"GEBEN_SIE_HIER": "Almost there. Now choose your new password. For security reasons, we also need your user name and your date of birth so that we can compare them with the information in your user account.",
+		"GEBURTSDATUM": "Date of birth",
+		"PASSWORT": "Password",
+		"PASSWORT_BESTÄTIGEN": "Confirm password",
+		"PASSWORT_DARF_NICHT_BENUTZERNAMEN_BEINHALTEN": "The password may not contain the user name",
+    "PASSWORT_NEU_GESETZT": "Your password has been reset. You can now log in with the new password",
+    "PASSWORT_NEU_SETZEN": "Reset password",
+		"PASSWORT_UND_BESTÄTIGUNG_MÜSSEN_ÜBEREINSTIMMEN": "Password and confirmation must be identical",
+		"PASSWORT_VERGESSEN": "Reset password",
+		"PFLICHTEINGABEN_SIND_MARKIERT": "Required fields are marked with an *",
+		"ZURÜCK_ZUM_LOGIN": "Back to login"
 	},
 	"PERSONAL_DATA_FORM": {
 		"ADRESSE": "Address",

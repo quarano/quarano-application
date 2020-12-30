@@ -2076,6 +2076,36 @@
           "style": "scss"
         }
       }
+    },
+    "auth-feature-reset-password": {
+      "projectType": "library",
+      "root": "libs/auth/feature-reset-password",
+      "sourceRoot": "libs/auth/feature-reset-password/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/auth/feature-reset-password/tsconfig.lib.json",
+              "libs/auth/feature-reset-password/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/auth/feature-reset-password/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/auth/feature-reset-password/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

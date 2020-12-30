@@ -56,5 +56,6 @@ module.exports = {
     '<rootDir>/libs/shared/ag-grid',
     '<rootDir>/libs/general/domain',
     '<rootDir>/libs/general/api',
+    '<rootDir>/libs/auth/feature-reset-password',
   ],
 };

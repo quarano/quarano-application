@@ -25,6 +25,10 @@ import { IsAuthenticatedGuard } from '@qro/auth/domain';
         path: 'login',
         loadChildren: () => import('@qro/auth/feature-login').then((m) => m.AuthFeatureLoginModule),
       },
+      {
+        path: 'reset-password',
+        loadChildren: () => import('@qro/auth/feature-reset-password').then((m) => m.AuthFeatureResetPasswordModule),
+      },
     ]),
   ],
 })
