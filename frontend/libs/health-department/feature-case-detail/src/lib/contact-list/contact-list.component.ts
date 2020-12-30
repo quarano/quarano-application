@@ -78,7 +78,7 @@ export class ContactListComponent implements OnInit {
       {
         headerName: 'Anmerkung.',
         field: 'remark',
-        width: 150,
+        flex: 2,
         filter: 'checkboxFilter',
       },
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
