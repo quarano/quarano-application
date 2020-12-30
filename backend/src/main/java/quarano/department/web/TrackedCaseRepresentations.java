@@ -15,6 +15,10 @@ import quarano.account.Account;
 import quarano.account.Department;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
+import quarano.core.ZipCode;
+import quarano.core.rki.HealthDepartments;
+import quarano.core.rki.HealthDepartments.HealthDepartment;
+import quarano.core.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.core.validation.Email;
 import quarano.core.validation.Strings;
 import quarano.core.validation.Textual;
@@ -30,14 +34,10 @@ import quarano.department.Questionnaire.SymptomInformation;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
-import quarano.core.rki.HealthDepartments;
-import quarano.core.rki.HealthDepartments.HealthDepartment;
-import quarano.core.rki.HealthDepartments.HealthDepartment.Address;
 import quarano.diary.DiaryEntry;
 import quarano.masterdata.SymptomRepository;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.TrackedPerson;
-import quarano.core.ZipCode;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
@@ -344,10 +344,8 @@ public class TrackedCaseRepresentations implements ExternalTrackedCaseRepresenta
 			return;
 		}
 
-		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
-
-		if (findDepartmentWithExact.isEmpty()) {
-			errors.rejectValue(field, "wrong.trackedPersonDto.zipCode", new Object[] { zipCode }, "");
+		if (!rkiDepartments.hasDepartmentWithExact(zipCode)) {
+			errors.rejectValue(field, "wrong.zipCode", new Object[] { zipCode }, "");
 		}
 	}
 

@@ -1,4 +1,4 @@
-package quarano.tracking;
+package quarano.core;
 
 import static org.assertj.core.api.Assertions.*;
 

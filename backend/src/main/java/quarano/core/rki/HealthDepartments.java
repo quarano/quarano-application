@@ -21,6 +21,14 @@ public interface HealthDepartments {
 	@XBRead("//SearchText[@Value='{0}']/..")
 	Optional<HealthDepartment> findDepartmentWithExact(String searchString);
 
+	/**
+	 * @param searchString
+	 * @return
+	 * @since 1.4
+	 */
+	@XBRead("boolean(//SearchText[@Value='{0}'])")
+	boolean hasDepartmentWithExact(String searchString);
+
 	@XBRead("//SearchText[contains(@Value, '{0}')]/..")
 	List<HealthDepartment> findDepartmentsContains(String searchString);
 

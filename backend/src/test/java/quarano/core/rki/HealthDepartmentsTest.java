@@ -1,10 +1,9 @@
-package quarano.department.rki;
+package quarano.core.rki;
 
 import static org.assertj.core.api.Assertions.*;
 
 import quarano.core.rki.HealthDepartments.HealthDepartment;
 import quarano.core.rki.HealthDepartments.HealthDepartment.Address;
-import quarano.core.rki.HealthDepartmentsConfiguration;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +57,20 @@ public class HealthDepartmentsTest {
 		var department = healthDepartments.findDepartmentWithExact("99999");
 
 		assertThat(department).isEmpty();
+	}
+
+	@Test
+	void testHasFindHealthDepartmentWithExact() {
+
+		var healthDepartments = new HealthDepartmentsConfiguration().healthDepartments();
+
+		var department = healthDepartments.hasDepartmentWithExact("01665");
+
+		assertThat(department).isTrue();
+
+		department = healthDepartments.hasDepartmentWithExact("99999");
+
+		assertThat(department).isFalse();
 	}
 
 	@Test

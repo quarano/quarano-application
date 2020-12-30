@@ -4,21 +4,19 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import quarano.core.rki.HealthDepartments;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.core.web.MapperWrapper;
-import quarano.core.rki.HealthDepartments;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.TrackedPerson;
-import quarano.tracking.TrackedPersonManagement;
 
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,17 +97,16 @@ public class ContactPersonController {
 				}).concludeIfValid(ResponseEntity::of);
 	}
 
-	private ContactPersonDto checkZipCodeMatchRKI(ContactPersonDto contactPersonDto, Errors errors){
-		if(contactPersonDto.getZipCode() == null){
+	private ContactPersonDto checkZipCodeMatchRKI(ContactPersonDto contactPersonDto, Errors errors) {
+		
+		if (contactPersonDto.getZipCode() == null) {
 			return contactPersonDto;
 		}
 
 		String zipCode = contactPersonDto.getZipCode();
 
-		var findDepartmentWithExact = rkiDepartments.findDepartmentWithExact(zipCode);
-
-		if (findDepartmentWithExact.isEmpty()) {
-			errors.rejectValue("zipCode", "wrong.trackedPersonDto.zipCode", new Object[] { zipCode }, "");
+		if (!rkiDepartments.hasDepartmentWithExact(zipCode)) {
+			errors.rejectValue("zipCode", "wrong.zipCode", new Object[] { zipCode }, "");
 		}
 
 		return contactPersonDto;
