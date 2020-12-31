@@ -1,12 +1,9 @@
 /// <reference types="cypress" />
 
-import * as moment from 'moment';
-
 describe('csv export', () => {
   beforeEach(() => {
     cy.server();
-    const dateString = moment().format('YYYY-MM-DD');
-    cy.route('GET', '/hd/export/quarantines').as('getcsv');
+    cy.route('POST', '/hd/export/quarantines').as('getcsv');
 
     cy.loginAgent();
     cy.visit('health-department/export');
