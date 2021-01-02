@@ -5,9 +5,11 @@ describe('Adding new symptom to symptom diary', () => {
     cy.loginClient();
     cy.server();
     cy.route('POST', '/diary').as('diary');
+    cy.route('GET', `/user/me`).as('me');
   });
 
   it('not possible, when no body temperature is selected.', () => {
+    cy.wait('@me').its('status').should('eq', 200);
     cy.location('pathname').should('eq', '/client/diary/diary-list');
     cy.get('[data-cy="add-diary-entry"]').click();
     cy.get('[data-cy="body-temperature"]').should('exist');

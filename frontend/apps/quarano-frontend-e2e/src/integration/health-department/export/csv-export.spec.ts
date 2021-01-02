@@ -3,7 +3,7 @@
 describe('csv export', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/hd/export/quarantines').as('getcsv');
+    cy.route('POST', '/hd/export/quarantines').as('getCsv');
 
     cy.loginAgent();
   });
@@ -14,7 +14,7 @@ describe('csv export', () => {
       cy.get('[data-cy="export"]').click();
       cy.location('pathname').should('eq', '/health-department/export');
       cy.get('[data-cy="export-submit"] button').should('exist').should('be.enabled').click();
-      cy.wait('@getcsv').its('status').should('eq', 200);
+      cy.wait('@getCsv').its('status').should('eq', 200);
     });
   });
 });
