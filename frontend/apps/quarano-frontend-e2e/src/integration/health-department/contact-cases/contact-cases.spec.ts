@@ -76,10 +76,10 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="house-number-input"]').should('exist');
       cy.get('[data-cy="city-input"]').should('exist');
 
-      cy.get('[data-cy="zip-code-input"]').type('10000');
+      cy.get('[data-cy="zip-code-input"]').type('68163');
       cy.get('[data-cy="street-input"]').type('Test');
       cy.get('[data-cy="house-number-input"]').type('1');
-      cy.get('[data-cy="city-input"]').type('Berlin');
+      cy.get('[data-cy="city-input"]').type('Mannheim');
 
       cy.get('[data-cy="client-submit-button"] button').click();
       cy.wait('@updateIndexCase').its('status').should('eq', 200);

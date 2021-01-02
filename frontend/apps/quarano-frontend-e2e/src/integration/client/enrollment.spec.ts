@@ -16,8 +16,8 @@ describe('enrollment happy path', () => {
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
       cy.get('[data-cy="street-input"] input[matInput]').type('Platz der Republik');
       cy.get('[data-cy="house-number-input"] input[matInput]').type('1');
-      cy.get('[data-cy="zip-code-input"] input[matInput]').type('68159');
-      cy.get('[data-cy="city-input"] input[matInput]').type('Berlin');
+      cy.get('[data-cy="zip-code-input"] input[matInput]').type('68163');
+      cy.get('[data-cy="city-input"] input[matInput]').type('Mannheim');
       cy.get('[data-cy="first-step-button"] button').should('be.enabled');
       cy.get('[data-cy="first-step-button"] button').click();
       cy.wait('@updatePersonalDetails').its('status').should('eq', 200);
