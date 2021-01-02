@@ -21,7 +21,7 @@ describe('login', () => {
     cy.visit('/');
   });
 
-  describe('client login', () => {
+  describe('client', () => {
     it('should successfully log in to client page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
@@ -48,7 +48,7 @@ describe('login', () => {
     });
   });
 
-  describe('agent login', () => {
+  describe('agent', () => {
     it('should successfully log in to agent page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
