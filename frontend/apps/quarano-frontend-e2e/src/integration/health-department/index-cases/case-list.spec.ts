@@ -45,8 +45,8 @@ describe('health-department index cases case-list', () => {
     cy.location('pathname').should('include', '/edit');
     cy.get("[data-cy='street-input']").clear().type('Frankfurterstrasse');
     cy.get("[data-cy='house-number-input']").clear().type('11');
-    cy.get("[data-cy='zip-code-input']").clear().type('60987');
-    cy.get("[data-cy='city-input']").clear().type('Frankfurt');
+    cy.get("[data-cy='zip-code-input']").clear().type('68163');
+    cy.get("[data-cy='city-input']").clear().type('Mannheim');
     cy.get("[data-cy='client-submit-and-close-button'] button").click();
     cy.wait('@saveDetails');
     cy.get('@saveDetails').its('status').should('eq', 200);
