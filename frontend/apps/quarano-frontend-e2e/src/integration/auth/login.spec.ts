@@ -28,7 +28,7 @@ describe('login', () => {
       login('test3', 'test123');
 
       cy.wait('@logIn').its('status').should('eq', 200);
-      cy.get('simple-snack-bar > span').should('have.text', 'Willkommen bei quarano');
+      cy.get('simple-snack-bar > span').should('contain.text', 'Willkommen bei quarano');
       cy.wait('@me').its('status').should('eq', 200);
       cy.wait('@enrollment').its('status').should('eq', 200);
       cy.wait('@diary').its('status').should('eq', 200);
@@ -42,7 +42,7 @@ describe('login', () => {
       login('test3', 'test1234');
 
       cy.wait('@logIn').its('status').should('eq', 401);
-      cy.get('simple-snack-bar > span').should('have.text', 'Benutzername oder Passwort falsch');
+      cy.get('simple-snack-bar > span').should('contain.text', 'Benutzername oder Passwort falsch');
 
       cy.location('pathname').should('not.eq', '/client/diary/diary-list');
     });
@@ -55,7 +55,7 @@ describe('login', () => {
       login('agent1', 'agent1');
 
       cy.wait('@logIn').its('status').should('eq', 200);
-      cy.get('simple-snack-bar > span').should('have.text', 'Willkommen bei quarano');
+      cy.get('simple-snack-bar > span').should('contain.text', 'Willkommen bei quarano');
       cy.wait('@me').its('status').should('eq', 200);
       cy.wait('@cases').its('status').should('eq', 200);
 
@@ -68,7 +68,7 @@ describe('login', () => {
       login('agent1', 'agent2');
 
       cy.wait('@logIn').its('status').should('eq', 401);
-      cy.get('simple-snack-bar > span').should('have.text', 'Benutzername oder Passwort falsch');
+      cy.get('simple-snack-bar > span').should('contain.text', 'Benutzername oder Passwort falsch');
 
       cy.location('pathname').should('not.eq', '/health-department/index-cases/case-list');
     });
