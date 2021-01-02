@@ -10,9 +10,9 @@ describe('csv export', () => {
 
   describe('csv export happy path', () => {
     it('should get csv data', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="export"]').click();
-      cy.location('pathname').should('eq', '/health-department/export');
+      cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'export');
       cy.get('[data-cy="export-submit"] button').should('exist').should('be.enabled').click();
       cy.wait('@getCsv').its('status').should('eq', 200);
     });

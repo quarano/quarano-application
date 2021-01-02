@@ -21,15 +21,15 @@ describe('health-department top navigation', () => {
     cy.get('[data-cy="index-cases"]').should('have.class', 'active');
     cy.get('[data-cy="export"]').should('not.have.class', 'active');
     cy.get('[data-cy="contact-cases"]').should('not.have.class', 'active');
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.get('[data-cy="contact-cases"]').click();
     cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
-    cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
 
     cy.get('[data-cy="export"]').click();
     cy.get('[data-cy="export"]').should('have.class', 'active');
-    cy.location('pathname').should('eq', '/health-department/export');
+    cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'export');
 
     cy.get('[data-cy="account-administration"]').click();
     cy.get('[data-cy="account-administration"]').should('have.class', 'active');

@@ -9,11 +9,11 @@ describe('health-department contact cases case-list', () => {
   });
 
   it('should display cases and allow editing a specific cases', () => {
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.get('[data-cy="contact-cases"]').click();
 
-    cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
 
     cy.get('[data-cy="new-case-button"]').should('exist');
     cy.get('[data-cy="search-case-input"]').should('exist');

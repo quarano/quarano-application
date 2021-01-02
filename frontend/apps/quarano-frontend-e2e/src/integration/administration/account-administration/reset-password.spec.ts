@@ -12,7 +12,7 @@ describe('Account administration', () => {
   });
 
   it('should reset password and change during next log-in', () => {
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="account-administration"]').click();
     cy.location('pathname').should('eq', '/administration/accounts/account-list');
     cy.wait('@fetchAccounts').its('status').should('eq', 200);
@@ -60,7 +60,7 @@ describe('Account administration', () => {
     cy.get('[data-cy="changepassword-submit-button"] button').click();
 
     cy.wait('@changePassword').its('status').should('eq', 204);
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
   });
 
   // TODO: unit tests

@@ -10,5 +10,10 @@
   "screenshotsFolder": "../../dist/cypress/apps/quarano-frontend-e2e/screenshots",
   "chromeWebSecurity": false,
   "baseUrl": "http://localhost:4200",
-  "viewportHeight": 1000
+  "viewportHeight": 1000,
+  "env": {
+    "index_cases_url": "/health-department/index-cases/case-list",
+    "contact_cases_url": "/health-department/contact-cases/case-list",
+    "health_department_url": "/health-department/"
+  }
 }
