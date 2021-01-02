@@ -8,10 +8,16 @@ describe('Account administration', () => {
     cy.route('POST', '/hd/accounts').as('createAccount');
     cy.route('PUT', '/user/me/password').as('changePassword');
     cy.route('GET', `/hd/accounts`).as('fetchAccounts');
+    cy.route('GET', `/user/me`).as('me');
+    cy.route('GET', `/hd/cases`).as('allCases');
+
     cy.loginAdmin();
   });
 
   it('create new admin account', () => {
+    cy.wait('@me').its('status').should('eq', 200);
+    cy.wait('@allCases').its('status').should('eq', 200);
+
     cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
 
     cy.get('[data-cy="account-administration"]').click();
