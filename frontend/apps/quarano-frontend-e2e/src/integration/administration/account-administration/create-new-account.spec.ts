@@ -18,7 +18,7 @@ describe('Account administration', () => {
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
 
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.get('[data-cy="account-administration"]').click();
 
@@ -63,7 +63,7 @@ describe('Account administration', () => {
     cy.get('[data-cy="changepassword-submit-button"] button').click();
 
     cy.wait('@changePassword').its('status').should('eq', 204);
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="profile-user-button"] .mat-button-wrapper span').should(
       'have.text',
       'Testfirstname Testlastname (GA Mannheim) ' // TODO: space

@@ -12,7 +12,7 @@ describe('health-department index cases action-list', () => {
 
   describe('preconditions', () => {
     it('should be on the correct url', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/action-list');
+      cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'index-cases/action-list');
     });
 
     it('should have correct page components', () => {

@@ -10,7 +10,7 @@ describe('health-department index cases case-list', () => {
   });
 
   it('should be on the correct url', () => {
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="new-case-button"]').should('exist');
     cy.get('[data-cy="search-case-input"]').should('exist');
     cy.get('[data-cy="case-data-table"]').should('exist');
@@ -24,7 +24,7 @@ describe('health-department index cases case-list', () => {
     cy.get('[data-cy="search-case-input"]').type('hanser');
     cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
     cy.get('[data-cy="new-case-button"]').click();
-    cy.location('pathname').should('eq', '/health-department/case-detail/new/index/edit');
+    cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'case-detail/new/index/edit');
     // cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
     // cy.location('pathname').should('include', '/edit');
     // cy.get('[data-cy="case-data-table"]')
@@ -50,6 +50,6 @@ describe('health-department index cases case-list', () => {
     cy.get("[data-cy='client-submit-and-close-button'] button").click();
     cy.wait('@saveDetails');
     cy.get('@saveDetails').its('status').should('eq', 200);
-    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
   });
 });

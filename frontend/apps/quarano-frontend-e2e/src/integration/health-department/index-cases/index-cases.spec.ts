@@ -10,7 +10,7 @@ describe('health-department index cases', () => {
 
   describe('creating new index case', () => {
     it('should not be possible if mandatory fields are missing', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
@@ -34,7 +34,7 @@ describe('health-department index cases', () => {
     });
 
     it('happy path: save and close', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
@@ -67,11 +67,11 @@ describe('health-department index cases', () => {
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
         });
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
     it('happy path: save and check e-mail template', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
@@ -104,19 +104,25 @@ describe('health-department index cases', () => {
           const caseId = body.caseId;
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/edit');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
+          );
           cy.get('[data-cy="start-tracking-button"]').should('be.enabled');
           cy.get('[data-cy="analog-tracking-button"]').should('be.disabled');
 
           cy.get('[data-cy="start-tracking-button"]').click();
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/comments');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/comments'
+          );
         });
     });
   });
 
   describe('viewing case details of existing index case', () => {
     it.skip('should show diary entries', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
       cy.get('[data-cy="case-data-table"]')
@@ -133,7 +139,10 @@ describe('health-department index cases', () => {
         .its('response.body')
         .then((body) => {
           const caseId = body.caseId;
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/edit');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
+          );
         });
 
       cy.get('[data-cy="case-detail-diary-link"]').should('exist');
@@ -159,7 +168,10 @@ describe('health-department index cases', () => {
         .its('response.body')
         .then((body) => {
           const caseId = body.caseId;
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/diary');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/diary'
+          );
         });
 
       cy.get('qro-diary-entries-list').should('exist');
@@ -202,7 +214,7 @@ describe('health-department index cases', () => {
     });
 
     it.skip('should display message if no diary entries exist', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
       cy.get('[data-cy="case-data-table"]')
@@ -219,7 +231,10 @@ describe('health-department index cases', () => {
         .its('response.body')
         .then((body) => {
           const caseId = body.caseId;
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/edit');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
+          );
         });
 
       cy.get('[data-cy="case-detail-diary-link"]').should('exist');
@@ -238,7 +253,10 @@ describe('health-department index cases', () => {
         .its('response.body')
         .then((body) => {
           const caseId = body.caseId;
-          cy.location('pathname').should('eq', '/health-department/case-detail/index/' + caseId + '/diary');
+          cy.location('pathname').should(
+            'eq',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/diary'
+          );
         });
 
       cy.get('qro-diary-entries-list').should('exist');

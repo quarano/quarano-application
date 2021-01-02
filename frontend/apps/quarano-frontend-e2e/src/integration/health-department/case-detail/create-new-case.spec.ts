@@ -12,7 +12,7 @@ describe('new case', () => {
 
   describe('index', () => {
     it('valid form (with phone)', () => {
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@me').its('status').should('eq', 200);
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -29,7 +29,7 @@ describe('new case', () => {
       cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.enabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').click();
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.wait('@createCase').its('status').should('eq', 201);
 
       cy.get('@createCase')

@@ -59,7 +59,7 @@ describe('login', () => {
       cy.wait('@me').its('status').should('eq', 200);
       cy.wait('@cases').its('status').should('eq', 200);
 
-      cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
     it('should fail to log in with incorrect credentials', () => {
@@ -70,7 +70,7 @@ describe('login', () => {
       cy.wait('@logIn').its('status').should('eq', 401);
       cy.get('simple-snack-bar > span').should('contain.text', 'Benutzername oder Passwort falsch');
 
-      cy.location('pathname').should('not.eq', '/health-department/index-cases/case-list');
+      cy.location('pathname').should('not.eq', Cypress.env('index_cases_url'));
     });
   });
 });
