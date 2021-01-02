@@ -1,42 +1,14 @@
-xdescribe('health-department top navigation', () => {
+describe('health-department top navigation', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/user/me').as('me');
+    cy.route('GET', '/hd/cases').as('allCases');
 
     cy.loginAdmin();
   });
 
-  it('should show a navigation', () => {
-    cy.get('[data-cy="index-cases"]').should('exist');
-    cy.get('[data-cy="contact-cases"]').should('exist');
-  });
-
-  it('should have selected index cases', () => {
-    cy.get('[data-cy="index-cases"]').should('have.class', 'active');
-    cy.get('[data-cy="contact-cases"]').should('not.have.class', 'active');
-  });
-
-  it('should switch to contact cases on click', () => {
-    cy.get('[data-cy="contact-cases"]').click();
-    cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
-    cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
-  });
-
-  it('should switch to export on click', () => {
-    cy.get('[data-cy="export"]').click();
-    cy.get('[data-cy="export"]').should('have.class', 'active');
-    cy.location('pathname').should('eq', '/health-department/export');
-  });
-
-  it('should switch to account administration on click', () => {
-    cy.get('[data-cy="account-administration"]').click();
-    cy.get('[data-cy="account-administration"]').should('have.class', 'active');
-    cy.location('pathname').should('eq', '/administration/accounts/account-list');
-  });
-
-  it('should show the current logged in agent', () => {
+  it('navigation should work as expected', () => {
     cy.wait('@me').its('status').should('eq', 200);
-
     cy.get('@me').then((request: any) => {
       const user = request.response?.body;
       const fullName = user.firstName + ' ' + user.lastName;
@@ -44,9 +16,37 @@ xdescribe('health-department top navigation', () => {
 
       cy.get('[data-cy="profile-user-button"]').should('contain.text', buttonLabel);
     });
+    cy.wait('@allCases').its('status').should('eq', 200);
+
+    cy.get('[data-cy="index-cases"]').should('have.class', 'active');
+    cy.get('[data-cy="export"]').should('not.have.class', 'active');
+    cy.get('[data-cy="contact-cases"]').should('not.have.class', 'active');
+    cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
+
+    cy.get('[data-cy="contact-cases"]').click();
+    cy.get('[data-cy="contact-cases"]').should('have.class', 'active');
+    cy.location('pathname').should('eq', '/health-department/contact-cases/case-list');
+
+    cy.get('[data-cy="export"]').click();
+    cy.get('[data-cy="export"]').should('have.class', 'active');
+    cy.location('pathname').should('eq', '/health-department/export');
+
+    cy.get('[data-cy="account-administration"]').click();
+    cy.get('[data-cy="account-administration"]').should('have.class', 'active');
+    cy.location('pathname').should('eq', '/administration/accounts/account-list');
   });
 
-  it('should open a context menu on profile button click', () => {
+  it('user profile should work as expected', () => {
+    cy.wait('@me').its('status').should('eq', 200);
+    cy.wait('@allCases').its('status').should('eq', 200);
+    cy.get('@me').then((request: any) => {
+      const user = request.response?.body;
+      const fullName = user.firstName + ' ' + user.lastName;
+      const buttonLabel = `${fullName} (${user.healthDepartment.name})`;
+
+      cy.get('[data-cy="profile-user-button"]').should('contain.text', buttonLabel);
+    });
+
     cy.get('div.mat-menu-panel').should('not.exist');
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('div.mat-menu-panel').should('exist');
@@ -54,17 +54,14 @@ xdescribe('health-department top navigation', () => {
     cy.get('[data-cy="profile-button"]').should('not.exist');
     cy.get('[data-cy="change-password-button"]').should('exist');
     cy.get('[data-cy="logout-button"]').should('exist');
+
+    cy.get('[data-cy="change-password-button"]').click();
+    cy.location('pathname').should('eq', '/auth/change-password');
   });
 
-  it('should logout user on logout button click', () => {
+  it('logout button should work as expected', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="logout-button"]').click();
     cy.location('pathname').should('eq', '/auth/login');
-  });
-
-  it('should navigate to change password component on button click', () => {
-    cy.get('[data-cy="profile-user-button"]').click();
-    cy.get('[data-cy="change-password-button"]').click();
-    cy.location('pathname').should('eq', '/auth/change-password');
   });
 });
