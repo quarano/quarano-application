@@ -8,7 +8,7 @@ describe('health-department contact cases case-list', () => {
     cy.loginAgent();
   });
 
-  it('should be display cases and allow to edit single case', () => {
+  it('should display cases and allow editing a specific cases', () => {
     cy.location('pathname').should('eq', '/health-department/index-cases/case-list');
 
     cy.get('[data-cy="contact-cases"]').click();
@@ -25,10 +25,10 @@ describe('health-department contact cases case-list', () => {
       .find('.ag-center-cols-container > .ag-row')
       .should('have.length.greaterThan', 0);
 
-    cy.get('[data-cy="search-case-input"]').type('Baum');
+    cy.get('[data-cy="search-case-input"] input').type('Baum');
     cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
 
-    cy.get('[data-cy="search-case-input"]').clear();
+    cy.get('[data-cy="search-case-input"] input').clear();
 
     cy.get('[data-cy="case-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
