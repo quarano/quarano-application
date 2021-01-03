@@ -13,21 +13,28 @@ describe('health-department contact cases action-list', () => {
 
   it('load actions', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@cases').its('status').should('eq', 200);
+
     cy.get('[data-cy="contact-cases"]').click();
     cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
+
     cy.get('[data-cy="action-list"]').click();
     cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'contact-cases/action-list');
+
     cy.wait('@allActions').its('status').should('eq', 200);
+
     cy.get('[data-cy="action-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
       .should('have.length.greaterThan', 0);
+
     cy.get('[data-cy="action-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
       .then(($elems) => {
         $elems[1].click();
       });
+
     cy.location('pathname').should('include', Cypress.env('health_department_url') + 'case-detail/contact');
     cy.wait('@action').its('status').should('eq', 200);
     cy.wait('@case').its('status').should('eq', 200);
