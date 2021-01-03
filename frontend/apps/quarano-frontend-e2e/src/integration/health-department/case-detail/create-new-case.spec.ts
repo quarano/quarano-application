@@ -11,7 +11,7 @@ describe('new case', () => {
   });
 
   describe('index', () => {
-    it('valid form (with phone)', () => {
+    it('should successfully be created', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@me').its('status').should('eq', 200);
