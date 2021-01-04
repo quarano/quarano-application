@@ -17,7 +17,6 @@ describe('health-department contact cases case-list', () => {
 
     cy.get('[data-cy="new-case-button"]').should('exist');
     cy.get('[data-cy="search-case-input"]').should('exist');
-    cy.get('[data-cy="case-data-table"]').should('exist');
 
     cy.wait('@allCases').its('status').should('eq', 200);
 
