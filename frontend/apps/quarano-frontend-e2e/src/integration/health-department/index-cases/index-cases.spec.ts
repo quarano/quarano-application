@@ -11,18 +11,12 @@ describe('health-department index cases', () => {
   describe('creating new index case', () => {
     it('should not be possible if mandatory fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-      cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
-      cy.get('[data-cy="input-firstname"]').should('exist');
-      cy.get('[data-cy="input-lastname"]').should('exist');
-      cy.get('[data-cy="input-dayofbirth"]').should('exist');
-      cy.get('[data-cy="input-phone"]').should('exist');
-      cy.get('[data-cy="input-email"]').should('exist');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
       cy.get('[data-cy="input-firstname"]').type('Jamie');
@@ -35,18 +29,12 @@ describe('health-department index cases', () => {
 
     it('happy path: save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-      cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
-      cy.get('[data-cy="input-firstname"]').should('exist');
-      cy.get('[data-cy="input-lastname"]').should('exist');
-      cy.get('[data-cy="input-dayofbirth"]').should('exist');
-      cy.get('[data-cy="input-phone"]').should('exist');
-      cy.get('[data-cy="input-email"]').should('exist');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
       cy.get('[data-cy="input-firstname"]').type('Jamie');
@@ -72,18 +60,11 @@ describe('health-department index cases', () => {
 
     it('happy path: save and check e-mail template', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-      cy.get('[data-cy="new-case-button"]').should('exist');
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
-
-      cy.get('[data-cy="input-firstname"]').should('exist');
-      cy.get('[data-cy="input-lastname"]').should('exist');
-      cy.get('[data-cy="input-dayofbirth"]').should('exist');
-      cy.get('[data-cy="input-phone"]').should('exist');
-      cy.get('[data-cy="input-email"]').should('exist');
 
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
@@ -124,7 +105,6 @@ describe('health-department index cases', () => {
     it.skip('should show diary entries', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);

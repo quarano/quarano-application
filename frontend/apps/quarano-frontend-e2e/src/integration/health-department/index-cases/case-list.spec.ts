@@ -11,9 +11,6 @@ describe('health-department index cases case-list', () => {
 
   it('should be on the correct url', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-    cy.get('[data-cy="new-case-button"]').should('exist');
-    cy.get('[data-cy="search-case-input"]').should('exist');
-    cy.get('[data-cy="case-data-table"]').should('exist');
     cy.wait('@allCases').its('status').should('eq', 200);
     cy.get('[data-cy="case-data-table"]')
       .find('.ag-center-cols-container > .ag-row')

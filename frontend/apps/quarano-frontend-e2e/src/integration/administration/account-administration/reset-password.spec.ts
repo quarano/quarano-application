@@ -49,8 +49,8 @@ describe('Account administration', () => {
     cy.logOut();
 
     cy.login(username, newPassword);
-    cy.get('mat-dialog-container').should('exist');
-    cy.get('mat-dialog-container mat-card-title h1').should('exist').should('have.text', 'Passwort ändern');
+
+    cy.get('mat-dialog-container mat-card-title h1').should('have.text', 'Passwort ändern');
     cy.get('mat-dialog-container [data-cy="input-username"] input[matInput]').should('contain.value', username);
     cy.get('[data-cy="changepassword-submit-button"] button').should('be.disabled');
     cy.get('mat-dialog-container [data-cy="input-currentpassword"] input[matInput]').type(newPassword);

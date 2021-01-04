@@ -45,7 +45,6 @@ describe('enrollment happy path', () => {
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('[data-cy="third-step-button"] button').should('be.enabled');
       cy.get('[data-cy="third-step-button"] button').click();
-      cy.get('[data-cy="confirm-button"]').should('exist');
       cy.get('[data-cy="confirm-button"]').click();
       cy.wait('@completeEnrollment').its('status').should('eq', 200);
       cy.location('pathname').should('eq', '/client/diary/diary-list');
@@ -81,18 +80,17 @@ describe('enrollment external zip code', () => {
       cy.location('pathname').should('eq', '/client/enrollment/health-department');
       cy.get('[data-cy="contact-button"]').should('not.exist');
       cy.get('[data-cy="profile-user-button"]').should('not.exist');
-      cy.get('[data-cy="health-department-name"]')
-        .should('exist')
-        .should('have.text', 'Landratsamt Breisgau-Hochschwarzwald');
+      cy.get('[data-cy="health-department-name"]').should('have.text', 'Landratsamt Breisgau-Hochschwarzwald');
     });
   });
 
   describe('login forbidden after external zip code confirmation', () => {
     it('login', () => {
       cy.location('pathname').should('include', '/auth/forbidden');
-      cy.get('[data-cy="forbidden-message"]')
-        .should('exist')
-        .should('have.text', 'Für Sie ist ein anderes Gesundheitsamt zuständig. Wenden Sie sich bitte an dieses!');
+      cy.get('[data-cy="forbidden-message"]').should(
+        'have.text',
+        'Für Sie ist ein anderes Gesundheitsamt zuständig. Wenden Sie sich bitte an dieses!'
+      );
     });
   });
 });
