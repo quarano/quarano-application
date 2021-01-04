@@ -2,9 +2,11 @@
 
 describe('health-department contact cases', () => {
   beforeEach(() => {
-    cy.loginAgent();
+    cy.server();
     cy.route('POST', '/hd/cases/?type=contact').as('newContact');
     cy.route('PUT', '/hd/cases/*').as('updateIndexCase');
+
+    cy.loginAgent();
   });
 
   describe('converting to index case ', () => {
