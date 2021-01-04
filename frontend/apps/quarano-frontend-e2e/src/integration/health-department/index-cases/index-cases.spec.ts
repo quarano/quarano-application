@@ -2,15 +2,22 @@
 
 describe('health-department index cases', () => {
   beforeEach(() => {
-    cy.loginAgent();
+    cy.server();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
     cy.route('GET', '/hd/cases/*').as('getCase');
     cy.route('GET', '/hd/cases/*/diary').as('diary');
+    cy.route('GET', '/hd/cases/').as('getCases');
+    cy.route('GET', '/user/me').as('me');
+    cy.loginAgent();
   });
 
   describe('creating new index case', () => {
     it('should not be possible if mandatory fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
+      cy.wait('@getCases').its('status').should('eq', 200);
+      cy.wait('@me').its('status').should('eq', 200);
+
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
@@ -29,6 +36,10 @@ describe('health-department index cases', () => {
 
     it('happy path: save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
+      cy.wait('@getCases').its('status').should('eq', 200);
+      cy.wait('@me').its('status').should('eq', 200);
+
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
@@ -60,6 +71,10 @@ describe('health-department index cases', () => {
 
     it('happy path: save and check e-mail template', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
+      cy.wait('@getCases').its('status').should('eq', 200);
+      cy.wait('@me').its('status').should('eq', 200);
+
       cy.get('[data-cy="new-case-button"]').click();
 
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
@@ -85,6 +100,28 @@ describe('health-department index cases', () => {
           const caseId = body.caseId;
           expect(caseId).not.to.eq(null);
           expect(caseId).not.to.eq('');
+          expect(body.caseId).not.to.eq(null);
+          expect(body.caseId).not.to.eq('');
+          expect(body.caseType).to.eq('index');
+          expect(body.caseTypeLabel).to.eq('Index');
+          expect(body.city).to.eq(null);
+          expect(body.comments).to.be.an('array').that.does.have.length(0);
+          expect(body.contactCount).to.eq(0);
+          expect(body.dateOfBirth).to.eq('1970-01-01');
+          expect(body.email).to.eq('james.fraser@gmail.com');
+          expect(body.extReferenceNumber).to.eq(null);
+          expect(body.firstName).to.eq('Jamie');
+          expect(body.houseNumber).to.eq(null);
+          expect(body.indexContacts).to.be.an('array').that.does.have.length(0);
+          expect(body.infected).to.be.eq(true);
+          expect(body.lastName).to.eq('Fraser');
+          expect(body.locale).to.eq(null);
+          expect(body.mobilePhone).to.eq(null);
+          expect(body.openAnomaliesCount).to.eq(1);
+          expect(body.phone).to.eq('162156156156');
+          expect(body.status).to.eq('angelegt');
+          expect(body.street).to.eq(null);
+          expect(body.zipCode).to.eq(null);
           cy.location('pathname').should(
             'eq',
             Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
