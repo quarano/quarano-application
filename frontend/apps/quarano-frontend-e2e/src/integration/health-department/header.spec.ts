@@ -4,7 +4,7 @@ describe('health-department top navigation', () => {
     cy.route('GET', '/user/me').as('me');
     cy.route('GET', '/hd/cases').as('allCases');
 
-    cy.loginAdmin();
+    cy.logInAdmin();
   });
 
   it('navigation should work as expected', () => {

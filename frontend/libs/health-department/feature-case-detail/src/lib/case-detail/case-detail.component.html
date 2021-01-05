@@ -122,6 +122,7 @@
         Angaben Indexfall
       </a>
       <a
+        data-cy="email-tab"
         *ngIf="caseDetail?._links?.hasOwnProperty('renew')"
         mat-tab-link
         [routerLink]="['email']"

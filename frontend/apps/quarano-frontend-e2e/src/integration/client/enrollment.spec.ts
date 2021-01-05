@@ -7,7 +7,7 @@ describe('enrollment happy path', () => {
     cy.route('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
     cy.route('PUT', '/enrollment/details').as('updatePersonalDetails');
 
-    cy.loginNotEnrolledClient();
+    cy.logInNotEnrolledClient();
   });
 
   describe('basic data', () => {
@@ -60,7 +60,7 @@ describe('enrollment external zip code', () => {
     cy.route('PUT', '/enrollment/details?confirmed=true').as('updatePersonalDetailsZipcodeConfirm');
     cy.route('PUT', '/enrollment/details').as('updatePersonalDetails');
 
-    cy.loginNotEnrolledClient2();
+    cy.logInNotEnrolledClient2();
   });
 
   describe('confirm external zip code in basic data', () => {

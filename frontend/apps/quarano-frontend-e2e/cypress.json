@@ -11,7 +11,7 @@
   "chromeWebSecurity": false,
   "baseUrl": "http://localhost:4200",
   "viewportHeight": 1000,
-  "defaultCommandTimeout": 20000
+  "defaultCommandTimeout": 20000,
   "env": {
     "index_cases_url": "/health-department/index-cases/case-list",
     "contact_cases_url": "/health-department/contact-cases/case-list",

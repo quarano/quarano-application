@@ -5,7 +5,7 @@ describe('health-department contact cases case-list', () => {
     cy.server();
     cy.route('GET', '/hd/cases').as('allCases');
 
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   it('should display cases and allow editing a specific cases', () => {

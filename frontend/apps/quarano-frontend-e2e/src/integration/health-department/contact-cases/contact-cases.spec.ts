@@ -6,7 +6,7 @@ describe('health-department contact cases', () => {
     cy.route('POST', '/hd/cases/?type=contact').as('newContact');
     cy.route('PUT', '/hd/cases/*').as('updateIndexCase');
 
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   describe('converting to index case ', () => {
