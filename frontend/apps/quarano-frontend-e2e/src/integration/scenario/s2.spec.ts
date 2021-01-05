@@ -1,39 +1,9 @@
 /// <reference types="cypress" />
-/**
- 1-Click auf  ‚"neuen Indexfalle anlegen"
- 2-Vorname  ‘Jamie‘
- 3-Nachname  "Fraser"
- 4-Insert Geburtsdatum as "01.01.1970"
- 5-Insert telephon  number as ‚162156156156‘
- 6-Insert email as ‚james.fraser@gmail.com‘
- 7-Click Auf Speichern
- CHECK 1: Neue Tabs erscheinen
- CHECK 2: "Nachverfolung starten" Button wird aktiv
- 8-click auf  'Nachverfolgung Starten' Button
- CHECK 2: "Tab Emailvorlage" wird automatisch angezeigt
- 9- click on 'in die zwischenablage kopieren' Button
- 10. Extrahiere Anmeldelink aus dem Template
- 11. Abmelden klicken
- CHECK: Benutzer ist auf Login Seite
- CHECK: Rechts oben wird kein Name mehr angezeigt
- 12. Anmeldelink aufrufen
- CHECK: Benutzer seiht Willkommensseite für Indexfälle "Herzlich Willkommen bei quarano..."
- CHECK: "Registrieren" Button ist inaktiv
- 13. Klick auf Weiter
- 14. Benutzername: "Jamie"
- 15. Passwort: "Password01!"
- 16. Password bestätgen  "Password01!"
- 17. Geburtsdatum: 01.01.1970
- 18. AGB aktivieren
- 19. Klick auf "Registrieren" Button
- CHECK: Benutzer ist auf der ersten Seiter der Initialen Datenerfassung
- CHECK: Rechts oben wird der name des Benutzers angezeigt: "Jamie Fraser"
- */
 describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
   before((done) => {
     cy.restart(done);
   });
-  it('should run', () => {
+  it.only('should run', () => {
     cy.logInAgent();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
 
@@ -46,7 +16,6 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
     /**
      *  1-Click auf  ‚"neuen Indexfalle anlegen"
      */
-    cy.get('[data-cy="new-case-button"]').should('exist');
     cy.get('[data-cy="new-case-button"]').click();
 
     cy.location('pathname').should('eq', '/health-department/case-detail/new/index/edit');
@@ -100,7 +69,6 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
     /**
      * CHECK 2: "Nachverfolung starten" Button wird aktiv
      */
-    cy.get('[data-cy="start-tracking-button"]').should('exist');
     cy.get('[data-cy="start-tracking-button"]').should('be.enabled');
 
     /**
@@ -124,6 +92,7 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
     cy.get('[data-cy="email-tab"]').click();
 
     cy.location('pathname').should('include', '/email');
+    cy.get('[data-cy="new-activation-code"]').should('be.enabled');
 
     /**
      * 9- click on 'in die zwischenablage kopieren' Button
@@ -173,8 +142,6 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
         // expect(loc.toString()).to.eq(url);
       });
 
-      cy.get('[data-cy="cta-button-index"]').should('exist');
-
       /**
        * 13. Klick auf Weiter
        */
@@ -183,7 +150,6 @@ describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
       /**
        * CHECK: "Registrieren" Button ist inaktiv
        */
-      cy.get('[data-cy="registration-submit-button"]').should('exist');
       cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
 
       /**
