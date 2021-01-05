@@ -5,7 +5,7 @@ describe('csv export', () => {
     cy.server();
     cy.route('POST', '/hd/export/quarantines').as('getCsv');
 
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   describe('csv export happy path', () => {

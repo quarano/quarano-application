@@ -5,14 +5,13 @@ declare namespace Cypress {
      * Custom command to select DOM element by data-cy attribute.
      * @example cy.dataCy('greeting')
      */
-    login: (username: string, password: string) => void;
-    loginAgent: () => void;
-    loginAdmin: () => void;
-    loginClient: () => void;
+    logIn: (username: string, password: string) => void;
+    logInAgent: () => void;
+    logInAdmin: () => void;
+    logInClient: () => void;
 
-    restart: (done: (err?: any) => void) => void;
-    loginNotEnrolledClient: () => void;
-    loginNotEnrolledClient2: () => void;
+    logInNotEnrolledClient: () => void;
+    logInNotEnrolledClient2: () => void;
 
     logOut: () => void;
 
@@ -22,14 +21,13 @@ declare namespace Cypress {
 
 const logOut = () => {
   cy.get('[data-cy="profile-user-button"]').click();
-  cy.get('[data-cy="logout-button"]').should('exist');
   cy.get('[data-cy="logout-button"]').click();
   cy.location('pathname').should('include', 'auth/login');
 };
 
 const logIn = (username: string, password: string) => {
   cy.server();
-  cy.route('POST', '/login').as('login');
+  cy.route('POST', '/login').as('logIn');
 
   cy.visit('/', {
     onBeforeLoad(win) {
@@ -41,29 +39,29 @@ const logIn = (username: string, password: string) => {
   cy.get('#password').type(password);
   cy.get('#submitBtn').click();
 
-  cy.wait('@login');
+  cy.wait('@logIn');
 };
 
 Cypress.Commands.add('logOut', () => {
   logOut();
 });
-Cypress.Commands.add('login', (username: string, password: string) => {
-  login(username, password);
+Cypress.Commands.add('logIn', (username: string, password: string) => {
+  logIn(username, password);
 });
-Cypress.Commands.add('loginAgent', () => {
-  login('agent1', 'agent1');
+Cypress.Commands.add('logInAgent', () => {
+  logIn('agent1', 'agent1');
 });
-Cypress.Commands.add('loginAdmin', () => {
-  login('admin', 'admin');
+Cypress.Commands.add('logInAdmin', () => {
+  logIn('admin', 'admin');
 });
-Cypress.Commands.add('loginClient', () => {
-  login('test3', 'test123');
+Cypress.Commands.add('logInClient', () => {
+  logIn('test3', 'test123');
 });
-Cypress.Commands.add('loginNotEnrolledClient', () => {
-  login('DemoAccount', 'DemoPassword');
+Cypress.Commands.add('logInNotEnrolledClient', () => {
+  logIn('DemoAccount', 'DemoPassword');
 });
-Cypress.Commands.add('loginNotEnrolledClient2', () => {
-  login('secUser2', 'secur1tyTest!');
+Cypress.Commands.add('logInNotEnrolledClient2', () => {
+  logIn('secUser2', 'secur1tyTest!');
 });
 
 Cypress.Commands.add('restart', (done: (err?: any) => void) => {

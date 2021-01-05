@@ -11,7 +11,7 @@ describe('Account administration', () => {
     cy.route('GET', `/user/me`).as('me');
     cy.route('GET', `/hd/cases`).as('allCases');
 
-    cy.loginAdmin();
+    cy.logInAdmin();
   });
 
   it('create new admin account', () => {
@@ -51,7 +51,7 @@ describe('Account administration', () => {
     cy.wait('@createAccount').its('status').should('eq', 201);
     cy.location('pathname').should('eq', '/administration/accounts/account-list');
     cy.logOut();
-    cy.login('testaccount', 'Test123!');
+    cy.logIn('testaccount', 'Test123!');
     cy.get('mat-dialog-container mat-card-title h1').should('have.text', 'Passwort ändern');
     cy.get('mat-dialog-container [data-cy="input-username"] input[matInput]').should('contain.value', 'testaccount');
     cy.get('[data-cy="changepassword-submit-button"] button').should('be.disabled');

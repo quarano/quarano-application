@@ -8,7 +8,7 @@ describe('Account administration', () => {
     cy.route('GET', `/hd/accounts/*`).as('fetchAccount');
     cy.route('PUT', '/user/me/password').as('changePassword');
 
-    cy.loginAdmin();
+    cy.logInAdmin();
   });
 
   it('should reset password and change during next log-in', () => {
@@ -48,7 +48,7 @@ describe('Account administration', () => {
     // TODO: Meldung "erfolgreich aktualisiert"
     cy.logOut();
 
-    cy.login(username, newPassword);
+    cy.logIn(username, newPassword);
 
     cy.get('mat-dialog-container mat-card-title h1').should('have.text', 'Passwort ändern');
     cy.get('mat-dialog-container [data-cy="input-username"] input[matInput]').should('contain.value', username);

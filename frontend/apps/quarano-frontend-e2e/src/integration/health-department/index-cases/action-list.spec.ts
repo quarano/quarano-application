@@ -8,7 +8,7 @@ describe('health-department index cases action-list', () => {
     cy.route('GET', '/hd/cases/').as('cases');
     cy.route('GET', '/hd/actions/*').as('action');
     cy.route('GET', '/hd/cases/*').as('case');
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   it('load actions', () => {

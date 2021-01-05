@@ -8,7 +8,7 @@ describe('health-department index cases', () => {
     cy.route('GET', '/hd/cases/*/diary').as('diary');
     cy.route('GET', '/hd/cases/').as('getCases');
     cy.route('GET', '/user/me').as('me');
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   describe('creating new index case', () => {

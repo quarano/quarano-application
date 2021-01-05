@@ -8,7 +8,7 @@ describe('health-department index cases case-list', () => {
     cy.route('GET', '/user/me').as('me');
     cy.route('GET', '/hd/cases/*').as('case');
 
-    cy.loginAgent();
+    cy.logInAgent();
   });
 
   it('should be able to select specific entry', () => {

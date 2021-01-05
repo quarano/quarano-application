@@ -5,7 +5,7 @@ describe('Adding new symptom to symptom diary', () => {
     cy.server();
     cy.route('POST', '/diary').as('diary');
 
-    cy.loginClient();
+    cy.logInClient();
   });
 
   it('not possible, when no body temperature is selected.', () => {
