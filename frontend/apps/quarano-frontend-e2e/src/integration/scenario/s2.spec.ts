@@ -30,10 +30,10 @@
  CHECK: Rechts oben wird der name des Benutzers angezeigt: "Jamie Fraser"
  */
 describe('S2 - Neu erstellter Indexfall kann sich registrieren', () => {
-  // before((done) => {
-  //   cy.restart(done);
-  // });
-  it.only('should run', () => {
+  before((done) => {
+    cy.restart(done);
+  });
+  it('should run', () => {
     cy.logInAgent();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
 
