@@ -75,13 +75,15 @@ export class ContactListComponent implements OnInit {
         width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
+      { headerName: 'Status', field: 'status', flex: 1, filter: 'checkboxFilter' },
       {
-        headerName: 'Anmerkung.',
+        headerName: 'Anmerkung',
         field: 'remark',
-        flex: 2,
-        filter: 'checkboxFilter',
+        flex: 3,
+        wrapText: true ,
+        autoHeight: true,
+        cellStyle: {'word-break': 'break-word', 'line-height': '36px'},
       },
-      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
     ];
   }
 
