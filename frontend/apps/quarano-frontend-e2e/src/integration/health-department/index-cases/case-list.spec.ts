@@ -5,31 +5,37 @@ describe('health-department index cases case-list', () => {
     cy.server();
     cy.route('GET', '/hd/cases').as('allCases');
     cy.route('PUT', '/hd/cases/*').as('saveDetails');
+    cy.route('GET', '/user/me').as('me');
+    cy.route('GET', '/hd/cases/*').as('case');
 
     cy.loginAgent();
   });
 
-  it('should be on the correct url', () => {
+  it('should be able to select specific entry', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
+    cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
+
     cy.get('[data-cy="case-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
       .should('have.length.greaterThan', 0);
-    cy.get('[data-cy="case-data-table"]')
-      .find('.ag-center-cols-container > .ag-row')
-      .should('have.length.greaterThan', 0);
+
     cy.get('[data-cy="search-case-input"]').type('hanser');
     cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
-    cy.get('[data-cy="new-case-button"]').click();
-    cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'case-detail/new/index/edit');
-    // cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(2).click();
-    // cy.location('pathname').should('include', '/edit');
-    // cy.get('[data-cy="case-data-table"]')
-    //   .find('.ag-center-cols-container > .ag-row')
-    //   .eq(2)
-    //   .find('[data-cy="mail-button"]')
-    //   .click();
-    // cy.get('@windowOpen').should('be.calledWithMatch', 'mailto');
+
+    cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
+
+    cy.wait('@case').its('status').should('eq', 200);
+    cy.get('@case')
+      .its('response.body')
+      .then(($body) => {
+        const caseId = $body.caseId;
+        cy.location('pathname').should(
+          'include',
+          Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
+        );
+      });
   });
 
   it('should add address', () => {
