@@ -58,38 +58,35 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 	}
 
 	public String getContactId() {
-
 		return contactPerson.getId().toString();
 	}
 
 	public String getFirstName() {
-
 		return contactPerson.getFirstName();
 	}
 
 	public String getLastName() {
-
 		return contactPerson.getLastName();
 	}
 
 	public Boolean getIsHealthStaff() {
-
 		return contactPerson.getIsHealthStaff();
 	}
 
 	public Boolean getHasPreExistingConditions() {
-
 		return contactPerson.getHasPreExistingConditions();
 	}
 
 	public Boolean getIsSenior() {
-
 		return contactPerson.getIsSenior();
 	}
 
 	public String getRemark() {
-
 		return contactPerson.getRemark();
+	}
+
+	public String getIdentificationHint() {
+		return contactPerson.getIdentificationHint();
 	}
 
 	public String getCaseId() {
