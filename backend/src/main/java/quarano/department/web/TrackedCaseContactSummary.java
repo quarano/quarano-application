@@ -87,6 +87,11 @@ public class TrackedCaseContactSummary extends RepresentationModel<TrackedCaseCo
 		return contactPerson.getIsSenior();
 	}
 
+	public String getRemark() {
+
+		return contactPerson.getRemark();
+	}
+
 	public String getCaseId() {
 		return contactTrackedCase.map(TrackedCase::getId)
 				.map(TrackedCaseIdentifier::toString)

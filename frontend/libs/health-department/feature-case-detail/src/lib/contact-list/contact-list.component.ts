@@ -16,6 +16,7 @@ interface RowViewModel {
   isSenior: string;
   hasPreExistingConditions: string;
   lastContact: string;
+  remark: string;
   status: string;
   caseType: string;
   caseId: string;
@@ -74,7 +75,15 @@ export class ContactListComponent implements OnInit {
         width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
-      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
+      { headerName: 'Status', field: 'status', flex: 1, filter: 'checkboxFilter' },
+      {
+        headerName: 'Anmerkung',
+        field: 'remark',
+        flex: 3,
+        wrapText: true ,
+        autoHeight: true,
+        cellStyle: {'word-break': 'break-word', 'line-height': '36px'},
+      },
     ];
   }
 
@@ -120,6 +129,7 @@ export class ContactListComponent implements OnInit {
       status: listItem.caseStatusLabel,
       isHealthStaff: this.getBooleanText(listItem.isHealthStaff),
       isSenior: this.getBooleanText(listItem.isSenior),
+      remark: listItem.remark,
       hasPreExistingConditions: this.getBooleanText(listItem.hasPreExistingConditions),
       caseId: listItem.caseId,
       caseType: listItem.caseType,
