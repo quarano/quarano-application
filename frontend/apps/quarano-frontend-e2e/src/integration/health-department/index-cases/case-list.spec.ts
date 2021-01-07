@@ -22,9 +22,11 @@ describe('health-department index cases case-list', () => {
       .should('have.length.greaterThan', 0);
 
     cy.get('[data-cy="search-case-input"]').type('hanser');
-    cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
-
-    cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
+    cy.get('[data-cy="case-data-table"]')
+      .find('.ag-center-cols-container > .ag-row')
+      .should('have.length', 1)
+      .eq(0)
+      .click();
 
     cy.wait('@case').its('status').should('eq', 200);
     cy.get('@case')
