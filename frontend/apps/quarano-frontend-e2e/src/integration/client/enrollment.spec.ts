@@ -30,7 +30,7 @@ describe('enrollment happy path', () => {
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('[data-cy="second-step-button"] button').should('be.disabled');
       cy.get('[data-cy="has-no-symptoms-option"]').click();
-      cy.get('[data-cy="has-no-pre-existion-conditions-option"]').click();
+      cy.get('[data-cy="has-no-pre-existing-conditions-option"]').click();
       cy.get('[data-cy="no-medical-staff-option"]').click();
       cy.get('[data-cy="no-contact-option"]').click();
       cy.get('[data-cy="second-step-button"] button').should('be.enabled');

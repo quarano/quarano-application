@@ -15,7 +15,7 @@ declare namespace Cypress {
 
     logOut: () => void;
 
-    restart: (done: (err?: any) => void) => void;
+    restartBackend: (done: (err?: any) => void) => void;
   }
 }
 
@@ -64,28 +64,29 @@ Cypress.Commands.add('logInNotEnrolledClient2', () => {
   logIn('secUser2', 'secur1tyTest!');
 });
 
-Cypress.Commands.add('restart', (done: (err?: any) => void) => {
-  Cypress.config('defaultCommandTimeout', 20000); // temporarily increase defaultCommandTimeout
+Cypress.Commands.add('restartBackend', (done: (err?: any) => void) => {
   const req = () => {
     return fetch('http://localhost:8080/actuator/health/readiness')
       .then((response) => response.json())
       .then((response: any) => {
         if (response.status === 'UP') {
-          Cypress.config('defaultCommandTimeout', 4000); // reset defaultCommandTimeout to default value
-
           done();
           return;
         }
-
-        req();
+        setTimeout(() => {
+          req();
+        }, 1000);
       })
       .catch(() => {
-        req();
+        setTimeout(() => {
+          req();
+        }, 1000);
       });
   };
 
   fetch('http://localhost:8080/actuator/restart', { method: 'POST' }).then(() => {
-    cy.log('restart server');
-    req();
+    setTimeout(() => {
+      req();
+    }, 5000);
   });
 });
