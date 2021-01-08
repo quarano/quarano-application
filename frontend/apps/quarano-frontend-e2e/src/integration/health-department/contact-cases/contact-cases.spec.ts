@@ -98,12 +98,6 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
 
-      cy.get('[data-cy="input-firstname"]').should('exist');
-      cy.get('[data-cy="input-lastname"]').should('exist');
-      cy.get('[data-cy="input-dayofbirth"]').should('exist');
-      cy.get('[data-cy="input-phone"]').should('exist');
-      cy.get('[data-cy="input-email"]').should('exist');
-
       cy.get('[data-cy="input-firstname"]').type('Jack');
       cy.get('[data-cy="input-lastname"]').type('Randel');
 
@@ -138,12 +132,6 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="client-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
       cy.get('[data-cy="client-cancel-button"]').should('be.enabled');
-
-      cy.get('[data-cy="input-firstname"]').should('exist');
-      cy.get('[data-cy="input-lastname"]').should('exist');
-      cy.get('[data-cy="input-dayofbirth"]').should('exist');
-      cy.get('[data-cy="input-phone"]').should('exist');
-      cy.get('[data-cy="input-email"]').should('exist');
 
       cy.get('[data-cy="input-firstname"]').type('Jack');
       cy.get('[data-cy="input-lastname"]').type('Randel');
