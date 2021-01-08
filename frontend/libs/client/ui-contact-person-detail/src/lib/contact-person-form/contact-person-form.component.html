@@ -38,7 +38,7 @@
       </mat-form-field>
       <fieldset class="mb-3">
         <legend>{{ 'CONTACT_PERSON_FORM.KONTAKTMÖGLICHKEITEN' | translate }} *</legend>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width" data-cy="contact-person-form-phone">
           <input
             matInput
             maxlength="17"
@@ -243,7 +243,7 @@
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <qro-button [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
+      <qro-button data-cy="submit-button" [disabled]="formGroup.invalid || formGroup.pristine" [loading]="loading">
         {{ 'CONTACT_PERSON_FORM.SPEICHERN' | translate }}
       </qro-button>
       <button type="button" mat-raised-button color="secondary" (click)="cancel()">
