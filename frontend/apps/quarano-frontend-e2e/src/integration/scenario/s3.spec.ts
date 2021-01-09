@@ -9,6 +9,7 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
     cy.route('POST', '/hd/cases/?type=contact').as('newContact');
     cy.route('GET', '/hd/cases/*').as('case');
     cy.route('PUT', '/hd/cases/*/registration').as('registration');
+    cy.route('GET', '/hd/cases?type=index*').as('search');
   });
 
   function extractActivationCode(elem: JQuery) {
@@ -54,7 +55,7 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
     cy.get('[data-cy="input-phone"]').type('162156156156');
     cy.get('[data-cy="input-email"]').type('jack@gmail.com');
     cy.get('[data-cy="chip-list-input"]').type('Aalen');
-    // TODO: /hd/cases?type=index&q=A&projection=select
+    cy.wait('@search').its('status').should('eq', 200);
     cy.get('mat-option').click();
 
     cy.get('[data-cy="client-submit-button"] button').should('be.enabled');
@@ -79,13 +80,9 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
         expect(body.status).to.eq('angelegt');
         expect(body.infected).to.eq(false);
         expect(body.dateOfBirth).to.eq('1970-01-01');
-        // expect(body._embedded.originCases).to.deep.eq([
-        //   {
-        //     dateOfBirth: '1990-01-01',
-        //     firstName: 'Peter',
-        //     lastName: 'Aalen',
-        //   },
-        // ]);
+        expect(body._embedded.originCases[0].dateOfBirth).to.eq('1990-01-01');
+        expect(body._embedded.originCases[0].firstName).to.eq('Peter');
+        expect(body._embedded.originCases[0].lastName).to.eq('Aalen');
 
         cy.location('pathname').should('eq', '/health-department/case-detail/contact/' + caseId + '/edit');
       });
