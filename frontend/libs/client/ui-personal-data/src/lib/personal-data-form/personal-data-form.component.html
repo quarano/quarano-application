@@ -1,7 +1,7 @@
 <div [formGroup]="formGroup">
   <fieldset class="mb-3">
     <legend>{{ 'PERSONAL_DATA_FORM.PERSON' | translate }}</legend>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="personal-data-firstName">
       <input
         required
         matInput
@@ -15,7 +15,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" data-cy="personal-data-lastName">
       <input
         matInput
         required
@@ -29,7 +29,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="personal-data-dateOfBirth">
       <mat-label>{{ 'PERSONAL_DATA_FORM.GEBURTSDATUM' | translate }}</mat-label>
       <input
         matInput
@@ -57,7 +57,7 @@
     >
       {{ 'PERSONAL_DATA_FORM.MINDESTENS_EINE_TELEFONNUMMER' | translate }}</mat-error
     >
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="personal-data-email">
       <input
         matInput
         required
@@ -71,7 +71,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.email, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="personal-data-phone">
       <input
         matInput
         maxlength="17"
@@ -86,7 +86,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.phone, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" data-cy="personal-data-mobile">
       <input
         matInput
         maxlength="17"
