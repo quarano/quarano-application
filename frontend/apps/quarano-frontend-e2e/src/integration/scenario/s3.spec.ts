@@ -30,7 +30,7 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
     }
   }
 
-  it.only('new contact case is able to complete registration', () => {
+  it('new contact case is able to complete registration', () => {
     cy.logInAgent();
 
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
