@@ -115,9 +115,9 @@
           <div class="col-sm-4">
             <fieldset>
               <legend>Adresse</legend>
-              <mat-form-field style="width: 70%">
+              <mat-form-field style="width: 70%" data-cy="street-input">
                 <input
-                  data-cy="street-input"
+
                   matInput
                   placeholder="Straße"
                   formControlName="street"
@@ -129,9 +129,8 @@
                   {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
                 </mat-error>
               </mat-form-field>
-              <mat-form-field style="width: 30%">
+              <mat-form-field style="width: 30%" data-cy="house-number-input">
                 <input
-                  data-cy="house-number-input"
                   matInput
                   placeholder="Hausnr."
                   maxlength="6"
@@ -158,9 +157,9 @@
                   {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
                 </mat-error>
               </mat-form-field>
-              <mat-form-field style="width: 70%">
+              <mat-form-field style="width: 70%" data-cy="city-input">
                 <input
-                  data-cy="city-input"
+
                   matInput
                   placeholder="Ort"
                   formControlName="city"

@@ -13,6 +13,7 @@ describe('S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioni
     cy.route('GET', '/details').as('details');
     cy.route('GET', '/contacts').as('contacts');
     cy.route('GET', '/hd/cases/*').as('case');
+    cy.route('GET', '/hd/cases/*/questionnaire').as('questionnaire');
   });
 
   it.only('can complete enrollment and retrospective', () => {
@@ -110,22 +111,62 @@ describe('S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioni
         $elems[0].click();
       });
     cy.location('pathname').should('include', '/edit');
+
+    cy.get('.mat-tab-links').children().should('have.length', 6);
+
     cy.wait('@case').its('status').should('eq', 200);
     cy.get('@case')
       .its('response.body')
       .then(($body) => {
         expect($body.caseId).to.not.eq(null);
         expect($body.caseId).to.not.eq('');
-        expect($body.caseType).to.eq('index');
-        expect($body.email).to.eq('markus.hanser@testtest.de');
-        expect($body.firstName).to.eq('Markus');
-        expect($body.houseNumber).to.eq('15');
-        expect($body.infected).to.eq(true);
-        expect($body.phone).to.eq('0621222255');
-        expect($body.status).to.eq('in Nachverfolgung');
-        expect($body.lastName).to.eq('Hanser');
-        expect($body.street).to.eq('Hauptstraße');
-        expect($body.zipCode).to.eq('68199');
       });
+
+    cy.get('[data-cy="input-firstname"]').find('input').should('have.value', 'Markus');
+    cy.get('[data-cy="input-lastname"]').find('input').should('have.value', 'Hanser');
+    cy.get('[data-cy="input-dayofbirth"]').find('input').should('have.value', '1.1.1990');
+    cy.get('[data-cy="input-email"]').find('input').should('have.value', 'markus.hanser@testtest.de');
+    cy.get('[data-cy="input-phone"]').find('input').should('have.value', '0621222255');
+
+    cy.get('[data-cy="street-input"]').find('input').should('have.value', 'Hauptstraße');
+    cy.get('[data-cy="house-number-input"]').find('input').should('have.value', '15');
+    cy.get('[data-cy="input-zipcode"]').find('input').should('have.value', '68199');
+    cy.get('[data-cy="city-input"]').find('input').should('have.value', 'Mannheim');
+
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(today.getDate() - 2);
+    const twoWeeksFromNow = new Date();
+    twoWeeksFromNow.setDate(today.getDate() + 14);
+
+    cy.get('[data-cy="input-testdate"]').find('input').should('have.value', twoDaysAgo.toLocaleDateString('de'));
+    cy.get('[data-cy="input-quarantinestart"]').find('input').should('have.value', today.toLocaleDateString('de'));
+    cy.get('[data-cy="input-quarantineend"]')
+      .find('input')
+      .should('have.value', twoWeeksFromNow.toLocaleDateString('de'));
+
+    cy.get('[data-cy="contacts-tab"]').click();
+    cy.location('pathname').should('include', '/contacts');
+    cy.wait('@contacts').its('status').should('eq', 200);
+    cy.get('@contacts')
+      .its('response.body')
+      .then((body) => {
+        expect(body).to.be.an('array').that.does.have.length(1);
+        expect(body[0].firstName).to.eq('Claire');
+        expect(body[0].lastName).to.eq('Fraser');
+      });
+
+    // TODO: cy.get('[data-cy="case-data-table"]').find('div[row-index="0"]').should('contain', 'Claire Fraser');
+
+    cy.get('[data-cy="questionnaire-tab"]').click();
+    cy.location('pathname').should('include', '/questionnaire');
+    cy.wait('@questionnaire').its('status').should('eq', 200);
+
+    // cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo.toLocaleDateString());
+    cy.get('[data-cy="familyDoctor"]').should('have.text', 'Dr Schmidt');
+    cy.get('[data-cy="presumed-origin"]').should('have.text', 'Nicht angegeben');
+    cy.get('[data-cy="presumed-date"]').should('have.text', 'Nicht angegeben');
+    // cy.get('[data-cy="pre-existing-conditions"]').should('have.text', 'test');
+    cy.get('[data-cy="belongToMedicalStaffDescription"]').should('have.text', 'Merck');
+    // cy.get('[data-cy="hasContactToVulnerablePeopleDescription"]').should('have.text', 'Peter Aalen');
   });
 });

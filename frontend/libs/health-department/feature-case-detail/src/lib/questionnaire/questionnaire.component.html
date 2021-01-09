@@ -4,11 +4,11 @@
     <div *ngIf="questionnaire.hasSymptoms; else noSymptoms" class="">
       <div class="item col">
         <div class="label">Datum der ersten Symptome:</div>
-        <div class="value">{{ questionnaire.dayOfFirstSymptoms }}</div>
+        <div class="value" data-cy="symptoms-date">{{ questionnaire.dayOfFirstSymptoms }}</div>
       </div>
       <div class="item col">
         <div class="label">Festgestellte Symptome:</div>
-        <ul class="value">
+        <ul class="value" >
           <li *ngFor="let symptom of symptoms$ | async">
             {{ symptom.name }}
           </li>
@@ -21,29 +21,29 @@
   </fieldset>
   <fieldset>
     <legend>Hausarzt</legend>
-    <div>{{ questionnaire.familyDoctor ? questionnaire.familyDoctor : 'Nicht angegeben' }}</div>
+    <div data-cy="familyDoctor">{{ questionnaire.familyDoctor ? questionnaire.familyDoctor : 'Nicht angegeben' }}</div>
   </fieldset>
   <fieldset>
     <legend>Vermuteter Ort der Ansteckung</legend>
-    <div>{{ questionnaire.guessedOriginOfInfection ? questionnaire.guessedOriginOfInfection : 'Nicht angegeben' }}</div>
+    <div data-cy="presumed-origin">{{ questionnaire.guessedOriginOfInfection ? questionnaire.guessedOriginOfInfection : 'Nicht angegeben' }}</div>
   </fieldset>
   <fieldset>
     <legend>Vermutetes Datum der Ansteckung</legend>
-    <div>{{ questionnaire.guessedDateOfInfection ? questionnaire.guessedDateOfInfection : 'Nicht angegeben' }}</div>
+    <div data-cy="presumed-date">{{ questionnaire.guessedDateOfInfection ? questionnaire.guessedDateOfInfection : 'Nicht angegeben' }}</div>
   </fieldset>
   <fieldset>
     <legend>Vorerkrankungen</legend>
-    <div>
+    <div data-cy="pre-existing-conditions">
       {{ questionnaire.hasPreExistingConditions ? questionnaire.hasPreExistingConditionsDescription : 'Nicht bekannt' }}
     </div>
   </fieldset>
   <fieldset>
     <legend>Arbeit in Pflege oder Medizinischem Umfeld?</legend>
-    <div>{{ questionnaire.belongToMedicalStaff ? questionnaire.belongToMedicalStaffDescription : 'Nein' }}</div>
+    <div data-cy="belongToMedicalStaffDescription">{{ questionnaire.belongToMedicalStaff ? questionnaire.belongToMedicalStaffDescription : 'Nein' }}</div>
   </fieldset>
   <fieldset>
     <legend>Kontakt zu Risikopersonen</legend>
-    <div>
+    <div data-cy="hasContactToVulnerablePeopleDescription">
       {{ questionnaire.hasContactToVulnerablePeople ? questionnaire.hasContactToVulnerablePeopleDescription : 'Nein' }}
     </div>
   </fieldset>
