@@ -10,9 +10,12 @@ describe('S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioni
     cy.route('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
     cy.route('PUT', '/enrollment/details').as('updatePersonalDetails');
     cy.route('GET', '/diary').as('diary');
+    cy.route('GET', '/details').as('details');
+    cy.route('GET', '/contacts').as('contacts');
+    cy.route('GET', '/hd/cases/*').as('case');
   });
 
-  it('can complete enrollment and retrospective', () => {
+  it.only('can complete enrollment and retrospective', () => {
     cy.logInNotEnrolledClient();
 
     cy.location('pathname').should('eq', '/client/enrollment/basic-data');
@@ -72,5 +75,57 @@ describe('S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioni
 
     cy.get('[data-cy="diary-menu-item"]').should('exist');
     cy.get('[data-cy="contact-person-menu-item"]').should('exist');
+
+    cy.get('[data-cy="profile-user-button"]').click();
+    cy.get('[data-cy="profile-button"]').click();
+    cy.wait('@details').its('status').should('eq', 200);
+    cy.location('pathname').should('include', '/client/profile');
+
+    cy.get('[data-cy="personal-data-firstName"]').find('input').should('have.value', 'Markus');
+    cy.get('[data-cy="personal-data-lastName"]').find('input').should('have.value', 'Hanser');
+    cy.get('[data-cy="personal-data-dateOfBirth"]').find('input').should('have.value', '1.1.1990');
+    cy.get('[data-cy="personal-data-email"]').find('input').should('have.value', 'markus.hanser@testtest.de');
+    cy.get('[data-cy="personal-data-phone"]').find('input').should('have.value', '0621222255');
+
+    cy.get('[data-cy="street-input"]').find('input').should('have.value', 'Hauptstraße');
+    cy.get('[data-cy="house-number-input"]').find('input').should('have.value', '15');
+    cy.get('[data-cy="zip-code-input"]').find('input').should('have.value', '68199');
+    cy.get('[data-cy="city-input"]').find('input').should('have.value', 'Mannheim');
+
+    cy.get('[data-cy="contact-person-menu-item"]').click();
+    cy.wait('@contacts').its('status').should('eq', 200);
+    cy.location('pathname').should('eq', '/client/contact-persons/contact-person-list');
+    cy.get('mat-card').should('contain', 'Claire Fraser');
+
+    cy.logOut();
+
+    cy.logInAgent();
+
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+    cy.get('[data-cy="search-case-input"]').type('Markus');
+    cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
+    cy.get('[data-cy="case-data-table"]')
+      .find('.ag-center-cols-container > .ag-row')
+      .then(($elems) => {
+        $elems[0].click();
+      });
+    cy.location('pathname').should('include', '/edit');
+    cy.wait('@case').its('status').should('eq', 200);
+    cy.get('@case')
+      .its('response.body')
+      .then(($body) => {
+        expect($body.caseId).to.not.eq(null);
+        expect($body.caseId).to.not.eq('');
+        expect($body.caseType).to.eq('index');
+        expect($body.email).to.eq('markus.hanser@testtest.de');
+        expect($body.firstName).to.eq('Markus');
+        expect($body.houseNumber).to.eq('15');
+        expect($body.infected).to.eq(true);
+        expect($body.phone).to.eq('0621222255');
+        expect($body.status).to.eq('in Nachverfolgung');
+        expect($body.lastName).to.eq('Hanser');
+        expect($body.street).to.eq('Hauptstraße');
+        expect($body.zipCode).to.eq('68199');
+      });
   });
 });
