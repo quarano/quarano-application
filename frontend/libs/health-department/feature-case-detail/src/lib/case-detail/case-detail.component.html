@@ -133,6 +133,7 @@
         E-Mail Vorlage
       </a>
       <a
+        data-cy="questionnaire-tab"
         *ngIf="caseDetail?._links?.hasOwnProperty('questionnaire')"
         mat-tab-link
         [routerLink]="['questionnaire']"
@@ -143,6 +144,7 @@
         Fragebogen
       </a>
       <a
+        data-cy="contacts-tab"
         mat-tab-link
         [routerLink]="['contacts']"
         routerLinkActive
