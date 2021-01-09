@@ -30,7 +30,7 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
     }
   }
 
-  it('new contact case is able to complete registration', () => {
+  it.only('new contact case is able to complete registration', () => {
     cy.logInAgent();
 
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
@@ -80,6 +80,7 @@ describe('S3 - GAMA kann neuen Kontaktfall anlegen', () => {
         expect(body.status).to.eq('angelegt');
         expect(body.infected).to.eq(false);
         expect(body.dateOfBirth).to.eq('1970-01-01');
+        expect(body._embedded.originCases).to.be.an('array').that.does.have.length(1);
         expect(body._embedded.originCases[0].dateOfBirth).to.eq('1990-01-01');
         expect(body._embedded.originCases[0].firstName).to.eq('Peter');
         expect(body._embedded.originCases[0].lastName).to.eq('Aalen');
