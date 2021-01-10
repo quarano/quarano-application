@@ -7,12 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
 import { Observable, of } from 'rxjs';
 
-export interface Event {
-  title: string;
-  start: string;
-  end: string;
-}
-
 @Component({
   selector: 'qro-event-list',
   templateUrl: './event-list.component.html',
@@ -49,20 +43,14 @@ export class EventListComponent implements OnInit, OnDestroy {
       this.dialog
         .open(EventNewDialogComponent)
         .afterClosed()
-        .pipe(filter((eventData) => eventData))
-        .subscribe((value) => this.saveNewEvent(value))
+        .pipe(filter((occasionData) => occasionData))
+        .subscribe((occasionData) => this.saveNewEvent(occasionData))
     );
   }
 
-  private saveNewEvent(event) {
-    //todo richtig typisieren
-    const newEvent: Event = {
-      title: event?.name,
-      start: event?.dateFrom,
-      end: event?.dateTo,
-    };
+  private saveNewEvent(newOccasion) {
     this.healthDepartmentService
-      .addOccasion(this.caseId, newEvent)
+      .addOccasion(this.caseId, newOccasion)
       .subscribe((response) => console.log('backendResponse:', response));
   }
 
