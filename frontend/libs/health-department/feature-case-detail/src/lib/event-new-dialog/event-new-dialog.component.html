@@ -1,16 +1,11 @@
 <h2 mat-dialog-title>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NEU' | translate }}</h2>
 
 <mat-dialog-content>
-  <form class="new-event-form" [formGroup]="eventFormGroup">
-    <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
-      <input formControlName="name" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
-    </mat-form-field>
-
+  <form class="new-event-form" [formGroup]="occasionFormGroup">
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}</mat-label>
       <input
-        formControlName="dateFrom"
+        formControlName="start"
         matInput
         placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}"
         [matDatepicker]="dateFrom"
@@ -22,7 +17,7 @@
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}</mat-label>
       <input
-        formControlName="dateTo"
+        formControlName="end"
         matInput
         placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}"
         [matDatepicker]="dateTo"
@@ -32,26 +27,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ADRESSE' | translate }}</mat-label>
-      <input
-        formControlName="address"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ADRESSE' | translate }}"
-      />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STATUS' | translate }}</mat-label>
-      <input formControlName="status" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STATUS' | translate }}" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VORGANGSNUMMER' | translate }}</mat-label>
-      <input
-        formControlName="id"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VORGANGSNUMMER' | translate }}"
-      />
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
+      <input formControlName="title" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
     </mat-form-field>
 
     <mat-form-field>
@@ -64,20 +41,39 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STRASSE' | translate }}</mat-label>
       <input
-        formControlName="description"
+        formControlName="street"
         matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}"
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STRASSE' | translate }}"
       />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BEKANNTE_TEILNEHMERZAHL' | translate }}</mat-label>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NUMMER' | translate }}</mat-label>
       <input
-        formControlName="participants"
+        formControlName="houseNumber"
         matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BEKANNTE_TEILNEHMERZAHL' | translate }}"
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NUMMER' | translate }}"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZIP' | translate }}</mat-label>
+      <input formControlName="zipCode" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZIP' | translate }}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}</mat-label>
+      <input formControlName="city" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
+      <input
+        formControlName="additionalInformation"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}"
       />
     </mat-form-field>
   </form>

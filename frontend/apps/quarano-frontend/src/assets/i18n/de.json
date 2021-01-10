@@ -403,7 +403,11 @@
       "ZUSAETZTLICHE_BESCHREIBUNG": "Zusätzliche Beschreibung",
       "BEKANNTE_TEILNEHMERZAHL": "Bekannte Teilnehmerzahl",
       "ABBRECHEN": "Abbrechen",
-      "ANLEGEN": "ANLEGEN"
+      "ANLEGEN": "ANLEGEN",
+      "STRASSE": "Straße",
+      "STADT": "Stadt",
+      "ZIP": "PLZ",
+      "NUMMER": "Hausnummer"
     }
   }
 }
