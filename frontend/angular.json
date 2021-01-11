@@ -15,14 +15,20 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["file-saver", "lodash"],
+            "allowedCommonJsDependencies": [
+              "file-saver",
+              "lodash"
+            ],
             "outputPath": "dist/apps/quarano-frontend/public",
             "index": "apps/quarano-frontend/src/index.html",
             "main": "apps/quarano-frontend/src/main.ts",
             "polyfills": "apps/quarano-frontend/src/polyfills.ts",
             "tsConfig": "apps/quarano-frontend/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/quarano-frontend/src/favicon.ico", "apps/quarano-frontend/src/assets"],
+            "assets": [
+              "apps/quarano-frontend/src/favicon.ico",
+              "apps/quarano-frontend/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css",
@@ -439,7 +445,10 @@
                 }
               ]
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "ngx-build-plus:dev-server",
@@ -462,8 +471,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/quarano-frontend/tsconfig.app.json", "apps/quarano-frontend/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!apps/quarano-frontend/**/*"]
+            "tsConfig": [
+              "apps/quarano-frontend/tsconfig.app.json",
+              "apps/quarano-frontend/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/quarano-frontend/**/*"
+            ]
           }
         },
         "test": {
@@ -471,7 +486,10 @@
           "options": {
             "jestConfig": "apps/quarano-frontend/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/apps/quarano-frontend"
+          ]
         }
       }
     },
@@ -496,8 +514,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/quarano-frontend-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/quarano-frontend-e2e/**/*"]
+            "tsConfig": [
+              "apps/quarano-frontend-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/quarano-frontend-e2e/**/*"
+            ]
           }
         }
       }
@@ -511,8 +534,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/auth/domain/tsconfig.lib.json", "libs/auth/domain/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/domain/**/*"]
+            "tsConfig": [
+              "libs/auth/domain/tsconfig.lib.json",
+              "libs/auth/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/domain/**/*"
+            ]
           }
         },
         "test": {
@@ -520,7 +549,10 @@
           "options": {
             "jestConfig": "libs/auth/domain/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/domain"
+          ]
         }
       },
       "schematics": {
@@ -538,8 +570,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-material/tsconfig.lib.json", "libs/shared/ui-material/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-material/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-material/tsconfig.lib.json",
+              "libs/shared/ui-material/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-material/**/*"
+            ]
           }
         },
         "test": {
@@ -547,7 +585,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-material/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-material"
+          ]
         }
       },
       "schematics": {
@@ -569,7 +610,10 @@
               "libs/health-department/domain/tsconfig.lib.json",
               "libs/health-department/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/domain/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/domain/**/*"
+            ]
           }
         },
         "test": {
@@ -577,7 +621,10 @@
           "options": {
             "jestConfig": "libs/health-department/domain/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/domain"
+          ]
         }
       },
       "schematics": {
@@ -599,7 +646,10 @@
               "libs/health-department/ui-action-alert/tsconfig.lib.json",
               "libs/health-department/ui-action-alert/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/ui-action-alert/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/ui-action-alert/**/*"
+            ]
           }
         },
         "test": {
@@ -607,7 +657,10 @@
           "options": {
             "jestConfig": "libs/health-department/ui-action-alert/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/ui-action-alert"
+          ]
         }
       },
       "schematics": {
@@ -629,7 +682,10 @@
               "libs/health-department/shell/tsconfig.lib.json",
               "libs/health-department/shell/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/shell/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/shell/**/*"
+            ]
           }
         },
         "test": {
@@ -637,7 +693,10 @@
           "options": {
             "jestConfig": "libs/health-department/shell/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/shell"
+          ]
         }
       },
       "schematics": {
@@ -655,8 +714,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-tile/tsconfig.lib.json", "libs/shared/ui-tile/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-tile/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-tile/tsconfig.lib.json",
+              "libs/shared/ui-tile/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-tile/**/*"
+            ]
           }
         },
         "test": {
@@ -664,7 +729,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-tile/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-tile"
+          ]
         }
       },
       "schematics": {
@@ -682,8 +750,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-button/tsconfig.lib.json", "libs/shared/ui-button/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-button/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-button/tsconfig.lib.json",
+              "libs/shared/ui-button/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-button/**/*"
+            ]
           }
         },
         "test": {
@@ -691,7 +765,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-button/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-button"
+          ]
         }
       },
       "schematics": {
@@ -709,8 +786,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/administration/shell/tsconfig.lib.json", "libs/administration/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/administration/shell/**/*"]
+            "tsConfig": [
+              "libs/administration/shell/tsconfig.lib.json",
+              "libs/administration/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/administration/shell/**/*"
+            ]
           }
         },
         "test": {
@@ -718,7 +801,10 @@
           "options": {
             "jestConfig": "libs/administration/shell/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/administration/shell"
+          ]
         }
       },
       "schematics": {
@@ -736,8 +822,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/auth/api/tsconfig.lib.json", "libs/auth/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/api/**/*"]
+            "tsConfig": [
+              "libs/auth/api/tsconfig.lib.json",
+              "libs/auth/api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/api/**/*"
+            ]
           }
         },
         "test": {
@@ -745,7 +837,10 @@
           "options": {
             "jestConfig": "libs/auth/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/api"
+          ]
         }
       },
       "schematics": {
@@ -767,7 +862,10 @@
               "libs/shared/ui-confirmation-dialog/tsconfig.lib.json",
               "libs/shared/ui-confirmation-dialog/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-confirmation-dialog/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-confirmation-dialog/**/*"
+            ]
           }
         },
         "test": {
@@ -775,7 +873,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-confirmation-dialog/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-confirmation-dialog"
+          ]
         }
       },
       "schematics": {
@@ -797,7 +898,10 @@
               "libs/shared/ui-multiple-autocomplete/tsconfig.lib.json",
               "libs/shared/ui-multiple-autocomplete/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-multiple-autocomplete/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-multiple-autocomplete/**/*"
+            ]
           }
         },
         "test": {
@@ -805,7 +909,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-multiple-autocomplete/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-multiple-autocomplete"
+          ]
         }
       },
       "schematics": {
@@ -823,8 +930,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/auth/shell/tsconfig.lib.json", "libs/auth/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/shell/**/*"]
+            "tsConfig": [
+              "libs/auth/shell/tsconfig.lib.json",
+              "libs/auth/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/shell/**/*"
+            ]
           }
         },
         "test": {
@@ -832,7 +945,10 @@
           "options": {
             "jestConfig": "libs/auth/shell/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/shell"
+          ]
         }
       },
       "schematics": {
@@ -854,7 +970,10 @@
               "libs/administration/domain/tsconfig.lib.json",
               "libs/administration/domain/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/domain/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/administration/domain/**/*"
+            ]
           }
         },
         "test": {
@@ -862,7 +981,10 @@
           "options": {
             "jestConfig": "libs/administration/domain/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/administration/domain"
+          ]
         }
       },
       "schematics": {
@@ -880,8 +1002,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/administration/api/tsconfig.lib.json", "libs/administration/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/administration/api/**/*"]
+            "tsConfig": [
+              "libs/administration/api/tsconfig.lib.json",
+              "libs/administration/api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/administration/api/**/*"
+            ]
           }
         },
         "test": {
@@ -889,7 +1017,10 @@
           "options": {
             "jestConfig": "libs/administration/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/administration/api"
+          ]
         }
       },
       "schematics": {
@@ -911,7 +1042,10 @@
               "libs/health-department/api/tsconfig.lib.json",
               "libs/health-department/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/api/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/api/**/*"
+            ]
           }
         },
         "test": {
@@ -919,7 +1053,10 @@
           "options": {
             "jestConfig": "libs/health-department/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/api"
+          ]
         }
       },
       "schematics": {
@@ -937,8 +1074,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/auth/forbidden/tsconfig.lib.json", "libs/auth/forbidden/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/forbidden/**/*"]
+            "tsConfig": [
+              "libs/auth/forbidden/tsconfig.lib.json",
+              "libs/auth/forbidden/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/forbidden/**/*"
+            ]
           }
         },
         "test": {
@@ -946,7 +1089,10 @@
           "options": {
             "jestConfig": "libs/auth/forbidden/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/forbidden"
+          ]
         }
       },
       "schematics": {
@@ -968,7 +1114,10 @@
               "libs/shared/util-progress-bar/tsconfig.lib.json",
               "libs/shared/util-progress-bar/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-progress-bar/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-progress-bar/**/*"
+            ]
           }
         },
         "test": {
@@ -976,7 +1125,10 @@
           "options": {
             "jestConfig": "libs/shared/util-progress-bar/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-progress-bar"
+          ]
         }
       },
       "schematics": {
@@ -994,8 +1146,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/client/domain/tsconfig.lib.json", "libs/client/domain/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/domain/**/*"]
+            "tsConfig": [
+              "libs/client/domain/tsconfig.lib.json",
+              "libs/client/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/domain/**/*"
+            ]
           }
         },
         "test": {
@@ -1003,7 +1161,10 @@
           "options": {
             "jestConfig": "libs/client/domain/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/domain"
+          ]
         }
       },
       "schematics": {
@@ -1021,8 +1182,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-aside/tsconfig.lib.json", "libs/shared/ui-aside/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-aside/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-aside/tsconfig.lib.json",
+              "libs/shared/ui-aside/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-aside/**/*"
+            ]
           }
         },
         "test": {
@@ -1030,7 +1197,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-aside/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-aside"
+          ]
         }
       },
       "schematics": {
@@ -1048,8 +1218,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/client/shell/tsconfig.lib.json", "libs/client/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/shell/**/*"]
+            "tsConfig": [
+              "libs/client/shell/tsconfig.lib.json",
+              "libs/client/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/shell/**/*"
+            ]
           }
         },
         "test": {
@@ -1057,7 +1233,10 @@
           "options": {
             "jestConfig": "libs/client/shell/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/shell"
+          ]
         }
       },
       "schematics": {
@@ -1075,8 +1254,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/util-symptom/tsconfig.lib.json", "libs/shared/util-symptom/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-symptom/**/*"]
+            "tsConfig": [
+              "libs/shared/util-symptom/tsconfig.lib.json",
+              "libs/shared/util-symptom/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-symptom/**/*"
+            ]
           }
         },
         "test": {
@@ -1084,7 +1269,10 @@
           "options": {
             "jestConfig": "libs/shared/util-symptom/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-symptom"
+          ]
         }
       },
       "schematics": {
@@ -1106,7 +1294,10 @@
               "libs/shared/util-data-access/tsconfig.lib.json",
               "libs/shared/util-data-access/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-data-access/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-data-access/**/*"
+            ]
           }
         },
         "test": {
@@ -1114,7 +1305,10 @@
           "options": {
             "jestConfig": "libs/shared/util-data-access/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-data-access"
+          ]
         }
       },
       "schematics": {
@@ -1132,8 +1326,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/client/api/tsconfig.lib.json", "libs/client/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/api/**/*"]
+            "tsConfig": [
+              "libs/client/api/tsconfig.lib.json",
+              "libs/client/api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/api/**/*"
+            ]
           }
         },
         "test": {
@@ -1141,7 +1341,10 @@
           "options": {
             "jestConfig": "libs/client/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/api"
+          ]
         }
       },
       "schematics": {
@@ -1159,8 +1362,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/util-date/tsconfig.lib.json", "libs/shared/util-date/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-date/**/*"]
+            "tsConfig": [
+              "libs/shared/util-date/tsconfig.lib.json",
+              "libs/shared/util-date/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-date/**/*"
+            ]
           }
         },
         "test": {
@@ -1168,7 +1377,10 @@
           "options": {
             "jestConfig": "libs/shared/util-date/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-date"
+          ]
         }
       },
       "schematics": {
@@ -1186,8 +1398,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/client/feature-diary/tsconfig.lib.json", "libs/client/feature-diary/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-diary/**/*"]
+            "tsConfig": [
+              "libs/client/feature-diary/tsconfig.lib.json",
+              "libs/client/feature-diary/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/feature-diary/**/*"
+            ]
           }
         },
         "test": {
@@ -1195,7 +1413,10 @@
           "options": {
             "jestConfig": "libs/client/feature-diary/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/feature-diary"
+          ]
         }
       },
       "schematics": {
@@ -1217,7 +1438,10 @@
               "libs/client/feature-enrollment/tsconfig.lib.json",
               "libs/client/feature-enrollment/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-enrollment/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/feature-enrollment/**/*"
+            ]
           }
         },
         "test": {
@@ -1225,7 +1449,10 @@
           "options": {
             "jestConfig": "libs/client/feature-enrollment/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/feature-enrollment"
+          ]
         }
       },
       "schematics": {
@@ -1247,7 +1474,10 @@
               "libs/client/feature-profile/tsconfig.lib.json",
               "libs/client/feature-profile/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-profile/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/feature-profile/**/*"
+            ]
           }
         },
         "test": {
@@ -1255,7 +1485,10 @@
           "options": {
             "jestConfig": "libs/client/feature-profile/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/feature-profile"
+          ]
         }
       },
       "schematics": {
@@ -1277,7 +1510,10 @@
               "libs/client/feature-health-department-contact/tsconfig.lib.json",
               "libs/client/feature-health-department-contact/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-health-department-contact/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/feature-health-department-contact/**/*"
+            ]
           }
         },
         "test": {
@@ -1285,7 +1521,10 @@
           "options": {
             "jestConfig": "libs/client/feature-health-department-contact/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/feature-health-department-contact"
+          ]
         }
       },
       "schematics": {
@@ -1307,7 +1546,10 @@
               "libs/client/feature-contact-persons/tsconfig.lib.json",
               "libs/client/feature-contact-persons/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/feature-contact-persons/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/feature-contact-persons/**/*"
+            ]
           }
         },
         "test": {
@@ -1315,7 +1557,10 @@
           "options": {
             "jestConfig": "libs/client/feature-contact-persons/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/feature-contact-persons"
+          ]
         }
       },
       "schematics": {
@@ -1337,7 +1582,10 @@
               "libs/client/ui-personal-data/tsconfig.lib.json",
               "libs/client/ui-personal-data/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-personal-data/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/ui-personal-data/**/*"
+            ]
           }
         },
         "test": {
@@ -1345,7 +1593,10 @@
           "options": {
             "jestConfig": "libs/client/ui-personal-data/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/ui-personal-data"
+          ]
         }
       },
       "schematics": {
@@ -1367,7 +1618,10 @@
               "libs/client/ui-contact-person-detail/tsconfig.lib.json",
               "libs/client/ui-contact-person-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-contact-person-detail/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/ui-contact-person-detail/**/*"
+            ]
           }
         },
         "test": {
@@ -1375,7 +1629,10 @@
           "options": {
             "jestConfig": "libs/client/ui-contact-person-detail/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/ui-contact-person-detail"
+          ]
         }
       },
       "schematics": {
@@ -1397,7 +1654,10 @@
               "libs/health-department/feature-contact-cases/tsconfig.lib.json",
               "libs/health-department/feature-contact-cases/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-contact-cases/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/feature-contact-cases/**/*"
+            ]
           }
         },
         "test": {
@@ -1405,7 +1665,10 @@
           "options": {
             "jestConfig": "libs/health-department/feature-contact-cases/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/feature-contact-cases"
+          ]
         }
       },
       "schematics": {
@@ -1427,7 +1690,10 @@
               "libs/health-department/feature-index-cases/tsconfig.lib.json",
               "libs/health-department/feature-index-cases/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-index-cases/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/feature-index-cases/**/*"
+            ]
           }
         },
         "test": {
@@ -1435,7 +1701,10 @@
           "options": {
             "jestConfig": "libs/health-department/feature-index-cases/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/feature-index-cases"
+          ]
         }
       },
       "schematics": {
@@ -1457,7 +1726,10 @@
               "libs/health-department/feature-case-detail/tsconfig.lib.json",
               "libs/health-department/feature-case-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-case-detail/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/feature-case-detail/**/*"
+            ]
           }
         },
         "test": {
@@ -1465,7 +1737,10 @@
           "options": {
             "jestConfig": "libs/health-department/feature-case-detail/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/feature-case-detail"
+          ]
         }
       },
       "schematics": {
@@ -1487,7 +1762,10 @@
               "libs/general/feature-welcome/tsconfig.lib.json",
               "libs/general/feature-welcome/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-welcome/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/feature-welcome/**/*"
+            ]
           }
         },
         "test": {
@@ -1495,7 +1773,10 @@
           "options": {
             "jestConfig": "libs/general/feature-welcome/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/feature-welcome"
+          ]
         }
       },
       "schematics": {
@@ -1517,7 +1798,10 @@
               "libs/general/feature-data-protection/tsconfig.lib.json",
               "libs/general/feature-data-protection/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-data-protection/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/feature-data-protection/**/*"
+            ]
           }
         },
         "test": {
@@ -1525,7 +1809,10 @@
           "options": {
             "jestConfig": "libs/general/feature-data-protection/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/feature-data-protection"
+          ]
         }
       },
       "schematics": {
@@ -1547,7 +1834,10 @@
               "libs/general/feature-imprint/tsconfig.lib.json",
               "libs/general/feature-imprint/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-imprint/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/feature-imprint/**/*"
+            ]
           }
         },
         "test": {
@@ -1555,7 +1845,10 @@
           "options": {
             "jestConfig": "libs/general/feature-imprint/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/feature-imprint"
+          ]
         }
       },
       "schematics": {
@@ -1577,7 +1870,10 @@
               "libs/general/feature-terms/tsconfig.lib.json",
               "libs/general/feature-terms/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/general/feature-terms/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/feature-terms/**/*"
+            ]
           }
         },
         "test": {
@@ -1585,7 +1881,10 @@
           "options": {
             "jestConfig": "libs/general/feature-terms/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/feature-terms"
+          ]
         }
       },
       "schematics": {
@@ -1603,8 +1902,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/general/shell/tsconfig.lib.json", "libs/general/shell/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/general/shell/**/*"]
+            "tsConfig": [
+              "libs/general/shell/tsconfig.lib.json",
+              "libs/general/shell/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/shell/**/*"
+            ]
           }
         },
         "test": {
@@ -1612,7 +1917,10 @@
           "options": {
             "jestConfig": "libs/general/shell/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/shell"
+          ]
         }
       },
       "schematics": {
@@ -1634,7 +1942,10 @@
               "libs/administration/feature-account-detail/tsconfig.lib.json",
               "libs/administration/feature-account-detail/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-detail/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/administration/feature-account-detail/**/*"
+            ]
           }
         },
         "test": {
@@ -1642,7 +1953,10 @@
           "options": {
             "jestConfig": "libs/administration/feature-account-detail/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/administration/feature-account-detail"
+          ]
         }
       },
       "schematics": {
@@ -1664,7 +1978,10 @@
               "libs/administration/feature-account-list/tsconfig.lib.json",
               "libs/administration/feature-account-list/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/administration/feature-account-list/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/administration/feature-account-list/**/*"
+            ]
           }
         },
         "test": {
@@ -1672,7 +1989,10 @@
           "options": {
             "jestConfig": "libs/administration/feature-account-list/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/administration/feature-account-list"
+          ]
         }
       },
       "schematics": {
@@ -1690,8 +2010,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-error/tsconfig.lib.json", "libs/shared/ui-error/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-error/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-error/tsconfig.lib.json",
+              "libs/shared/ui-error/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-error/**/*"
+            ]
           }
         },
         "test": {
@@ -1699,7 +2025,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-error/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-error"
+          ]
         }
       },
       "schematics": {
@@ -1721,7 +2050,10 @@
               "libs/auth/feature-change-password/tsconfig.lib.json",
               "libs/auth/feature-change-password/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/auth/feature-change-password/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/feature-change-password/**/*"
+            ]
           }
         },
         "test": {
@@ -1729,7 +2061,10 @@
           "options": {
             "jestConfig": "libs/auth/feature-change-password/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/feature-change-password"
+          ]
         }
       },
       "schematics": {
@@ -1747,8 +2082,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/auth/feature-login/tsconfig.lib.json", "libs/auth/feature-login/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/auth/feature-login/**/*"]
+            "tsConfig": [
+              "libs/auth/feature-login/tsconfig.lib.json",
+              "libs/auth/feature-login/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/feature-login/**/*"
+            ]
           }
         },
         "test": {
@@ -1756,7 +2097,10 @@
           "options": {
             "jestConfig": "libs/auth/feature-login/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/feature-login"
+          ]
         }
       },
       "schematics": {
@@ -1774,8 +2118,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ui-styles/tsconfig.lib.json", "libs/shared/ui-styles/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-styles/**/*"]
+            "tsConfig": [
+              "libs/shared/ui-styles/tsconfig.lib.json",
+              "libs/shared/ui-styles/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-styles/**/*"
+            ]
           }
         },
         "test": {
@@ -1783,7 +2133,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-styles/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-styles"
+          ]
         }
       },
       "schematics": {
@@ -1801,8 +2154,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/util-forms/tsconfig.lib.json", "libs/shared/util-forms/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-forms/**/*"]
+            "tsConfig": [
+              "libs/shared/util-forms/tsconfig.lib.json",
+              "libs/shared/util-forms/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-forms/**/*"
+            ]
           }
         },
         "test": {
@@ -1810,7 +2169,10 @@
           "options": {
             "jestConfig": "libs/shared/util-forms/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-forms"
+          ]
         }
       },
       "schematics": {
@@ -1832,7 +2194,10 @@
               "libs/shared/util-common-functions/tsconfig.lib.json",
               "libs/shared/util-common-functions/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-common-functions/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-common-functions/**/*"
+            ]
           }
         },
         "test": {
@@ -1840,7 +2205,10 @@
           "options": {
             "jestConfig": "libs/shared/util-common-functions/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-common-functions"
+          ]
         }
       },
       "schematics": {
@@ -1858,8 +2226,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/util-snackbar/tsconfig.lib.json", "libs/shared/util-snackbar/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-snackbar/**/*"]
+            "tsConfig": [
+              "libs/shared/util-snackbar/tsconfig.lib.json",
+              "libs/shared/util-snackbar/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-snackbar/**/*"
+            ]
           }
         },
         "test": {
@@ -1867,7 +2241,10 @@
           "options": {
             "jestConfig": "libs/shared/util-snackbar/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-snackbar"
+          ]
         }
       },
       "schematics": {
@@ -1889,7 +2266,10 @@
               "libs/shared/util-translation/tsconfig.lib.json",
               "libs/shared/util-translation/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/util-translation/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/util-translation/**/*"
+            ]
           }
         },
         "test": {
@@ -1897,7 +2277,10 @@
           "options": {
             "jestConfig": "libs/shared/util-translation/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/util-translation"
+          ]
         }
       },
       "schematics": {
@@ -1919,7 +2302,10 @@
               "libs/shared/ui-static-pages/tsconfig.lib.json",
               "libs/shared/ui-static-pages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-static-pages/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-static-pages/**/*"
+            ]
           }
         },
         "test": {
@@ -1927,7 +2313,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-static-pages/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-static-pages"
+          ]
         }
       },
       "schematics": {
@@ -1949,7 +2338,10 @@
               "libs/health-department/feature-export/tsconfig.lib.json",
               "libs/health-department/feature-export/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/health-department/feature-export/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/health-department/feature-export/**/*"
+            ]
           }
         },
         "test": {
@@ -1957,7 +2349,10 @@
           "options": {
             "jestConfig": "libs/health-department/feature-export/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/health-department/feature-export"
+          ]
         }
       },
       "schematics": {
@@ -1979,7 +2374,10 @@
               "libs/client/ui-forgotten-contact-dialog/tsconfig.lib.json",
               "libs/client/ui-forgotten-contact-dialog/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client/ui-forgotten-contact-dialog/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/client/ui-forgotten-contact-dialog/**/*"
+            ]
           }
         },
         "test": {
@@ -1987,7 +2385,10 @@
           "options": {
             "jestConfig": "libs/client/ui-forgotten-contact-dialog/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/client/ui-forgotten-contact-dialog"
+          ]
         }
       },
       "schematics": {
@@ -2005,8 +2406,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/shared/ag-grid/tsconfig.lib.json", "libs/shared/ag-grid/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/shared/ui-ag-grid/**/*"]
+            "tsConfig": [
+              "libs/shared/ag-grid/tsconfig.lib.json",
+              "libs/shared/ag-grid/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/ui-ag-grid/**/*"
+            ]
           }
         },
         "test": {
@@ -2014,7 +2421,10 @@
           "options": {
             "jestConfig": "libs/shared/ui-ag-grid/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/shared/ui-ag-grid"
+          ]
         }
       },
       "schematics": {
@@ -2032,8 +2442,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/general/domain/tsconfig.lib.json", "libs/general/domain/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/general/domain/**/*"]
+            "tsConfig": [
+              "libs/general/domain/tsconfig.lib.json",
+              "libs/general/domain/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/domain/**/*"
+            ]
           }
         },
         "test": {
@@ -2041,7 +2457,10 @@
           "options": {
             "jestConfig": "libs/general/domain/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/domain"
+          ]
         }
       },
       "schematics": {
@@ -2059,8 +2478,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/general/api/tsconfig.lib.json", "libs/general/api/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "!libs/general/api/**/*"]
+            "tsConfig": [
+              "libs/general/api/tsconfig.lib.json",
+              "libs/general/api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/general/api/**/*"
+            ]
           }
         },
         "test": {
@@ -2068,7 +2493,10 @@
           "options": {
             "jestConfig": "libs/general/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/general/api"
+          ]
         }
       },
       "schematics": {
@@ -2090,7 +2518,10 @@
               "libs/auth/feature-reset-password/tsconfig.lib.json",
               "libs/auth/feature-reset-password/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/auth/feature-reset-password/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/auth/feature-reset-password/**/*"
+            ]
           }
         },
         "test": {
@@ -2098,7 +2529,10 @@
           "options": {
             "jestConfig": "libs/auth/feature-reset-password/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/auth/feature-reset-password"
+          ]
         }
       },
       "schematics": {
