@@ -276,7 +276,6 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		mvc.perform(post("/hd/export/sormas/by-ids")
 				.accept(MediaType.valueOf("text/csv"))
 				.content(ids))
-				.andDo(documentGetQuarantinesByIds())
 				.andExpect(status().isBadRequest());
 	}
 
