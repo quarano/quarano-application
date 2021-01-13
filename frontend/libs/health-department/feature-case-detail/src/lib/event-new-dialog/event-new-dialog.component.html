@@ -12,6 +12,9 @@
       />
       <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
       <mat-datepicker #dateFrom></mat-datepicker>
+      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
+      }}</mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -24,11 +27,17 @@
       />
       <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
       <mat-datepicker #dateTo></mat-datepicker>
+      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
+      }}</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
       <input formControlName="title" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
+      <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
+      }}</mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -81,7 +90,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
-  <button mat-button cdkFocusInitial (click)="closeAndSubmit()">
+  <button mat-button cdkFocusInitial (click)="closeAndSubmit()" [disabled]="occasionFormGroup?.invalid">
     {{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANLEGEN' | translate }}
   </button>
 </mat-dialog-actions>

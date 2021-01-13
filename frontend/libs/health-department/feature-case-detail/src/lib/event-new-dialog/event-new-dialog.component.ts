@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -9,7 +9,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class EventNewDialogComponent {
   occasionFormGroup: FormGroup;
-  addressFormGroup: FormGroup;
 
   initialOccasion = {
     additionalInformation: '',
@@ -35,11 +34,13 @@ export class EventNewDialogComponent {
   }
 
   closeAndSubmit() {
-    console.log(this.occasionFormGroup.getRawValue());
     this.dialogRef.close(this.occasionFormGroup.getRawValue());
   }
 
   private initializeEventForm() {
     this.occasionFormGroup = this.builder.group(this.initialOccasion);
+    this.occasionFormGroup.controls.title.setValidators([Validators.required]);
+    this.occasionFormGroup.controls.start.setValidators([Validators.required]);
+    this.occasionFormGroup.controls.end.setValidators([Validators.required]);
   }
 }
