@@ -205,15 +205,15 @@ class DiaryDataInitializer implements DataInitializer {
 		contact3OfPerson5.assignOwner(nadine);
 		contactsOfPerson5.add(contact3OfPerson5);
 
-			var contact4OfPerson5 = new ContactPerson(null, "Meier",
-					ContactWays.ofIdentificationHint("meier@web.de"));
-			contact3OfPerson5.assignOwner(nadine);
-			contactsOfPerson5.add(contact4OfPerson5);
+		var contact4OfPerson5 = new ContactPerson(null, "Meier",
+				ContactWays.ofIdentificationHint("meier@web.de"));
+		contact3OfPerson5.assignOwner(nadine);
+		contactsOfPerson5.add(contact4OfPerson5);
 
-			var contact5OfPerson5 = new ContactPerson("Peter", null,
-					ContactWays.ofIdentificationHint("peter@web.de"));
-			contact3OfPerson5.assignOwner(nadine);
-			contactsOfPerson5.add(contact5OfPerson5);
+		var contact5OfPerson5 = new ContactPerson("Peter", null,
+				ContactWays.ofIdentificationHint("peter@web.de"));
+		contact3OfPerson5.assignOwner(nadine);
+		contactsOfPerson5.add(contact5OfPerson5);
 
 		contacts.saveAll(contactsOfPerson5);
 
@@ -224,16 +224,16 @@ class DiaryDataInitializer implements DataInitializer {
 				.setBodyTemperature(BodyTemperature.of(36.5f));
 
 		// add 'husten'
-			List<Symptom> symptomsE1N = new ArrayList<>();
-			symptomsE1G.add(cough);
-			entry1N.setSymptoms(symptomsE1N);
+		List<Symptom> symptomsE1N = new ArrayList<>();
+		symptomsE1G.add(cough);
+		entry1N.setSymptoms(symptomsE1N);
 
-			entries.updateDiaryEntry(entry1N);
+		entries.updateDiaryEntry(entry1N);
 
-			Slot todayEvening = Slot.eveningOf(LocalDate.now());
+		Slot todayEvening = Slot.eveningOf(LocalDate.now());
 
-			DiaryEntry entry2N = DiaryEntry.of(todayEvening, nadine)
-					.setContacts(contactsOfPerson5.subList(0, 0)).setBodyTemperature(BodyTemperature.of(35.8f));
+		DiaryEntry entry2N = DiaryEntry.of(todayEvening, nadine)
+				.setContacts(contactsOfPerson5.subList(0, 0)).setBodyTemperature(BodyTemperature.of(35.8f));
 
 		// add 'husten' and 'Nackenschmerzen'
 		List<Symptom> symptomsE2N = new ArrayList<>();
