@@ -162,7 +162,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		var source = Stream.of(
 				new ValidSormas("index", null, null, null, 16, false),
-				new ValidSormas("contact", null, null, null, 9, false),
+				new ValidSormas("contact", null, null, null, 11, false),
 				new ValidSormas("index", "true", null, null, 15, false),
 				new ValidSormas("index", "false", null, null, 16, false),
 				new ValidSormas("index", null, now, null, 16, false),
@@ -357,9 +357,9 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		var now = LocalDate.now();
 
 		var source = Stream.of(
-				new ValidCase(null, null, null, null, null, null, 22, false),
+				new ValidCase(null, null, null, null, null, null, 24, false),
 				new ValidCase("index", null, null, null, null, null, 14, false),
-				new ValidCase("contact", null, null, null, null, null, 9, false),
+				new ValidCase("contact", null, null, null, null, null, 11, false),
 				new ValidCase("index", "OPEN", null, null, null, null, 8, false),
 				new ValidCase("index", null, "INTERNAL_AND_EXTERNAL", null, null, null, 15, false),
 				new ValidCase("index", null, "INTERNAL", null, null, null, 14, false),
