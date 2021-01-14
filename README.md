@@ -1,6 +1,4 @@
-# quarano - Epidemic management for health authorities
-
-Epidemic management for health authorities by digitizing self-reports of confirmed quarantine cases and suspected persons (including information on symptoms and contacts)
+# <a href="https://www.quarano.de"><img src="/frontend/apps/quarano-frontend/src/assets/images/quarano_SW_RGB.png" align="left" height="48" ></a> - Epidemic management for health authorities by digitizing self-reports of confirmed quarantine cases and suspected persons (including information on symptoms and contacts)
 
 For further information please visit <https://www.quarano.de> (in German)
 
@@ -11,7 +9,8 @@ Hosted at <https://quarano.de/internal-test> (test) and <https://quarano.de/inte
 ## Status
 
 This is a project in development. It has been created during the [WirVsVirusHackathon](https://wirvsvirushackathon.org/).
-[Contributors welcome!](mailto:info@quarano.de)
+
+👉 [Contributors welcome!](mailto:info@quarano.de) 👈 
 
 ## License
 
