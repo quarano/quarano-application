@@ -5,6 +5,7 @@ export interface EnrollmentStatusDto extends HalResponse {
   completedQuestionnaire: boolean;
   completedContactRetro: boolean;
   complete: boolean;
+  steps: string[];
 }
 
 export function getEmptyEnrollmentStatus(): EnrollmentStatusDto {
@@ -13,5 +14,6 @@ export function getEmptyEnrollmentStatus(): EnrollmentStatusDto {
     completedQuestionnaire: false,
     completedContactRetro: false,
     complete: false,
+    steps: [],
   };
 }

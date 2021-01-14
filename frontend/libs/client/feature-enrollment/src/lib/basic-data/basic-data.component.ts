@@ -62,6 +62,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   encounters: EncounterEntry[] = [];
   noRetrospectiveContactsConfirmed = false;
   thirdFormLoading = false;
+  showThirdStep = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,7 +73,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private clientService: ProfileService,
     private dialogService: ContactDialogService,
     public clientStore: ClientStore,
     private store: Store,
@@ -101,6 +101,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   ngAfterViewInit(): void {
     this.subs.add(
       this.clientStore.enrollmentStatus$.pipe(take(1)).subscribe((status) => {
+        this.showThirdStep = status.steps.includes('encounters');
         if (status.completedPersonalData) {
           this.stepper?.next();
         }
@@ -324,7 +325,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
           )
           .subscribe(
             (result) => {
-              this.stepper.next();
+              if (this.showThirdStep) {
+                this.stepper.next();
+              } else {
+                this.subs.add(this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').subscribe());
+                this.router.navigate(['/client/diary/diary-list']);
+              }
             },
             (error) => {
               this.badRequestService.handleBadRequestError(error, this.secondFormGroup);
