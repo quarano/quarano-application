@@ -26,7 +26,6 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		assertThat(result).containsExactlyInAnyOrder(
 				TrackedPersonDataInitializer.createSandra().getId(),
-				TrackedPersonDataInitializer.createNadine().getId(),
 				TrackedPersonDataInitializer.createSiggi().getId(),
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
