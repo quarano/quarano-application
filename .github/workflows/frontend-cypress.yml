@@ -54,7 +54,7 @@ jobs:
           mvn -B package -PlocalDev -DskipTests -f backend/pom.xml &&
           java -Dspring.profiles.active=develop -jar backend/target/*.jar &
           sleep 60
-          cd frontend && npm run e2e  -- --browser firefox
+          cd frontend && npm run e2e  -- --cypressConfig apps/quarano-frontend-e2e/cypress-ci.json --browser firefox
           kill -2 `lsof -i:8080 -t`
 
       - uses: actions/upload-artifact@v2
