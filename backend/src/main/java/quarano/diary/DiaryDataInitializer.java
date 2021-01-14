@@ -261,12 +261,13 @@ class DiaryDataInitializer implements DataInitializer {
 				.setBodyTemperature(BodyTemperature.of(35.5f));
 
 		// add 'husten' and 'Nackenschmerzen'
-			List<Symptom> symptomsE4N = new ArrayList<>();
-			symptomsE4N.add(neckProblems);
-			symptomsE4N.add(cough);
-			entry4N.setSymptoms(symptomsE4N);
 
-			entries.updateDiaryEntry(entry4N);
+		List<Symptom> symptomsE4N = new ArrayList<>();
+		symptomsE4N.add(neckProblems);
+		symptomsE4N.add(cough);
+		entry4N.setSymptoms(symptomsE4N);
+
+		entries.updateDiaryEntry(entry4N);
 
 		// ==================== JESSICA =================
 		List<ContactPerson> contactsOfJessica = new ArrayList<>();
