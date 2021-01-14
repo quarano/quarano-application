@@ -25,12 +25,12 @@ module.exports = (on, config) => {
   // https://docs.cypress.io/api/plugins/browser-launch-api.html#Modify-browser-launch-arguments-preferences-and-extensions
   on('before:browser:launch', (browser, launchOptions) => {
     if (browser.family === 'chromium' && browser.name !== 'electron') {
-      launchOptions.preferences.default.intl = { accept_languages: 'de' };
+      launchOptions.preferences.default.intl = { accept_languages: 'de', user_locale: 'de' };
       return launchOptions;
     }
 
     if (browser.family === 'firefox') {
-      launchOptions.preferences['intl.locale.requested'] = 'de';
+      launchOptions.preferences['intl.accept_languages'] = 'de';
       return launchOptions;
     }
   });
