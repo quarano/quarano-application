@@ -42,13 +42,25 @@
           (buttonClicked)="checkAndSendQuestionaire()"
           [loading]="secondFormLoading"
           data-cy="second-step-button"
+          *ngIf="showThirdStep; else COMPLETE_ENROLLMENT_BUTTON"
         >
           <mat-icon>arrow_forward</mat-icon> {{ 'BASIC_DATA.WEITER' | translate }}
         </qro-button>
+        <ng-template #COMPLETE_ENROLLMENT_BUTTON>
+          <qro-button
+            class="ml-3"
+            (buttonClicked)="checkAndSendQuestionaire()"
+            [disabled]="secondStep.hasError"
+            [loading]="secondFormLoading"
+            data-cy="second-step-complete-button"
+          >
+            <mat-icon>check</mat-icon> {{ 'BASIC_DATA.ERFASSUNG_ABSCHLIESSEN' | translate }}
+          </qro-button>
+        </ng-template>
       </div>
     </form>
   </mat-step>
-  <mat-step #thirdStep [stepControl]="thirdFormGroup">
+  <mat-step #thirdStep [stepControl]="thirdFormGroup" *ngIf="showThirdStep">
     <ng-template matStepLabel>{{ 'BASIC_DATA.KONTAKTPERSONEN' | translate }}</ng-template>
     <div class="info-text">
       <h2>{{ 'BASIC_DATA.UMGANG_MIT_KONTAKTPERSONEN' | translate }}</h2>

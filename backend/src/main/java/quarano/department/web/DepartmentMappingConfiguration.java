@@ -1,8 +1,11 @@
 package quarano.department.web;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import quarano.core.web.MappingCustomizer;
 import quarano.department.TestResult;
 import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseProperties;
 import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.tracking.Quarantine;
 
@@ -21,7 +24,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(30)
+@RequiredArgsConstructor
 public class DepartmentMappingConfiguration implements MappingCustomizer {
+
+	private final @NonNull TrackedCaseProperties caseProperties;
 
 	/*
 	 * (non-Javadoc)
@@ -55,7 +61,8 @@ public class DepartmentMappingConfiguration implements MappingCustomizer {
 			var testDate = source.getTestDate();
 
 			if (source.getTestDate() != null) {
-				target.report(source.isInfected() ? TestResult.infected(testDate) : TestResult.notInfected(testDate));
+				target.report(source.isInfected() ? TestResult.infected(testDate) : TestResult.notInfected(testDate),
+						caseProperties.isExecuteContactRetroForContactCases());
 			}
 
 			return target;

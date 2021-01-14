@@ -412,7 +412,7 @@ class TrackedCaseCsvController {
 		TrackedCase trackedCase = new TrackedCase(person, CaseType.INDEX, department);
 		trackedCase.addOriginCase(new TrackedCase(person, CaseType.INDEX, department));
 		trackedCase.setQuarantine(Quarantine.of(LocalDate.now().minusDays(7), LocalDate.now().plusDays(7)));
-		trackedCase.report(TestResult.infected(LocalDate.now().minusDays(4)));
+		trackedCase.report(TestResult.infected(LocalDate.now().minusDays(4)), false);
 
 		try {
 			var lastModField = AuditingMetadata.class.getDeclaredField("lastModified");

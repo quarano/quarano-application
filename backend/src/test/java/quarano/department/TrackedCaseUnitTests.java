@@ -154,8 +154,8 @@ class TrackedCaseUnitTests {
 
 		var trackedCase = new TrackedCase(person, CaseType.CONTACT, department);
 
-		assertThat(trackedCase.report(TestResult.notInfected(LocalDate.now())).isIndexCase()).isFalse();
-		assertThat(trackedCase.report(TestResult.infected(LocalDate.now())).isIndexCase()).isTrue();
+		assertThat(trackedCase.report(TestResult.notInfected(LocalDate.now()), false).isIndexCase()).isFalse();
+		assertThat(trackedCase.report(TestResult.infected(LocalDate.now()), false).isIndexCase()).isTrue();
 	}
 
 	@ParameterizedTest

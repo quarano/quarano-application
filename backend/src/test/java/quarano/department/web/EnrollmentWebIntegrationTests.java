@@ -15,12 +15,14 @@ import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
 import quarano.WithQuaranoUser;
 import quarano.core.web.MapperWrapper;
+import quarano.department.TestResult;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
 import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
 import quarano.department.web.TrackedCaseRepresentations.InstitutionDto;
 import quarano.masterdata.Symptom;
 import quarano.masterdata.SymptomRepository;
+import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.TrackedPersonRepository;
@@ -86,6 +88,9 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 
 		assertThat(document.read("$.completedPersonalData", boolean.class)).isFalse();
 		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
+
+		// CORE-468
+		assertThat(document.read("$.steps", JSONArray.class)).containsExactly("details", "questionnaire", "encounters");
 
 		var source = createValidDetailsInput();
 		submitDetailsSuccessfully(source);
@@ -321,6 +326,82 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 				.andReturn().getResponse().getContentAsString();
 
 		assertThat(discoverer.findLinkWithRel(IanaLinkRelations.NEXT, response)).isEmpty();
+	}
+
+	@Test // CORE-468
+	@WithQuaranoUser("test6")
+	void doNotSeeEncountersEnrollmentStepForContactCases() throws Exception {
+
+		Object[] steps = { "details", "questionnaire" };
+
+		String result = performRequestToGetEnrollementState();
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isFalse();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isFalse();
+		assertThat(document.read("$.steps", JSONArray.class)).containsExactly(steps);
+
+		TrackedPerson jessica = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+
+		submitDetailsSuccessfully(mapper.map(jessica, TrackedPersonDto.class));
+		submitQuestionnaireSuccessfully(createValidQuestionnaireInput());
+
+		// The first enrollment steps is completed
+		result = performRequestToGetEnrollementState();
+		document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isTrue();
+
+		// And the last enrollment step is skipped for contact cases
+		assertThat(document.read("$.complete", boolean.class)).isTrue();
+		assertThat(document.read("$.steps", JSONArray.class)).containsExactly(steps);
+	}
+
+	@Test // CORE-468
+	@WithQuaranoUser("test6")
+	void doReopenEnrollmentAfterTransformIntoIndexForContactCases() throws Exception {
+
+		TrackedPerson jessica = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+
+		submitDetailsSuccessfully(mapper.map(jessica, TrackedPersonDto.class));
+		submitQuestionnaireSuccessfully(createValidQuestionnaireInput());
+
+		// transform into index case and check reopen
+		var trackedCaseReopen = cases.findByTrackedPerson(jessica).orElseThrow();
+
+		trackedCaseReopen.report(TestResult.infected(LocalDate.now()), false);
+		cases.save(trackedCaseReopen);
+
+		var result = performRequestToGetEnrollementState();
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isTrue();
+		assertThat(document.read("$.complete", boolean.class)).isFalse();
+		assertThat(document.read("$.steps", JSONArray.class)).containsExactly("details", "questionnaire", "encounters");
+	}
+
+	@Test // CORE-468
+	@WithQuaranoUser("test6")
+	void dontReopenEnrollmentAfterTransformIntoIndexForContactCases() throws Exception {
+
+		TrackedPerson jessica = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
+
+		submitDetailsSuccessfully(mapper.map(jessica, TrackedPersonDto.class));
+		submitQuestionnaireSuccessfully(createValidQuestionnaireInput());
+
+		var trackedCaseNoReopen = cases.findByTrackedPerson(jessica).orElseThrow();
+		trackedCaseNoReopen.report(TestResult.infected(LocalDate.now()), true);
+		cases.save(trackedCaseNoReopen);
+
+		var result = performRequestToGetEnrollementState();
+		var document = JsonPath.parse(result);
+
+		assertThat(document.read("$.completedPersonalData", boolean.class)).isTrue();
+		assertThat(document.read("$.completedQuestionnaire", boolean.class)).isTrue();
+		assertThat(document.read("$.complete", boolean.class)).isTrue();
+		assertThat(document.read("$.steps", JSONArray.class)).containsExactly("details", "questionnaire", "encounters");
 	}
 
 	private void expectResponseCarriesEmptyQuestionnaire(String result) {
