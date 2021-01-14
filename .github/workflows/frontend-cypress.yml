@@ -54,7 +54,7 @@ jobs:
           mvn -B package -PlocalDev -DskipTests -f backend/pom.xml &&
           java -Dspring.profiles.active=develop -jar backend/target/*.jar &
           sleep 60
-          cd frontend && npm run e2e  -- --browser firefox --headless
+          cd frontend && TZ=Europe/Berlin && LANG=de_DE.UTF-8 && npm run e2e  -- --browser firefox --headless
           kill -2 `lsof -i:8080 -t`
 
       - uses: actions/upload-artifact@v2
