@@ -1,5 +1,11 @@
 /// <reference types="cypress" />
 
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/de';
+import * as localeData from 'dayjs/plugin/localeData';
+dayjs.locale('de');
+dayjs.extend(localeData);
+
 describe('health-department index cases', () => {
   beforeEach(() => {
     cy.server();
@@ -139,16 +145,17 @@ describe('health-department index cases', () => {
   });
 
   describe('viewing case details of existing index case', () => {
-    it.skip('should show diary entries', () => {
+    it('should show diary entries', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
+      cy.get('[data-cy="search-case-input"]').type('Nadine');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .then(($elems) => {
-          $elems[1].click();
+          $elems[0].click();
         });
 
       cy.wait('@getCase').its('status').should('eq', 200);
@@ -170,7 +177,7 @@ describe('health-department index cases', () => {
         .its('response.body')
         .then((body) => {
           const entries = body._embedded.trackedCaseDiaryEntrySummaryList;
-          expect(entries).to.have.length(3);
+          expect(entries).to.have.length(4);
           entries.forEach((entry) => {
             expect(entry.bodyTemperature).to.not.eq(null);
             expect(entry.reportedAt).to.not.eq(null);
@@ -193,54 +200,73 @@ describe('health-department index cases', () => {
 
       cy.get('qro-diary-entries-list').should('exist');
       const entryListItems = cy.get('qro-diary-entries-list-item');
-      entryListItems.should('have.length', 2);
+      entryListItems.should('have.length', 3);
 
-      const yesterday = new Date();
-      yesterday.setDate(new Date().getDate() - 1);
-      const twoDaysAgo = new Date();
-      twoDaysAgo.setDate(yesterday.getDate() - 1);
-      const dateYesterday =
-        yesterday.toLocaleDateString('de', { weekday: 'short' }) + '., ' + yesterday.toLocaleDateString('de');
-      const dateTwoDaysAgo =
-        twoDaysAgo.toLocaleDateString('de', { weekday: 'short' }) + '., ' + twoDaysAgo.toLocaleDateString('de');
+      const today = dayjs().format('DD.MM.YYYY');
+      const weekdays = dayjs.localeData().weekdaysShort();
+      const todaysDateString = weekdays[dayjs().get('day')] + ', ' + today;
+
+      const yesterday = dayjs().subtract(1, 'day').format('DD.MM.YYYY');
+      const yesterdayDateString = weekdays[dayjs().subtract(1, 'day').get('day')] + ', ' + yesterday;
+
+      const twoDaysAgo = dayjs().subtract(2, 'days').format('DD.MM.YYYY');
+      const twoDaysAgoDateString = weekdays[dayjs().subtract(2, 'days').get('day')] + ', ' + twoDaysAgo;
 
       entryListItems.each(($elem, $index, $elems) => {
         const entryContainers = cy.wrap($elem).find('.entry-container');
         entryContainers.should('have.length', 3);
         if ($index === 0) {
-          cy.wrap($elems[0]).find('span[data-cy="entry-date"]').should('have.text', dateTwoDaysAgo);
-          cy.wrap($elems[0]).find('span[data-cy="no-entry"]').should('exist');
+          cy.wrap($elems[0]).find('span[data-cy="entry-date"]').should('have.text', todaysDateString);
+          cy.wrap($elems[0]).find('span[data-cy="no-entry"]').should('not.exist');
+          cy.wrap($elems[0]).find('span[data-cy="temperature-morning"]').should('have.text', '36,5 °C');
+          cy.wrap($elems[0])
+            .find('span[data-cy="contacts-morning"]')
+            .should('have.text', 'Sonja Sortig, Manuel Mertens, unbekannte Kontaktperson, ? Meier, Peter ?');
+          cy.wrap($elems[0]).find('span[data-cy="symptoms-morning"]').should('not.exist');
+
           cy.wrap($elems[0]).find('span[data-cy="temperature-evening"]').should('have.text', '35,8 °C');
           cy.wrap($elems[0]).find('span[data-cy="contacts-evening"]').should('not.exist');
           cy.wrap($elems[0]).find('span[data-cy="symptoms-evening"]').should('have.text', 'Husten, Nackenschmerzen');
-        } else {
-          cy.wrap($elems[1]).find('span[data-cy="entry-date"]').should('have.text', dateYesterday);
-          cy.wrap($elems[1]).find('span[data-cy="no-entry"]').should('not.exist');
-          cy.wrap($elems[1]).find('span[data-cy="temperature-morning"]').should('have.text', '36,5 °C');
+        } else if ($index === 1) {
+          cy.wrap($elems[1]).find('span[data-cy="entry-date"]').should('have.text', yesterdayDateString);
           cy.wrap($elems[1])
-            .find('span[data-cy="contacts-morning"]')
-            .should('have.text', 'Sonja Sortig, Manuel Mertens, unbekannte Kontaktperson');
-          cy.wrap($elems[1]).find('span[data-cy="symptoms-morning"]').should('not.exist');
+            .find('span[data-cy="no-entry"]')
+            .should('exist')
+            .should('have.text', 'Kein Eintrag vorhanden');
+
           cy.wrap($elems[1]).find('span[data-cy="temperature-evening"]').should('have.text', '36,5 °C');
           cy.wrap($elems[1])
             .find('span[data-cy="contacts-evening"]')
-            .should('have.text', 'Sonja Sortig, Manuel Mertens, unbekannte Kontaktperson');
+            .should('have.text', 'Sonja Sortig, Manuel Mertens, unbekannte Kontaktperson, ? Meier, Peter ?');
           cy.wrap($elems[1]).find('span[data-cy="symptoms-evening"]').should('have.text', 'Husten');
+        } else {
+          cy.wrap($elems[2]).find('span[data-cy="entry-date"]').should('have.text', twoDaysAgoDateString);
+          cy.wrap($elems[2])
+            .find('span[data-cy="no-entry"]')
+            .should('exist')
+            .should('have.text', 'Kein Eintrag vorhanden');
+
+          cy.wrap($elems[2]).find('span[data-cy="temperature-evening"]').should('have.text', '35,5 °C');
+          cy.wrap($elems[2])
+            .find('span[data-cy="contacts-evening"]')
+            .should('have.text', 'Sonja Sortig, Manuel Mertens, unbekannte Kontaktperson, ? Meier, Peter ?');
+          cy.wrap($elems[2]).find('span[data-cy="symptoms-evening"]').should('have.text', 'Husten, Nackenschmerzen');
         }
       });
     });
 
-    it.skip('should display message if no diary entries exist', () => {
+    it('should display message if no diary entries exist', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
+      cy.get('[data-cy="search-case-input"]').type('Peter');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .then(($elems) => {
-          $elems[1].click();
+          $elems[0].click();
         });
 
       cy.wait('@getCase').its('status').should('eq', 200);
