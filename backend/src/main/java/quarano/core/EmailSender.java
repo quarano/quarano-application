@@ -206,7 +206,7 @@ public class EmailSender implements ApplicationListener<ApplicationReadyEvent> {
 
 			return !StringUtils.hasText(fixRecipient) || this.to.getEmailAddress().endsWith(QUARANO_DOMAIN)
 					? to.toInternetAddress()
-					: FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient), to).toInternetAddress();
+					: FixedConfiguredRecipient.of(EmailAddress.of(fixRecipient.trim()), to).toInternetAddress();
 		}
 
 		private interface InternetAdressSource {
@@ -243,8 +243,9 @@ public class EmailSender implements ApplicationListener<ApplicationReadyEvent> {
 				var fixSender = properties.get(FIX_SENDER_PROPERTY_KEY);
 				var fixSenderName = properties.get(FIX_SENDER_NAME_PROPERTY_KEY);
 
-				var fullName = fixSenderName != null ? fixSenderName : originSenderAsFallback.getFullName();
-				var emailAddress = fixSender != null ? EmailAddress.of(fixSender) : originSenderAsFallback.getEmailAddress();
+				var fullName = fixSenderName != null ? fixSenderName.trim() : originSenderAsFallback.getFullName();
+				var emailAddress = fixSender != null ? EmailAddress.of(fixSender.trim())
+						: originSenderAsFallback.getEmailAddress();
 
 				return new FixedConfiguredSender(fullName, emailAddress);
 			}
