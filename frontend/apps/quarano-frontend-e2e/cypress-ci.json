@@ -1,0 +1,17 @@
+{
+  "fileServerFolder": ".",
+  "fixturesFolder": "./src/fixtures",
+  "integrationFolder": "./src/integration",
+  "modifyObstructiveCode": false,
+  "pluginsFile": "./src/plugins/index",
+  "supportFile": "./src/support/index.ts",
+  "video": true,
+  "videosFolder": "../../dist/cypress/apps/quarano-frontend-e2e/videos",
+  "screenshotsFolder": "../../dist/cypress/apps/quarano-frontend-e2e/screenshots",
+  "baseUrl": "http://localhost:4200",
+  "env": {
+    "index_cases_url": "/health-department/index-cases/case-list",
+    "contact_cases_url": "/health-department/contact-cases/case-list",
+    "health_department_url": "/health-department/"
+  }
+}
