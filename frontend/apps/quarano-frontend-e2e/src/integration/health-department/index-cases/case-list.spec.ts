@@ -42,16 +42,17 @@ describe('health-department index cases case-list', () => {
 
   it('should add address', () => {
     cy.get('[data-cy="case-data-table"]').find('div[role="row"]').should('have.length.greaterThan', 0);
-    cy.get('div[row-index="1"] > div[role="gridcell"]')
-      .should('have.length.greaterThan', 0)
-      .then(($elems) => {
-        $elems[0].click();
-      });
+    cy.get('[data-cy="search-case-input"]').type('Harry');
+    cy.get('[data-cy="case-data-table"]')
+      .find('.ag-center-cols-container > .ag-row')
+      .should('have.length', 1)
+      .eq(0)
+      .click();
     cy.location('pathname').should('include', '/edit');
-    cy.get("[data-cy='street-input']").clear().type('Frankfurterstrasse');
-    cy.get("[data-cy='house-number-input']").clear().type('11');
-    cy.get("[data-cy='zip-code-input']").clear().type('68163');
-    cy.get("[data-cy='city-input']").clear().type('Mannheim');
+    cy.get("[data-cy='street-input']").type('Frankfurterstrasse');
+    cy.get("[data-cy='house-number-input']").type('11');
+    cy.get("[data-cy='zip-code-input']").type('68163');
+    cy.get("[data-cy='city-input']").type('Mannheim');
     cy.get("[data-cy='client-submit-and-close-button'] button").click();
     cy.wait('@saveDetails');
     cy.get('@saveDetails').its('status').should('eq', 200);
