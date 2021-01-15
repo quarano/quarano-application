@@ -4,11 +4,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 
 @Component({
-  selector: 'qro-event-new-dialog',
-  templateUrl: './event-new-dialog.component.html',
-  styleUrls: ['./event-new-dialog.component.scss'],
+  selector: 'qro-occasion-detail-dialog',
+  templateUrl: './occasion-detail-dialog.component.html',
+  styleUrls: ['./occasion-detail-dialog.component.scss'],
 })
-export class EventNewDialogComponent {
+export class OccasionDetailDialogComponent {
   occasionFormGroup: FormGroup;
   initialOccasion: OccasionDto;
 
@@ -18,7 +18,7 @@ export class EventNewDialogComponent {
     this.mapOccasionToForm();
   }
 
-  constructor(public dialogRef: MatDialogRef<EventNewDialogComponent>, private builder: FormBuilder) {
+  constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {
     this.initializeEventForm();
   }
 

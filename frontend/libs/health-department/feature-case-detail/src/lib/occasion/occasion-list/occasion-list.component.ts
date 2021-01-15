@@ -1,20 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SubSink } from 'subsink';
-import { HealthDepartmentService } from '@qro/health-department/domain';
-import { filter, switchMap, take, tap } from 'rxjs/operators';
+import { filter, take, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
-import { Observable, of } from 'rxjs';
+import { OccasionDetailDialogComponent } from '../occasion-detail-dialog/occasion-detail-dialog.component';
+import { Observable } from 'rxjs';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { OccasionService } from '../occasion.service';
 
 @Component({
-  selector: 'qro-event-list',
-  templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss'],
+  selector: 'qro-occasion-list',
+  templateUrl: './occasion-list.component.html',
+  styleUrls: ['./occasion-list.component.scss'],
 })
-export class EventListComponent implements OnInit, OnDestroy {
+export class OccasionListComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   caseId = null;
 
@@ -33,17 +32,17 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  openNewEventDialog() {
+  openOccasionDetailDialog() {
     this.subs.add(
       this.dialog
-        .open(EventNewDialogComponent)
+        .open(OccasionDetailDialogComponent)
         .afterClosed()
         .pipe(filter((occasionData) => occasionData))
-        .subscribe((occasionData) => this.saveNewEvent(occasionData))
+        .subscribe((occasionData) => this.saveNewOccasion(occasionData))
     );
   }
 
-  private saveNewEvent(newOccasion) {
+  private saveNewOccasion(newOccasion) {
     this.occasionService
       .saveOccasion(this.caseId, newOccasion)
       .pipe(take(1))
