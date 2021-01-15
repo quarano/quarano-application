@@ -207,12 +207,12 @@ class DiaryDataInitializer implements DataInitializer {
 
 		var contact4OfPerson5 = new ContactPerson(null, "Meier",
 				ContactWays.ofIdentificationHint("meier@web.de"));
-		contact3OfPerson5.assignOwner(nadine);
+		contact4OfPerson5.assignOwner(nadine);
 		contactsOfPerson5.add(contact4OfPerson5);
 
 		var contact5OfPerson5 = new ContactPerson("Peter", null,
 				ContactWays.ofIdentificationHint("peter@web.de"));
-		contact3OfPerson5.assignOwner(nadine);
+		contact5OfPerson5.assignOwner(nadine);
 		contactsOfPerson5.add(contact5OfPerson5);
 
 		contacts.saveAll(contactsOfPerson5);
