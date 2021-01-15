@@ -26,9 +26,9 @@ import { AnomalyComponent } from './anomaly/anomaly.component';
 import { ActionComponent } from './action/action.component';
 import { DiaryEntriesListComponent } from './diary-entries-list/diary-entries-list.component';
 import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-entries-list-item.component';
-import { EventListComponent } from './occasion/event-list/event-list.component';
-import { EventCardComponent } from './occasion/event-card/event-card.component';
-import { EventNewDialogComponent } from './occasion/event-new-dialog/event-new-dialog.component';
+import { OccasionListComponent } from './occasion/occasion-list/occasion-list.component';
+import { OccasionCardComponent } from './occasion/occasion-card/occasion-card.component';
+import { OccasionDetailDialogComponent } from './occasion/occasion-detail-dialog/occasion-detail-dialog.component';
 
 const routes: Routes = [
   {
@@ -93,7 +93,7 @@ const routes: Routes = [
       },
       {
         path: 'events',
-        component: EventListComponent,
+        component: OccasionListComponent,
       },
     ],
   },
@@ -113,9 +113,9 @@ const routes: Routes = [
     ContactListComponent,
     DiaryEntriesListComponent,
     DiaryEntriesListItemComponent,
-    EventListComponent,
-    EventCardComponent,
-    EventNewDialogComponent,
+    OccasionListComponent,
+    OccasionCardComponent,
+    OccasionDetailDialogComponent,
   ],
   imports: [
     CommonModule,

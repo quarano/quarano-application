@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { HealthDepartmentService } from '@qro/health-department/domain';
-import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
+import { OccasionDetailDialogComponent } from '../occasion-detail-dialog/occasion-detail-dialog.component';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { SubSink } from 'subsink';
@@ -8,11 +7,11 @@ import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { OccasionService } from '../occasion.service';
 
 @Component({
-  selector: 'qro-event-card',
-  templateUrl: './event-card.component.html',
-  styleUrls: ['./event-card.component.scss'],
+  selector: 'qro-occasion-card',
+  templateUrl: './occasion-card.component.html',
+  styleUrls: ['./occasion-card.component.scss'],
 })
-export class EventCardComponent {
+export class OccasionCardComponent {
   @Input()
   occasion: OccasionDto;
 
@@ -25,7 +24,7 @@ export class EventCardComponent {
   }
 
   editOccasion(occasion: OccasionDto) {
-    const dialogRef = this.dialog.open(EventNewDialogComponent);
+    const dialogRef = this.dialog.open(OccasionDetailDialogComponent);
     dialogRef.componentInstance.occasion(occasion);
     this.subs.add(
       dialogRef
