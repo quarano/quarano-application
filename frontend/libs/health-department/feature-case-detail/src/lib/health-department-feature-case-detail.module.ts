@@ -26,9 +26,9 @@ import { AnomalyComponent } from './anomaly/anomaly.component';
 import { ActionComponent } from './action/action.component';
 import { DiaryEntriesListComponent } from './diary-entries-list/diary-entries-list.component';
 import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-entries-list-item.component';
-import { EventListComponent } from './event-list/event-list.component';
-import { EventCardComponent } from './event-card/event-card.component';
-import { EventNewDialogComponent } from './event-new-dialog/event-new-dialog.component';
+import { EventListComponent } from './occasion/event-list/event-list.component';
+import { EventCardComponent } from './occasion/event-card/event-card.component';
+import { EventNewDialogComponent } from './occasion/event-new-dialog/event-new-dialog.component';
 
 const routes: Routes = [
   {
