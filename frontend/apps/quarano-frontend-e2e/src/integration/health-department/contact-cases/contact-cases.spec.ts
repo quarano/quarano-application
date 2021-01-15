@@ -40,11 +40,12 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="contact-cases"]').click();
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
       cy.get('[data-cy="case-data-table"]').should('exist');
-      cy.get('div[row-index="1"] > div[role="gridcell"]')
-        .should('have.length.greaterThan', 0)
-        .then(($elems) => {
-          $elems[0].click();
-        });
+      cy.get('[data-cy="search-case-input"]').type('Baum');
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 1)
+        .eq(0)
+        .click();
 
       cy.location('pathname').should('include', Cypress.env('health_department_url') + 'case-detail/contact/');
 
