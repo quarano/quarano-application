@@ -6,6 +6,8 @@ import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { EventNewDialogComponent } from '../event-new-dialog/event-new-dialog.component';
 import { Observable, of } from 'rxjs';
+import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
+import { OccasionService } from '../occasion.service';
 
 @Component({
   selector: 'qro-event-list',
@@ -16,13 +18,9 @@ export class EventListComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   caseId = null;
 
-  $occasions: Observable<any[]>;
+  $occasions: Observable<OccasionDto[]>;
 
-  constructor(
-    private dialog: MatDialog,
-    private healthDepartmentService: HealthDepartmentService,
-    private route: ActivatedRoute
-  ) {
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private occasionService: OccasionService) {
     this.route.parent.paramMap
       .pipe(
         take(1),
@@ -30,10 +28,7 @@ export class EventListComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.$occasions = this.healthDepartmentService.getOccasion().pipe(
-      tap((occasionsDTO) => console.log(occasionsDTO)),
-      switchMap((occasions) => of(occasions?._embedded?.occasions))
-    );
+    this.$occasions = this.occasionService.getOccasions();
   }
 
   ngOnInit(): void {}
@@ -49,9 +44,10 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   private saveNewEvent(newOccasion) {
-    this.healthDepartmentService
-      .addOccasion(this.caseId, newOccasion)
-      .subscribe((response) => console.log('backendResponse:', response));
+    this.occasionService
+      .saveOccasion(this.caseId, newOccasion)
+      .pipe(take(1))
+      .subscribe((value) => console.log(value));
   }
 
   ngOnDestroy(): void {

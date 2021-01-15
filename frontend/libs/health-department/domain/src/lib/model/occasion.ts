@@ -6,7 +6,7 @@ export interface OccasionDto {
   address: Address;
   additionalInformation: string;
   contactPerson: string;
-  visitorGroups: string;
+  visitorGroups: VisitorGroup[];
   occasionCode: string;
   trackedCaseId: string;
 }
@@ -16,4 +16,13 @@ interface Address {
   houseNumber: number;
   city: string;
   zipCode: number;
+}
+
+interface VisitorGroup {
+  visitors: [];
+  start: Date;
+  end: Date;
+  occasionCode: string;
+  comment: string;
+  locationName: string;
 }
