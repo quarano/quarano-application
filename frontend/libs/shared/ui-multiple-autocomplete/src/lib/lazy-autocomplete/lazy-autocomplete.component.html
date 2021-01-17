@@ -1,5 +1,5 @@
 <mat-form-field class="chip-list" (click)="trigger.openPanel()">
-  <mat-chip-list #chipList>
+  <mat-chip-list #chipList data-cy="lazy-autocomplete-chip-list">
     <mat-chip
       *ngFor="let item of selectedItems"
       [selectable]="!disabled"
