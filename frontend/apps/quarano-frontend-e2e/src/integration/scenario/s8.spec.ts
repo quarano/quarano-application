@@ -26,10 +26,10 @@ describe(
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
 
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
-      cy.get('[data-cy="street-input"] input[matInput]').type('Hauptstraße');
-      cy.get('[data-cy="house-number-input"] input[matInput]').type('15');
-      cy.get('[data-cy="zip-code-input"] input[matInput]').type('68199');
-      cy.get('[data-cy="city-input"] input[matInput]').type('Mannheim');
+      cy.get('[data-cy="street-input"]').type('Hauptstraße');
+      cy.get('[data-cy="house-number-input"]').type('15');
+      cy.get('[data-cy="zip-code-input"]').type('68199');
+      cy.get('[data-cy="city-input"]').type('Mannheim');
       cy.get('[data-cy="first-step-button"] button').click();
       cy.wait('@updatePersonalDetails').its('status').should('eq', 200);
 
@@ -58,10 +58,12 @@ describe(
       cy.get('[data-cy="multiple-auto-complete-input"]').eq(1).type('Claire Fraser').blur();
       cy.get('[data-cy="confirm-button"]').click();
 
-      cy.get('qro-contact-person-form')
-        .should('exist')
-        .find('mat-form-field[data-cy="contact-person-form-phone"]')
-        .type('123123123123');
+      cy.get('qro-contact-person-dialog').should('exist');
+      cy.get('[data-cy="contact-person-form-phone"] input')
+        .click()
+        .then(($elem) => {
+          cy.wrap($elem).type('123123123123');
+        });
       cy.get('[data-cy="submit-button"] button').click();
 
       cy.get('[data-cy="multiple-auto-complete-input"]').eq(3).type('Claire Fraser');
@@ -174,8 +176,6 @@ describe(
       cy.get('[data-cy="search-case-input"] input').type('Claire');
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
       cy.location('pathname').should('include', '/edit');
-
-      cy.get('[data-cy="lazy-autocomplete-chip-list"]').should('contain', 'Hanser, Markus');
     });
   }
 );
