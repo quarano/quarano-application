@@ -20,7 +20,7 @@ describe(
       cy.route('GET', '/hd/cases/*/questionnaire').as('questionnaire');
     });
 
-    it('can complete enrollment and retrospective', () => {
+    it.only('can complete enrollment and retrospective', () => {
       cy.logInNotEnrolledClient();
 
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
@@ -61,9 +61,7 @@ describe(
       cy.get('qro-contact-person-form')
         .should('exist')
         .find('mat-form-field[data-cy="contact-person-form-phone"]')
-        .then((fields) => {
-          cy.wrap(fields[0]).type('123123123123');
-        });
+        .type('123123123123');
       cy.get('[data-cy="submit-button"] button').click();
 
       cy.get('[data-cy="multiple-auto-complete-input"]').eq(3).type('Claire Fraser');
@@ -155,20 +153,29 @@ describe(
           expect(body[0].firstName).to.eq('Claire');
           expect(body[0].lastName).to.eq('Fraser');
         });
-
-      // TODO: cy.get('[data-cy="case-data-table"]').find('div[row-index="0"]').should('contain', 'Claire Fraser');
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
 
       cy.get('[data-cy="questionnaire-tab"]').click();
       cy.location('pathname').should('include', '/questionnaire');
       cy.wait('@questionnaire').its('status').should('eq', 200);
 
-      // cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo.toLocaleDateString());
+      // cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo.toLocaleDateString()); TODO: check once dayjs is merged
       cy.get('[data-cy="familyDoctor"]').should('have.text', 'Dr Schmidt');
       cy.get('[data-cy="presumed-origin"]').should('have.text', 'Nicht angegeben');
       cy.get('[data-cy="presumed-date"]').should('have.text', 'Nicht angegeben');
-      // cy.get('[data-cy="pre-existing-conditions"]').should('have.text', 'test');
+      cy.get('[data-cy="pre-existing-conditions"]').should('have.text', ' test '); // TODO: spaces
       cy.get('[data-cy="belongToMedicalStaffDescription"]').should('have.text', 'Merck');
-      // cy.get('[data-cy="hasContactToVulnerablePeopleDescription"]').should('have.text', 'Peter Aalen');
+      cy.get('[data-cy="hasContactToVulnerablePeopleDescription"]').should('have.text', ' Peter Aalen '); // TODO: spaces
+
+      cy.get('[data-cy="contact-cases"]').click();
+
+      cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
+
+      cy.get('[data-cy="search-case-input"] input').type('Claire');
+      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
+      cy.location('pathname').should('include', '/edit');
+
+      cy.get('[data-cy="lazy-autocomplete-chip-list"]').should('contain', 'Hanser, Markus');
     });
   }
 );
