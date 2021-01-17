@@ -20,7 +20,7 @@ describe(
       cy.route('GET', '/hd/cases/*/questionnaire').as('questionnaire');
     });
 
-    it.only('can complete enrollment and retrospective', () => {
+    it('can complete enrollment and retrospective', () => {
       cy.logInNotEnrolledClient();
 
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
