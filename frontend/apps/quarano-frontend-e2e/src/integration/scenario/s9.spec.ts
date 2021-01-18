@@ -73,8 +73,6 @@ describe(
         });
       cy.get('[data-cy="client-cancel-button"]').click();
 
-      // 10-prüfe, ob Ursprungsfall noch korrekt angezeigt wird -> "Jamie Fraser" Siggi Seufert
-
       cy.get('[data-cy="search-index-case-input"] input').type('Siggi');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
@@ -101,8 +99,6 @@ describe(
       cy.get('[data-cy="index-cases"]').click();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-
-      // 8-prüfe, ob Aussage "Keine Daten zum Anzeigen vorhanden" kommt
     });
   }
 );
