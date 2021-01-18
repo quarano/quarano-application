@@ -39,7 +39,7 @@ export class HealthDepartmentService {
     return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/hd/actions/${caseId}`).pipe(shareReplay());
   }
 
-  getCsvDataByIdList(ids: string[]): Observable<any> {
+  performCsvExport(url: string, idList: string[]): Observable<any> {
     const options: Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export class HealthDepartmentService {
       responseType: 'text/csv',
       observe: 'response',
     };
-    return this.httpClient.post<string>(`${this.apiUrl}/hd/export/sormas/by-ids`, ids, options);
+    return this.httpClient.post<string>(`${this.apiUrl}/hd/export/${url}`, idList, options);
   }
 
   getQuarantineCsvData(caseType: CaseType, start: Moment, end: Moment): Observable<any> {
