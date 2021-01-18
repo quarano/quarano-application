@@ -24,9 +24,9 @@ describe(
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
 
       cy.get('[data-cy="search-contact-case-input"] input').type('Dorothea');
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 1)
         .then(($elems) => {
           $elems[0].click();
         });
@@ -65,9 +65,9 @@ describe(
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="search-index-case-input"] input').type('Dorothea');
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 1)
         .then(($elems) => {
           $elems[0].click();
         });
@@ -76,9 +76,9 @@ describe(
       // 10-prüfe, ob Ursprungsfall noch korrekt angezeigt wird -> "Jamie Fraser" Siggi Seufert
 
       cy.get('[data-cy="search-index-case-input"] input').type('Siggi');
-      cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 1)
         .then(($elems) => {
           $elems[0].click();
         });
@@ -88,8 +88,9 @@ describe(
       cy.get('qro-contact-list')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length', 2)
-        .eq(1)
-        .should('contain', 'Dorothea');
+        .then(($elems) => {
+          cy.wrap($elems[0]).should('contain', 'Dorothea');
+        });
 
       cy.get('[data-cy="contact-cases"]').click();
 
