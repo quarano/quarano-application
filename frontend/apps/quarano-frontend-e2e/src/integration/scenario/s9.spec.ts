@@ -85,8 +85,11 @@ describe(
 
       cy.get('[data-cy="contacts-tab"]').click();
       cy.location('pathname').should('include', '/contacts');
-      cy.get('qro-contact-list').find('.ag-center-cols-container > .ag-row').should('have.length', 2);
-      cy.get('qro-contact-list').find('.ag-center-cols-container > .ag-row').eq(1).should('contain', 'Dorothea');
+      cy.get('qro-contact-list')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 2)
+        .eq(1)
+        .should('contain', 'Dorothea');
 
       cy.get('[data-cy="contact-cases"]').click();
 
