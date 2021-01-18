@@ -57,5 +57,6 @@ module.exports = {
     '<rootDir>/libs/general/domain',
     '<rootDir>/libs/general/api',
     '<rootDir>/libs/auth/feature-reset-password',
+    '<rootDir>/libs/health-department/ui-export-dialog',
   ],
 };

@@ -1,7 +1,5 @@
-import { BadRequestService } from '@qro/shared/ui-error';
-import { SnackbarService } from '@qro/shared/util-snackbar';
-import { finalize, map, tap } from 'rxjs/operators';
-import { CaseEntityService, CaseDto, HealthDepartmentService } from '@qro/health-department/domain';
+import { map } from 'rxjs/operators';
+import { CaseEntityService, CaseDto } from '@qro/health-department/domain';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -9,9 +7,8 @@ import { DateFunctions } from '@qro/shared/util-date';
 import { CaseType } from '@qro/auth/api';
 import { EmailButtonComponent, DE_LOCALE, CheckboxFilterComponent, DATE_FILTER_PARAMS } from '@qro/shared/ui-ag-grid';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
-import { HttpResponse } from '@angular/common/http';
-import * as fileSaver from 'file-saver';
-import * as moment from 'moment';
+import { ExportDialogComponent } from '@qro/health-department/ui-export-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 class CaseRowViewModel {
   lastName: string;
@@ -46,13 +43,7 @@ export class CaseListComponent implements OnInit {
   frameworkComponents;
   loading = false;
 
-  constructor(
-    private entityService: CaseEntityService,
-    private router: Router,
-    private healthDepartmentService: HealthDepartmentService,
-    private snackbar: SnackbarService,
-    private badRequestService: BadRequestService
-  ) {
+  constructor(private entityService: CaseEntityService, private router: Router, private dialogService: MatDialog) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
@@ -156,26 +147,11 @@ export class CaseListComponent implements OnInit {
   }
 
   exportFilteredCases() {
-    this.loading = true;
     // @ts-ignore
     const ids = this.gridApi.getModel().rowsToDisplay.map((r) => r.data.selfLink);
-    this.healthDepartmentService
-      .getCsvDataByIdList(ids)
-      .pipe(
-        map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
-        tap((blob) => {
-          fileSaver.saveAs(blob, `csvexport_index_gefiltert_${moment().format('YYYYMMDDHHmmss')}.csv`);
-        }),
-        finalize(() => (this.loading = false))
-      )
-      .subscribe(
-        (_) => {
-          this.snackbar.success('CSV-Export erfolgreich ausgeführt');
-        },
-        (error) => {
-          this.badRequestService.handleBadRequestError(error, null);
-        }
-      );
+    this.dialogService.open(ExportDialogComponent, {
+      data: { idList: ids, caseType: CaseType.Index },
+    });
   }
 
   get areCasesVisible(): boolean {

@@ -1,0 +1,43 @@
+<mat-card style="box-shadow: none; margin-bottom: 0">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title>CSV-Export</mat-card-title>
+    <mat-card-subtitle>Auswahl des Export-Formats</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="example-radio-group"
+      [(ngModel)]="selectedExportFormat"
+    >
+      <mat-radio-button value="sormas" class="example-radio-button">Export für SORMAS Import</mat-radio-button
+      ><br /><small
+        >Die Daten der gefilterten Personen werden im Import-Format<br />für SORMAS aus Quarano exportiert</small
+      >
+      <mat-radio-button value="cases" class="example-radio-button">Generischer Export (Quarano)</mat-radio-button
+      ><br /><small
+        >Die Daten der gefilterten Personen werden in einem<br />generischen Quarano-Format exportiert<br /><mat-slide-toggle
+          [disabled]="selectedExportFormat !== 'cases'"
+          [(ngModel)]="includeOriginCase"
+          >Inkl. Ursprungsfall, sofern eindeutig bekannt</mat-slide-toggle
+        >
+      </small>
+      <mat-radio-button value="quarantines" class="example-radio-button"
+        >Export für Quarantäneanordnung</mat-radio-button
+      ><br /><small
+        >Die Daten der gefilterten Personen werden in einem reduzierten Format<br />für Quarantäneanordnungen
+        exportiert, sofern eine Quarantäne eingetragen ist</small
+      >
+    </mat-radio-group>
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <qro-button
+      color="primary"
+      type="button"
+      [loading]="loading"
+      (buttonClicked)="exportNow()"
+      [disabled]="!selectedExportFormat"
+      ><mat-icon>get_app</mat-icon>Jetzt exportieren</qro-button
+    >
+  </mat-card-actions>
+</mat-card>

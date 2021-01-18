@@ -193,6 +193,9 @@
     },
     "auth-feature-reset-password": {
       "tags": ["scope:auth", "type:feature"]
+    },
+    "health-department-ui-export-dialog": {
+      "tags": ["scope:health-department", "type:ui"]
     }
   },
   "affected": {
