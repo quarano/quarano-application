@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { $b } from '@angular/compiler/src/chars';
+
 describe(
   'S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioniert',
   {
@@ -9,15 +11,14 @@ describe(
     before((done) => {
       cy.restartBackend(done);
 
-      cy.server();
-      cy.route('POST', '/enrollment/completion?withoutEncounters=false').as('completeEnrollment');
-      cy.route('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
-      cy.route('PUT', '/enrollment/details').as('updatePersonalDetails');
-      cy.route('GET', '/diary').as('diary');
-      cy.route('GET', '/details').as('details');
-      cy.route('GET', '/contacts').as('contacts');
-      cy.route('GET', '/hd/cases/*').as('case');
-      cy.route('GET', '/hd/cases/*/questionnaire').as('questionnaire');
+      cy.intercept('POST', '/enrollment/completion?withoutEncounters=false').as('completeEnrollment');
+      cy.intercept('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
+      cy.intercept('PUT', '/enrollment/details').as('updatePersonalDetails');
+      cy.intercept('GET', '/diary').as('diary');
+      cy.intercept('GET', '/details').as('details');
+      cy.intercept('GET', '/contacts').as('contacts');
+      cy.intercept('GET', '/hd/cases/*').as('case');
+      cy.intercept('GET', '/hd/cases/*/questionnaire').as('questionnaire');
     });
 
     it('can complete enrollment and retrospective', () => {
@@ -31,7 +32,7 @@ describe(
       cy.get('[data-cy="zip-code-input"]').type('68199');
       cy.get('[data-cy="city-input"]').type('Mannheim');
       cy.get('[data-cy="first-step-button"] button').click();
-      cy.wait('@updatePersonalDetails').its('status').should('eq', 200);
+      cy.wait('@updatePersonalDetails').its('response.statusCode').should('eq', 200);
 
       cy.get('[data-cy="second-step-button"] button').should('be.disabled');
       cy.get('[data-cy="has-symptoms-option"]').click();
@@ -51,7 +52,7 @@ describe(
       cy.get('[data-cy="contact-option"]').click();
       cy.get('[data-cy="hasContactToVulnerablePeopleDescription"]').type('Peter Aalen');
       cy.get('[data-cy="second-step-button"] button').click();
-      cy.wait('@updateQuestionnaire').its('status').should('eq', 200);
+      cy.wait('@updateQuestionnaire').its('response.statusCode').should('eq', 200);
 
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('mat-horizontal-stepper').find('fieldset').should('have.length.greaterThan', 13);
@@ -70,8 +71,8 @@ describe(
       cy.get('mat-option').click();
 
       cy.get('[data-cy="third-step-button"] button').click();
-      cy.wait('@completeEnrollment').its('status').should('eq', 200);
-      cy.wait('@diary').its('status').should('eq', 200);
+      cy.wait('@completeEnrollment').its('response.statusCode').should('eq', 200);
+      cy.wait('@diary').its('response.statusCode').should('eq', 200);
 
       cy.location('pathname').should('eq', '/client/diary/diary-list');
 
@@ -80,7 +81,7 @@ describe(
 
       cy.get('[data-cy="profile-user-button"]').click();
       cy.get('[data-cy="profile-button"]').click();
-      cy.wait('@details').its('status').should('eq', 200);
+      cy.wait('@details').its('response.statusCode').should('eq', 200);
       cy.location('pathname').should('include', '/client/profile');
 
       cy.get('[data-cy="personal-data-firstName"] input').should('have.value', 'Markus');
@@ -95,7 +96,7 @@ describe(
       cy.get('[data-cy="city-input"] input').should('have.value', 'Mannheim');
 
       cy.get('[data-cy="contact-person-menu-item"]').click();
-      cy.wait('@contacts').its('status').should('eq', 200);
+      cy.wait('@contacts').its('response.statusCode').should('eq', 200);
       cy.location('pathname').should('eq', '/client/contact-persons/contact-person-list');
       cy.get('mat-card').should('contain', 'Claire Fraser');
 
@@ -115,7 +116,7 @@ describe(
 
       cy.get('.mat-tab-links').children().should('have.length', 6);
 
-      cy.wait('@case').its('status').should('eq', 200);
+      cy.wait('@case').its('response.statusCode').should('eq', 200);
       cy.get('@case')
         .its('response.body')
         .then(($body) => {
@@ -147,7 +148,7 @@ describe(
 
       cy.get('[data-cy="contacts-tab"]').click();
       cy.location('pathname').should('include', '/contacts');
-      cy.wait('@contacts').its('status').should('eq', 200);
+      cy.wait('@contacts').its('response.statusCode').should('eq', 200);
       cy.get('@contacts')
         .its('response.body')
         .then((body) => {
@@ -159,7 +160,7 @@ describe(
 
       cy.get('[data-cy="questionnaire-tab"]').click();
       cy.location('pathname').should('include', '/questionnaire');
-      cy.wait('@questionnaire').its('status').should('eq', 200);
+      cy.wait('@questionnaire').its('response.statusCode').should('eq', 200);
 
       // cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo.toLocaleDateString()); TODO: check once dayjs is merged
       cy.get('[data-cy="familyDoctor"]').should('have.text', 'Dr Schmidt');
@@ -176,6 +177,15 @@ describe(
       cy.get('[data-cy="search-case-input"] input').type('Claire');
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
       cy.location('pathname').should('include', '/edit');
+      cy.wait('@case').its('response.statusCode').should('eq', 200);
+      cy.get('@case')
+        .its('response.body')
+        .then(($body) => {
+          expect($body.firstName).to.eq('Claire');
+          expect($body.lastName).to.eq('Fraser');
+          expect($body._embedded.originCases[0].firstName).to.eq('Markus');
+          expect($body._embedded.originCases[0].lastName).to.eq('Hanser');
+        });
     });
   }
 );
