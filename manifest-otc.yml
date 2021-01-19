@@ -265,6 +265,54 @@ applications:
     stack: cflinuxfs3
     path: ./backend/target/quarano-backend.jar
 
+  ###############   Internal PENTEST system #########################
+  - name: internal-pentest-frontend
+    memory: 128M
+    disk_quota: 200M
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git
+    path: ./frontend/dist/apps/quarano-frontend
+    routes:
+      - route: quarano.de/internal-pentest
+    env:
+      ENVIRONMENT_NAME: "internal-pentest"
+
+  - name: internal-pentest-backend
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
+      QUARANO_APP_HOST: quarano.de/internal-pentest
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: gesundheitsamt@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 04721-66 2006
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_EMAIL-ADDRESS: gesundheitsamt@landkreis-cuxhaven.de
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_PHONE-NUMBER: 04721-66 2006
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[1]_TYPE: INDEX
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_NAME: Gesundheitsamt Mannheim
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.08.2.22.
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_FEDERAL-STATE: Voreingestellte Bundesländer
+      QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_DISTRICT: Voreingestellter Landkreis
+      SERVER_SERVLET_CONTEXTPATH: "/internal-pentest/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-pentest/api
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+      SPRING_PROFILES_ACTIVE: staging
+      TZ: Europe/Berlin
+      SPRING_MAIL_HOST: no-mailserver
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
+      SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
+    instances: 1
+    memory: 1G
+    disk_quota: 400M
+    routes:
+      - route: quarano.de/internal-pentest/api
+    services:
+      - quarano-internal-pentest-db
+    stack: cflinuxfs3
+    path: ./backend/target/quarano-backend.jar
+
   ###############   Internal TEST system #########################
   - name: internal-test-frontend
     memory: 128M

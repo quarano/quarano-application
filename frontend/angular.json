@@ -34,87 +34,6 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.mannheim-prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "test": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.test.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "evoila-prod": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.prod-evoila.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
             "mannheim-prod": {
               "fileReplacements": [
                 {
@@ -250,87 +169,6 @@
                 }
               ]
             },
-            "sec-evoila": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.sec-evoila.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "stage": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.stage.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
-            "test-pivotal": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.test.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            },
             "internal-test-otc": {
               "fileReplacements": [
                 {
@@ -385,11 +223,11 @@
                 }
               ]
             },
-            "sec": {
+            "internal-pentest": {
               "fileReplacements": [
                 {
                   "replace": "apps/quarano-frontend/src/environments/environment.ts",
-                  "with": "apps/quarano-frontend/src/environments/environment.sec.ts"
+                  "with": "apps/quarano-frontend/src/environments/environment.internal-pentest.ts"
                 }
               ],
               "optimization": true,
@@ -411,7 +249,7 @@
                   "maximumError": "10kb"
                 }
               ]
-            },
+            },            
             "autotest": {
               "fileReplacements": [
                 {

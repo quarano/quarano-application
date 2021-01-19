@@ -12,6 +12,7 @@
     "build-cuxhaven-prod": "ng run quarano-frontend:build:cuxhaven-prod --baseHref=/cuxhaven/",
     "build-cuxhaven-stage": "ng run quarano-frontend:build:cuxhaven-stage --baseHref=/cuxhaven-stage/",
     "build-internal-dev-otc": "ng run quarano-frontend:build:internal-dev-otc --baseHref=/internal-dev/",
+    "build-internal-pentest": "ng run quarano-frontend:build:internal-pentest --baseHref=/internal-pentest/",
     "build-internal-test-otc": "ng run quarano-frontend:build:internal-test-otc --baseHref=/internal-test/",
     "build-demo-otc": "ng run quarano-frontend:build:demo-otc --baseHref=/demo/",
     "prepare-deployment-otc": "ncp ./deployment/otc/ ./dist/apps/quarano-frontend/",
