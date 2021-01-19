@@ -264,7 +264,6 @@ applications:
       - quarano-internal-dev-db
     stack: cflinuxfs3
     path: ./backend/target/quarano-backend.jar
-
   ###############   Internal PENTEST system #########################
   - name: internal-pentest-frontend
     memory: 128M
