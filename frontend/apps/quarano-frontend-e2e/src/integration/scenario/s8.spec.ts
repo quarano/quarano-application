@@ -83,16 +83,16 @@ describe(
       cy.wait('@details').its('status').should('eq', 200);
       cy.location('pathname').should('include', '/client/profile');
 
-      cy.get('[data-cy="personal-data-firstName"]').find('input').should('have.value', 'Markus');
-      cy.get('[data-cy="personal-data-lastName"]').find('input').should('have.value', 'Hanser');
-      cy.get('[data-cy="personal-data-dateOfBirth"]').find('input').should('have.value', '1.1.1990');
-      cy.get('[data-cy="personal-data-email"]').find('input').should('have.value', 'markus.hanser@testtest.de');
-      cy.get('[data-cy="personal-data-phone"]').find('input').should('have.value', '0621222255');
+      cy.get('[data-cy="personal-data-firstName"] input').should('have.value', 'Markus');
+      cy.get('[data-cy="personal-data-lastName"] input').should('have.value', 'Hanser');
+      cy.get('[data-cy="personal-data-dateOfBirth"] input').should('have.value', '1.1.1990');
+      cy.get('[data-cy="personal-data-email"] input').should('have.value', 'markus.hanser@testtest.de');
+      cy.get('[data-cy="personal-data-phone"] input').should('have.value', '0621222255');
 
-      cy.get('[data-cy="street-input"]').find('input').should('have.value', 'Hauptstraße');
-      cy.get('[data-cy="house-number-input"]').find('input').should('have.value', '15');
-      cy.get('[data-cy="zip-code-input"]').find('input').should('have.value', '68199');
-      cy.get('[data-cy="city-input"]').find('input').should('have.value', 'Mannheim');
+      cy.get('[data-cy="street-input"] input').should('have.value', 'Hauptstraße');
+      cy.get('[data-cy="house-number-input"] input').should('have.value', '15');
+      cy.get('[data-cy="zip-code-input"] input').should('have.value', '68199');
+      cy.get('[data-cy="city-input"] input').should('have.value', 'Mannheim');
 
       cy.get('[data-cy="contact-person-menu-item"]').click();
       cy.wait('@contacts').its('status').should('eq', 200);
@@ -123,24 +123,24 @@ describe(
           expect($body.caseId).to.not.eq('');
         });
 
-      cy.get('[data-cy="input-firstname"]').find('input').should('have.value', 'Markus');
-      cy.get('[data-cy="input-lastname"]').find('input').should('have.value', 'Hanser');
-      cy.get('[data-cy="input-dayofbirth"]').find('input').should('have.value', '1.1.1990');
-      cy.get('[data-cy="input-email"]').find('input').should('have.value', 'markus.hanser@testtest.de');
-      cy.get('[data-cy="input-phone"]').find('input').should('have.value', '0621222255');
+      cy.get('[data-cy="input-firstname"] input').should('have.value', 'Markus');
+      cy.get('[data-cy="input-lastname"] input').should('have.value', 'Hanser');
+      cy.get('[data-cy="input-dayofbirth"] input').should('have.value', '1.1.1990');
+      cy.get('[data-cy="input-email"] input').should('have.value', 'markus.hanser@testtest.de');
+      cy.get('[data-cy="input-phone"] input').should('have.value', '0621222255');
 
-      cy.get('[data-cy="street-input"]').find('input').should('have.value', 'Hauptstraße');
-      cy.get('[data-cy="house-number-input"]').find('input').should('have.value', '15');
-      cy.get('[data-cy="input-zipcode"]').find('input').should('have.value', '68199');
-      cy.get('[data-cy="city-input"]').find('input').should('have.value', 'Mannheim');
+      cy.get('[data-cy="street-input"] input').should('have.value', 'Hauptstraße');
+      cy.get('[data-cy="house-number-input"] input').should('have.value', '15');
+      cy.get('[data-cy="input-zipcode"] input').should('have.value', '68199');
+      cy.get('[data-cy="city-input"] input').should('have.value', 'Mannheim');
 
       const twoDaysAgo = new Date();
       twoDaysAgo.setDate(today.getDate() - 2);
       const twoWeeksFromNow = new Date();
       twoWeeksFromNow.setDate(today.getDate() + 14);
 
-      cy.get('[data-cy="input-testdate"]').find('input').should('have.value', twoDaysAgo.toLocaleDateString('de'));
-      cy.get('[data-cy="input-quarantinestart"]').find('input').should('have.value', today.toLocaleDateString('de'));
+      cy.get('[data-cy="input-testdate"] input').should('have.value', twoDaysAgo.toLocaleDateString('de'));
+      cy.get('[data-cy="input-quarantinestart"] input').should('have.value', today.toLocaleDateString('de'));
       cy.get('[data-cy="input-quarantineend"]')
         .find('input')
         .should('have.value', twoWeeksFromNow.toLocaleDateString('de'));
