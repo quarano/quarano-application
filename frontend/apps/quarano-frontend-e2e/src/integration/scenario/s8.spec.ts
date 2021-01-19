@@ -150,6 +150,9 @@ describe(
       cy.get('@contacts')
         .its('response.body')
         .then((body) => {
+          for (const [key, value] of Object.entries($body)) {
+            cy.log(`${key}: ${value}`);
+          }
           expect(body).to.be.an('array').that.does.have.length(1);
           expect(body[0].firstName).to.eq('Claire');
           expect(body[0].lastName).to.eq('Fraser');
@@ -181,6 +184,8 @@ describe(
         .then(($body) => {
           expect($body.firstName).to.eq('Claire');
           expect($body.lastName).to.eq('Fraser');
+          expect($body._embedded.originCases[0].firstName).to.eq('Markus');
+          expect($body._embedded.originCases[0].lastName).to.eq('Hanser');
         });
     });
   }
