@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-import { $b } from '@angular/compiler/src/chars';
-
 describe(
   'S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioniert',
   {
@@ -183,6 +181,7 @@ describe(
         .then(($body) => {
           expect($body.firstName).to.eq('Claire');
           expect($body.lastName).to.eq('Fraser');
+          console.log($body);
           expect($body._embedded.originCases[0].firstName).to.eq('Markus');
           expect($body._embedded.originCases[0].lastName).to.eq('Hanser');
         });
