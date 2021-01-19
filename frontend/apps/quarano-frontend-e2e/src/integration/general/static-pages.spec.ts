@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('static pages', () => {
   beforeEach(() => {
     cy.server();

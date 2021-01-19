@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('health-department top navigation', () => {
   beforeEach(() => {
     cy.server();

@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-/// <reference types="cypress" />
-
 describe('Account administration', () => {
   beforeEach(() => {
     cy.server();

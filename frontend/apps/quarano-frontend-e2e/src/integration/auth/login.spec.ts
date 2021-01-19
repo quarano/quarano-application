@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('login', () => {
   const login = (username: string, password: string) => {
     cy.get('#submitBtn button').should('be.disabled');
