@@ -179,9 +179,8 @@ describe(
       cy.get('@case')
         .its('response.body')
         .then(($body) => {
-          for (const [key, value] of Object.entries($body)) {
-            cy.log(`${key}: ${value}`);
-          }
+          expect($body.firstName).to.eq('Claire');
+          expect($body.lastName).to.eq('Fraser');
         });
     });
   }
