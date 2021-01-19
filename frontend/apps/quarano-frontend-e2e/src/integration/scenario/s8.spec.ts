@@ -150,7 +150,7 @@ describe(
       cy.get('@contacts')
         .its('response.body')
         .then((body) => {
-          for (const [key, value] of Object.entries($body)) {
+          for (const [key, value] of Object.entries(body)) {
             cy.log(`${key}: ${value}`);
           }
           expect(body).to.be.an('array').that.does.have.length(1);
