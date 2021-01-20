@@ -2,10 +2,11 @@
 
 describe('Account administration', () => {
   beforeEach(() => {
-    cy.intercept('PUT', `/hd/accounts/*/password`).as('resetPassword');
-    cy.intercept('GET', `/hd/accounts`).as('fetchAccounts');
-    cy.intercept('GET', `/hd/accounts/*`).as('fetchAccount');
-    cy.intercept('PUT', '/user/me/password').as('changePassword');
+    cy.server();
+    cy.route('PUT', `/hd/accounts/*/password`).as('resetPassword');
+    cy.route('GET', `/hd/accounts`).as('fetchAccounts');
+    cy.route('GET', `/hd/accounts/*`).as('fetchAccount');
+    cy.route('PUT', '/user/me/password').as('changePassword');
 
     cy.logInAdmin();
   });
@@ -14,7 +15,7 @@ describe('Account administration', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="account-administration"]').click();
     cy.location('pathname').should('eq', '/administration/accounts/account-list');
-    cy.wait('@fetchAccounts').its('response.statusCode').should('eq', 200);
+    cy.wait('@fetchAccounts').its('status').should('eq', 200);
     cy.get('.ag-row').should('have.length.gt', 0);
     cy.get('[row-index="0"] > [aria-colindex="1"]')
       .should('exist')
@@ -22,7 +23,7 @@ describe('Account administration', () => {
         $elem.click();
       });
     cy.location('pathname').should('include', '/edit');
-    cy.wait('@fetchAccount').its('response.statusCode').should('eq', 200);
+    cy.wait('@fetchAccount').its('status').should('eq', 200);
     cy.get('@fetchAccount')
       .its('response.body')
       .then((body) => {
@@ -42,7 +43,7 @@ describe('Account administration', () => {
     cy.get('[data-cy="account-submitandclose-button"] button').should('be.enabled');
     cy.get('[data-cy="account-submitandclose-button"] button').click();
 
-    cy.wait('@resetPassword').its('response.statusCode').should('eq', 204);
+    cy.wait('@resetPassword').its('status').should('eq', 204);
     cy.location('pathname').should('eq', `/administration/accounts/account-list`);
     // TODO: Meldung "erfolgreich aktualisiert"
     cy.logOut();
@@ -58,7 +59,7 @@ describe('Account administration', () => {
     cy.get('[data-cy="changepassword-submit-button"] button').should('be.enabled');
     cy.get('[data-cy="changepassword-submit-button"] button').click();
 
-    cy.wait('@changePassword').its('response.statusCode').should('eq', 204);
+    cy.wait('@changePassword').its('status').should('eq', 204);
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
   });
 
