@@ -150,6 +150,7 @@ describe(
       cy.get('@contacts')
         .its('response.body')
         .then((body) => {
+          cy.log(body);
           expect(body[0].firstName).to.eq('Claire');
           expect(body[0].lastName).to.eq('Fraser');
         });
