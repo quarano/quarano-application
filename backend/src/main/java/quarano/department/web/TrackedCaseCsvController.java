@@ -100,7 +100,8 @@ class TrackedCaseCsvController {
 	 * This is mainly intended for creating quarantine orders.
 	 * </p>
 	 * <p>
-	 * The cases to be exported must be specified using a list of their Self links.
+	 * The cases to be exported must be specified using a list of their Self links. Given cases without currently running
+	 * quarantine will be ignored.
 	 * </p>
 	 * 
 	 * @param department
@@ -122,8 +123,9 @@ class TrackedCaseCsvController {
 				.collect(Collectors.toList());
 
 		var cases = caseRepo.findAllById(idList);
+		var caseStream = StreamSupport.stream(cases.spliterator(), false).filter(TrackedCase::isInQuarantine);
 
-		representations.writeQuarantineOrderCsv(response.getWriter(), StreamSupport.stream(cases.spliterator(), false));
+		representations.writeQuarantineOrderCsv(response.getWriter(), caseStream);
 	}
 
 	/**
