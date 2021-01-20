@@ -147,7 +147,8 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, is("text/csv;charset=UTF-8")))
 				.andReturn().getResponse().getContentAsString();
 
-		assertThat(result.lines()).size().isEqualTo(3);
+		// Tanja is not in quarantine and is therefore filtered out.
+		assertThat(result.lines()).size().isEqualTo(2);
 		assertThat(result.lines()).first().isEqualTo(QUARANTINE_CSV_HEADER);
 	}
 
