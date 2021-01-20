@@ -10,6 +10,7 @@ import quarano.QuaranoWebIntegrationTest;
 import quarano.security.web.AuthenticationLinkRelations;
 
 import org.junit.jupiter.api.Test;
+import quarano.user.web.UserLinkRelations;
 
 /**
  * Web integration tests for {@link QuaranoApiRootController}.
@@ -27,13 +28,12 @@ class QuaranoApiRootControllerWebIntegrationTests extends AbstractDocumentation 
 		var loginLink = linkWithRel(AuthenticationLinkRelations.LOGIN.value())
 				.description("Log into Quarano. See <<authentication>> for details.");
 
-		// Temporarily deactivated for the release because of an open vulnerability.
-		// var resetPasswordLink = linkWithRel(UserLinkRelations.RESET_PASSWORD.value())
-		// .description("Reset your password. See <<authentication.password-reset>> for details.");
+		 var resetPasswordLink = linkWithRel(UserLinkRelations.RESET_PASSWORD.value())
+		 .description("Reset your password. See <<authentication.password-reset>> for details.");
 
 		mvc.perform(get("/"))
 				.andExpect(status().isOk())
 				.andDo(flow.document("access-root-resource", relaxedLinks(
-						loginLink /* Temporarily deactivated for the release because of an open vulnerability. , resetPasswordLink*/)));
+						loginLink , resetPasswordLink)));
 	}
 }

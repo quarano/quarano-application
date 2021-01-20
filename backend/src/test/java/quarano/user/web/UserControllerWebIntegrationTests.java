@@ -6,9 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import quarano.AbstractDocumentation;
 import quarano.DocumentationFlow;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.account.Account;
 import quarano.core.EmailAddress;
 import quarano.core.web.QuaranoHttpHeaders;
 import quarano.tracking.TrackedPerson;
@@ -20,7 +22,6 @@ import quarano.user.web.UserRepresentations.PasswordResetRequest;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -215,7 +216,6 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	@Test // CORE-92
-	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	void requestsPasswordReset() throws Exception {
 
 		requestPasswordReset();
@@ -228,7 +228,6 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	@TestFactory // CORE-92
-	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	Stream<DynamicTest> rejectsInvalidPasswordResetRequests() {
 
 		var validUsername = "DemoAccount";
@@ -253,7 +252,6 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 	}
 
 	@Test // CORE-92
-	@Disabled // Temporarily deactivated for the release because of an open vulnerability.
 	void resetsPasswordSuccessfully() throws Exception {
 
 		var resetPassword = UserLinkRelations.RESET_PASSWORD;
@@ -263,14 +261,13 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		links.findRequiredLinkWithRel(resetPassword, root);
+		requestPasswordReset();
 
-		var response = requestPasswordReset()
-				.andDo(flow.document("request-reset", relaxedLinks(linkWithRel(resetPassword.value()))))
-				.andReturn().getResponse().getContentAsString();
-
-		var resetUrl = links.findRequiredLinkWithRel(resetPassword, response).getHref();
 		var markus = people.findByEmailAddress(EmailAddress.of("markus.hanser@testtest.de")).orElseThrow();
+
+		Account account = markus.getAccount().orElseThrow();
+
+		assertThat(account.getPasswordResetToken()).isNotNull();
 
 		var reset = new PasswordResetInput()
 				.setUsername("DemoAccount")
@@ -278,7 +275,7 @@ class UserControllerWebIntegrationTests extends AbstractDocumentation {
 				.setPassword("newPassword")
 				.setPasswordConfirm("newPassword");
 
-		mvc.perform(put(resetUrl)
+		mvc.perform(put("/password/reset/"+ account.getPasswordResetToken().getToken().toString())
 				.content(mapper.writeValueAsString(reset)))
 				.andExpect(status().is2xxSuccessful())
 				.andDo(flow.document("perform-reset"));

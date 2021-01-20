@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatInput } from '@angular/material/input';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@qro/auth/domain';
-import { BadRequestService } from '@qro/shared/ui-error';
 import {
   ConfirmValidPasswordMatcher,
   PasswordIncludesUsernameMatcher,
@@ -12,7 +11,7 @@ import {
   ValidationErrorService,
   VALIDATION_PATTERNS,
 } from '@qro/shared/util-forms';
-import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { Observable } from 'rxjs';
 import { delay, map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
@@ -34,9 +33,9 @@ export class PasswordResetComponent implements OnInit, OnDestroy {
   constructor(
     public validationErrorService: ValidationErrorService,
     private formBuilder: FormBuilder,
-    private badRequestService: BadRequestService,
     private router: Router,
     private translatedSnackbarService: TranslatedSnackbarService,
+    private snackbarService: SnackbarService,
     private authService: AuthService,
     private route: ActivatedRoute
   ) {}
@@ -95,7 +94,7 @@ export class PasswordResetComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
           },
           (error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            this.snackbarService.error(error.errors);
           }
         )
         .add(() => (this.loading = false))

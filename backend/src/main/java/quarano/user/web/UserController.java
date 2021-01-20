@@ -6,12 +6,14 @@ import static quarano.department.web.TrackedCaseLinkRelations.*;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
 import quarano.account.Account;
 import quarano.account.AccountService;
 import quarano.account.AuthenticationManager;
 import quarano.account.DepartmentContact.ContactType;
 import quarano.account.DepartmentRepository;
 import quarano.account.Password.UnencryptedPassword;
+import quarano.account.RoleType;
 import quarano.actions.web.AnomaliesController;
 import quarano.core.web.I18nedMessage;
 import quarano.core.web.LoggedIn;
@@ -125,13 +127,12 @@ public class UserController {
 	/**
 	 * Requests the password reset for the {@link Account} identified by the given username and email address.
 	 *
-	 * @param payload must not be {@literal null}.
+	 * @param request must not be {@literal null}.
 	 * @param errors must not be {@literal null}.
 	 * @return will never be {@literal null}.
 	 * @since 1.4
 	 */
-	// @PostMapping("/password/reset")
-	// Temporarily deactivated for the release because of an open vulnerability.
+	@PostMapping("/password/reset")
 	HttpEntity<?> requestPasswordReset(@Valid @RequestBody PasswordResetRequest request, Errors errors) {
 
 		Supplier<HttpEntity<?>> errorResponse = () -> ResponseEntity.badRequest()
@@ -140,14 +141,7 @@ public class UserController {
 		return MappedPayloads.of(request, errors)
 				.flatMap(it -> accounts.requestPasswordReset(it.toEmail(), it.getUsername()))
 				.onErrors(errorResponse).onAbsence(errorResponse)
-				.concludeIfValid(token -> {
-
-					var controller = on(UserController.class);
-					var resetPasswordLink = MvcLink.of(controller.resetPassword(token.getToken(), null, null),
-							UserLinkRelations.RESET_PASSWORD);
-
-					return ResponseEntity.ok(new RepresentationModel<>().add(resetPasswordLink));
-				});
+				.onValidGet(() -> ResponseEntity.ok().build());
 	}
 
 	/**
@@ -159,16 +153,19 @@ public class UserController {
 	 * @return will never be {@literal null}.
 	 * @since 1.4
 	 */
-	@PutMapping(UserLinkRelations.PASSWORD_RESET_URI_TEMPLATE)
-	HttpEntity<?> resetPassword(@PathVariable UUID token,
+	@PutMapping("/password/reset/{token}")
+	HttpEntity<?> resetPassword(@Valid @PathVariable UUID token,
 			@Valid @RequestBody PasswordResetInput payload,
 			Errors errors) {
+
+		Supplier<HttpEntity<?>> errorResponse = () -> ResponseEntity.badRequest()
+				.body(I18nedMessage.of("PasswordReset.invalidRequest"));
 
 		return MappedPayloads.of(payload, errors)
 				.alwaysMap(PasswordResetInput::validate)
 				.map(it -> representations.from(it, token))
 				.flatMap(trackedPeople::resetPassword)
-				.onAbsence(() -> ResponseEntity.badRequest().body("Invalid or expired password request token!"))
+				.onAbsence(errorResponse).onErrors(errorResponse)
 				.onValidGet(() -> {
 
 					var loginLink = MvcLink.of(on(AuthenticationController.class).login(null, null),
@@ -194,11 +191,9 @@ public class UserController {
 
 			var controller = on(UserController.class);
 
-			return model;
-			// Temporarily deactivated for the release because of an open vulnerability.
-			// return authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman)
-			// ? model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD))
-			// : model;
+			 return authentication.isAnonymousOrHasRoleMatching(RoleType::isHuman)
+			 ? model.add(MvcLink.of(controller.requestPasswordReset(null, null), UserLinkRelations.RESET_PASSWORD))
+			 : model;
 		};
 	}
 }

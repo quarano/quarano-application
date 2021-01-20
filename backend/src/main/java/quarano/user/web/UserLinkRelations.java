@@ -22,7 +22,7 @@ import org.springframework.hateoas.LinkRelation;
  */
 public class UserLinkRelations {
 
-	public static final String PASSWORD_RESET_URI_TEMPLATE = "/password/reset/{token}";
+	public static final String PASSWORD_RESET_URI_TEMPLATE = "/auth/reset-password/{token}";
 
 	public static final LinkRelation CHANGE_PASSWORD = LinkRelation.of("change-password");
 	public static final LinkRelation RESET_PASSWORD = LinkRelation.of("reset-password");
