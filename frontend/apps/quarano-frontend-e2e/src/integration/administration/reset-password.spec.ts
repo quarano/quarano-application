@@ -2,11 +2,10 @@
 
 describe('Account administration', () => {
   beforeEach(() => {
-    cy.server();
-    cy.route('PUT', `/hd/accounts/*/password`).as('resetPassword');
-    cy.route('GET', `/hd/accounts`).as('fetchAccounts');
-    cy.route('GET', `/hd/accounts/*`).as('fetchAccount');
-    cy.route('PUT', '/user/me/password').as('changePassword');
+    cy.intercept('PUT', `/hd/accounts/*/password`).as('resetPassword');
+    cy.intercept('GET', `/hd/accounts`).as('fetchAccounts');
+    cy.intercept('GET', `/hd/accounts/*`).as('fetchAccount');
+    cy.intercept('PUT', '/user/me/password').as('changePassword');
 
     cy.logInAdmin();
   });
@@ -22,6 +21,7 @@ describe('Account administration', () => {
       .then(($elem) => {
         $elem.click();
       });
+    cy.location('pathname').should('include', '/edit');
     cy.wait('@fetchAccount').its('status').should('eq', 200);
     cy.get('@fetchAccount')
       .its('response.body')
@@ -30,7 +30,6 @@ describe('Account administration', () => {
         expect(accountId).not.to.eq(null);
       });
 
-    cy.location('pathname').should('include', '/edit');
     cy.get('[data-cy="reset-account-password"]').click();
     cy.location('pathname').should('include', '/reset-password');
 
