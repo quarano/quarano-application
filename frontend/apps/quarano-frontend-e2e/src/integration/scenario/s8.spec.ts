@@ -113,6 +113,7 @@ describe(
         cy.logOut();
       });
     });
+
     describe('check results GAMA', () => {
       it('check edit page', () => {
         cy.logInAgent();
@@ -163,6 +164,7 @@ describe(
           .find('input')
           .should('have.value', twoWeeksFromNow.toLocaleDateString('de'));
       });
+
       it('check contacts', () => {
         cy.get('[data-cy="contacts-tab"]').click();
         cy.location('pathname').should('include', '/contacts');
@@ -175,6 +177,7 @@ describe(
           });
         cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
       });
+
       it('check questionnaire', () => {
         cy.get('[data-cy="questionnaire-tab"]').click();
         cy.location('pathname').should('include', '/questionnaire');
@@ -188,6 +191,7 @@ describe(
         cy.get('[data-cy="belongToMedicalStaffDescription"]').should('have.text', 'Merck');
         cy.get('[data-cy="hasContactToVulnerablePeopleDescription"]').should('have.text', ' Peter Aalen '); // TODO: spaces
       });
+
       it('check associated contact', () => {
         cy.get('[data-cy="contact-cases"]').click();
 
