@@ -52,7 +52,7 @@
   <form [formGroup]="formGroup" (ngSubmit)="submitForm(caseAction)" class="mt-5" *ngIf="hasOpenAnomalies(caseAction)">
     <fieldset>
       <legend>Obige Auffälligkeiten als bearbeitet kennzeichnen</legend>
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width" data-cy="action-comments">
         <mat-label>Bemerkung</mat-label>
         <textarea
           [mat-autosize]="true"
@@ -65,7 +65,7 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.comment, error) | async }}
         </mat-error>
       </mat-form-field>
-      <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid">
+      <button type="submit" mat-raised-button color="primary" [disabled]="formGroup.invalid" data-cy="close-actions">
         <mat-icon>check</mat-icon> Auffälligkeiten abschließen
       </button>
       <button class="ml-3" type="button" mat-raised-button color="secondary" [routerLink]="[returnLink]">
