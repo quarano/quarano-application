@@ -12,10 +12,10 @@ describe('health-department index cases case-list', () => {
   });
 
   it('should be able to select specific entry', () => {
-    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
+
+    cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.get('[data-cy="case-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
