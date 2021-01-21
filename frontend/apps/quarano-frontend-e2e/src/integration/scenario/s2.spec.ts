@@ -108,25 +108,25 @@ describe(
         cy.get('h1').should('contain.text', 'Herzlich Willkommen bei quarano');
 
         cy.location('pathname').should('eq', '/client/enrollment/landing/index/' + extractedActivationCode);
-
-        cy.get('[data-cy="cta-button-index"]').click();
-
-        cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
-
-        cy.get('[data-cy="input-username"] input[matInput]').type('Jamie');
-        cy.get('[data-cy="input-password"] input[matInput]').type('Password01!');
-
-        cy.get('[data-cy="input-password-confirm"] input[matInput]').type('Password01!');
-        cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('01.01.1970');
-
-        cy.get('[data-cy="input-privacy-policy"]').click();
-        cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
-        cy.get('[data-cy="registration-submit-button"] button').click();
-
-        cy.location('pathname').should('eq', '/client/enrollment/basic-data');
-
-        cy.get('[data-cy="profile-user-button"] .mat-button-wrapper span').should('have.text', 'Jamie Fraser ');
       });
+
+      cy.get('[data-cy="cta-button-index"]').click();
+
+      cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
+
+      cy.get('[data-cy="input-username"] input[matInput]').type('Jamie');
+      cy.get('[data-cy="input-password"] input[matInput]').type('Password01!');
+
+      cy.get('[data-cy="input-password-confirm"] input[matInput]').type('Password01!');
+      cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('01.01.1970');
+
+      cy.get('[data-cy="input-privacy-policy"]').click();
+      cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
+      cy.get('[data-cy="registration-submit-button"] button').click();
+
+      cy.location('pathname').should('eq', '/client/enrollment/basic-data');
+
+      cy.get('[data-cy="profile-user-button"] .mat-button-wrapper span').should('have.text', 'Jamie Fraser ');
     });
   }
 );
