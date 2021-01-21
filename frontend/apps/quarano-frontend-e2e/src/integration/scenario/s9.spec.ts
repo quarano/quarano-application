@@ -9,12 +9,11 @@ describe(
     before((done) => {
       cy.restartBackend(done);
 
-      cy.server();
-      cy.route('POST', '/hd/cases/?type=contact').as('newContact');
-      cy.route('PUT', '/hd/cases/*').as('updateIndexCase');
+      cy.intercept('POST', '/hd/cases/?type=contact').as('newContact');
+      cy.intercept('PUT', '/hd/cases/*').as('updateIndexCase');
     });
 
-    it('new contact case is able to complete registration', () => {
+    it('convert contact case to index case', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
@@ -54,7 +53,7 @@ describe(
       cy.get('[data-cy="city-input"]').type('Mannheim');
 
       cy.get('[data-cy="client-submit-and-close-button"] button').click();
-      cy.wait('@updateIndexCase').its('status').should('eq', 200);
+      cy.wait('@updateIndexCase').its('response.statusCode').should('eq', 200);
       cy.get('@updateIndexCase')
         .its('response.body')
         .then((body) => {
@@ -64,6 +63,8 @@ describe(
         });
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+    });
+    it('contact case is listed as index case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Dorothea');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
@@ -72,7 +73,8 @@ describe(
           $elems[0].click();
         });
       cy.get('[data-cy="client-cancel-button"]').click();
-
+    });
+    it('index case is still linked to origin case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Siggi');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
@@ -86,10 +88,10 @@ describe(
       cy.get('qro-contact-list')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length', 2)
-        .then(($elems) => {
-          cy.wrap($elems[0]).should('contain', 'Dorothea');
-        });
-
+        .find('div')
+        .should('contain', 'Dorothea');
+    });
+    it('index case is not listed in contact case list', () => {
       cy.get('[data-cy="contact-cases"]').click();
 
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));

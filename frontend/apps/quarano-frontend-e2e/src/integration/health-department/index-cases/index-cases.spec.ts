@@ -151,7 +151,7 @@ describe('health-department index cases', () => {
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
-      cy.get('[data-cy="search-case-input"]').type('Nadine');
+      cy.get('[data-cy="search-index-case-input"]').type('Nadine');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .then(($elems) => {
@@ -262,7 +262,7 @@ describe('health-department index cases', () => {
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length.greaterThan', 0);
-      cy.get('[data-cy="search-case-input"]').type('Peter');
+      cy.get('[data-cy="search-index-case-input"]').type('Peter');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .then(($elems) => {

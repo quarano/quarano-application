@@ -40,7 +40,7 @@ describe('health-department contact cases', () => {
       cy.get('[data-cy="contact-cases"]').click();
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
       cy.get('[data-cy="case-data-table"]').should('exist');
-      cy.get('[data-cy="search-case-input"]').type('Baum');
+      cy.get('[data-cy="search-contact-case-input"]').type('Baum');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
         .should('have.length', 1)
