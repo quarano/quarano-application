@@ -64,6 +64,7 @@ describe(
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
+
     it('contact case is listed as index case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Dorothea');
       cy.get('[data-cy="case-data-table"]')
@@ -74,6 +75,7 @@ describe(
         });
       cy.get('[data-cy="client-cancel-button"]').click();
     });
+
     it('index case is still linked to origin case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Siggi');
       cy.get('[data-cy="case-data-table"]')
@@ -91,6 +93,7 @@ describe(
         .find('div')
         .should('contain', 'Dorothea');
     });
+
     it('index case is not listed in contact case list', () => {
       cy.get('[data-cy="contact-cases"]').click();
 
