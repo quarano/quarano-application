@@ -1,5 +1,7 @@
 package quarano.account;
 
+import static org.springframework.util.StringUtils.*;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import quarano.account.DepartmentContact.ContactType;
@@ -12,7 +14,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.util.StringUtils;
 
 /**
  * @author Oliver Drotbohm
@@ -27,15 +28,15 @@ public class DepartmentProperties {
 
 	public Department getDefaultDepartment() {
 
-		var rkiCode = defaultDepartment.rkiCode;
-		var federalState = defaultDepartment.federalState;
+		var rkiCode = trimWhitespace(defaultDepartment.rkiCode);
+		var federalState = trimWhitespace(defaultDepartment.federalState);
 
-		if (!StringUtils.hasText(federalState)) {
+		if (!hasText(federalState)) {
 			federalState = new FederalStates().apply(rkiCode).getName();
 		}
 
 		return new Department(defaultDepartment.name, rkiCode, federalState,
-				defaultDepartment.district)
+				trimWhitespace(defaultDepartment.district))
 						.setContacts(defaultDepartment.contacts.stream()
 								.map(contact -> new DepartmentContact()
 										.setType(ContactType.valueOf(contact.type))
