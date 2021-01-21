@@ -1,5 +1,12 @@
 /// <reference types="cypress" />
 
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/de';
+import * as localeData from 'dayjs/plugin/localeData';
+
+dayjs.locale('de');
+dayjs.extend(localeData);
+
 describe(
   'S8 - Initiale Datenerfassung und Retrospektive Kontaktanlage funktioniert',
   {
@@ -45,11 +52,9 @@ describe(
         cy.get('[data-cy="second-step-button"] button').should('be.disabled');
         cy.get('[data-cy="has-symptoms-option"]').click();
 
-        const today = new Date();
-        const tenDaysAgo = new Date();
-        tenDaysAgo.setDate(today.getDate() - 10);
+        const tenDaysAgo = dayjs().subtract(10, 'days').format('DD.MM.YYYY');
 
-        cy.get('[data-cy="dayOfFirstSymptoms"]').type(tenDaysAgo.toLocaleDateString('de-DE'));
+        cy.get('[data-cy="dayOfFirstSymptoms"]').type(tenDaysAgo);
         cy.get('[data-cy="characteristicSymptoms"]').type('Fever');
         cy.get('mat-option').click();
         cy.get('[data-cy="familyDoctor"]').type('Dr Schmidt');
@@ -119,7 +124,7 @@ describe(
         cy.logInAgent();
 
         cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
-        cy.get('[data-cy="search-case-input"]').type('Markus');
+        cy.get('[data-cy="search-index-case-input"]').type('Markus');
         cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('have.length', 1);
         cy.get('[data-cy="case-data-table"]')
           .find('.ag-center-cols-container > .ag-row')
@@ -149,20 +154,13 @@ describe(
         cy.get('[data-cy="input-zipcode"] input').should('have.value', '68199');
         cy.get('[data-cy="city-input"] input').should('have.value', 'Mannheim');
 
-        const today = new Date();
-        const tenDaysAgo = new Date();
-        tenDaysAgo.setDate(today.getDate() - 10);
+        const today = dayjs().format('D.M.YYYY');
+        const twoDaysAgo = dayjs().subtract(2, 'days').format('D.M.YYYY');
+        const twoWeeksFromNow = dayjs().add(14, 'days').format('D.M.YYYY');
 
-        const twoDaysAgo = new Date();
-        twoDaysAgo.setDate(today.getDate() - 2);
-        const twoWeeksFromNow = new Date();
-        twoWeeksFromNow.setDate(today.getDate() + 14);
-
-        cy.get('[data-cy="input-testdate"] input').should('have.value', twoDaysAgo.toLocaleDateString('de'));
-        cy.get('[data-cy="input-quarantinestart"] input').should('have.value', today.toLocaleDateString('de'));
-        cy.get('[data-cy="input-quarantineend"]')
-          .find('input')
-          .should('have.value', twoWeeksFromNow.toLocaleDateString('de'));
+        cy.get('[data-cy="input-testdate"] input').should('have.value', twoDaysAgo);
+        cy.get('[data-cy="input-quarantinestart"] input').should('have.value', today);
+        cy.get('[data-cy="input-quarantineend"]').find('input').should('have.value', twoWeeksFromNow);
       });
 
       it('check contacts', () => {
@@ -183,7 +181,9 @@ describe(
         cy.location('pathname').should('include', '/questionnaire');
         cy.wait('@questionnaire').its('response.statusCode').should('eq', 200);
 
-        // cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo.toLocaleDateString()); TODO: check once dayjs is merged
+        const tenDaysAgo = dayjs().subtract(10, 'days').format('YYYY-MM-DD');
+
+        cy.get('[data-cy="symptoms-date"]').should('have.text', tenDaysAgo);
         cy.get('[data-cy="familyDoctor"]').should('have.text', 'Dr Schmidt');
         cy.get('[data-cy="presumed-origin"]').should('have.text', 'Nicht angegeben');
         cy.get('[data-cy="presumed-date"]').should('have.text', 'Nicht angegeben');
@@ -197,7 +197,7 @@ describe(
 
         cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
 
-        cy.get('[data-cy="search-case-input"] input').type('Claire');
+        cy.get('[data-cy="search-contact-case-input"] input').type('Claire');
         cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
         cy.wait('@case').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('include', '/edit');

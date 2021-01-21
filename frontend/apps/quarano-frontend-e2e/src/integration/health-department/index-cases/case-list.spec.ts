@@ -42,7 +42,7 @@ describe('health-department index cases case-list', () => {
 
   it('should add address', () => {
     cy.get('[data-cy="case-data-table"]').find('div[role="row"]').should('have.length.greaterThan', 0);
-    cy.get('[data-cy="search-case-input"]').type('Harry');
+    cy.get('[data-cy="search-index-case-input"]').type('Harry');
     cy.get('[data-cy="case-data-table"]')
       .find('.ag-center-cols-container > .ag-row')
       .should('have.length', 1)
