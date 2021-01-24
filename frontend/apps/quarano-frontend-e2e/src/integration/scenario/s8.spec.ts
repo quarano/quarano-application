@@ -24,8 +24,13 @@ describe(
       cy.intercept('GET', '/diary').as('diary');
       cy.intercept('GET', '/details').as('details');
       cy.intercept('GET', '/contacts').as('contacts');
-      cy.intercept('GET', '/hd/cases/*').as('case');
-      cy.intercept('GET', '/hd/cases/*/questionnaire').as('questionnaire');
+      cy.intercept('GET', '/hd/cases', (req) => {
+        if (req.url.endsWith('/questionnaire')) {
+          req.alias = 'questionnaireForCase';
+        } else {
+          req.alias = 'specificCase';
+        }
+      });
     });
 
     describe('enroll as client', () => {
@@ -135,8 +140,8 @@ describe(
 
         cy.get('.mat-tab-links').children().should('have.length', 6);
 
-        cy.wait('@case').its('response.statusCode').should('eq', 200);
-        cy.get('@case')
+        cy.wait('@specificCase').its('response.statusCode').should('eq', 200);
+        cy.get('@specificCase')
           .its('response.body')
           .then(($body) => {
             expect($body.caseId).to.not.eq(null);
@@ -179,7 +184,7 @@ describe(
       it('check questionnaire', () => {
         cy.get('[data-cy="questionnaire-tab"]').click();
         cy.location('pathname').should('include', '/questionnaire');
-        cy.wait('@questionnaire').its('response.statusCode').should('eq', 200);
+        cy.wait('@questionnaireForCase').its('response.statusCode').should('eq', 200);
 
         const tenDaysAgo = dayjs().subtract(10, 'days').format('YYYY-MM-DD');
 
@@ -199,9 +204,14 @@ describe(
 
         cy.get('[data-cy="search-contact-case-input"] input').type('Claire');
         cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').eq(0).click();
-        cy.wait('@case').its('response.statusCode').should('eq', 200);
-        cy.location('pathname').should('include', '/edit');
-        // cy.get('[data-cy="lazy-autocomplete-chip-list"]').should('contain', 'Hanser, Markus'); // TODO: fix
+        cy.wait('@specificCase').its('response.statusCode').should('eq', 200);
+        cy.get('@specificCase')
+          .its('response.body')
+          .then(($body) => {
+            expect($body._embedded.originCases[0].firstName).to.eq('Markus');
+            expect($body._embedded.originCases[0].lastName).to.eq('Hanser');
+          });
+        // TODO: check in frontend
       });
     });
   }
