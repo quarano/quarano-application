@@ -54,7 +54,7 @@ describe('health-department index cases action-list', () => {
         expect(body.numberOfUnresolvedAnomalies).to.eq(1);
       });
     cy.location('pathname').should('include', '/actions');
-    cy.get('qro-client-action').should('exist');
+    cy.get('qro-client-action', { timeout: 6000 }).should('exist'); // Timeout seems to be necessary because of the way the table is rendered
     cy.get('[data-cy="action-comments"]').type('Anruf erledigt');
     cy.get('[data-cy="close-actions"]').click();
     cy.get('[data-cy="confirm-button"]').click();
