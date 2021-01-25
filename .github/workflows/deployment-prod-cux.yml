@@ -1,0 +1,88 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Deploy to CUX PROD
+
+on:
+  push:
+    branches:
+      - deployments/cuxhaven
+    paths:
+      - backend/**
+      - frontend/**
+      - .manifest-otc.yml
+      - .github/workflows/deployment-prod-cux.yml
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with Maven
+        run: mvn -B package --file backend/pom.xml
+
+      - name: Deploy Backend
+        if: success()
+        uses: citizen-of-planet-earth/cf-cli-action@master
+        with:
+          cf_api: ${{ secrets.CF_OTC_API }}
+          cf_org: ${{ secrets.CF_OTC_ORG }}
+          cf_space: ${{ secrets.CF_OTC_SPACE_CUSTOMERS }}
+          cf_username: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_USERNAME }}
+          cf_password: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_PASSWORD }}
+          command: push quarano-cuxhaven-backend -f ./manifest-otc.yml -t 180
+
+  deploy-frontend:
+    timeout-minutes: 15
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build-cuxhaven-prod
+      - run: npm run prepare-deployment-otc
+      - run: npm run ci-test
+      - run: npm run lint
+
+      - name: Deploy Frontend STAGE
+        if: success()
+        uses: citizen-of-planet-earth/cf-cli-action@master
+        with:
+          cf_api: ${{ secrets.CF_OTC_API }}
+          cf_org: ${{ secrets.CF_OTC_ORG }}
+          cf_space: ${{ secrets.CF_OTC_SPACE_CUSTOMERS }}
+          cf_username: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_USERNAME }}
+          cf_password: ${{ secrets.CF_OTC_BUILD_CUSTOMERS_PASSWORD }}
+          command: push quarano-cuxhaven-frontend -f ./manifest-otc.yml
