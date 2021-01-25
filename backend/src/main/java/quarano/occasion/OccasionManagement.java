@@ -53,6 +53,26 @@ public class OccasionManagement {
 	}
 
 	/**
+	 * Updates the {@link Occasion} that has the given {@link OccasionCode} assigned.
+	 *
+	 * @param trackedCaseId
+	 * @param occasion must not be {@literal null}.
+	 * @param id
+	 * @return will never be {@literal null}.
+	 */
+	public Occasion updateOccasionBy(String title, LocalDateTime start, LocalDateTime end,
+									 String street, String houseNumber, String zipCode, String city, String additionalInformation, String contactPerson, Occasion existing) {
+		Address address = new Address(street, Address.HouseNumber.of(houseNumber), city, ZipCode.of(zipCode));
+		existing.setTitle(title);
+		existing.setStart(start);
+		existing.setEnd(end);
+		existing.setAddress(address);
+		existing.setAdditionalInformation(additionalInformation);
+		existing.setContactPerson(contactPerson);
+		return occasions.save(existing);
+	}
+
+	/**
 	 * Registers the given {@link VisitorGroup} for the {@link Occasion} for which the given {@link OccasionCode} was
 	 * registered.
 	 *

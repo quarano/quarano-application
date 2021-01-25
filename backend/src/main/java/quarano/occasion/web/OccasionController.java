@@ -4,8 +4,6 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import quarano.account.Account;
-import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,6 +69,23 @@ class OccasionController {
 				.map(this::toModel)
 				.map(ResponseEntity::ok)
 				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	/**
+	 * Update the occasion registered for the given {@link OccasionCode}.
+	 *
+	 * @param occasionCode must not be {@literal null}.
+	 * @param payload
+	 * @param errors
+	 * @return will never be {@literal null}.
+	 */
+	@PutMapping("/hd/occasions/{occasionCode:" + OccasionCode.REGEX + "}")
+	HttpEntity<?> getOccasion(@PathVariable OccasionCode occasionCode, @RequestBody OccasionsDto payload, Errors errors) {
+		var existing = occasions.findOccasionBy(occasionCode).orElse(null);
+		return MappedPayloads.of(payload, errors)
+				.notFoundIf(existing == null)
+				.map(it -> occasions.updateOccasionBy(it.title, it.start, it.end, it.street, it.street, it.zipCode, it.city, it.additionalInformation, it.contactPerson, existing))
+				.concludeIfValid(ResponseEntity::ok);
 	}
 
 
