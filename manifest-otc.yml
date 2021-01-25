@@ -115,7 +115,7 @@ applications:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_SOCKETFACTORY_CLASS: javax.net.ssl.SSLSocketFactory
-      SPRING_MAIL_PROPERTIES_FIX-SENDER: quarano-test@landkreis-cuxhaven.de
+      SPRING_MAIL_PROPERTIES_FIX-SENDER: gesundheitsamt@landkreis-cuxhaven.de
       SPRING_MAIL_PROPERTIES_FIX-RECIPIENT: 
       TZ: Europe/Berlin
     instances: 1
