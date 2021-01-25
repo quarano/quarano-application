@@ -41,7 +41,7 @@ public class Occasion extends QuaranoAggregate<Occasion, OccasionIdentifier> {
 	private @Setter String contactPerson;
 	private OccasionCode occasionCode;
 	private TrackedCaseIdentifier trackedCaseId;
-	private Address address;
+	private @Setter Address address;
 
 	Occasion(String title, LocalDateTime start, LocalDateTime end, Address address, String additionalInformation, String contactPerson, OccasionCode eventCode,
 			TrackedCaseIdentifier trackedCaseId) {
