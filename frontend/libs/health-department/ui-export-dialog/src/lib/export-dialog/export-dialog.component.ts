@@ -35,7 +35,6 @@ export class ExportDialogComponent implements OnInit {
 
   exportNow() {
     this.loading = true;
-    console.log(this.data.idList);
     let url = `${this.selectedExportFormat}/by-ids`;
     if (this.includeOriginCase) {
       url += '?withorigincase=true';
@@ -45,7 +44,7 @@ export class ExportDialogComponent implements OnInit {
 
   private performExport(url: string) {
     this.healthDepartmentService
-      .performCsvExport(url, this.data.idList)
+      .performFilteredCsvExport(url, this.data.idList)
       .pipe(
         map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
         tap((blob) => {

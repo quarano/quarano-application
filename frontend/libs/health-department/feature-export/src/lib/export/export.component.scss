@@ -10,3 +10,19 @@
   display: flex;
   justify-content: space-between;
 }
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+small {
+  font-style: italic;
+  margin-left: 34px;
+  margin-bottom: 1rem;
+}
