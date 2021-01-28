@@ -83,6 +83,12 @@ export class ExportComponent implements OnInit {
     }
   }
 
+  onExportFormatChange(event: MatRadioChange) {
+    if (event.value === 'sormas' && !this.formGroup.controls.type.value) {
+      this.formGroup.controls.type.setValue(CaseType.Index);
+    }
+  }
+
   onSubmit() {
     if (this.formGroup.invalid) {
       return;

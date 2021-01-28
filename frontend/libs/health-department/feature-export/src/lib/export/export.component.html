@@ -15,6 +15,7 @@
         aria-labelledby="example-radio-group-label"
         class="example-radio-group"
         formControlName="selectedExportFormat"
+        (change)="onExportFormatChange($event)"
       >
         <mat-radio-button value="sormas" class="example-radio-button">Export für SORMAS Import</mat-radio-button
         ><br /><small
@@ -30,7 +31,7 @@
             >Inkl. Ursprungsfall, sofern eindeutig bekannt</mat-slide-toggle
           >
         </small>
-        <mat-radio-button value="quarantines" class="example-radio-button"
+        <mat-radio-button data-cy="quarantine-radio-button" value="quarantines" class="example-radio-button"
           >Export für Quarantäneanordnung</mat-radio-button
         ><br /><small
           >Die Daten der selektierten Personen werden in einem reduzierten Format für<br />
@@ -80,7 +81,11 @@
       <fieldset>
         <legend>Personengruppe</legend>
         <mat-radio-group aria-label="Personengruppe" formControlName="type">
-          <mat-radio-button [value]="null">Alle</mat-radio-button>
+          <mat-radio-button
+            [value]="null"
+            [disabled]="this.formGroup?.controls?.selectedExportFormat?.value === 'sormas'"
+            >Alle</mat-radio-button
+          >
           <mat-radio-button [value]="CaseType.Index">Indexfälle</mat-radio-button>
           <mat-radio-button [value]="CaseType.Contact">Kontaktfälle</mat-radio-button>
         </mat-radio-group>
