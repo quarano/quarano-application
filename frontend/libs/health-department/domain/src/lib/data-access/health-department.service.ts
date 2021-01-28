@@ -39,7 +39,7 @@ export class HealthDepartmentService {
     return this.httpClient.get<CaseActionDto>(`${this.apiUrl}/hd/actions/${caseId}`).pipe(shareReplay());
   }
 
-  performCsvExport(url: string, idList: string[]): Observable<any> {
+  performFilteredCsvExport(url: string, idList: string[]): Observable<any> {
     const options: Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -50,8 +50,27 @@ export class HealthDepartmentService {
     return this.httpClient.post<string>(`${this.apiUrl}/hd/export/${url}`, idList, options);
   }
 
-  getQuarantineCsvData(caseType: CaseType, start: Moment, end: Moment): Observable<any> {
+  performCsvExport(
+    selectedExportFormat: string,
+    caseType: CaseType,
+    start: Moment,
+    end: Moment,
+    includeOriginCase: boolean
+  ): Observable<any> {
     const dto = {};
+    let queryParam = '';
+
+    switch (selectedExportFormat) {
+      case 'sormas':
+        dto['onlyWithoutSormasId'] = true;
+        break;
+      case 'cases':
+        queryParam += `?withorigincase=${includeOriginCase}`;
+      // dto['casesRealm'] = 'INTERNAL';
+      // dto['status'] = 'OPEN';
+      default:
+        break;
+    }
 
     if (caseType) {
       dto['type'] = caseType;
@@ -69,7 +88,9 @@ export class HealthDepartmentService {
       observe: 'response',
     };
 
-    return this.httpClient.post<string>(`${this.apiUrl}/hd/export/quarantines`, dto, options).pipe(shareReplay());
+    return this.httpClient
+      .post<string>(`${this.apiUrl}/hd/export/${selectedExportFormat}${queryParam}`, dto, options)
+      .pipe(shareReplay());
   }
 
   public get healthDepartment$(): Observable<HealthDepartmentDto> {

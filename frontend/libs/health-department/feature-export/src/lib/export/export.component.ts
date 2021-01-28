@@ -40,6 +40,8 @@ export class ExportComponent implements OnInit {
   private createForm() {
     this.formGroup = this.formBuilder.group(
       {
+        selectedExportFormat: new FormControl(null, Validators.required),
+        includeOriginCase: new FormControl(false),
         from: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
         to: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
         type: new FormControl(null),
@@ -81,22 +83,31 @@ export class ExportComponent implements OnInit {
     }
   }
 
+  onExportFormatChange(event: MatRadioChange) {
+    if (event.value === 'sormas' && !this.formGroup.controls.type.value) {
+      this.formGroup.controls.type.setValue(CaseType.Index);
+    }
+  }
+
   onSubmit() {
     if (this.formGroup.invalid) {
       return;
     }
     this.loading = true;
-    const { from, to, type } = this.formGroup.getRawValue();
+    const { from, to, type, selectedExportFormat, includeOriginCase } = this.formGroup.getRawValue();
+
     this.healthDepartmentService
-      .getQuarantineCsvData(type, from, to)
+      .performCsvExport(selectedExportFormat, type, from, to, includeOriginCase)
       .pipe(
         map((result: HttpResponse<string>) => new Blob([result.body], { type: result.headers.get('Content-Type') })),
         tap((blob) => {
           fileSaver.saveAs(
             blob,
-            `csvexport_${type || 'alle_faelle'}_${(from as Moment).format('DD.MM.YYYY')}-${(to as Moment).format(
-              'DD.MM.YYYY'
-            )}.csv`
+            `csvexport_` +
+              `${selectedExportFormat}_` +
+              `${type || 'alle_faelle'}_` +
+              `${(from as Moment).format('DD.MM.YYYY')}-${(to as Moment).format('DD.MM.YYYY')}_` +
+              `${moment().format('YYYYMMDDHHmmss')}.csv`
           );
         }),
         finalize(() => (this.loading = false))
