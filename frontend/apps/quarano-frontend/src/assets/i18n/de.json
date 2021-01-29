@@ -418,7 +418,7 @@
     },
     "EREIGNIS_NEU_MODAL": {
       "PFLICHTFELD": "Dies ist ein Pflichtfeld",
-      "NEU": "Neues Ereignis anlegen",
+      "NEU": "Ereignis Details",
       "NAME": "Name",
       "VON": "Startdatum",
       "BIS": "Enddatum",
@@ -433,7 +433,8 @@
       "STRASSE": "Straße",
       "STADT": "Stadt",
       "ZIP": "PLZ",
-      "NUMMER": "Hausnummer"
+      "NUMMER": "Hausnummer",
+      "CODE": ""
     }
   }
 }

@@ -14,6 +14,7 @@ export class OccasionDetailDialogComponent {
 
   @Input()
   occasion(occasion: OccasionDto) {
+    console.log('initalOccasion', occasion);
     this.initialOccasion = occasion;
     this.mapOccasionToForm();
   }
@@ -39,8 +40,6 @@ export class OccasionDetailDialogComponent {
 
   private mapFormToOccasion() {
     return {
-      id: this.initialOccasion?.id ? this.initialOccasion?.id : null,
-      occasionCode: this.initialOccasion?.occasionCode ? this.initialOccasion?.occasionCode : null,
       additionalInformation: this.occasionFormGroup?.controls?.additionalInformation?.value,
       end: this.occasionFormGroup?.controls?.end?.value,
       start: this.occasionFormGroup?.controls?.start?.value,
@@ -49,9 +48,10 @@ export class OccasionDetailDialogComponent {
       houseNumber: this.occasionFormGroup?.controls?.houseNumber?.value,
       street: this.occasionFormGroup?.controls?.street?.value,
       zipCode: this.occasionFormGroup?.controls?.zipCode?.value,
-      // contactPerson: null, // todo
-      // trackedCaseId: null, // todo
-      // visitorGroups: null // todo
+      occasionCode: this.initialOccasion?.occasionCode ? this.initialOccasion?.occasionCode : null,
+      contactPerson: null, // todo
+      trackedCaseId: null, // todo
+      visitorGroups: null, // todo
     };
   }
 
