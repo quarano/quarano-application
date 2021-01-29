@@ -16,12 +16,12 @@ export class OccasionService {
       .pipe(switchMap((occasions) => of(occasions?._embedded?.occasions)));
   }
 
-  saveOccasion(caseId: string, occasion: OccasionDto): Observable<any> {
-    return this.healthDepartmentService.addOccasion(caseId, occasion);
+  saveOccasion(occasionCode: string, occasion: OccasionDto): Observable<any> {
+    return this.healthDepartmentService.addOccasion(occasionCode, occasion);
   }
 
-  editOccasion(caseId: string, occasion: OccasionDto): Observable<any> {
-    return this.healthDepartmentService.editOccasion(caseId, occasion);
+  editOccasion(occasionCode: string, occasion: OccasionDto): Observable<any> {
+    return this.healthDepartmentService.editOccasion(occasionCode, occasion);
   }
 
   deleteOccasion(occasion: OccasionDto) {

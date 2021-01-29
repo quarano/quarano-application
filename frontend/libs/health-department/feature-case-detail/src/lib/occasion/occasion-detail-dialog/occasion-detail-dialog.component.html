@@ -3,6 +3,24 @@
 <mat-dialog-content>
   <form class="new-event-form" [formGroup]="occasionFormGroup">
     <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.CODE' | translate }}</mat-label>
+      <input
+        readonly
+        formControlName="occasionCode"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.CODE' | translate }}"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
+      <input formControlName="title" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
+      <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}</mat-label>
       <input
         formControlName="start"
@@ -28,14 +46,6 @@
       <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
       <mat-datepicker #dateTo></mat-datepicker>
       <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
-      }}</mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
-      <input formControlName="title" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
-      <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">{{
         'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
       }}</mat-error>
     </mat-form-field>

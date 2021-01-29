@@ -85,9 +85,9 @@ export class HealthDepartmentService {
     return this.httpClient.delete(occasion._links.self.href).pipe(shareReplay());
   }
 
-  editOccasion(caseId: string, occasion: OccasionDto): Observable<any> {
+  editOccasion(occasionCode: string, occasion: OccasionDto): Observable<any> {
     return this.httpClient
-      .put<OccasionDto>(`${this.apiUrl}/hd/cases/${caseId}/occasions`, occasion)
+      .put<OccasionDto>(`${this.apiUrl}/hd/occasions/${occasionCode}`, occasion)
       .pipe(shareReplay());
   }
 
