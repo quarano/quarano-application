@@ -32,17 +32,15 @@ describe('health-department index cases action-list', () => {
 
     cy.wait('@allActions').its('response.statusCode').should('eq', 200);
 
-    cy.get('[data-cy="action-data-table"]')
-      .find('.ag-center-cols-container > .ag-row')
-      .should('have.length.greaterThan', 0);
-
-    cy.get('[data-cy="action-data-table"]')
-      .find('.ag-center-cols-container > .ag-row')
-      .contains('Sperber')
-      .should('have.length', 1)
-      .eq(0)
-      .parent()
-      .click();
+    cy.get('[data-cy="action-data-table"]').within(() => {
+      cy.get('[role=rowgroup] .ag-row')
+        .should('have.length.greaterThan', 0)
+        .contains('Sperber')
+        .should('have.length', 1)
+        .eq(0)
+        .parent()
+        .click();
+    });
 
     cy.wait('@specificCase').its('response.statusCode').should('eq', 200);
     cy.wait('@userAction').its('response.statusCode').should('eq', 200);
@@ -54,7 +52,7 @@ describe('health-department index cases action-list', () => {
         expect(body.numberOfUnresolvedAnomalies).to.eq(1);
       });
     cy.location('pathname').should('include', '/actions');
-    cy.get('qro-client-action', { timeout: 6000 }).should('exist'); // Timeout seems to be necessary because of the way the table is rendered
+    cy.get('qro-client-action').should('exist');
     cy.get('[data-cy="action-comments"]').type('Anruf erledigt');
     cy.get('[data-cy="close-actions"]').click();
     cy.get('[data-cy="confirm-button"]').click();
@@ -62,9 +60,8 @@ describe('health-department index cases action-list', () => {
 
     cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'index-cases/action-list');
 
-    cy.get('[data-cy="action-data-table"]')
-      .find('.ag-center-cols-container > .ag-row')
-      .contains('Sperber')
-      .should('have.length', 0);
+    cy.get('[data-cy="action-data-table"]').within(() => {
+      cy.get('[role=rowgroup] .ag-row').contains('Sperber').should('have.length', 0);
+    });
   });
 });
