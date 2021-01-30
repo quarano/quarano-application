@@ -23,10 +23,7 @@ class AccountRepositoryIntegrationTests {
 	void findsAccountByEmailAddress() {
 
 		var account = accounts.findByEmailAddress(EmailAddress.of("markus.hanser@testtest.de"));
-
-		assertThat(account).hasValueSatisfying(it -> {
-			assertThat(it.getUsername()).isEqualTo("DemoAccount");
-		});
+		assertThat(account).hasSize(1).anySatisfy(it -> assertThat(it.getUsername()).isEqualTo("DemoAccount"));
 	}
 
 	@Test // CORE-92

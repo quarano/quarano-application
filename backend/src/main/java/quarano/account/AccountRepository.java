@@ -42,7 +42,7 @@ interface AccountRepository extends CrudRepository<Account, AccountIdentifier> {
 	 * @since 1.4
 	 */
 	@Query(DEFAULT_SELECT + "where a.email = :emailAddress")
-	Optional<Account> findByEmailAddress(EmailAddress emailAddress);
+	Stream<Account> findByEmailAddress(EmailAddress emailAddress);
 
 	/**
 	 * Returns all accounts registered for the {@link Department} with the given {@link DepartmentIdentifier}.

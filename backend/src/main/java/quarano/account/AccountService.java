@@ -158,6 +158,7 @@ public class AccountService {
 
 		return accounts.findByEmailAddress(emailAddress)
 				.filter(it -> it.getUsername().equals(username))
+				.findFirst()
 				.map(account -> {
 
 					var token = account.requestPasswordReset(LocalDateTime.now().plusHours(2));

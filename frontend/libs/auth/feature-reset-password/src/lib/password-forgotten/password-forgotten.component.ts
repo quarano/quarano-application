@@ -1,5 +1,5 @@
 import { AuthService } from '@qro/auth/domain';
-import { TranslatedSnackbarService } from '@qro/shared/util-snackbar';
+import { SnackbarService, TranslatedSnackbarService } from '@qro/shared/util-snackbar';
 import { Router } from '@angular/router';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { TrimmedPatternValidator, ValidationErrorService, VALIDATION_PATTERNS } from '@qro/shared/util-forms';
@@ -25,6 +25,7 @@ export class PasswordForgottenComponent implements OnInit, OnDestroy {
     private badRequestService: BadRequestService,
     private router: Router,
     private translatedSnackbarService: TranslatedSnackbarService,
+    private snackbarService: SnackbarService,
     private authService: AuthService
   ) {}
 
@@ -71,7 +72,7 @@ export class PasswordForgottenComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
           },
           (error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
+            this.snackbarService.error(error.errors);
           }
         )
         .add(() => (this.loading = false))
