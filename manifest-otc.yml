@@ -215,7 +215,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
-    disk_quota: 400M
+    disk_quota: 600M
     routes:
       - route: quarano.de/demo/api
     services:
@@ -263,7 +263,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
-    disk_quota: 400M
+    disk_quota: 600M
     routes:
       - route: quarano.de/internal-dev/api
     services:
@@ -310,7 +310,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
-    disk_quota: 400M
+    disk_quota: 600M
     routes:
       - route: quarano.de/internal-pentest/api
     services:
@@ -357,7 +357,7 @@ applications:
       SPRING_MAIL_PROPERTIES_FIX-SENDER: test@quarano.de
     instances: 1
     memory: 1G
-    disk_quota: 400M
+    disk_quota: 600M
     routes:
       - route: quarano.de/internal-test/api
     services:
