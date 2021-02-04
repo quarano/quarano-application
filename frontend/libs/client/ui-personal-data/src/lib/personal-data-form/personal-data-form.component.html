@@ -49,12 +49,7 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>{{ 'PERSONAL_DATA_FORM.KONTAKTMÖGLICHKEITEN' | translate }}</legend>
-    <mat-error
-      *ngIf="
-        formGroup.getError('phoneMissing') &&
-        (formGroup.controls.phone.touched || formGroup.controls.mobilePhone.touched)
-      "
-    >
+    <mat-error class="mb-3" *ngIf="formGroup.getError('phoneMissing')">
       {{ 'PERSONAL_DATA_FORM.MINDESTENS_EINE_TELEFONNUMMER' | translate }}</mat-error
     >
     <mat-form-field class="full-width" data-cy="personal-data-email">
@@ -104,7 +99,7 @@
   </fieldset>
   <fieldset class="mb-3">
     <legend>{{ 'PERSONAL_DATA_FORM.ADRESSE' | translate }}</legend>
-    <mat-form-field style="width: 70%;" data-cy="street-input">
+    <mat-form-field style="width: 70%" data-cy="street-input">
       <input
         matInput
         required
@@ -118,7 +113,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;" data-cy="house-number-input">
+    <mat-form-field style="width: 30%" data-cy="house-number-input">
       <input
         matInput
         [placeholder]="'PERSONAL_DATA_FORM.HAUSNUMMER' | translate"
@@ -132,7 +127,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 30%;" data-cy="zip-code-input">
+    <mat-form-field style="width: 30%" data-cy="zip-code-input">
       <input
         matInput
         required
@@ -146,7 +141,7 @@
         {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field style="width: 70%;" data-cy="city-input">
+    <mat-form-field style="width: 70%" data-cy="city-input">
       <input
         matInput
         required
