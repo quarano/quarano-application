@@ -102,8 +102,15 @@ export class CheckboxFilterComponent implements IFilterAngularComp {
         }
       });
     } else {
-      this.options = this.options || [];
+      this.resetOptions();
     }
+  }
+
+  private resetOptions(): void {
+    if (!this.options) {
+      this.initOptions();
+    }
+    this.options.forEach((o) => (o.selected = true));
   }
 
   selectAll() {
