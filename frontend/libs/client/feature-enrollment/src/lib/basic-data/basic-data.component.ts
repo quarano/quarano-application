@@ -139,46 +139,49 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   // ########## STEP I ##########
 
   buildFirstForm() {
-    this.firstFormGroup = this.formBuilder.group({
-      firstName: new FormControl(this.client.firstName, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
-      ]),
-      lastName: new FormControl(this.client.lastName, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
-      ]),
-      email: new FormControl(this.client.email, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email),
-      ]),
-      phone: new FormControl(this.client.phone, [
-        Validators.minLength(5),
-        Validators.maxLength(17),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
-      ]),
-      mobilePhone: new FormControl(this.client.mobilePhone, [
-        Validators.minLength(5),
-        Validators.maxLength(17),
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
-      ]),
-      street: new FormControl(this.client.street, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street),
-      ]),
-      houseNumber: new FormControl(this.client.houseNumber, [
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
-      ]),
-      zipCode: new FormControl(this.client.zipCode, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
-      ]),
-      city: new FormControl(this.client.city, [
-        Validators.required,
-        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
-      ]),
-      dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required]),
-    });
+    this.firstFormGroup = this.formBuilder.group(
+      {
+        firstName: new FormControl(this.client.firstName, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+        ]),
+        lastName: new FormControl(this.client.lastName, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+        ]),
+        email: new FormControl(this.client.email, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.email),
+        ]),
+        phone: new FormControl(this.client.phone, [
+          Validators.minLength(5),
+          Validators.maxLength(17),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+        ]),
+        mobilePhone: new FormControl(this.client.mobilePhone, [
+          Validators.minLength(5),
+          Validators.maxLength(17),
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.phoneNumber),
+        ]),
+        street: new FormControl(this.client.street, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street),
+        ]),
+        houseNumber: new FormControl(this.client.houseNumber, [
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
+        ]),
+        zipCode: new FormControl(this.client.zipCode, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
+        ]),
+        city: new FormControl(this.client.city, [
+          Validators.required,
+          TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
+        ]),
+        dateOfBirth: new FormControl(this.client.dateOfBirth, [Validators.required]),
+      },
+      { validators: [PhoneOrMobilePhoneValidator] }
+    );
   }
 
   checkAndSendFirstForm(confirmedZipCode = false) {
