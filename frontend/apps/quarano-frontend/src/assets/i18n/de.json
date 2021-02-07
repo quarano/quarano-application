@@ -434,7 +434,7 @@
       "STADT": "Stadt",
       "ZIP": "PLZ",
       "NUMMER": "Hausnummer",
-      "CODE": ""
+      "CODE": "Event-Code"
     }
   }
 }
