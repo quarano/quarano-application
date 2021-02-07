@@ -21,6 +21,9 @@ export class OccasionDetailDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {
     this.initializeEventForm();
+    this.occasionFormGroup.valueChanges.subscribe((value) => {
+      console.log(value);
+    });
   }
 
   close() {
@@ -40,18 +43,19 @@ export class OccasionDetailDialogComponent {
 
   private mapFormToOccasion() {
     return {
+      title: this.occasionFormGroup?.controls?.title?.value,
       additionalInformation: this.occasionFormGroup?.controls?.additionalInformation?.value,
       end: this.occasionFormGroup?.controls?.end?.value,
       start: this.occasionFormGroup?.controls?.start?.value,
-      title: this.occasionFormGroup?.controls?.title?.value,
-      city: this.occasionFormGroup?.controls?.city?.value,
       houseNumber: this.occasionFormGroup?.controls?.houseNumber?.value,
       street: this.occasionFormGroup?.controls?.street?.value,
       zipCode: this.occasionFormGroup?.controls?.zipCode?.value,
-      occasionCode: this.initialOccasion?.occasionCode ? this.initialOccasion?.occasionCode : null,
-      contactPerson: null, // todo
-      trackedCaseId: null, // todo
-      visitorGroups: null, // todo
+      city: this.occasionFormGroup?.controls?.city?.value,
+      contactPerson: this.occasionFormGroup?.controls?.contactPerson?.value,
+      // properties set by backend
+      occasionCode: this.initialOccasion?.occasionCode,
+      trackedCaseId: this.initialOccasion?.trackedCaseId,
+      visitorGroups: this.initialOccasion?.visitorGroups,
     };
   }
 
@@ -67,8 +71,8 @@ export class OccasionDetailDialogComponent {
       houseNumber: this.initialOccasion?.address?.houseNumber,
       city: this.initialOccasion?.address?.city,
       zipCode: this.initialOccasion?.address?.zipCode,
-      visitorGroups: [], //todo
-      contactPerson: null, // todo
+      visitorGroups: this.initialOccasion?.visitorGroups,
+      contactPerson: this.initialOccasion?.contactPerson,
     };
     return (this.occasionFormGroup = this.builder.group(initialData));
   }
