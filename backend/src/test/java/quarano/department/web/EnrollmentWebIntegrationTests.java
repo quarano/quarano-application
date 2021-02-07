@@ -318,6 +318,30 @@ class EnrollmentWebIntegrationTests extends AbstractDocumentation {
 		assertThat(document.read("$.houseNumber", String.class)).isEqualTo(houseNumber);
 	}
 
+	@Test
+	@WithQuaranoUser("DemoAccount")
+	void rejectsEmptyPhoneFields() throws Exception {
+
+		var person = repository.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON2_ID_DEP1);
+		var source = mapper.map(person, TrackedPersonDto.class);
+
+		source.setZipCode("68199")
+				.setCity("Mannheim")
+				.setMobilePhone(null)
+				.setPhone(null);
+
+		// When all enrollment details were submitted
+		var responseBody = expectBadSubmitDetailsRequest(source);
+
+		var document = JsonPath.parse(responseBody);
+
+		var mobilePhone = messages.getMessage("Pattern.mobilePhone", Locale.UK);
+		var phone = messages.getMessage("Pattern.phone", Locale.UK);
+
+		assertThat(document.read("$.phone", String.class)).isEqualTo(phone);
+		assertThat(document.read("$.mobilePhone", String.class)).isEqualTo(mobilePhone);
+	}
+
 	@Test // CORE-554
 	@WithQuaranoUser("test5") // Nadine Ebert
 	void caseWithEnrollmentCompletedDoNotExposeNextLinkPointingToEnrollment() throws Exception {

@@ -19,11 +19,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.validation.Errors;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrackedPersonDto {
+
+	private static final String INVALID_MOBILE_PHONE_KEY = "Pattern.mobilePhone";
+	private static final String INVALID_PHONE_KEY = "Pattern.phone";
 
 	private @Pattern(regexp = Strings.NAMES) @NotEmpty String firstName;
 	private @Pattern(regexp = Strings.NAMES) @NotEmpty String lastName;
@@ -45,4 +50,14 @@ public class TrackedPersonDto {
 	private @NotNull @Past LocalDate dateOfBirth;
 	private List<URI> originContacts;
 	private Locale locale;
+
+	public TrackedPersonDto validate(Errors errors) {
+
+		if (phone == null && mobilePhone == null) {
+			errors.rejectValue("phone", INVALID_PHONE_KEY);
+			errors.rejectValue("mobilePhone", INVALID_MOBILE_PHONE_KEY);
+		}
+
+		return this;
+	}
 }

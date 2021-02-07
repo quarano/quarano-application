@@ -251,6 +251,7 @@ public class TrackedCaseController {
 		var mappedPayload = MappedPayloads.of(dto, errors);
 
 		return mappedPayload
+				.alwaysMap(TrackedPersonDto::validate)
 				.rejectField(needToRejectDeviatingZipCode, field, "__placeholder__", err -> {
 
 					return zipCode
