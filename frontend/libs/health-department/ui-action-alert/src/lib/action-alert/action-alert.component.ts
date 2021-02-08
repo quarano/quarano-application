@@ -14,7 +14,10 @@ export class ActionAlertComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     this.params = params;
     params?.value.forEach((element) => {
-      this.alerts.push(this.alertConfigurationFor(element));
+      const config = this.alertConfigurationFor(element);
+      if (config) {
+        this.alerts.push(this.alertConfigurationFor(element));
+      }
     });
   }
 
@@ -23,6 +26,10 @@ export class ActionAlertComponent implements ICellRendererAngularComp {
   }
 
   private alertConfigurationFor(alert: Alert) {
-    return getAlertConfigurations().find((c) => c.alert === alert);
+    const config = getAlertConfigurations().find((c) => c.alert === alert);
+    if (!config) {
+      console.warn(`No alert configuration found for alert '${alert}'. Alert will be ignored`);
+    }
+    return config;
   }
 }
