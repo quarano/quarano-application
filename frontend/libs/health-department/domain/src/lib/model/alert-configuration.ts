@@ -39,7 +39,7 @@ export function getAlertConfigurations(): AlertConfiguration[] {
       order: 3,
     },
     {
-      alert: Alert.SUSPICUOUS_SYMPTOM,
+      alert: Alert.SUSPICIOUS_SYMPTOM,
       color: 'lightpink',
       icon: 'trnding_up',
       displayName: 'Symptome auffällig',
