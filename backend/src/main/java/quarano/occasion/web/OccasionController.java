@@ -84,7 +84,8 @@ class OccasionController {
 		var existing = occasions.findOccasionBy(occasionCode).orElse(null);
 		return MappedPayloads.of(payload, errors)
 				.notFoundIf(existing == null)
-				.map(it -> occasions.updateOccasionBy(it.title, it.start, it.end, it.street, it.street, it.zipCode, it.city, it.additionalInformation, it.contactPerson, existing))
+				.map(it -> occasions.updateOccasionBy(it.title, it.start, it.end, it.street, it.houseNumber, it.zipCode, it.city, it.additionalInformation, it.contactPerson, existing))
+				.map(representations::toSummary)
 				.concludeIfValid(ResponseEntity::ok);
 	}
 

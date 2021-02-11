@@ -112,6 +112,8 @@ class OccasionRepresentions {
 
 			String getStreet();
 
+			String getHouseNumber();
+
 			String getZipCode();
 
 			String getCity();
