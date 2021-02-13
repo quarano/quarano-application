@@ -7,7 +7,11 @@
     </button>
     <p class="new-event-subtitle">{{ 'EREIGNISSE.NEUES_EREIGNIS' | translate }}</p>
   </mat-card>
-  <div *ngFor="let occasion of $occasions | async">
-    <qro-occasion-card [occasion]="occasion"></qro-occasion-card>
+  <div *ngFor="let occasion of occasions | async">
+    <qro-occasion-card
+      [occasion]="occasion"
+      (saveOccasionEvent)="editOccasion($event)"
+      (deleteOccasionEvent)="deleteOccasion($event)"
+    ></qro-occasion-card>
   </div>
 </div>

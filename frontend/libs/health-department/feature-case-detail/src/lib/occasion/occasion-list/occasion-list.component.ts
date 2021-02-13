@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SubSink } from 'subsink';
 import { filter, take, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { OccasionDetailDialogComponent } from '../occasion-detail-dialog/occasion-detail-dialog.component';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { OccasionService } from '../occasion.service';
 
@@ -13,11 +13,11 @@ import { OccasionService } from '../occasion.service';
   templateUrl: './occasion-list.component.html',
   styleUrls: ['./occasion-list.component.scss'],
 })
-export class OccasionListComponent implements OnInit, OnDestroy {
+export class OccasionListComponent implements OnDestroy {
   subs = new SubSink();
   caseId = null;
 
-  $occasions: Observable<OccasionDto[]>;
+  $$occasions: BehaviorSubject<OccasionDto[]> = new BehaviorSubject<OccasionDto[]>(null);
 
   constructor(private dialog: MatDialog, private route: ActivatedRoute, private occasionService: OccasionService) {
     this.route.parent.paramMap
@@ -26,11 +26,12 @@ export class OccasionListComponent implements OnInit, OnDestroy {
         tap((params) => (this.caseId = params.get('id')))
       )
       .subscribe();
-
-    this.$occasions = this.occasionService.getOccasions();
+    this.loadOccasions();
   }
 
-  ngOnInit(): void {}
+  get occasions() {
+    return this.$$occasions.asObservable();
+  }
 
   openOccasionDetailDialog() {
     this.subs.add(
@@ -38,15 +39,36 @@ export class OccasionListComponent implements OnInit, OnDestroy {
         .open(OccasionDetailDialogComponent)
         .afterClosed()
         .pipe(filter((occasionData) => occasionData))
-        .subscribe((occasionData) => this.saveNewOccasion(occasionData))
+        .subscribe((occasionData) => this.createNewOccasion(occasionData))
     );
   }
 
-  private saveNewOccasion(newOccasion) {
+  editOccasion(occasion: OccasionDto) {
+    this.occasionService
+      .editOccasion(occasion.occasionCode, occasion)
+      .pipe(take(1))
+      .subscribe((_) => this.loadOccasions());
+  }
+
+  deleteOccasion(occasion: OccasionDto) {
+    this.occasionService
+      .deleteOccasion(occasion)
+      .pipe(take(1))
+      .subscribe((_) => this.loadOccasions());
+  }
+
+  private loadOccasions() {
+    this.occasionService
+      .getOccasions()
+      .pipe(take(1))
+      .subscribe((occasions) => this.$$occasions.next(occasions));
+  }
+
+  private createNewOccasion(newOccasion) {
     this.occasionService
       .saveOccasion(this.caseId, newOccasion)
       .pipe(take(1))
-      .subscribe((value) => console.log(value));
+      .subscribe((_) => this.loadOccasions());
   }
 
   ngOnDestroy(): void {
