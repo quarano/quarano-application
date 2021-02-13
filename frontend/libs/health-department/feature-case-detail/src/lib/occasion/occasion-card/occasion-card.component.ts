@@ -36,7 +36,6 @@ export class OccasionCardComponent {
         filter((occasionData) => occasionData)
       )
       .subscribe((occasionData) => {
-        console.log('emitEvent:', occasionData);
         this.saveOccasionEvent.emit(occasionData);
       });
   }
