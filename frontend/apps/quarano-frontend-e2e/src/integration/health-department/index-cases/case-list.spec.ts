@@ -40,7 +40,7 @@ describe('health-department index cases case-list', () => {
       });
   });
 
-  it('should add address', () => {
+  it.skip('should add address', () => {
     cy.get('[data-cy="case-data-table"]').find('div[role="row"]').should('have.length.greaterThan', 0);
     cy.get('[data-cy="search-index-case-input"]').type('Harry');
     cy.get('[data-cy="case-data-table"]')
