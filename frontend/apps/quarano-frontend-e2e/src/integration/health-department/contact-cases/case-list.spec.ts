@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('health-department contact cases case-list', () => {
+describe('health-department contact cases case-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/hd/cases').as('allCases');
@@ -8,7 +8,7 @@ xdescribe('health-department contact cases case-list', () => {
     cy.logInAgent();
   });
 
-  it('should display cases and allow editing a specific case', () => {
+  it.skip('should display cases and allow editing a specific case', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.get('[data-cy="contact-cases"]').click();

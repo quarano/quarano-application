@@ -6,7 +6,7 @@ import * as localeData from 'dayjs/plugin/localeData';
 dayjs.locale('de');
 dayjs.extend(localeData);
 
-xdescribe('health-department index cases', () => {
+describe('health-department index cases', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
@@ -17,8 +17,8 @@ xdescribe('health-department index cases', () => {
     cy.logInAgent();
   });
 
-  xdescribe('creating new index case', () => {
-    it('should not be possible if mandatory fields are missing', () => {
+  describe('creating new index case', () => {
+    it.skip('should not be possible if mandatory fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -40,7 +40,7 @@ xdescribe('health-department index cases', () => {
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
     });
 
-    it('happy path: save and close', () => {
+    it.skip('happy path: save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -144,7 +144,7 @@ xdescribe('health-department index cases', () => {
     });
   });
 
-  xdescribe('viewing case details of existing index case', () => {
+  describe('viewing case details of existing index case', () => {
     it('should show diary entries', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 

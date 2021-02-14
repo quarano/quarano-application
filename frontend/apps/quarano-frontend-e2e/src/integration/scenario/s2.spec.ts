@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe(
+describe(
   'S2 - Neu erstellter Indexfall kann sich registrieren',
   {
     defaultCommandTimeout: 20000,
@@ -33,7 +33,7 @@ xdescribe(
       }
     }
 
-    it('new index case is able to complete registration', () => {
+    it.skip('new index case is able to complete registration', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));

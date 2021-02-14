@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('health-department index cases action-list', () => {
+describe('health-department index cases action-list', () => {
   beforeEach(() => {
     cy.intercept('GET', '/hd/actions', (req) => {
       if (req.url.endsWith('/hd/actions')) {
@@ -21,7 +21,7 @@ xdescribe('health-department index cases action-list', () => {
     cy.logInAgent();
   });
 
-  it('G10.3-1: comment on and close action', () => {
+  it.skip('G10.3-1: comment on and close action', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.wait('@me').its('response.statusCode').should('eq', 200);

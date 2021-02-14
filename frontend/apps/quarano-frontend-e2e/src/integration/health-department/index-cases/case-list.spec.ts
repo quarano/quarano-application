@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('health-department index cases case-list', () => {
+describe('health-department index cases case-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/hd/cases').as('allCases');
@@ -11,7 +11,7 @@ xdescribe('health-department index cases case-list', () => {
     cy.logInAgent();
   });
 
-  it('should be able to select specific entry', () => {
+  it.skip('should be able to select specific entry', () => {
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
 

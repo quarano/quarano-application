@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('registration form', () => {
+describe('registration form', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/registration').as('registration');
@@ -9,8 +9,8 @@ xdescribe('registration form', () => {
 
   // TODO: happy path
 
-  xdescribe('completed form', () => {
-    it('returns error if activation code is incorrect', () => {
+  describe('completed form', () => {
+    it.skip('returns error if activation code is incorrect', () => {
       cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
       cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
@@ -25,8 +25,8 @@ xdescribe('registration form', () => {
     });
   });
   // TODO: unit tests
-  // xdescribe('validation', () => {
-  //   xdescribe('empty fields', () => {
+  // describe('validation', () => {
+  //   describe('empty fields', () => {
   //     ['client-code', 'username', 'password', 'password-confirm', 'dateofbirth'].forEach((fieldName: string) => {
   //       it(`empty ${fieldName}`, () => {
   //         cy.get(`[data-cy="input-${fieldName}"] input[matInput]`)
@@ -37,8 +37,8 @@ xdescribe('registration form', () => {
   //     });
   //   });
   //
-  //   xdescribe('input values are validated', () => {
-  //     xdescribe('username', () => {
+  //   describe('input values are validated', () => {
+  //     describe('username', () => {
   //       it('valid value', () => {
   //         cy.get('[data-cy="input-username"] input[matInput]')
   //           .type('my_username')
@@ -50,7 +50,7 @@ xdescribe('registration form', () => {
   //       });
   //     });
   //
-  //     xdescribe('password', () => {
+  //     describe('password', () => {
   //       it('too few characters', () => {
   //         cy.get('[data-cy="input-password"] input[matInput]')
   //           .type('short')
@@ -148,7 +148,7 @@ xdescribe('registration form', () => {
   //       });
   //     });
   //
-  //     xdescribe('date of birth', () => {
+  //     describe('date of birth', () => {
   //       it('no date string', () => {
   //         cy.get('[data-cy="input-dateofbirth"] input[matInput]')
   //           .type('somestring')

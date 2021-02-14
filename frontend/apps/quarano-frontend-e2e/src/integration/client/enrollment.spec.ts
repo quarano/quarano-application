@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('enrollment external zip code', () => {
+describe('enrollment external zip code', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', '/enrollment/details?confirmed=true').as('updatePersonalDetailsZipcodeConfirm');
@@ -9,8 +9,8 @@ xdescribe('enrollment external zip code', () => {
     cy.logInNotEnrolledClient2();
   });
 
-  xdescribe('confirm external zip code in basic data', () => {
-    it('form completion', () => {
+  describe('confirm external zip code in basic data', () => {
+    it.skip('form completion', () => {
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
       cy.get('[data-cy="street-input"] input[matInput]').type('Höllentalstr.');
@@ -30,8 +30,8 @@ xdescribe('enrollment external zip code', () => {
     });
   });
 
-  xdescribe('login forbidden after external zip code confirmation', () => {
-    it('login', () => {
+  describe('login forbidden after external zip code confirmation', () => {
+    it.skip('login', () => {
       cy.location('pathname').should('include', '/auth/forbidden');
       cy.get('[data-cy="forbidden-message"]').should(
         'have.text',

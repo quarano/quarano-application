@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('Account administration', () => {
+describe('Account administration', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', `/hd/accounts/*/password`).as('resetPassword');
@@ -11,7 +11,7 @@ xdescribe('Account administration', () => {
     cy.logInAdmin();
   });
 
-  it('should reset password and change during next log-in', () => {
+  it.skip('should reset password and change during next log-in', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="account-administration"]').click();
     cy.location('pathname').should('eq', '/administration/accounts/account-list');

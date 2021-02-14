@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('login', () => {
+describe('login', () => {
   const login = (username: string, password: string) => {
     cy.get('#submitBtn button').should('be.disabled');
     cy.get('#username').type(username);
@@ -23,8 +23,8 @@ xdescribe('login', () => {
     cy.visit('/');
   });
 
-  xdescribe('client', () => {
-    it('should successfully log in to client page', () => {
+  describe('client', () => {
+    it.skip('should successfully log in to client page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('test3', 'test123');
@@ -38,7 +38,7 @@ xdescribe('login', () => {
       cy.location('pathname').should('eq', '/client/diary/diary-list');
     });
 
-    it('should fail to log in with incorrect credentials', () => {
+    it.skip('should fail to log in with incorrect credentials', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('test3', 'test1234');
@@ -50,8 +50,8 @@ xdescribe('login', () => {
     });
   });
 
-  xdescribe('agent', () => {
-    it('should successfully log in to agent page', () => {
+  describe('agent', () => {
+    it.skip('should successfully log in to agent page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('agent1', 'agent1');
@@ -64,7 +64,7 @@ xdescribe('login', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
-    it('should fail to log in with incorrect credentials', () => {
+    it.skip('should fail to log in with incorrect credentials', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('agent1', 'agent2');
