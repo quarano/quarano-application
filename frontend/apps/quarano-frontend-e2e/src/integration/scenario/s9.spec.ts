@@ -13,7 +13,7 @@ describe(
       cy.intercept('PUT', '/hd/cases/*').as('updateIndexCase');
     });
 
-    it'convert contact case to index case', () => {
+    it('convert contact case to index case', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
@@ -65,7 +65,7 @@ describe(
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
-    it'contact case is listed as index case', () => {
+    it('contact case is listed as index case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Dorothea');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
@@ -76,7 +76,7 @@ describe(
       cy.get('[data-cy="client-cancel-button"]').click();
     });
 
-    it'index case is still linked to origin case', () => {
+    it('index case is still linked to origin case', () => {
       cy.get('[data-cy="search-index-case-input"] input').type('Siggi');
       cy.get('[data-cy="case-data-table"]')
         .find('.ag-center-cols-container > .ag-row')
@@ -94,7 +94,7 @@ describe(
         .should('contain', 'Dorothea');
     });
 
-    it'index case is not listed in contact case list', () => {
+    it('index case is not listed in contact case list', () => {
       cy.get('[data-cy="contact-cases"]').click();
 
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));

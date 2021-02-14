@@ -18,7 +18,7 @@ describe('health-department index cases', () => {
   });
 
   describe('creating new index case', () => {
-    it'should not be possible if mandatory fields are missing', () => {
+    it('should not be possible if mandatory fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -40,7 +40,7 @@ describe('health-department index cases', () => {
       cy.get('[data-cy="client-submit-and-close-button"] button').should('be.disabled');
     });
 
-    it'happy path: save and close', () => {
+    it('happy path: save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -75,7 +75,7 @@ describe('health-department index cases', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
-    it'happy path: save and check e-mail template', () => {
+    it('happy path: save and check e-mail template', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.wait('@getCases').its('status').should('eq', 200);
@@ -145,7 +145,7 @@ describe('health-department index cases', () => {
   });
 
   describe('viewing case details of existing index case', () => {
-    it'should show diary entries', () => {
+    it('should show diary entries', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]')
@@ -255,7 +255,7 @@ describe('health-department index cases', () => {
       });
     });
 
-    it'should display message if no diary entries exist', () => {
+    it('should display message if no diary entries exist', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
       cy.get('[data-cy="case-data-table"]').find('.ag-center-cols-container > .ag-row').should('exist');
