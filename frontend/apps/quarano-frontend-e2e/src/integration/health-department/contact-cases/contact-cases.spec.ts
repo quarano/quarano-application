@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('health-department contact cases', () => {
+describe('health-department contact cases', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/hd/cases/?type=contact').as('newContact');
@@ -9,8 +9,8 @@ xdescribe('health-department contact cases', () => {
     cy.logInAgent();
   });
 
-  xdescribe('converting to index case ', () => {
-    it('should not be possible if required fields are missing', () => {
+  describe('converting to index case ', () => {
+    it.skip('should not be possible if required fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="contact-cases"]').click();
 
@@ -35,8 +35,8 @@ xdescribe('health-department contact cases', () => {
     });
   });
 
-  xdescribe('create new contact case', () => {
-    it('happy path save and close', () => {
+  describe('create new contact case', () => {
+    it.skip('happy path save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('Adding new symptom to symptom diary', () => {
+describe('Adding new symptom to symptom diary', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/diary').as('diary');

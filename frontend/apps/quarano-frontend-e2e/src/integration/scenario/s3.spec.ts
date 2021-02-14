@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe(
+describe(
   'S3 - GAMA kann neuen Kontaktfall anlegen',
   {
     defaultCommandTimeout: 20000,
@@ -34,7 +34,7 @@ xdescribe(
       }
     }
 
-    it('new contact case is accessible', () => {
+    it.skip('new contact case is accessible', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));

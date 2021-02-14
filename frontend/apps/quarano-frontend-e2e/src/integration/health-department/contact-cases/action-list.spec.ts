@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('health-department contact cases action-list', () => {
+describe('health-department contact cases action-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/hd/actions').as('allActions');
@@ -11,7 +11,7 @@ xdescribe('health-department contact cases action-list', () => {
     cy.logInAgent();
   });
 
-  it('load actions', () => {
+  it.skip('load actions', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.wait('@me').its('status').should('eq', 200);

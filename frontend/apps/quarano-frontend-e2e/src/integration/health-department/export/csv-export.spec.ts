@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('csv export', () => {
+describe('csv export', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/hd/export/quarantines').as('getCsv');
@@ -8,8 +8,8 @@ xdescribe('csv export', () => {
     cy.logInAgent();
   });
 
-  xdescribe('csv export happy path', () => {
-    it('should get csv data', () => {
+  describe('csv export happy path', () => {
+    it.skip('should get csv data', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="export"]').click();
       cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'export');
