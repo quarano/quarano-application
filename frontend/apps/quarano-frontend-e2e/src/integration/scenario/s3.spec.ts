@@ -34,7 +34,7 @@ describe(
       }
     }
 
-    it'new contact case is accessible', () => {
+    it('new contact case is accessible', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
