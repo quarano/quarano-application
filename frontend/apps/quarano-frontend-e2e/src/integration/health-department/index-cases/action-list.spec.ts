@@ -21,7 +21,7 @@ describe('health-department index cases action-list', () => {
     cy.logInAgent();
   });
 
-  it.skip('G10.3-1: comment on and close action', () => {
+  it'G10.3-1: comment on and close action', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.wait('@me').its('response.statusCode').should('eq', 200);

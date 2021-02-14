@@ -10,7 +10,7 @@ describe('registration form', () => {
   // TODO: happy path
 
   describe('completed form', () => {
-    it.skip('returns error if activation code is incorrect', () => {
+    it'returns error if activation code is incorrect', () => {
       cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
       cy.get('[data-cy="input-username"] input[matInput]').type('my_username');

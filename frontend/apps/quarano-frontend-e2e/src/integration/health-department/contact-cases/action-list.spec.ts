@@ -11,7 +11,7 @@ describe('health-department contact cases action-list', () => {
     cy.logInAgent();
   });
 
-  it.skip('load actions', () => {
+  it'load actions', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
     cy.wait('@me').its('status').should('eq', 200);

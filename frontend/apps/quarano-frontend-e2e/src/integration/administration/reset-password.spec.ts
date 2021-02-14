@@ -11,7 +11,7 @@ describe('Account administration', () => {
     cy.logInAdmin();
   });
 
-  it.skip('should reset password and change during next log-in', () => {
+  it'should reset password and change during next log-in', () => {
     cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     cy.get('[data-cy="account-administration"]').click();
     cy.location('pathname').should('eq', '/administration/accounts/account-list');

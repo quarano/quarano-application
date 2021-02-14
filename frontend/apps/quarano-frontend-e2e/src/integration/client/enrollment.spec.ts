@@ -10,7 +10,7 @@ describe('enrollment external zip code', () => {
   });
 
   describe('confirm external zip code in basic data', () => {
-    it.skip('form completion', () => {
+    it'form completion', () => {
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
       cy.get('[data-cy="street-input"] input[matInput]').type('Höllentalstr.');
@@ -31,7 +31,7 @@ describe('enrollment external zip code', () => {
   });
 
   describe('login forbidden after external zip code confirmation', () => {
-    it.skip('login', () => {
+    it'login', () => {
       cy.location('pathname').should('include', '/auth/forbidden');
       cy.get('[data-cy="forbidden-message"]').should(
         'have.text',

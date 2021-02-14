@@ -10,7 +10,7 @@ describe('health-department contact cases', () => {
   });
 
   describe('converting to index case ', () => {
-    it.skip('should not be possible if required fields are missing', () => {
+    it'should not be possible if required fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="contact-cases"]').click();
 
@@ -36,7 +36,7 @@ describe('health-department contact cases', () => {
   });
 
   describe('create new contact case', () => {
-    it.skip('happy path save and close', () => {
+    it'happy path save and close', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();
@@ -71,7 +71,7 @@ describe('health-department contact cases', () => {
       cy.location('pathname').should('eq', Cypress.env('contact_cases_url'));
     });
 
-    it.skip('happy path save and return to detail page', () => {
+    it'happy path save and return to detail page', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="contact-cases"]').should('exist');
       cy.get('[data-cy="contact-cases"]').click();

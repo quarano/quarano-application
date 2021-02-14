@@ -24,7 +24,7 @@ describe('login', () => {
   });
 
   describe('client', () => {
-    it.skip('should successfully log in to client page', () => {
+    it'should successfully log in to client page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('test3', 'test123');
@@ -38,7 +38,7 @@ describe('login', () => {
       cy.location('pathname').should('eq', '/client/diary/diary-list');
     });
 
-    it.skip('should fail to log in with incorrect credentials', () => {
+    it'should fail to log in with incorrect credentials', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('test3', 'test1234');
@@ -51,7 +51,7 @@ describe('login', () => {
   });
 
   describe('agent', () => {
-    it.skip('should successfully log in to agent page', () => {
+    it'should successfully log in to agent page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('agent1', 'agent1');
@@ -64,7 +64,7 @@ describe('login', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
     });
 
-    it.skip('should fail to log in with incorrect credentials', () => {
+    it'should fail to log in with incorrect credentials', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
       login('agent1', 'agent2');
