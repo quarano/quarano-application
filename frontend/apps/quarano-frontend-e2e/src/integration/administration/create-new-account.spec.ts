@@ -12,7 +12,7 @@ describe('Account administration', () => {
     cy.logInAdmin();
   });
 
-  it('create new admin account', () => {
+  it.skip('create new admin account', () => {
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
 
