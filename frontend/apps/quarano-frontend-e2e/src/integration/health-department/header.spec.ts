@@ -9,7 +9,7 @@ describe('health-department top navigation', () => {
     cy.logInAdmin();
   });
 
-  it.skip('navigation should work as expected', () => {
+  it'navigation should work as expected', () => {
     cy.wait('@me').its('status').should('eq', 200);
     cy.get('@me').then((request: any) => {
       const user = request.response?.body;
@@ -38,7 +38,7 @@ describe('health-department top navigation', () => {
     cy.location('pathname').should('eq', '/administration/accounts/account-list');
   });
 
-  it.skip('user profile should work as expected', () => {
+  it'user profile should work as expected', () => {
     cy.wait('@me').its('status').should('eq', 200);
     cy.wait('@allCases').its('status').should('eq', 200);
     cy.get('@me').then((request: any) => {
@@ -61,7 +61,7 @@ describe('health-department top navigation', () => {
     cy.location('pathname').should('eq', '/auth/change-password');
   });
 
-  it.skip('logout button should work as expected', () => {
+  it'logout button should work as expected', () => {
     cy.get('[data-cy="profile-user-button"]').click();
     cy.get('[data-cy="logout-button"]').click();
     cy.location('pathname').should('eq', '/auth/login');

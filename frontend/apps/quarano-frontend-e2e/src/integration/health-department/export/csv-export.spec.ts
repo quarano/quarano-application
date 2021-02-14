@@ -9,7 +9,7 @@ describe('csv export', () => {
   });
 
   describe('csv export happy path', () => {
-    it.skip('should get csv data', () => {
+    it'should get csv data', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
       cy.get('[data-cy="export"]').click();
       cy.location('pathname').should('eq', Cypress.env('health_department_url') + 'export');

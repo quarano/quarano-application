@@ -8,7 +8,7 @@ describe('Adding new symptom to symptom diary', () => {
     cy.logInClient();
   });
 
-  it.skip('not possible, when no body temperature is selected.', () => {
+  it'not possible, when no body temperature is selected.', () => {
     cy.location('pathname').should('eq', '/client/diary/diary-list');
     cy.get('[data-cy="add-diary-entry"]').click();
     cy.get('[data-cy="body-temperature"]').should('exist');
@@ -21,7 +21,7 @@ describe('Adding new symptom to symptom diary', () => {
     cy.get('[data-cy="cancel-diary-entry"]').should('be.enabled');
   });
 
-  it.skip('happy path', () => {
+  it'happy path', () => {
     cy.location('pathname').should('eq', '/client/diary/diary-list');
     cy.get('[data-cy="add-diary-entry"]').click();
     cy.get('[data-cy="add-missing-contacts"]').should('exist');

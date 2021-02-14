@@ -33,7 +33,7 @@ describe(
       }
     }
 
-    it.skip('new index case is able to complete registration', () => {
+    it'new index case is able to complete registration', () => {
       cy.logInAgent();
 
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
