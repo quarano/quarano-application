@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('health-department contact cases case-list', () => {
+xdescribe('health-department contact cases case-list', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/hd/cases').as('allCases');

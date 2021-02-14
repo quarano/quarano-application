@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('enrollment external zip code', () => {
+xdescribe('enrollment external zip code', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', '/enrollment/details?confirmed=true').as('updatePersonalDetailsZipcodeConfirm');
@@ -9,7 +9,7 @@ describe('enrollment external zip code', () => {
     cy.logInNotEnrolledClient2();
   });
 
-  describe('confirm external zip code in basic data', () => {
+  xdescribe('confirm external zip code in basic data', () => {
     it('form completion', () => {
       cy.location('pathname').should('eq', '/client/enrollment/basic-data');
       cy.get('[data-cy="first-step-button"] button').should('be.disabled');
@@ -30,7 +30,7 @@ describe('enrollment external zip code', () => {
     });
   });
 
-  describe('login forbidden after external zip code confirmation', () => {
+  xdescribe('login forbidden after external zip code confirmation', () => {
     it('login', () => {
       cy.location('pathname').should('include', '/auth/forbidden');
       cy.get('[data-cy="forbidden-message"]').should(

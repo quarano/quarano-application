@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - develop
-      - feature/*
       - e2e-tests/*
 
 defaults:

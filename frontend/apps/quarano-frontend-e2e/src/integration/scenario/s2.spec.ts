@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe(
+xdescribe(
   'S2 - Neu erstellter Indexfall kann sich registrieren',
   {
     defaultCommandTimeout: 20000,

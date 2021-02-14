@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe(
+xdescribe(
   'S9 - GAMA kann Kontaktfall in Indexfall umwandeln',
   {
     defaultCommandTimeout: 20000,

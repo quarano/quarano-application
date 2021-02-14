@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe(
+xdescribe(
   'S3 - GAMA kann neuen Kontaktfall anlegen',
   {
     defaultCommandTimeout: 20000,

@@ -6,7 +6,7 @@ import * as localeData from 'dayjs/plugin/localeData';
 dayjs.locale('de');
 dayjs.extend(localeData);
 
-describe('health-department index cases', () => {
+xdescribe('health-department index cases', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/hd/cases/?type=index').as('newIndex');
@@ -17,7 +17,7 @@ describe('health-department index cases', () => {
     cy.logInAgent();
   });
 
-  describe('creating new index case', () => {
+  xdescribe('creating new index case', () => {
     it('should not be possible if mandatory fields are missing', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
@@ -144,7 +144,7 @@ describe('health-department index cases', () => {
     });
   });
 
-  describe('viewing case details of existing index case', () => {
+  xdescribe('viewing case details of existing index case', () => {
     it('should show diary entries', () => {
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 

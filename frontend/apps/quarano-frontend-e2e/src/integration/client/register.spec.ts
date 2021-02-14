@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('registration form', () => {
+xdescribe('registration form', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/registration').as('registration');
@@ -9,7 +9,7 @@ describe('registration form', () => {
 
   // TODO: happy path
 
-  describe('completed form', () => {
+  xdescribe('completed form', () => {
     it('returns error if activation code is incorrect', () => {
       cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
       cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
@@ -25,8 +25,8 @@ describe('registration form', () => {
     });
   });
   // TODO: unit tests
-  // describe('validation', () => {
-  //   describe('empty fields', () => {
+  // xdescribe('validation', () => {
+  //   xdescribe('empty fields', () => {
   //     ['client-code', 'username', 'password', 'password-confirm', 'dateofbirth'].forEach((fieldName: string) => {
   //       it(`empty ${fieldName}`, () => {
   //         cy.get(`[data-cy="input-${fieldName}"] input[matInput]`)
@@ -37,8 +37,8 @@ describe('registration form', () => {
   //     });
   //   });
   //
-  //   describe('input values are validated', () => {
-  //     describe('username', () => {
+  //   xdescribe('input values are validated', () => {
+  //     xdescribe('username', () => {
   //       it('valid value', () => {
   //         cy.get('[data-cy="input-username"] input[matInput]')
   //           .type('my_username')
@@ -50,7 +50,7 @@ describe('registration form', () => {
   //       });
   //     });
   //
-  //     describe('password', () => {
+  //     xdescribe('password', () => {
   //       it('too few characters', () => {
   //         cy.get('[data-cy="input-password"] input[matInput]')
   //           .type('short')
@@ -148,7 +148,7 @@ describe('registration form', () => {
   //       });
   //     });
   //
-  //     describe('date of birth', () => {
+  //     xdescribe('date of birth', () => {
   //       it('no date string', () => {
   //         cy.get('[data-cy="input-dateofbirth"] input[matInput]')
   //           .type('somestring')

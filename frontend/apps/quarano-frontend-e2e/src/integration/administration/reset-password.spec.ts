@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Account administration', () => {
+xdescribe('Account administration', () => {
   beforeEach(() => {
     cy.server();
     cy.route('PUT', `/hd/accounts/*/password`).as('resetPassword');
