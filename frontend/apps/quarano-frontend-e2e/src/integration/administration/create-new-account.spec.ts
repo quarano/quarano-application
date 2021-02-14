@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Account administration', () => {
+xdescribe('Account administration', () => {
   beforeEach(() => {
     cy.server();
     cy.route('POST', '/hd/accounts').as('createAccount');
@@ -69,7 +69,7 @@ describe('Account administration', () => {
 });
 
 //
-// describe('new account', () => {
+// xdescribe('new account', () => {
 //   beforeEach(() => {
 //     cy.server();
 //     cy.route('POST', '/hd/accounts').as('createaccount');
@@ -79,8 +79,8 @@ describe('Account administration', () => {
 //     cy.visit('administration/accounts/account-detail/new');
 //   });
 //
-//   describe('field validations: required', () => {
-//     describe('enabled submit button', () => {
+//   xdescribe('field validations: required', () => {
+//     xdescribe('enabled submit button', () => {
 
 // TODO: unit tests
 
@@ -175,8 +175,8 @@ describe('Account administration', () => {
 //     });
 //   });
 //
-//   describe('field tests', () => {
-//     describe('firstName', () => {
+//   xdescribe('field tests', () => {
+//     xdescribe('firstName', () => {
 //       it('should not be empty', () => {
 //         cy.get('[data-cy="input-firstname"] input[matInput]').type('Testfirstname');
 //         cy.get('[data-cy="input-firstname"] input[matInput]').clear();
@@ -199,7 +199,7 @@ describe('Account administration', () => {
 //       });
 //     });
 //
-//     describe('lastName', () => {
+//     xdescribe('lastName', () => {
 //       it('should not be empty', () => {
 //         cy.get('[data-cy="input-lastname"] input[matInput]').type('Testlastname');
 //         cy.get('[data-cy="input-lastname"] input[matInput]').clear();
@@ -221,7 +221,7 @@ describe('Account administration', () => {
 //       });
 //     });
 //
-//     describe('username', () => {
+//     xdescribe('username', () => {
 //       it('should not be empty', () => {
 //         cy.get('[data-cy="input-username"] input[matInput]').type('account');
 //         cy.get('[data-cy="input-username"] input[matInput]').clear();
@@ -244,7 +244,7 @@ describe('Account administration', () => {
 //       });
 //     });
 //
-//     describe('password', () => {
+//     xdescribe('password', () => {
 //       it('too few characters', () => {
 //         cy.get('[data-cy="input-password"] input[matInput]')
 //           .type('short')
@@ -323,7 +323,7 @@ describe('Account administration', () => {
 //       });
 //     });
 //
-//     describe('role', () => {
+//     xdescribe('role', () => {
 //       it('should not be empty', () => {
 //         cy.get('[data-cy="select-role"] div.mat-select-trigger').click();
 //         cy.get('[id="mat-option-0"]').click();
@@ -335,7 +335,7 @@ describe('Account administration', () => {
 //       });
 //     });
 //
-//     describe('email address', () => {
+//     xdescribe('email address', () => {
 //       it('should have a valid email address', () => {
 //         cy.get('[data-cy="input-email"] input[matInput]').type('test@test.de');
 //         cy.get('[data-cy="input-email"] input[matInput]').blur();

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('health-department top navigation', () => {
+xdescribe('health-department top navigation', () => {
   beforeEach(() => {
     cy.server();
     cy.route('GET', '/user/me').as('me');

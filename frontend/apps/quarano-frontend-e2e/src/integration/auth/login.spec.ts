@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('login', () => {
+xdescribe('login', () => {
   const login = (username: string, password: string) => {
     cy.get('#submitBtn button').should('be.disabled');
     cy.get('#username').type(username);
@@ -23,7 +23,7 @@ describe('login', () => {
     cy.visit('/');
   });
 
-  describe('client', () => {
+  xdescribe('client', () => {
     it('should successfully log in to client page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 
@@ -50,7 +50,7 @@ describe('login', () => {
     });
   });
 
-  describe('agent', () => {
+  xdescribe('agent', () => {
     it('should successfully log in to agent page', () => {
       cy.location('pathname').should('eq', '/auth/login');
 

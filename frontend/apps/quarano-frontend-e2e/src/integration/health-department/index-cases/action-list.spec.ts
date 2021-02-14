@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('health-department index cases action-list', () => {
+xdescribe('health-department index cases action-list', () => {
   beforeEach(() => {
     cy.intercept('GET', '/hd/actions', (req) => {
       if (req.url.endsWith('/hd/actions')) {
