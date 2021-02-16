@@ -236,7 +236,7 @@ describe('S7 - Status wechselt korrekt', () => {
           });
 
         /* 46 - wähle "Fall abschließen" */
-        cy.get('[data-cy="button-closeCase"]').should('exist').click();
+        cy.get('[data-cy="close-case-button"]').should('exist').click();
 
         //TODO
         cy.wait(500);
