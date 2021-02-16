@@ -243,10 +243,10 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* 47 - Popup "Diesen Fall abschließen" geht auf */
         /* 48 - Zusätzliche Informationen zum Fallabschluss: -> "Quarantäne beendet" */
-        cy.get('[data-cy="textarea-comment"]').should('exist').type('Quarantäne beendet');
+        cy.get('[data-cy="comment-textarea"]').should('exist').type('Quarantäne beendet');
 
         /* 49 - Klicke "OK" */
-        cy.get('[data-cy="button-confirm"]').should('exist').click();
+        cy.get('[data-cy="confirm-button"]').should('exist').click();
 
         /* 49A - wähle "Speichern und schließen" */
         cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
