@@ -5,7 +5,7 @@
       <span>
         {{ (type$ | async) === ClientType.Index ? 'Falldetails' : 'Kontaktperson' }} {{ caseDetail.firstName }}
         {{ caseDetail.lastName }}
-        <span class="status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
+        <span class="status" data-cy="case-status" *ngIf="caseDetail.status">{{ caseDetail.status }}</span>
       </span>
       <span class="type"
         >{{ caseLabel$ | async }}
