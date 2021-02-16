@@ -210,7 +210,7 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="contact-person-form-mobile-phone"]').should('exist').type('017196347526');
 
         /* 41 - Klick auf "speichern" */
-        cy.get('[data-cy="button-save"]').should('exist').click();
+        cy.get('[data-cy="submit-button"]').should('exist').click();
 
         /* 42 - Klick auf "Erfassung abschließen" */
         cy.get('[data-cy="third-step-button"]').should('exist').click();
