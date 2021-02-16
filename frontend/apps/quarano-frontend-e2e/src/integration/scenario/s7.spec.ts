@@ -253,9 +253,9 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* 50 - wähle in Übersicht der Indexfälle den Filter "abgeschlossen" */
         cy.get('.ag-icon-menu').should('exist').first().click();
-        cy.get('[data-cy="button-selectAll"]').should('exist').click();
-        cy.get('[data-cy="button-unselectAll"]').should('exist').click();
-        cy.get('[data-cy="checkbox-filter"]').should('exist').first().click();
+        cy.get('[data-cy="select-all-button"]').should('exist').click();
+        cy.get('[data-cy="unselect-all-button"]').should('exist').click();
+        cy.get('[data-cy="filter-checkbox"]').should('exist').first().click();
 
         /* --> CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "abgeschlossen" */
         cy.get('[data-cy="search-index-case-input"]').should('exist').type('Berta Benz');
