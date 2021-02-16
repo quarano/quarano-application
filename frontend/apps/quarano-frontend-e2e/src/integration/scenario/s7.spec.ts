@@ -207,7 +207,7 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.wait(500);
 
         /* 40 - Telefonnummer (mobil) -> "017196347526" */
-        cy.get('[data-cy="input-mobilePhone"]').should('exist').type('017196347526');
+        cy.get('[data-cy="contact-person-form-mobile-phone"]').should('exist').type('017196347526');
 
         /* 41 - Klick auf "speichern" */
         cy.get('[data-cy="button-save"]').should('exist').click();
