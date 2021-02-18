@@ -17,6 +17,7 @@ import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
+import quarano.department.activation.ActivationCodeService;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
@@ -25,6 +26,7 @@ import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
@@ -69,6 +71,10 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull HealthDepartments rkiDepartments;
+	private final @NonNull TrackedPersonRepository people;
+	private final @NonNull ActivationCodeService activationCodes;
+	private final @NonNull RegistrationRepresentations registrationRepresentations;
+
 
 	@GetMapping(path = "/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
@@ -223,6 +229,24 @@ public class TrackedCaseController {
 				.map(cases::save)
 				.map(it -> representations.toRepresentation(it))
 				.concludeIfValid(ResponseEntity::ok);
+	}
+
+	@DeleteMapping("/hd/cases/{identifier}/account")
+	HttpEntity<?> removeAccountOfTrackedPerson(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account) {
+
+		return cases.findById(identifier)
+				.filter(it -> it.belongsTo(account.getDepartmentId()))
+				.filter(it -> it.getTrackedPerson().getAccount().isPresent())
+				.map(it -> {
+					TrackedPerson trackedPerson = it.getTrackedPerson().deleteAccountRegistration();
+					trackedPerson = people.save(trackedPerson);
+
+					return activationCodes.createActivationCode(trackedPerson.getId(),it.getDepartment().getId()).toTry()
+							.map(at -> registrationRepresentations.toRepresentation(at, it))
+							.fold(at -> ResponseEntity.badRequest().body(at.getMessage()),
+									ResponseEntity::ok);
+				})
+				.orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
 	@GetMapping("/enrollments")

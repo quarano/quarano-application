@@ -132,6 +132,13 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return this;
 	}
 
+	public TrackedPerson deleteAccountRegistration() {
+
+		this.account = null;
+
+		return this;
+	}
+
 	@Nullable
 	public LocalDate getAccountRegistrationDate() {
 		return account == null ? null : account.getMetadata().getCreated().toLocalDate();

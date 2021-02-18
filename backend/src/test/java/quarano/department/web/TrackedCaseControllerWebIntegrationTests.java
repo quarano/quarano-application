@@ -755,6 +755,27 @@ class TrackedCaseControllerWebIntegrationTests {
 		assertThat(document.read("$.openAnomaliesCount", long.class)).isEqualTo(1);
 	}
 
+	@Test // CORE-455
+	void deletedAccountOfTrackedPerson() throws Exception {
+
+		var result = mvc.perform(delete("/hd/cases/{identifier}/account", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+		
+		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
+	}
+
+	@Test// CORE-455
+	void deletedAccountOfTrackedPersonWithoutAccount() throws Exception {
+
+		mvc.perform(delete("/hd/cases/{identifier}/account", TrackedCaseDataInitializer.TRACKED_CASE_TANJA)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+
 	@Test // CORE-331
 	void getOriginCasesOfContactsCorrectly() throws Exception {
 
