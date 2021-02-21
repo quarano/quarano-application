@@ -779,7 +779,7 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(docResponse.read("$.status", String.class))
 				.isEqualTo(messages.getMessage("quarano.department.TrackedCase.Status.tracking"));
-
+		assertThat(links.findLinkWithRel(ACCOUNT, result)).isPresent();
 	}
 
 	@Test// CORE-455
