@@ -42,6 +42,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -73,6 +74,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
 	private final LinkDiscoverer discoverer;
+	private final HalLinkDiscoverer links;
 	private final ModelMapper modelMapper;
 
 	@Test
@@ -766,6 +768,18 @@ class TrackedCaseControllerWebIntegrationTests {
 		var document = JsonPath.parse(result);
 		
 		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.RENEW, result)).isPresent();
+
+		var response = mvc.perform(get("/hd/cases/{identifier}", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var docResponse = JsonPath.parse(response);
+
+		assertThat(docResponse.read("$.status", String.class))
+				.isEqualTo(messages.getMessage("quarano.department.TrackedCase.Status.tracking"));
+
 	}
 
 	@Test// CORE-455

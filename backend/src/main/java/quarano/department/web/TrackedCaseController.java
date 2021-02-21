@@ -13,11 +13,11 @@ import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.department.CaseType;
 import quarano.department.EnrollmentCompletion;
+import quarano.department.RegistrationManagement;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseProperties;
 import quarano.department.TrackedCaseRepository;
-import quarano.department.activation.ActivationCodeService;
 import quarano.department.web.ExternalTrackedCaseRepresentations.TrackedCaseSummary;
 import quarano.department.web.TrackedCaseRepresentations.CommentInput;
 import quarano.department.web.TrackedCaseRepresentations.DeviatingZipCode;
@@ -72,7 +72,7 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull HealthDepartments rkiDepartments;
 	private final @NonNull TrackedPersonRepository people;
-	private final @NonNull ActivationCodeService activationCodes;
+	private final @NonNull RegistrationManagement registrationManagement;
 	private final @NonNull RegistrationRepresentations registrationRepresentations;
 
 
@@ -239,9 +239,9 @@ public class TrackedCaseController {
 				.filter(it -> it.getTrackedPerson().getAccount().isPresent())
 				.map(it -> {
 					TrackedPerson trackedPerson = it.getTrackedPerson().deleteAccountRegistration();
-					trackedPerson = people.save(trackedPerson);
+					people.save(trackedPerson);
 
-					return activationCodes.createActivationCode(trackedPerson.getId(),it.getDepartment().getId()).toTry()
+					return registrationManagement.initiateRegistration(it).toTry()
 							.map(at -> registrationRepresentations.toRepresentation(at, it))
 							.fold(at -> ResponseEntity.badRequest().body(at.getMessage()),
 									ResponseEntity::ok);
