@@ -173,7 +173,7 @@
         #rlevents="routerLinkActive"
         [active]="rlevents.isActive"
       >
-        {{ 'CASE_DETAIL.EVENTS' | translate }}
+        {{ 'CASE_DETAIL.EVENTS' | translate }}<span class="info-badge">{{ (occasions$ | async)?.length }}</span>
       </a>
     </nav>
     <router-outlet></router-outlet> </mat-card-content
