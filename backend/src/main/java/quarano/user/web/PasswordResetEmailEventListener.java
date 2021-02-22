@@ -42,7 +42,7 @@ public class PasswordResetEmailEventListener {
 		parameters.put("fullName", account.getFullName());
 		parameters.put("resetUrl", properties.getHostRelativeUrl(url));
 
-		var email = emailFactory.getEmailFor(account, "Subject", Keys.RESET_PASSWORD, parameters);
+		var email = emailFactory.getEmailFor(account, "PasswordReset.subject", Keys.RESET_PASSWORD, parameters);
 
 		log.info("Sending out password reset email to {}.", email.getTo());
 

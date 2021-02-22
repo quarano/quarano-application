@@ -1,6 +1,8 @@
 package quarano.tracking;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.MessageSourceAccessor;
 import quarano.account.Account;
 import quarano.account.DepartmentRepository;
 import quarano.core.EmailTemplates.Key;
@@ -22,13 +24,16 @@ public class TrackedPersonEmailFactory {
 	private final TrackedPersonRepository people;
 	private final DepartmentRepository departments;
 	private final ContactTypeLookup contactTypes;
+	private final @NonNull MessageSourceAccessor messages;
 
-	public TrackedPersonEmail getEmailFor(Account account, String subject, Key templateKey,
+	public TrackedPersonEmail getEmailFor(Account account, String subjectKey, Key templateKey,
 			Map<String, ? extends Object> placeholders) {
+
 
 		var person = people.findByAccount(account).orElseThrow();
 		var department = departments.findById(account.getDepartmentId()).orElseThrow();
 		var contactType = contactTypes.getBy(person);
+		var subject = messages.getMessage(subjectKey, person.getLocale());
 
 		return new TrackedPersonEmail(person, department, contactType, subject, templateKey, placeholders);
 	}
