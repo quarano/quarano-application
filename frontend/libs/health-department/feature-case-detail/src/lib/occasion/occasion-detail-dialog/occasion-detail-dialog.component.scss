@@ -18,3 +18,8 @@ mat-form-field {
   grid-gap: 10px;
   grid-template-columns: repeat(2, auto);
 }
+
+.additional-info {
+  grid-column: 1 / 3;
+  grid-row: 6;
+}
