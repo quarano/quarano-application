@@ -104,14 +104,14 @@ export class CaseDetailComponent implements OnDestroy {
     return '';
   }
 
-  getAccountDeletionInfoText(caseDetail: CaseDto) {
+  getAccountDeletionInfoText(caseDetail: CaseDto, buttonName: string) {
     return (
-      `Mit Klick auf diesen Button löschen Sie den User-Account von ${caseDetail.firstName} ${caseDetail.lastName}. ` +
+      `Mit Klick auf den Button "${buttonName}" löschen Sie den User-Account von ${caseDetail.firstName} ${caseDetail.lastName}. ` +
       `Ein Login mit den bisherigen Accountdaten wird nicht mehr möglich sein. ` +
       `Bereits hinterlegte Falldaten bleiben jedoch erhalten. ` +
-      `Verwenden Sie diesen Button, wenn ${caseDetail.firstName} ${caseDetail.lastName} ` +
+      `Verwenden Sie den Button "${buttonName}", wenn ${caseDetail.firstName} ${caseDetail.lastName} ` +
       `seinen/ihren Usernamen vergessen hat und sich deshalb nicht mehr einloggen kann. ` +
-      `Senden Sie ${caseDetail.firstName} ${caseDetail.lastName} anschließend erneut die Registrierungs-E-Mail zu.`
+      `Ein vergessenes Passwort dagegen kann ${caseDetail.firstName} ${caseDetail.lastName} selbst auf der Login-Seite zurücksetzen.`
     );
   }
 
@@ -121,16 +121,19 @@ export class CaseDetailComponent implements OnDestroy {
         abortButtonText: 'Abbrechen',
         confirmButtonText: 'Ja',
         title: `User-Account von ${caseDetail.firstName} ${caseDetail.lastName} löschen`,
-        text: this.getAccountDeletionInfoText(caseDetail) + ' Möchten Sie fortfahren?',
+        text: this.getAccountDeletionInfoText(caseDetail, 'Ja') + ' Möchten Sie fortfahren?',
       },
     });
 
     this.subs.add(
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          alert('gelöscht');
-          // ToDo: delete-Acount link aufrufen, sobald vorhanden
-          // Dann ein Switchmap wie bei start tracking
+          this.subs.sink = this.apiService
+            .deleteApiCall<StartTracking>(caseDetail, 'account')
+            .pipe(switchMap((result) => this.entityService.getByKey(caseDetail.caseId)))
+            .subscribe((caseDto) => {
+              this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDto.caseId}/comments`]);
+            });
         }
       })
     );

@@ -64,9 +64,10 @@
       <button
         class="mr-3"
         mat-button
-        [matTooltip]="getAccountDeletionInfoText(caseDetail)"
+        [matTooltip]="getAccountDeletionInfoText(caseDetail, 'User-Account löschen')"
         matTooltipClass="qro-tooltip"
         (click)="deleteUserAccount(caseDetail)"
+        *ngIf="caseDetail?._links?.hasOwnProperty('account')"
       >
         User-Account löschen
       </button>
