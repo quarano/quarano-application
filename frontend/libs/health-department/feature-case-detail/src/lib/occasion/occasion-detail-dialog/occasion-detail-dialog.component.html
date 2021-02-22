@@ -4,7 +4,12 @@
   <form class="new-event-form" [formGroup]="occasionFormGroup">
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
-      <input formControlName="title" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}" />
+      <input
+        required
+        formControlName="title"
+        matInput
+        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}"
+      />
       <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">{{
         'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
       }}</mat-error>
@@ -22,6 +27,7 @@
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}</mat-label>
       <input
+        required
         formControlName="start"
         matInput
         placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}"
@@ -37,6 +43,7 @@
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}</mat-label>
       <input
+        required
         formControlName="end"
         matInput
         placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}"
@@ -77,7 +84,7 @@
       <input formControlName="city" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="additional-info">
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
       <input
         formControlName="additionalInformation"
