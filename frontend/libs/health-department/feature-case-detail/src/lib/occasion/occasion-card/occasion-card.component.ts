@@ -3,6 +3,8 @@ import { OccasionDetailDialogComponent } from '../occasion-detail-dialog/occasio
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
+import { TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { ConfirmDialogData } from '@qro/client/ui-contact-person-detail';
 
 @Component({
   selector: 'qro-occasion-card',
@@ -22,7 +24,10 @@ export class OccasionCardComponent {
   constructor(private dialog: MatDialog) {}
 
   deleteOccasion() {
-    this.deleteOccasionEvent.emit(this.occasion);
+    this.openConfirmDialog()
+      .afterClosed()
+      .pipe(filter((response) => !!response))
+      .subscribe((_) => this.deleteOccasionEvent.emit(this.occasion));
   }
 
   editOccasion(occasion: OccasionDto) {
@@ -38,5 +43,16 @@ export class OccasionCardComponent {
       .subscribe((occasionData) => {
         this.saveOccasionEvent.emit(occasionData);
       });
+  }
+
+  private openConfirmDialog() {
+    const dialogData: ConfirmDialogData = {
+      text: 'EREIGNISSE.EREIGNIS_CARD.LOESCHEN.TEXT',
+      title: 'EREIGNISSE.EREIGNIS_CARD.LOESCHEN.TITEL',
+      abortButtonText: 'EREIGNISSE.EREIGNIS_CARD.LOESCHEN.ABBRECHEN',
+      confirmButtonText: 'EREIGNISSE.EREIGNIS_CARD.LOESCHEN.BESTAETIGEN',
+    };
+
+    return this.dialog.open(TranslatedConfirmationDialogComponent, { data: dialogData });
   }
 }

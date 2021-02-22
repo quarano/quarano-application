@@ -389,7 +389,14 @@
       "START": "Start",
       "ENDE": "Ende",
       "ANZAHL_TEILNEHMER": "Anzahl Teilnehmer",
-      "STATUS": "Status"
+      "STATUS": "Status",
+      "CODE": "Ereignis Code",
+      "LOESCHEN": {
+        "TITEL": "Ereignis löschen",
+        "TEXT":"Möchten Sie dieses Ereignis löschen?",
+        "ABBRECHEN": "Abbrechen",
+        "BESTAETIGEN": "Löschen"
+      }
     },
     "EREIGNIS_NEU_MODAL": {
       "PFLICHTFELD": "Dies ist ein Pflichtfeld",
@@ -409,7 +416,7 @@
       "STADT": "Stadt",
       "ZIP": "PLZ",
       "NUMMER": "Hausnummer",
-      "CODE": "Event-Code"
+      "CODE": "Ereignis Code"
     }
   }
 }
