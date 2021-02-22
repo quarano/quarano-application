@@ -17,6 +17,8 @@ import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog'
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseType } from '@qro/auth/api';
+import { OccasionService } from '../occasion/occasion.service';
+import { OccasionDto } from '../../../../domain/src/lib/model/occasion';
 
 @Component({
   selector: 'qro-case-detail',
@@ -32,6 +34,7 @@ export class CaseDetailComponent implements OnDestroy {
   caseLabel$: Observable<string>;
   ClientType = CaseType;
   caseDetail$: Observable<CaseDto>;
+  occasions$: Observable<OccasionDto[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +43,8 @@ export class CaseDetailComponent implements OnDestroy {
     private apiService: ApiService,
     private dialog: MatDialog,
     private entityService: CaseEntityService,
-    private router: Router
+    private router: Router,
+    private occasionService: OccasionService
   ) {
     this.initData();
     this.setCaseLabel();
@@ -67,6 +71,8 @@ export class CaseDetailComponent implements OnDestroy {
     this.caseDetail$ = this.route.paramMap.pipe(
       switchMap((params) => this.entityService.loadOneFromStore(params.get('id')))
     );
+
+    this.occasions$ = this.occasionService.getOccasions();
 
     this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
       this.type$$.next(paramMap.get('type') as CaseType);
