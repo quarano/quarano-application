@@ -69,7 +69,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@Nullable
 	private @Getter @Setter String sormasUuid = null;
 
-	@OneToOne
+	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "account_id")
 	private Account account;
 

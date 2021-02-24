@@ -114,7 +114,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 		}
 
 		return result
-				.filter(ActivationCode::isWaitingForActivation, ActivationCodeException::usedOrCanceled)
+				.filter(ActivationCode::isCancelled, ActivationCodeException::canceled)
 				.onSuccess(it -> it.status = ActivationCodeStatus.CANCELED);
 	}
 

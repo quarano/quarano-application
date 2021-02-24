@@ -43,7 +43,6 @@ public class ActivationCodeService {
 
 		return Try.success(personIdentifier)
 				.map(activationCodes::findByTrackedPersonId)
-				.filter(not(ActivationCodes::hasRedeemedCode), ActivationCodeException::activationConcluded)
 				.map(it -> it.cancelAll(activationCodes::save))
 				.map(__ -> new ActivationCode(configuration.getExpiryDate(), personIdentifier, departmentIdentifier))
 				.map(activationCodes::save);
