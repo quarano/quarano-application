@@ -1,7 +1,5 @@
 package quarano.department.activation;
 
-import static java.util.function.Predicate.*;
-
 import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

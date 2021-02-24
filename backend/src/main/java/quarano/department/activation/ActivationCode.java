@@ -1,5 +1,7 @@
 package quarano.department.activation;
 
+import static java.util.function.Predicate.*;
+
 import io.vavr.control.Try;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -114,7 +116,7 @@ public class ActivationCode extends QuaranoAggregate<ActivationCode, ActivationC
 		}
 
 		return result
-				.filter(ActivationCode::isCancelled, ActivationCodeException::canceled)
+				.filter(not(ActivationCode::isCancelled), ActivationCodeException::canceled)
 				.onSuccess(it -> it.status = ActivationCodeStatus.CANCELED);
 	}
 
