@@ -83,7 +83,7 @@ describe(
         cy.get('[data-cy="contact-person-form-phone"] input')
           .click()
           .then(($elem) => {
-            cy.wrap($elem).type('123123123123');
+            cy.wrap($elem).click().type('123123123123');
           });
         cy.get('[data-cy="submit-button"] button').click();
 
@@ -212,7 +212,7 @@ describe(
             expect($body._embedded.originCases[0].lastName).to.eq('Hanser');
           });
         cy.location('pathname').should('include', '/edit');
-        // cy.get('[data-cy="lazy-autocomplete-chip-list"]').contains('Hanser, Markus');
+        cy.get('[data-cy="lazy-autocomplete-chip-list"]').contains('Hanser, Markus');
       });
     });
   }
