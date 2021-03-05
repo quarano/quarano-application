@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import {AsideHostDirective} from './aside-host.directive';
+import { AsideHostDirective } from './aside-host.directive';
 
 describe('Directive: Aside', () => {
   it('should create an instance', () => {

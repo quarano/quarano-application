@@ -3,6 +3,7 @@ package quarano.tracking;
 import static java.util.stream.Collectors.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
 import java.time.LocalDate;

@@ -4,10 +4,9 @@ import { ButtonComponent } from './button/button.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-
 @NgModule({
   imports: [CommonModule, MatButtonModule, MatIconModule],
   declarations: [ButtonComponent],
-  exports: [ButtonComponent]
+  exports: [ButtonComponent],
 })
-export class SharedUiButtonModule { }
+export class SharedUiButtonModule {}

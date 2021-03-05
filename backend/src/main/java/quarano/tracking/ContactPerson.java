@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
+import org.springframework.lang.Nullable;
 import quarano.core.Address;
 import quarano.core.Address.HouseNumber;
 import quarano.core.EmailAddress;
@@ -65,6 +66,9 @@ public class ContactPerson extends QuaranoAggregate<ContactPerson, ContactPerson
 	@Column(nullable = false)
 	@AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
 	private TrackedPersonIdentifier ownerId;
+
+	@Nullable
+	private @Getter @Setter String sormasUuid = null;
 
 	public ContactPerson(String firstName, String lastName, ContactWays contactWays) {
 

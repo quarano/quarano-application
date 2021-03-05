@@ -4,23 +4,18 @@ import { AsideService } from '../services/aside.service';
 
 @Component({
   selector: 'qro-aside',
-  template: `
-                <ng-template qroAsideHost></ng-template>
-            `,
-  styleUrls: ['./aside.component.scss']
+  template: ` <ng-template qroAsideHost></ng-template> `,
+  styleUrls: ['./aside.component.scss'],
 })
 export class AsideComponent implements OnInit {
   @ViewChild(AsideHostDirective, { static: true }) asideHost: AsideHostDirective;
 
-  constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private asideService: AsideService) { }
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private asideService: AsideService) {}
 
   ngOnInit() {
-    this.asideService.asideComponentContent$
-      .subscribe(content => {
-        this.showContent(content);
-      });
+    this.asideService.asideComponentContent$.subscribe((content) => {
+      this.showContent(content);
+    });
   }
 
   showContent(contentComponent: Type<any>) {

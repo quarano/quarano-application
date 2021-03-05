@@ -8,6 +8,7 @@ import quarano.core.web.MappingCustomizer;
 import quarano.core.web.RepositoryMappingModule;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -71,10 +72,9 @@ public class Quarano {
 
 		ClassPathResource resource = new ClassPathResource("git.properties");
 		Properties properties = PropertiesLoaderUtils.loadProperties(resource);
-
 		SpringApplication application = new SpringApplication(Quarano.class);
 		application.setBanner(new QuaranoBanner(properties));
-		application.run(args);
+		ApplicationContext ctx = application.run(args);
 	}
 
 	@Bean

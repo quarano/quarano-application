@@ -11,8 +11,7 @@ describe('ButtonComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ButtonComponent],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -4,7 +4,7 @@ import { AsideService } from './aside.service';
 describe('Service: Aside', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AsideService]
+      providers: [AsideService],
     });
   });
 

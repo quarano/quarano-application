@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'qro-button',
   templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss']
+  styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent {
   @Input() color = 'primary';
@@ -16,5 +16,4 @@ export class ButtonComponent {
   save(event: any): void {
     this.buttonClicked.emit(event);
   }
-
 }

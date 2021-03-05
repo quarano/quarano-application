@@ -4,18 +4,16 @@ import { ITileViewModel } from './tile-view-model';
 @Component({
   selector: 'qro-tile',
   templateUrl: './tile.component.html',
-  styleUrls: ['./tile.component.scss']
+  styleUrls: ['./tile.component.scss'],
 })
 export class TileComponent implements OnInit {
   @Input() viewModel: ITileViewModel;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getHeaderImageUrl() {
     return `url('${this.viewModel.headerImageUrl}')`;
   }
 }
-

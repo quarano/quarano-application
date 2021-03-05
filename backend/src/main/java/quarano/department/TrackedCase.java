@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.jmolecules.ddd.types.Identifier;
@@ -79,7 +80,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private Quarantine quarantine = null;
 
 	@Nullable
-	@Setter(AccessLevel.NONE) //
+	private @Getter @Setter String sormasUuid = null;
+
+	@Nullable @Setter(AccessLevel.NONE) //
 	@Column(name = "quarantine_last_modified") //
 	private LocalDateTime quarantineLastModified = null;
 

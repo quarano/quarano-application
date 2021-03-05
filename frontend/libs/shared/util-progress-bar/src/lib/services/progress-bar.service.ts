@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProgressBarService {
   public progressBarActive$$ = new BehaviorSubject<boolean>(false);
@@ -11,6 +11,5 @@ export class ProgressBarService {
     this.progressBarActive$$.next(state);
   }
 
-  constructor() {
-  }
+  constructor() {}
 }

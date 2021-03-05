@@ -60,4 +60,5 @@ public class TrackedPersonDto {
 
 		return this;
 	}
+	private String sormasUuid;
 }

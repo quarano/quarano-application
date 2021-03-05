@@ -1,10 +1,7 @@
 package quarano.tracking;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.lang.Nullable;
 import quarano.core.QuaranoEntity;
 import quarano.tracking.Encounter.EncounterIdentifier;
 
@@ -46,6 +43,10 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 		this.contact = contact;
 		this.date = date;
 	}
+
+	@Nullable
+	private @Getter @Setter
+	String sormasUuid = null;
 
 	public static Encounter with(ContactPerson person, LocalDate date) {
 		return new Encounter(person, date);

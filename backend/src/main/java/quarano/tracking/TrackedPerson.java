@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
+import org.springframework.data.rest.core.annotation.RestResource;
 import quarano.account.Account;
 import quarano.core.Address;
 import quarano.core.Address.HouseNumber;
@@ -65,6 +66,9 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	private @Getter @Setter LocalDate dateOfBirth;
 
 	private @Getter @Nullable Locale locale;
+
+	@Nullable
+	private @Getter @Setter String sormasUuid = null;
 
 	@OneToOne
 	@JoinColumn(name = "account_id")
