@@ -11,6 +11,7 @@ import quarano.account.DepartmentRepository;
 import quarano.core.rki.HealthDepartments;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
+import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.EnrollmentCompletion;
 import quarano.department.TrackedCase;
@@ -24,7 +25,9 @@ import quarano.department.web.TrackedCaseRepresentations.TrackedCaseDto;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedContactCase;
 import quarano.department.web.TrackedCaseRepresentations.ValidatedIndexCase;
 import quarano.diary.DiaryManagement;
+import quarano.tracking.LocationRepository;
 import quarano.tracking.TrackedPerson;
+import quarano.tracking.web.LocationDto;
 import quarano.tracking.web.TrackedPersonDto;
 import quarano.tracking.web.TrackingController;
 
@@ -69,6 +72,8 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseProperties configuration;
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull HealthDepartments rkiDepartments;
+	private final @NonNull MapperWrapper mapper;
+	private final @NonNull LocationRepository locations;
 
 	@GetMapping(path = "/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
@@ -223,6 +228,14 @@ public class TrackedCaseController {
 				.map(cases::save)
 				.map(it -> representations.toRepresentation(it))
 				.concludeIfValid(ResponseEntity::ok);
+	}
+
+	@GetMapping(path = "/hd/locations")
+	public Stream<LocationDto> getLocations(@LoggedIn Department department) {
+
+		return locations.findAll()
+				.map(it -> mapper.map(it, LocationDto.class))
+				.stream();
 	}
 
 	@GetMapping("/enrollments")

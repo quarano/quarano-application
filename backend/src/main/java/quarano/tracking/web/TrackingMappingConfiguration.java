@@ -7,6 +7,7 @@ import quarano.core.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactWays;
+import quarano.tracking.Location;
 import quarano.tracking.TrackedPerson;
 import quarano.core.ZipCode;
 
@@ -144,5 +145,30 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
+
+		//Location
+
+		mapper.typeMap(LocationDto.class, Location.class).setProvider(request -> {
+
+			var dto = (LocationDto) request.getSource();
+
+			return new Location(dto.getContactPerson().getContactPersonName(), EmailAddress.ofNullable(dto.getContactPerson().getContactPersonEmail()), PhoneNumber.ofNullable(dto.getContactPerson().getContactPersonPhone()), dto.getComment());
+
+		}).addMappings(it -> {
+
+			it.<String> map(LocationDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
+			it.<HouseNumber> map(LocationDto::getHouseNumber, (target, v) -> target.getAddress().setHouseNumber(v));
+			it.<String> map(LocationDto::getCity, (target, v) -> target.getAddress().setCity(v));
+			it.<ZipCode> map(LocationDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
+		});
+
+		mapper.typeMap(Location.class, LocationDto.class).setProvider(request -> {
+
+			var source = (Location) request.getSource();
+			LocationDto.LocationContactDto locationContactDto = new LocationDto.LocationContactDto(source.getContactPersonName(), source.getContactPersonPhone().toString(), source.getContactPersonEmail().toString());
+			return new LocationDto(source.getId(), locationContactDto, source.getAddress().getStreet(), source.getAddress().getHouseNumber().toString(), source.getAddress().getZipCode().toString(), source.getAddress().getCity(), source.getComment());
+
+		});
+
 	}
 }
