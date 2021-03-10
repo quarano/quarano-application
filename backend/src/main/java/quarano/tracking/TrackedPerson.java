@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import org.springframework.data.rest.core.annotation.RestResource;
 import quarano.account.Account;
 import quarano.core.Address;
 import quarano.core.Address.HouseNumber;

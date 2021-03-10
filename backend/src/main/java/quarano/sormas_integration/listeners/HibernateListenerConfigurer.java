@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -16,14 +17,10 @@ public class HibernateListenerConfigurer {
     @PersistenceUnit
     private EntityManagerFactory emf;
 
+    @Inject
     private UpdateListener updateListener;
+    @Inject
     private InsertListener insertListener;
-
-    @Autowired
-    public HibernateListenerConfigurer(UpdateListener updateListener, InsertListener insertListener) {
-        this.updateListener = updateListener;
-        this.insertListener = insertListener;
-    }
 
     @PostConstruct
     protected void init() {

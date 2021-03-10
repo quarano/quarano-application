@@ -3,6 +3,7 @@ package quarano.sormas_integration.listeners;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.FlushMode;
 import org.hibernate.event.spi.PostInsertEvent;
 import org.hibernate.event.spi.PostInsertEventListener;
 import org.hibernate.persister.entity.EntityPersister;
@@ -22,35 +23,31 @@ import java.util.UUID;
 @Component
 class InsertListener implements PostInsertEventListener {
 
-    private final @NonNull IndexSyncBacklogRepository indexBacklog;
-    private final @NonNull ContactsSyncBacklogRepository contactsBacklog;
-
     @Override
     public void onPostInsert(PostInsertEvent postInsertEvent) {
         if(postInsertEvent.getEntity() instanceof TrackedPerson){
 
             log.debug("Trigger invoked...");
 
-            IndexSynchBacklog newIndexEntry = new IndexSynchBacklog(
-                    UUID.fromString(
-                            ((TrackedPerson) postInsertEvent.getEntity())
-                                    .getId()
-                                    .toString()
-                    ),
-                    new Date()
-            );
+            postInsertEvent.getSession().createNativeQuery(
+                    "INSERT INTO index_synch_backlog (id, sync_date) " +
+                            "VALUES (:id, :sync_date)")
+                    .setParameter("id", ((TrackedPerson) postInsertEvent.getEntity())
+                            .getId()
+                            .toString())
+                    .setParameter("sync_date", new Date())
+                    .setFlushMode(FlushMode.MANUAL)
+                    .executeUpdate();
 
-            ContactsSynchBacklog newContactEntry = new ContactsSynchBacklog(
-                    UUID.fromString(
-                            ((TrackedPerson) postInsertEvent.getEntity())
-                                    .getId()
-                                    .toString()
-                    ),
-                    new Date()
-            );
-
-            indexBacklog.save(newIndexEntry);
-            contactsBacklog.save(newContactEntry);
+            postInsertEvent.getSession().createNativeQuery(
+                    "INSERT INTO contacts_synch_backlog (id, sync_date) " +
+                            "VALUES (:id, :sync_date)")
+                    .setParameter("id", ((TrackedPerson) postInsertEvent.getEntity())
+                            .getId()
+                            .toString())
+                    .setParameter("sync_date", new Date())
+                    .setFlushMode(FlushMode.MANUAL)
+                    .executeUpdate();
         }
     }
 
