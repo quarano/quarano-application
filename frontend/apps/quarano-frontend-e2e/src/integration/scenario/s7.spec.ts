@@ -26,18 +26,17 @@ describe('S7 - Status wechselt korrekt', () => {
 
   /* Intercept Definitionen */
   beforeEach(() => {
-    cy.intercept('GET', '**/hd/cases/*').as('getCaseDetails');
     cy.intercept('GET', '**/hd/cases').as('getAllCases');
     cy.intercept('POST', '**/hd/cases/?type=index').as('newIndex');
     cy.intercept('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
-    //cy.intercept('POST', '**/hd/cases/*').as('postCaseDetails');
+    cy.intercept({
+      method: 'GET',
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}/,
+    }).as('getCaseDetails');
     cy.intercept({
       method: 'POST',
       url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}/,
     }).as('postCaseDetails');
-    //cy.intercept('GET', /hd\/cases\/.*$/).as('getCaseDetails');
-    //cy.intercept('GET', /.*\/hd\/cases\/$/).as('getAllCases');
-    //cy.intercept('POST', '/hd/cases/*').as('newIndex');
   });
 
   it('should run', () => {
@@ -197,7 +196,6 @@ describe('S7 - Status wechselt korrekt', () => {
         /* 31 - Bitte geben Sie Ihren behandelnden Hausarzt an. -> Dr. Schmidt */
         cy.get('[data-cy="familyDoctor"]').click().type('Dr. Schmidt');
 
-        //TODO -> data-cy zu Komponente hinzufügen
         /* 32 - Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung: -> "Familie" */
         cy.get('[formcontrolname="guessedOriginOfInfection"]').click().type('Familie');
 
