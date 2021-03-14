@@ -16,10 +16,30 @@ mat-form-field {
 .new-event-form {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(4, auto);
 }
 
 .additional-info {
   grid-column: 1 / 3;
   grid-row: 6;
+}
+
+.timepicker-input {
+  display: flex;
+
+  .mat-icon-button {
+    line-height: 13px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .material-icons {
+    font-size: 14px;
+  }
+
+  .mat-icon-button i,
+  .mat-icon-button .mat-icon {
+    line-height: 14px;
+    padding-right: 10px;
+  }
 }
