@@ -26,10 +26,18 @@ describe('S7 - Status wechselt korrekt', () => {
 
   /* Intercept Definitionen */
   beforeEach(() => {
-    cy.intercept('GET', '/hd/cases').as('getAllCases');
-    cy.intercept('GET', '/hd/cases/*').as('getCaseDetails');
-    cy.intercept('POST', '/hd/cases/*').as('postCaseDetails');
-    cy.intercept('POST', '/hd/cases/*').as('newIndex');
+    cy.intercept('GET', '**/hd/cases/*').as('getCaseDetails');
+    cy.intercept('GET', '**/hd/cases').as('getAllCases');
+    cy.intercept('POST', '**/hd/cases/?type=index').as('newIndex');
+    cy.intercept('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
+    //cy.intercept('POST', '**/hd/cases/*').as('postCaseDetails');
+    cy.intercept({
+      method: 'POST',
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}/,
+    }).as('postCaseDetails');
+    //cy.intercept('GET', /hd\/cases\/.*$/).as('getCaseDetails');
+    //cy.intercept('GET', /.*\/hd\/cases\/$/).as('getAllCases');
+    //cy.intercept('POST', '/hd/cases/*').as('newIndex');
   });
 
   it('should run', () => {
@@ -75,9 +83,10 @@ describe('S7 - Status wechselt korrekt', () => {
     /* 12 - wähle "Speichern und schließen" */
     cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
 
-    //TODO
     /* CHECK: Anfrage wurde gesendet */
-    //cy.wait('@newIndex').its('response.statusCode').should('eq', 201);
+    cy.wait('@newIndex').should(({ request, response }) => {
+      expect(response.statusCode).to.equal(201);
+    });
 
     /* CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "angelegt" */
     cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
@@ -95,9 +104,6 @@ describe('S7 - Status wechselt korrekt', () => {
       });
 
     /* CHECK: Überprüfung, ob die Seite gewechselt wurde */
-    //REGEX hinzufügen
-    //const indexUrlReg = /^health-department\/case-detail\/index\/.*\/edit$/;
-    //cy.url().should('match', /^health-department\/case-detail\/index\/.*\/edit$/);
     cy.url().should('contain', 'health-department/case-detail/index/');
 
     /* 14 - wähle "Nachverfolgung Starten" */
@@ -114,7 +120,12 @@ describe('S7 - Status wechselt korrekt', () => {
 
     /* 14A - Aufrufen der E-Mail Vorlage */
     cy.get('[data-cy="email-tab"]').should('exist').click();
-    cy.wait(500);
+
+    /* CHECK: Korrekte URL aufgerufen */
+    cy.url().should(
+      'match',
+      /.*\/health-department\/case-detail\/index\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/email$/
+    );
 
     /* CHECK: Button "Aktivierungscode erneuern" ist vorhanden */
     cy.get('[data-cy="new-activation-code"]').should('exist');
@@ -203,11 +214,11 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="second-step-button"] button').should('be.enabled');
         cy.get('[data-cy="second-step-button"] button').click();
 
+        /* CHECK: Anfrage wurde gesendet */
+        cy.wait('@updateQuestionnaire').its('response.statusCode').should('eq', 200);
+
         /* CHECK: Weiter auf Seite 3 */
         cy.get('[data-cy="third-step-button"]').should('exist');
-
-        //TODO
-        cy.wait(500);
 
         /* 37 - Kontakte mit anderen Menschen -> "Carl Benz" */
         /* 38 - Klick enter */
@@ -216,8 +227,8 @@ describe('S7 - Status wechselt korrekt', () => {
         /* 39 - wähle "Kontakt anlegen" in Popup */
         cy.get('[data-cy="confirm-button"]').should('exist').click();
 
-        //TODO
-        cy.wait(500);
+        //TODO - still working without wait?
+        //cy.wait(500);
 
         /* 40 - Telefonnummer (mobil) -> "017196347526" */
         cy.get('[data-cy="contact-person-form-mobile-phone"]').should('exist').click().type('017196347526');
@@ -257,9 +268,8 @@ describe('S7 - Status wechselt korrekt', () => {
         /* 46 - wähle "Fall abschließen" */
         cy.get('[data-cy="close-case-button"]').should('exist').click();
 
-        //TODO
-        cy.wait(500);
-        //cy.wait('@getCaseDetails').its('response.statusCode').should('eq', 200);
+        /* CHECK: Anfrage wurde verarbeitet */
+        cy.wait('@getCaseDetails').its('response.statusCode').should('eq', 200);
 
         /* 47 - Popup "Diesen Fall abschließen" geht auf */
         /* 48 - Zusätzliche Informationen zum Fallabschluss: -> "Quarantäne beendet" */
@@ -269,7 +279,7 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="confirm-button"]').should('exist').click();
 
         /* CHECK: Anfrage wurde gesendet */
-        cy.wait('@postCaseDetails').its('response.statusCode').should('eq', 201);
+        cy.wait('@postCaseDetails').its('response.statusCode').should('eq', 200);
 
         /* 49A - wähle "Speichern und schließen" */
         cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
