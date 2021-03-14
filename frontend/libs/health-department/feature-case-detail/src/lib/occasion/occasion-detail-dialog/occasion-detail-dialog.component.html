@@ -40,6 +40,32 @@
       }}</mat-error>
     </mat-form-field>
 
+    <div [formGroup]="timeGroup">
+      <mat-form-field>
+        <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}</mat-label>
+        <div class="timepicker-input">
+          <input
+            matInput
+            [ngxTimepicker]="fromTime"
+            [format]="24"
+            placeholder="{{ 'TEndTime' | translate }}"
+            formControlName="startTime"
+          />
+          <button mat-icon-button (click)="fromTime.open()">
+            <mat-icon>schedule</mat-icon>
+          </button>
+        </div>
+      </mat-form-field>
+      <ngx-material-timepicker
+        [cancelBtnTmpl]="cancelBtn"
+        [confirmBtnTmpl]="confirmBtn"
+        [theme]="timepickerTheme"
+        [disableAnimation]="true"
+        #fromTime
+        [appendToInput]="true"
+      ></ngx-material-timepicker>
+    </div>
+
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}</mat-label>
       <input
@@ -55,6 +81,36 @@
         'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
       }}</mat-error>
     </mat-form-field>
+
+    <div [formGroup]="timeGroup">
+      <mat-form-field>
+        <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}</mat-label>
+        <div class="timepicker-input">
+          <input
+            disabled
+            matInput
+            [ngxTimepicker]="toTime"
+            [format]="24"
+            placeholder="{{ 'TEndTime' | translate }}"
+            formControlName="endTime"
+          />
+          <button mat-icon-button (click)="toTime.open()">
+            <mat-icon>schedule</mat-icon>
+          </button>
+        </div>
+      </mat-form-field>
+      <ngx-material-timepicker
+        [cancelBtnTmpl]="cancelBtn"
+        [confirmBtnTmpl]="confirmBtn"
+        [theme]="timepickerTheme"
+        [disableAnimation]="true"
+        #toTime
+        [appendToInput]="true"
+      ></ngx-material-timepicker>
+      <mat-error *ngIf="timeGroup?.controls?.endTime?.errors?.pattern">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.PFLICHTFELD' | translate
+      }}</mat-error>
+    </div>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STRASSE' | translate }}</mat-label>
@@ -111,3 +167,10 @@
     {{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANLEGEN' | translate }}
   </button>
 </mat-dialog-actions>
+
+<ng-template #cancelBtn>
+  <button mat-button>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
+</ng-template>
+<ng-template #confirmBtn>
+  <button mat-button color="primary">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.OK' | translate }}</button>
+</ng-template>

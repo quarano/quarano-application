@@ -399,6 +399,9 @@
       }
     },
     "EREIGNIS_NEU_MODAL": {
+      "OK": "OK",
+      "ZEIT_BIS": "Uhrzeit bis",
+      "ZEIT_VON": "Uhrzeit von",
       "PFLICHTFELD": "Dies ist ein Pflichtfeld",
       "NEU": "Ereignis Details",
       "NAME": "Name",

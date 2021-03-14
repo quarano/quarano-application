@@ -29,6 +29,7 @@ import { DiaryEntriesListItemComponent } from './diary-entries-list-item/diary-e
 import { OccasionListComponent } from './occasion/occasion-list/occasion-list.component';
 import { OccasionCardComponent } from './occasion/occasion-card/occasion-card.component';
 import { OccasionDetailDialogComponent } from './occasion/occasion-detail-dialog/occasion-detail-dialog.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const routes: Routes = [
   {
@@ -130,6 +131,7 @@ const routes: Routes = [
     SharedUiMultipleAutocompleteModule,
     SharedUtilTranslationModule,
     SharedUiAgGridModule,
+    NgxMaterialTimepickerModule,
   ],
 })
 export class HealthDepartmentFeatureCaseDetailModule {}
