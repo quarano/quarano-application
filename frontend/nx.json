@@ -196,6 +196,9 @@
     },
     "health-department-ui-export-dialog": {
       "tags": ["scope:health-department", "type:ui"]
+    },
+    "client-ui-location-detail": {
+      "tags": []
     }
   },
   "affected": {

@@ -249,7 +249,7 @@
                   "maximumError": "10kb"
                 }
               ]
-            },            
+            },
             "autotest": {
               "fileReplacements": [
                 {
@@ -2023,6 +2023,36 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/health-department/ui-export-dialog/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-ui-location-detail": {
+      "projectType": "library",
+      "root": "libs/client/ui-location-detail",
+      "sourceRoot": "libs/client/ui-location-detail/src",
+      "prefix": "qro",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/ui-location-detail/tsconfig.lib.json",
+              "libs/client/ui-location-detail/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/ui-location-detail/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/ui-location-detail/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -73,7 +73,8 @@
       "@qro/general/domain": ["libs/general/domain/src/index.ts"],
       "@qro/general/api": ["libs/general/api/src/index.ts"],
       "@qro/auth/feature-reset-password": ["libs/auth/feature-reset-password/src/index.ts"],
-      "@qro/health-department/ui-export-dialog": ["libs/health-department/ui-export-dialog/src/index.ts"]
+      "@qro/health-department/ui-export-dialog": ["libs/health-department/ui-export-dialog/src/index.ts"],
+      "@qro/client/ui-location-detail": ["libs/client/ui-location-detail/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
