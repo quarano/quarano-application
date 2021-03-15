@@ -1,3 +1,4 @@
+import { LocationsResolver } from './resolvers/locations.resolver';
 import { EnrollmentProfileResolver } from './resolvers/enrollment-profile.resolver';
 import { ClientStoreModule } from './client-store.module';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { ContactPersonsResolver } from './resolvers/contact-persons.resolver';
     ContactPersonsResolver,
     ContactPersonResolver,
     EnrollmentProfileResolver,
+    LocationsResolver,
   ],
 })
 export class ClientDomainModule {}

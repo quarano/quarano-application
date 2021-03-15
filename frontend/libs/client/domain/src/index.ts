@@ -20,3 +20,6 @@ export * from './lib/resolvers/contact-person.resolver';
 export * from './lib/store/client-store.service';
 export * from './lib/model/zip-code-error';
 export * from './lib/resolvers/enrollment-profile.resolver';
+export * from './lib/model/location';
+export * from './lib/data-access/location.service';
+export * from './lib/resolvers/locations.resolver';

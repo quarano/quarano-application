@@ -114,6 +114,17 @@
           >
             {{ 'BASIC_DATA.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
           </button>
+          <span class="text-muted">{{ 'BASIC_DATA.ORT_FEHLT_IN_DER_LISTE' | translate }}</span>
+          <button
+            mat-button
+            color="primary"
+            type="button"
+            (click)="openLocationDialog(date)"
+            class="p-2 mr-0"
+            style="line-height: normal"
+          >
+            {{ 'BASIC_DATA.HIER_FEHLENDEN_ORT_ANLEGEN' | translate }}
+          </button>
         </div>
       </fieldset>
       <div class="mt-3">

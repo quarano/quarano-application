@@ -1,3 +1,4 @@
+import { ClientUiLocationDetailModule } from '@qro/client/ui-location-detail';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
 import { SharedUiMultipleAutocompleteModule } from '@qro/shared/ui-multiple-autocomplete';
@@ -7,11 +8,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { BasicDataComponent } from './basic-data/basic-data.component';
 import { SymptomsResolver, SharedUtilSymptomModule } from '@qro/shared/util-symptom';
 import {
-  ProfileResolver,
   ClientDomainModule,
   MyFirstQueryResolver,
   EncountersResolver,
   EnrollmentProfileResolver,
+  LocationsResolver,
 } from '@qro/client/domain';
 import { SharedUiMaterialModule } from '@qro/shared/ui-material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +35,7 @@ const routes: Routes = [
     resolve: {
       symptomsLoaded: SymptomsResolver,
       contactPersons: ContactPersonsResolver,
+      locations: LocationsResolver,
       firstQuery: MyFirstQueryResolver,
       clientData: EnrollmentProfileResolver,
       encounters: EncountersResolver,
@@ -73,6 +75,7 @@ const routes: Routes = [
     SharedUtilSymptomModule,
     ClientUiPersonalDataModule,
     ClientUiContactPersonDetailModule,
+    ClientUiLocationDetailModule,
     ClientDomainModule,
     RouterModule.forChild(routes),
     SharedUtilTranslationModule,

@@ -1,7 +1,14 @@
 import { TranslateService } from '@ngx-translate/core';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
-import { ProfileService, EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto } from '@qro/client/domain';
+import {
+  ProfileService,
+  EncounterEntry,
+  ClientStore,
+  ZipCodeErrorDto,
+  HealthDepartmentDto,
+  LocationDto,
+} from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -31,6 +38,7 @@ import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { tap, finalize, take, switchMap, map, mergeMap, filter, first } from 'rxjs/operators';
 import { iif, noop, Observable, of } from 'rxjs';
+import { LocationDialogService } from '@qro/client/ui-location-detail';
 
 @Component({
   selector: 'qro-basic-data',
@@ -59,6 +67,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   thirdFormGroup: FormGroup;
   datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
+  locations: LocationDto[] = [];
   encounters: EncounterEntry[] = [];
   noRetrospectiveContactsConfirmed = false;
   thirdFormLoading = false;
@@ -73,7 +82,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private dialogService: ContactDialogService,
+    private contactPersonDialogService: ContactDialogService,
+    private locationDialogService: LocationDialogService,
     public clientStore: ClientStore,
     private store: Store,
     private translate: TranslateService,
@@ -84,6 +94,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     this.subs.add(
       this.route.data.subscribe((data) => {
         this.contactPersons = data.contactPersons;
+        this.locations = data.locations;
         this.firstQuery = data.firstQuery;
         this.client = data.clientData;
         this.encounters = data.encounters;
@@ -377,7 +388,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   openContactDialog(date: Date) {
     const dateString = date.toLocaleDateString('de');
     this.subs.add(
-      this.dialogService
+      this.contactPersonDialogService
         .openContactPersonDialog({ disableClose: true })
         .afterClosed()
         .subscribe((createdContact: ContactPersonDto | null) => {
@@ -388,6 +399,25 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
               ...this.thirdFormGroup.controls[dateString].value,
               createdContact.id,
             ]);
+          }
+        })
+    );
+  }
+
+  openLocationDialog(date: Date) {
+    // const dateString = date.toLocaleDateString('de');
+    this.subs.add(
+      this.locationDialogService
+        .openLocationDialog({ disableClose: true })
+        .afterClosed()
+        .subscribe((createdLocation: LocationDto | null) => {
+          if (createdLocation) {
+            this.locations.push(createdLocation);
+            // this.onLocationAdded(date, createdLocation.id);
+            // this.thirdFormGroup.controls[dateString].patchValue([
+            //   ...this.thirdFormGroup.controls[dateString].value,
+            //   createdLocation.id,
+            // ]);
           }
         })
     );
