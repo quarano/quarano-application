@@ -31,11 +31,15 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.intercept('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
     cy.intercept({
       method: 'GET',
-      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}/,
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/registration$/,
+    }).as('getEmailText');
+    cy.intercept({
+      method: 'GET',
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}$/,
     }).as('getCaseDetails');
     cy.intercept({
       method: 'POST',
-      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}/,
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/comments$/,
     }).as('postCaseDetails');
   });
 
@@ -125,6 +129,9 @@ describe('S7 - Status wechselt korrekt', () => {
       'match',
       /.*\/health-department\/case-detail\/index\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/email$/
     );
+
+    /* CHECK: Anfrage wurde gesendet */
+    cy.wait('@getEmailText').its('response.statusCode').should('eq', 200);
 
     /* CHECK: Button "Aktivierungscode erneuern" ist vorhanden */
     cy.get('[data-cy="new-activation-code"]').should('exist');
