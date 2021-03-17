@@ -68,4 +68,14 @@ public class LocationController {
         return ResponseEntity.of(dto);
     }
 
+    @GetMapping()
+    public HttpEntity<?> getLocationsForUser(@LoggedIn TrackedPerson person) {
+
+        var dto = locations.findByOwnerId(person.getId())
+                .map(it -> mapper.map(it, LocationDto.class))
+                .toList();
+
+        return ResponseEntity.ok(dto);
+    }
+
 }

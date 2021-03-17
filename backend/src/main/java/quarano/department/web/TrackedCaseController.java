@@ -230,14 +230,6 @@ public class TrackedCaseController {
 				.concludeIfValid(ResponseEntity::ok);
 	}
 
-	@GetMapping(path = "/hd/locations")
-	public Stream<LocationDto> getLocations(@LoggedIn Department department) {
-
-		return locations.findAll()
-				.map(it -> mapper.map(it, LocationDto.class))
-				.stream();
-	}
-
 	@GetMapping("/enrollments")
 	Stream<?> allEnrollments() {
 

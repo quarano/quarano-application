@@ -152,7 +152,7 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 
 			var dto = (LocationDto) request.getSource();
 
-			return new Location(dto.getContactPerson().getContactPersonName(), EmailAddress.ofNullable(dto.getContactPerson().getContactPersonEmail()), PhoneNumber.ofNullable(dto.getContactPerson().getContactPersonPhone()), dto.getComment());
+			return new Location(dto.getName(), dto.getContactPerson().getContactPersonName(), EmailAddress.ofNullable(dto.getContactPerson().getContactPersonEmail()), PhoneNumber.ofNullable(dto.getContactPerson().getContactPersonPhone()), dto.getComment());
 
 		}).addMappings(it -> {
 
@@ -166,7 +166,7 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 
 			var source = (Location) request.getSource();
 			LocationDto.LocationContactDto locationContactDto = new LocationDto.LocationContactDto(source.getContactPersonName(), source.getContactPersonPhone().toString(), source.getContactPersonEmail().toString());
-			return new LocationDto(source.getId(), locationContactDto, source.getAddress().getStreet(), source.getAddress().getHouseNumber().toString(), source.getAddress().getZipCode().toString(), source.getAddress().getCity(), source.getComment());
+			return new LocationDto(source.getId(), source.getName(), locationContactDto, source.getAddress().getStreet(), source.getAddress().getHouseNumber().toString(), source.getAddress().getZipCode().toString(), source.getAddress().getCity(), source.getComment());
 
 		});
 

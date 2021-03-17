@@ -4,6 +4,7 @@ CREATE TABLE locations (
      created_by uuid NULL,
      last_modified timestamp NULL,
      last_modified_by uuid NULL,
+     name varchar(255) NOT NULL,
      city varchar(255) NOT NULL,
      house_number varchar(255) NULL,
      street varchar(255) NOT NULL,
@@ -16,3 +17,7 @@ CREATE TABLE locations (
      CONSTRAINT locations_pkey PRIMARY KEY (location_id),
      CONSTRAINT locations_tracked_person_fk FOREIGN KEY (tracked_person_id) REFERENCES tracked_people(tracked_person_id)
 );
+
+ALTER TABLE public.encounters ADD location_id uuid NULL DEFAULT NULL;
+ALTER TABLE public.encounters ADD CONSTRAINT encounters_locations_fk FOREIGN KEY (location_id) REFERENCES locations (location_id);
+

@@ -32,6 +32,7 @@ import org.jmolecules.ddd.types.Identifier;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class Location extends QuaranoAggregate<Location, Location.LocationIdentifier> {
 
+    private @Setter(AccessLevel.NONE) String name;
     private @Setter(AccessLevel.NONE) String contactPersonName;
     private @Setter(AccessLevel.NONE) EmailAddress contactPersonEmail;
     private @Setter(AccessLevel.NONE) PhoneNumber contactPersonPhone;
@@ -42,9 +43,10 @@ public class Location extends QuaranoAggregate<Location, Location.LocationIdenti
     @AttributeOverride(name = "trackedPersonId", column = @Column(name = "tracked_person_id"))
     private TrackedPerson.TrackedPersonIdentifier ownerId;
 
-    public Location(String contactPersonName, EmailAddress emailAddress, PhoneNumber phoneNumber, String comment) {
+    public Location(String name, String contactPersonName, EmailAddress emailAddress, PhoneNumber phoneNumber, String comment) {
 
         this.id = Location.LocationIdentifier.of(UUID.randomUUID());
+        this.name = name;
         this.contactPersonName = contactPersonName;
         this.contactPersonEmail = emailAddress;
         this.contactPersonPhone = phoneNumber;

@@ -13,12 +13,14 @@ import quarano.core.web.MapperWrapper;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.Encounter.EncounterIdentifier;
+import quarano.tracking.Location;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 import quarano.core.ZipCode;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -145,10 +147,15 @@ public class TrackingController {
 	static class NewEncounter {
 
 		@NotNull UUID contact;
+		UUID location;
 		@NotNull @PastOrPresent LocalDate date;
 
 		ContactPersonIdentifier getContactId() {
 			return ContactPersonIdentifier.of(contact);
+		}
+
+		Optional<Location.LocationIdentifier> getLocationId() {
+			return location!=null ? Optional.of(Location.LocationIdentifier.of(location)) : Optional.empty();
 		}
 	}
 }
