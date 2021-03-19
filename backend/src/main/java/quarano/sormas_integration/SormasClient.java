@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.reactive.function.client.WebClient;
 import quarano.sormas_integration.indexcase.SormasCase;
+import quarano.sormas_integration.person.SormasContact;
 import quarano.sormas_integration.person.SormasPerson;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Federico Grasso
@@ -80,5 +82,23 @@ public class SormasClient {
         log.info("Getting persons since " + since);
         return GetRequest("/persons/all/" + since.getTime())
                 .bodyToFlux(SormasPerson.class);
+    }
+
+    public Mono<String[]> postPersons(List<SormasPerson> persons){
+        log.info("Starting person insert on SORMAS...");
+        return PostRequest("/persons/push", persons)
+                .bodyToMono(String[].class);
+    }
+
+    public Mono<String[]> postContacts(List<SormasContact> contacts){
+        log.info("Starting contact insert on SORMAS...");
+        return PostRequest("/contacts/push", contacts)
+                .bodyToMono(String[].class);
+    }
+
+    public Mono<String[]> postCases(List<SormasCase> cases){
+        log.info("Starting case insert on SORMAS...");
+        return PostRequest("/cases/push", cases)
+                .bodyToMono(String[].class);
     }
 }

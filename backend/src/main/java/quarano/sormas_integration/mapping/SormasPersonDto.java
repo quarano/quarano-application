@@ -8,6 +8,11 @@ import quarano.tracking.TrackedPerson;
 import java.time.LocalDate;
 import java.util.Locale;
 
+/**
+ * @author Federico Grasso
+ *
+ * Sormas person Dto class
+ */
 public class SormasPersonDto {
 
     private TrackedPerson.TrackedPersonIdentifier id;
