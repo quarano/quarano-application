@@ -2,6 +2,12 @@ package quarano.sormas_integration.mapping;
 
 import java.time.LocalDate;
 
+/**
+ * @author Federico Grasso
+ *
+ * Sormas case Dto class
+ */
+
 public class SormasCaseDto {
     private String lastName;
     private String firstName;
