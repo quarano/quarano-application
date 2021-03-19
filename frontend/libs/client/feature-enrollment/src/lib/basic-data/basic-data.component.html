@@ -69,9 +69,9 @@
       </p>
     </div>
     <div class="info-text">
-      <h2>
+      <p>
         {{ 'BASIC_DATA.BEISPIELHAFTE_KONSTELLATIONEN' | translate }}
-      </h2>
+      </p>
       <ul>
         <li>
           {{ 'BASIC_DATA.PERSONEN_MIT_KUMULATIV' | translate }}
@@ -80,13 +80,13 @@
           {{ 'BASIC_DATA.PERSONEN_MIT_DIREKTEM_KONTAKT' | translate }}
         </li>
         <li>{{ 'BASIC_DATA.PERSONEN_DIE_MIT_HOHER_WAHRSCHEINLICHKEIT' | translate }}</li>
-        <li>
-          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL_KONTAKT' | translate }}
-        </li>
-        <li>
-          {{ 'BASIC_DATA.MEDIZINISCHES_PERSONAL_RAUM' | translate }}
-        </li>
       </ul>
+      <p>
+        {{ 'BASIC_DATA.SIE_KOENNEN_SOWOHL' | translate }}
+      </p>
+      <p>
+        {{ 'BASIC_DATA.SOFERN_SIE' | translate }}
+      </p>
     </div>
     <form [formGroup]="thirdFormGroup">
       <fieldset *ngFor="let date of datesForRetrospectiveContacts">

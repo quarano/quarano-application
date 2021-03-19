@@ -9,6 +9,7 @@
     </mat-card-header>
     <mat-card-content>
       <mat-form-field class="full-width">
+        <mat-label>{{ 'LOCATION_FORM.NAME' | translate }} *</mat-label>
         <input
           matInput
           [placeholder]="'LOCATION_FORM.NAME' | translate"
@@ -51,6 +52,7 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 30%">
+          <mat-label>{{ 'LOCATION_FORM.POSTLEITZAHL' | translate }} *</mat-label>
           <input
             matInput
             [placeholder]="'LOCATION_FORM.POSTLEITZAHL' | translate"
@@ -64,6 +66,7 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field style="width: 70%">
+          <mat-label>{{ 'LOCATION_FORM.ORT' | translate }} *</mat-label>
           <input
             matInput
             [placeholder]="'LOCATION_FORM.ORT' | translate"

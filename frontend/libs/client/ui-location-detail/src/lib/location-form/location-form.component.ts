@@ -46,7 +46,10 @@ export class LocationFormComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.formGroup = this.formBuilder.group({
-      name: new FormControl(this.location.name, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name)]),
+      name: new FormControl(this.location.name, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
+        Validators.required,
+      ]),
       contactPerson: this.formBuilder.group({
         contactPersonName: new FormControl(this.location.contactPerson?.contactPersonName, [
           TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.name),
@@ -68,8 +71,12 @@ export class LocationFormComponent implements OnInit, OnDestroy {
       ]),
       zipCode: new FormControl(this.location.zipCode, [
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
+        Validators.required,
       ]),
-      city: new FormControl(this.location.city, [TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city)]),
+      city: new FormControl(this.location.city, [
+        TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
+        Validators.required,
+      ]),
       comment: new FormControl(this.location.comment, [
         TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.textual),
       ]),
