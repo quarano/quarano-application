@@ -25,6 +25,7 @@ import quarano.sormas_integration.report.ContactsSyncReportRepository;
 import quarano.sormas_integration.report.IndexSyncReport;
 import quarano.tracking.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 @Setter(AccessLevel.NONE)
 @RequiredArgsConstructor
 @Component
-public class SynchContacts {
+public class SyncContacts {
 
     private final @NonNull MapperWrapper mapper;
     private final @NonNull TrackedCaseRepository trackedCases;
@@ -41,27 +42,20 @@ public class SynchContacts {
     private final @NonNull DepartmentRepository departments;
     private final @NonNull ContactsSyncReportRepository reports;
     private final @NonNull ContactsSyncBacklogRepository backlog;
-
-    @org.springframework.beans.factory.annotation.Value("${quarano.sormas-integration.sormasurl:}")
-    private String sormasUrl;
-    @org.springframework.beans.factory.annotation.Value("${quarano.sormas-integration.sormasuser:}")
-    private String sormasUser;
-    @Value("${quarano.sormas-integration.sormaspass:}")
-    private String sormasPassword;
-    @Value("${quarano.sormas-synch.master.contacts:}")
-    private String master;
+    private final @NonNull SormasIntegrationProperties properties;
 
     @Scheduled(cron="${quarano.sormas-synch.interval.contacts:-}")
     public void syncContactCases() {
-        if(StringUtils.isNotBlank(sormasUrl)) {
+        if(StringUtils.isNotBlank(properties.getSormasurl())) {
             log.info("Contact cases synchronization started");
-            log.info("MASTER: " + master);
+            log.info("MASTER: " + properties.getMaster().getContacts());
 
             // Store starting date of sync
             log.debug("Creating report instance...");
             ContactsSyncReport newReport = new ContactsSyncReport(
+                    UUID.randomUUID(),
                     0,
-                    new Date(),
+                    LocalDateTime.now(),
                     System.currentTimeMillis(),
                     ContactsSyncReport.ReportStatus.STARTED
             );
@@ -88,13 +82,13 @@ public class SynchContacts {
                 // Save current synchronization entry
                 reports.save(newReport);
 
-                SormasClient sormasClient = new SormasClient(sormasUrl, sormasUser, sormasPassword);
+                SormasClient sormasClient = new SormasClient(properties.getSormasurl(), properties.getSormasuser(), properties.getSormaspass());
 
                 // if master is sormas...
-                if(master.equals("sormas")) {
+                if(properties.getMaster().getContacts().equals("sormas")) {
                 }
                 // if master is quarano
-                else if(master.equals("quarano")) {
+                else if(properties.getMaster().getContacts().equals("quarano")) {
                     // if reports table is empty
                     if(reportsCount == 0){
                         // start an initial synchronization
@@ -108,17 +102,12 @@ public class SynchContacts {
                 }
 
                 // Save report with success status
-                newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-                newReport.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
-                reports.save(newReport);
-                log.info("Report saved");
+                updateSuccessReport(newReport.getUuid(), newReport);
             }
             catch(Exception ex){
                 // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-                newReport.setStatus(ContactsSyncReport.ReportStatus.FAILED);
-                reports.save(newReport);
+                updateFailedReport(newReport.getUuid(), newReport);
             }
         }
         else {
@@ -167,9 +156,9 @@ public class SynchContacts {
         }
     }
 
-    private void syncCasesFromQuarano(SormasClient sormasClient, Date synchDate) {
+    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate) {
         // Determine IDs to sync
-        ArrayList<UUID> entities = backlog.findBySyncDate(synchDate);
+        List<UUID> entities = backlog.findBySyncDate(synchDate);
 
         List<TrackedPerson> indexPersons = new ArrayList<>();
 
@@ -246,12 +235,48 @@ public class SynchContacts {
         persons.forEach(person -> {
             // Map TrackedPerson to SormasContact
             SormasContactDto contactDto = mapper.map(person, SormasContactDto.class);
-            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto);
+            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto, properties.getReportingUser());
 
             sormasContacts.add(sormasContact);
         });
 
         // Push to Sormas
         String[] response = sormasClient.postContacts(sormasContacts).block();
+    }
+
+    private void updateFailedReport(UUID id, ContactsSyncReport report){
+        Optional<ContactsSyncReport> reportQuery = reports.findById(id);
+
+        if(reportQuery.isPresent()){
+            ContactsSyncReport reportToUpdate = reportQuery.get();
+            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.FAILED);
+            reports.save(reportToUpdate);
+            log.info("Report saved");
+        }
+        else{
+            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setStatus(ContactsSyncReport.ReportStatus.FAILED);
+            reports.save(report);
+            log.info("Report saved");
+        }
+    }
+
+    private void updateSuccessReport(UUID id, ContactsSyncReport report){
+        Optional<ContactsSyncReport> reportQuery = reports.findById(id);
+
+        if(reportQuery.isPresent()){
+            ContactsSyncReport reportToUpdate = reportQuery.get();
+            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
+            reports.save(reportToUpdate);
+            log.info("Report saved");
+        }
+        else{
+            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
+            reports.save(report);
+            log.info("Report saved");
+        }
     }
 }

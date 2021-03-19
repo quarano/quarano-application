@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SormasContactPerson {
     private String uuid;
-    private String firstName;
-    private String lastName;
 
     /**
      * Getters and setter
@@ -31,21 +29,5 @@ public class SormasContactPerson {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 }

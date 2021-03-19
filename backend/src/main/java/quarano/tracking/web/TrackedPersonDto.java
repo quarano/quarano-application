@@ -36,6 +36,8 @@ public class TrackedPersonDto {
 	private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
 	private @Pattern(regexp = Strings.CITY) @NotEmpty String city;
 
+	private String sormasUuid;
+
 	/**
 	 * The zip code of the city the person lives in.
 	 */

@@ -4,7 +4,9 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Federico Grasso
@@ -21,13 +23,15 @@ import java.util.Date;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class ContactsSyncReport {
 
+    @Id
+    @NonNull
+    private UUID uuid;
+
     @NonNull
     private Integer personsNumber;
 
-    @Id
-    @Temporal(TemporalType.TIMESTAMP)
     @NonNull
-    private Date syncDate;
+    private LocalDateTime syncDate;
 
     @NonNull
     private Long syncTime;

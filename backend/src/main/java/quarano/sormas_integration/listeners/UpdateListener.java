@@ -9,6 +9,7 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.springframework.stereotype.Component;
 import quarano.tracking.TrackedPerson;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -34,7 +35,7 @@ class UpdateListener implements PostUpdateEventListener {
                     .setParameter("id", ((TrackedPerson) postUpdateEvent.getEntity())
                             .getId()
                             .toString())
-                    .setParameter("sync_date", new Date())
+                    .setParameter("sync_date", LocalDateTime.now())
                     .setFlushMode(FlushMode.MANUAL)
                     .executeUpdate();
 
@@ -44,7 +45,7 @@ class UpdateListener implements PostUpdateEventListener {
                     .setParameter("id", ((TrackedPerson) postUpdateEvent.getEntity())
                             .getId()
                             .toString())
-                    .setParameter("sync_date", new Date())
+                    .setParameter("sync_date", LocalDateTime.now())
                     .setFlushMode(FlushMode.MANUAL)
                     .executeUpdate();
         }

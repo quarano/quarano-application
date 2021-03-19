@@ -1,4 +1,4 @@
-package quarano.sormas_integration.indexcase;
+package quarano.sormas_integration.person;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,14 +8,14 @@ import lombok.RequiredArgsConstructor;
 /**
  * @author Federico Grasso
  *
- * SORMAS Case District
+ * SORMAS Contact person model
  */
+
 @Data
 @RequiredArgsConstructor(staticName = "of")
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class SormasCaseDistrict {
+public class SormasContactCase {
     private String uuid;
-    private String caption;
 
     /**
      * Getters and setter
@@ -23,23 +23,11 @@ public class SormasCaseDistrict {
      * but re-defined to make properties accessible by MapStruct)
      */
 
-    public SormasCaseDistrict(String uuid){
-        this.uuid = uuid;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getCaption() {
-        return caption;
-    }
-
-    public void setCaption(String caption) {
-        this.caption = caption;
     }
 }

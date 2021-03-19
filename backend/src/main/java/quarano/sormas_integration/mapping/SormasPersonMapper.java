@@ -7,7 +7,6 @@ import org.mapstruct.factory.Mappers;
 import quarano.core.Address;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
-import quarano.core.ZipCode;
 import quarano.sormas_integration.person.SormasPerson;
 import quarano.sormas_integration.person.SormasPersonAddress;
 
@@ -26,7 +25,11 @@ public interface SormasPersonMapper {
     @Mapping(target = "phoneNumber", expression = "java(getPhoneNumber(source.getPhone()))")
     @Mapping(target = "mobilePhoneNumber", expression = "java(getPhoneNumber(source.getPhone()))")
     @Mapping(target = "dateOfBirth", expression = "java(getDateOfBirth(source))")
-    @Mapping(target = "address", expression = "java(getAddress(source))")
+    @Mapping(target = "street", expression = "java(getStreet(source.getAddress()))")
+    @Mapping(target = "city", expression = "java(getCity(source.getAddress()))")
+    @Mapping(target = "zipCode", expression = "java(getZipCode(source.getAddress()))")
+    @Mapping(target = "houseNumber", expression = "java(getHouseNumber(source.getAddress()))")
+    @Mapping(target = "address", expression = "java(null)")
     SormasPersonDto map(SormasPerson source);
 
     @Mapping(target = "uuid", source = "sormasUuid")
@@ -129,25 +132,19 @@ public interface SormasPersonMapper {
         return null;
     }
 
-    default Address getAddress(SormasPerson source){
-        try{
-            if(StringUtils.isNoneBlank(
-                    source.getAddress().getStreet(),
-                    source.getAddress().getCity(),
-                    source.getAddress().getPostalCode()
-            )
-            ) {
-                return new Address(
-                        source.getAddress().getStreet(),
-                        Address.HouseNumber.NONE,
-                        source.getAddress().getCity(),
-                        ZipCode.of(source.getAddress().getPostalCode())
-                );
-            }
-            return null;
-        }
-        catch (IllegalArgumentException ex){
-            return null;
-        }
+    default String getStreet(SormasPersonAddress address) {
+        return address.getStreet();
+    }
+
+    default String getCity(SormasPersonAddress address) {
+        return address.getCity();
+    }
+
+    default String getZipCode(SormasPersonAddress address) {
+        return address.getPostalCode();
+    }
+
+    default String getHouseNumber(SormasPersonAddress address) {
+        return address.getHouseNumber();
     }
 }
