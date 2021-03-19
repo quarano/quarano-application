@@ -44,9 +44,12 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_MARKUS = TrackedCaseIdentifier
 			.of(UUID.fromString("cc2ef69d-f12d-8874-975c-03ea69537d41"));
-	
+
 	public static final TrackedCaseIdentifier TRACKED_CASE_JULIAN = TrackedCaseIdentifier
 			.of(UUID.fromString("1da5769d-118c-8874-975c-1bea69537273"));	
+			
+	public static final TrackedCaseIdentifier TRACKED_CASE_THORSTEN = TrackedCaseIdentifier
+			.of(UUID.fromString("cadf636e-c7ba-495f-9a54-77e90a71100f"));
 
 	// security test cases
 	public static final TrackedCaseIdentifier TRACKED_CASE_SARAH = TrackedCaseIdentifier
@@ -90,6 +93,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var harry = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1);
 		var harriette = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1);
 		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);		
+		var thorsten = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON9_ID_DEP1);
 
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 		var sarah = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1);
@@ -98,7 +102,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var sylvia = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC5_ID_DEP1);
 		var steve = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC6_ID_DEP1);
 		var steffen = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC7_ID_DEP1);
-		var sunny = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1);
+		var sunny = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC8_ID_DEP1);		
 
 		var department1 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP1).orElseThrow();
 		var department2 = departments.findById(DepartmentDataInitializer.DEPARTMENT_ID_DEP2).orElseThrow();
@@ -173,7 +177,6 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));		
 			
 		// CASE Siggi
-
 		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)))
@@ -222,5 +225,16 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		cases.save(new TrackedCase(sylvia, CaseType.INDEX, department1) // s
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(9), LocalDate.now().plusWeeks(2).minusDays(9))))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(10)));
+
+		cases.save(new TrackedCase(thorsten, CaseType.INDEX, department1)
+				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(1), LocalDate.now().plusWeeks(2).minusDays(1)))
+				.setTestResult(TestResult.infected(LocalDate.now().minusDays(3)))
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(
+						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Chirurg im Klinikum Ludwigshafen")
+								.withContactToVulnerablePeople("Alterheim Totenruh")
+								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
+								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 	}
 }

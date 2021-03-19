@@ -45,13 +45,15 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON7_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("c53bb0c9-a007-43e6-851a-e5e711920d3c"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON8_ID_DEP1 = TrackedPersonIdentifier
-			.of(UUID.fromString("2105d200-e331-1dea-87d0-0242ac13ad71"));		
+			.of(UUID.fromString("2105d200-e331-1dea-87d0-0242ac13ad71"));
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON9_ID_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("caaf631e-c7ba-495f-9a54-77e90a71100f"));		
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("ee35d200-e221-11ea-87d0-0242ac130003"));
 
-	
+
 	// Persons for security tests
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("4bcb1da9-1e03-4ca0-9da1-f86d80aaa1ab"));
@@ -76,6 +78,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC8_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("ca5f631e-c7ba-495f-9a54-77e90a71100f"));
+
+
 
 	/**
 	 * A persona with all contact details submitted, ready to take the next steps in enrollment.
@@ -179,7 +183,6 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createSiggi() {
-
 		return new TrackedPerson(VALID_TRACKED_SEC1_ID_DEP1, "Siggi", "Seufert", EmailAddress.of("siggi@testtest.de"),
 				PhoneNumber.of("0621883322"), LocalDate.of(1980, 1, 1))
 						.setAddress(new Address("Baumstr.", HouseNumber.of("6"), "Mannheim", ZipCode.of("68309")));
@@ -266,6 +269,16 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 						.setAddress(new Address("Nebenstr.", HouseNumber.of("12"), "Mannheim", ZipCode.of("68199")))
 						.setLocale(Locale.GERMANY);
 	}	
+	 /** 
+	 * A persona without account created.
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createThorsten() {
+		return new TrackedPerson(VALID_TRACKED_PERSON9_ID_DEP1, "Thorsten", "Mehler", 
+				EmailAddress.of("ThorstenMehler@testtest.de"), PhoneNumber.of("0621703221"), LocalDate.of(1983, 5,8))
+					.setAddress(new Address("Blütenweg", HouseNumber.of("24"), "Mannheim", ZipCode.of("68199")));
+	}
 	
 	/*
 	 * (non-Javadoc)
@@ -298,6 +311,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
 		trackedPeople.save(createJulian());
+		trackedPeople.save(createThorsten());
 
 		log.debug("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}

@@ -51,6 +51,7 @@ class DiaryDataInitializer implements DataInitializer {
 		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);
 		
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
+		var thorsten = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON9_ID_DEP1);
 
 		log.debug("Start creating diary and contacts for test persons");
 
@@ -320,5 +321,25 @@ class DiaryDataInitializer implements DataInitializer {
 		diary3.setSymptoms(symptomsE3);
 
 		entries.updateDiaryEntry(diary3);
+
+		//TODO
+		// ==================== THORSTEN ==================
+		List<ContactPerson> contactsOfThorsten = new ArrayList<>();
+
+		var contactOfThorsten = new ContactPerson("Leon", "Duerr", ContactWays.ofEmailAddress("leond@test.de"));
+		contactOfThorsten.assignOwner(thorsten);
+		contactsOfThorsten.add(contactOfThorsten);
+
+		var contactOfThorsten2 = new ContactPerson("Anna", "Beike", ContactWays.ofEmailAddress("annabeike@mail.de"));
+		contactOfThorsten2.assignOwner(thorsten);
+		contactsOfThorsten.add(contactOfThorsten2);
+
+		contacts.saveAll(contactsOfThorsten);
+
+ 		DiaryEntry diaryThorsten = DiaryEntry.of(sameSlotYesterday, thorsten)
+		 		.setContacts(contactsOfThorsten)
+		 		.setBodyTemperature(BodyTemperature.of(39.7f))
+				.setSymptoms(symptomsE2);
+		entries.updateDiaryEntry(diaryThorsten); 
 	}
 }
