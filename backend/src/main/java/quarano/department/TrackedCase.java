@@ -79,6 +79,9 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	private Quarantine quarantine = null;
 
 	@Nullable
+	private @Getter @Setter String sormasUuid = null;
+
+	@Nullable
 	@Setter(AccessLevel.NONE) //
 	@Column(name = "quarantine_last_modified") //
 	private LocalDateTime quarantineLastModified = null;
