@@ -44,6 +44,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 
 	public static final TrackedCaseIdentifier TRACKED_CASE_MARKUS = TrackedCaseIdentifier
 			.of(UUID.fromString("cc2ef69d-f12d-8874-975c-03ea69537d41"));
+	
+	public static final TrackedCaseIdentifier TRACKED_CASE_JULIAN = TrackedCaseIdentifier
+			.of(UUID.fromString("1da5769d-118c-8874-975c-1bea69537273"));	
 
 	// security test cases
 	public static final TrackedCaseIdentifier TRACKED_CASE_SARAH = TrackedCaseIdentifier
@@ -86,6 +89,7 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var jessica = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
 		var harry = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1);
 		var harriette = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1);
+		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);		
 
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 		var sarah = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1);
@@ -156,6 +160,18 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
+		// CASE Julian
+		LocalDate startJ = LocalDate.now().minusDays(2);
+		LocalDate endJ = start.plusWeeks(2);		
+		cases.save(new TrackedCase(TRACKED_CASE_JULIAN, julian, CaseType.CONTACT, department1, null)
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, null)
+								.withoutSymptoms()
+								.withoutContactToVulnerablePeople()
+								.setFamilyDoctor("Dr. Kleiss, Mannheimer. 34")
+								.setGuessedOriginOfInfection("privat"))
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));		
+			
 		// CASE Siggi
 
 		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null)

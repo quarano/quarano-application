@@ -48,6 +48,8 @@ class DiaryDataInitializer implements DataInitializer {
 		var jessica = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
 		var gustav = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1);
 		var nadine = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1);
+		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);
+		
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 
 		log.debug("Start creating diary and contacts for test persons");
@@ -101,6 +103,28 @@ class DiaryDataInitializer implements DataInitializer {
 		entry3.setSymptoms(symptomsE3);
 
 		entries.updateDiaryEntry(entry3);
+		
+		
+		// ==================== JULIAN ==================
+		List<ContactPerson> contactsOfJulian = new ArrayList<>();
+
+		var contact1OfJulian = new ContactPerson("Clara", "Chess", ContactWays.ofEmailAddress("clara@testtest.de"));
+		contact1OfJulian.assignOwner(julian);
+		contactsOfJulian.add(contact1OfJulian);
+
+		contacts.saveAll(contactsOfJulian);
+
+		// generate diary entries for person 3
+		DiaryEntry entry1Julian = DiaryEntry.of(sameSlotYesterday, julian).setContacts(contactsOfJulian);
+		// add 'husten'
+		List<Symptom> symptomsOfJulian = new ArrayList<>();
+		symptomsE1.add(cough);
+		entry1Julian.setSymptoms(symptomsOfJulian);
+		entry1Julian.setBodyTemperature(BodyTemperature.of(36.2f));
+
+		entries.updateDiaryEntry(entry1Julian);
+
+		
 
 		// ==================== SIGGI ==================
 		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
