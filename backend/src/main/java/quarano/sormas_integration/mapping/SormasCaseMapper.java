@@ -4,12 +4,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import quarano.department.TrackedCase;
-import quarano.sormas_integration.indexcase.SormasCase;
-import quarano.sormas_integration.indexcase.SormasCaseDistrict;
-import quarano.sormas_integration.indexcase.SormasCasePerson;
+import quarano.sormas_integration.common.SormasReportingUser;
+import quarano.sormas_integration.indexcase.*;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
@@ -31,11 +31,14 @@ public interface SormasCaseMapper {
 
     @Mapping(target = "uuid", expression = "java(getUUID(source))")
     @Mapping(target = "person", expression = "java(getPerson(person))")
-    @Mapping(target = "district", expression = "java(getDistrict(source))")
+    @Mapping(target = "district", expression = "java(getDistrict(district))")
+    @Mapping(target = "region", expression = "java(getRegion(district))")
+    @Mapping(target = "healthFacility", expression = "java(getHealthFacility(district))")
     @Mapping(target = "reportDate", expression = "java(getReportDate(source))")
     @Mapping(target = "quarantineTo", expression = "java(getQuarantineTo(source))")
     @Mapping(target = "quarantineFrom", expression = "java(getQuarantineFrom(source))")
-    SormasCase map(TrackedCase source, TrackedPerson person);
+    @Mapping(target = "reportingUser", expression = "java(getReportingUser(reportingUser))")
+    SormasCase map(TrackedCase source, TrackedPerson person, String reportingUser, String district, String region, String healthFacility);
 
     default String getUUID(TrackedCase source){
         return source.getSormasUuid();
@@ -49,28 +52,55 @@ public interface SormasCaseMapper {
         );
     }
 
-    default SormasCaseDistrict getDistrict(TrackedCase source){
+    default SormasCaseDistrict getDistrict(String district){
         return new SormasCaseDistrict(
-                UUID.randomUUID().toString(),
-                source.getDepartment().getName()
+                district
         );
     }
 
-    default Date getQuarantineTo(TrackedCase source){
-        return convertToDateViaInstant(source.getQuarantine().getTo());
+    default SormasCaseRegion getRegion(String region){
+        return new SormasCaseRegion(
+                region
+        );
     }
 
-    default Date getQuarantineFrom(TrackedCase source){
-        return convertToDateViaInstant(source.getQuarantine().getFrom());
+    default SormasCaseHealthFacility getHealthFacility(String healthFacility){
+        return new SormasCaseHealthFacility(
+                healthFacility
+        );
     }
 
-    default Date getReportDate(TrackedCase source){
-        return convertToDateViaInstant(source.getTestResult().getTestDate());
+    default LocalDateTime getQuarantineTo(TrackedCase source){
+        if(source.getQuarantine() != null){
+            return convertToDateViaInstant(source.getQuarantine().getTo());
+        }
+
+        return null;
     }
 
-    default Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
+    default LocalDateTime getQuarantineFrom(TrackedCase source){
+        if(source.getQuarantine() != null){
+            return convertToDateViaInstant(source.getQuarantine().getFrom());
+        }
+
+        return null;
+    }
+
+    default LocalDateTime getReportDate(TrackedCase source){
+        if(source.getTestResult() != null){
+            return convertToDateViaInstant(source.getTestResult().getTestDate());
+        }
+
+        return null;
+    }
+
+    default LocalDateTime convertToDateViaInstant(LocalDate dateToConvert) {
+        return LocalDateTime.from(dateToConvert.atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
+    }
+
+    default SormasReportingUser getReportingUser(String reportingUser){
+        return new SormasReportingUser(reportingUser);
     }
 }

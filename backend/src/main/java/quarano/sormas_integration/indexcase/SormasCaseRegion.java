@@ -1,9 +1,9 @@
 package quarano.sormas_integration.indexcase;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+        import lombok.AccessLevel;
+        import lombok.AllArgsConstructor;
+        import lombok.Data;
+        import lombok.RequiredArgsConstructor;
 
 /**
  * @author Federico Grasso
@@ -13,9 +13,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor(staticName = "of")
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class SormasCaseDistrict {
+public class SormasCaseRegion {
     private String uuid;
-    private String caption;
 
     /**
      * Getters and setter
@@ -23,23 +22,11 @@ public class SormasCaseDistrict {
      * but re-defined to make properties accessible by MapStruct)
      */
 
-    public SormasCaseDistrict(String uuid){
-        this.uuid = uuid;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getCaption() {
-        return caption;
-    }
-
-    public void setCaption(String caption) {
-        this.caption = caption;
     }
 }

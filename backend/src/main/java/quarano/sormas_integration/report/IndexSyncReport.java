@@ -4,7 +4,8 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * @author Federico Grasso
@@ -20,6 +21,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 public class IndexSyncReport {
+    @Id
+    @NonNull
+    private UUID uuid;
 
     @NonNull
     private Integer personsNumber;
@@ -27,10 +31,8 @@ public class IndexSyncReport {
     @NonNull
     private Integer casesNumber;
 
-    @Id
-    @Temporal(TemporalType.TIMESTAMP)
     @NonNull
-    private Date syncDate;
+    private LocalDateTime syncDate;
 
     @NonNull
     private Long syncTime;
