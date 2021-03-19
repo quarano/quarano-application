@@ -66,6 +66,9 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	private @Getter @Nullable Locale locale;
 
+	@Nullable
+	private @Getter @Setter String sormasUuid = null;
+
 	@OneToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
