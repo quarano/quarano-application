@@ -22,6 +22,9 @@ public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson
 
 	Optional<TrackedPerson> findByAccount(Account account);
 
+	@Query("select p from TrackedPerson p where p.sormasUuid = :sormasUuid")
+	Optional<TrackedPerson> findBySormasUuid(String sormasUuid);
+
 	/**
 	 * Returns the preferred {@link Locale} for the {@link TrackedPerson} with the given {@link AccountIdentifier}.
 	 *
