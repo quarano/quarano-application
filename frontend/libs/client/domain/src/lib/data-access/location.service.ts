@@ -2,7 +2,7 @@ import { LocationDto } from './../model/location';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { API_URL } from '@qro/shared/util-data-access';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
@@ -12,8 +12,7 @@ export class LocationService {
   constructor(private httpClient: HttpClient, @Inject(API_URL) private apiUrl: string) {}
 
   getLocations(): Observable<LocationDto[]> {
-    return of([]);
-    // return this.httpClient.get<LocationDto[]>(`${this.apiUrl}/locations`).pipe(shareReplay());
+    return this.httpClient.get<LocationDto[]>(`${this.apiUrl}/locations`).pipe(shareReplay());
   }
 
   createLocation(location: LocationDto): Observable<LocationDto> {
