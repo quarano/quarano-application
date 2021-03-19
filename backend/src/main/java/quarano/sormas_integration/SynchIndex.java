@@ -20,10 +20,12 @@ import quarano.core.web.MapperWrapper;
 import quarano.department.CaseType;
 import quarano.department.TrackedCase;
 import quarano.department.TrackedCaseRepository;
+import quarano.sormas_integration.backlog.IndexSyncBacklogRepository;
 import quarano.sormas_integration.indexcase.SormasCase;
 import quarano.sormas_integration.indexcase.SormasCasePerson;
 import quarano.sormas_integration.mapping.SormasCaseDto;
 import quarano.sormas_integration.mapping.SormasCaseMapper;
+import quarano.sormas_integration.mapping.SormasPersonDto;
 import quarano.sormas_integration.mapping.SormasPersonMapper;
 import quarano.sormas_integration.person.SormasPerson;
 import quarano.sormas_integration.report.IndexSyncReport;
@@ -54,6 +56,7 @@ public class SynchIndex {
     private final @NonNull TrackedPersonRepository trackedPersons;
     private final @NonNull DepartmentRepository departments;
     private final @NonNull IndexSyncReportRepository reports;
+    private final @NonNull IndexSyncBacklogRepository backlog;
     private HashMap<String, TrackedPerson> personsFromQuarano = new HashMap<>();
     private HashMap<String, Department> departmentsFromQuarano = new HashMap<>();
 
@@ -121,7 +124,22 @@ public class SynchIndex {
                     syncCasesFromSormas(sormasClient, since, newReport);
                 }
                 else if(master.equals("quarano")) {
+                    // if reports table is empty
+                    if(reportsCount == 0){
+                        // start an initial synchronization
+                        initialSynchFromQuarano(sormasClient);
+                    }
+                    // else
+                    else{
+                        // start a standard synchronization
+                        syncCasesFromQuarano(sormasClient, newReport.getSyncDate());
+                    }
 
+                    // Save report with success status
+                    newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
+                    newReport.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
+                    reports.save(newReport);
+                    log.info("Report saved");
                 }
                 else{
                     // Save report with success status
@@ -385,5 +403,145 @@ public class SynchIndex {
         }
 
         return trackedPerson;
+    }
+
+    // Initial synchronization from Quarano
+    private void initialSynchFromQuarano(SormasClient sormasClient) {
+
+        // Get first tracked persons page
+        Page<TrackedPerson> personsPage = trackedPersons.findAll(PageRequest.of(0, 1000));
+
+        int pages = personsPage.getTotalPages();
+
+        // for every page...
+        for(int i = 0; i < pages; i++){
+            List<TrackedPerson> persons = personsPage.stream().collect(Collectors.toList());
+
+            List<TrackedPerson> indexPersons = new ArrayList<>();
+            List<Tuple2<TrackedCase, TrackedPerson>> indexCases = new ArrayList<>();
+
+            // for every tracked person...
+            for(int j = 0; j < persons.size(); j++){
+                TrackedPerson trackedPerson = persons.get(j);
+
+                // Search Tracked Case related to person
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+
+                if(trackedCaseQuery.isPresent()){
+                    TrackedCase trackedCase = trackedCaseQuery.get();
+                    // if case is of type INDEX
+                    if(trackedCase.isIndexCase()){
+                        // synchronize person
+                        indexPersons.add(trackedPerson);
+                        indexCases.add(new Tuple2<>(trackedCase, trackedPerson));
+                    }
+                }
+            }
+
+            synchronizePersons(sormasClient, indexPersons);
+            synchronizeCases(sormasClient, indexCases);
+
+            if(i + 1 < pages){
+                personsPage = trackedPersons.findAll(PageRequest.of(i + 1, 1000));
+            }
+        }
+    }
+
+    private void syncCasesFromQuarano(SormasClient sormasClient, Date synchDate) {
+        // Determine IDs to sync
+        ArrayList<UUID> entities = backlog.findBySyncDate(synchDate);
+
+        List<TrackedPerson> indexPersons = new ArrayList<>();
+        List<Tuple2<TrackedCase, TrackedPerson>> indexCases = new ArrayList<>();
+
+        for(int i = 0; i < entities.size(); i++){
+            UUID entity = entities.get(i);
+
+            // Fetch person from Database
+            Optional<TrackedPerson> trackedPersonQuery = trackedPersons.findById(TrackedPerson.TrackedPersonIdentifier.of(entity));
+
+            if(trackedPersonQuery.isPresent()){
+
+                TrackedPerson trackedPerson = trackedPersonQuery.get();
+
+                // Search Tracked Case related to person
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+
+                if(trackedCaseQuery.isPresent()){
+
+                    TrackedCase trackedCase = trackedCaseQuery.get();
+                    // if case is of type INDEX
+                    if(trackedCase.isIndexCase()){
+
+                        indexPersons.add(trackedPerson);
+                        indexCases.add(new Tuple2<>(trackedCase, trackedPerson));
+                    }
+                }
+            }
+        }
+
+        // synchronize persons
+        List<TrackedPerson> successPersons = synchronizePersons(sormasClient, indexPersons);
+        // synchronize cases
+        synchronizeCases(sormasClient, indexCases);
+
+        successPersons.forEach(person -> {
+            // Delete from backlog
+            backlog.deleteAfterSynchronization(UUID.fromString(person.getId().toString()), synchDate);
+        });
+    }
+
+    private List<TrackedPerson> synchronizePersons(SormasClient sormasClient, List<TrackedPerson> persons){
+        List<SormasPerson> sormasPersons = new ArrayList<>();
+        List<TrackedPerson> successPersons = new ArrayList<>();
+
+        persons.forEach(person -> {
+            if(StringUtils.isBlank(person.getSormasUuid())){
+                // Create Sormas ID
+                person.setSormasUuid(UUID.randomUUID().toString());
+            }
+
+            // Map TrackedPerson to SormasPerson
+            SormasPersonDto personDto = mapper.map(person, SormasPersonDto.class);
+            SormasPerson sormasPerson = SormasPersonMapper.INSTANCE.map(personDto);
+
+            sormasPersons.add(sormasPerson);
+        });
+
+        // Push to Sormas
+        String[] response = sormasClient.postPersons(sormasPersons).block();
+
+        for(int i = 0; i < response.length; i++){
+            if(response[i].equals("OK")){
+                trackedPersons.save(persons.get(i));
+                successPersons.add(persons.get(i));
+            }
+        }
+
+        return successPersons;
+    }
+
+    private void synchronizeCases(SormasClient sormasClient, List<Tuple2<TrackedCase, TrackedPerson>> indexCases){
+        List<SormasCase> sormasCases = new ArrayList<>();
+
+        indexCases.forEach(caze -> {
+            if(StringUtils.isBlank(caze._1.getSormasUuid())){
+                // Create Sormas ID
+                caze._1.setSormasUuid(UUID.randomUUID().toString());
+            }
+            // Map TrackedCase to SormasCase
+            SormasCase sormasCase = SormasCaseMapper.INSTANCE.map(caze._1, caze._2);
+
+            sormasCases.add(sormasCase);
+        });
+
+        // Push to Sormas
+        String[] response = sormasClient.postCases(sormasCases).block();
+
+        for(int i = 0; i < response.length; i++){
+            if(response[i].equals("OK")){
+                trackedCases.save(indexCases.get(i)._1());
+            }
+        }
     }
 }
