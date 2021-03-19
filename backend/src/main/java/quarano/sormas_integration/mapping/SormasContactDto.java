@@ -1,5 +1,10 @@
 package quarano.sormas_integration.mapping;
 
+/**
+ * @author Federico Grasso
+ *
+ * Sormas contact Dto class
+ */
 public class SormasContactDto {
     private String firstName;
     private String lastName;
