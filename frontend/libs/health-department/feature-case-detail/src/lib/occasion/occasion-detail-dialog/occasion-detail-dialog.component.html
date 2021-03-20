@@ -137,14 +137,22 @@
       <input formControlName="city" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}" />
     </mat-form-field>
 
-    <mat-form-field class="additional-info">
+    <!--    <mat-form-field class="additional-info">
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
       <input
         formControlName="additionalInformation"
         matInput
         placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}"
       />
-    </mat-form-field>
+    </mat-form-field>-->
+
+    <fieldset class="additional-info">
+      <legend>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</legend>
+
+      <mat-form-field class="full-width">
+        <textarea matInput formControlName="additionalInformation" type="text"></textarea>
+      </mat-form-field>
+    </fieldset>
 
     <mat-form-field *ngIf="initialOccasion?.occasionCode">
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.CODE' | translate }}</mat-label>
