@@ -29,47 +29,39 @@ export class OccasionDetailDialogComponent {
   @Input()
   occasion(occasion: OccasionDto) {
     this.initialOccasion = occasion;
-    this.initializeEventForm();
     this.initializeTimeForm();
-    this.mapOccasionToForm();
-    this.occasionFormGroup.valueChanges.subscribe((v) => console.log(this.occasionFormGroup));
+    this.occasionFormGroup = this.mapOccasionToForm();
+    this.initializeValidators();
+    this.occasionFormGroup.controls.zipCode.valueChanges.subscribe((v) => console.log(v));
   }
 
   constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {}
 
-  get startTime() {
-    const hours = this.initialOccasion?.start?.getHours().toString();
-    let minutes = this.initialOccasion?.start?.getMinutes().toString();
-    minutes = minutes === '0' ? '00' : minutes;
-    return hours.concat(':').concat(minutes);
-  }
-
-  get endTime() {
-    const hours = this.initialOccasion?.end?.getHours().toString();
-    let minutes = this.initialOccasion?.end?.getMinutes().toString();
-    minutes = minutes === '0' ? '00' : minutes;
-    return hours.concat(':').concat(minutes);
+  prepareZeroHours(timeString: string) {
+    return timeString === '0' ? '00' : timeString;
   }
 
   private initializeTimeForm() {
-    const startHours = this.initialOccasion?.start?.getHours();
-    const startMinutes = this.initialOccasion?.start?.getMinutes();
-    const startTime = '';
-    if (startHours && startMinutes) {
-      startTime.concat(startHours.toString()).concat(':').concat(startMinutes.toString());
-    }
+    const endHours = this.prepareZeroHours(this.initialOccasion?.end?.getHours().toString());
+    const endMinutes = this.prepareZeroHours(this.initialOccasion?.end?.getMinutes().toString());
+    const endTime = endHours.concat(':').concat(endMinutes);
 
-    const endHours = this.initialOccasion?.end?.getHours();
-    const endMinutes = this.initialOccasion?.end?.getMinutes();
-    const endTime = '';
-    if (endHours && endMinutes) {
-      endTime.concat(endHours.toString()).concat(':').concat(endMinutes.toString());
-    }
+    const startHours = this.prepareZeroHours(this.initialOccasion?.start?.getHours().toString());
+    const startMinutes = this.prepareZeroHours(this.initialOccasion?.start?.getMinutes().toString());
+    const startTime = startHours.concat(':').concat(startMinutes);
 
     this.timeGroup = new FormGroup({
-      startTime: new FormControl(this.startTime),
-      endTime: new FormControl(this.endTime),
+      startTime: new FormControl(startTime, { validators: [Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')] }),
+      endTime: new FormControl(endTime, { validators: [Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')] }),
     });
+  }
+
+  setStartTime(event: any) {
+    this.timeGroup.controls.startTime.setValue(event);
+  }
+
+  setEndTime(event: any) {
+    this.timeGroup.controls.endTime.setValue(event);
   }
 
   close() {
@@ -91,11 +83,11 @@ export class OccasionDetailDialogComponent {
     return date;
   }
 
-  private initializeEventForm() {
-    this.mapOccasionToForm();
+  private initializeValidators() {
     this.occasionFormGroup.controls.title.setValidators([Validators.required]);
     this.occasionFormGroup.controls.start.setValidators([Validators.required]);
     this.occasionFormGroup.controls.end.setValidators([Validators.required]);
+    this.occasionFormGroup.controls.zipCode.setValidators([Validators.pattern('[0-9]{5}')]);
   }
 
   private mapFormToOccasion() {
@@ -118,7 +110,7 @@ export class OccasionDetailDialogComponent {
     };
   }
 
-  private mapOccasionToForm() {
+  private mapOccasionToForm(): FormGroup {
     const initialData = {
       additionalInformation: this.initialOccasion?.additionalInformation,
       end: this.initialOccasion?.end,
@@ -133,6 +125,6 @@ export class OccasionDetailDialogComponent {
       visitorGroups: this.initialOccasion?.visitorGroups,
       contactPerson: this.initialOccasion?.contactPerson,
     };
-    return (this.occasionFormGroup = this.builder.group(initialData));
+    return this.builder.group(initialData);
   }
 }
