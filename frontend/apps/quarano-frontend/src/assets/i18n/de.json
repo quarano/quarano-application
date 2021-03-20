@@ -427,7 +427,6 @@
       "OK": "OK",
       "ZEIT_BIS": "Uhrzeit bis",
       "ZEIT_VON": "Uhrzeit von",
-      "PFLICHTFELD": "Dies ist ein Pflichtfeld",
       "NEU": "Ereignis Details",
       "NAME": "Name",
       "VON": "Startdatum",
@@ -444,7 +443,12 @@
       "STADT": "Stadt",
       "ZIP": "PLZ",
       "NUMMER": "Hausnummer",
-      "CODE": "Ereignis Code"
+      "CODE": "Ereignis Code",
+      "ERROR": {
+        "PFLICHTFELD": "Dies ist ein Pflichtfeld",
+        "ZEITFORMAT": "Benötigtes Format hh:mm (20:15)",
+        "ZIP": "Postleitzahl besteht aus sechs Ziffern"
+      }
     }
   }
 }
