@@ -82,6 +82,7 @@
         {{ type === ClientType.Index ? 'Falldaten' : 'Stammdaten' }}
       </a>
       <a
+        data-cy="case-detail-actions-link"
         mat-tab-link
         [routerLink]="['actions']"
         routerLinkActive
