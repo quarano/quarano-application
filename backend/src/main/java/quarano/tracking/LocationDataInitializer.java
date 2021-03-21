@@ -26,7 +26,13 @@ public class LocationDataInitializer implements DataInitializer {
 
     public static Location createFussballplatzLocation() {
         Address address = new Address("Am Sportplatz", Address.HouseNumber.of("1"), "Musterstadt", ZipCode.of("12345"));
-        return new Location("Sportplatz 01", "Michael Mustermann", EmailAddress.of("praesident@sportvereinnulleins.de"), PhoneNumber.of("0918272711"), "Auf dem Fussballplatz").setAddress(address);
+
+        return new Location("Sportplatz 01")
+                .setAddress(address)
+                .setComment("Auf dem Fussballplatz")
+                .setContactPersonName("Michael Mustermann")
+                .setContactPersonEmail(EmailAddress.of("praesident@sportvereinnulleins.de"))
+                .setContactPersonPhone(PhoneNumber.of("0918272711"));
     }
 
     @Override

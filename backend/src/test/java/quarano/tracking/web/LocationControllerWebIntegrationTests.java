@@ -32,7 +32,6 @@ class LocationControllerWebIntegrationTests {
 
 	private final MockMvc mvc;
 	private final ObjectMapper mapper;
-	private final MessageSourceAccessor messages;
 
 	@Test
 	void addLocationSuccess() throws Exception {
@@ -62,6 +61,44 @@ class LocationControllerWebIntegrationTests {
 		assertThat(document.read("$.contactPerson.contactPersonPhone", String.class)).isEqualTo("0918272711");
 		assertThat(document.read("$.city", String.class)).isEqualTo("Musterstadt");
 		assertThat(document.read("$.comment", String.class)).isEqualTo("Auf dem Fussballplatz");
+	}
+
+	@Test
+	void addLocationOnlyMandatorySuccess() throws Exception {
+
+		var payload = new LocationDto();
+		payload.setName("Sportplatz 01");
+		payload.setCity("Musterstadt");
+		payload.setZipCode("12345");
+
+
+		String response = mvc.perform(post("/locations")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.city", String.class)).isEqualTo("Musterstadt");
+		assertThat(document.read("$.name", String.class)).isEqualTo("Sportplatz 01");
+	}
+
+	@Test
+	void addLocationEmptyValues() throws Exception {
+
+		var payload = new LocationDto();
+
+		String response = mvc.perform(post("/locations")
+				.content(mapper.writeValueAsString(payload))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(response);
+
+		assertThat(document.read("$.city", String.class)).isEqualTo("Bitte geben Sie eine Stadt an!");
+		assertThat(document.read("$.name", String.class)).isEqualTo("Bitte geben Sie einen Namen an!");
 	}
 
 	@Test

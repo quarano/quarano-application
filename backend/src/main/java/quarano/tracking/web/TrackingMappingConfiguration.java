@@ -1,5 +1,6 @@
 package quarano.tracking.web;
 
+import quarano.core.Address;
 import quarano.core.EmailAddress;
 import quarano.core.PhoneNumber;
 import quarano.core.web.MappingCustomizer;
@@ -151,8 +152,15 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 		mapper.typeMap(LocationDto.class, Location.class).setProvider(request -> {
 
 			var dto = (LocationDto) request.getSource();
+			Location location = new Location(dto.getName());
+			if(dto.getContactPerson() != null){
+				location.setContactPersonName(dto.getContactPerson().getContactPersonName());
+				location.setContactPersonEmail(EmailAddress.ofNullable(dto.getContactPerson().getContactPersonEmail()));
+				location.setContactPersonPhone(PhoneNumber.ofNullable(dto.getContactPerson().getContactPersonPhone()));
+			}
+			location.setComment(dto.getComment());
 
-			return new Location(dto.getName(), dto.getContactPerson().getContactPersonName(), EmailAddress.ofNullable(dto.getContactPerson().getContactPersonEmail()), PhoneNumber.ofNullable(dto.getContactPerson().getContactPersonPhone()), dto.getComment());
+			return location;
 
 		}).addMappings(it -> {
 
@@ -162,12 +170,32 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 			it.<ZipCode> map(LocationDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
 		});
 
-		mapper.typeMap(Location.class, LocationDto.class).setProvider(request -> {
+		mapper.typeMap(Location.class, LocationDto.class).setPreConverter(context -> {
 
-			var source = (Location) request.getSource();
-			LocationDto.LocationContactDto locationContactDto = new LocationDto.LocationContactDto(source.getContactPersonName(), source.getContactPersonPhone().toString(), source.getContactPersonEmail().toString());
-			return new LocationDto(source.getId(), source.getName(), locationContactDto, source.getAddress().getStreet(), source.getAddress().getHouseNumber().toString(), source.getAddress().getZipCode().toString(), source.getAddress().getCity(), source.getComment());
+			LocationDto destination = context.getDestination();
+			Location location = context.getSource();
+			destination.setName(location.getName());
+			destination.setComment(location.getComment());
 
+			LocationDto.LocationContactDto contactPersonDto = new LocationDto.LocationContactDto();
+			contactPersonDto.setContactPersonName(location.getContactPersonName());
+			if(location.getContactPersonEmail() != null){
+				contactPersonDto.setContactPersonEmail(location.getContactPersonEmail().toString());
+			}
+
+			if(location.getContactPersonPhone() != null){
+				contactPersonDto.setContactPersonPhone(location.getContactPersonPhone().toString());
+			}
+			destination.setContactPerson(contactPersonDto);
+
+			return destination;
+
+		}).addMappings(it -> {
+
+			it.map(source -> source.getAddress().getStreet(), LocationDto::setStreet);
+			it.map(source -> source.getAddress().getZipCode(), LocationDto::setZipCode);
+			it.map(source -> source.getAddress().getCity(), LocationDto::setCity);
+			it.map(source -> source.getAddress().getHouseNumber(), LocationDto::setHouseNumber);
 		});
 
 	}

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -40,11 +41,11 @@ public class LocationDto {
 	@Getter(onMethod = @__(@JsonProperty(access = JsonProperty.Access.READ_ONLY)))
 	private Location.LocationIdentifier id;
 
-	private String name;
+	private @NotEmpty String name;
 	private LocationContactDto contactPerson;
 	private @Pattern(regexp = Strings.STREET) String street;
 	private @Pattern(regexp = Strings.HOUSE_NUMBER) String houseNumber;
-	private @Pattern(regexp = ZipCode.PATTERN) String zipCode;
+	private @Pattern(regexp = ZipCode.PATTERN) @NotEmpty String zipCode;
 	private @Pattern(regexp = Strings.CITY) @NotEmpty String city;
 	private String comment;
 
