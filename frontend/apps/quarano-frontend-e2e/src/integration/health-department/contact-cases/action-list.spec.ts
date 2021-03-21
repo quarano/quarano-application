@@ -2,21 +2,28 @@
 
 describe('health-department contact cases action-list', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/hd/actions', (req) => {
-      if (req.url.endsWith('/hd/actions')) {
-        req.alias = 'allActions';
-      } else {
-        req.alias = 'userAction';
-      }
-    });
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/actions$/,
+    }).as('allActions');
+
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/actions\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/,
+    }).as('userAction');
+
     cy.intercept('GET', '/user/me').as('me');
-    cy.intercept('GET', '/hd/cases', (req) => {
-      if (req.url.endsWith('/hd/cases/')) {
-        req.alias = 'allCases';
-      } else {
-        req.alias = 'specificCase';
-      }
-    });
+
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/$/,
+    }).as('allCases');
+
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/,
+    }).as('specificCase');
+
     cy.intercept('PUT', '/hd/actions/*/resolve').as('updateCaseActions');
 
     cy.logInAgent();
