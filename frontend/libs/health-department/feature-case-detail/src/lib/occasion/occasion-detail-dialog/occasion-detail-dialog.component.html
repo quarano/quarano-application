@@ -40,16 +40,16 @@
       }}</mat-error>
     </mat-form-field>
 
-    <div [formGroup]="timeGroup">
+    <div>
       <mat-form-field>
         <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}</mat-label>
         <div class="timepicker-input">
-          <input matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="startTime" />
+          <input matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="timeStart" />
           <button mat-icon-button (click)="fromTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
         </div>
-        <mat-error *ngIf="timeGroup?.controls?.startTime?.errors?.pattern">{{
+        <mat-error *ngIf="occasionFormGroup?.controls?.timeStart?.errors?.pattern">{{
           'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZEITFORMAT' | translate
         }}</mat-error>
       </mat-form-field>
@@ -61,7 +61,7 @@
         [disableAnimation]="true"
         #fromTime
         [format]="24"
-        (timeSet)="setStartTime($event)"
+        (timeSet)="setPickedStartTime($event)"
       ></ngx-material-timepicker>
     </div>
 
@@ -81,16 +81,16 @@
       }}</mat-error>
     </mat-form-field>
 
-    <div [formGroup]="timeGroup">
+    <div>
       <mat-form-field>
         <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}</mat-label>
         <div class="timepicker-input">
-          <input disabled matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="endTime" />
+          <input disabled matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="timeEnd" />
           <button mat-icon-button (click)="toTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
         </div>
-        <mat-error *ngIf="timeGroup?.controls?.endTime?.errors?.pattern">{{
+        <mat-error *ngIf="occasionFormGroup?.controls?.timeEnd?.errors?.pattern">{{
           'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZEITFORMAT' | translate
         }}</mat-error>
       </mat-form-field>
@@ -102,7 +102,7 @@
         [disableAnimation]="true"
         [format]="24"
         #toTime
-        (timeSet)="setEndTime($event)"
+        (timeSet)="setPickedEndTime($event)"
       ></ngx-material-timepicker>
     </div>
 
@@ -130,21 +130,15 @@
       <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.pattern">{{
         'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZIP' | translate
       }}</mat-error>
+      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.required">{{
+        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.PFLICHTFELD' | translate
+      }}</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}</mat-label>
       <input formControlName="city" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}" />
     </mat-form-field>
-
-    <!--    <mat-form-field class="additional-info">
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</mat-label>
-      <input
-        formControlName="additionalInformation"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}"
-      />
-    </mat-form-field>-->
 
     <fieldset class="additional-info">
       <legend>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</legend>

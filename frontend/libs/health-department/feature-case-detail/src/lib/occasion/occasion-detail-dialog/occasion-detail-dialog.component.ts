@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
@@ -9,59 +9,64 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
   templateUrl: './occasion-detail-dialog.component.html',
   styleUrls: ['./occasion-detail-dialog.component.scss'],
 })
-export class OccasionDetailDialogComponent {
-  occasionFormGroup: FormGroup;
-  timeGroup: FormGroup;
+export class OccasionDetailDialogComponent implements OnInit {
   initialOccasion: OccasionDto;
-
-  timepickerTheme: NgxMaterialTimepickerTheme = {
-    container: {
-      buttonColor: '#5ce1e6',
-    },
-    clockFace: {
-      clockHandColor: '#5ce1e6',
-    },
-    dial: {
-      dialBackgroundColor: '#5ce1e6',
-    },
-  };
+  occasionFormGroup: FormGroup;
+  timepickerTheme: NgxMaterialTimepickerTheme;
 
   @Input()
   occasion(occasion: OccasionDto) {
     this.initialOccasion = occasion;
-    this.initializeTimeForm();
+  }
+
+  constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {
+    this.initialOccasion = {
+      additionalInformation: '',
+      address: undefined,
+      contactPerson: '',
+      end: undefined,
+      occasionCode: '',
+      start: undefined,
+      title: '',
+      trackedCaseId: '',
+      visitorGroups: [],
+    };
+    this.occasionFormGroup = this.builder.group(this.mapOccasionToForm());
+    this.timepickerTheme = {
+      container: {
+        buttonColor: '#5ce1e6',
+      },
+      clockFace: {
+        clockHandColor: '#5ce1e6',
+      },
+      dial: {
+        dialBackgroundColor: '#5ce1e6',
+      },
+    };
+  }
+
+  ngOnInit() {
     this.occasionFormGroup = this.mapOccasionToForm();
     this.initializeValidators();
-    this.occasionFormGroup.controls.zipCode.valueChanges.subscribe((v) => console.log(v));
   }
 
-  constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {}
-
-  prepareZeroHours(timeString: string) {
-    return timeString === '0' ? '00' : timeString;
+  private mapTimestampToString(timestamp: Date) {
+    if (!timestamp) {
+      return '';
+    }
+    let timestampHour = timestamp?.getHours()?.toString();
+    timestampHour === '0' ? (timestampHour = '00') : (timestampHour = '0');
+    let timestampMinute = timestamp?.getMinutes()?.toString();
+    timestampMinute === '0' ? (timestampMinute = '00') : (timestampMinute = '0');
+    return timestampHour.concat(':').concat(timestampMinute);
   }
 
-  private initializeTimeForm() {
-    const endHours = this.prepareZeroHours(this.initialOccasion?.end?.getHours().toString());
-    const endMinutes = this.prepareZeroHours(this.initialOccasion?.end?.getMinutes().toString());
-    const endTime = endHours.concat(':').concat(endMinutes);
-
-    const startHours = this.prepareZeroHours(this.initialOccasion?.start?.getHours().toString());
-    const startMinutes = this.prepareZeroHours(this.initialOccasion?.start?.getMinutes().toString());
-    const startTime = startHours.concat(':').concat(startMinutes);
-
-    this.timeGroup = new FormGroup({
-      startTime: new FormControl(startTime, { validators: [Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')] }),
-      endTime: new FormControl(endTime, { validators: [Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')] }),
-    });
+  setPickedStartTime(event: string) {
+    this.occasionFormGroup.controls.timeStart.setValue(event);
   }
 
-  setStartTime(event: any) {
-    this.timeGroup.controls.startTime.setValue(event);
-  }
-
-  setEndTime(event: any) {
-    this.timeGroup.controls.endTime.setValue(event);
+  setPickedEndTime(event: string) {
+    this.occasionFormGroup.controls.timeEnd.setValue(event);
   }
 
   close() {
@@ -72,14 +77,18 @@ export class OccasionDetailDialogComponent {
     this.dialogRef.close(this.mapFormToOccasion());
   }
 
-  private setDateTime(time: string, date: Date): Date {
+  private mapPickedDateAndTime(time: string, date: Date): Date {
     const splitted = time.split(':');
     const hour = splitted[0];
     const minute = splitted[1];
-    if (hour || minute) {
-      date.setHours(Number(hour));
-      date.setMinutes(Number(minute));
+
+    if (!(date instanceof Date)) {
+      // @ts-ignore
+      date = (date as unknown).toDate();
     }
+
+    hour ? date.setHours(Number(hour)) : date.setHours(0);
+    minute ? date.setMinutes(Number(minute)) : date.setMinutes(0);
     return date;
   }
 
@@ -87,17 +96,19 @@ export class OccasionDetailDialogComponent {
     this.occasionFormGroup.controls.title.setValidators([Validators.required]);
     this.occasionFormGroup.controls.start.setValidators([Validators.required]);
     this.occasionFormGroup.controls.end.setValidators([Validators.required]);
-    this.occasionFormGroup.controls.zipCode.setValidators([Validators.pattern('[0-9]{5}')]);
+    this.occasionFormGroup.controls.zipCode.setValidators([Validators.pattern('[0-9]{5}'), Validators.required]);
+    this.occasionFormGroup.controls.timeStart.setValidators([Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')]);
+    this.occasionFormGroup.controls.timeEnd.setValidators([Validators.pattern('((?:(?:0|1)\\d|2[0-3])):([0-5]\\d)')]);
   }
 
   private mapFormToOccasion() {
-    const startTime = this.timeGroup.controls.startTime.value;
-    const endTime = this.timeGroup.controls.endTime.value;
+    const startTime = this.occasionFormGroup.controls.timeStart.value;
+    const endTime = this.occasionFormGroup.controls.timeEnd.value;
     return {
       title: this.occasionFormGroup?.controls?.title?.value,
       additionalInformation: this.occasionFormGroup?.controls?.additionalInformation?.value,
-      end: this.setDateTime(endTime, this.occasionFormGroup?.controls?.end?.value),
-      start: this.setDateTime(startTime, this.occasionFormGroup?.controls?.start?.value),
+      end: this.mapPickedDateAndTime(endTime, this.occasionFormGroup?.controls?.end?.value),
+      start: this.mapPickedDateAndTime(startTime, this.occasionFormGroup?.controls?.start?.value),
       houseNumber: this.occasionFormGroup?.controls?.houseNumber?.value,
       street: this.occasionFormGroup?.controls?.street?.value,
       zipCode: this.occasionFormGroup?.controls?.zipCode?.value,
@@ -124,6 +135,8 @@ export class OccasionDetailDialogComponent {
       zipCode: this.initialOccasion?.address?.zipCode,
       visitorGroups: this.initialOccasion?.visitorGroups,
       contactPerson: this.initialOccasion?.contactPerson,
+      timeStart: this.mapTimestampToString(this.initialOccasion?.start),
+      timeEnd: this.mapTimestampToString(this.initialOccasion?.end),
     };
     return this.builder.group(initialData);
   }
