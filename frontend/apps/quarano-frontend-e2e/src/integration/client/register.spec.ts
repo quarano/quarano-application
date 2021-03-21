@@ -2,28 +2,130 @@
 
 describe('registration form', () => {
   beforeEach(() => {
-    cy.server();
-    cy.route('POST', '/registration').as('registration');
-    cy.visit('client/enrollment/register');
+    cy.intercept('GET', '/user/me').as('me');
+    cy.intercept({
+      method: 'PUT',
+      path: /^\/hd\/cases\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/registration$/,
+    }).as('newActivationCode');
+    cy.intercept('POST', '/registration').as('registration');
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/$/,
+    }).as('allCases');
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/,
+    }).as('specificCase');
   });
 
-  // TODO: happy path
+  function extractActivationCode(elem: JQuery) {
+    const regex = /\/client\/enrollment\/landing\/index\/(.*)/g;
+    let content;
+
+    if (typeof elem !== 'string') {
+      content = elem.text();
+    } else {
+      content = elem;
+    }
+
+    try {
+      return regex.exec(content)[1];
+    } catch (e) {
+      cy.log(e);
+      throw e;
+    }
+  }
 
   describe('completed form', () => {
-    it('returns error if activation code is incorrect', () => {
-      cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
-      cy.get('[data-cy="input-client-code"] input[matInput]').type('a557222e-c10c-4c2c-8cdb-41855ba74ac7');
-      cy.get('[data-cy="input-username"] input[matInput]').type('my_username');
-      cy.get('[data-cy="input-password"] input[matInput]').type('thisIsMyPassword1!');
-      cy.get('[data-cy="input-password-confirm"] input[matInput]').type('thisIsMyPassword1!');
-      cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('24.05.1965');
-      cy.get('[data-cy="input-privacy-policy"]').click();
-      cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
-      cy.get('[data-cy="registration-submit-button"] button').click();
-      cy.wait('@registration').its('status').should('eq', 400);
-      cy.location('pathname').should('eq', '/client/enrollment/register');
+    it.only('G13.2-1 renew activation code', () => {
+      cy.logInAgent();
+      cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
+
+      cy.wait('@me').its('response.statusCode').should('eq', 200);
+      cy.wait('@allCases').its('response.statusCode').should('eq', 200);
+
+      cy.get('[data-cy="search-index-case-input"]').type('Aalen');
+      cy.get('[data-cy="case-data-table"]')
+        .find('.ag-center-cols-container > .ag-row')
+        .should('have.length', 1)
+        .eq(0)
+        .click();
+
+      cy.wait('@specificCase').its('response.statusCode').should('eq', 200);
+      cy.get('@specificCase')
+        .its('response.body')
+        .then(($body) => {
+          const caseId = $body.caseId;
+          cy.location('pathname').should(
+            'include',
+            Cypress.env('health_department_url') + 'case-detail/index/' + caseId + '/edit'
+          );
+        });
+
+      cy.get('[data-cy="start-tracking-button"]').click();
+      cy.wait('@newActivationCode').its('response.statusCode').should('eq', 200);
+
+      cy.get('[data-cy="email-tab"]').click();
+      let oldExtractedActivationCode = '';
+
+      cy.get('[data-cy="copy-to-clipboard"]').click();
+
+      cy.get('[data-cy="mail-text"]').then((elem) => {
+        oldExtractedActivationCode = extractActivationCode(elem);
+      });
+
+      cy.get('[data-cy="new-activation-code"]').click();
+
+      cy.wait('@newActivationCode').its('response.statusCode').should('eq', 200);
+
+      cy.get('[data-cy="new-activation-code"]').should('be.enabled');
+
+      cy.get('[data-cy="copy-to-clipboard"]').click();
+
+      let newExtractedActivationCode = '';
+
+      cy.get('[data-cy="mail-text"]').then((elem) => {
+        newExtractedActivationCode = extractActivationCode(elem);
+        expect(oldExtractedActivationCode).to.not.eq(newExtractedActivationCode);
+
+        cy.logOut();
+        cy.visit('/client/enrollment/landing/index/' + oldExtractedActivationCode);
+
+        cy.get('[data-cy="cta-button-index"]').click();
+        cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
+
+        cy.get('[data-cy="input-username"] input[matInput]').type('Peter');
+        cy.get('[data-cy="input-password"] input[matInput]').type('Test1234!');
+        cy.get('[data-cy="input-password-confirm"] input[matInput]').type('Test1234!');
+        cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('01.01.1990');
+        cy.get('[data-cy="input-privacy-policy"]').click();
+        cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
+        cy.get('[data-cy="registration-submit-button"] button').click();
+        cy.wait('@registration').its('response.statusCode').should('eq', 400);
+        cy.location('pathname').should('include', '/client/enrollment/register');
+        cy.get('mat-error').contains(
+          ' Der von Ihnen eingegebene Anmeldecode ist entweder nicht aktuell oder bereits benutzt worden. Bitte überprüfen Sie, ob Sie einen neueren Code vom Gesundheitsamt erhalten haben. '
+        );
+
+        cy.visit('/client/enrollment/landing/index/' + newExtractedActivationCode);
+
+        cy.get('[data-cy="cta-button-index"]').click();
+        cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
+
+        cy.get('[data-cy="input-username"] input[matInput]').type('Peter');
+        cy.get('[data-cy="input-password"] input[matInput]').type('Test1234!');
+        cy.get('[data-cy="input-password-confirm"] input[matInput]').type('Test1234!');
+        cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('01.01.1990');
+        cy.get('[data-cy="input-privacy-policy"]').click();
+        cy.get('[data-cy="registration-submit-button"] button').should('be.enabled');
+        cy.get('[data-cy="registration-submit-button"] button').click();
+        cy.wait('@registration').its('response.statusCode').should('eq', 200);
+
+        cy.location('pathname').should('eq', '/client/enrollment/basic-data');
+      });
     });
   });
+
   // TODO: unit tests
   // describe('validation', () => {
   //   describe('empty fields', () => {
