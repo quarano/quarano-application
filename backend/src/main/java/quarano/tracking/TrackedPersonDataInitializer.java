@@ -222,7 +222,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSylvia() {
 		return new TrackedPerson(VALID_TRACKED_SEC5_ID_DEP1, "Sylvia", "Sander", EmailAddress.of("sylvia@testtest.de"),
-				PhoneNumber.of("0621447785"), LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621447785"), LocalDate.of(1979, 1, 1));
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSteven() {
 		return new TrackedPerson(VALID_TRACKED_SEC6_ID_DEP1, "Steven", "Sperber", EmailAddress.of("steven@testtest.de"),
-				PhoneNumber.of("0621779988"), LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621779988"), LocalDate.of(1979, 1, 1));
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSteffen() {
 		return new TrackedPerson(VALID_TRACKED_SEC7_ID_DEP1, "Steffen", "Schön", EmailAddress.of("steffen@testtest.de"),
-				PhoneNumber.of("0621443311"), LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621443311"), LocalDate.of(1979, 1, 1));
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 */
 	public static TrackedPerson createSunny() {
 		return new TrackedPerson(VALID_TRACKED_SEC8_ID_DEP1, "Sunny", "Schuster", EmailAddress.of("sunny@testtest.de"),
-				PhoneNumber.of("0621884466"), LocalDate.of(1980, 1, 1));
+				PhoneNumber.of("0621884466"), LocalDate.of(1981, 1, 1));
 	}
 
 	/**
