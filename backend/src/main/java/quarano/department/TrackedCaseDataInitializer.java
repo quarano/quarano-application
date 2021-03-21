@@ -48,7 +48,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	public static final TrackedCaseIdentifier TRACKED_CASE_JULIAN = TrackedCaseIdentifier
 			.of(UUID.fromString("1da5769d-118c-8874-975c-1bea69537273"));	
 
-	// security test cases
+	public static final TrackedCaseIdentifier TRACKED_CASE_THOMAS = TrackedCaseIdentifier
+			.of(UUID.fromString("a4706190-8a27-11eb-8dcd-0242ac130003"));
+
 	public static final TrackedCaseIdentifier TRACKED_CASE_SARAH = TrackedCaseIdentifier
 			.of(UUID.fromString("20158af7-56da-4bca-a9c6-72035d1b27b6"));
 
@@ -89,7 +91,8 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var jessica = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
 		var harry = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1);
 		var harriette = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1);
-		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);		
+		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);
+		var thomas = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON9_ID_DEP1);
 
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 		var sarah = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1);
@@ -170,10 +173,19 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 								.withoutContactToVulnerablePeople()
 								.setFamilyDoctor("Dr. Kleiss, Mannheimer. 34")
 								.setGuessedOriginOfInfection("privat"))
-				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));		
-			
-		// CASE Siggi
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 
+		// CASE THOMAS
+		cases.save(new TrackedCase(TRACKED_CASE_THOMAS, thomas, CaseType.CONTACT, department1, null)
+				.submitEnrollmentDetails()
+				.submitQuestionnaire(new Questionnaire(SymptomInformation.withoutSymptoms(), null, null)
+						.withoutSymptoms()
+						.withoutContactToVulnerablePeople()
+						.setFamilyDoctor("Dr. Kleiss, Mannheimer. 34")
+						.setGuessedOriginOfInfection("privat"))
+				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
+
+		// CASE Siggi
 		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null)
 				.setQuarantine(Quarantine.of(LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(2).minusDays(3)))
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(2)))

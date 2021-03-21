@@ -49,7 +49,8 @@ class DiaryDataInitializer implements DataInitializer {
 		var gustav = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP1);
 		var nadine = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON5_ID_DEP1);
 		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);
-		
+		var thomas = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON9_ID_DEP1);
+
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 
 		log.debug("Start creating diary and contacts for test persons");
@@ -124,7 +125,11 @@ class DiaryDataInitializer implements DataInitializer {
 
 		entries.updateDiaryEntry(entry1Julian);
 
-		
+		// ==================== THOMAS ==================
+		DiaryEntry entry1Thomas = DiaryEntry.of(sameSlotYesterday, thomas);
+		entry1Thomas.setBodyTemperature(BodyTemperature.of(39.9f));
+
+		entries.updateDiaryEntry(entry1Thomas);
 
 		// ==================== SIGGI ==================
 		List<ContactPerson> contactsOfSiggi = new ArrayList<>();
