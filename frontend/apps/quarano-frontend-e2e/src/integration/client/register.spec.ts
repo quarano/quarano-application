@@ -37,7 +37,7 @@ describe('registration form', () => {
   }
 
   describe('completed form', () => {
-    it.only('G13.2-1 renew activation code', () => {
+    it('G13.2-1 renew activation code', () => {
       cy.logInAgent();
       cy.location('pathname').should('eq', Cypress.env('index_cases_url'));
 
