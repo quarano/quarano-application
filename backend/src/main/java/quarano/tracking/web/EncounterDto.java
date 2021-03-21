@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class EncounterDto extends RepresentationModel<EncounterDto> {
 
 	private static final LinkRelation CONTACT_REL = LinkRelation.of("contact");
+	private static final LinkRelation LOCATION_REL = LinkRelation.of("location");
 
 	private @Getter(onMethod = @__(@JsonIgnore)) Encounter encounter;
 	private @Getter(onMethod = @__(@JsonIgnore)) TrackedPerson person;
@@ -44,6 +45,10 @@ public class EncounterDto extends RepresentationModel<EncounterDto> {
 		return encounter.getContact().getLastName();
 	}
 
+	public String getLocationName() {
+		return encounter.getLocation().getName();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.hateoas.RepresentationModel#getLinks()
@@ -57,6 +62,13 @@ public class EncounterDto extends RepresentationModel<EncounterDto> {
 		var contactId = encounter.getContact().getId();
 		var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
 		var encounterUri = on(TrackingController.class).getEncounter(encounter.getId(), person);
+
+		if(encounter.getLocation() != null){
+			var locationHandlerMethod = on(LocationController.class).getLocation(null, encounter.getLocation().getId());
+			return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
+					.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL))
+					.and(Link.of(fromMethodCall(locationHandlerMethod).toUriString(), LOCATION_REL));
+		}
 
 		return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
 				.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL));

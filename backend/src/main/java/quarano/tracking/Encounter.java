@@ -74,6 +74,10 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 		return this.contact == person;
 	}
 
+	public boolean isEncounterAt(Location location) {
+		return this.location == location;
+	}
+
 	public boolean hasId(EncounterIdentifier id) {
 		return this.id.equals(id);
 	}

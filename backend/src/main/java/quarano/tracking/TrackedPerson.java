@@ -173,6 +173,29 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				});
 	}
 
+	public Encounter reportContactWithLocation(ContactPerson person, Location location, LocalDate date){
+		Assert.notNull(person, "ContactPerson must not be null!");
+		Assert.notNull(date, "Date must not be null!");
+
+		var encounters = getEncounters();
+
+		return encounters.getEncounter(person, location, date)
+				.orElseGet(() -> {
+
+					var encounter = Encounter.withPersonAtLocation(person, location, date);
+
+					registerEvent(!encounters.hasBeenInTouchWith(person)
+							? EncounterReported.firstEncounter(encounter, id)
+							: EncounterReported.subsequentEncounter(encounter, id));
+
+					this.encounters.add(encounter);
+
+					return encounter;
+				});
+	}
+
+
+
 	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {
 
 		encounters.stream()

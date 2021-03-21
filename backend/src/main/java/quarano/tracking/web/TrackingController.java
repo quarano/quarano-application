@@ -14,6 +14,7 @@ import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.Location;
+import quarano.tracking.LocationRepository;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonRepository;
 import quarano.core.ZipCode;
@@ -52,6 +53,7 @@ public class TrackingController {
 
 	private final @NonNull TrackedPersonRepository people;
 	private final @NonNull ContactPersonRepository contacts;
+	private final @NonNull LocationRepository locations;
 	private final @NonNull MapperWrapper mapper;
 	private final @NonNull MessageSourceAccessor messages;
 
@@ -102,9 +104,20 @@ public class TrackingController {
 			return ResponseEntity.badRequest().body(errors);
 		}
 
+		Optional<Location> location = payload.getLocationId()
+				.flatMap(locations::findById)
+				.filter(it -> it.belongsTo(person));
+
+		if(payload.getLocationId().isPresent() && location.isEmpty()){
+			errors.rejectValue("location", "Invalid.location", new Object[] { payload.getContact().toString() }, "");
+
+			return ResponseEntity.badRequest().body(errors);
+		}
+
+
 		return contacts.findById(payload.getContactId())
 				.filter(it -> it.belongsTo(person))
-				.map(it -> person.reportContactWith(it, payload.date))
+				.map(it -> location.map(value -> person.reportContactWithLocation(it, value, payload.date)).orElseGet(() -> person.reportContactWith(it, payload.date)))
 				.map(it -> {
 					people.save(person);
 					return it;

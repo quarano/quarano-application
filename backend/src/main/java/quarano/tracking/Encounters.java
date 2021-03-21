@@ -38,6 +38,15 @@ public class Encounters implements Streamable<Encounter> {
 				.findFirst();
 	}
 
+	public Optional<Encounter> getEncounter(ContactPerson person, Location location, LocalDate date) {
+
+		return encounters.stream()
+				.filter(it -> it.happenedOn(date))
+				.filter(it -> it.isEncounterWith(person))
+				.filter(it -> it.isEncounterAt(location))
+				.findFirst();
+	}
+
 	public Optional<Encounter> havingIdOf(EncounterIdentifier id) {
 		return encounters.stream()
 				.filter(it -> it.hasId(id))
