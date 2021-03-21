@@ -2,10 +2,18 @@
 
 describe('health-department index cases case-list', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/hd/cases').as('allCases');
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/$/,
+    }).as('allCases');
+
+    cy.intercept({
+      method: 'GET',
+      path: /^\/hd\/cases\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/,
+    }).as('case');
+
     cy.intercept('PUT', '/hd/cases/*').as('saveDetails');
     cy.intercept('GET', '/user/me').as('me');
-    cy.intercept('GET', '/hd/cases/*').as('case');
 
     cy.logInAgent();
   });
