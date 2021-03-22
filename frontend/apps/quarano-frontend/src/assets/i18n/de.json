@@ -384,6 +384,9 @@
 		"ZU_DEN_KONTAKTPERSONEN": "Zu den Kontaktpersonen"
 	},
   "EREIGNISSE": {
+    "BEARBEITET": "Ereignis erfolgreich bearbeitet",
+    "GELOESCHT": "Ereignis erfolgreich geloescht",
+    "ERSTELLT": "Ereignis erfolgreich erstellt",
     "NEUES_EREIGNIS": "Neues Ereignis anlegen",
     "EREIGNIS_CARD" : {
       "START": "Start",
