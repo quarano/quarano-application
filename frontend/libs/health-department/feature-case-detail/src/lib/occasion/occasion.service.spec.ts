@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { OccasionService } from './occasion.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AuthService, AuthStore } from '@qro/auth/domain';
+import { AuthStore } from '@qro/auth/domain';
 import { API_URL } from '@qro/shared/util-data-access';
 
 describe('OccasionService', () => {
