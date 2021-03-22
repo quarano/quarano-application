@@ -7,6 +7,8 @@ import { OccasionDetailDialogComponent } from '../occasion-detail-dialog/occasio
 import { BehaviorSubject } from 'rxjs';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { OccasionService } from '../occasion.service';
+import { SnackbarService } from '@qro/shared/util-snackbar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'qro-occasion-list',
@@ -19,7 +21,13 @@ export class OccasionListComponent implements OnDestroy {
 
   $$occasions: BehaviorSubject<OccasionDto[]> = new BehaviorSubject<OccasionDto[]>(null);
 
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private occasionService: OccasionService) {
+  constructor(
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private occasionService: OccasionService,
+    private snackbarService: SnackbarService,
+    private translate: TranslateService
+  ) {
     this.route.parent.paramMap
       .pipe(
         take(1),
@@ -47,14 +55,20 @@ export class OccasionListComponent implements OnDestroy {
     this.occasionService
       .editOccasion(occasion.occasionCode, occasion)
       .pipe(take(1))
-      .subscribe((_) => this.loadOccasions());
+      .subscribe((_) => {
+        this.snackbarService.success(this.translate.instant('EREIGNISSE.BEARBEITET'));
+        this.loadOccasions();
+      });
   }
 
   deleteOccasion(occasion: OccasionDto) {
     this.occasionService
       .deleteOccasion(occasion)
       .pipe(take(1))
-      .subscribe((_) => this.loadOccasions());
+      .subscribe((_) => {
+        this.snackbarService.success(this.translate.instant('EREIGNISSE.GELOESCHT'));
+        this.loadOccasions();
+      });
   }
 
   private loadOccasions() {
@@ -68,7 +82,10 @@ export class OccasionListComponent implements OnDestroy {
     this.occasionService
       .saveOccasion(this.caseId, newOccasion)
       .pipe(take(1))
-      .subscribe((_) => this.loadOccasions());
+      .subscribe((_) => {
+        this.snackbarService.success(this.translate.instant('EREIGNISSE.ERSTELLT'));
+        this.loadOccasions();
+      });
   }
 
   ngOnDestroy(): void {
