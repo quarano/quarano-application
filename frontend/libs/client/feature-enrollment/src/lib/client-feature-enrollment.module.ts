@@ -1,3 +1,5 @@
+import { EncounterFormComponent } from './encounter-form/encounter-form.component';
+import { SharedUiAgGridModule } from '@qro/shared/ui-ag-grid';
 import { ClientUiLocationDetailModule } from '@qro/client/ui-location-detail';
 import { IsAuthenticatedGuard } from '@qro/auth/api';
 import { ClientUiPersonalDataModule } from '@qro/client/ui-personal-data';
@@ -80,6 +82,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedUtilTranslationModule,
     SharedUiStaticPagesModule,
+    SharedUiAgGridModule,
   ],
   declarations: [
     DataProtectionDialogComponent,
@@ -88,6 +91,7 @@ const routes: Routes = [
     LandingComponent,
     RegisterComponent,
     HealthDepartmentAddressComponent,
+    EncounterFormComponent,
   ],
 })
 export class ClientFeatureEnrollmentModule {}

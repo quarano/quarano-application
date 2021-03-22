@@ -14,7 +14,7 @@
     "KONTAKTE_MIT_ANDEREN_MENSCHEN_AM": "Kontakte mit anderen Menschen am",
     "KONTAKTPERSONEN": "Kontaktpersonen",
     "KONTAKTPERSONEN_SIND_PERSONEN": "Kontaktpersonen sind Personen mit einem Kontakt zu einem bestätigten Fall von COVID-19 ab dem 7. Tag vor Auftreten der ersten Symptome des Falls. Das Ende der infektiösen Periode ist aktuell nicht sicher anzugeben. Um die Ausbreitung einzudämmen, müssen wir daher alle Kontaktpersonen möglichst zeitnah informieren.",
-    "KONTAKTPERSONEN_VOM": "Kontaktpersonen vom",
+    "KONTAKTPERSONEN_VOM": "Kontakte vom",
     "KONTAKTPERSON_FEHLT_IN_DER_LISTE": "Kontaktperson fehlt in der Liste?",
     "KONTAKT_ENTFERNT": "Kontakt erfolgreich entfernt",
     "KONTAKT_GESPEICHERT": "Kontakt erfolgreich gespeichert",
@@ -34,6 +34,7 @@
     "SOFERN_SIE": "Sofern sie eine Person oder einen Ort bereits zu einem Datum erfasst haben, können diese Personen oder Orte für weitere Einträge ausgewählt werden.",
     "UMGANG_MIT_KONTAKTPERSONEN": "Retrospektive Kontakterfassung",
     "WEITER": "Weiter",
+    "WEITEREN_KONTAKT_HINZUFUGEN": "Weiteren Kontakt hinzufügen",
     "ZURÜCK": "Zurück"
   },
   "CASE_DETAIL": {
@@ -165,6 +166,10 @@
     "SERVERFEHLER": "Server Fehler - Für weitere Informationen siehe Konsole",
     "ZUNÄCHST_EINLOGGEN": "Sie müssen sich zunächst einloggen",
     "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
+  },
+  "ENCOUNTER_FORM": {
+    "PERSON_MIT_ENGEM_KONTAKT": "Person mit engem Kontakt",
+    "ORT_DER_BEGEGNUNG": "Ort der Begegnung"
   },
   "FOOTER": {
     "AGB": "AGB",

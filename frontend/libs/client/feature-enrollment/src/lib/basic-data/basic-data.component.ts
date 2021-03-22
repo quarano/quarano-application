@@ -1,3 +1,5 @@
+import { load } from './../../../../../shared/util-symptom/src/lib/store/symptom.actions';
+import { EncounterFormComponent } from './../encounter-form/encounter-form.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
@@ -21,6 +23,10 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
+  ViewContainerRef,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  ComponentRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -51,6 +57,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
 
   @ViewChild('stepper')
   stepper: MatHorizontalStepper;
+  @ViewChild('encounter_container', { read: ViewContainerRef }) container: ViewContainerRef;
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -72,6 +79,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   noRetrospectiveContactsConfirmed = false;
   thirdFormLoading = false;
   showThirdStep = true;
+  encounterForms = new Map<Date, ComponentRef<EncounterFormComponent>>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -87,7 +95,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     public clientStore: ClientStore,
     private store: Store,
     private translate: TranslateService,
-    private userService: UserService
+    private userService: UserService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit() {
@@ -111,15 +120,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
 
   ngAfterViewInit(): void {
     this.subs.add(
-      this.clientStore.enrollmentStatus$.pipe(take(1)).subscribe((status) => {
-        this.showThirdStep = status.steps.includes('encounters');
-        if (status.completedPersonalData) {
-          this.stepper?.next();
-        }
-        if (status.completedQuestionnaire) {
-          this.stepper?.next();
-        }
-      })
+      this.clientStore
+        .getEnrollmentStatus()
+        .pipe(take(1))
+        .subscribe((status) => {
+          this.showThirdStep = status.steps.includes('encounters');
+          if (status.completedPersonalData) {
+            this.stepper?.next();
+          }
+          if (status.completedQuestionnaire) {
+            this.stepper?.next();
+          }
+        })
     );
   }
 
@@ -505,5 +517,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
         })
         .add(() => (this.thirdFormLoading = false))
     );
+  }
+
+  addEncounterForm(date: Date): void {
+    const componentFactory: ComponentFactory<EncounterFormComponent> = this.componentFactoryResolver.resolveComponentFactory(
+      EncounterFormComponent
+    );
+
+    const componentRef = this.container.createComponent(componentFactory);
+
+    componentRef.instance.date = date;
+    componentRef.instance.contactPersons = this.contactPersons;
+    componentRef.instance.locations = this.locations;
+    this.encounterForms.set(date, componentRef);
   }
 }

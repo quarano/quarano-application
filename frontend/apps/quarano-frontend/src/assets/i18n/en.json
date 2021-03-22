@@ -34,6 +34,7 @@
     "SOFERN_SIE": "If you have recorded a person or place on a particular date, you can select these people or places again for further entries",
     "UMGANG_MIT_KONTAKTPERSONEN": "Retrospective contacts registration",
     "WEITER": "Continue",
+    "WEITEREN_KONTAKT_HINZUFUGEN": "Add additional contact",
     "ZURÜCK": "Back"
   },
   "CASE_DETAIL": {
@@ -157,6 +158,10 @@
     "ERST_AB_17_UHR": "You can only enter data here after 5 pm",
     "JETZT_EINTRAGEN": "Enter data now",
     "MORGENS": "Morning"
+  },
+  "ENCOUNTER_FORM": {
+    "PERSON_MIT_ENGEM_KONTAKT": "Person with close contact",
+    "ORT_DER_BEGEGNUNG": "Location of contact"
   },
   "ERROR": {
     "DA_IST_ETWAS_SCHIEFGELAUFEN": "Something went wrong here",

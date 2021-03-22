@@ -1,0 +1,28 @@
+<form [formGroup]="formGroup">
+  <div style="display: flex; justify-content: space-between">
+    <mat-form-field>
+      <mat-label>{{ 'ENCOUNTER_FORM.PERSON_MIT_ENGEM_KONTAKT' | translate }}</mat-label>
+      <mat-select formControlName="contactPersons" multiple>
+        <mat-option *ngFor="let contactPerson of contactPersons" [value]="contactPerson.id">{{
+          getName(contactPerson)
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{ 'ENCOUNTER_FORM.ORT_DER_BEGEGNUNG' | translate }}</mat-label>
+      <mat-select formControlName="locations">
+        <mat-option *ngFor="let location of locations" [value]="location.id"
+          >{{ location.Name }}({{ location.zipCode }} {{ location.city }})</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <button mat-mini-fab color="primary" *ngIf="formGroup.dirty; else DELETE">
+      <mat-icon>save</mat-icon>
+    </button>
+    <ng-template #DELETE>
+      <button mat-mini-fab color="danger">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </ng-template>
+  </div>
+</form>
