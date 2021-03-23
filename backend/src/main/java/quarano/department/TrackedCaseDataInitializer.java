@@ -231,10 +231,10 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 				.setTestResult(TestResult.infected(LocalDate.now().minusDays(3)))
 				.submitEnrollmentDetails()
 				.submitQuestionnaire(
-						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Chirurg im Klinikum Ludwigshafen")
-								.withContactToVulnerablePeople("Alterheim Totenruh")
-								.setFamilyDoctor("Dr. Müller, Schwanenstr. 34 in Mannheim")
-								.setGuessedOriginOfInfection("Auf dem Mannheim Blasmusikfestival"))
+						new Questionnaire(SymptomInformation.withoutSymptoms(), null, "Theresien Krankenhaus Mannheim")
+								.withContactToVulnerablePeople("Alterheim Ruhetstill")
+								.setFamilyDoctor("Prof. Dr. Maier - Bergstraße 34, Mannheim")
+								.setGuessedOriginOfInfection("Schnitzel Wettessen in der Wirtschaft Zum blauen Schwert"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));
 	}
 }
