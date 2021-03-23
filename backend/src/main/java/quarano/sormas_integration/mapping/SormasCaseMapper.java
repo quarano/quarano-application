@@ -10,6 +10,7 @@ import quarano.sormas_integration.indexcase.SormasCasePerson;
 import quarano.tracking.TrackedPerson;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
@@ -56,20 +57,20 @@ public interface SormasCaseMapper {
         );
     }
 
-    default Date getQuarantineTo(TrackedCase source){
+    default LocalDateTime getQuarantineTo(TrackedCase source){
         return convertToDateViaInstant(source.getQuarantine().getTo());
     }
 
-    default Date getQuarantineFrom(TrackedCase source){
+    default LocalDateTime getQuarantineFrom(TrackedCase source){
         return convertToDateViaInstant(source.getQuarantine().getFrom());
     }
 
-    default Date getReportDate(TrackedCase source){
+    default LocalDateTime getReportDate(TrackedCase source){
         return convertToDateViaInstant(source.getTestResult().getTestDate());
     }
 
-    default Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
+    default LocalDateTime convertToDateViaInstant(LocalDate dateToConvert) {
+        return LocalDateTime.from(dateToConvert.atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
     }
