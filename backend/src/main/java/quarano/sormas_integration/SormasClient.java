@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import quarano.sormas_integration.indexcase.SormasCase;
 import quarano.sormas_integration.person.SormasContact;
 import quarano.sormas_integration.person.SormasPerson;
@@ -20,6 +21,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 
@@ -72,15 +75,15 @@ public class SormasClient {
                 .retrieve();
     }
 
-    public Flux<SormasCase> getCases(Date since) throws JSONException {
+    public Flux<SormasCase> getCases(LocalDateTime since) throws JSONException {
         log.info("Getting cases since " + since);
-        return GetRequest("/cases/all/" + since.getTime())
+        return GetRequest("/cases/all/" + since.toEpochSecond(ZoneOffset.UTC))
                 .bodyToFlux(SormasCase.class);
     }
 
-    public Flux<SormasPerson> getPersons(Date since) throws JSONException {
+    public Flux<SormasPerson> getPersons(LocalDateTime since) throws JSONException {
         log.info("Getting persons since " + since);
-        return GetRequest("/persons/all/" + since.getTime())
+        return GetRequest("/persons/all/" + since.toEpochSecond(ZoneOffset.UTC))
                 .bodyToFlux(SormasPerson.class);
     }
 

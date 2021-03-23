@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import quarano.account.Department;
 import quarano.account.DepartmentRepository;
 import quarano.core.Address;
@@ -28,6 +29,7 @@ import quarano.sormas_integration.mapping.SormasCaseMapper;
 import quarano.sormas_integration.mapping.SormasPersonDto;
 import quarano.sormas_integration.mapping.SormasPersonMapper;
 import quarano.sormas_integration.person.SormasPerson;
+import quarano.sormas_integration.report.ContactsSyncReport;
 import quarano.sormas_integration.report.IndexSyncReport;
 import quarano.sormas_integration.report.IndexSyncReportRepository;
 import quarano.tracking.TrackedPerson;
@@ -36,6 +38,7 @@ import quarano.tracking.web.TrackedPersonDto;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,7 +51,7 @@ import java.util.stream.Collectors;
 @Setter(AccessLevel.NONE)
 @RequiredArgsConstructor
 @Component
-public class SynchIndex {
+public class SyncIndex {
 
     private @Getter @Setter(value = AccessLevel.PACKAGE) String cronSchedule;
     private final @NonNull MapperWrapper mapper;
@@ -59,27 +62,20 @@ public class SynchIndex {
     private final @NonNull IndexSyncBacklogRepository backlog;
     private HashMap<String, TrackedPerson> personsFromQuarano = new HashMap<>();
     private HashMap<String, Department> departmentsFromQuarano = new HashMap<>();
-
-    @Value("${quarano.sormas-integration.sormasurl:}")
-    private String sormasUrl;
-    @Value("${quarano.sormas-integration.sormasuser:}")
-    private String sormasUser;
-    @Value("${quarano.sormas-integration.sormaspass:}")
-    private String sormasPassword;
-    @Value("${quarano.sormas-synch.master.indexcases:}")
-    private String master;
+    private final @NonNull SormasIntegrationProperties properties;
 
     @Scheduled(cron="${quarano.sormas-synch.interval.indexcases:-}")
     public void syncIndexCases() {
-        if(StringUtils.isNotBlank(sormasUrl)){
+        if(StringUtils.isNotBlank(properties.getSormasurl())){
             log.info("Index cases synchronization started");
-            log.info("MASTER: " + master);
+            log.info("MASTER: " + properties.getMaster().getIndexcases());
 
             log.debug("Creating report instance...");
             IndexSyncReport newReport = new IndexSyncReport(
+                    UUID.randomUUID(),
                     0,
                     0,
-                    new Date(),
+                    LocalDateTime.now(),
                     System.currentTimeMillis(),
                     IndexSyncReport.ReportStatus.STARTED
             );
@@ -89,12 +85,12 @@ public class SynchIndex {
             long reportsCount = reports.count();
 
             try{
-                SormasClient sormasClient = new SormasClient(sormasUrl, sormasUser, sormasPassword);
+                SormasClient sormasClient = new SormasClient(properties.getSormasurl(), properties.getSormasurl(), properties.getSormaspass());
 
                 log.debug("Getting last report...");
                 List<IndexSyncReport> report = reports.getOrderBySyncDateDesc();
 
-                Date since = new Date(0);
+                LocalDateTime since = LocalDateTime.MIN;
 
                 // if reports table is not empty...
                 if(!report.isEmpty()){
@@ -120,10 +116,10 @@ public class SynchIndex {
                 reports.save(newReport);
 
                 // if master is sormas...
-                if(master.equals("sormas")) {
+                if(properties.getMaster().getIndexcases().equals("sormas")) {
                     syncCasesFromSormas(sormasClient, since, newReport);
                 }
-                else if(master.equals("quarano")) {
+                else if(properties.getMaster().getIndexcases().equals("quarano")) {
                     // if reports table is empty
                     if(reportsCount == 0){
                         // start an initial synchronization
@@ -136,25 +132,17 @@ public class SynchIndex {
                     }
 
                     // Save report with success status
-                    newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-                    newReport.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
-                    reports.save(newReport);
-                    log.info("Report saved");
+                    updateSuccessReport(newReport.getUuid(), newReport);
                 }
                 else{
                     // Save report with success status
-                    newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-                    newReport.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
-                    reports.save(newReport);
-                    log.info("Report saved");
+                    updateSuccessReport(newReport.getUuid(), newReport);
                 }
             }
             catch(Exception ex){
                 // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-                newReport.setStatus(IndexSyncReport.ReportStatus.FAILED);
-                reports.save(newReport);
+                updateFailedReport(newReport.getUuid(), newReport);
             }
         }
         else{
@@ -162,7 +150,7 @@ public class SynchIndex {
         }
     }
 
-    private void syncCasesFromSormas(SormasClient sormasClient, Date since, IndexSyncReport newReport) throws JSONException {
+    private void syncCasesFromSormas(SormasClient sormasClient, LocalDateTime since, IndexSyncReport newReport) throws JSONException, WebClientResponseException {
         personsFromQuarano.clear();
         departmentsFromQuarano.clear();
 
@@ -288,12 +276,14 @@ public class SynchIndex {
              * Update since value
              ***/
 
-            newReport.setSyncTime(System.nanoTime() - newReport.getSyncTime());
-            newReport.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
-            reports.save(newReport);
-            log.info("Report saved");
+            updateSuccessReport(newReport.getUuid(), newReport);
 
             return Mono.empty();
+        }).onErrorMap(ex -> {
+            // Save report with failed status
+            log.error(ex.getMessage(), ex);
+            updateFailedReport(newReport.getUuid(), newReport);
+            return ex;
         }).subscribe();
     }
 
@@ -447,9 +437,9 @@ public class SynchIndex {
         }
     }
 
-    private void syncCasesFromQuarano(SormasClient sormasClient, Date synchDate) {
+    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate) {
         // Determine IDs to sync
-        ArrayList<UUID> entities = backlog.findBySyncDate(synchDate);
+        List<UUID> entities = backlog.findBySyncDate(synchDate);
 
         List<TrackedPerson> indexPersons = new ArrayList<>();
         List<Tuple2<TrackedCase, TrackedPerson>> indexCases = new ArrayList<>();
@@ -542,6 +532,42 @@ public class SynchIndex {
             if(response[i].equals("OK")){
                 trackedCases.save(indexCases.get(i)._1());
             }
+        }
+    }
+
+    private void updateFailedReport(UUID id, IndexSyncReport report){
+        Optional<IndexSyncReport> reportQuery = reports.findById(id);
+
+        if(reportQuery.isPresent()){
+            IndexSyncReport reportToUpdate = reportQuery.get();
+            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setStatus(IndexSyncReport.ReportStatus.FAILED);
+            reports.save(reportToUpdate);
+            log.info("Report saved");
+        }
+        else{
+            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setStatus(IndexSyncReport.ReportStatus.FAILED);
+            reports.save(report);
+            log.info("Report saved");
+        }
+    }
+
+    private void updateSuccessReport(UUID id, IndexSyncReport report){
+        Optional<IndexSyncReport> reportQuery = reports.findById(id);
+
+        if(reportQuery.isPresent()){
+            IndexSyncReport reportToUpdate = reportQuery.get();
+            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
+            reports.save(reportToUpdate);
+            log.info("Report saved");
+        }
+        else{
+            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
+            reports.save(report);
+            log.info("Report saved");
         }
     }
 }
