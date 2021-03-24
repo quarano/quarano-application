@@ -261,7 +261,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	 * @return
 	 */
 	public static TrackedPerson createJulian() {
-		return new TrackedPerson(VALID_TRACKED_PERSON8_ID_DEP1, "Julian", "Jäger", EmailAddress.of("julian@testtest.de"),
+		return new TrackedPerson(VALID_TRACKED_PERSON8_ID_DEP1, "Julian", "Joger", EmailAddress.of("julian@testtest.de"),
 			 PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3))
 						.setAddress(new Address("Nebenstr.", HouseNumber.of("12"), "Mannheim", ZipCode.of("68199")))
 						.setLocale(Locale.GERMANY);

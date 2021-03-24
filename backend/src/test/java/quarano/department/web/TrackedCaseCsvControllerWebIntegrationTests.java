@@ -76,6 +76,7 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		var now = LocalDate.now();
 
+		// Define test-cases for different queries based on the e2e test data initialized on startup
 		var source = Stream.of(
 				new ValidOrder(null, null, null, 15, false),
 				new ValidOrder("index", null, null, 15, false),
@@ -160,9 +161,10 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 
 		var now = LocalDate.now();
 
+		// Define test-cases for different queries based on the e2e test data initialized on startup
 		var source = Stream.of(
 				new ValidSormas("index", null, null, null, 16, false),
-				new ValidSormas("contact", null, null, null, 11, false),
+				new ValidSormas("contact", null, null, null, 12, false),
 				new ValidSormas("index", "true", null, null, 15, false),
 				new ValidSormas("index", "false", null, null, 16, false),
 				new ValidSormas("index", null, now, null, 16, false),
@@ -355,11 +357,12 @@ class TrackedCaseCsvControllerWebIntegrationTests extends AbstractDocumentation 
 		cases.findById(TRACKED_CASE_GUSTAV).map(TrackedCase::markAsExternalZip).map(cases::save).orElseThrow();
 
 		var now = LocalDate.now();
-
+		
+		// Define test-cases for different queries based on the e2e test data initialized on startup
 		var source = Stream.of(
-				new ValidCase(null, null, null, null, null, null, 24, false),
+				new ValidCase(null, null, null, null, null, null, 25, false),
 				new ValidCase("index", null, null, null, null, null, 14, false),
-				new ValidCase("contact", null, null, null, null, null, 11, false),
+				new ValidCase("contact", null, null, null, null, null, 12, false),
 				new ValidCase("index", "OPEN", null, null, null, null, 8, false),
 				new ValidCase("index", null, "INTERNAL_AND_EXTERNAL", null, null, null, 15, false),
 				new ValidCase("index", null, "INTERNAL", null, null, null, 14, false),
