@@ -71,15 +71,27 @@ public interface SormasCaseMapper {
     }
 
     default LocalDateTime getQuarantineTo(TrackedCase source){
-        return convertToDateViaInstant(source.getQuarantine().getTo());
+        if(source.getQuarantine() != null){
+            return convertToDateViaInstant(source.getQuarantine().getTo());
+        }
+
+        return null;
     }
 
     default LocalDateTime getQuarantineFrom(TrackedCase source){
-        return convertToDateViaInstant(source.getQuarantine().getFrom());
+        if(source.getQuarantine() != null){
+            return convertToDateViaInstant(source.getQuarantine().getFrom());
+        }
+
+        return null;
     }
 
     default LocalDateTime getReportDate(TrackedCase source){
-        return convertToDateViaInstant(source.getTestResult().getTestDate());
+        if(source.getTestResult() != null){
+            return convertToDateViaInstant(source.getTestResult().getTestDate());
+        }
+
+        return null;
     }
 
     default LocalDateTime convertToDateViaInstant(LocalDate dateToConvert) {

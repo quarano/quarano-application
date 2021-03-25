@@ -4,29 +4,39 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import quarano.QuaranoIntegrationTest;
 import quarano.QuaranoUnitTest;
 import quarano.QuaranoWebIntegrationTest;
+import quarano.account.Department;
+import quarano.account.DepartmentDataInitializer;
 import quarano.core.web.MapperWrapper;
-import quarano.sormas_integration.mapping.SormasCaseMapper;
-import quarano.sormas_integration.mapping.SormasContactMapper;
-import quarano.sormas_integration.mapping.SormasPersonDto;
-import quarano.sormas_integration.mapping.SormasPersonMapper;
-import quarano.sormas_integration.person.SormasPerson;
-import quarano.sormas_integration.person.SormasPersonAddress;
+import quarano.department.CaseType;
+import quarano.department.TrackedCase;
+import quarano.department.TrackedCaseDataInitializer;
+import quarano.department.TrackedCaseRepository;
+import quarano.sormas_integration.common.SormasReportingUser;
+import quarano.sormas_integration.indexcase.*;
+import quarano.sormas_integration.mapping.*;
+import quarano.sormas_integration.person.*;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.TrackedPersonDataInitializer;
 import quarano.tracking.web.TrackedPersonDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuaranoUnitTest
 @QuaranoWebIntegrationTest
+@QuaranoIntegrationTest
 @RequiredArgsConstructor
 public class SormasIntegrationMappingUnitTests {
 
     private final MapperWrapper mapper;
+    private final TrackedCaseRepository cases;
 
     SormasCaseMapper caseMapper;
     SormasPersonMapper personMapper;
@@ -81,6 +91,7 @@ public class SormasIntegrationMappingUnitTests {
 
     @Test
     void TrackedPersonIsConvertedInSormasPerson() {
+
         TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
 
         SormasPersonDto personDto = mapper.map(trackedPerson, SormasPersonDto.class);
@@ -104,15 +115,87 @@ public class SormasIntegrationMappingUnitTests {
     @Test
     void TrackedPersonIsConvertedInSormasContact() {
 
+        TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
+
+        SormasContactDto contactDto = mapper.map(trackedPerson, SormasContactDto.class);
+        SormasContact sormasContact = contactMapper.map(contactDto, "XXXX-YYYY-WWWW");
+
+        assertThat(sormasContact.getUuid()).isEqualTo(trackedPerson.getSormasUuid());
+        assertThat(sormasContact.getPerson().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
+        assertThat(sormasContact.getDisease()).isEqualTo("CORONAVIRUS");
+        assertThat(sormasContact.getReportingUser().getUuid()).isEqualTo("XXXX-YYYY-WWWW");
+        assertThat(sormasContact.getCaze().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
+        assertThat(sormasContact.getHealthConditions().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
     }
 
     @Test
     void SormasCaseIsConvertedInTrackedCase() {
 
+        TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
+        Department department = new Department(DepartmentDataInitializer.DEPARTMENT_ID_DEP1.toString());
+
+        SormasCase sormasCase = new SormasCase(
+                UUID.randomUUID().toString(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                new SormasCasePerson(
+                        trackedPerson.getSormasUuid(),
+                        trackedPerson.getFirstName(),
+                        trackedPerson.getLastName()
+                ),
+                new SormasCaseDistrict(
+                        department.getName()
+                ),
+                new SormasCaseRegion(
+                        UUID.randomUUID().toString()
+                ),
+                "CORONAVIRUS",
+                "PROBABLE",
+                "PENDING",
+                "XXXX-MMMM-RRRR",
+                new SormasReportingUser("XXXX-MMMM-RRRR"),
+                new SormasCaseHealthFacility("XXXX-MMMM-RRRR")
+        );
+
+        SormasCaseDto caseDto = mapper.map(caseMapper.map(sormasCase), SormasCaseDto.class);
+        TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department));
+
+        assertThat(trackedCase.getSormasUuid()).isEqualTo(sormasCase.getUuid());
+        assertThat(trackedCase.getTrackedPerson().getFirstName()).isEqualTo(trackedPerson.getFirstName());
+        assertThat(trackedCase.getTrackedPerson().getLastName()).isEqualTo(trackedPerson.getLastName());
+        assertThat(trackedCase.getDepartment().getName()).isEqualTo(department.getName());
     }
 
     @Test
     void TrackedCaseIsConvertedInSormasCase() {
 
+        TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
+        TrackedCase trackedCase = cases.findById(TrackedCaseDataInitializer.TRACKED_CASE_TANJA).get();
+
+        SormasCase sormasCase = caseMapper.map(
+                trackedCase,
+                trackedPerson,
+                "XXXX-MMMM-YYYY-EEEE",
+                "XXXX-MMMM-YYYY-EEEE",
+                "XXXX-MMMM-YYYY-EEEE",
+                "XXXX-MMMM-YYYY-EEEE"
+        );
+
+        assertThat(sormasCase.getUuid()).isEqualTo(trackedCase.getSormasUuid());
+        assertThat(sormasCase.getDisease()).isEqualTo("CORONAVIRUS");
+        assertThat(sormasCase.getFacilityType()).isEqualTo("LABORATORY");
+        assertThat(sormasCase.getCaseClassification()).isEqualTo("PROBABLE");
+        assertThat(sormasCase.getInvestigationStatus()).isEqualTo("PENDING");
+        assertThat(sormasCase.getQuarantineFrom()).isNull();
+        assertThat(sormasCase.getQuarantineTo()).isNull();
+        assertThat(sormasCase.getHealthFacility().getUuid()).isEqualTo("XXXX-MMMM-YYYY-EEEE");
+        assertThat(sormasCase.getRegion().getUuid()).isEqualTo("XXXX-MMMM-YYYY-EEEE");
+        assertThat(sormasCase.getDistrict().getUuid()).isEqualTo("XXXX-MMMM-YYYY-EEEE");
+        assertThat(sormasCase.getReportingUser().getUuid()).isEqualTo("XXXX-MMMM-YYYY-EEEE");
+
+        assertThat(sormasCase.getPerson().getFirstName()).isEqualTo(trackedPerson.getFirstName());
+        assertThat(sormasCase.getPerson().getLastName()).isEqualTo(trackedPerson.getLastName());
+        assertThat(sormasCase.getPerson().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
     }
 }
