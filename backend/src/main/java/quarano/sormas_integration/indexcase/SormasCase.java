@@ -1,6 +1,7 @@
 package quarano.sormas_integration.indexcase;
 
 import lombok.*;
+import quarano.sormas_integration.common.SormasReportingUser;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,6 +21,13 @@ public class SormasCase {
     private LocalDateTime quarantineFrom;
     private SormasCasePerson person;
     private SormasCaseDistrict district;
+    private SormasCaseRegion region;
+    private String disease = "CORONAVIRUS";
+    private String caseClassification = "PROBABLE";
+    private String investigationStatus = "PENDING";
+    private String facilityType = "LABORATORY";
+    private SormasReportingUser reportingUser;
+    private SormasCaseHealthFacility healthFacility;
 
     /**
      * Getters and setter
@@ -73,5 +81,29 @@ public class SormasCase {
 
     public void setDistrict(SormasCaseDistrict district) {
         this.district = district;
+    }
+
+    public SormasCaseRegion getRegion() {
+        return region;
+    }
+
+    public void setRegion(SormasCaseRegion region) {
+        this.region = region;
+    }
+
+    public SormasReportingUser getReportingUser() {
+        return reportingUser;
+    }
+
+    public void setReportingUser(SormasReportingUser reportingUser) {
+        this.reportingUser = reportingUser;
+    }
+
+    public SormasCaseHealthFacility getHealthFacility() {
+        return healthFacility;
+    }
+
+    public void setHealthFacility(SormasCaseHealthFacility healthFacility) {
+        this.healthFacility = healthFacility;
     }
 }

@@ -502,6 +502,7 @@ public class SyncIndex {
         String[] response = sormasClient.postPersons(sormasPersons).block();
 
         for(int i = 0; i < response.length; i++){
+            log.error(response[i]);
             if(response[i].equals("OK")){
                 trackedPersons.save(persons.get(i));
                 successPersons.add(persons.get(i));
@@ -520,7 +521,14 @@ public class SyncIndex {
                 caze._1.setSormasUuid(UUID.randomUUID().toString());
             }
             // Map TrackedCase to SormasCase
-            SormasCase sormasCase = SormasCaseMapper.INSTANCE.map(caze._1, caze._2);
+            SormasCase sormasCase = SormasCaseMapper.INSTANCE.map(
+                    caze._1,
+                    caze._2,
+                    properties.getReportingUser(),
+                    properties.getDistrict(),
+                    properties.getRegion(),
+                    properties.getHealthFacility()
+            );
 
             sormasCases.add(sormasCase);
         });
@@ -529,6 +537,7 @@ public class SyncIndex {
         String[] response = sormasClient.postCases(sormasCases).block();
 
         for(int i = 0; i < response.length; i++){
+            log.error(response[i]);
             if(response[i].equals("OK")){
                 trackedCases.save(indexCases.get(i)._1());
             }

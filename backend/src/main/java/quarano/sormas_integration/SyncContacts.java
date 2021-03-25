@@ -235,7 +235,7 @@ public class SyncContacts {
         persons.forEach(person -> {
             // Map TrackedPerson to SormasContact
             SormasContactDto contactDto = mapper.map(person, SormasContactDto.class);
-            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto);
+            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto, properties.getReportingUser());
 
             sormasContacts.add(sormasContact);
         });

@@ -27,6 +27,11 @@ public class SormasIntegrationProperties {
     private final @Getter String sormasuser;
     private final @Getter String sormaspass;
 
+    private final @Getter String reportingUser;
+    private final @Getter String district;
+    private final @Getter String region;
+    private final @Getter String healthFacility;
+
     @Getter
     @RequiredArgsConstructor
     static class Master {

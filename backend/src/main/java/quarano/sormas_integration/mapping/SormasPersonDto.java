@@ -23,6 +23,10 @@ public class SormasPersonDto {
     private EmailAddress emailAddress;
     private LocalDate dateOfBirth;
     private Address address;
+    private String street;
+    private String city;
+    private String zipCode;
+    private String houseNumber;
     private String sormasUuid;
     private Locale locale;
 
@@ -82,14 +86,6 @@ public class SormasPersonDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public String getSormasUuid() {
         return sormasUuid;
     }
@@ -104,5 +100,45 @@ public class SormasPersonDto {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
