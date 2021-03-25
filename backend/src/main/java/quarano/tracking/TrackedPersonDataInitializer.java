@@ -44,11 +44,15 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			.of(UUID.fromString("e5e71192-a007-43e6-851a-c53bb0c90d3b"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON7_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("c53bb0c9-a007-43e6-851a-e5e711920d3c"));
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON8_ID_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("2105d200-e331-1dea-87d0-0242ac13ad71"));		
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("ee35d200-e221-11ea-87d0-0242ac130003"));
-	// Persons for security
+
+	
+	// Persons for security tests
 	public final static TrackedPersonIdentifier VALID_TRACKED_SEC1_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("4bcb1da9-1e03-4ca0-9da1-f86d80aaa1ab"));
 
@@ -251,6 +255,18 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 				PhoneNumber.of("0621884466"), LocalDate.of(1980, 1, 1));
 	}
 
+	/**
+	 * A persona ready for tracking
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createJulian() {
+		return new TrackedPerson(VALID_TRACKED_PERSON8_ID_DEP1, "Julian", "Joger", EmailAddress.of("julian@testtest.de"),
+			 PhoneNumber.of("0621111155"), LocalDate.of(1975, 8, 3))
+						.setAddress(new Address("Nebenstr.", HouseNumber.of("12"), "Mannheim", ZipCode.of("68199")))
+						.setLocale(Locale.GERMANY);
+	}	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -281,6 +297,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSteven());
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
+		trackedPeople.save(createJulian());
 
 		log.debug("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}

@@ -24,9 +24,11 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		var result = diaries.findMissingDiaryEntryPersons(List.of(now)).toList();
 
+		// compare to the list of all initially created  test cases that have the previous slot open
 		assertThat(result).containsExactlyInAnyOrder(
 				TrackedPersonDataInitializer.createSandra().getId(),
 				TrackedPersonDataInitializer.createSiggi().getId(),
+				TrackedPersonDataInitializer.createJulian().getId(),
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
 
@@ -38,9 +40,11 @@ class DiaryEntryRepositoryIntegrationTest {
 
 		var result = diaries.findMissingDiaryEntryPersons(List.of(now, previous)).toList();
 
+	// compare to the list of all initially created test cases that have the previous and the slot before it open
 		assertThat(result).containsExactlyInAnyOrder(
 				TrackedPersonDataInitializer.createSandra().getId(),
 				TrackedPersonDataInitializer.createSiggi().getId(),
+				TrackedPersonDataInitializer.createJulian().getId(),				
 				TrackedPersonDataInitializer.createGustav().getId());
 	}
 }
