@@ -55,7 +55,7 @@ class TrackingEventListenerUnitTests {
 				ContactWays.ofEmailAddress("michaela@mustermann.de"))
 						.setOwnerId(person.getId());
 
-		var event = EncounterReported.firstEncounter(Encounter.with(contactPerson, LocalDate.now()), person.getId());
+		var event = EncounterReported.firstEncounter(Encounter.withPerson(contactPerson, LocalDate.now()), person.getId());
 
 		when(cases.findByTrackedPerson(person.getId())).thenReturn(Optional.of(trackedCase));
 

@@ -38,15 +38,15 @@ public class EncounterDto extends RepresentationModel<EncounterDto> {
 	}
 
 	public String getFirstName() {
-		return encounter.getContact().getFirstName();
+		return encounter.getContact() != null ? encounter.getContact().getFirstName() : "";
 	}
 
 	public String getLastName() {
-		return encounter.getContact().getLastName();
+		return encounter.getContact() != null ? encounter.getContact().getLastName() : "";
 	}
 
 	public String getLocationName() {
-		return encounter.getLocation().getName();
+		return encounter.getLocation() != null ? encounter.getLocation().getName() : "";
 	}
 
 	/*
@@ -59,18 +59,26 @@ public class EncounterDto extends RepresentationModel<EncounterDto> {
 
 		Links links = super.getLinks();
 
-		var contactId = encounter.getContact().getId();
-		var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
 		var encounterUri = on(TrackingController.class).getEncounter(encounter.getId(), person);
 
-		if(encounter.getLocation() != null){
+		if(encounter.getLocation() != null && encounter.getContact() != null){
+			var contactId = encounter.getContact().getId();
+			var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
 			var locationHandlerMethod = on(LocationController.class).getLocation(null, encounter.getLocation().getId());
 			return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
 					.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL))
 					.and(Link.of(fromMethodCall(locationHandlerMethod).toUriString(), LOCATION_REL));
 		}
 
+		if(encounter.getContact() != null){
+			var contactId = encounter.getContact().getId();
+			var contactHandlerMethod = on(ContactPersonController.class).getContact(null, contactId);
+			return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
+					.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL));
+		}
+
+		var locationHandlerMethod = on(LocationController.class).getLocation(null, encounter.getLocation().getId());
 		return links.and(Link.of(fromMethodCall(encounterUri).toUriString()).withSelfRel())
-				.and(Link.of(fromMethodCall(contactHandlerMethod).toUriString(), CONTACT_REL));
+				.and(Link.of(fromMethodCall(locationHandlerMethod).toUriString(), LOCATION_REL));
 	}
 }

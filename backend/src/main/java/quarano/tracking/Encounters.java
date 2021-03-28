@@ -30,11 +30,25 @@ public class Encounters implements Streamable<Encounter> {
 				.anyMatch(it -> it.getContact().equals(person));
 	}
 
+	public boolean hasBeenAt(Location location) {
+
+		return encounters.stream()
+				.anyMatch(it -> it.getLocation().equals(location));
+	}
+
 	public Optional<Encounter> getEncounter(ContactPerson person, LocalDate date) {
 
 		return encounters.stream()
 				.filter(it -> it.happenedOn(date))
 				.filter(it -> it.isEncounterWith(person))
+				.findFirst();
+	}
+
+	public Optional<Encounter> getEncounter(Location location, LocalDate date) {
+
+		return encounters.stream()
+				.filter(it -> it.happenedOn(date))
+				.filter(it -> it.isEncounterAt(location))
 				.findFirst();
 	}
 

@@ -27,8 +27,8 @@ class EncountersUnitTests {
 		var cp1 = mock(ContactPerson.class);
 		var cp2 = mock(ContactPerson.class);
 
-		var encounterList = List.of(Encounter.with(cp1, LocalDate.now()), Encounter.with(cp1, LocalDate.now()),
-				Encounter.with(cp2, LocalDate.now()));
+		var encounterList = List.of(Encounter.withPerson(cp1, LocalDate.now()), Encounter.withPerson(cp1, LocalDate.now()),
+				Encounter.withPerson(cp2, LocalDate.now()));
 		var encounters = Encounters.of(encounterList);
 		return encounters;
 	}

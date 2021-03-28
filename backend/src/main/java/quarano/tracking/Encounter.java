@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier> {
 
 	@ManyToOne @JoinColumn(name = "contact_person_id")
-	private final @Getter ContactPerson contact;
+	private @Getter ContactPerson contact;
 
 	@ManyToOne @JoinColumn(name = "location_id")
 	private @Getter Location location;
@@ -62,12 +62,26 @@ public class Encounter extends QuaranoEntity<TrackedPerson, EncounterIdentifier>
 		this.date = date;
 	}
 
-	public static Encounter with(ContactPerson person, LocalDate date) {
+	private Encounter(Location location, LocalDate date) {
+
+		Assert.notNull(location, "Location must not be null!");
+		Assert.notNull(date, "Date must not be null!");
+
+		this.id = EncounterIdentifier.of(UUID.randomUUID());
+		this.location = location;
+		this.date = date;
+	}
+
+	public static Encounter withPerson(ContactPerson person, LocalDate date) {
 		return new Encounter(person, date);
 	}
 
 	public static Encounter withPersonAtLocation(ContactPerson person, Location location, LocalDate date) {
 		return new Encounter(person, location, date);
+	}
+
+	public static Encounter atLocation(Location location, LocalDate date) {
+		return new Encounter(location, date);
 	}
 
 	public boolean isEncounterWith(ContactPerson person) {

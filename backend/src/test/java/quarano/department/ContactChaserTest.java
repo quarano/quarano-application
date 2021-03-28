@@ -136,7 +136,7 @@ class ContactChaserTest {
 		lenient().when(person.getId()).thenReturn(identifier);
 		// test with two encounters because CORE-270
 		when(person.getEncounters()).thenReturn(Encounters
-				.of(List.of(Encounter.with(contactPerson, LocalDate.now()), Encounter.with(contactPerson, YESTERDAY))));
+				.of(List.of(Encounter.withPerson(contactPerson, LocalDate.now()), Encounter.withPerson(contactPerson, YESTERDAY))));
 
 		return new TrackedCase(person, CaseType.INDEX, new Department("test"));
 	}

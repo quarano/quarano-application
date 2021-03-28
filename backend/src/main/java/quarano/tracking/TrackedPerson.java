@@ -161,7 +161,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		return encounters.getEncounter(person, date)
 				.orElseGet(() -> {
 
-					var encounter = Encounter.with(person, date);
+					var encounter = Encounter.withPerson(person, date);
 
 					registerEvent(!encounters.hasBeenInTouchWith(person)
 							? EncounterReported.firstEncounter(encounter, id)
@@ -173,7 +173,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				});
 	}
 
-	public Encounter reportContactWithLocation(ContactPerson person, Location location, LocalDate date){
+	public Encounter reportContactWithAtLocation(ContactPerson person, Location location, LocalDate date){
 		Assert.notNull(person, "ContactPerson must not be null!");
 		Assert.notNull(date, "Date must not be null!");
 
@@ -194,7 +194,26 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 				});
 	}
 
+	public Encounter reportAtLocation(Location location, LocalDate date) {
+		Assert.notNull(location, "ContactPerson must not be null!");
+		Assert.notNull(date, "Date must not be null!");
 
+		var encounters = getEncounters();
+
+		return encounters.getEncounter(location, date)
+				.orElseGet(() -> {
+
+					var encounter = Encounter.atLocation(location, date);
+					//TODO Verify
+//					registerEvent(!encounters.hasBeenAt(location)
+//							? EncounterReported.firstEncounter(encounter, id)
+//							: EncounterReported.subsequentEncounter(encounter, id));
+
+					this.encounters.add(encounter);
+
+					return encounter;
+				});
+	}
 
 	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {
 

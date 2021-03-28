@@ -10,8 +10,10 @@ import quarano.core.PhoneNumber;
 import quarano.core.web.LoggedIn;
 import quarano.core.web.MappedPayloads;
 import quarano.core.web.MapperWrapper;
+import quarano.tracking.ContactPerson;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
+import quarano.tracking.Encounter;
 import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.Location;
 import quarano.tracking.LocationRepository;
@@ -23,9 +25,9 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.context.support.MessageSourceAccessor;
@@ -100,7 +102,7 @@ public class TrackingController {
 	@PostMapping("/encounters")
 	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, Errors errors, @LoggedIn TrackedPerson person) {
 
-		if (errors.hasErrors() && errors.hasFieldErrors("contact")) {
+		if (errors.hasErrors() && (errors.hasFieldErrors("contact") || errors.hasFieldErrors("location"))) {
 			return ResponseEntity.badRequest().body(errors);
 		}
 
@@ -109,15 +111,31 @@ public class TrackingController {
 				.filter(it -> it.belongsTo(person));
 
 		if(payload.getLocationId().isPresent() && location.isEmpty()){
-			errors.rejectValue("location", "Invalid.location", new Object[] { payload.getContact().toString() }, "");
+			errors.rejectValue("location", "Invalid.location", new Object[] { payload.getLocation().toString() }, "");
 
 			return ResponseEntity.badRequest().body(errors);
 		}
 
+		Optional<ContactPerson> contactPerson = payload.getContactId()
+				.flatMap(contacts::findById)
+				.filter(it -> it.belongsTo(person));
 
-		return contacts.findById(payload.getContactId())
-				.filter(it -> it.belongsTo(person))
-				.map(it -> location.map(value -> person.reportContactWithLocation(it, value, payload.date)).orElseGet(() -> person.reportContactWith(it, payload.date)))
+		if(payload.getContactId().isPresent() && contactPerson.isEmpty()){
+			errors.rejectValue("contact", "Invalid.contact", new Object[] { payload.getContact() }, "");
+
+			return ResponseEntity.badRequest().body(errors);
+		}
+
+		if (location.isEmpty() && contactPerson.isEmpty()) {
+			errors.rejectValue("location", "Invalid.location", new Object[]{payload.getLocation().toString()}, "");
+			errors.rejectValue("contact", "Invalid.contact", new Object[]{payload.getContact().toString()}, "");
+
+			return ResponseEntity.badRequest().body(errors);
+		}
+
+		return Optional.of(contactPerson.map(c -> location.map(l -> person.reportContactWithAtLocation(c, l, payload.date))
+				.orElse(person.reportContactWith(c, payload.date)))
+				.orElse(location.map(l -> person.reportAtLocation(l, payload.date)).orElse(null)))
 				.map(it -> {
 					people.save(person);
 					return it;
@@ -131,7 +149,7 @@ public class TrackingController {
 
 				}).orElseGet(() -> {
 
-					errors.rejectValue("contact", "Invalid.contact", new Object[] { payload.getContact().toString() }, "");
+					errors.rejectValue("contact", "Invalid.contact", new Object[] { payload.getContact() }, "");
 
 					return ResponseEntity.badRequest().body(errors);
 				});
@@ -159,12 +177,12 @@ public class TrackingController {
 	@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 	static class NewEncounter {
 
-		@NotNull UUID contact;
+		UUID contact;
 		UUID location;
-		@NotNull @PastOrPresent LocalDate date;
+		@PastOrPresent LocalDate date;
 
-		ContactPersonIdentifier getContactId() {
-			return ContactPersonIdentifier.of(contact);
+		Optional<ContactPersonIdentifier> getContactId() {
+			return contact != null ? Optional.of(ContactPersonIdentifier.of(contact)) : Optional.empty();
 		}
 
 		Optional<Location.LocationIdentifier> getLocationId() {
