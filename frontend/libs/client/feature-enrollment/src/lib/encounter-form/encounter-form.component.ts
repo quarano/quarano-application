@@ -1,3 +1,5 @@
+import { MatDialog } from '@angular/material/dialog';
+import { EncounterEntry } from './../../../../domain/src/lib/model/encounter';
 import { SubSink } from 'subsink';
 import { TranslateService } from '@ngx-translate/core';
 import { ContactPersonDto, LocationDto } from '@qro/client/domain';
@@ -7,6 +9,7 @@ import { Observable, of } from 'rxjs';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { LocationDialogService } from '@qro/client/ui-location-detail';
+import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 
 export interface ISelectItem {
   id: string;
@@ -18,10 +21,18 @@ export interface ISelectItem {
   templateUrl: './encounter-form.component.html',
   styleUrls: ['./encounter-form.component.scss'],
 })
-export class EncounterFormComponent implements OnInit, OnDestroy {
+export class EncounterFormComponent implements OnDestroy {
   formGroup: FormGroup;
   date: Date;
   private subs = new SubSink();
+  private _encounterEntry: EncounterEntry;
+  get encounterEntry(): EncounterEntry {
+    return this._encounterEntry;
+  }
+  set encounterEntry(value: EncounterEntry) {
+    this._encounterEntry = value;
+    this.fillForm();
+  }
   private _contactPersons: ContactPersonDto[] = [];
   get contactPersons() {
     return this._contactPersons;
@@ -59,6 +70,8 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
   locationSelectItems: ISelectItem[] = [];
   contactPersonAdded = new EventEmitter<ContactPersonDto>();
   locationAdded = new EventEmitter<LocationDto>();
+  deleteForm = new EventEmitter<EncounterEntry>();
+
   EncounterFormValidator: ValidatorFn = (fg: FormGroup) => {
     const location = fg.get('location')?.value as ISelectItem;
     const contactPersons = fg.get('contactPersons')?.value as ISelectItem[];
@@ -80,7 +93,8 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private contactPersonDialogService: ContactDialogService,
-    private locationDialogService: LocationDialogService
+    private locationDialogService: LocationDialogService,
+    private dialog: MatDialog
   ) {
     this.timepickerTheme = {
       container: {
@@ -93,9 +107,6 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
         dialBackgroundColor: '#5ce1e6',
       },
     };
-  }
-
-  ngOnInit() {
     this.createForm();
   }
 
@@ -115,6 +126,15 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
         validators: [this.EncounterFormValidator],
       }
     );
+  }
+
+  private fillForm() {
+    this.formGroup.setValue({
+      contactPersons: [this.encounterEntry?.contactPersonId],
+      location: this.encounterEntry?.locationId,
+      from: this.encounterEntry?.from,
+      to: this.encounterEntry?.to,
+    });
   }
 
   private getName(contact: ContactPersonDto): Observable<string> {
@@ -163,5 +183,24 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
   onFormSubmit() {
     this.formGroup.markAllAsTouched();
     console.log(this.formGroup.hasError('encounterFormError'));
+  }
+
+  onDeleteFormClick() {
+    if (this.encounterEntry) {
+      const dialogRef = this.dialog.open(TranslatedConfirmationDialogComponent, {
+        data: {
+          title: 'ENCOUNTER_FORM.LOSCHEN',
+          text: 'ENCOUNTER_FORM.KONTAKT_LOSCHEN',
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.deleteForm.emit(this.encounterEntry);
+        }
+      });
+    } else {
+      this.deleteForm.emit(this.encounterEntry);
+    }
   }
 }

@@ -30,4 +30,6 @@ export interface EncounterEntry {
   contactPersonId: string;
   encounter: EncounterDto;
   locationId: string;
+  from: string;
+  to: string;
 }

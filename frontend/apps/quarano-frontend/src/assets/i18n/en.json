@@ -161,6 +161,8 @@
   },
   "ENCOUNTER_FORM": {
     "BIS": "to",
+    "KONTAKT_LOSCHEN": "Are you sure you want to delete this contact?",
+    "LOSCHEN": "Delete contact?",
     "MINDESTANGABE": "Please enter at least one location or one contact person",
     "NICHT_IN_LISTE": "Not in list - create here",
     "PERSON_MIT_ENGEM_KONTAKT": "Person with close contact",

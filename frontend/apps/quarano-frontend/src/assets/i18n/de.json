@@ -169,6 +169,8 @@
   },
   "ENCOUNTER_FORM": {
     "BIS": "bis",
+    "KONTAKT_LOSCHEN": "Sind Sie sicher, dass Sie diesen Kontakt löschen wollen?",
+    "LOSCHEN": "Kontakt löschen?",
     "MINDESTANGABE": "Bitte geben Sie mindestens einen Ort oder eine Kontaktperson an",
     "NICHT_IN_LISTE": "Nicht in Liste - hier anlegen",
     "PERSON_MIT_ENGEM_KONTAKT": "Person mit engem Kontakt",

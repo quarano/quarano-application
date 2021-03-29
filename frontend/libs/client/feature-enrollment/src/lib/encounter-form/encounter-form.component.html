@@ -52,8 +52,8 @@
       <mat-icon>save</mat-icon>
     </button>
     <ng-template #DELETE>
-      <button mat-mini-fab color="danger">
-        <mat-icon>delete</mat-icon>
+      <button mat-mini-fab color="danger" (click)="onDeleteFormClick()">
+        <mat-icon>highlight_off</mat-icon>
       </button>
     </ng-template>
   </div>

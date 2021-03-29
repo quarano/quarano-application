@@ -412,20 +412,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   //   );
   // }
 
-  onContactRemoved(date: Date, id: string) {
-    const encounterToRemove = this.encounters.find(
-      (e) => e.contactPersonId === id && e.date === DateFunctions.getDateWithoutTime(date)
-    );
-    this.subs.add(
-      this.enrollmentService
-        .deleteEncounter(encounterToRemove.encounter)
-        .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
-        .subscribe((_) => {
-          this.encounters = this.encounters.filter((e) => e !== encounterToRemove);
-        })
-    );
-  }
-
   hasRetrospectiveContacts(): boolean {
     let result = false;
     Object.keys(this.thirdFormGroup.controls).forEach((key) => {
@@ -504,6 +490,17 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
       });
     });
     const refs = this.encounterForms.get(date) || [];
+
+    componentRef.instance.deleteForm.subscribe((encounter) => {
+      if (encounter) {
+        this.enrollmentService
+          .deleteEncounter(encounter)
+          .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
+          .subscribe(() => (this.encounters = this.encounters.filter((e) => e !== encounter)));
+      }
+      this.container.remove(this.container.indexOf(componentRef.hostView));
+      refs.splice(refs.indexOf(componentRef), 1);
+    });
     refs.push(componentRef);
     this.encounterForms.set(date, refs);
   }
