@@ -1,8 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -12,48 +10,36 @@ export class TranslatedSnackbarService {
 
   constructor(public snackbar: MatSnackBar, private translate: TranslateService) {}
 
-  confirm(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {
+  confirm(messageKey: string): void {
     const config = new MatSnackBarConfig();
     config.panelClass = ['light-primary-color'];
-    return this.translate.get(messageKey).pipe(map((result: string) => this.snackbar.open(result, 'Ok', config)));
+    this.snackbar.open(this.translate.instant(messageKey), 'Ok', config);
   }
 
-  success(messageKey: string, params?: { value: string }): Observable<MatSnackBarRef<SimpleSnackBar>> {
+  success(messageKey: string, params?: { value: string }): void {
     const config = new MatSnackBarConfig();
     config.panelClass = ['background-green'];
     config.duration = this.duration;
-    return this.translate.get(messageKey, params).pipe(
-      first(),
-      map((result: string) => this.snackbar.open(result, null, config))
-    );
+    this.snackbar.open(this.translate.instant(messageKey, params), null, config);
   }
 
-  error(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {
+  error(messageKey: string): void {
     const config = new MatSnackBarConfig();
     config.panelClass = ['background-red'];
-    return this.translate.get(messageKey).pipe(
-      first(),
-      map((result: string) => this.snackbar.open(result, 'x', config))
-    );
+    this.snackbar.open(this.translate.instant(messageKey), 'x', config);
   }
 
-  warning(messageKey: string): Observable<MatSnackBarRef<SimpleSnackBar>> {
+  warning(messageKey: string): void {
     const config = new MatSnackBarConfig();
     config.panelClass = ['background-orange'];
     config.duration = this.duration;
-    return this.translate.get(messageKey).pipe(
-      first(),
-      map((result: string) => this.snackbar.open(result, null, config))
-    );
+    this.snackbar.open(this.translate.instant(messageKey), null, config);
   }
 
-  message(messageKey: string) {
+  message(messageKey: string): void {
     const config = new MatSnackBarConfig();
     config.duration = this.duration;
     config.panelClass = ['light-primary-color'];
-    return this.translate.get(messageKey).pipe(
-      first(),
-      map((result: string) => this.snackbar.open(result, null, config))
-    );
+    this.snackbar.open(this.translate.instant(messageKey), null, config);
   }
 }

@@ -54,7 +54,7 @@ export class UserService {
   }
 
   public logout() {
-    this.snackbarService.message('USER.SIE_WURDEN_ABGEMELDET').subscribe();
+    this.snackbarService.message('USER.SIE_WURDEN_ABGEMELDET');
     this.tokenService.unsetToken();
     this.authStore.logout();
   }

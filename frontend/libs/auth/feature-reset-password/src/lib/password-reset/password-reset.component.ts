@@ -80,17 +80,12 @@ export class PasswordResetComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.token$
         .pipe(
-          switchMap((token) =>
-            this.authService
-              .resetPassword(this.formGroup.value, token)
-              .pipe(
-                switchMap((resData) => this.translatedSnackbarService.success('PASSWORD_RESET.PASSWORT_NEU_GESETZT'))
-              )
-          ),
+          switchMap((token) => this.authService.resetPassword(this.formGroup.value, token)),
           delay(3000)
         )
         .subscribe(
           (_) => {
+            this.translatedSnackbarService.success('PASSWORD_RESET.PASSWORT_NEU_GESETZT');
             this.router.navigate(['/']);
           },
           (error) => {

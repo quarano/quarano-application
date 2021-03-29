@@ -109,18 +109,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   modifyProfile() {
     this.subs.add(
-      this.clientService
-        .updatePersonalDetails(this.client)
-        .pipe(switchMap((_) => this.snackbarService.success('PROFILE.PERSÖNLICHE_DATEN_AKTUALISIERT')))
-        .subscribe(
-          (_) => {
-            this.formGroup.markAsPristine();
-            this.router.navigate(['/']);
-          },
-          (error) => {
-            this.badRequestService.handleBadRequestError(error, this.formGroup);
-          }
-        )
+      this.clientService.updatePersonalDetails(this.client).subscribe(
+        (_) => {
+          this.snackbarService.success('PROFILE.PERSÖNLICHE_DATEN_AKTUALISIERT');
+          this.formGroup.markAsPristine();
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          this.badRequestService.handleBadRequestError(error, this.formGroup);
+        }
+      )
     );
   }
 }

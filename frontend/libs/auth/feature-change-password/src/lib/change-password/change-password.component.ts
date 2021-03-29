@@ -70,9 +70,9 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.subs.add(
         this.authService
           .changePassword(this.formGroup.value)
-          .pipe(switchMap(() => this.snackbarService.success('CHANGE_PASSWORD.PASSWORT_WURDE_GEÄNDERT')))
           .subscribe(
             () => {
+              this.snackbarService.success('CHANGE_PASSWORD.PASSWORT_WURDE_GEÄNDERT');
               if (this.dialogData?.mode === 'initialPasswordChange') {
                 this.dialogRef.close('success');
               } else {

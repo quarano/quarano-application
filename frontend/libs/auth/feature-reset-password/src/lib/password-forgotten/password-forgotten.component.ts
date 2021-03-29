@@ -63,12 +63,12 @@ export class PasswordForgottenComponent implements OnInit, OnDestroy {
       this.authService
         .requestPasswordResetToken(username, email)
         .pipe(
-          switchMap((resData) => this.translatedSnackbarService.success('PASSWORD_FORGOTTEN.EMAIL_GESENDET')),
           tap((_) => (this.loading = false)),
           delay(3000)
         )
         .subscribe(
           (_) => {
+            this.translatedSnackbarService.success('PASSWORD_FORGOTTEN.EMAIL_GESENDET');
             this.router.navigate(['/']);
           },
           (error) => {

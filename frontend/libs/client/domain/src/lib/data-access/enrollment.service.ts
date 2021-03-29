@@ -1,5 +1,5 @@
 import { ClientStore } from './../store/client-store.service';
-import { QuestionnaireDto } from '@qro/shared/util-data-access';
+import { Link, QuestionnaireDto } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
@@ -44,25 +44,34 @@ export class EnrollmentService {
     return {
       encounter: dto,
       date: dto.date,
-      contactPersonId: dto._links.contact.href.split('/').slice(-1)[0],
-      locationId: dto._links.location.href.split('/').slice(-1)[0],
+      from: dto.from,
+      to: dto.to,
+      contactPersonId: this.getIdFromLink(dto._links.contact),
+      locationId: this.getIdFromLink(dto._links.location),
+      id: this.getIdFromLink(dto._links.self),
     };
   }
 
-  createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
-    // return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto).pipe(
-    //   shareReplay(),
-    //   map((encounter) => {
-    //     return this.mapEncounterToEncounterEntry(encounter);
-    //   })
-    // );
-    return of(null);
+  private getIdFromLink(link: Link): string {
+    return link.href.split('/').slice(-1)[0];
   }
 
-  createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
-    // const dateString = DateFunctions.getDateWithoutTime(date);
-    // return forkJoin(contactIds.map((id) => this.createEncounter({ contact: id, date: dateString })));
-    return of([]);
+  createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
+    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto).pipe(
+      shareReplay(),
+      map((encounter) => {
+        return this.mapEncounterToEncounterEntry(encounter);
+      })
+    );
+  }
+
+  updateEncounter(updateDto: EncounterCreateDto, id: string): Observable<EncounterEntry> {
+    return this.httpClient.put<EncounterDto>(`${this.baseUrl}/encounters/${id}`, updateDto).pipe(
+      shareReplay(),
+      map((encounter) => {
+        return this.mapEncounterToEncounterEntry(encounter);
+      })
+    );
   }
 
   deleteEncounter(encounter: EncounterDto) {

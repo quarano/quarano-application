@@ -1,4 +1,3 @@
-import { switchMap, map } from 'rxjs/operators';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ValidationErrorService, VALIDATION_PATTERNS, TrimmedPatternValidator } from '@qro/shared/util-forms';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
@@ -131,15 +130,11 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
           this.modifyContactPerson(contactPersonToModify);
         }
       } else if (!this.showIdentificationHintField) {
-        this.subs.add(
-          this.snackbarService.confirm('CONTACT_PERSON_FORM.MINDESTENS_EINE_KONTAKTMÖGLICHKEIT').subscribe()
-        );
+        this.snackbarService.confirm('CONTACT_PERSON_FORM.MINDESTENS_EINE_KONTAKTMÖGLICHKEIT');
         this.showIdentificationHintField = true;
         this.loading = false;
       } else {
-        this.subs.add(
-          this.snackbarService.confirm('CONTACT_PERSON_FORM.MINDESTENS_EINE_KONTAKTMÖGLICHKEIT').subscribe()
-        );
+        this.snackbarService.confirm('CONTACT_PERSON_FORM.MINDESTENS_EINE_KONTAKTMÖGLICHKEIT');
         this.loading = false;
       }
     }
@@ -149,13 +144,9 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.contactPersonService
         .createContactPerson(contactPerson)
-        .pipe(
-          switchMap((person) =>
-            this.snackbarService.success('CONTACT_PERSON_FORM.KONTAKTPERSON_ANGELEGT').pipe(map((res) => person))
-          )
-        )
         .subscribe(
           (createdContactPerson) => {
+            this.snackbarService.success('CONTACT_PERSON_FORM.KONTAKTPERSON_ANGELEGT');
             this.formGroup.markAsPristine();
             this.contactCreated.emit(createdContactPerson);
             this.dirty.emit(false);
@@ -172,9 +163,9 @@ export class ContactPersonFormComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.contactPersonService
         .modifyContactPerson(contactPerson, this.contactPerson.id)
-        .pipe(switchMap((person) => this.snackbarService.success('CONTACT_PERSON_FORM.KONTAKTPERSON_AKTUALISIERT')))
         .subscribe(
           (_) => {
+            this.snackbarService.success('CONTACT_PERSON_FORM.KONTAKTPERSON_AKTUALISIERT');
             this.formGroup.markAsPristine();
             this.contactModified.emit();
             this.dirty.emit(false);

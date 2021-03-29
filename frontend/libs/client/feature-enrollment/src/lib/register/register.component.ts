@@ -108,7 +108,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   public submitForm() {
     if (this.registrationForm.invalid) {
-      this.subs.add(this.snackbarService.warning('REGISTER.BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN').subscribe());
+      this.snackbarService.warning('REGISTER.BITTE_ALLE_PFLICHTFELDER_AUSFÜLLEN');
       return;
     }
     this.loading = true;
@@ -120,11 +120,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
         .registerClient(register)
         .pipe(
           tap((res) => this.tokenService.setToken(res.headers.get('X-Auth-Token'))),
-          tap((res) => this.authStore.login()),
-          switchMap((res) => this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH').pipe(map((r) => res)))
+          tap((res) => this.authStore.login())
         )
         .subscribe(
           (res) => {
+            this.snackbarService.success('REGISTER.REGISTRIERUNG_ERFOLGREICH');
             this.router.navigate(['/client/diary/diary-list']);
           },
           (error) => {

@@ -32,7 +32,7 @@ export class BadRequestService {
       }
 
       if (!handled) {
-        this.translatedSnackbar.error(requestErrors?.message || 'BAD_REQUEST.UNGÜLTIGE_WERTE').subscribe();
+        this.translatedSnackbar.error(requestErrors?.message || 'BAD_REQUEST.UNGÜLTIGE_WERTE');
       }
     }
 

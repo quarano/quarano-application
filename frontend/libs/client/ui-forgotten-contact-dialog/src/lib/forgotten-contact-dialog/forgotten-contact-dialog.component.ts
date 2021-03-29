@@ -58,26 +58,23 @@ export class ForgottenContactDialogComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid) {
       this.loading = true;
       const day = (this.formGroup.controls.day.value as Moment).toDate();
-      this.subs.add(
-        this.enrollmentService
-          .createEncounters(day, this.formGroup.controls.contactIds.value)
-          .pipe(
-            switchMap((entries) =>
-              this.snackbarService.success('FORGOTTEN_CONTACT_DIALOG.RETROSPEKTIVE_KONTAKTE_GESPEICHERT', {
-                value: entries.length.toString(),
-              })
-            )
-          )
-          .subscribe(
-            () => {
-              this.matDialogRef.close();
-            },
-            (error) => {
-              this.badRequestService.handleBadRequestError(error, this.formGroup);
-            }
-          )
-          .add(() => (this.loading = false))
-      );
+      // ToDo: CORE-337 Anpassen, sobald Encounter-Endpunkte korrekt funktionieren
+      // this.subs.add(
+      //   this.enrollmentService
+      //     .createEncounters(day, this.formGroup.controls.contactIds.value)
+      //     .subscribe(
+      //       () => {
+      //         this.snackbarService.success('FORGOTTEN_CONTACT_DIALOG.RETROSPEKTIVE_KONTAKTE_GESPEICHERT', {
+      //           value: entries.length.toString(),
+      //         })
+      //         this.matDialogRef.close();
+      //       },
+      //       (error) => {
+      //         this.badRequestService.handleBadRequestError(error, this.formGroup);
+      //       }
+      //     )
+      //     .add(() => (this.loading = false))
+      // );
     }
   }
 

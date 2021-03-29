@@ -118,11 +118,9 @@ export class LocationFormComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.locationService
         .createLocation(location)
-        .pipe(
-          switchMap((person) => this.snackbarService.success('LOCATION_FORM.ORT_ANGELEGT').pipe(map((res) => person)))
-        )
         .subscribe(
           (createdLocation) => {
+            this.snackbarService.success('LOCATION_FORM.ORT_ANGELEGT');
             this.formGroup.markAsPristine();
             this.locationCreated.emit(createdLocation);
             this.dirty.emit(false);
@@ -139,9 +137,9 @@ export class LocationFormComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.locationService
         .modifyLocation(location, this.location.id)
-        .pipe(switchMap((person) => this.snackbarService.success('LOCATION_FORM.ORT_AKTUALISIERT')))
         .subscribe(
           (_) => {
+            this.snackbarService.success('LOCATION_FORM.ORT_AKTUALISIERT');
             this.formGroup.markAsPristine();
             this.locationModified.emit();
             this.dirty.emit(false);

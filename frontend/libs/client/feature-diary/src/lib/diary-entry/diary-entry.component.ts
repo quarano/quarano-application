@@ -157,9 +157,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(
       this.diaryService
         .createDiaryEntry(diaryEntry)
-        .pipe(switchMap(() => this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_ANGELEGT')))
         .subscribe(
           (_) => {
+            this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_ANGELEGT');
             this.formGroup.markAsPristine();
             this.router.navigate(['/client/diary/diary-list']);
           },
@@ -177,9 +177,9 @@ export class DiaryEntryComponent implements OnInit, OnDestroy, DeactivatableComp
     this.subs.add(
       this.diaryService
         .modifyDiaryEntry(diaryEntry)
-        .pipe(switchMap(() => this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_AKTUALISIERT')))
         .subscribe(
           (_) => {
+            this.snackbarService.success('DIARY_ENTRY.TAGEBUCH_EINTRAG_AKTUALISIERT');
             this.formGroup.markAsPristine();
             this.router.navigate(['/client/diary/diary-list']);
           },

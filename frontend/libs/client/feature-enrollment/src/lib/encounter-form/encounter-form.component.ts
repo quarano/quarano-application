@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { EncounterEntry } from './../../../../domain/src/lib/model/encounter';
+import { EncounterEntry, EncounterCreateDto } from './../../../../domain/src/lib/model/encounter';
 import { SubSink } from 'subsink';
 import { TranslateService } from '@ngx-translate/core';
 import { ContactPersonDto, LocationDto } from '@qro/client/domain';
@@ -23,7 +23,7 @@ export interface ISelectItem {
 })
 export class EncounterFormComponent implements OnDestroy {
   formGroup: FormGroup;
-  date: Date;
+  date: string;
   private subs = new SubSink();
   private _encounterEntry: EncounterEntry;
   get encounterEntry(): EncounterEntry {
@@ -71,6 +71,7 @@ export class EncounterFormComponent implements OnDestroy {
   contactPersonAdded = new EventEmitter<ContactPersonDto>();
   locationAdded = new EventEmitter<LocationDto>();
   deleteForm = new EventEmitter<EncounterEntry>();
+  submitForm = new EventEmitter<{ id: string; encounter: EncounterCreateDto }>();
 
   EncounterFormValidator: ValidatorFn = (fg: FormGroup) => {
     const location = fg.get('location')?.value as ISelectItem;
@@ -181,8 +182,17 @@ export class EncounterFormComponent implements OnDestroy {
   }
 
   onFormSubmit() {
-    this.formGroup.markAllAsTouched();
-    console.log(this.formGroup.hasError('encounterFormError'));
+    this.submitForm.emit({
+      id: this.encounterEntry?.id,
+      encounter: {
+        date: this.date,
+        contacts: this.formGroup.value.contacts,
+        location: this.formGroup.value.location,
+        from: this.formGroup.value.from,
+        to: this.formGroup.value.to,
+      },
+    });
+    this.formGroup.markAsPristine();
   }
 
   onDeleteFormClick() {

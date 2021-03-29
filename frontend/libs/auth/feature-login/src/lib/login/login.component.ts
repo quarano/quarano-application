@@ -62,13 +62,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.userService
         .login(this.loginFormGroup.controls.username.value, this.loginFormGroup.controls.password.value)
-        .pipe(
-          switchMap((resData) =>
-            this.translatedSnackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO').pipe(map((res) => resData))
-          )
-        )
         .subscribe(
           (resData) => {
+            this.translatedSnackbarService.success('LOGIN.WILLKOMMEN_BEI_QUARANO');
             if (this.userService.isHealthDepartmentUser) {
               if (this.checkIfPasswordChangeNeeded(resData)) {
                 this.openPasswordChangeDialog();
@@ -107,20 +103,18 @@ export class LoginComponent implements OnInit, OnDestroy {
    * routes the user afterwards if the password change was successful
    */
   openPasswordChangeDialog(): void {
-    this.translatedSnackbarService
-      .message('LOGIN.ZUNAECHST_PASSWORT_AENDERN')
-      .pipe(
-        switchMap((_) =>
-          this.matDialog
-            .open(ChangePasswordComponent, { disableClose: true, data: { mode: 'initialPasswordChange' } })
-            .afterClosed()
-        )
-      )
-      .subscribe((result) => {
-        if (result === 'success') {
-          this.router.navigate(['/health-department/index-cases/case-list']);
-        }
-      });
+    this.translatedSnackbarService.message('LOGIN.ZUNAECHST_PASSWORT_AENDERN');
+
+    this.subs.add(
+      this.matDialog
+        .open(ChangePasswordComponent, { disableClose: true, data: { mode: 'initialPasswordChange' } })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result === 'success') {
+            this.router.navigate(['/health-department/index-cases/case-list']);
+          }
+        })
+    );
   }
 
   trimValue(input: MatInput) {

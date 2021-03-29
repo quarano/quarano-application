@@ -9,13 +9,17 @@ export interface EncounterDto {
   firstName: string;
   lastName: string;
   locationName: string;
+  from: string;
+  to: string;
   _links: EncounterLinks;
 }
 
 export interface EncounterCreateDto {
   date: string;
-  contact: string;
+  contacts: string[];
   location: string;
+  from: string;
+  to: string;
 }
 
 export interface EncounterLinks {
@@ -26,6 +30,7 @@ export interface EncounterLinks {
 }
 
 export interface EncounterEntry {
+  id: string;
   date: string;
   contactPersonId: string;
   encounter: EncounterDto;

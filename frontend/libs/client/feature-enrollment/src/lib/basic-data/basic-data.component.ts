@@ -1,3 +1,4 @@
+import { EncounterCreateDto } from './../../../../domain/src/lib/model/encounter';
 import { EncounterFormComponent } from './../encounter-form/encounter-form.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
@@ -63,13 +64,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   secondFormLoading = false;
 
   // ########## STEP III ##########
-  thirdFormGroup: FormGroup;
+  thirdFormLoading: boolean;
   datesForRetrospectiveContacts: Date[] = [];
   contactPersons: ContactPersonDto[] = [];
   locations: LocationDto[] = [];
   encounters: EncounterEntry[] = [];
   noRetrospectiveContactsConfirmed = false;
-  thirdFormLoading = false;
   showThirdStep = true;
   encounterForms = new Map<Date, ComponentRef<EncounterFormComponent>[]>();
 
@@ -210,8 +210,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
               iif(
                 () => confirmedZipCode,
                 this.logoutAndNavigate(result as HealthDepartmentDto),
-                this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT').pipe(
-                  switchMap((res) => this.clientStore.enrollmentStatus$),
+                this.clientStore.enrollmentStatus$.pipe(
                   filter((enrollment) => enrollment.completedPersonalData),
                   tap((enrollment) => {
                     this.client = value;
@@ -223,13 +222,18 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
               )
             )
           )
-          .subscribe(noop, (error) => {
-            if (error.hasOwnProperty('unprocessableEntityErrors')) {
-              this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
-            } else {
-              this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
+          .subscribe(
+            () => {
+              this.snackbarService.success('BASIC_DATA.PERSÖNLICHE_DATEN_GESPEICHERT');
+            },
+            (error) => {
+              if (error.hasOwnProperty('unprocessableEntityErrors')) {
+                this.handleUnprocessableEntityError(error.unprocessableEntityErrors);
+              } else {
+                this.badRequestService.handleBadRequestError(error, this.firstFormGroup);
+              }
             }
-          })
+          )
           .add(() => (this.firstFormLoading = false))
       );
     }
@@ -334,17 +338,17 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
           .pipe(
             take(1),
             tap((result) => (this.firstQuery = this.secondFormGroup.value)),
-            switchMap((result) => this.snackbarService.success('BASIC_DATA.FRAGEBOGEN_GESPEICHERT')),
             finalize(() => {
               this.secondFormLoading = false;
             })
           )
           .subscribe(
             (result) => {
+              this.snackbarService.success('BASIC_DATA.FRAGEBOGEN_GESPEICHERT');
               if (this.showThirdStep) {
                 this.stepper.next();
               } else {
-                this.subs.add(this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').subscribe());
+                this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN');
                 this.router.navigate(['/client/diary/diary-list']);
               }
             },
@@ -359,7 +363,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   // ########## STEP III ##########
 
   buildThirdForm() {
-    this.thirdFormGroup = new FormGroup({});
     let day = new Date(this.today);
     this.datesForRetrospectiveContacts = [];
 
@@ -377,24 +380,20 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
 
     while (DateFunctions.getDateWithoutTime(day) >= DateFunctions.getDateWithoutTime(firstDay)) {
       this.datesForRetrospectiveContacts.push(day);
-      this.thirdFormGroup.addControl(
-        day.toLocaleDateString('de'),
-        new FormControl(
-          this.encounters.filter((e) => e.date === DateFunctions.getDateWithoutTime(day)).map((e) => e.contactPersonId)
-        )
-      );
       day = DateFunctions.addDays(day, -1);
     }
+
+    this.datesForRetrospectiveContacts.forEach((day, index) => {
+      this.encounters
+        .filter((e) => e.date === DateFunctions.getDateWithoutTime(day))
+        .forEach((encounter) => {
+          this.addEncounterForm(day, index, encounter);
+        });
+    });
   }
 
   hasRetrospectiveContacts(): boolean {
-    let result = false;
-    Object.keys(this.thirdFormGroup.controls).forEach((key) => {
-      if (this.thirdFormGroup.controls[key].value.length > 0) {
-        result = true;
-      }
-    });
-    return result;
+    return this.encounters.length > 0;
   }
 
   onComplete() {
@@ -428,12 +427,8 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     this.clientStore.completeEnrollment(withoutEncounters);
     this.subs.add(
       this.clientStore.enrollmentStatus$
-        .pipe(
-          switchMap((result) =>
-            this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN').pipe(map((res) => result))
-          )
-        )
         .subscribe((result) => {
+          this.snackbarService.success('BASIC_DATA.REGISTRIERUNG_ABGESCHLOSSEN');
           if (result.completedContactRetro) {
             this.router.navigate(['/client/diary/diary-list']);
           }
@@ -442,40 +437,86 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     );
   }
 
-  addEncounterForm(date: Date, index: number): void {
+  addEncounterForm(date: Date, index: number, encounter: EncounterEntry = null): void {
     const componentFactory: ComponentFactory<EncounterFormComponent> = this.componentFactoryResolver.resolveComponentFactory(
       EncounterFormComponent
     );
     const currentContainer = this.containerQueryList.toArray()[index];
-    const componentRef = currentContainer.createComponent(componentFactory);
-
-    componentRef.instance.date = date;
-    componentRef.instance.contactPersons = this.contactPersons;
-    componentRef.instance.locations = this.locations;
-    componentRef.instance.contactPersonAdded.subscribe((contactPerson) => {
-      this.contactPersons.push(contactPerson);
-      this.encounterForms.forEach((refs) => {
-        refs.forEach((form) => (form.instance.contactPersons = this.contactPersons));
-      });
-    });
-    componentRef.instance.locationAdded.subscribe((location) => {
-      this.locations.push(location);
-      this.encounterForms.forEach((refs) => {
-        refs.forEach((form) => (form.instance.locations = this.locations));
-      });
-    });
     const refs = this.encounterForms.get(date) || [];
 
-    componentRef.instance.deleteForm.subscribe((encounter) => {
-      if (encounter) {
-        this.enrollmentService
-          .deleteEncounter(encounter)
-          .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
-          .subscribe(() => (this.encounters = this.encounters.filter((e) => e !== encounter)));
-      }
-      currentContainer.remove(currentContainer.indexOf(componentRef.hostView));
-      refs.splice(refs.indexOf(componentRef), 1);
-    });
+    const componentRef = currentContainer.createComponent(componentFactory);
+
+    componentRef.instance.date = date.toISOString();
+    componentRef.instance.contactPersons = this.contactPersons;
+    componentRef.instance.locations = this.locations;
+    if (encounter) {
+      componentRef.instance.encounterEntry = encounter;
+    }
+
+    this.subs.add(
+      componentRef.instance.contactPersonAdded.subscribe((contactPerson) => {
+        this.contactPersons.push(contactPerson);
+        this.encounterForms.forEach((refs) => {
+          refs.forEach((form) => (form.instance.contactPersons = this.contactPersons));
+        });
+      })
+    );
+
+    this.subs.add(
+      componentRef.instance.locationAdded.subscribe((location) => {
+        this.locations.push(location);
+        this.encounterForms.forEach((refs) => {
+          refs.forEach((form) => (form.instance.locations = this.locations));
+        });
+      })
+    );
+
+    this.subs.add(
+      componentRef.instance.deleteForm.subscribe((encounter) => {
+        if (encounter) {
+          this.enrollmentService.deleteEncounter(encounter).subscribe(
+            () => {
+              this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT');
+              this.encounters = this.encounters.filter((e) => e !== encounter);
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, componentRef.instance.formGroup);
+            }
+          );
+        }
+        currentContainer.remove(currentContainer.indexOf(componentRef.hostView));
+        refs.splice(refs.indexOf(componentRef), 1);
+      })
+    );
+
+    this.subs.add(
+      componentRef.instance.submitForm.subscribe((submitValue: { id: string; encounter: EncounterCreateDto }) => {
+        if (submitValue.id) {
+          this.enrollmentService.updateEncounter(submitValue.encounter, submitValue.id).subscribe(
+            (encounterEntry) => {
+              this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT');
+              this.encounters[this.encounters.findIndex((e) => e.id === encounterEntry.id)] = encounterEntry;
+              this.encounters = [...this.encounters];
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, componentRef.instance.formGroup);
+            }
+          );
+        } else {
+          this.enrollmentService.createEncounter(submitValue.encounter).subscribe(
+            (encounterEntry) => {
+              this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT');
+              this.encounters.push(encounterEntry);
+              this.encounters = [...this.encounters];
+            },
+            (error) => {
+              this.badRequestService.handleBadRequestError(error, componentRef.instance.formGroup);
+            }
+          );
+        }
+      })
+    );
+
     refs.push(componentRef);
     this.encounterForms.set(date, refs);
   }
