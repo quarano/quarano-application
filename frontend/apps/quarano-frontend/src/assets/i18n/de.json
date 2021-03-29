@@ -168,8 +168,11 @@
     "ZURÜCK_ZUR_STARTSEITE": "Zurück zur Startseite"
   },
   "ENCOUNTER_FORM": {
+    "BIS": "bis",
+    "NICHT_IN_LISTE": "Nicht in Liste - hier anlegen",
     "PERSON_MIT_ENGEM_KONTAKT": "Person mit engem Kontakt",
-    "ORT_DER_BEGEGNUNG": "Ort der Begegnung"
+    "ORT_DER_BEGEGNUNG": "Ort der Begegnung",
+    "VON": "von"
   },
   "FOOTER": {
     "AGB": "AGB",

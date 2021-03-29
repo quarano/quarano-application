@@ -1,0 +1,24 @@
+.encounter-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+
+    .long-field {
+      min-width: 250px;
+    }
+    .short-field {
+      max-width: 100px;
+    }
+  }
+
+  ::ng-deep {
+    .mat-select-placeholder {
+      vertical-align: middle;
+      display: table-cell;
+      line-height: 18px;
+    }
+  }
+}

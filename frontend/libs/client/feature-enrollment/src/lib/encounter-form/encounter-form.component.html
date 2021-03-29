@@ -1,20 +1,40 @@
 <form [formGroup]="formGroup">
-  <div style="display: flex; justify-content: space-between">
-    <mat-form-field>
+  <div class="encounter-form-wrapper">
+    <mat-form-field class="long-field">
       <mat-label>{{ 'ENCOUNTER_FORM.PERSON_MIT_ENGEM_KONTAKT' | translate }}</mat-label>
       <mat-select formControlName="contactPersons" multiple>
-        <mat-option *ngFor="let contactPerson of contactPersons" [value]="contactPerson.id">{{
-          getName(contactPerson)
-        }}</mat-option>
+        <mat-option *ngFor="let selectItem of contactPersonSelectItems" [value]="selectItem.id"
+          ><span *ngIf="selectItem.id !== 'new'; else NEW_CONTACT">{{ selectItem.label$ | async }}</span>
+          <ng-template #NEW_CONTACT>
+            <button mat-button color="primary" (click)="onNewContactPersonClick($event)">
+              {{ 'ENCOUNTER_FORM.NICHT_IN_LISTE' | translate }}
+            </button>
+          </ng-template>
+        </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="long-field">
       <mat-label>{{ 'ENCOUNTER_FORM.ORT_DER_BEGEGNUNG' | translate }}</mat-label>
       <mat-select formControlName="locations">
-        <mat-option *ngFor="let location of locations" [value]="location.id"
-          >{{ location.Name }}({{ location.zipCode }} {{ location.city }})</mat-option
+        <mat-option *ngFor="let selectItem of locationSelectItems" [value]="selectItem.id"
+          ><span *ngIf="selectItem.id !== 'new'; else NEW_LOCATION">{{ selectItem.label$ | async }}</span>
+          <ng-template #NEW_LOCATION>
+            <button mat-button color="primary" (click)="onNewLocationClick($event)">
+              {{ 'ENCOUNTER_FORM.NICHT_IN_LISTE' | translate }}
+            </button>
+          </ng-template></mat-option
         >
       </mat-select>
+    </mat-form-field>
+    <mat-form-field class="short-field">
+      <mat-label>{{ 'ENCOUNTER_FORM.VON' | translate }}</mat-label>
+      <input matInput [ngxTimepicker]="from_picker" formControlName="from" [format]="24" />
+      <ngx-material-timepicker #from_picker [theme]="timepickerTheme"></ngx-material-timepicker>
+    </mat-form-field>
+    <mat-form-field class="short-field">
+      <mat-label>{{ 'ENCOUNTER_FORM.BIS' | translate }}</mat-label>
+      <input matInput [ngxTimepicker]="to_picker" formControlName="to" [format]="24" />
+      <ngx-material-timepicker #to_picker [theme]="timepickerTheme"></ngx-material-timepicker>
     </mat-form-field>
     <button mat-mini-fab color="primary" *ngIf="formGroup.dirty; else DELETE">
       <mat-icon>save</mat-icon>

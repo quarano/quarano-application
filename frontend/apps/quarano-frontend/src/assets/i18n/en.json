@@ -160,8 +160,11 @@
     "MORGENS": "Morning"
   },
   "ENCOUNTER_FORM": {
+    "BIS": "to",
+    "NICHT_IN_LISTE": "Not in list - create here",
     "PERSON_MIT_ENGEM_KONTAKT": "Person with close contact",
-    "ORT_DER_BEGEGNUNG": "Location of contact"
+    "ORT_DER_BEGEGNUNG": "Location of contact",
+    "VON": "from"
   },
   "ERROR": {
     "DA_IST_ETWAS_SCHIEFGELAUFEN": "Something went wrong here",

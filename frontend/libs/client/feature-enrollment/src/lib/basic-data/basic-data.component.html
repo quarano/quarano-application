@@ -88,64 +88,28 @@
         {{ 'BASIC_DATA.SOFERN_SIE' | translate }}
       </p>
     </div>
-    <form [formGroup]="thirdFormGroup">
-      <fieldset *ngFor="let date of datesForRetrospectiveContacts">
-        <legend>{{ 'BASIC_DATA.KONTAKTPERSONEN_VOM' | translate }} {{ date | date: 'dd.MM.y' }}</legend>
-        <ng-template #encounter_container> </ng-template>
-        <div style="display: flex; justify-content: flex-end">
-          <button mat-raised-button color="primary" type="button" (click)="addEncounterForm(date)">
-            <mat-icon>add</mat-icon> {{ 'BASIC_DATA.WEITEREN_KONTAKT_HINZUFUGEN' | translate }}
-          </button>
-        </div>
-        <qro-multiple-contact-autocomplete
-          [control]="this.thirdFormGroup.controls[date.toLocaleDateString('de')]"
-          [selectableItems]="contactPersons"
-          [placeholder]="
-            ('BASIC_DATA.KONTAKTE_MIT_ANDEREN_MENSCHEN_AM' | translate) + ' ' + date.toLocaleDateString('de')
-          "
-          [nameProperties]="['firstName', 'lastName']"
-          (added)="onContactAdded(date, $event)"
-          (removed)="onContactRemoved(date, $event)"
-        ></qro-multiple-contact-autocomplete>
-        <div style="display: flex; flex-direction: row; align-items: center">
-          <span class="text-muted">{{ 'BASIC_DATA.KONTAKTPERSON_FEHLT_IN_DER_LISTE' | translate }}</span>
-          <button
-            mat-button
-            color="primary"
-            type="button"
-            (click)="openContactDialog(date)"
-            class="p-2 mr-0"
-            style="line-height: normal"
-          >
-            {{ 'BASIC_DATA.HIER_FEHLENDEN_KONTAKT_ANLEGEN' | translate }}
-          </button>
-          <span class="text-muted">{{ 'BASIC_DATA.ORT_FEHLT_IN_DER_LISTE' | translate }}</span>
-          <button
-            mat-button
-            color="primary"
-            type="button"
-            (click)="openLocationDialog(date)"
-            class="p-2 mr-0"
-            style="line-height: normal"
-          >
-            {{ 'BASIC_DATA.HIER_FEHLENDEN_ORT_ANLEGEN' | translate }}
-          </button>
-        </div>
-      </fieldset>
-      <div class="mt-3">
-        <button mat-raised-button matStepperPrevious>
-          <mat-icon>arrow_back</mat-icon> {{ 'BASIC_DATA.ZURÜCK' | translate }}
+    <fieldset *ngFor="let date of datesForRetrospectiveContacts">
+      <legend>{{ 'BASIC_DATA.KONTAKTPERSONEN_VOM' | translate }} {{ date | date: 'dd.MM.y' }}</legend>
+      <ng-template #encounter_container> </ng-template>
+      <div style="display: flex; justify-content: flex-end">
+        <button mat-raised-button color="primary" type="button" (click)="addEncounterForm(date)">
+          <mat-icon>add</mat-icon> {{ 'BASIC_DATA.WEITEREN_KONTAKT_HINZUFUGEN' | translate }}
         </button>
-        <qro-button
-          class="ml-3"
-          (buttonClicked)="onComplete()"
-          [disabled]="thirdStep.hasError"
-          [loading]="thirdFormLoading"
-          data-cy="third-step-button"
-        >
-          <mat-icon>check</mat-icon> {{ 'BASIC_DATA.ERFASSUNG_ABSCHLIESSEN' | translate }}
-        </qro-button>
       </div>
-    </form>
+    </fieldset>
+    <div class="mt-3">
+      <button mat-raised-button matStepperPrevious>
+        <mat-icon>arrow_back</mat-icon> {{ 'BASIC_DATA.ZURÜCK' | translate }}
+      </button>
+      <qro-button
+        class="ml-3"
+        (buttonClicked)="onComplete()"
+        [disabled]="thirdStep.hasError"
+        [loading]="thirdFormLoading"
+        data-cy="third-step-button"
+      >
+        <mat-icon>check</mat-icon> {{ 'BASIC_DATA.ERFASSUNG_ABSCHLIESSEN' | translate }}
+      </qro-button>
+    </div>
   </mat-step>
 </mat-horizontal-stepper>

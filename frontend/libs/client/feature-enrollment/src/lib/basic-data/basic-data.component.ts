@@ -79,7 +79,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
   noRetrospectiveContactsConfirmed = false;
   thirdFormLoading = false;
   showThirdStep = true;
-  encounterForms = new Map<Date, ComponentRef<EncounterFormComponent>>();
+  encounterForms = new Map<Date, ComponentRef<EncounterFormComponent>[]>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -397,58 +397,20 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     }
   }
 
-  openContactDialog(date: Date) {
-    const dateString = date.toLocaleDateString('de');
-    this.subs.add(
-      this.contactPersonDialogService
-        .openContactPersonDialog({ disableClose: true })
-        .afterClosed()
-        .subscribe((createdContact: ContactPersonDto | null) => {
-          if (createdContact) {
-            this.contactPersons.push(createdContact);
-            this.onContactAdded(date, createdContact.id);
-            this.thirdFormGroup.controls[dateString].patchValue([
-              ...this.thirdFormGroup.controls[dateString].value,
-              createdContact.id,
-            ]);
-          }
-        })
-    );
-  }
-
-  openLocationDialog(date: Date) {
-    // const dateString = date.toLocaleDateString('de');
-    this.subs.add(
-      this.locationDialogService
-        .openLocationDialog({ disableClose: true })
-        .afterClosed()
-        .subscribe((createdLocation: LocationDto | null) => {
-          if (createdLocation) {
-            this.locations.push(createdLocation);
-            // this.onLocationAdded(date, createdLocation.id);
-            // this.thirdFormGroup.controls[dateString].patchValue([
-            //   ...this.thirdFormGroup.controls[dateString].value,
-            //   createdLocation.id,
-            // ]);
-          }
-        })
-    );
-  }
-
-  onContactAdded(date: Date, id: string) {
-    this.subs.add(
-      this.enrollmentService
-        .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id })
-        .pipe(
-          switchMap((encounter) =>
-            this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
-          )
-        )
-        .subscribe((encounter) => {
-          this.encounters.push(encounter);
-        })
-    );
-  }
+  // onContactAdded(date: Date, id: string, locationId: string) {
+  //   this.subs.add(
+  //     this.enrollmentService
+  //       .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id, location: locationId })
+  //       .pipe(
+  //         switchMap((encounter) =>
+  //           this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
+  //         )
+  //       )
+  //       .subscribe((encounter) => {
+  //         this.encounters.push(encounter);
+  //       })
+  //   );
+  // }
 
   onContactRemoved(date: Date, id: string) {
     const encounterToRemove = this.encounters.find(
@@ -529,6 +491,20 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     componentRef.instance.date = date;
     componentRef.instance.contactPersons = this.contactPersons;
     componentRef.instance.locations = this.locations;
-    this.encounterForms.set(date, componentRef);
+    componentRef.instance.contactPersonAdded.subscribe((contactPerson) => {
+      this.contactPersons.push(contactPerson);
+      this.encounterForms.forEach((refs) => {
+        refs.forEach((form) => (form.instance.contactPersons = this.contactPersons));
+      });
+    });
+    componentRef.instance.locationAdded.subscribe((location) => {
+      this.locations.push(location);
+      this.encounterForms.forEach((refs) => {
+        refs.forEach((form) => (form.instance.locations = this.locations));
+      });
+    });
+    const refs = this.encounterForms.get(date) || [];
+    refs.push(componentRef);
+    this.encounterForms.set(date, refs);
   }
 }

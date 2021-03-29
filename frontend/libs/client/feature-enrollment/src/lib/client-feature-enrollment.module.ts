@@ -28,6 +28,7 @@ import { ClientUiContactPersonDetailModule } from '@qro/client/ui-contact-person
 import { SharedUtilTranslationModule } from '@qro/shared/util-translation';
 import { HealthDepartmentAddressComponent } from './health-department-address/health-department-address.component';
 import { SharedUiStaticPagesModule, StaticPagesResolver } from '@qro/shared/ui-static-pages';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const routes: Routes = [
   {
@@ -83,6 +84,7 @@ const routes: Routes = [
     SharedUtilTranslationModule,
     SharedUiStaticPagesModule,
     SharedUiAgGridModule,
+    NgxMaterialTimepickerModule.setLocale('de-DE'),
   ],
   declarations: [
     DataProtectionDialogComponent,

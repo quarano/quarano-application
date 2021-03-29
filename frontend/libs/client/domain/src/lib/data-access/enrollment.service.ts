@@ -2,7 +2,7 @@ import { ClientStore } from './../store/client-store.service';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { API_URL } from '@qro/shared/util-data-access';
 import { RegisterDto } from '../model/register';
@@ -41,21 +41,28 @@ export class EnrollmentService {
   }
 
   private mapEncounterToEncounterEntry(dto: EncounterDto): EncounterEntry {
-    return { encounter: dto, date: dto.date, contactPersonId: dto._links.contact.href.split('/').slice(-1)[0] };
+    return {
+      encounter: dto,
+      date: dto.date,
+      contactPersonId: dto._links.contact.href.split('/').slice(-1)[0],
+      locationId: dto._links.location.href.split('/').slice(-1)[0],
+    };
   }
 
   createEncounter(createDto: EncounterCreateDto): Observable<EncounterEntry> {
-    return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto).pipe(
-      shareReplay(),
-      map((encounter) => {
-        return this.mapEncounterToEncounterEntry(encounter);
-      })
-    );
+    // return this.httpClient.post<EncounterDto>(`${this.baseUrl}/encounters`, createDto).pipe(
+    //   shareReplay(),
+    //   map((encounter) => {
+    //     return this.mapEncounterToEncounterEntry(encounter);
+    //   })
+    // );
+    return of(null);
   }
 
   createEncounters(date: Date, contactIds: string[]): Observable<EncounterEntry[]> {
-    const dateString = DateFunctions.getDateWithoutTime(date);
-    return forkJoin(contactIds.map((id) => this.createEncounter({ contact: id, date: dateString })));
+    // const dateString = DateFunctions.getDateWithoutTime(date);
+    // return forkJoin(contactIds.map((id) => this.createEncounter({ contact: id, date: dateString })));
+    return of([]);
   }
 
   deleteEncounter(encounter: EncounterDto) {
