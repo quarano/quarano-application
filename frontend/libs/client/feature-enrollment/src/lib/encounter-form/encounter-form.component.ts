@@ -1,8 +1,8 @@
 import { SubSink } from 'subsink';
 import { TranslateService } from '@ngx-translate/core';
 import { ContactPersonDto, LocationDto } from '@qro/client/domain';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { Component, OnChanges, OnInit, SimpleChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
@@ -59,6 +59,22 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
   locationSelectItems: ISelectItem[] = [];
   contactPersonAdded = new EventEmitter<ContactPersonDto>();
   locationAdded = new EventEmitter<LocationDto>();
+  EncounterFormValidator: ValidatorFn = (fg: FormGroup) => {
+    const location = fg.get('location')?.value as ISelectItem;
+    const contactPersons = fg.get('contactPersons')?.value as ISelectItem[];
+    const from = fg.get('from')?.value as string;
+    const to = fg.get('to')?.value as string;
+    const error: any = {};
+
+    if (!location && contactPersons.length === 0) {
+      error.encounterFormError = true;
+    }
+    if (from && to && to < from) {
+      error.timeError = true;
+    }
+
+    return error || null;
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,12 +104,17 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
   }
 
   private createForm() {
-    this.formGroup = this.formBuilder.group({
-      contactPersons: new FormControl([]),
-      locations: new FormControl([]),
-      from: new FormControl(null),
-      to: new FormControl(null),
-    });
+    this.formGroup = this.formBuilder.group(
+      {
+        contactPersons: new FormControl([]),
+        location: new FormControl(null),
+        from: new FormControl(null),
+        to: new FormControl(null),
+      },
+      {
+        validators: [this.EncounterFormValidator],
+      }
+    );
   }
 
   private getName(contact: ContactPersonDto): Observable<string> {
@@ -137,5 +158,10 @@ export class EncounterFormComponent implements OnInit, OnDestroy {
           }
         })
     );
+  }
+
+  onFormSubmit() {
+    this.formGroup.markAllAsTouched();
+    console.log(this.formGroup.hasError('encounterFormError'));
   }
 }

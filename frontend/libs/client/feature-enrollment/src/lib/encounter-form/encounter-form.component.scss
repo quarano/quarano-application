@@ -1,7 +1,17 @@
+.encounter-form {
+  background-color: #f4f4f4;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
 .encounter-form-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  button.mat-mini-fab {
+    align-self: center;
+  }
 
   @media (min-width: 900px) {
     flex-direction: row;
@@ -15,7 +25,8 @@
   }
 
   ::ng-deep {
-    .mat-select-placeholder {
+    .mat-select-placeholder,
+    .mat-select-value-text {
       vertical-align: middle;
       display: table-cell;
       line-height: 18px;

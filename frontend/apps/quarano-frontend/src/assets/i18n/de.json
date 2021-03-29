@@ -169,10 +169,12 @@
   },
   "ENCOUNTER_FORM": {
     "BIS": "bis",
+    "MINDESTANGABE": "Bitte geben Sie mindestens einen Ort oder eine Kontaktperson an",
     "NICHT_IN_LISTE": "Nicht in Liste - hier anlegen",
     "PERSON_MIT_ENGEM_KONTAKT": "Person mit engem Kontakt",
     "ORT_DER_BEGEGNUNG": "Ort der Begegnung",
-    "VON": "von"
+    "VON": "von",
+    "ZEIT_FEHLERHAFT": "Die 'bis' Zeit darf nicht vor der 'von' Zeit liegen"
   },
   "FOOTER": {
     "AGB": "AGB",

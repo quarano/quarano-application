@@ -161,10 +161,12 @@
   },
   "ENCOUNTER_FORM": {
     "BIS": "to",
+    "MINDESTANGABE": "Please enter at least one location or one contact person",
     "NICHT_IN_LISTE": "Not in list - create here",
     "PERSON_MIT_ENGEM_KONTAKT": "Person with close contact",
     "ORT_DER_BEGEGNUNG": "Location of contact",
-    "VON": "from"
+    "VON": "from",
+    "ZEIT_FEHLERHAFT": "The 'to' value may not be before the 'from' value"
   },
   "ERROR": {
     "DA_IST_ETWAS_SCHIEFGELAUFEN": "Something went wrong here",

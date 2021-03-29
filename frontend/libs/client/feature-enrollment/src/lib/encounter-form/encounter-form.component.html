@@ -1,4 +1,11 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" class="encounter-form">
+  <mat-error *ngIf="formGroup.dirty && formGroup.hasError('encounterFormError')">{{
+    'ENCOUNTER_FORM.MINDESTANGABE' | translate
+  }}</mat-error>
+  <mat-error *ngIf="formGroup.dirty && formGroup.hasError('timeError')">{{
+    'ENCOUNTER_FORM.ZEIT_FEHLERHAFT' | translate
+  }}</mat-error>
+
   <div class="encounter-form-wrapper">
     <mat-form-field class="long-field">
       <mat-label>{{ 'ENCOUNTER_FORM.PERSON_MIT_ENGEM_KONTAKT' | translate }}</mat-label>
@@ -15,7 +22,7 @@
     </mat-form-field>
     <mat-form-field class="long-field">
       <mat-label>{{ 'ENCOUNTER_FORM.ORT_DER_BEGEGNUNG' | translate }}</mat-label>
-      <mat-select formControlName="locations">
+      <mat-select formControlName="location">
         <mat-option *ngFor="let selectItem of locationSelectItems" [value]="selectItem.id"
           ><span *ngIf="selectItem.id !== 'new'; else NEW_LOCATION">{{ selectItem.label$ | async }}</span>
           <ng-template #NEW_LOCATION>
@@ -36,7 +43,12 @@
       <input matInput [ngxTimepicker]="to_picker" formControlName="to" [format]="24" />
       <ngx-material-timepicker #to_picker [theme]="timepickerTheme"></ngx-material-timepicker>
     </mat-form-field>
-    <button mat-mini-fab color="primary" *ngIf="formGroup.dirty; else DELETE">
+    <button
+      mat-mini-fab
+      color="primary"
+      *ngIf="formGroup.dirty && formGroup.valid; else DELETE"
+      (click)="onFormSubmit()"
+    >
       <mat-icon>save</mat-icon>
     </button>
     <ng-template #DELETE>
