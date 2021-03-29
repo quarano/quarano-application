@@ -1,16 +1,8 @@
-import { load } from './../../../../../shared/util-symptom/src/lib/store/symptom.actions';
 import { EncounterFormComponent } from './../encounter-form/encounter-form.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SymptomSelectors } from '@qro/shared/util-symptom';
 import { select, Store } from '@ngrx/store';
-import {
-  ProfileService,
-  EncounterEntry,
-  ClientStore,
-  ZipCodeErrorDto,
-  HealthDepartmentDto,
-  LocationDto,
-} from '@qro/client/domain';
+import { EncounterEntry, ClientStore, ZipCodeErrorDto, HealthDepartmentDto, LocationDto } from '@qro/client/domain';
 import { BadRequestService } from '@qro/shared/ui-error';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
@@ -27,6 +19,8 @@ import {
   ComponentFactory,
   ComponentFactoryResolver,
   ComponentRef,
+  ViewChildren,
+  QueryList,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -41,10 +35,8 @@ import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } fr
 import { DateFunctions } from '@qro/shared/util-date';
 import { ClientDto, UserService } from '@qro/auth/api';
 import { QuestionnaireDto } from '@qro/shared/util-data-access';
-import { ContactDialogService } from '@qro/client/ui-contact-person-detail';
 import { tap, finalize, take, switchMap, map, mergeMap, filter, first } from 'rxjs/operators';
 import { iif, noop, Observable, of } from 'rxjs';
-import { LocationDialogService } from '@qro/client/ui-location-detail';
 
 @Component({
   selector: 'qro-basic-data',
@@ -57,7 +49,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
 
   @ViewChild('stepper')
   stepper: MatHorizontalStepper;
-  @ViewChild('encounter_container', { read: ViewContainerRef }) container: ViewContainerRef;
+  @ViewChildren('encounter_container', { read: ViewContainerRef }) containerQueryList: QueryList<ViewContainerRef>;
 
   // ########## STEP I ##########
   firstFormGroup: FormGroup;
@@ -90,8 +82,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     private router: Router,
     private changeDetect: ChangeDetectorRef,
     private badRequestService: BadRequestService,
-    private contactPersonDialogService: ContactDialogService,
-    private locationDialogService: LocationDialogService,
     public clientStore: ClientStore,
     private store: Store,
     private translate: TranslateService,
@@ -397,21 +387,6 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     }
   }
 
-  // onContactAdded(date: Date, id: string, locationId: string) {
-  //   this.subs.add(
-  //     this.enrollmentService
-  //       .createEncounter({ date: DateFunctions.getDateWithoutTime(date), contact: id, location: locationId })
-  //       .pipe(
-  //         switchMap((encounter) =>
-  //           this.snackbarService.success('BASIC_DATA.KONTAKT_GESPEICHERT').pipe(map((res) => encounter))
-  //         )
-  //       )
-  //       .subscribe((encounter) => {
-  //         this.encounters.push(encounter);
-  //       })
-  //   );
-  // }
-
   hasRetrospectiveContacts(): boolean {
     let result = false;
     Object.keys(this.thirdFormGroup.controls).forEach((key) => {
@@ -467,12 +442,12 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
     );
   }
 
-  addEncounterForm(date: Date): void {
+  addEncounterForm(date: Date, index: number): void {
     const componentFactory: ComponentFactory<EncounterFormComponent> = this.componentFactoryResolver.resolveComponentFactory(
       EncounterFormComponent
     );
-
-    const componentRef = this.container.createComponent(componentFactory);
+    const currentContainer = this.containerQueryList.toArray()[index];
+    const componentRef = currentContainer.createComponent(componentFactory);
 
     componentRef.instance.date = date;
     componentRef.instance.contactPersons = this.contactPersons;
@@ -498,7 +473,7 @@ export class BasicDataComponent implements OnInit, OnDestroy, AfterViewChecked, 
           .pipe(switchMap(() => this.snackbarService.success('BASIC_DATA.KONTAKT_ENTFERNT')))
           .subscribe(() => (this.encounters = this.encounters.filter((e) => e !== encounter)));
       }
-      this.container.remove(this.container.indexOf(componentRef.hostView));
+      currentContainer.remove(currentContainer.indexOf(componentRef.hostView));
       refs.splice(refs.indexOf(componentRef), 1);
     });
     refs.push(componentRef);

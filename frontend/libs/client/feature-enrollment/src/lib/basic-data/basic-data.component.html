@@ -88,11 +88,11 @@
         {{ 'BASIC_DATA.SOFERN_SIE' | translate }}
       </p>
     </div>
-    <fieldset *ngFor="let date of datesForRetrospectiveContacts">
+    <fieldset *ngFor="let date of datesForRetrospectiveContacts; let i = index">
       <legend>{{ 'BASIC_DATA.KONTAKTPERSONEN_VOM' | translate }} {{ date | date: 'dd.MM.y' }}</legend>
       <ng-template #encounter_container> </ng-template>
       <div style="display: flex; justify-content: flex-end">
-        <button mat-raised-button color="primary" type="button" (click)="addEncounterForm(date)">
+        <button mat-raised-button color="primary" type="button" (click)="addEncounterForm(date, i)">
           <mat-icon>add</mat-icon> {{ 'BASIC_DATA.WEITEREN_KONTAKT_HINZUFUGEN' | translate }}
         </button>
       </div>
