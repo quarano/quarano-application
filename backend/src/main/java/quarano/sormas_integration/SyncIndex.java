@@ -69,13 +69,15 @@ public class SyncIndex {
             log.info("Index cases synchronization started");
             log.info("MASTER: " + properties.getMaster().getIndexcases());
 
+            long executionTimeSpan = System.currentTimeMillis();
+
             log.debug("Creating report instance...");
             IndexSyncReport newReport = new IndexSyncReport(
                     UUID.randomUUID(),
                     0,
                     0,
                     LocalDateTime.now(),
-                    System.currentTimeMillis(),
+                    0,
                     IndexSyncReport.ReportStatus.STARTED
             );
             log.info("Report instance created");
@@ -116,7 +118,7 @@ public class SyncIndex {
 
                 // if master is sormas...
                 if(properties.getMaster().getIndexcases().equals("sormas")) {
-                    syncCasesFromSormas(sormasClient, since, newReport);
+                    syncCasesFromSormas(sormasClient, since, newReport, executionTimeSpan);
                 }
                 else if(properties.getMaster().getIndexcases().equals("quarano")) {
                     // if reports table is empty
@@ -131,17 +133,17 @@ public class SyncIndex {
                     }
 
                     // Save report with success status
-                    updateSuccessReport(newReport.getUuid(), newReport);
+                    updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
                 }
                 else{
                     // Save report with success status
-                    updateSuccessReport(newReport.getUuid(), newReport);
+                    updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
                 }
             }
             catch(Exception ex){
                 // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                updateFailedReport(newReport.getUuid(), newReport);
+                updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
             }
         }
         else{
@@ -149,7 +151,7 @@ public class SyncIndex {
         }
     }
 
-    private void syncCasesFromSormas(SormasClient sormasClient, LocalDateTime since, IndexSyncReport newReport) throws JSONException, WebClientResponseException {
+    private void syncCasesFromSormas(SormasClient sormasClient, LocalDateTime since, IndexSyncReport newReport, long executionTimeSpan) throws JSONException, WebClientResponseException {
         personsFromQuarano.clear();
         departmentsFromQuarano.clear();
 
@@ -275,13 +277,13 @@ public class SyncIndex {
              * Update since value
              ***/
 
-            updateSuccessReport(newReport.getUuid(), newReport);
+            updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
 
             return Mono.empty();
         }).onErrorMap(ex -> {
             // Save report with failed status
             log.error(ex.getMessage(), ex);
-            updateFailedReport(newReport.getUuid(), newReport);
+            updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
             return ex;
         }).subscribe();
     }
@@ -543,36 +545,36 @@ public class SyncIndex {
         }
     }
 
-    private void updateFailedReport(UUID id, IndexSyncReport report){
+    private void updateFailedReport(UUID id, IndexSyncReport report, long executionTimeSpan){
         Optional<IndexSyncReport> reportQuery = reports.findById(id);
 
         if(reportQuery.isPresent()){
             IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             reportToUpdate.setStatus(IndexSyncReport.ReportStatus.FAILED);
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             report.setStatus(IndexSyncReport.ReportStatus.FAILED);
             reports.save(report);
             log.info("Report saved");
         }
     }
 
-    private void updateSuccessReport(UUID id, IndexSyncReport report){
+    private void updateSuccessReport(UUID id, IndexSyncReport report, long executionTimeSpan){
         Optional<IndexSyncReport> reportQuery = reports.findById(id);
 
         if(reportQuery.isPresent()){
             IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             reportToUpdate.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             report.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
             reports.save(report);
             log.info("Report saved");

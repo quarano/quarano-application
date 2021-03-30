@@ -34,7 +34,7 @@ public class ContactsSyncReport {
     private LocalDateTime syncDate;
 
     @NonNull
-    private Long syncTime;
+    private Integer syncTime;
 
     @NonNull
     private ReportStatus status;

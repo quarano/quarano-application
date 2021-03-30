@@ -35,7 +35,7 @@ public class IndexSyncReport {
     private LocalDateTime syncDate;
 
     @NonNull
-    private Long syncTime;
+    private Integer syncTime;
 
     @NonNull
     private ReportStatus status;

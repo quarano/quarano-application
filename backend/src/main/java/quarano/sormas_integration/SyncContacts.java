@@ -50,13 +50,15 @@ public class SyncContacts {
             log.info("Contact cases synchronization started");
             log.info("MASTER: " + properties.getMaster().getContacts());
 
+            long executionTimeSpan = System.currentTimeMillis();
+
             // Store starting date of sync
             log.debug("Creating report instance...");
             ContactsSyncReport newReport = new ContactsSyncReport(
                     UUID.randomUUID(),
                     0,
                     LocalDateTime.now(),
-                    System.currentTimeMillis(),
+                    0,
                     ContactsSyncReport.ReportStatus.STARTED
             );
             log.info("Report instance created");
@@ -102,12 +104,12 @@ public class SyncContacts {
                 }
 
                 // Save report with success status
-                updateSuccessReport(newReport.getUuid(), newReport);
+                updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
             }
             catch(Exception ex){
                 // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                updateFailedReport(newReport.getUuid(), newReport);
+                updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
             }
         }
         else {
@@ -244,36 +246,36 @@ public class SyncContacts {
         String[] response = sormasClient.postContacts(sormasContacts).block();
     }
 
-    private void updateFailedReport(UUID id, ContactsSyncReport report){
+    private void updateFailedReport(UUID id, ContactsSyncReport report, long executionTimeSpan){
         Optional<ContactsSyncReport> reportQuery = reports.findById(id);
 
         if(reportQuery.isPresent()){
             ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.FAILED);
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             report.setStatus(ContactsSyncReport.ReportStatus.FAILED);
             reports.save(report);
             log.info("Report saved");
         }
     }
 
-    private void updateSuccessReport(UUID id, ContactsSyncReport report){
+    private void updateSuccessReport(UUID id, ContactsSyncReport report, long executionTimeSpan){
         Optional<ContactsSyncReport> reportQuery = reports.findById(id);
 
         if(reportQuery.isPresent()){
             ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(System.nanoTime() - reportToUpdate.getSyncTime());
+            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime(System.nanoTime() - report.getSyncTime());
+            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
             report.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
             reports.save(report);
             log.info("Report saved");
