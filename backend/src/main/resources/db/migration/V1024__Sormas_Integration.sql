@@ -8,7 +8,7 @@ CREATE TABLE index_sync_report (
     uuid uuid NOT NULL,
     persons_number int NOT NULL,
     cases_number int NOT NULL,
-    sync_date datetime NOT NULL,
+    sync_date timestamp NOT NULL,
     sync_time long NOT NULL,
     status int NOT NULL,
     CONSTRAINT changes_for_index_sync_pkey PRIMARY KEY (uuid)
@@ -19,7 +19,7 @@ CREATE INDEX index_sync_report_date ON index_sync_report (sync_date);
 CREATE TABLE contacts_sync_report (
     uuid uuid NOT NULL,
     persons_number int NOT NULL,
-    sync_date datetime NOT NULL,
+    sync_date timestamp NOT NULL,
     sync_time long NOT NULL,
     status int NOT NULL,
     CONSTRAINT changes_for_contacts_sync_pkey PRIMARY KEY (uuid)
@@ -29,10 +29,10 @@ CREATE INDEX contacts_sync_report_date ON contacts_sync_report (sync_date);
 
 CREATE TABLE contacts_synch_backlog (
     id uuid NOT NULL,
-    sync_date datetime NOT NULL
+    sync_date timestamp NOT NULL
 );
 
 CREATE TABLE index_synch_backlog (
     id uuid NOT NULL,
-    sync_date datetime NOT NULL
+    sync_date timestamp NOT NULL
 );
