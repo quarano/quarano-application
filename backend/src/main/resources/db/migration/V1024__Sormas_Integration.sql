@@ -9,7 +9,7 @@ CREATE TABLE index_sync_report (
     persons_number int NOT NULL,
     cases_number int NOT NULL,
     sync_date timestamp NOT NULL,
-    sync_time long NOT NULL,
+    sync_time int NOT NULL,
     status int NOT NULL,
     CONSTRAINT changes_for_index_sync_pkey PRIMARY KEY (uuid)
 );
@@ -20,7 +20,7 @@ CREATE TABLE contacts_sync_report (
     uuid uuid NOT NULL,
     persons_number int NOT NULL,
     sync_date timestamp NOT NULL,
-    sync_time long NOT NULL,
+    sync_time int NOT NULL,
     status int NOT NULL,
     CONSTRAINT changes_for_contacts_sync_pkey PRIMARY KEY (uuid)
 );
