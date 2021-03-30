@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import quarano.core.Address;
 import quarano.core.QuaranoAggregate;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.occasion.Occasion.OccasionIdentifier;
-import quarano.tracking.Address;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

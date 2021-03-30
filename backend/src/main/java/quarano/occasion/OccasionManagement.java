@@ -1,10 +1,10 @@
 package quarano.occasion;
 
 import lombok.RequiredArgsConstructor;
-import quarano.tracking.Address;
+import quarano.core.Address;
+import quarano.core.ZipCode;
 import quarano.department.TrackedCase.TrackedCaseIdentifier;
 import quarano.department.TrackedCaseRepository;
-import quarano.tracking.ZipCode;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
