@@ -28,13 +28,13 @@ public class ContactsSyncReport {
     private UUID uuid;
 
     @NonNull
-    private Integer personsNumber;
+    private int personsNumber;
 
     @NonNull
     private LocalDateTime syncDate;
 
     @NonNull
-    private Integer syncTime;
+    private int syncTime;
 
     @NonNull
     private ReportStatus status;

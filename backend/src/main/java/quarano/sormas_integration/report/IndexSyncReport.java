@@ -26,16 +26,16 @@ public class IndexSyncReport {
     private UUID uuid;
 
     @NonNull
-    private Integer personsNumber;
+    private int personsNumber;
 
     @NonNull
-    private Integer casesNumber;
+    private int casesNumber;
 
     @NonNull
     private LocalDateTime syncDate;
 
     @NonNull
-    private Integer syncTime;
+    private int syncTime;
 
     @NonNull
     private ReportStatus status;
