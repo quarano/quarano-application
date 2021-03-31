@@ -10,7 +10,7 @@
       <mat-card-subtitle>{{ 'CONTACT_PERSON_FORM.PFLICHTEINGABEN_SIND_MARKIERT' | translate }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="contact-person-form-firstName">
         <input
           matInput
           [placeholder]="'CONTACT_PERSON_FORM.VORNAME' | translate"
@@ -24,15 +24,15 @@
           {{ validationErrorService.getErrorMessage(formGroup.controls.firstName, error) | async }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="half-width">
+      <mat-form-field class="half-width" data-cy="contact-person-form-lastName">
         <input
           matInput
           [placeholder]="'CONTACT_PERSON_FORM.NACHNAME' | translate"
           formControlName="lastName"
           type="text"
           #last_name_input
-          (blur)="trimValue(first_name_input)"
           data-cy="contact-person-form-last-name"
+          (blur)="trimValue(last_name_input)"
         />
         <mat-error *ngFor="let error of validationErrorService.getErrorKeys(formGroup.controls.lastName)">
           {{ validationErrorService.getErrorMessage(formGroup.controls.lastName, error) | async }}
@@ -72,7 +72,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.mobilePhone, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width" data-cy="contact-person-form-email">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.E_MAIL' | translate"
@@ -102,7 +102,7 @@
       </fieldset>
       <fieldset class="mb-3">
         <legend>{{ 'CONTACT_PERSON_FORM.ADRESSE' | translate }}</legend>
-        <mat-form-field style="width: 70%">
+        <mat-form-field style="width: 70%" data-cy="contact-person-form-street">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.STRASSE' | translate"
@@ -115,7 +115,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.street, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 30%">
+        <mat-form-field style="width: 30%" data-cy="contact-person-form-houseNumber">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.HAUSNUMMER' | translate"
@@ -129,7 +129,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.houseNumber, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 30%">
+        <mat-form-field style="width: 30%" data-cy="contact-person-form-zipCode">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.POSTLEITZAHL' | translate"
@@ -142,7 +142,7 @@
             {{ validationErrorService.getErrorMessage(formGroup.controls.zipCode, error) | async }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field style="width: 70%">
+        <mat-form-field style="width: 70%" data-cy="contact-person-form-city">
           <input
             matInput
             [placeholder]="'CONTACT_PERSON_FORM.ORT' | translate"
@@ -169,13 +169,25 @@
               class="example-radio-group"
               formControlName="isHealthStaff"
             >
-              <mat-radio-button class="example-radio-button" [value]="true">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="true"
+                data-cy="contact-person-form-isHealthStaff-true"
+              >
                 {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="false">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="false"
+                data-cy="contact-person-form-isHealthStaff-false"
+              >
                 {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="null">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="null"
+                data-cy="contact-person-form-isHealthStaff-null"
+              >
                 {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>
@@ -187,13 +199,17 @@
               class="example-radio-group"
               formControlName="isSenior"
             >
-              <mat-radio-button class="example-radio-button" [value]="true">
+              <mat-radio-button class="example-radio-button" [value]="true" data-cy="contact-person-form-isSenior-true">
                 {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="false">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="false"
+                data-cy="contact-person-form-isSenior-false"
+              >
                 {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="null">
+              <mat-radio-button class="example-radio-button" [value]="null" data-cy="contact-person-form-isSenior-null">
                 {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>
@@ -216,13 +232,25 @@
               class="example-radio-group"
               formControlName="hasPreExistingConditions"
             >
-              <mat-radio-button class="example-radio-button" [value]="true">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="true"
+                data-cy="contact-person-form-hasPreExistingConditions-true"
+              >
                 {{ 'CONTACT_PERSON_FORM.JA' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="false">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="false"
+                data-cy="contact-person-form-hasPreExistingConditions-false"
+              >
                 {{ 'CONTACT_PERSON_FORM.NEIN' | translate }}
               </mat-radio-button>
-              <mat-radio-button class="example-radio-button" [value]="null">
+              <mat-radio-button
+                class="example-radio-button"
+                [value]="null"
+                data-cy="contact-person-form-hasPreExistingConditions-null"
+              >
                 {{ 'CONTACT_PERSON_FORM.DAS_WEISS_ICH_NICHT' | translate }}
               </mat-radio-button>
             </mat-radio-group>

@@ -23,7 +23,7 @@
         >
           <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
-            <mat-card-title>{{ getName(contact) | async }}</mat-card-title>
+            <mat-card-title data-cy="contact-person-list-name">{{ getName(contact) | async }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <p *ngIf="contact.email">
