@@ -2,6 +2,7 @@ package quarano.department.web;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import quarano.account.Account;
 import quarano.account.web.AccountRepresentations;
 import quarano.core.web.LoggedIn;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import quarano.tracking.TrackedPerson;
+import quarano.tracking.TrackedPersonRepository;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,6 +49,7 @@ public class RegistrationController {
 	private final @NonNull TrackedCaseRepository cases;
 	private final @NonNull AccountRepresentations accountRepresentations;
 	private final @NonNull RegistrationRepresentations representations;
+	private final @NonNull TrackedPersonRepository people;
 
 	@PostMapping("/registration")
 	public HttpEntity<?> registerClient(@Valid @RequestBody RegistrationDto payload, Errors errors,
@@ -112,6 +116,24 @@ public class RegistrationController {
 				.recover(RegistrationException.class, it -> recover(it, errors))
 				.recover(ActivationCodeException.class, it -> recover(it, errors))
 				.getOrElseGet(it -> ResponseEntity.badRequest().body(it.getMessage()));
+	}
+
+	@DeleteMapping("/hd/cases/{identifier}/account")
+	HttpEntity<?> removeAccountOfTrackedPerson(@PathVariable TrackedCaseIdentifier identifier, @LoggedIn Account account) {
+
+		return cases.findById(identifier)
+				.filter(it -> it.belongsTo(account.getDepartmentId()))
+				.filter(it -> it.getTrackedPerson().getAccount().isPresent())
+				.map(it -> {
+					TrackedPerson trackedPerson = it.getTrackedPerson().deleteAccountRegistration();
+					people.save(trackedPerson);
+
+					return registration.initiateRegistration(it).toTry()
+							.map(at -> representations.toRepresentation(at, it))
+							.fold(at -> ResponseEntity.badRequest().body(at.getMessage()),
+									ResponseEntity::ok);
+				})
+				.orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
 	private HttpEntity<?> toPendingActivationCode(TrackedCase trackedCase) {
