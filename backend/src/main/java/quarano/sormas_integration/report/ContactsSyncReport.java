@@ -28,16 +28,16 @@ public class ContactsSyncReport {
     private UUID uuid;
 
     @NonNull
-    private int personsNumber;
+    private String personsNumber;
 
     @NonNull
     private LocalDateTime syncDate;
 
     @NonNull
-    private int syncTime;
+    private String syncTime;
 
     @NonNull
-    private ReportStatus status;
+    private String status;
 
     public enum ReportStatus {
         STARTED,

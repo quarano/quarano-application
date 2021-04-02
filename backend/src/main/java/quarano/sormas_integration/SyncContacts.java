@@ -56,10 +56,10 @@ public class SyncContacts {
             log.debug("Creating report instance...");
             ContactsSyncReport newReport = new ContactsSyncReport(
                     UUID.randomUUID(),
-                    0,
+                    String.valueOf(0),
                     LocalDateTime.now(),
-                    0,
-                    ContactsSyncReport.ReportStatus.STARTED
+                    String.valueOf(0),
+                    String.valueOf(ContactsSyncReport.ReportStatus.STARTED)
             );
             log.info("Report instance created");
 
@@ -75,7 +75,7 @@ public class SyncContacts {
                     ContactsSyncReport singleReport = report.get(0);
 
                     // if is already present an active report quit current synchronization
-                    if(singleReport.getStatus().equals(IndexSyncReport.ReportStatus.STARTED)){
+                    if(singleReport.getStatus().equals(String.valueOf(ContactsSyncReport.ReportStatus.STARTED))){
                         log.warn("Another schedule is already running... ABORTED");
                         return;
                     }
@@ -251,14 +251,14 @@ public class SyncContacts {
 
         if(reportQuery.isPresent()){
             ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.FAILED);
+            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            reportToUpdate.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.FAILED));
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(ContactsSyncReport.ReportStatus.FAILED);
+            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            report.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.FAILED));
             reports.save(report);
             log.info("Report saved");
         }
@@ -269,14 +269,14 @@ public class SyncContacts {
 
         if(reportQuery.isPresent()){
             ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
+            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            reportToUpdate.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.SUCCESS));
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(ContactsSyncReport.ReportStatus.SUCCESS);
+            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            report.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.SUCCESS));
             reports.save(report);
             log.info("Report saved");
         }
