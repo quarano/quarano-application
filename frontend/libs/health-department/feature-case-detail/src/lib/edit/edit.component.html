@@ -117,7 +117,6 @@
               <legend>Adresse</legend>
               <mat-form-field style="width: 70%" data-cy="street-input">
                 <input
-
                   matInput
                   placeholder="Straße"
                   formControlName="street"
@@ -159,7 +158,6 @@
               </mat-form-field>
               <mat-form-field style="width: 70%" data-cy="city-input">
                 <input
-
                   matInput
                   placeholder="Ort"
                   formControlName="city"
@@ -262,6 +260,7 @@
                 [displayWith]="showIndexCaseItem"
                 [control]="formGroup.controls.originCases"
                 placeholder="Ursprungsfälle wählen"
+                data-cy="origin-case-element"
               ></qro-lazy-autocomplete>
             </fieldset>
           </div>

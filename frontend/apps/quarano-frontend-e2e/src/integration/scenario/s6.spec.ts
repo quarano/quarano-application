@@ -35,6 +35,8 @@ describe(
   'S6 - Erfasste Kontakte in Indexfällen werden als Kontaktfälle angelegt und korrekt verknüpft',
   {
     defaultCommandTimeout: 20000,
+    viewportWidth: 1300,
+    viewportHeight: 1200,
   },
   () => {
     before((done) => {
@@ -42,13 +44,27 @@ describe(
     });
 
     beforeEach(() => {
-      cy.intercept('GET', '/enrollment').as('getEnrollment');
-      cy.intercept('POST', '/contacts').as('postContacts');
-      cy.intercept('GET', '/contacts').as('getContacts');
       cy.intercept('POST', '/diary').as('postDiary');
+      cy.intercept({
+        method: 'GET',
+        url: /.*\/enrollment$/,
+      }).as('getEnrollment');
+      cy.intercept({
+        method: 'GET',
+        url: /.*\/contacts$/,
+      }).as('getContacts');
+      cy.intercept({
+        method: 'POST',
+        url: /.*\/contacts$/,
+      }).as('postContacts');
+      cy.intercept({
+        method: 'GET',
+        url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}$/,
+      }).as('getCaseDetails');
     });
 
     describe('enroll as client', () => {
+      const contacts = ['Leon Duerr', 'Anna Beike', 'Conny Hügel'];
       it('add new contact for index', () => {
         /* 1 - Login als Bürger Thorsten Mehler (“test8”, “test123”) */
         cy.logIn('test8', 'test123');
@@ -61,11 +77,18 @@ describe(
         /* 2a - Wähle Eintrag hinzufügen */
         cy.get('[data-cy="add-diary-entry"]').should('exist').click();
 
-        /* 3 - Körpertemperatur angeben -> 38,1°C */
+        cy.wait('@getEnrollment').its('response.statusCode').should('eq', 200);
+        cy.wait('@getContacts').its('response.statusCode').should('eq', 200);
+
+        /* CHECK: Überprüfung, ob die Seite gewechselt wurde */
+        //cy.url().should('contain', /.*\/client\/diary\/diary-detail\/new\/.*/);
+
+        /* 3 - Körpertemperatur angeben -> 35°C */
         cy.get('[data-cy="body-temperature"]').should('exist').click(); //Slider
 
         /* 4 - "Kontakte mit anderen Menschen  seit dem letzten Eintrag": Eingabe -> "Leon Duerr" */
         cy.get('[data-cy="multiple-auto-complete-input"]').eq(1).should('exist').click().type('Leon Duerr');
+        cy.get('.mat-option').should('exist').click();
 
         /* 5 - auswählen "Kontaktperson fehlt in der Liste" */
         cy.get('[data-cy="add-missing-contacts"]').should('exist').click();
@@ -118,7 +141,7 @@ describe(
         cy.get('[data-cy="contact-person-list-name"]')
           .should('exist')
           .each(($el) => {
-            expect($el.text()).to.be.oneOf(['Leon Duerr', 'Anna Beike', 'Conny Hügel']);
+            expect($el.text()).to.be.oneOf(contacts);
           });
 
         /* 17 - Logout als Bürger */
@@ -127,11 +150,73 @@ describe(
 
       it('test for health department user', () => {
         /* 18 - Login als GAMA "agent1" */
-        /* CHECK: Unter dem Reiter "Kontaktpersonen" sind alle Kontakte (Claire Fraser, Roger Fraser und Conny Hügel) für GAMA sichtbar und mit Status "angelegt" erfasst */
-        /* CHECK: für alle Kontakte (Leon Duerr, Anna Beike und Conny Hügel) ist der Ursprungsfall "Markus Hanser" in der Übersicht hinterlegt */
-        /* 19 - suche unter dem Reiter "Indexfälle" "Markus Hanser" */
+        cy.logInAgent();
+
+        /* CHECKS pro angelegtem Kontaktfall */
+        cy.get('[data-cy="contact-cases"]').should('exist').click();
+        for (let index = 0; index < contacts.length; index++) {
+          /* CHECK: Unter dem Reiter "Kontaktpersonen" sind alle Kontakte (Leon Duerr, Anna Beike und Conny Hügel) für GAMA sichtbar und mit Status "angelegt" erfasst */
+          cy.get('[data-cy="search-contact-case-input"]').should('exist').type(contacts[index]);
+          cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('angelegt');
+
+          /* CHECK: für alle Kontakte (Leon Duerr, Anna Beike und Conny Hügel) ist der Ursprungsfall "Thorsten Mehler" in der Übersicht hinterlegt */
+          /* Auswählen der Kontaktperson aus */
+          cy.get('[data-cy="case-data-table"]')
+            .find('.ag-center-cols-container > .ag-row')
+            .should('have.length.greaterThan', 0)
+            .then(($elems) => {
+              $elems[0].click();
+            });
+
+          cy.get('[data-cy="origin-case-element"]')
+            .find('.mat-chip')
+            .should('have.length.greaterThan', 0)
+            .then(($elems) => {
+              const text = $elems.text();
+              expect(text).to.contain('Mehler, Thorsten');
+            });
+
+          cy.get('[data-cy="contact-cases"]').should('exist').click();
+        }
+
+        /* 19 - suche unter dem Reiter "Indexfälle" "Thorsten Mehler" */
+        cy.get('[data-cy="index-cases"]').should('exist').click();
+
+        cy.get('[data-cy="search-index-case-input"]').should('exist').type('Thorsten Mehler');
+        cy.get('[data-cy="case-data-table"]')
+          .find('.ag-center-cols-container > .ag-row')
+          .should('have.length.greaterThan', 0)
+          .then(($elems) => {
+            $elems[0].click();
+          });
+
         /* CHECK: Unter "Kontakte" sind alle alten und neu angelegten Kontakte (Leon Duerr, Anna Beike und Conny Hügel) mit der dazugehörigen Risikoeinstufung  (für Conny Hügel erfasst) sichtbar */
+        cy.get('[data-cy="contacts-tab"]').should('exist').click();
+
+        checkContactExists('Leon', 'Duerr');
+        checkContactExists('Anna', 'Beike');
+        checkContactExists('Conny', 'Hügel');
+
         /* 20 - Logout als GAMA */
+        cy.logOut();
+
+        function checkContactExists(firstName: string, lastName: string) {
+          cy.get('[col-id="lastName"] > .ag-cell-label-container > .ag-header-cell-menu-button > .ag-icon')
+            .should('exist')
+            .click();
+
+          cy.get('.ag-filter-filter').first().should('exist').clear().type(lastName);
+
+          cy.get('[col-id="firstName"] > .ag-cell-label-container > .ag-header-cell-menu-button > .ag-icon')
+            .should('exist')
+            .click();
+
+          cy.get('.ag-filter-filter').first().should('exist').clear().type(firstName);
+
+          cy.get('.ag-center-cols-container > div > [col-id="lastName"]').contains(lastName);
+          cy.get('.ag-center-cols-container > div > [col-id="firstName"]').contains(firstName);
+          cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('angelegt');
+        }
       });
     });
   }
