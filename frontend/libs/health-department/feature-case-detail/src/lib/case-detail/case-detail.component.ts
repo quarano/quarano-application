@@ -13,7 +13,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseType } from '@qro/auth/api';
@@ -102,6 +102,41 @@ export class CaseDetailComponent implements OnDestroy {
       return 'Der Fall ist bereits abgeschlossen worden';
     }
     return '';
+  }
+
+  getAccountDeletionInfoText(caseDetail: CaseDto, buttonName: string) {
+    return (
+      `Mit Klick auf den Button "${buttonName}" löschen Sie den User-Account von ${caseDetail.firstName} ${caseDetail.lastName}. ` +
+      `Ein Login mit den bisherigen Accountdaten wird nicht mehr möglich sein. ` +
+      `Bereits hinterlegte Falldaten bleiben jedoch erhalten. ` +
+      `Verwenden Sie den Button "${buttonName}", wenn ${caseDetail.firstName} ${caseDetail.lastName} ` +
+      `seinen/ihren Usernamen vergessen hat und sich deshalb nicht mehr einloggen kann. ` +
+      `Ein vergessenes Passwort dagegen kann ${caseDetail.firstName} ${caseDetail.lastName} selbst auf der Login-Seite zurücksetzen.`
+    );
+  }
+
+  deleteUserAccount(caseDetail: CaseDto) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        abortButtonText: 'Abbrechen',
+        confirmButtonText: 'Ja',
+        title: `User-Account von ${caseDetail.firstName} ${caseDetail.lastName} löschen`,
+        text: this.getAccountDeletionInfoText(caseDetail, 'Ja') + ' Möchten Sie fortfahren?',
+      },
+    });
+
+    this.subs.add(
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.subs.sink = this.apiService
+            .deleteApiCall<StartTracking>(caseDetail, 'account')
+            .pipe(switchMap((result) => this.entityService.getByKey(caseDetail.caseId)))
+            .subscribe((caseDto) => {
+              this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDto.caseId}/comments`]);
+            });
+        }
+      })
+    );
   }
 
   get returnLink() {

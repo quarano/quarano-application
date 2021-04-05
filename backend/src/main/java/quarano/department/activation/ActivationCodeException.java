@@ -35,6 +35,12 @@ public class ActivationCodeException extends RuntimeException {
 				Status.USED_OR_CANCELED);
 	}
 
+	static ActivationCodeException canceled(ActivationCode code) {
+		return new ActivationCodeException(
+				"Activation code " + code.getId() + " is canceled!",
+				Status.CANCELED);
+	}
+
 	static ActivationCodeException activationConcluded() {
 		return new ActivationCodeException("Account was already activated!", Status.USED_OR_CANCELED);
 	}
@@ -45,7 +51,7 @@ public class ActivationCodeException extends RuntimeException {
 
 	public enum Status {
 
-		NOT_FOUND, EXPIRED, USED_OR_CANCELED;
+		NOT_FOUND, EXPIRED, USED_OR_CANCELED, CANCELED;
 
 		public String getMessageKey() {
 			return "Invalid.activationCode." + name();
