@@ -30,6 +30,7 @@ class CaseRowViewModel {
   originCases: string[];
   rowHeight: number;
   selfLink: string;
+  email: string;
 }
 
 @Component({
@@ -54,37 +55,40 @@ export class CaseListComponent implements OnInit {
   constructor(private entityService: CaseEntityService, private router: Router, private dialogService: MatDialog) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
-      { headerName: 'Nachname', field: 'lastName', flex: 2 },
-      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      { headerName: 'Status', field: 'status', filter: 'checkboxFilter' },
+      { headerName: 'Nachname', field: 'lastName' },
+      { headerName: 'Vorname', field: 'firstName' },
+      {
+        headerName: 'Geburtsdatum',
+        field: 'dateOfBirth',
+        filter: 'agDateColumnFilter',
+        filterParams: DATE_FILTER_PARAMS,
+      },
       { headerName: 'Typ', field: 'typeName', filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
-      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber' },
       {
         headerName: 'Ursprungsfälle',
         field: 'originCases',
         cellRendererFramework: UnorderedListComponent,
-        flex: 2,
       },
       {
         headerName: 'E-Mail',
         field: 'email',
         cellRendererFramework: EmailButtonComponent,
         filter: false,
-        width: 90,
+        width: 100,
       },
     ];
   }
@@ -124,6 +128,7 @@ export class CaseListComponent implements OnInit {
       originCases: c?._embedded?.originCases?.map((originCase) => `${originCase?.firstName} ${originCase?.lastName}`),
       rowHeight: Math.min(50 + c?._embedded?.originCases?.length * 9),
       selfLink: c?._links?.self?.href,
+      email: c.email,
     };
   }
 
