@@ -24,13 +24,7 @@
       <div class="row">
         <div class="col-sm-11 pl-0">
           <mat-form-field appearance="outline" class="full-width mt-3" data-cy="search-contact-case-input">
-            <input
-              matInput
-              type="text"
-              placeholder="Suchen..."
-              [(ngModel)]="filterString"
-              name="filterString"
-            />
+            <input matInput type="text" placeholder="Suchen..." [(ngModel)]="filterString" name="filterString" />
           </mat-form-field>
         </div>
         <div class="col-sm-1" style="display: flex; align-items: center; justify-content: flex-end">
@@ -51,7 +45,7 @@
 
   <ag-grid-angular
     data-cy="case-data-table"
-    style="height: 50vh"
+    style="height: 50vh; width: 100%"
     class="ag-theme-material"
     [rowData]="cases$ | async"
     [columnDefs]="columnDefs"

@@ -46,32 +46,30 @@ export class CaseListComponent implements OnInit {
   constructor(private entityService: CaseEntityService, private router: Router, private dialogService: MatDialog) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
-      { headerName: 'Nachname', field: 'lastName', flex: 2, tooltipField: 'lastName' },
-      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      { headerName: 'Status', field: 'status', filter: 'checkboxFilter', width: 300 },
+      { headerName: 'Nachname', field: 'lastName', tooltipField: 'lastName' },
+      { headerName: 'Vorname', field: 'firstName' },
       {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
-      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter', width: 100 },
-      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', flex: 3 },
+      { headerName: 'PLZ', field: 'zipCode', filter: 'agNumberColumnFilter' },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', width: 250 },
       {
         headerName: 'E-Mail',
         field: 'email',
         cellRendererFramework: EmailButtonComponent,
         filter: false,
         sortable: false,
-        width: 90,
+        width: 100,
       },
     ];
   }
