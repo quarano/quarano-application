@@ -57,6 +57,13 @@ export class CaseListComponent implements OnInit {
       { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
       { headerName: 'Nachname', field: 'lastName', flex: 2 },
       { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      {
+        headerName: 'Geburtsdatum',
+        field: 'dateOfBirth',
+        filter: 'agDateColumnFilter',
+        width: 170,
+        filterParams: DATE_FILTER_PARAMS,
+      },
       { headerName: 'Typ', field: 'typeName', filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne bis',
