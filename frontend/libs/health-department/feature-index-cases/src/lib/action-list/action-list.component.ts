@@ -51,31 +51,28 @@ export class ActionListComponent implements OnInit {
       {
         headerName: 'Auffälligkeiten',
         field: 'alerts',
-        flex: 3,
         filter: 'actionAlertFilter',
         cellRenderer: 'actionAlertComponent',
+        width: 300,
       },
-      { headerName: 'Nachname', field: 'lastName', flex: 2 },
-      { headerName: 'Vorname', field: 'firstName', flex: 2 },
+      { headerName: 'Nachname', field: 'lastName' },
+      { headerName: 'Vorname', field: 'firstName' },
       {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
-      { headerName: 'Status', field: 'status', flex: 3, filter: 'checkboxFilter' },
+      { headerName: 'Status', field: 'status', filter: 'checkboxFilter' },
       {
         headerName: 'Quarantäne seit',
         field: 'quarantineStart',
         filter: 'agDateColumnFilter',
-        width: 170,
         filterParams: DATE_FILTER_PARAMS,
       },
       {
         headerName: 'Telefon',
         field: 'phone',
-        width: 140,
       },
       {
         headerName: 'E-Mail',
@@ -83,7 +80,7 @@ export class ActionListComponent implements OnInit {
         cellRendererFramework: EmailButtonComponent,
         filter: false,
         sortable: false,
-        width: 90,
+        width: 100,
       },
     ];
   }
