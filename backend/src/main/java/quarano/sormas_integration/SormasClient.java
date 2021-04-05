@@ -1,19 +1,7 @@
 package quarano.sormas_integration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import quarano.sormas_integration.indexcase.SormasCase;
 import quarano.sormas_integration.person.SormasContact;
 import quarano.sormas_integration.person.SormasPerson;
@@ -23,8 +11,19 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.List;
+
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Federico Grasso
@@ -75,13 +74,13 @@ public class SormasClient {
                 .retrieve();
     }
 
-    public Flux<SormasCase> getCases(LocalDateTime since) throws JSONException {
+    public Flux<SormasCase> getCases(LocalDateTime since){
         log.info("Getting cases since " + since);
         return GetRequest("/cases/all/" + since.toEpochSecond(ZoneOffset.UTC))
                 .bodyToFlux(SormasCase.class);
     }
 
-    public Flux<SormasPerson> getPersons(LocalDateTime since) throws JSONException {
+    public Flux<SormasPerson> getPersons(LocalDateTime since) {
         log.info("Getting persons since " + since);
         return GetRequest("/persons/all/" + since.toEpochSecond(ZoneOffset.UTC))
                 .bodyToFlux(SormasPerson.class);

@@ -1,15 +1,13 @@
 package quarano.sormas_integration;
 
 import io.vavr.Tuple2;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import quarano.account.Department;
 import quarano.account.DepartmentRepository;
 import quarano.core.Address;
@@ -28,7 +26,6 @@ import quarano.sormas_integration.mapping.SormasCaseMapper;
 import quarano.sormas_integration.mapping.SormasPersonDto;
 import quarano.sormas_integration.mapping.SormasPersonMapper;
 import quarano.sormas_integration.person.SormasPerson;
-import quarano.sormas_integration.report.ContactsSyncReport;
 import quarano.sormas_integration.report.IndexSyncReport;
 import quarano.sormas_integration.report.IndexSyncReportRepository;
 import quarano.tracking.TrackedPerson;
@@ -38,8 +35,19 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * @author Federico Grasso
@@ -151,7 +159,7 @@ public class SyncIndex {
         }
     }
 
-    private void syncCasesFromSormas(SormasClient sormasClient, LocalDateTime since, IndexSyncReport newReport, long executionTimeSpan) throws JSONException, WebClientResponseException {
+    private void syncCasesFromSormas(SormasClient sormasClient, LocalDateTime since, IndexSyncReport newReport, long executionTimeSpan) throws WebClientResponseException {
         personsFromQuarano.clear();
         departmentsFromQuarano.clear();
 
