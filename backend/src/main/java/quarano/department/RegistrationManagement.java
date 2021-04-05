@@ -58,8 +58,8 @@ public class RegistrationManagement {
 
 		return activationCodes.createActivationCode(personId, departmentId)
 				.onSuccess(code -> {
-					var comment = comments.successComment(CommentKey.REGISTRATION__INITIATED, code.getId());
-					cases.save(trackedCase.markInRegistration().addComment(comment));
+						var comment = comments.successComment(CommentKey.REGISTRATION__INITIATED, code.getId());
+						cases.save(trackedCase.markInRegistration().addComment(comment));
 				});
 	}
 

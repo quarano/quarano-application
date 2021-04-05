@@ -69,7 +69,7 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 	@Nullable
 	private @Getter @Setter String sormasUuid = null;
 
-	@OneToOne
+	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "account_id")
 	private Account account;
 
@@ -128,6 +128,13 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 		Assert.notNull(account, "Account must not be null!");
 
 		this.account = account;
+
+		return this;
+	}
+
+	public TrackedPerson deleteAccountRegistration() {
+
+		this.account = null;
 
 		return this;
 	}

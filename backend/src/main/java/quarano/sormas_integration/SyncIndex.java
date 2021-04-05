@@ -74,11 +74,11 @@ public class SyncIndex {
             log.debug("Creating report instance...");
             IndexSyncReport newReport = new IndexSyncReport(
                     UUID.randomUUID(),
-                    0,
-                    0,
+                    String.valueOf(0),
+                    String.valueOf(0),
                     LocalDateTime.now(),
-                    0,
-                    IndexSyncReport.ReportStatus.STARTED
+                    String.valueOf(0),
+                    String.valueOf(IndexSyncReport.ReportStatus.STARTED)
             );
             log.info("Report instance created");
 
@@ -86,12 +86,12 @@ public class SyncIndex {
             long reportsCount = reports.count();
 
             try{
-                SormasClient sormasClient = new SormasClient(properties.getSormasurl(), properties.getSormasurl(), properties.getSormaspass());
+                SormasClient sormasClient = new SormasClient(properties.getSormasurl(), properties.getSormasuser(), properties.getSormaspass());
 
                 log.debug("Getting last report...");
                 List<IndexSyncReport> report = reports.getOrderBySyncDateDesc();
 
-                LocalDateTime since = LocalDateTime.MIN;
+                LocalDateTime since = LocalDateTime.of(2020, 1, 1, 0, 0);
 
                 // if reports table is not empty...
                 if(!report.isEmpty()){
@@ -99,7 +99,7 @@ public class SyncIndex {
                     log.debug("Report list is not empty");
 
                     // if is already present an active report quit current synchronization
-                    if(singleReport.getStatus().equals(IndexSyncReport.ReportStatus.STARTED)){
+                    if(singleReport.getStatus().equals(String.valueOf(IndexSyncReport.ReportStatus.STARTED))){
                         log.warn("Another schedule is already running... ABORTED");
                         return;
                     }
@@ -166,8 +166,8 @@ public class SyncIndex {
 
             List<SormasPerson> remainingPersons = data.getT2();
 
-            newReport.setCasesNumber(casesResponse.size());
-            newReport.setPersonsNumber(personsResponse.size());
+            newReport.setCasesNumber(String.valueOf(casesResponse.size()));
+            newReport.setPersonsNumber(String.valueOf(personsResponse.size()));
 
             log.info(casesResponse.size() + " cases to handle");
             log.info(personsResponse.size() + " persons to handle");
@@ -550,14 +550,14 @@ public class SyncIndex {
 
         if(reportQuery.isPresent()){
             IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(IndexSyncReport.ReportStatus.FAILED);
+            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            reportToUpdate.setStatus(String.valueOf(IndexSyncReport.ReportStatus.FAILED));
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(IndexSyncReport.ReportStatus.FAILED);
+            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            report.setStatus(String.valueOf(IndexSyncReport.ReportStatus.FAILED));
             reports.save(report);
             log.info("Report saved");
         }
@@ -568,14 +568,14 @@ public class SyncIndex {
 
         if(reportQuery.isPresent()){
             IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
+            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            reportToUpdate.setStatus(String.valueOf(IndexSyncReport.ReportStatus.SUCCESS));
             reports.save(reportToUpdate);
             log.info("Report saved");
         }
         else{
-            report.setSyncTime((int)((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(IndexSyncReport.ReportStatus.SUCCESS);
+            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+            report.setStatus(String.valueOf(IndexSyncReport.ReportStatus.SUCCESS));
             reports.save(report);
             log.info("Report saved");
         }

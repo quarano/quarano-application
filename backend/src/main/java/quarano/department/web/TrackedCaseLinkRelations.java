@@ -20,8 +20,11 @@ public class TrackedCaseLinkRelations {
 	public static final LinkRelation CONTACTS = LinkRelation.of("contacts");
 	public static final LinkRelation ORIGIN_CASES = LinkRelation.of("originCases");
 	public static final LinkRelation DIARY = LinkRelation.of("diary");
+	public static final LinkRelation ACCOUNT = LinkRelation.of("account");
+
 
 	public static final LinkRelation ENROLLMENT = LinkRelation.of("enrollment");
+
 
 	static final LinkRelation DETAILS = LinkRelation.of("details");
 	static final LinkRelation ENCOUNTERS = LinkRelation.of("encounters");

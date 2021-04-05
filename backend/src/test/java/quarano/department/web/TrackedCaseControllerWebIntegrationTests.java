@@ -42,6 +42,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.client.LinkDiscoverer;
+import org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -73,6 +74,7 @@ class TrackedCaseControllerWebIntegrationTests {
 	private final TrackedCaseRepresentations representations;
 	private final MessageSourceAccessor messages;
 	private final LinkDiscoverer discoverer;
+	private final HalLinkDiscoverer links;
 	private final ModelMapper modelMapper;
 
 	@Test
@@ -753,6 +755,39 @@ class TrackedCaseControllerWebIntegrationTests {
 
 		assertThat(document.read("$._links.anomalies.href", String.class)).isNotBlank();
 		assertThat(document.read("$.openAnomaliesCount", long.class)).isEqualTo(1);
+	}
+
+	@Test // CORE-455
+	void deletedAccountOfTrackedPerson() throws Exception {
+
+		var result = mvc.perform(delete("/hd/cases/{identifier}/account", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var document = JsonPath.parse(result);
+		
+		assertThat(document.read("$.activationCode", String.class)).isNotBlank();
+		assertThat(links.findLinkWithRel(TrackedCaseLinkRelations.RENEW, result)).isPresent();
+
+		var response = mvc.perform(get("/hd/cases/{identifier}", TrackedCaseDataInitializer.TRACKED_CASE_GUSTAV)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+
+		var docResponse = JsonPath.parse(response);
+
+		assertThat(docResponse.read("$.status", String.class))
+				.isEqualTo(messages.getMessage("quarano.department.TrackedCase.Status.tracking"));
+		assertThat(links.findLinkWithRel(ACCOUNT, result)).isEmpty();
+	}
+
+	@Test// CORE-455
+	void deletedAccountOfTrackedPersonWithoutAccount() throws Exception {
+
+		mvc.perform(delete("/hd/cases/{identifier}/account", TrackedCaseDataInitializer.TRACKED_CASE_TANJA)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test // CORE-331

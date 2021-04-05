@@ -53,12 +53,23 @@
         color="primary"
         [disabled]="!caseDetail._links?.hasOwnProperty('analog-tracking')"
         mat-button
+        class="mr-3"
       >
         <span
           [matTooltip]="getAnalogTrackingTitle(caseDetail, analog_tracking_btn.disabled)"
           matTooltipClass="qro-tooltip"
           >Analog nachverfolgen</span
         >
+      </button>
+      <button
+        class="mr-3"
+        mat-button
+        [matTooltip]="getAccountDeletionInfoText(caseDetail, 'User-Account löschen')"
+        matTooltipClass="qro-tooltip"
+        (click)="deleteUserAccount(caseDetail)"
+        *ngIf="caseDetail?._links?.hasOwnProperty('account')"
+      >
+        User-Account löschen
       </button>
       <div class="spacer"></div>
       <button

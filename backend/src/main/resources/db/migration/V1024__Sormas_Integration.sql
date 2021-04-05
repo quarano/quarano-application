@@ -6,11 +6,11 @@ CREATE INDEX tracked_people_sormas_id ON tracked_people (sormas_uuid);
 
 CREATE TABLE index_sync_report (
     uuid uuid NOT NULL,
-    persons_number int NOT NULL,
-    cases_number int NOT NULL,
+    persons_number varchar(255) NOT NULL,
+    cases_number varchar(255) NOT NULL,
     sync_date timestamp NOT NULL,
-    sync_time int NOT NULL,
-    status int NOT NULL,
+    sync_time varchar(255) NOT NULL,
+    status varchar(255) NOT NULL,
     CONSTRAINT changes_for_index_sync_pkey PRIMARY KEY (uuid)
 );
 
@@ -18,10 +18,10 @@ CREATE INDEX index_sync_report_date ON index_sync_report (sync_date);
 
 CREATE TABLE contacts_sync_report (
     uuid uuid NOT NULL,
-    persons_number int NOT NULL,
+    persons_number varchar(255) NOT NULL,
     sync_date timestamp NOT NULL,
-    sync_time int NOT NULL,
-    status int NOT NULL,
+    sync_time varchar(255) NOT NULL,
+    status varchar(255) NOT NULL,
     CONSTRAINT changes_for_contacts_sync_pkey PRIMARY KEY (uuid)
 );
 

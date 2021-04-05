@@ -70,6 +70,7 @@ public class TrackedCaseController {
 	private final @NonNull TrackedCaseRepresentations representations;
 	private final @NonNull HealthDepartments rkiDepartments;
 
+
 	@GetMapping(path = "/hd/cases")
 	public RepresentationModel<?> getCases(@LoggedIn Department department,
 			@RequestParam("q") Optional<String> query,

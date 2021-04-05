@@ -391,10 +391,13 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	 */
 	TrackedCase markInRegistration() {
 
-		assertStatus(Streamable.of(Status.OPEN, Status.IN_REGISTRATION),
-				"Cannot start registration for case %s in status %s!", id, status);
+		if(this.getStatus() != Status.TRACKING && this.getStatus() != Status.REGISTERED){
+			assertStatus(Streamable.of(Status.OPEN, Status.IN_REGISTRATION),
+					"Cannot start registration for case %s in status %s!", id, status);
 
-		this.status = Status.IN_REGISTRATION;
+			this.status = Status.IN_REGISTRATION;
+		}
+
 		this.registerEvent(RegistrationInitiated.of(getId()));
 
 		return this;
@@ -415,12 +418,15 @@ public class TrackedCase extends QuaranoAggregate<TrackedCase, TrackedCaseIdenti
 	}
 
 	TrackedCase markRegistrationCompleted() {
+		//CORE-455 in case a account was deleted it kept its old status wich could be tracking or registered
+		if (this.getStatus() != Status.TRACKING && this.getStatus() != Status.REGISTERED) {
 
-		assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
+			assertStatus(Status.IN_REGISTRATION, "Cannot complete registration for case %s in status %s!", id, status);
 
-		this.status = Status.REGISTERED;
+			this.status = Status.REGISTERED;
 
-		this.registerEvent(CaseStatusUpdated.of(id));
+			this.registerEvent(CaseStatusUpdated.of(id));
+		}
 
 		return this;
 	}
