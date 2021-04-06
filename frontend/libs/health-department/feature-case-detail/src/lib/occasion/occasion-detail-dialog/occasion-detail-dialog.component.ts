@@ -54,11 +54,17 @@ export class OccasionDetailDialogComponent implements OnInit {
     if (!timestamp) {
       return '';
     }
-    let timestampHour = timestamp?.getHours()?.toString();
-    timestampHour === '0' ? (timestampHour = '00') : (timestampHour = '0');
-    let timestampMinute = timestamp?.getMinutes()?.toString();
-    timestampMinute === '0' ? (timestampMinute = '00') : (timestampMinute = '0');
+    const timestampHour = this.mapZeros(timestamp?.getHours());
+    const timestampMinute = this.mapZeros(timestamp?.getMinutes());
     return timestampHour.concat(':').concat(timestampMinute);
+  }
+
+  private mapZeros(time: number) {
+    const t = time?.toString();
+    if (t.length === 1) {
+      return '0'.concat(t);
+    }
+    return t;
   }
 
   setPickedStartTime(event: string) {
@@ -74,6 +80,7 @@ export class OccasionDetailDialogComponent implements OnInit {
   }
 
   closeAndSubmit() {
+    console.log(this.mapFormToOccasion());
     this.dialogRef.close(this.mapFormToOccasion());
   }
 

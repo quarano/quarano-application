@@ -44,7 +44,11 @@
       <mat-form-field>
         <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}</mat-label>
         <div class="timepicker-input">
-          <input matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="timeStart" />
+          <input
+            matInput
+            placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}"
+            formControlName="timeStart"
+          />
           <button mat-icon-button (click)="fromTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
@@ -84,7 +88,12 @@
       <mat-form-field>
         <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}</mat-label>
         <div class="timepicker-input">
-          <input disabled matInput placeholder="{{ 'TEndTime' | translate }}" formControlName="timeEnd" />
+          <input
+            disabled
+            matInput
+            placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}"
+            formControlName="timeEnd"
+          />
           <button mat-icon-button (click)="toTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
@@ -160,7 +169,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
-  <button mat-button cdkFocusInitial (click)="closeAndSubmit()" [disabled]="occasionFormGroup?.invalid">
+  <button
+    mat-button
+    cdkFocusInitial
+    (click)="closeAndSubmit()"
+    [disabled]="occasionFormGroup?.invalid || occasionFormGroup?.untouched"
+  >
     {{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANLEGEN' | translate }}
   </button>
 </mat-dialog-actions>
