@@ -32,8 +32,8 @@ public interface SormasCaseMapper {
     @Mapping(target = "uuid", expression = "java(getUUID(source))")
     @Mapping(target = "person", expression = "java(getPerson(person))")
     @Mapping(target = "district", expression = "java(getDistrict(district))")
-    @Mapping(target = "region", expression = "java(getRegion(district))")
-    @Mapping(target = "healthFacility", expression = "java(getHealthFacility(district))")
+    @Mapping(target = "region", expression = "java(getRegion(region))")
+    @Mapping(target = "healthFacility", expression = "java(getHealthFacility(healthFacility))")
     @Mapping(target = "reportDate", expression = "java(getReportDate(source))")
     @Mapping(target = "quarantineTo", expression = "java(getQuarantineTo(source))")
     @Mapping(target = "quarantineFrom", expression = "java(getQuarantineFrom(source))")
@@ -70,34 +70,32 @@ public interface SormasCaseMapper {
         );
     }
 
-    default LocalDateTime getQuarantineTo(TrackedCase source){
+    default String getQuarantineTo(TrackedCase source){
         if(source.getQuarantine() != null){
-            return convertToDateViaInstant(source.getQuarantine().getTo());
+            return convertToDateViaInstant(source.getQuarantine().getTo()).toString();
         }
 
         return null;
     }
 
-    default LocalDateTime getQuarantineFrom(TrackedCase source){
+    default String getQuarantineFrom(TrackedCase source){
         if(source.getQuarantine() != null){
-            return convertToDateViaInstant(source.getQuarantine().getFrom());
+            return convertToDateViaInstant(source.getQuarantine().getFrom()).toString();
         }
 
         return null;
     }
 
-    default LocalDateTime getReportDate(TrackedCase source){
+    default String getReportDate(TrackedCase source){
         if(source.getTestResult() != null){
-            return convertToDateViaInstant(source.getTestResult().getTestDate());
+            return convertToDateViaInstant(source.getTestResult().getTestDate()).toString();
         }
 
         return null;
     }
 
-    default LocalDateTime convertToDateViaInstant(LocalDate dateToConvert) {
-        return LocalDateTime.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+    default LocalDate convertToDateViaInstant(LocalDate dateToConvert) {
+        return dateToConvert;
     }
 
     default SormasReportingUser getReportingUser(String reportingUser){

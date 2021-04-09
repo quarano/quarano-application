@@ -19,6 +19,6 @@ public interface IndexSyncReportRepository extends JpaRepository<IndexSyncReport
     List<IndexSyncReport> getOrderBySyncDateDesc();
 
     // Get most recent successful report entity
-    @Query(nativeQuery = true, value = "SELECT * FROM index_sync_report WHERE status = 2 ORDER BY sync_date DESC LIMIT 1")
+    @Query(nativeQuery = true, value = "SELECT * FROM index_sync_report WHERE status = 'SUCCESS' ORDER BY sync_date DESC LIMIT 1")
     List<IndexSyncReport> getSuccessfulOrderBySyncDateDesc();
 }

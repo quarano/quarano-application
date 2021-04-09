@@ -136,9 +136,9 @@ public class SormasIntegrationMappingUnitTests {
 
         SormasCase sormasCase = new SormasCase(
                 UUID.randomUUID().toString(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                LocalDate.now().toString(),
+                LocalDate.now().toString(),
+                LocalDate.now().toString(),
                 new SormasCasePerson(
                         trackedPerson.getSormasUuid(),
                         trackedPerson.getFirstName(),

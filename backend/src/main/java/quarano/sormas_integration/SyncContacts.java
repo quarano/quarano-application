@@ -222,6 +222,7 @@ public class SyncContacts {
         String[] response = sormasClient.postPersons(sormasPersons).block();
 
         for(int i = 0; i < response.length; i++){
+            log.debug("Person number" + i + ": " + response[i]);
             if(response[i].equals("OK")){
                 trackedPersons.save(persons.get(i));
                 successPersons.add(persons.get(i));
@@ -244,6 +245,10 @@ public class SyncContacts {
 
         // Push to Sormas
         String[] response = sormasClient.postContacts(sormasContacts).block();
+
+        for(int i = 0; i < response.length; i++){
+            log.debug("Contact number" + i + ": " + response[i]);
+        }
     }
 
     private void updateFailedReport(UUID id, ContactsSyncReport report, long executionTimeSpan){
