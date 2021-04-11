@@ -2,10 +2,10 @@
   <h2>{{ occasion.title }}</h2>
 
   <mat-card-content>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.CODE' | translate }}: {{ occasion?.occasionCode }}</div>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.ANZAHL_TEILNEHMER' | translate }}: {{ occasion?.visitorGroups?.length }}</div>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.START' | translate }}: {{ occasion?.start | date: 'EEEEEE, dd.MM.y' }}</div>
-    <div>{{ 'EREIGNISSE.EREIGNIS_CARD.ENDE' | translate }}: {{ occasion?.end | date: 'EEEEEE, dd.MM.y' }}</div>
+    <div>Ereignis Code: {{ occasion?.occasionCode }}</div>
+    <div>Anzahl Teilnehmer: {{ occasion?.visitorGroups?.length }}</div>
+    <div>Start: {{ occasion?.start | date: 'EEEEEE, dd.MM.y' }}</div>
+    <div>Ende: {{ occasion?.end | date: 'EEEEEE, dd.MM.y' }}</div>
   </mat-card-content>
 
   <mat-card-footer>

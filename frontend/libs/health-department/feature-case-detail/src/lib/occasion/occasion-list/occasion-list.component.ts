@@ -8,7 +8,6 @@ import { BehaviorSubject } from 'rxjs';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { OccasionService } from '../occasion.service';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'qro-occasion-list',
@@ -25,8 +24,7 @@ export class OccasionListComponent implements OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private occasionService: OccasionService,
-    private snackbarService: SnackbarService,
-    private translate: TranslateService
+    private snackbarService: SnackbarService
   ) {
     this.route.parent.paramMap
       .pipe(
@@ -56,7 +54,7 @@ export class OccasionListComponent implements OnDestroy {
       .editOccasion(occasion.occasionCode, occasion)
       .pipe(take(1))
       .subscribe((_) => {
-        this.snackbarService.success(this.translate.instant('EREIGNISSE.BEARBEITET'));
+        this.snackbarService.success('Ereignis erfolgreich bearbeitet');
         this.loadOccasions();
       });
   }
@@ -66,7 +64,7 @@ export class OccasionListComponent implements OnDestroy {
       .deleteOccasion(occasion)
       .pipe(take(1))
       .subscribe((_) => {
-        this.snackbarService.success(this.translate.instant('EREIGNISSE.GELOESCHT'));
+        this.snackbarService.success('Ereignis erfolgreich gelöscht');
         this.loadOccasions();
       });
   }
@@ -83,7 +81,7 @@ export class OccasionListComponent implements OnDestroy {
       .saveOccasion(this.caseId, newOccasion)
       .pipe(take(1))
       .subscribe((_) => {
-        this.snackbarService.success(this.translate.instant('EREIGNISSE.ERSTELLT'));
+        this.snackbarService.success('Ereignis erfolgreich erstellt');
         this.loadOccasions();
       });
   }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { OccasionDto } from '../../../../../domain/src/lib/model/occasion';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
-import { VALIDATION_PATTERNS } from '@qro/shared/util-forms';
+import { TrimmedPatternValidator, VALIDATION_PATTERNS, ValidationErrorService } from '@qro/shared/util-forms';
 
 @Component({
   selector: 'qro-occasion-detail-dialog',
@@ -20,7 +20,11 @@ export class OccasionDetailDialogComponent implements OnInit {
     this.initialOccasion = occasion;
   }
 
-  constructor(public dialogRef: MatDialogRef<OccasionDetailDialogComponent>, private builder: FormBuilder) {
+  constructor(
+    public dialogRef: MatDialogRef<OccasionDetailDialogComponent>,
+    private builder: FormBuilder,
+    public validationErrorService: ValidationErrorService
+  ) {
     this.initialOccasion = {
       additionalInformation: '',
       address: undefined,
@@ -108,8 +112,12 @@ export class OccasionDetailDialogComponent implements OnInit {
       Validators.pattern(VALIDATION_PATTERNS.zip),
       Validators.required,
     ]);
-    this.occasionFormGroup.controls.timeStart.setValidators([Validators.pattern(VALIDATION_PATTERNS.timestamp)]);
-    this.occasionFormGroup.controls.timeEnd.setValidators([Validators.pattern(VALIDATION_PATTERNS.timestamp)]);
+    this.occasionFormGroup.controls.timeStart.setValidators([
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.timestamp),
+    ]);
+    this.occasionFormGroup.controls.timeEnd.setValidators([
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.timestamp),
+    ]);
   }
 
   private mapFormToOccasion() {

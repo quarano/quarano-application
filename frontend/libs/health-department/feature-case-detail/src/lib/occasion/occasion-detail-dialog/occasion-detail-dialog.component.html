@@ -1,61 +1,38 @@
-<h2 mat-dialog-title>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NEU' | translate }}</h2>
+<h2 mat-dialog-title>Ereignis Details</h2>
 
 <mat-dialog-content>
   <form class="new-event-form" [formGroup]="occasionFormGroup">
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}</mat-label>
-      <input
-        required
-        formControlName="title"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NAME' | translate }}"
-      />
-      <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.PFLICHTFELD' | translate
-      }}</mat-error>
+      <mat-label>Name</mat-label>
+      <input required formControlName="title" matInput placeholder="Ereignis Details" />
+      <mat-error *ngIf="occasionFormGroup?.controls?.title?.errors?.required">Name</mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANSPRECHPARTNER' | translate }}</mat-label>
-      <input
-        formControlName="contactPerson"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANSPRECHPARTNER' | translate }}"
-      />
+      <mat-label>Ansprechpartner</mat-label>
+      <input formControlName="contactPerson" matInput placeholder="Ansprechpartner" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}</mat-label>
-      <input
-        required
-        formControlName="start"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.VON' | translate }}"
-        [matDatepicker]="dateFrom"
-      />
+      <mat-label>Startdatum</mat-label>
+      <input required formControlName="start" matInput placeholder="Startdatum" [matDatepicker]="dateFrom" />
       <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
       <mat-datepicker #dateFrom></mat-datepicker>
-      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.PFLICHTFELD' | translate
-      }}</mat-error>
+      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">Dies ist ein Pflichtfeld</mat-error>
     </mat-form-field>
 
     <div>
       <mat-form-field>
-        <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}</mat-label>
+        <mat-label>Startdatum</mat-label>
         <div class="timepicker-input">
-          <input
-            matInput
-            placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_VON' | translate }}"
-            formControlName="timeStart"
-          />
+          <input matInput placeholder="Startdatum" formControlName="timeStart" />
           <button mat-icon-button (click)="fromTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
         </div>
-        <mat-error *ngIf="occasionFormGroup?.controls?.timeStart?.errors?.pattern">{{
-          'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZEITFORMAT' | translate
-        }}</mat-error>
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.timeStart)">
+          {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.timeStart, error) | async }}
+        </mat-error>
       </mat-form-field>
       <ngx-material-timepicker
         [cancelBtnTmpl]="cancelBtn"
@@ -69,38 +46,28 @@
     </div>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}</mat-label>
-      <input
-        required
-        formControlName="end"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.BIS' | translate }}"
-        [matDatepicker]="dateTo"
-      />
+      <mat-label>Enddatum</mat-label>
+      <input required formControlName="end" matInput placeholder="Enddatum" [matDatepicker]="dateTo" />
       <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
       <mat-datepicker #dateTo></mat-datepicker>
-      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.PFLICHTFELD' | translate
-      }}</mat-error>
+      <mat-error *ngIf="occasionFormGroup?.controls?.start?.errors?.required">Dies ist ein Pflichtfeld</mat-error>
     </mat-form-field>
 
     <div>
       <mat-form-field>
-        <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}</mat-label>
+        <mat-label>Uhrzeit bis</mat-label>
         <div class="timepicker-input">
-          <input
-            disabled
-            matInput
-            placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZEIT_BIS' | translate }}"
-            formControlName="timeEnd"
-          />
+          <input disabled matInput placeholder="Uhrzeit bis" formControlName="timeEnd" />
           <button mat-icon-button (click)="toTime.open()">
             <mat-icon>schedule</mat-icon>
           </button>
         </div>
-        <mat-error *ngIf="occasionFormGroup?.controls?.timeEnd?.errors?.pattern">{{
-          'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZEITFORMAT' | translate
-        }}</mat-error>
+        <mat-error *ngIf="occasionFormGroup?.controls?.timestamp?.errors?.pattern"
+          >Benötigtes Format hh:mm (20:15)</mat-error
+        >
+        <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.timeEnd)">
+          {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.timeEnd, error) | async }}
+        </mat-error>
       </mat-form-field>
       <ngx-material-timepicker
         [cancelBtnTmpl]="cancelBtn"
@@ -114,41 +81,29 @@
     </div>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STRASSE' | translate }}</mat-label>
-      <input
-        formControlName="street"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STRASSE' | translate }}"
-      />
+      <mat-label>Straße</mat-label>
+      <input formControlName="street" matInput placeholder="Straße" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NUMMER' | translate }}</mat-label>
-      <input
-        formControlName="houseNumber"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.NUMMER' | translate }}"
-      />
+      <mat-label>Hausnummer</mat-label>
+      <input formControlName="houseNumber" matInput placeholder="Hausnummer" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZIP' | translate }}</mat-label>
-      <input formControlName="zipCode" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZIP' | translate }}" />
-      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.pattern">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.ZIP' | translate
-      }}</mat-error>
-      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.required">{{
-        'EREIGNISSE.EREIGNIS_NEU_MODAL.ERROR.PFLICHTFELD' | translate
-      }}</mat-error>
+      <mat-label>PLZ</mat-label>
+      <input formControlName="zipCode" matInput placeholder="PLZ" />
+      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.pattern">PLZ</mat-error>
+      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.required">Dies ist ein Pflichtfeld</mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}</mat-label>
-      <input formControlName="city" matInput placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.STADT' | translate }}" />
+      <mat-label>Stadt</mat-label>
+      <input formControlName="city" matInput placeholder="Stadt" />
     </mat-form-field>
 
     <fieldset class="additional-info">
-      <legend>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ZUSAETZTLICHE_BESCHREIBUNG' | translate }}</legend>
+      <legend>Zusätzliche Beschreibung</legend>
 
       <mat-form-field class="full-width">
         <textarea matInput formControlName="additionalInformation" type="text"></textarea>
@@ -156,32 +111,27 @@
     </fieldset>
 
     <mat-form-field *ngIf="initialOccasion?.occasionCode">
-      <mat-label>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.CODE' | translate }}</mat-label>
-      <input
-        readonly
-        formControlName="occasionCode"
-        matInput
-        placeholder="{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.CODE' | translate }}"
-      />
+      <mat-label>Ereignis Code</mat-label>
+      <input readonly formControlName="occasionCode" matInput placeholder="Ereignis Code" />
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
+  <button mat-button (click)="close()">Abbrechen</button>
   <button
     mat-button
     cdkFocusInitial
     (click)="closeAndSubmit()"
     [disabled]="occasionFormGroup?.invalid || occasionFormGroup?.untouched"
   >
-    {{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ANLEGEN' | translate }}
+    Speichern
   </button>
 </mat-dialog-actions>
 
 <ng-template #cancelBtn>
-  <button mat-button>{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.ABBRECHEN' | translate }}</button>
+  <button mat-button>Abbrechen</button>
 </ng-template>
 <ng-template #confirmBtn>
-  <button mat-button color="primary">{{ 'EREIGNISSE.EREIGNIS_NEU_MODAL.OK' | translate }}</button>
+  <button mat-button color="primary">Ok</button>
 </ng-template>
