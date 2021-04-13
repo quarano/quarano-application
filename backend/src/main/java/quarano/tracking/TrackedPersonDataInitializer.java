@@ -46,6 +46,8 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 			.of(UUID.fromString("c53bb0c9-a007-43e6-851a-e5e711920d3c"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON8_ID_DEP1 = TrackedPersonIdentifier
 			.of(UUID.fromString("2105d200-e331-1dea-87d0-0242ac13ad71"));		
+	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON11_ID_DEP1 = TrackedPersonIdentifier
+			.of(UUID.fromString("c53b0bc9-a007-34e6-851a-e5e711920d3c"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON3_ID_DEP2 = TrackedPersonIdentifier
 			.of(UUID.fromString("1d5ce370-7dbe-11ea-bc55-0242ac130003"));
 	public final static TrackedPersonIdentifier VALID_TRACKED_PERSON4_ID_DEP2 = TrackedPersonIdentifier
@@ -267,6 +269,16 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 						.setLocale(Locale.GERMANY);
 	}	
 	
+	/**
+	 * szenario 4
+	 *
+	 * @return
+	 */
+	public static TrackedPerson createHorst() {
+		return new TrackedPerson(VALID_TRACKED_PERSON11_ID_DEP1, "Horst", "Fröhlich", EmailAddress.of("horst@testtest.de"),
+				PhoneNumber.of("0621877466"), LocalDate.of(1980, 1, 1));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -298,6 +310,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
 		trackedPeople.save(createJulian());
+		trackedPeople.save(createHorst());
 
 		log.debug("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}
