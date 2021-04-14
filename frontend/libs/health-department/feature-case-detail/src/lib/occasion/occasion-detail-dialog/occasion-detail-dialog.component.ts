@@ -109,7 +109,7 @@ export class OccasionDetailDialogComponent implements OnInit {
     this.occasionFormGroup.controls.start.setValidators([Validators.required]);
     this.occasionFormGroup.controls.end.setValidators([Validators.required]);
     this.occasionFormGroup.controls.zipCode.setValidators([
-      Validators.pattern(VALIDATION_PATTERNS.zip),
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.zip),
       Validators.required,
     ]);
     this.occasionFormGroup.controls.timeStart.setValidators([
@@ -117,6 +117,15 @@ export class OccasionDetailDialogComponent implements OnInit {
     ]);
     this.occasionFormGroup.controls.timeEnd.setValidators([
       TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.timestamp),
+    ]);
+    this.occasionFormGroup.controls.houseNumber.setValidators([
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.houseNumber),
+    ]);
+    this.occasionFormGroup.controls.street.setValidators([
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.street),
+    ]);
+    this.occasionFormGroup.controls.city.setValidators([
+      TrimmedPatternValidator.trimmedPattern(VALIDATION_PATTERNS.city),
     ]);
   }
 

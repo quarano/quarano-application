@@ -83,23 +83,34 @@
     <mat-form-field>
       <mat-label>Straße</mat-label>
       <input formControlName="street" matInput placeholder="Straße" />
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.street)">
+        {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.street, error) | async }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Hausnummer</mat-label>
       <input formControlName="houseNumber" matInput placeholder="Hausnummer" />
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.houseNumber)">
+        {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.houseNumber, error) | async }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>PLZ</mat-label>
       <input formControlName="zipCode" matInput placeholder="PLZ" />
-      <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.pattern">PLZ</mat-error>
       <mat-error *ngIf="occasionFormGroup?.controls?.zipCode?.errors?.required">Dies ist ein Pflichtfeld</mat-error>
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.zipCode)">
+        {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.zipCode, error) | async }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Stadt</mat-label>
       <input formControlName="city" matInput placeholder="Stadt" />
+      <mat-error *ngFor="let error of validationErrorService.getErrorKeys(occasionFormGroup.controls.city)">
+        {{ validationErrorService.getErrorMessage(occasionFormGroup.controls.city, error) | async }}
+      </mat-error>
     </mat-form-field>
 
     <fieldset class="additional-info">
