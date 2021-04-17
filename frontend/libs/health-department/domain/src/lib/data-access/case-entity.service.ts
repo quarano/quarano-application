@@ -3,7 +3,7 @@ import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } f
 import { CaseDto } from '../..';
 import { HealthDepartmentService } from './health-department.service';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
 
 export const CASE_FEATURE_KEY = 'Case';
 
@@ -30,6 +30,7 @@ export class CaseEntityService extends EntityCollectionServiceBase<CaseDto> {
   public loadOneFromStore(id: string): Observable<CaseDto> {
     if (id) {
       return this.entityMap$.pipe(
+        first(),
         switchMap((entities) => {
           const loadedCase = entities[id];
           if (loadedCase && loadedCase?.comments) {
