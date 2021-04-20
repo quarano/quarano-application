@@ -270,13 +270,13 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 	}	
 	
 	/**
-	 * szenario 4
+	 * e2e - szenario 4
 	 *
 	 * @return
 	 */
-	public static TrackedPerson createHorst() {
-		return new TrackedPerson(VALID_TRACKED_PERSON11_ID_DEP1, "Horst", "Fröhlich", EmailAddress.of("horst@testtest.de"),
-				PhoneNumber.of("0621877466"), LocalDate.of(1980, 1, 1));
+	public static TrackedPerson createVanessa() {
+		return new TrackedPerson(VALID_TRACKED_PERSON11_ID_DEP1, "Vanessa", "Friedmann", EmailAddress.of("VanessaFriedmann@testtest.de"),
+				PhoneNumber.of("06701921712"), LocalDate.of(1965, 5, 19));
 	}
 
 	/*
@@ -310,7 +310,7 @@ public class TrackedPersonDataInitializer implements DataInitializer {
 		trackedPeople.save(createSunny());
 		trackedPeople.save(createSteffen());
 		trackedPeople.save(createJulian());
-		trackedPeople.save(createHorst());
+		trackedPeople.save(createVanessa());
 
 		log.debug("Test data: Generated {} tracked persons.", trackedPeople.count());
 	}
