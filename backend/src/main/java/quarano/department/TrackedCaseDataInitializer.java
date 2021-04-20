@@ -73,6 +73,9 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 	public static final TrackedCaseIdentifier TRACKED_CASE_SUNNY = TrackedCaseIdentifier
 			.of(UUID.fromString("cbb52d97-fb3e-45a1-b7a3-d2cb5d9c65a2"));
 
+	public static final TrackedCaseIdentifier TRACKED_CASE_VANESSA = TrackedCaseIdentifier
+			.of(UUID.fromString("cbb52d97-fb3e-45a1-bbaa-d2cb5d9c65a2"));	
+
 	/*
 	 * (non-Javadoc)
 	 * @see quarano.core.DataInitializer#initialize()
@@ -89,7 +92,8 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 		var jessica = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON4_ID_DEP2);
 		var harry = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON6_ID_DEP1);
 		var harriette = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON7_ID_DEP1);
-		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);		
+		var julian = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON8_ID_DEP1);
+		var vanessa = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_PERSON11_ID_DEP1);		
 
 		var siggi = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC1_ID_DEP1);
 		var sarah = trackedPeople.findRequiredById(TrackedPersonDataInitializer.VALID_TRACKED_SEC2_ID_DEP1);
@@ -171,7 +175,10 @@ public class TrackedCaseDataInitializer implements DataInitializer {
 								.setFamilyDoctor("Dr. Kleiss, Mannheimer. 34")
 								.setGuessedOriginOfInfection("privat"))
 				.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS));		
-			
+
+		// CASE Vanessa
+		cases.save(new TrackedCase(TRACKED_CASE_VANESSA, vanessa, CaseType.INDEX, department1, null));
+
 		// CASE Siggi
 
 		cases.save(new TrackedCase(TRACKED_CASE_SIGGI, siggi, CaseType.INDEX, department1, null)
