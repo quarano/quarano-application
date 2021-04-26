@@ -18,7 +18,7 @@ public class SormasContact {
     private String uuid;
     private SormasContactPerson person;
     private String disease = "CORONAVIRUS";
-    private LocalDateTime reportDateTime;
+    private String reportDateTime;
     private SormasContactHealthConditions healthConditions;
     private SormasContactCase caze;
     private SormasReportingUser reportingUser;
@@ -45,11 +45,11 @@ public class SormasContact {
         this.person = person;
     }
 
-    public LocalDateTime getReportDateTime() {
+    public String getReportDateTime() {
         return reportDateTime;
     }
 
-    public void setReportDateTime(LocalDateTime reportDateTime) {
+    public void setReportDateTime(String reportDateTime) {
         this.reportDateTime = reportDateTime;
     }
 

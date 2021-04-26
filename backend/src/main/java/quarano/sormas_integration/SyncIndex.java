@@ -511,7 +511,7 @@ public class SyncIndex {
         String[] response = sormasClient.postPersons(sormasPersons).block();
 
         for(int i = 0; i < response.length; i++){
-            log.error(response[i]);
+            log.debug("Person number" + i + ": " + response[i]);
             if(response[i].equals("OK")){
                 trackedPersons.save(persons.get(i));
                 successPersons.add(persons.get(i));
@@ -546,7 +546,7 @@ public class SyncIndex {
         String[] response = sormasClient.postCases(sormasCases).block();
 
         for(int i = 0; i < response.length; i++){
-            log.error(response[i]);
+            log.debug("Case number" + i + ": " + response[i]);
             if(response[i].equals("OK")){
                 trackedCases.save(indexCases.get(i)._1());
             }

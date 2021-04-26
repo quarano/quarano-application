@@ -3,6 +3,7 @@ package quarano.sormas_integration.indexcase;
 import lombok.*;
 import quarano.sormas_integration.common.SormasReportingUser;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -16,9 +17,9 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class SormasCase {
     private String uuid;
-    private LocalDateTime reportDate;
-    private LocalDateTime quarantineTo;
-    private LocalDateTime quarantineFrom;
+    private String reportDate;
+    private String quarantineTo;
+    private String quarantineFrom;
     private SormasCasePerson person;
     private SormasCaseDistrict district;
     private SormasCaseRegion region;
@@ -43,27 +44,27 @@ public class SormasCase {
         this.uuid = uuid;
     }
 
-    public LocalDateTime getReportDate() {
+    public String getReportDate() {
         return reportDate;
     }
 
-    public void setReportDate(LocalDateTime reportDate) {
+    public void setReportDate(String reportDate) {
         this.reportDate = reportDate;
     }
 
-    public LocalDateTime getQuarantineTo() {
+    public String getQuarantineTo() {
         return quarantineTo;
     }
 
-    public void setQuarantineTo(LocalDateTime quarantineTo) {
+    public void setQuarantineTo(String quarantineTo) {
         this.quarantineTo = quarantineTo;
     }
 
-    public LocalDateTime getQuarantineFrom() {
+    public String getQuarantineFrom() {
         return quarantineFrom;
     }
 
-    public void setQuarantineFrom(LocalDateTime quarantineFrom) {
+    public void setQuarantineFrom(String quarantineFrom) {
         this.quarantineFrom = quarantineFrom;
     }
 

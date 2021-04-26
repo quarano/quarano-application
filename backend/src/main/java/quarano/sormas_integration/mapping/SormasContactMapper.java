@@ -35,8 +35,8 @@ public interface SormasContactMapper {
         return new SormasContactPerson(contact.getSormasUuid());
     }
 
-    default LocalDateTime getReportDateTime(){
-        return LocalDateTime.now();
+    default String getReportDateTime(){
+        return LocalDateTime.now().toString();
     }
 
     default SormasContactHealthConditions getHealthConditions(SormasContactDto contact){

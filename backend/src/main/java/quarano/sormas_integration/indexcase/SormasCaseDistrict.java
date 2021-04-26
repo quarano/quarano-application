@@ -25,6 +25,7 @@ public class SormasCaseDistrict {
 
     public SormasCaseDistrict(String uuid){
         this.uuid = uuid;
+        this.caption = "";
     }
 
     public String getUuid() {
