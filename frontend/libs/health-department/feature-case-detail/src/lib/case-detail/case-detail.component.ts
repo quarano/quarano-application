@@ -8,12 +8,11 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
-import { cloneDeep } from 'lodash';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { filter, map, switchMap, tap, shareReplay } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SnackbarService } from '@qro/shared/util-snackbar';
-import { ConfirmationDialogComponent, TranslatedConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
+import { ConfirmationDialogComponent } from '@qro/shared/ui-confirmation-dialog';
 import { CloseCaseDialogComponent } from '../close-case-dialog/close-case-dialog.component';
 import { ApiService, HalResponse } from '@qro/shared/util-data-access';
 import { CaseType } from '@qro/auth/api';
@@ -68,16 +67,19 @@ export class CaseDetailComponent implements OnDestroy {
   }
 
   initData(): void {
-    this.caseDetail$ = this.route.paramMap.pipe(
-      switchMap((params) => this.entityService.loadOneFromStore(params.get('id')))
+    this.caseDetail$ = combineLatest([this.route.paramMap, this.entityService.entityMap$]).pipe(
+      tap(([params, entityMap]) => this.type$$.next(params.get('type') as CaseType)),
+      tap(([params, entityMap]) => (this.caseId = params.get('id'))),
+      map(([params, entityMap]) => {
+        const id = params.get('id');
+        if (id) {
+          return entityMap[id];
+        }
+        return this.entityService.emptyCase;
+      })
     );
 
     this.occasions$ = this.occasionService.getOccasions();
-
-    this.subs.sink = this.route.paramMap.subscribe((paramMap) => {
-      this.type$$.next(paramMap.get('type') as CaseType);
-      this.caseId = paramMap.get('id');
-    });
   }
 
   getStartTrackingTitle(caseDetail: CaseDto, buttonIsDisabled: boolean): string {
@@ -152,7 +154,7 @@ export class CaseDetailComponent implements OnDestroy {
   startTracking(caseDetail: CaseDto) {
     this.subs.sink = this.apiService
       .putApiCall<StartTracking>(caseDetail, 'start-tracking')
-      .pipe(switchMap((result) => this.entityService.getByKey(caseDetail.caseId)))
+      .pipe(switchMap((result) => this.entityService.getByKey(caseDetail.caseId).pipe(shareReplay())))
       .subscribe((caseDto) => {
         this.router.navigate([`/health-department/case-detail/${this.type$$.value}/${caseDto.caseId}/comments`]);
       });
@@ -175,7 +177,6 @@ export class CaseDetailComponent implements OnDestroy {
       .deleteApiCall<any>(halResponse, 'conclude')
       .pipe(switchMap(() => this.entityService.getByKey(this.caseId)))
       .subscribe((data) => {
-        this.entityService.updateOneInCache(data);
         this.snackbarService.success('Fall abgeschlossen.');
       });
   }

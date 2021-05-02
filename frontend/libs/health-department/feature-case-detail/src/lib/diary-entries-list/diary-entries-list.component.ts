@@ -5,7 +5,7 @@ import { Dictionary } from '@ngrx/entity';
 import { DiaryListItemModel } from '../diary-entries-list-item/diary-entries-list-item.component';
 import { ActivatedRoute } from '@angular/router';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { ApiService } from '@qro/shared/util-data-access';
 
 @Component({
@@ -27,9 +27,15 @@ export class DiaryEntriesListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.listItems$ = this.route.parent.paramMap.pipe(
-      tap((params) => (this.caseId = params.get('id'))),
-      switchMap((params) => this.entityService.loadOneFromStore(params.get('id'))),
+    this.listItems$ = combineLatest([this.route.parent.paramMap, this.entityService.entityMap$]).pipe(
+      tap(([params, entityMap]) => (this.caseId = params.get('id'))),
+      map(([params, entityMap]) => {
+        const id = params.get('id');
+        if (id) {
+          return entityMap[id];
+        }
+        return this.entityService.emptyCase;
+      }),
       switchMap((caseDto: CaseDto) => this.apiService.getApiCall(caseDto, 'diary')),
       map((response) => {
         return this.mapToListItems(this.mapToTrackedCaseDiaryEntryDtoList(response));
