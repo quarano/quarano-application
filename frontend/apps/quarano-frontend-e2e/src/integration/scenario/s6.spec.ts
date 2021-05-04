@@ -65,6 +65,7 @@ describe(
 
     describe('enroll as client', () => {
       const contacts = ['Leon Duerr', 'Anna Beike', 'Conny Hügel'];
+
       it('add new contact for index', () => {
         /* 1 - Login als Bürger Thorsten Mehler (“test8”, “test123”) */
         cy.logIn('test8', 'test123');
@@ -152,21 +153,32 @@ describe(
         /* 18 - Login als GAMA "agent1" */
         cy.logInAgent();
 
-        /* CHECKS pro angelegtem Kontaktfall */
+        /* 18a - Reiter Kontaktpersonen auswählen */
         cy.get('[data-cy="contact-cases"]').should('exist').click();
+
+        /* CHECK richtige URL aufgerufen */
+        cy.url().should('match', /.*\/health-department\/contact-cases\/case-list$/);
+
+        /* CHECKS pro angelegtem Kontaktfall */
         for (let index = 0; index < contacts.length; index++) {
           /* CHECK: Unter dem Reiter "Kontaktpersonen" sind alle Kontakte (Leon Duerr, Anna Beike und Conny Hügel) für GAMA sichtbar und mit Status "angelegt" erfasst */
           cy.get('[data-cy="search-contact-case-input"]').should('exist').type(contacts[index]);
           cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('angelegt');
 
           /* CHECK: für alle Kontakte (Leon Duerr, Anna Beike und Conny Hügel) ist der Ursprungsfall "Thorsten Mehler" in der Übersicht hinterlegt */
-          /* Auswählen der Kontaktperson aus */
+          /* Auswählen der Kontaktperson */
           cy.get('[data-cy="case-data-table"]')
             .find('.ag-center-cols-container > .ag-row')
             .should('have.length.greaterThan', 0)
             .then(($elems) => {
               $elems[0].click();
             });
+
+          /* CHECK richtige URL aufgerufen */
+          cy.url().should(
+            'match',
+            /.*\/health-department\/case-detail\/contact\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/edit$/
+          );
 
           cy.get('[data-cy="origin-case-element"]')
             .find('.mat-chip')
@@ -177,11 +189,18 @@ describe(
             });
 
           cy.get('[data-cy="contact-cases"]').should('exist').click();
+
+          /* CHECK richtige URL aufgerufen */
+          cy.url().should('match', /.*\/health-department\/contact-cases\/case-list$/);
         }
 
-        /* 19 - suche unter dem Reiter "Indexfälle" "Thorsten Mehler" */
+        /* 19 - Öffne den Reiter "Indexfälle" */
         cy.get('[data-cy="index-cases"]').should('exist').click();
 
+        /* CHECK richtige URL aufgerufen */
+        cy.url().should('match', /.*\/health-department\/index-cases\/case-list$/);
+
+        /* 19a - suche unter dem Reiter "Indexfälle" "Thorsten Mehler" */
         cy.get('[data-cy="search-index-case-input"]').should('exist').type('Thorsten Mehler');
         cy.get('[data-cy="case-data-table"]')
           .find('.ag-center-cols-container > .ag-row')
@@ -190,9 +209,16 @@ describe(
             $elems[0].click();
           });
 
-        /* CHECK: Unter "Kontakte" sind alle alten und neu angelegten Kontakte (Leon Duerr, Anna Beike und Conny Hügel) mit der dazugehörigen Risikoeinstufung  (für Conny Hügel erfasst) sichtbar */
+        /* 19b - öffne den Tab "Kontakte" */
         cy.get('[data-cy="contacts-tab"]').should('exist').click();
 
+        /* CHECK richtige URL aufgerufen */
+        cy.url().should(
+          'match',
+          /.*\/health-department\/case-detail\/index\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/contacts$/
+        );
+
+        /* CHECK: Unter "Kontakte" sind alle alten und neu angelegten Kontakte (Leon Duerr, Anna Beike und Conny Hügel) mit der dazugehörigen Risikoeinstufung  (für Conny Hügel erfasst) sichtbar */
         checkContactExists('Leon', 'Duerr');
         checkContactExists('Anna', 'Beike');
         checkContactExists('Conny', 'Hügel');
