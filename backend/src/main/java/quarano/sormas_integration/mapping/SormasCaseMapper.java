@@ -8,10 +8,13 @@ import quarano.sormas_integration.common.SormasReportingUser;
 import quarano.sormas_integration.indexcase.*;
 import quarano.tracking.TrackedPerson;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,9 +27,9 @@ public interface SormasCaseMapper {
     @Mapping(target = "lastName", source = "person.lastName")
     @Mapping(target = "firstName", source = "person.firstName")
     @Mapping(target = "sormasUuid", source = "uuid")
-    @Mapping(target = "testDate", source = "reportDate")
-    @Mapping(target = "quarantineStartDate", source = "quarantineTo")
-    @Mapping(target = "quarantineEndDate", source = "quarantineFrom")
+    @Mapping(target = "testDate", expression = "java(getDateFromInstant(source.getReportDate()))")
+    @Mapping(target = "quarantineStartDate", expression = "java(getDateFromInstant(source.getQuarantineFrom()))")
+    @Mapping(target = "quarantineEndDate", expression = "java(getDateFromInstant(source.getQuarantineTo()))")
     SormasCaseDto map(SormasCase source);
 
     @Mapping(target = "uuid", expression = "java(getUUID(source))")
@@ -38,6 +41,9 @@ public interface SormasCaseMapper {
     @Mapping(target = "quarantineTo", expression = "java(getQuarantineTo(source))")
     @Mapping(target = "quarantineFrom", expression = "java(getQuarantineFrom(source))")
     @Mapping(target = "reportingUser", expression = "java(getReportingUser(reportingUser))")
+    @Mapping(target = "caseOrigin", expression = "java(getOriginCase(source))")
+    @Mapping(target = "pointOfEntry", expression = "java(getPointOfEntry(source))")
+    @Mapping(target = "externalID", expression = "java(getExternalID(source))")
     SormasCase map(TrackedCase source, TrackedPerson person, String reportingUser, String district, String region, String healthFacility);
 
     default String getUUID(TrackedCase source){
@@ -87,6 +93,7 @@ public interface SormasCaseMapper {
     }
 
     default String getReportDate(TrackedCase source){
+
         if(source.getTestResult() != null){
             return convertToDateViaInstant(source.getTestResult().getTestDate()).toString();
         }
@@ -98,7 +105,35 @@ public interface SormasCaseMapper {
         return dateToConvert;
     }
 
+    default LocalDate getDateFromInstant(String date) {
+
+        if(date != null){
+            return Instant.ofEpochMilli(Long.parseLong(date)).atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+
+        return null;
+    }
+
     default SormasReportingUser getReportingUser(String reportingUser){
+
         return new SormasReportingUser(reportingUser);
+    }
+
+    default String getOriginCase(TrackedCase source){
+
+        return "POINT_OF_ENTRY";
+    }
+
+    default SormasCaseOrigin getPointOfEntry(TrackedCase source){
+
+        List<TrackedCase> originCases = source.getOriginCases();
+
+        return new SormasCaseOrigin(
+                originCases.isEmpty() ? null : originCases.get(0).getId().toString()
+        );
+    }
+    default String getExternalID(TrackedCase source){
+
+        return source.getId().toString();
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import quarano.account.Department;
+import quarano.account.DepartmentProperties;
 import quarano.account.DepartmentRepository;
 import quarano.core.Address;
 import quarano.core.EmailAddress;
@@ -26,6 +27,7 @@ import quarano.sormas_integration.mapping.SormasCaseMapper;
 import quarano.sormas_integration.mapping.SormasPersonDto;
 import quarano.sormas_integration.mapping.SormasPersonMapper;
 import quarano.sormas_integration.person.SormasPerson;
+import quarano.sormas_integration.report.ContactsSyncReport;
 import quarano.sormas_integration.report.IndexSyncReport;
 import quarano.sormas_integration.report.IndexSyncReportRepository;
 import quarano.tracking.TrackedPerson;
@@ -70,6 +72,7 @@ public class SyncIndex {
     private HashMap<String, TrackedPerson> personsFromQuarano = new HashMap<>();
     private HashMap<String, Department> departmentsFromQuarano = new HashMap<>();
     private final @NonNull SormasIntegrationProperties properties;
+    private final @NonNull DepartmentProperties departmentProperties;
 
     @Scheduled(cron="${quarano.sormas-synch.interval.indexcases:-}")
     public void syncIndexCases() {
@@ -79,6 +82,8 @@ public class SyncIndex {
 
             long executionTimeSpan = System.currentTimeMillis();
 
+            IndexSyncReport.ReportStatus executionStatus = IndexSyncReport.ReportStatus.STARTED;
+
             log.debug("Creating report instance...");
             IndexSyncReport newReport = new IndexSyncReport(
                     UUID.randomUUID(),
@@ -86,7 +91,7 @@ public class SyncIndex {
                     String.valueOf(0),
                     LocalDateTime.now(),
                     String.valueOf(0),
-                    String.valueOf(IndexSyncReport.ReportStatus.STARTED)
+                    String.valueOf(executionStatus)
             );
             log.info("Report instance created");
 
@@ -132,26 +137,25 @@ public class SyncIndex {
                     // if reports table is empty
                     if(reportsCount == 0){
                         // start an initial synchronization
-                        initialSynchFromQuarano(sormasClient);
+                        initialSynchFromQuarano(sormasClient, newReport);
                     }
                     // else
                     else{
                         // start a standard synchronization
-                        syncCasesFromQuarano(sormasClient, newReport.getSyncDate());
+                        syncCasesFromQuarano(sormasClient, newReport.getSyncDate(), newReport);
                     }
+                }
 
-                    // Save report with success status
-                    updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
-                }
-                else{
-                    // Save report with success status
-                    updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
-                }
+                // Save report with success status
+                executionStatus = IndexSyncReport.ReportStatus.SUCCESS;
             }
             catch(Exception ex){
-                // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
+                // Save report with failed status
+                executionStatus = IndexSyncReport.ReportStatus.FAILED;
+            }
+            finally {
+                updateReport(newReport, executionTimeSpan, executionStatus);
             }
         }
         else{
@@ -214,14 +218,14 @@ public class SyncIndex {
                         }
 
                         log.debug("Retrieving person cases...");
-                        Optional<TrackedCase> personCase = trackedCases.findByTrackedPerson(personFromQuarano);
+                        Optional<TrackedCase> personCase = trackedCases.findByTrackedPerson(personFromQuarano.getId());
                         log.debug("Person cases retrieved");
 
                         /***
                          * If TrackedPerson has TrackedCase of CaseType INDEX
                          * Transform ContactCase to IndexCase
                          ***/
-                        if(!personCase.get().getType().equals(CaseType.INDEX)){
+                        if(personCase.isPresent()){
                             TrackedCase modifiedCase = personCase.get();
                             modifiedCase.setType(CaseType.INDEX);
                             trackedCases.save(modifiedCase);
@@ -250,10 +254,12 @@ public class SyncIndex {
 
                         if(checkPerson(trackedPerson)){
                             if(sormasCase.getDistrict() != null){
-                                Department department = getDepartment(sormasCase.getDistrict().getCaption());
+                                // Multi tenant approach will not be considered because is not used in production
+                                // all cases will be created for the department that is configured inside environment variable
+                                // Department department = getDepartment(sormasCase.getDistrict().getCaption());
 
                                 SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
-                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department));
+                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, departments.findByRkiCode(departmentProperties.getDefaultDepartment().getRkiCode()).get()));
                                 trackedCases.save(trackedCase);
                                 log.info("Case saved");
                             }
@@ -285,13 +291,13 @@ public class SyncIndex {
              * Update since value
              ***/
 
-            updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
+            updateReport(newReport, executionTimeSpan, IndexSyncReport.ReportStatus.SUCCESS);
 
             return Mono.empty();
         }).onErrorMap(ex -> {
             // Save report with failed status
             log.error(ex.getMessage(), ex);
-            updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
+            updateReport(newReport, executionTimeSpan, IndexSyncReport.ReportStatus.FAILED);
             return ex;
         }).subscribe();
     }
@@ -361,6 +367,12 @@ public class SyncIndex {
     }
 
     private TrackedPerson updatePerson(TrackedPerson trackedPerson, SormasPerson sormasPerson){
+
+        if(sormasPerson.getFirstName() != null && sormasPerson.getLastName() != null){
+            trackedPerson.setFirstName(sormasPerson.getFirstName());
+            trackedPerson.setLastName(sormasPerson.getLastName());
+        }
+
         if(StringUtils.isNotBlank(sormasPerson.getEmailAddress())){
             trackedPerson.setEmailAddress(EmailAddress.of(sormasPerson.getEmailAddress()));
         }
@@ -405,12 +417,15 @@ public class SyncIndex {
     }
 
     // Initial synchronization from Quarano
-    private void initialSynchFromQuarano(SormasClient sormasClient) {
+    private void initialSynchFromQuarano(SormasClient sormasClient, IndexSyncReport newReport) {
 
         // Get first tracked persons page
         Page<TrackedPerson> personsPage = trackedPersons.findAll(PageRequest.of(0, 1000));
 
         int pages = personsPage.getTotalPages();
+
+        Integer newReportPersonsCount = 0;
+        Integer newReportCasesCount = 0;
 
         // for every page...
         for(int i = 0; i < pages; i++){
@@ -423,13 +438,19 @@ public class SyncIndex {
             for(int j = 0; j < persons.size(); j++){
                 TrackedPerson trackedPerson = persons.get(j);
 
+                newReportPersonsCount++;
+
                 // Search Tracked Case related to person
                 Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
 
                 if(trackedCaseQuery.isPresent()){
                     TrackedCase trackedCase = trackedCaseQuery.get();
+
                     // if case is of type INDEX
                     if(trackedCase.isIndexCase()){
+
+                        newReportCasesCount++;
+
                         // synchronize person
                         indexPersons.add(trackedPerson);
                         indexCases.add(new Tuple2<>(trackedCase, trackedPerson));
@@ -444,14 +465,20 @@ public class SyncIndex {
                 personsPage = trackedPersons.findAll(PageRequest.of(i + 1, 1000));
             }
         }
+
+        newReport.setPersonsNumber(newReportPersonsCount.toString());
+        newReport.setCasesNumber(newReportCasesCount.toString());
     }
 
-    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate) {
+    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate, IndexSyncReport newReport) {
         // Determine IDs to sync
         List<UUID> entities = backlog.findBySyncDate(synchDate);
 
         List<TrackedPerson> indexPersons = new ArrayList<>();
         List<Tuple2<TrackedCase, TrackedPerson>> indexCases = new ArrayList<>();
+
+        Integer newReportPersonsCount = 0;
+        Integer newReportCasesCount = 0;
 
         for(int i = 0; i < entities.size(); i++){
             UUID entity = entities.get(i);
@@ -463,6 +490,8 @@ public class SyncIndex {
 
                 TrackedPerson trackedPerson = trackedPersonQuery.get();
 
+                newReportPersonsCount++;
+
                 // Search Tracked Case related to person
                 Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
 
@@ -472,7 +501,10 @@ public class SyncIndex {
                     // if case is of type INDEX
                     if(trackedCase.isIndexCase()){
 
+                        newReportCasesCount++;
+
                         indexPersons.add(trackedPerson);
+
                         indexCases.add(new Tuple2<>(trackedCase, trackedPerson));
                     }
                 }
@@ -488,6 +520,9 @@ public class SyncIndex {
             // Delete from backlog
             backlog.deleteAfterSynchronization(UUID.fromString(person.getId().toString()), synchDate);
         });
+
+        newReport.setPersonsNumber(newReportPersonsCount.toString());
+        newReport.setCasesNumber(newReportCasesCount.toString());
     }
 
     private List<TrackedPerson> synchronizePersons(SormasClient sormasClient, List<TrackedPerson> persons){
@@ -498,6 +533,7 @@ public class SyncIndex {
             if(StringUtils.isBlank(person.getSormasUuid())){
                 // Create Sormas ID
                 person.setSormasUuid(UUID.randomUUID().toString());
+                trackedPersons.save(person);
             }
 
             // Map TrackedPerson to SormasPerson
@@ -513,7 +549,6 @@ public class SyncIndex {
         for(int i = 0; i < response.length; i++){
             log.debug("Person number" + i + ": " + response[i]);
             if(response[i].equals("OK")){
-                trackedPersons.save(persons.get(i));
                 successPersons.add(persons.get(i));
             }
         }
@@ -529,6 +564,7 @@ public class SyncIndex {
                 // Create Sormas ID
                 caze._1.setSormasUuid(UUID.randomUUID().toString());
             }
+
             // Map TrackedCase to SormasCase
             SormasCase sormasCase = SormasCaseMapper.INSTANCE.map(
                     caze._1,
@@ -547,45 +583,13 @@ public class SyncIndex {
 
         for(int i = 0; i < response.length; i++){
             log.debug("Case number" + i + ": " + response[i]);
-            if(response[i].equals("OK")){
-                trackedCases.save(indexCases.get(i)._1());
-            }
         }
     }
 
-    private void updateFailedReport(UUID id, IndexSyncReport report, long executionTimeSpan){
-        Optional<IndexSyncReport> reportQuery = reports.findById(id);
-
-        if(reportQuery.isPresent()){
-            IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(String.valueOf(IndexSyncReport.ReportStatus.FAILED));
-            reports.save(reportToUpdate);
-            log.info("Report saved");
-        }
-        else{
-            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(String.valueOf(IndexSyncReport.ReportStatus.FAILED));
-            reports.save(report);
-            log.info("Report saved");
-        }
-    }
-
-    private void updateSuccessReport(UUID id, IndexSyncReport report, long executionTimeSpan){
-        Optional<IndexSyncReport> reportQuery = reports.findById(id);
-
-        if(reportQuery.isPresent()){
-            IndexSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(String.valueOf(IndexSyncReport.ReportStatus.SUCCESS));
-            reports.save(reportToUpdate);
-            log.info("Report saved");
-        }
-        else{
-            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(String.valueOf(IndexSyncReport.ReportStatus.SUCCESS));
-            reports.save(report);
-            log.info("Report saved");
-        }
+    private void updateReport(IndexSyncReport report, long executionTimeSpan, IndexSyncReport.ReportStatus status){
+        report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+        report.setStatus(String.valueOf(status));
+        reports.save(report);
+        log.info("Report saved with status " + status);
     }
 }
