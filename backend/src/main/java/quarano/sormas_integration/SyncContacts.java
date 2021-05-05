@@ -147,7 +147,7 @@ public class SyncContacts {
                 newReportPersonsCount++;
 
                 // Search Tracked Case related to person
-                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPersonWithOrigin(trackedPerson);
 
                 if(trackedCaseQuery.isPresent()){
                     TrackedCase trackedCase = trackedCaseQuery.get();
@@ -203,7 +203,7 @@ public class SyncContacts {
                 newReportPersonsCount++;
 
                 // Search Tracked Case related to person
-                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPersonWithOrigin(trackedPerson);
 
                 if(trackedCaseQuery.isPresent()){
 
