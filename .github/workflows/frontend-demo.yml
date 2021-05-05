@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm run build-internal-demo
+      - run: npm run build-demo-otc
       - run: npm run prepare-deployment-otc
 
       - name: Deploy Frontend DEMO        
