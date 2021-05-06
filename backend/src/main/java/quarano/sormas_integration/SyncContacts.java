@@ -48,7 +48,7 @@ public class SyncContacts {
     @Scheduled(cron="${quarano.sormas-synch.interval.contacts:-}")
     public void syncContactCases() {
         if(StringUtils.isNotBlank(properties.getSormasurl())) {
-            log.info("Contact cases synchronization started");
+            log.info("Contact cases synchronization started [V1]");
             log.info("MASTER: " + properties.getMaster().getContacts());
 
             long executionTimeSpan = System.currentTimeMillis();
@@ -79,7 +79,9 @@ public class SyncContacts {
 
                     // if is already present an active report quit current synchronization
                     if(singleReport.getStatus().equals(String.valueOf(ContactsSyncReport.ReportStatus.STARTED))){
+                        executionStatus = ContactsSyncReport.ReportStatus.FAILED;
                         log.warn("Another schedule is already running... ABORTED");
+                        updateReport(newReport, executionTimeSpan, executionStatus);
                         return;
                     }
                 }

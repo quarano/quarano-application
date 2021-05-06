@@ -77,7 +77,7 @@ public class SyncIndex {
     @Scheduled(cron="${quarano.sormas-synch.interval.indexcases:-}")
     public void syncIndexCases() {
         if(StringUtils.isNotBlank(properties.getSormasurl())){
-            log.info("Index cases synchronization started");
+            log.info("Index cases synchronization started [V1]");
             log.info("MASTER: " + properties.getMaster().getIndexcases());
 
             long executionTimeSpan = System.currentTimeMillis();
@@ -113,7 +113,9 @@ public class SyncIndex {
 
                     // if is already present an active report quit current synchronization
                     if(singleReport.getStatus().equals(String.valueOf(IndexSyncReport.ReportStatus.STARTED))){
+                        executionStatus = IndexSyncReport.ReportStatus.FAILED;
                         log.warn("Another schedule is already running... ABORTED");
+                        updateReport(newReport, executionTimeSpan, executionStatus);
                         return;
                     }
 
@@ -203,7 +205,11 @@ public class SyncIndex {
                     SormasPerson personRelatedToCase = personsResponse.stream()
                             .filter(person ->
                                     casePerson.getUuid().equals(person.getUuid()) &&
-                                            person.getEmailAddress() != null && !person.getEmailAddress().equals("")
+                                            person.getEmailAddress() != null && !person.getEmailAddress().equals("") &&
+                                            person.getPhone() != null && !person.getPhone().equals("") &&
+                                            person.getBirthdateDD() != null && !person.getBirthdateDD().equals("") &&
+                                            person.getBirthdateMM() != null && !person.getBirthdateMM().equals("") &&
+                                            person.getBirthdateYYYY() != null && !person.getBirthdateYYYY().equals("")
                             )
                             .findFirst()
                             .orElse(null);
