@@ -115,7 +115,6 @@ public class SyncIndex {
                     if(singleReport.getStatus().equals(String.valueOf(IndexSyncReport.ReportStatus.STARTED))){
                         executionStatus = IndexSyncReport.ReportStatus.FAILED;
                         log.warn("Another schedule is already running... ABORTED");
-                        updateReport(newReport, executionTimeSpan, executionStatus);
                         return;
                     }
 
@@ -264,10 +263,19 @@ public class SyncIndex {
                                 // all cases will be created for the department that is configured inside environment variable
                                 // Department department = getDepartment(sormasCase.getDistrict().getCaption());
 
-                                SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
-                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, departments.findByRkiCode(departmentProperties.getDefaultDepartment().getRkiCode()).get()));
-                                trackedCases.save(trackedCase);
-                                log.info("Case saved");
+                                String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
+
+                                Optional<Department> department = departments.findByRkiCode(rkiCode);
+
+                                if(department.isPresent()){
+                                    SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
+                                    TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
+                                    trackedCases.save(trackedCase);
+                                    log.info("Case saved");
+                                }
+                                else{
+                                    log.error("Department with RkiCode" + rkiCode + "was not found");
+                                }
                             }
                         }
                     }

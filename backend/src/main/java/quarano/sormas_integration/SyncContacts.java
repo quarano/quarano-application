@@ -81,7 +81,6 @@ public class SyncContacts {
                     if(singleReport.getStatus().equals(String.valueOf(ContactsSyncReport.ReportStatus.STARTED))){
                         executionStatus = ContactsSyncReport.ReportStatus.FAILED;
                         log.warn("Another schedule is already running... ABORTED");
-                        updateReport(newReport, executionTimeSpan, executionStatus);
                         return;
                     }
                 }
