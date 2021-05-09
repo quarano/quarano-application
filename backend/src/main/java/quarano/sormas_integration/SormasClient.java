@@ -9,7 +9,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -76,13 +78,13 @@ public class SormasClient {
 
     public Flux<SormasCase> getCases(LocalDateTime since){
         log.info("Getting cases since " + since);
-        return GetRequest("/cases/all/" + since.toEpochSecond(ZoneOffset.UTC))
+        return GetRequest("/cases/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                 .bodyToFlux(SormasCase.class);
     }
 
     public Flux<SormasPerson> getPersons(LocalDateTime since) {
         log.info("Getting persons since " + since);
-        return GetRequest("/persons/all/" + since.toEpochSecond(ZoneOffset.UTC))
+        return GetRequest("/persons/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                 .bodyToFlux(SormasPerson.class);
     }
 

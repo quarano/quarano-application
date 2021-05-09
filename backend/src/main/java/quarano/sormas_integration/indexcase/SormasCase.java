@@ -29,6 +29,9 @@ public class SormasCase {
     private String facilityType = "LABORATORY";
     private SormasReportingUser reportingUser;
     private SormasCaseHealthFacility healthFacility;
+    private String caseOrigin;
+    private SormasCaseOrigin pointOfEntry;
+    private String externalID;
 
     /**
      * Getters and setter
@@ -106,5 +109,29 @@ public class SormasCase {
 
     public void setHealthFacility(SormasCaseHealthFacility healthFacility) {
         this.healthFacility = healthFacility;
+    }
+
+    public String getCaseOrigin() {
+        return caseOrigin;
+    }
+
+    public void setCaseOrigin(String caseOrigin) {
+        this.caseOrigin = caseOrigin;
+    }
+
+    public SormasCaseOrigin getPointOfEntry() {
+        return pointOfEntry;
+    }
+
+    public void setPointOfEntry(SormasCaseOrigin pointOfEntry) {
+        this.pointOfEntry = pointOfEntry;
+    }
+
+    public String getExternalID() {
+        return externalID;
+    }
+
+    public void setExternalID(String externalID) {
+        this.externalID = externalID;
     }
 }

@@ -1,8 +1,10 @@
 package quarano.sormas_integration.mapping;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import quarano.department.TrackedCase;
 import quarano.sormas_integration.common.SormasReportingUser;
 import quarano.sormas_integration.person.SormasContact;
 import quarano.sormas_integration.person.SormasContactCase;
@@ -23,9 +25,10 @@ public interface SormasContactMapper {
     @Mapping(target = "person", expression = "java(getContactPerson(contact))")
     @Mapping(target = "reportDateTime", expression = "java(getReportDateTime())")
     @Mapping(target = "healthConditions", expression = "java(getHealthConditions(contact))")
-    @Mapping(target = "caze", expression = "java(getContactCase(contact))")
+    @Mapping(target = "caze", expression = "java(getContactCase(contact, originContact))")
     @Mapping(target = "reportingUser", expression = "java(getReportingUser(reportingUser))")
-    SormasContact map(SormasContactDto contact, String reportingUser);
+    @Mapping(target = "contactClassification", expression = "java(getOriginCase())")
+    SormasContact map(SormasContactDto contact, String reportingUser, String originContact);
 
     default String getUUID(SormasContactDto contact){
         return contact.getSormasUuid();
@@ -42,11 +45,23 @@ public interface SormasContactMapper {
     default SormasContactHealthConditions getHealthConditions(SormasContactDto contact){
         return new SormasContactHealthConditions(contact.getSormasUuid());
     }
-    default SormasContactCase getContactCase(SormasContactDto contact){
-        return new SormasContactCase(contact.getSormasUuid());
+    default SormasContactCase getContactCase(SormasContactDto contact, String originContact){
+
+        String value = contact.getSormasUuid();
+
+        if(StringUtils.isNotEmpty(originContact)){
+            value = originContact;
+        }
+
+        return new SormasContactCase(value);
     }
     default SormasReportingUser getReportingUser(String reportingUser){
         return new SormasReportingUser(reportingUser);
+    }
+
+    default String getOriginCase(){
+
+        return "NO_CONTACT";
     }
 }
 

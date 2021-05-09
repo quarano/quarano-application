@@ -32,10 +32,14 @@ public interface TrackedCaseRepository
 	@Query(DEFAULT_SELECT + " where c.status != 'ANONYMIZED' and d.id = :id order by p.lastName")
 	Streamable<TrackedCase> findByDepartmentIdOrderByLastNameAsc(DepartmentIdentifier id);
 
-	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
-
 	@Query(DEFAULT_SELECT + " where p.id = :identifier")
 	Optional<TrackedCase> findByTrackedPerson(TrackedPersonIdentifier identifier);
+
+	//@Query("select c from TrackedCase c join fetch c.trackedPerson p join fetch c.originCases where p = :person")
+	Optional<TrackedCase> findByTrackedPerson(TrackedPerson person);
+
+	@Query("select c from TrackedCase c join fetch c.trackedPerson p join fetch c.originCases where p = :person")
+	Optional<TrackedCase> findByTrackedPersonWithOrigin(TrackedPerson person);
 
 	@Query(DEFAULT_SELECT + " where p.account = :account")
 	Optional<TrackedCase> findByAccount(Account account);

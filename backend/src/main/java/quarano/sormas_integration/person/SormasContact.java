@@ -22,6 +22,7 @@ public class SormasContact {
     private SormasContactHealthConditions healthConditions;
     private SormasContactCase caze;
     private SormasReportingUser reportingUser;
+    private String contactClassification;
 
     /**
      * Getters and setter
@@ -75,5 +76,21 @@ public class SormasContact {
 
     public void setReportingUser(SormasReportingUser reportingUser) {
         this.reportingUser = reportingUser;
+    }
+
+    public String getDisease() {
+        return disease;
+    }
+
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
+
+    public String getContactClassification() {
+        return contactClassification;
+    }
+
+    public void setContactClassification(String contactClassification) {
+        this.contactClassification = contactClassification;
     }
 }

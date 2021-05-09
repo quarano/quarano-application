@@ -1,5 +1,6 @@
 package quarano.sormas_integration;
 
+import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -47,10 +48,12 @@ public class SyncContacts {
     @Scheduled(cron="${quarano.sormas-synch.interval.contacts:-}")
     public void syncContactCases() {
         if(StringUtils.isNotBlank(properties.getSormasurl())) {
-            log.info("Contact cases synchronization started");
+            log.info("Contact cases synchronization started [V1]");
             log.info("MASTER: " + properties.getMaster().getContacts());
 
             long executionTimeSpan = System.currentTimeMillis();
+
+            ContactsSyncReport.ReportStatus executionStatus = ContactsSyncReport.ReportStatus.STARTED;
 
             // Store starting date of sync
             log.debug("Creating report instance...");
@@ -76,6 +79,7 @@ public class SyncContacts {
 
                     // if is already present an active report quit current synchronization
                     if(singleReport.getStatus().equals(String.valueOf(ContactsSyncReport.ReportStatus.STARTED))){
+                        executionStatus = ContactsSyncReport.ReportStatus.FAILED;
                         log.warn("Another schedule is already running... ABORTED");
                         return;
                     }
@@ -94,22 +98,25 @@ public class SyncContacts {
                     // if reports table is empty
                     if(reportsCount == 0){
                         // start an initial synchronization
-                        initialSynchFromQuarano(sormasClient);
+                        initialSynchFromQuarano(sormasClient, newReport);
                     }
                     // else
                     else{
                         // start a standard synchronization
-                        syncCasesFromQuarano(sormasClient, newReport.getSyncDate());
+                        syncCasesFromQuarano(sormasClient, newReport.getSyncDate(), newReport);
                     }
                 }
 
                 // Save report with success status
-                updateSuccessReport(newReport.getUuid(), newReport, executionTimeSpan);
+                executionStatus = ContactsSyncReport.ReportStatus.SUCCESS;
             }
             catch(Exception ex){
-                // Save report with failed status
                 log.error(ex.getMessage(), ex);
-                updateFailedReport(newReport.getUuid(), newReport, executionTimeSpan);
+                // Save report with failed status
+                executionStatus = ContactsSyncReport.ReportStatus.FAILED;
+            }
+            finally {
+                updateReport(newReport, executionTimeSpan, executionStatus);
             }
         }
         else {
@@ -118,33 +125,46 @@ public class SyncContacts {
     }
 
     // Initial synchronization from Quarano
-    private void initialSynchFromQuarano(SormasClient sormasClient) {
+    private void initialSynchFromQuarano(SormasClient sormasClient, ContactsSyncReport newReport) {
 
         // Get first tracked persons page
         Page<TrackedPerson> personsPage = trackedPersons.findAll(PageRequest.of(0, 1000));
 
         int pages = personsPage.getTotalPages();
 
+        Integer newReportPersonsCount = 0;
+
         // for every page...
         for(int i = 0; i < pages; i++){
 
             List<TrackedPerson> persons = personsPage.stream().collect(Collectors.toList());
 
-            List<TrackedPerson> indexPersons = new ArrayList<>();
+            List<Tuple2<TrackedPerson, TrackedCase>> indexPersons = new ArrayList<>();
 
             // for every tracked person...
             for(int j = 0; j < persons.size(); j++){
                 TrackedPerson trackedPerson = persons.get(j);
 
+                newReportPersonsCount++;
+
                 // Search Tracked Case related to person
-                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPersonWithOrigin(trackedPerson);
 
                 if(trackedCaseQuery.isPresent()){
                     TrackedCase trackedCase = trackedCaseQuery.get();
                     // if case is of type CONTACT
                     if(trackedCase.isContactCase()){
+
+                        List<TrackedCase> originCases = trackedCase
+                                .getOriginCases();
+
+                        TrackedCase originCase = null;
+                        if(!originCases.isEmpty()){
+                            originCase = originCases.get(0);
+                        }
+
                         // synchronize person
-                        indexPersons.add(trackedPerson);
+                        indexPersons.add(Tuple.of(trackedPerson, originCase));
                     }
                 }
             }
@@ -156,13 +176,17 @@ public class SyncContacts {
                 personsPage = trackedPersons.findAll(PageRequest.of(i + 1, 1000));
             }
         }
+
+        newReport.setPersonsNumber(newReportPersonsCount.toString());
     }
 
-    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate) {
+    private void syncCasesFromQuarano(SormasClient sormasClient, LocalDateTime synchDate, ContactsSyncReport newReport) {
         // Determine IDs to sync
         List<UUID> entities = backlog.findBySyncDate(synchDate);
 
-        List<TrackedPerson> indexPersons = new ArrayList<>();
+        List<Tuple2<TrackedPerson, TrackedCase>> indexPersons = new ArrayList<>();
+
+        Integer newReportPersonsCount = 0;
 
         // for every tracked person...
         for(int i = 0; i < entities.size(); i++){
@@ -173,10 +197,14 @@ public class SyncContacts {
 
             if(trackedPersonQuery.isPresent()){
 
+                newReport.setPersonsNumber(newReport.getPersonsNumber() + 1);
+
                 TrackedPerson trackedPerson = trackedPersonQuery.get();
 
+                newReportPersonsCount++;
+
                 // Search Tracked Case related to person
-                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPerson(trackedPerson);
+                Optional<TrackedCase> trackedCaseQuery = trackedCases.findByTrackedPersonWithOrigin(trackedPerson);
 
                 if(trackedCaseQuery.isPresent()){
 
@@ -184,7 +212,16 @@ public class SyncContacts {
 
                     // if case is of type CONTACT
                     if(trackedCase.isContactCase()){
-                        indexPersons.add(trackedPerson);
+                        List<TrackedCase> originCases = trackedCase
+                                .getOriginCases();
+
+                        TrackedCase originCase = null;
+
+                        if(!originCases.isEmpty()){
+                            originCase = originCases.get(0);
+                        }
+
+                        indexPersons.add(Tuple.of(trackedPerson, originCase));
                     }
                 }
             }
@@ -199,20 +236,22 @@ public class SyncContacts {
             // Delete from backlog
             backlog.deleteAfterSynchronization(UUID.fromString(person.getId().toString()), synchDate);
         });
+
+        newReport.setPersonsNumber(newReportPersonsCount.toString());
     }
 
-    private List<TrackedPerson> synchronizePersons(SormasClient sormasClient, List<TrackedPerson> persons){
+    private List<TrackedPerson> synchronizePersons(SormasClient sormasClient, List<Tuple2<TrackedPerson, TrackedCase>> persons){
         List<SormasPerson> sormasPersons = new ArrayList<>();
         List<TrackedPerson> successPersons = new ArrayList<>();
 
         persons.forEach(person -> {
-            if(StringUtils.isBlank(person.getSormasUuid())){
+            if(StringUtils.isBlank(person._1.getSormasUuid())){
                 // Create Sormas ID
-                person.setSormasUuid(UUID.randomUUID().toString());
+                person._1.setSormasUuid(UUID.randomUUID().toString());
             }
 
             // Map TrackedPerson to SormasPerson
-            SormasPersonDto personDto = mapper.map(person, SormasPersonDto.class);
+            SormasPersonDto personDto = mapper.map(person._1, SormasPersonDto.class);
             SormasPerson sormasPerson = SormasPersonMapper.INSTANCE.map(personDto);
 
             sormasPersons.add(sormasPerson);
@@ -224,21 +263,22 @@ public class SyncContacts {
         for(int i = 0; i < response.length; i++){
             log.debug("Person number" + i + ": " + response[i]);
             if(response[i].equals("OK")){
-                trackedPersons.save(persons.get(i));
-                successPersons.add(persons.get(i));
+                trackedPersons.save(persons.get(i)._1);
+                successPersons.add(persons.get(i)._1);
             }
         }
 
         return successPersons;
     }
 
-    private void synchronizeContacts(SormasClient sormasClient, List<TrackedPerson> persons){
+    private void synchronizeContacts(SormasClient sormasClient, List<Tuple2<TrackedPerson, TrackedCase>> persons){
         List<SormasContact> sormasContacts = new ArrayList<>();
 
         persons.forEach(person -> {
+
             // Map TrackedPerson to SormasContact
-            SormasContactDto contactDto = mapper.map(person, SormasContactDto.class);
-            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto, properties.getReportingUser());
+            SormasContactDto contactDto = mapper.map(person._1, SormasContactDto.class);
+            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto, properties.getReportingUser(), person._2.getSormasUuid());
 
             sormasContacts.add(sormasContact);
         });
@@ -251,39 +291,11 @@ public class SyncContacts {
         }
     }
 
-    private void updateFailedReport(UUID id, ContactsSyncReport report, long executionTimeSpan){
-        Optional<ContactsSyncReport> reportQuery = reports.findById(id);
-
-        if(reportQuery.isPresent()){
-            ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.FAILED));
-            reports.save(reportToUpdate);
-            log.info("Report saved");
-        }
-        else{
-            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.FAILED));
-            reports.save(report);
-            log.info("Report saved");
-        }
+    private void updateReport(ContactsSyncReport report, long executionTimeSpan, ContactsSyncReport.ReportStatus status){
+        report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
+        report.setStatus(String.valueOf(status));
+        reports.save(report);
+        log.info("Report saved with status " + status);
     }
 
-    private void updateSuccessReport(UUID id, ContactsSyncReport report, long executionTimeSpan){
-        Optional<ContactsSyncReport> reportQuery = reports.findById(id);
-
-        if(reportQuery.isPresent()){
-            ContactsSyncReport reportToUpdate = reportQuery.get();
-            reportToUpdate.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            reportToUpdate.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.SUCCESS));
-            reports.save(reportToUpdate);
-            log.info("Report saved");
-        }
-        else{
-            report.setSyncTime(String.valueOf((System.currentTimeMillis() - executionTimeSpan) / 1000));
-            report.setStatus(String.valueOf(ContactsSyncReport.ReportStatus.SUCCESS));
-            reports.save(report);
-            log.info("Report saved");
-        }
-    }
 }

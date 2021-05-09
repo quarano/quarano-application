@@ -118,13 +118,13 @@ public class SormasIntegrationMappingUnitTests {
         TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
 
         SormasContactDto contactDto = mapper.map(trackedPerson, SormasContactDto.class);
-        SormasContact sormasContact = contactMapper.map(contactDto, "XXXX-YYYY-WWWW");
+        SormasContact sormasContact = contactMapper.map(contactDto, "XXXX-YYYY-WWWW", "XXXX-YYYY-WWWW");
 
         assertThat(sormasContact.getUuid()).isEqualTo(trackedPerson.getSormasUuid());
         assertThat(sormasContact.getPerson().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
         assertThat(sormasContact.getDisease()).isEqualTo("CORONAVIRUS");
         assertThat(sormasContact.getReportingUser().getUuid()).isEqualTo("XXXX-YYYY-WWWW");
-        assertThat(sormasContact.getCaze().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
+        assertThat(sormasContact.getCaze().getUuid()).isEqualTo("XXXX-YYYY-WWWW");
         assertThat(sormasContact.getHealthConditions().getUuid()).isEqualTo(trackedPerson.getSormasUuid());
     }
 
@@ -136,9 +136,9 @@ public class SormasIntegrationMappingUnitTests {
 
         SormasCase sormasCase = new SormasCase(
                 UUID.randomUUID().toString(),
-                LocalDate.now().toString(),
-                LocalDate.now().toString(),
-                LocalDate.now().toString(),
+                "1620139921000",
+                "1620139921000",
+                "1620139921000",
                 new SormasCasePerson(
                         trackedPerson.getSormasUuid(),
                         trackedPerson.getFirstName(),
@@ -155,7 +155,10 @@ public class SormasIntegrationMappingUnitTests {
                 "PENDING",
                 "XXXX-MMMM-RRRR",
                 new SormasReportingUser("XXXX-MMMM-RRRR"),
-                new SormasCaseHealthFacility("XXXX-MMMM-RRRR")
+                new SormasCaseHealthFacility("XXXX-MMMM-RRRR"),
+                "POINT_OF_ENTRY",
+                new SormasCaseOrigin("XXXX-MMMM-RRRR"),
+                "XXX-MMMM-RRRR"
         );
 
         SormasCaseDto caseDto = mapper.map(caseMapper.map(sormasCase), SormasCaseDto.class);
