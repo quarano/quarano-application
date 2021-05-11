@@ -87,9 +87,7 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
 
     /* CHECK: Anfrage wurde gesendet */
-    cy.wait('@newIndex').should(({ request, response }) => {
-      expect(response.statusCode).to.equal(201);
-    });
+    cy.wait('@newIndex').its('response.statusCode').should('eq', 201);
 
     /* CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "angelegt" */
     cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
@@ -107,7 +105,7 @@ describe('S7 - Status wechselt korrekt', () => {
       });
 
     /* CHECK: Überprüfung, ob die Seite gewechselt wurde */
-    cy.url().should('contain', 'health-department/case-detail/index/');
+    cy.location('href').should('include', 'health-department/case-detail/index/');
 
     /* 14 - wähle "Nachverfolgung Starten" */
     cy.get('[data-cy="start-tracking-button"]').should('exist');
@@ -125,7 +123,7 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.get('[data-cy="email-tab"]').should('exist').click();
 
     /* CHECK: Korrekte URL aufgerufen */
-    cy.url().should(
+    cy.location('href').should(
       'match',
       /.*\/health-department\/case-detail\/index\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/email$/
     );
