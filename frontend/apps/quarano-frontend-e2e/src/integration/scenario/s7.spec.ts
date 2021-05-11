@@ -48,50 +48,50 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.logInAgent();
 
     /* 1 - wähle Übersichtsseite "Indexfälle" */
-    cy.get('[data-cy="index-cases"]').should('exist').click();
+    cy.get('[data-cy="index-cases"]').click();
 
     /* 2 - wähle "neuen Indexfall anlegen" */
-    cy.get('[data-cy="new-case-button"]').should('exist').click();
+    cy.get('[data-cy="new-case-button"]').click();
 
     /* CHECK: Anfrage wurde gesendet */
     cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
 
     /* 3 - Vorname -> "Berta" */
-    cy.get('[data-cy="input-firstname"]').should('exist').click().type('Berta');
+    cy.get('[data-cy="input-firstname"]').type('Berta');
 
     /* 4 - Nachname ->  "Benz" */
-    cy.get('[data-cy="input-lastname"]').should('exist').click().type('Benz');
+    cy.get('[data-cy="input-lastname"]').type('Benz');
 
     /* 5 - Geburtsdatum -> "25.03.1946" */
-    cy.get('[data-cy="input-dayofbirth"]').should('exist').click().type('25.03.1946');
+    cy.get('[data-cy="input-dayofbirth"]').type('25.03.1946');
 
     /* 6 - Telefonnummer -> "062186319" */
-    cy.get('[data-cy="input-phone"]').should('exist').click().type('062186319');
+    cy.get('[data-cy="input-phone"]').type('062186319');
 
     /* 7 - Email -> "bbenz@mail.de" */
-    cy.get('[data-cy="input-email"]').should('exist').click().type('bbenz@mail.de');
+    cy.get('[data-cy="input-email"]').type('bbenz@mail.de');
 
     /* 8 - Straße -> "Waldweg" */
-    cy.get('[data-cy="street-input"]').should('exist').click().type('Waldweg');
+    cy.get('[data-cy="street-input"]').type('Waldweg');
 
     /* 9 - Hausnummer -> "2" */
-    cy.get('[data-cy="house-number-input"]').should('exist').click().type('2');
+    cy.get('[data-cy="house-number-input"]').type('2');
 
     /* 10 - PLZ von Mannheim -> "68167" */
-    cy.get('[data-cy="zip-code-input"]').should('exist').click().type('68167');
+    cy.get('[data-cy="zip-code-input"]').type('68167');
 
     /* 11 - Stadt -> "Mannheim" */
-    cy.get('[data-cy="city-input"]').should('exist').click().type('Mannheim');
+    cy.get('[data-cy="city-input"]').type('Mannheim');
 
     /* 12 - wähle "Speichern und schließen" */
-    cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
+    cy.get('[data-cy="client-submit-and-close-button"] button').click();
 
     /* CHECK: Anfrage wurde gesendet */
     cy.wait('@newIndex').its('response.statusCode').should('eq', 201);
 
     /* CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "angelegt" */
     cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
-    cy.get('[data-cy="search-index-case-input"]').should('exist').click().type('Berta Benz');
+    cy.get('[data-cy="search-index-case-input"]').click().type('Berta Benz');
     cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('angelegt');
 
     /* 13 - wähle Indexfall "Berta Benz" aus */
@@ -120,7 +120,7 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.get('.mat-tab-links').children().contains('E-Mail Vorlage');
 
     /* 14A - Aufrufen der E-Mail Vorlage */
-    cy.get('[data-cy="email-tab"]').should('exist').click();
+    cy.get('[data-cy="email-tab"]').click();
 
     /* CHECK: Korrekte URL aufgerufen */
     cy.location('href').should(
@@ -154,16 +154,16 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="registration-submit-button"] button').should('be.disabled');
 
         /* 19 - Benutzername: "Berta" */
-        cy.get('[data-cy="input-username"] input[matInput]').click().type('Berta');
+        cy.get('[data-cy="input-username"] input[matInput]').type('Berta');
 
         /* 20 - Passwort: "Password03!" */
-        cy.get('[data-cy="input-password"] input[matInput]').click().type('Password03!');
+        cy.get('[data-cy="input-password"] input[matInput]').type('Password03!');
 
         /* 21 - Passwort bestätgen  "Password03!" */
-        cy.get('[data-cy="input-password-confirm"] input[matInput]').click().type('Password03!');
+        cy.get('[data-cy="input-password-confirm"] input[matInput]').type('Password03!');
 
         /* 22 - Geburtsdatum: "25.03.1946" */
-        cy.get('[data-cy="input-dateofbirth"] input[matInput]').click().type('25.03.1946');
+        cy.get('[data-cy="input-dateofbirth"] input[matInput]').type('25.03.1946');
 
         /* 23 - AGB aktivieren */
         cy.get('[data-cy="input-privacy-policy"]').click();
@@ -183,7 +183,7 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* CHECK:  In Übersicht "Indexfälle" steht für "Berta Benz" der Status "Registrierung abgeschlossen" */
         cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
-        cy.get('[data-cy="search-index-case-input"]').should('exist').click().type('Berta Benz');
+        cy.get('[data-cy="search-index-case-input"]').type('Berta Benz');
         cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('Registrierung abgeschlossen');
 
         /* 28 - Logout als GAMA */
@@ -199,10 +199,10 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="has-no-symptoms-option"]').click();
 
         /* 31 - Bitte geben Sie Ihren behandelnden Hausarzt an. -> Dr. Schmidt */
-        cy.get('[data-cy="familyDoctor"]').click().type('Dr. Schmidt');
+        cy.get('[data-cy="familyDoctor"]').type('Dr. Schmidt');
 
         /* 32 - Nennen Sie uns bitte den (vermuteten) Ort der Ansteckung: -> "Familie" */
-        cy.get('[formcontrolname="guessedOriginOfInfection"]').click().type('Familie');
+        cy.get('[formcontrolname="guessedOriginOfInfection"]').type('Familie');
 
         /* 33 - Haben Sie eine oder mehrere relevante Vorerkrankungen? -> "nein" */
         cy.get('[data-cy="has-no-pre-existing-conditions-option"]').click();
@@ -225,22 +225,19 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* 37 - Kontakte mit anderen Menschen -> "Carl Benz" */
         /* 38 - Klick enter */
-        cy.get('[data-cy="multiple-auto-complete-input"]').should('exist').first().click().type('Carl Benz').blur();
+        cy.get('[data-cy="multiple-auto-complete-input"]').first().click().type('Carl Benz').blur();
 
         /* 39 - wähle "Kontakt anlegen" in Popup */
-        cy.get('[data-cy="confirm-button"]').should('exist').click();
-
-        //TODO - still working without wait?
-        //cy.wait(500);
+        cy.get('[data-cy="confirm-button"]').click();
 
         /* 40 - Telefonnummer (mobil) -> "017196347526" */
-        cy.get('[data-cy="contact-person-form-mobile-phone"]').should('exist').click().type('017196347526');
+        cy.get('[data-cy="contact-person-form-mobile-phone"]').type('017196347526');
 
         /* 41 - Klick auf "speichern" */
-        cy.get('[data-cy="submit-button"]').should('exist').click();
+        cy.get('[data-cy="submit-button"]').click();
 
         /* 42 - Klick auf "Erfassung abschließen" */
-        cy.get('[data-cy="third-step-button"]').should('exist').click();
+        cy.get('[data-cy="third-step-button"]').click();
 
         /* 43 - Logout als Bürger */
         cy.logOut();
@@ -250,8 +247,7 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* --> CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "in Nachverfolgung" */
         cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
-        cy.get('[data-cy="search-index-case-input"]').should('exist').click().type('Berta Benz');
-        //cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('Nachverfolgung');
+        cy.get('[data-cy="search-index-case-input"]').type('Berta Benz');
         cy.get('[data-cy="case-data-table"]')
           .find('.ag-center-cols-container > .ag-row')
           .then(($elems) => {
@@ -269,33 +265,33 @@ describe('S7 - Status wechselt korrekt', () => {
           });
 
         /* 46 - wähle "Fall abschließen" */
-        cy.get('[data-cy="close-case-button"]').should('exist').click();
+        cy.get('[data-cy="close-case-button"]').click();
 
         /* CHECK: Anfrage wurde verarbeitet */
         cy.wait('@getCaseDetails').its('response.statusCode').should('eq', 200);
 
         /* 47 - Popup "Diesen Fall abschließen" geht auf */
         /* 48 - Zusätzliche Informationen zum Fallabschluss: -> "Quarantäne beendet" */
-        cy.get('[data-cy="comment-textarea"]').should('exist').click().type('Quarantäne beendet');
+        cy.get('[data-cy="comment-textarea"]').type('Quarantäne beendet');
 
         /* 49 - Klicke "OK" */
-        cy.get('[data-cy="confirm-button"]').should('exist').click();
+        cy.get('[data-cy="confirm-button"]').click();
 
         /* CHECK: Anfrage wurde gesendet */
         cy.wait('@postCaseDetails').its('response.statusCode').should('eq', 200);
 
         /* 49A - wähle "Speichern und schließen" */
-        cy.get('[data-cy="client-submit-and-close-button"] button').should('exist').click();
+        cy.get('[data-cy="client-submit-and-close-button"] button').click();
 
         /* 50 - wähle in Übersicht der Indexfälle den Filter "abgeschlossen" */
-        cy.get('.ag-icon-menu').should('exist').first().click();
-        cy.get('[data-cy="select-all-button"]').should('exist').click();
-        cy.get('[data-cy="unselect-all-button"]').should('exist').click();
-        cy.get('[data-cy="filter-checkbox"]').should('exist').first().click();
+        cy.get('.ag-icon-menu').first().click();
+        cy.get('[data-cy="select-all-button"]').click();
+        cy.get('[data-cy="unselect-all-button"]').click();
+        cy.get('[data-cy="filter-checkbox"]').first().click();
 
         /* --> CHECK: In Übersicht "Indexfälle" steht für "Berta Benz" der Status "abgeschlossen" */
         cy.wait('@getAllCases').its('response.statusCode').should('eq', 200);
-        cy.get('[data-cy="search-index-case-input"]').should('exist').click().type('Berta Benz');
+        cy.get('[data-cy="search-index-case-input"]').type('Berta Benz');
         cy.get('.ag-center-cols-container > div > [col-id="status"]').contains('abgeschlossen');
 
         /* 51 - Logout als GAMA */
