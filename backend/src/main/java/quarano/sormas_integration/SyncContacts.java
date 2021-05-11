@@ -26,6 +26,7 @@ import quarano.sormas_integration.report.ContactsSyncReportRepository;
 import quarano.sormas_integration.report.IndexSyncReport;
 import quarano.tracking.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,7 +65,7 @@ public class SyncContacts {
                     String.valueOf(0),
                     String.valueOf(ContactsSyncReport.ReportStatus.STARTED)
             );
-            log.info("Report instance created");
+            log.debug("Report instance created");
 
             // Retrieving reports number...
             long reportsCount = reports.count();
@@ -128,6 +129,8 @@ public class SyncContacts {
     private void initialSynchFromQuarano(SormasClient sormasClient, ContactsSyncReport newReport) {
 
         // Get first tracked persons page
+        // Page<TrackedPerson> personsPage = trackedPersons.findAllWithEncounters(PageRequest.of(0, 1000));
+
         Page<TrackedPerson> personsPage = trackedPersons.findAll(PageRequest.of(0, 1000));
 
         int pages = personsPage.getTotalPages();
@@ -193,12 +196,11 @@ public class SyncContacts {
             UUID entity = entities.get(i);
 
             // Fetch person from Database
-            Optional<TrackedPerson> trackedPersonQuery = trackedPersons.findById(TrackedPerson.TrackedPersonIdentifier.of(entity));
+            Optional<TrackedPerson> trackedPersonQuery = trackedPersons.findByIdWithEncounters(TrackedPerson.TrackedPersonIdentifier.of(entity));
 
             if(trackedPersonQuery.isPresent()){
 
                 newReport.setPersonsNumber(newReport.getPersonsNumber() + 1);
-
                 TrackedPerson trackedPerson = trackedPersonQuery.get();
 
                 newReportPersonsCount++;
@@ -276,9 +278,31 @@ public class SyncContacts {
 
         persons.forEach(person -> {
 
+            LocalDateTime lastContactDate = null;
+
+//            var lastContactDateQuery = person._1.getEncounters()
+//                    .stream()
+//                    .sorted(new Comparator<Encounter>() {
+//                        public int compare(Encounter o1, Encounter o2) {
+//                            return o1.getDate().compareTo(o2.getDate());
+//                        }
+//                    })
+//                    .findFirst();
+//
+//            if(lastContactDateQuery.isPresent()){
+//                lastContactDate = lastContactDateQuery.get().getDate();
+//            }
+
             // Map TrackedPerson to SormasContact
             SormasContactDto contactDto = mapper.map(person._1, SormasContactDto.class);
-            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(contactDto, properties.getReportingUser(), person._2.getSormasUuid());
+            SormasContact sormasContact = SormasContactMapper.INSTANCE.map(
+                    contactDto,
+                    properties.getReportingUser(),
+                    person._2.getSormasUuid(),
+                    properties.getDistrict(),
+                    properties.getRegion(),
+                    lastContactDate
+            );
 
             sormasContacts.add(sormasContact);
         });

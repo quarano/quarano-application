@@ -77,31 +77,31 @@ public class SormasClient {
     }
 
     public Flux<SormasCase> getCases(LocalDateTime since){
-        log.info("Getting cases since " + since);
+        log.debug("Getting cases since " + since);
         return GetRequest("/cases/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                 .bodyToFlux(SormasCase.class);
     }
 
     public Flux<SormasPerson> getPersons(LocalDateTime since) {
-        log.info("Getting persons since " + since);
+        log.debug("Getting persons since " + since);
         return GetRequest("/persons/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                 .bodyToFlux(SormasPerson.class);
     }
 
     public Mono<String[]> postPersons(List<SormasPerson> persons){
-        log.info("Starting person insert on SORMAS...");
+        log.debug("Starting person insert on SORMAS...");
         return PostRequest("/persons/push", persons)
                 .bodyToMono(String[].class);
     }
 
     public Mono<String[]> postContacts(List<SormasContact> contacts){
-        log.info("Starting contact insert on SORMAS...");
+        log.debug("Starting contact insert on SORMAS...");
         return PostRequest("/contacts/push", contacts)
                 .bodyToMono(String[].class);
     }
 
     public Mono<String[]> postCases(List<SormasCase> cases){
-        log.info("Starting case insert on SORMAS...");
+        log.debug("Starting case insert on SORMAS...");
         return PostRequest("/cases/push", cases)
                 .bodyToMono(String[].class);
     }

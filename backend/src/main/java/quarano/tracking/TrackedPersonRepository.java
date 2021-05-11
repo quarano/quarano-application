@@ -1,9 +1,12 @@
 package quarano.tracking;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import quarano.account.Account;
 import quarano.account.Account.AccountIdentifier;
 import quarano.core.EmailAddress;
 import quarano.core.QuaranoRepository;
+import quarano.department.TrackedCase;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.util.Locale;
@@ -33,4 +36,10 @@ public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson
 	 */
 	@Query("select p.locale from TrackedPerson p where p.account.id = :accountIdentifier")
 	Optional<Locale> findLocaleByAccount(AccountIdentifier accountIdentifier);
+
+	@Query("select p from TrackedPerson p left join fetch p.encounters e where p.id = :id")
+	Optional<TrackedPerson> findByIdWithEncounters(TrackedPersonIdentifier id);
+
+	//@Query("select c from TrackedPerson c left join fetch c.encounters")
+	//Page<TrackedPerson> findAllWithEncounters(Pageable pageable);
 }

@@ -6,11 +6,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import quarano.department.TrackedCase;
 import quarano.sormas_integration.common.SormasReportingUser;
+import quarano.sormas_integration.indexcase.SormasCaseDistrict;
+import quarano.sormas_integration.indexcase.SormasCaseRegion;
 import quarano.sormas_integration.person.SormasContact;
 import quarano.sormas_integration.person.SormasContactCase;
 import quarano.sormas_integration.person.SormasContactHealthConditions;
 import quarano.sormas_integration.person.SormasContactPerson;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -28,7 +31,10 @@ public interface SormasContactMapper {
     @Mapping(target = "caze", expression = "java(getContactCase(contact, originContact))")
     @Mapping(target = "reportingUser", expression = "java(getReportingUser(reportingUser))")
     @Mapping(target = "contactClassification", expression = "java(getOriginCase())")
-    SormasContact map(SormasContactDto contact, String reportingUser, String originContact);
+    @Mapping(target = "district", expression = "java(getDistrict(district))")
+    @Mapping(target = "region", expression = "java(getRegion(region))")
+    @Mapping(target = "lastContactDate", expression = "java(getLastContactDate(lastContactDate))")
+    SormasContact map(SormasContactDto contact, String reportingUser, String originContact, String district, String region, LocalDateTime lastContactDate);
 
     default String getUUID(SormasContactDto contact){
         return contact.getSormasUuid();
@@ -61,7 +67,24 @@ public interface SormasContactMapper {
 
     default String getOriginCase(){
 
-        return "NO_CONTACT";
+        return "UNCONFIRMED";
     }
+
+    default SormasCaseDistrict getDistrict(String district){
+        return new SormasCaseDistrict(
+                district
+        );
+    }
+
+    default SormasCaseRegion getRegion(String region){
+        return new SormasCaseRegion(
+                region
+        );
+    }
+
+    default String getLastContactDate(LocalDateTime date){
+        return date == null ? null : date.toString();
+    }
+
 }
 

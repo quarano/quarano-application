@@ -118,7 +118,7 @@ public class SormasIntegrationMappingUnitTests {
         TrackedPerson trackedPerson = TrackedPersonDataInitializer.createTanja();
 
         SormasContactDto contactDto = mapper.map(trackedPerson, SormasContactDto.class);
-        SormasContact sormasContact = contactMapper.map(contactDto, "XXXX-YYYY-WWWW", "XXXX-YYYY-WWWW");
+        SormasContact sormasContact = contactMapper.map(contactDto, "XXXX-YYYY-WWWW", "XXXX-YYYY-WWWW", "", "", LocalDateTime.now());
 
         assertThat(sormasContact.getUuid()).isEqualTo(trackedPerson.getSormasUuid());
         assertThat(sormasContact.getPerson().getUuid()).isEqualTo(trackedPerson.getSormasUuid());

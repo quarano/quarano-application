@@ -2,7 +2,10 @@ package quarano.sormas_integration.person;
 
 import lombok.*;
 import quarano.sormas_integration.common.SormasReportingUser;
+import quarano.sormas_integration.indexcase.SormasCaseDistrict;
+import quarano.sormas_integration.indexcase.SormasCaseRegion;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -23,6 +26,9 @@ public class SormasContact {
     private SormasContactCase caze;
     private SormasReportingUser reportingUser;
     private String contactClassification;
+    private SormasCaseDistrict district;
+    private SormasCaseRegion region;
+    private String lastContactDate;
 
     /**
      * Getters and setter
@@ -92,5 +98,29 @@ public class SormasContact {
 
     public void setContactClassification(String contactClassification) {
         this.contactClassification = contactClassification;
+    }
+
+    public SormasCaseDistrict getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(SormasCaseDistrict district) {
+        this.district = district;
+    }
+
+    public SormasCaseRegion getRegion() {
+        return region;
+    }
+
+    public void setRegion(SormasCaseRegion region) {
+        this.region = region;
+    }
+
+    public String getLastContactDate() {
+        return lastContactDate;
+    }
+
+    public void setLastContactDate(String lastContactDate) {
+        this.lastContactDate = lastContactDate;
     }
 }

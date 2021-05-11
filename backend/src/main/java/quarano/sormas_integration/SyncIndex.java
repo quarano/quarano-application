@@ -93,7 +93,7 @@ public class SyncIndex {
                     String.valueOf(0),
                     String.valueOf(executionStatus)
             );
-            log.info("Report instance created");
+            log.debug("Report instance created");
 
             // Retrieving reports number...
             long reportsCount = reports.count();
@@ -125,7 +125,7 @@ public class SyncIndex {
                     }
                 }
 
-                log.info("Last sync: " + since);
+                log.debug("Last sync: " + since);
 
                 // Save current synchronization entry
                 reports.save(newReport);
@@ -182,14 +182,14 @@ public class SyncIndex {
             newReport.setCasesNumber(String.valueOf(casesResponse.size()));
             newReport.setPersonsNumber(String.valueOf(personsResponse.size()));
 
-            log.info(casesResponse.size() + " cases to handle");
-            log.info(personsResponse.size() + " persons to handle");
+            log.debug(casesResponse.size() + " cases to handle");
+            log.debug(personsResponse.size() + " persons to handle");
 
             /*** for each case... ***/
             for(int i = 0; i < casesResponse.size(); i++){
                 // current case
                 SormasCase sormasCase = casesResponse.get(i);
-                log.info("Case UUID: " + sormasCase.getUuid());
+                log.debug("Case UUID: " + sormasCase.getUuid());
                 // person of current case
                 SormasCasePerson casePerson = sormasCase.getPerson();
 
@@ -271,7 +271,7 @@ public class SyncIndex {
                                     SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
                                     TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
                                     trackedCases.save(trackedCase);
-                                    log.info("Case saved");
+                                    log.debug("Case saved");
                                 }
                                 else{
                                     log.error("Department with RkiCode" + rkiCode + "was not found");
@@ -409,19 +409,12 @@ public class SyncIndex {
         }
 
         try{
-            if(StringUtils.isNoneBlank(
-                    sormasPerson.getAddress().getStreet(),
-                    sormasPerson.getAddress().getCity(),
-                    sormasPerson.getAddress().getPostalCode()
-            ))
-            {
-                trackedPerson.setAddress(new Address(
-                        sormasPerson.getAddress().getStreet(),
-                        Address.HouseNumber.NONE,
-                        sormasPerson.getAddress().getCity(),
-                        ZipCode.of(sormasPerson.getAddress().getPostalCode())
-                ));
-            }
+            trackedPerson.setAddress(new Address(
+                    StringUtils.isNoneBlank(sormasPerson.getAddress().getStreet()) ? sormasPerson.getAddress().getStreet() : null,
+                    Address.HouseNumber.NONE,
+                    StringUtils.isNoneBlank(sormasPerson.getAddress().getCity()) ? sormasPerson.getAddress().getCity() : null,
+                    StringUtils.isNoneBlank(sormasPerson.getAddress().getPostalCode()) ? ZipCode.of(sormasPerson.getAddress().getPostalCode()) : null
+            ));
         }
         catch (IllegalArgumentException ex){
             log.warn("Illegal Address");
