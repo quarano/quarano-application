@@ -29,6 +29,11 @@ describe('S7 - Status wechselt korrekt', () => {
     cy.intercept('GET', '**/hd/cases').as('getAllCases');
     cy.intercept('POST', '**/hd/cases/?type=index').as('newIndex');
     cy.intercept('PUT', '/enrollment/questionnaire').as('updateQuestionnaire');
+    cy.intercept('GET', '/enrollment').as('getQuestionnaire');
+    cy.intercept({
+      method: 'GET',
+      url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/registration$/,
+    }).as('getEmailText');
     cy.intercept({
       method: 'GET',
       url: /.*\/hd\/cases\/[0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12}\/registration$/,
@@ -230,11 +235,19 @@ describe('S7 - Status wechselt korrekt', () => {
         /* 39 - wähle "Kontakt anlegen" in Popup */
         cy.get('[data-cy="confirm-button"]').click();
 
+        /* CHECK */
+        cy.get('[data-cy="contact-person-form-first-name"]').should('exist').clear();
+        cy.get('[data-cy="contact-person-form-last-name"]').should('exist').clear();
+        cy.get('[data-cy="contact-person-form-first-name"]').type('Carl');
+        cy.get('[data-cy="contact-person-form-last-name"]').type('Benz');
+
         /* 40 - Telefonnummer (mobil) -> "017196347526" */
         cy.get('[data-cy="contact-person-form-mobile-phone"]').type('017196347526');
 
         /* 41 - Klick auf "speichern" */
         cy.get('[data-cy="submit-button"]').click();
+
+        cy.wait('@getQuestionnaire').its('response.statusCode').should('eq', 200);
 
         /* 42 - Klick auf "Erfassung abschließen" */
         cy.get('[data-cy="third-step-button"]').click();
@@ -272,7 +285,7 @@ describe('S7 - Status wechselt korrekt', () => {
 
         /* 47 - Popup "Diesen Fall abschließen" geht auf */
         /* 48 - Zusätzliche Informationen zum Fallabschluss: -> "Quarantäne beendet" */
-        cy.get('[data-cy="comment-textarea"]').type('Quarantäne beendet');
+        cy.get('[data-cy="comment-textarea"]').should('exist').type('Quarantäne beendet');
 
         /* 49 - Klicke "OK" */
         cy.get('[data-cy="confirm-button"]').click();
