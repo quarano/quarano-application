@@ -288,7 +288,7 @@ describe('S7 - Status wechselt korrekt', () => {
         cy.get('[data-cy="comment-textarea"]').should('exist').type('Quarantäne beendet');
 
         /* 49 - Klicke "OK" */
-        cy.get('[data-cy="confirm-button"]').click();
+        cy.get('[data-cy="confirm-button"]').should('exist').should('not.be.disabled').click();
 
         /* CHECK: Anfrage wurde gesendet */
         cy.wait('@postCaseDetails').its('response.statusCode').should('eq', 200);
