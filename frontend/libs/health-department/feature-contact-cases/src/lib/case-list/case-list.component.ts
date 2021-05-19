@@ -55,29 +55,32 @@ export class CaseListComponent implements OnInit {
   constructor(private entityService: CaseEntityService, private router: Router, private dialogService: MatDialog) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', filter: 'checkboxFilter' },
-      { headerName: 'Nachname', field: 'lastName' },
-      { headerName: 'Vorname', field: 'firstName' },
+      { headerName: 'Status', field: 'status', filter: 'checkboxFilter', width: 170 },
+      { headerName: 'Nachname', field: 'lastName', width: 190 },
+      { headerName: 'Vorname', field: 'firstName', width: 190 },
       {
         headerName: 'Geburtsdatum',
         field: 'dateOfBirth',
         filter: 'agDateColumnFilter',
         filterParams: DATE_FILTER_PARAMS,
+        width: 170,
       },
-      { headerName: 'Typ', field: 'typeName', filter: 'checkboxFilter' },
+      { headerName: 'Typ', field: 'typeName', filter: 'checkboxFilter', width: 130 },
       {
         headerName: 'Quarantäne bis',
         field: 'quarantineEnd',
         filter: 'agDateColumnFilter',
         filterParams: DATE_FILTER_PARAMS,
+        width: 170,
       },
       {
         headerName: 'Angelegt am',
         field: 'createdAt',
         filter: 'agDateColumnFilter',
         filterParams: DATE_FILTER_PARAMS,
+        width: 170,
       },
-      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber' },
+      { headerName: 'Vorgangsnr.', field: 'extReferenceNumber', width: 190 },
       {
         headerName: 'Ursprungsfälle',
         field: 'originCases',

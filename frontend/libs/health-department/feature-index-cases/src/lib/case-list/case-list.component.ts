@@ -46,7 +46,7 @@ export class CaseListComponent implements OnInit {
   constructor(private entityService: CaseEntityService, private router: Router, private dialogService: MatDialog) {
     this.frameworkComponents = { checkboxFilter: CheckboxFilterComponent };
     this.columnDefs = [
-      { headerName: 'Status', field: 'status', filter: 'checkboxFilter', width: 300 },
+      { headerName: 'Status', field: 'status', filter: 'checkboxFilter', width: 250 },
       { headerName: 'Nachname', field: 'lastName', tooltipField: 'lastName' },
       { headerName: 'Vorname', field: 'firstName' },
       {
