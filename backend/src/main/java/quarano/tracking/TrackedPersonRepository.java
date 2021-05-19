@@ -40,6 +40,6 @@ public interface TrackedPersonRepository extends QuaranoRepository<TrackedPerson
 	@Query("select p from TrackedPerson p left join fetch p.encounters e where p.id = :id")
 	Optional<TrackedPerson> findByIdWithEncounters(TrackedPersonIdentifier id);
 
-	//@Query("select c from TrackedPerson c left join fetch c.encounters")
+	//@Query("select c from TrackedPerson c left join fetch c.encounters e")
 	//Page<TrackedPerson> findAllWithEncounters(Pageable pageable);
 }

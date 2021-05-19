@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import quarano.account.Department;
 import quarano.account.DepartmentProperties;
 import quarano.account.DepartmentRepository;
@@ -22,6 +23,8 @@ import quarano.department.TrackedCaseRepository;
 import quarano.sormas_integration.backlog.IndexSyncBacklogRepository;
 import quarano.sormas_integration.indexcase.SormasCase;
 import quarano.sormas_integration.indexcase.SormasCasePerson;
+import quarano.sormas_integration.lookup.SormasLookup;
+import quarano.sormas_integration.lookup.SormasLookupRepository;
 import quarano.sormas_integration.mapping.SormasCaseDto;
 import quarano.sormas_integration.mapping.SormasCaseMapper;
 import quarano.sormas_integration.mapping.SormasPersonDto;
@@ -66,6 +69,7 @@ public class SyncIndex {
     private final @NonNull MapperWrapper mapper;
     private final @NonNull TrackedCaseRepository trackedCases;
     private final @NonNull TrackedPersonRepository trackedPersons;
+    private final @NonNull SormasLookupRepository lookup;
     private final @NonNull DepartmentRepository departments;
     private final @NonNull IndexSyncReportRepository reports;
     private final @NonNull IndexSyncBacklogRepository backlog;
@@ -99,7 +103,11 @@ public class SyncIndex {
             long reportsCount = reports.count();
 
             try{
-                SormasClient sormasClient = new SormasClient(properties.getSormasurl(), properties.getSormasuser(), properties.getSormaspass());
+                SormasClient sormasClient = new SormasClient(
+                        properties.getSormasurl(),
+                        properties.getSormasuser(),
+                        properties.getSormaspass()
+                );
 
                 log.debug("Getting last report...");
                 List<IndexSyncReport> report = reports.getOrderBySyncDateDesc();
@@ -193,6 +201,13 @@ public class SyncIndex {
                 // person of current case
                 SormasCasePerson casePerson = sormasCase.getPerson();
 
+                /*** Fill lookup table with new Sormas Person-Case association ***/
+                Optional<SormasLookup> existingLookup = lookup.findByPerson(casePerson.getUuid());
+
+                if(existingLookup.isEmpty()){
+                    lookup.save(new SormasLookup(casePerson.getUuid(), sormasCase.getUuid()));
+                }
+
                 /*** Check if person already exists inside Quarano system ***/
                 TrackedPerson personFromQuarano = getPersonFromQuarano(casePerson.getUuid());
 
@@ -204,11 +219,10 @@ public class SyncIndex {
                     SormasPerson personRelatedToCase = personsResponse.stream()
                             .filter(person ->
                                     casePerson.getUuid().equals(person.getUuid()) &&
-                                            person.getEmailAddress() != null && !person.getEmailAddress().equals("") &&
-                                            person.getPhone() != null && !person.getPhone().equals("") &&
-                                            person.getBirthdateDD() != null && !person.getBirthdateDD().equals("") &&
-                                            person.getBirthdateMM() != null && !person.getBirthdateMM().equals("") &&
-                                            person.getBirthdateYYYY() != null && !person.getBirthdateYYYY().equals("")
+                                            (
+                                                    (person.getEmailAddress() != null && !person.getEmailAddress().equals(""))
+                                                            || (person.getPhone() != null && !person.getPhone().equals(""))
+                                            )
                             )
                             .findFirst()
                             .orElse(null);
@@ -246,7 +260,10 @@ public class SyncIndex {
                     SormasPerson personRelatedToCase = personsResponse.stream()
                             .filter(person ->
                                     casePerson.getUuid().equals(person.getUuid()) &&
-                                            person.getEmailAddress() != null && !person.getEmailAddress().equals("")
+                                            (
+                                                    (person.getEmailAddress() != null && !person.getEmailAddress().equals(""))
+                                                            || (person.getPhone() != null && !person.getPhone().equals(""))
+                                            )
                             )
                             .findFirst()//.findAny()
                             .orElse(null);
@@ -297,6 +314,61 @@ public class SyncIndex {
                     if(checkPerson(personFromQuarano)) {
                         trackedPersons.save(personFromQuarano);
                         log.debug("Tracked person updated");
+                    }
+                }
+                else{
+                    /*** Check in Sormas if exists a Case ***/
+
+                    Optional<SormasLookup> lookupQuery = lookup.findByPerson(person.getUuid());
+
+                    if(lookupQuery.isPresent()){
+
+                        List<String> uuids = new ArrayList<String>();
+
+                        uuids.add(lookupQuery.get().getCaseId());
+
+                        sormasClient.getCasesById(uuids).collectList()
+                        .flatMap(response -> {
+                            if(!response.isEmpty()){
+                                SormasCase sormasCase = response.get(0);
+                                /*** Store new TrackedCase with type INDEX and new TrackedPerson ***/
+                                if((person.getEmailAddress() != null && !person.getEmailAddress().equals(""))
+                                        || (person.getPhone() != null && !person.getPhone().equals(""))){
+
+                                    log.debug("Case person is new on Quarano");
+                                    TrackedPersonDto personDto = mapper.map(SormasPersonMapper.INSTANCE.map(person), TrackedPersonDto.class);
+                                    TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
+
+                                    if(checkPerson(trackedPerson)){
+                                        if(sormasCase.getDistrict() != null){
+                                            // Multi tenant approach will not be considered because is not used in production
+                                            // all cases will be created for the department that is configured inside environment variable
+                                            // Department department = getDepartment(sormasCase.getDistrict().getCaption());
+
+                                            String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
+
+                                            Optional<Department> department = departments.findByRkiCode(rkiCode);
+
+                                            if(department.isPresent()){
+                                                SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
+                                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
+                                                trackedCases.save(trackedCase);
+                                                log.debug("Case saved");
+                                            }
+                                            else{
+                                                log.error("Department with RkiCode" + rkiCode + "was not found");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            return null;
+                        }).onErrorMap(ex -> {
+                            // Save report with failed status
+                            log.error(ex.getMessage(), ex);
+                            updateReport(newReport, executionTimeSpan, IndexSyncReport.ReportStatus.FAILED);
+                            return ex;
+                        }).subscribe();
                     }
                 }
             }
@@ -496,7 +568,6 @@ public class SyncIndex {
             if(trackedPersonQuery.isPresent()){
 
                 TrackedPerson trackedPerson = trackedPersonQuery.get();
-
                 newReportPersonsCount++;
 
                 // Search Tracked Case related to person
@@ -509,9 +580,7 @@ public class SyncIndex {
                     if(trackedCase.isIndexCase()){
 
                         newReportCasesCount++;
-
                         indexPersons.add(trackedPerson);
-
                         indexCases.add(new Tuple2<>(trackedCase, trackedPerson));
                     }
                 }

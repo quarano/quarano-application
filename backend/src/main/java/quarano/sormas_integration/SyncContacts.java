@@ -129,7 +129,7 @@ public class SyncContacts {
     private void initialSynchFromQuarano(SormasClient sormasClient, ContactsSyncReport newReport) {
 
         // Get first tracked persons page
-        // Page<TrackedPerson> personsPage = trackedPersons.findAllWithEncounters(PageRequest.of(0, 1000));
+        //Page<TrackedPerson> personsPage = trackedPersons.findAllWithEncounters(PageRequest.of(0, 1000));
 
         Page<TrackedPerson> personsPage = trackedPersons.findAll(PageRequest.of(0, 1000));
 

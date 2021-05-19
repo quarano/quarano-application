@@ -82,6 +82,12 @@ public class SormasClient {
                 .bodyToFlux(SormasCase.class);
     }
 
+    public Flux<SormasCase> getCasesById(List<String> uuids){
+        log.debug("Getting cases by Id...");
+        return PostRequest("/cases/query", uuids)
+                .bodyToFlux(SormasCase.class);
+    }
+
     public Flux<SormasPerson> getPersons(LocalDateTime since) {
         log.debug("Getting persons since " + since);
         return GetRequest("/persons/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())

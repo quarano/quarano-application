@@ -36,3 +36,10 @@ CREATE TABLE index_synch_backlog (
     id uuid NOT NULL,
     sync_date timestamp NOT NULL
 );
+
+CREATE TABLE sormas_lookup (
+    person_id varchar(255) NOT NULL,
+    case_id varchar(255) NOT NULL
+);
+
+CREATE INDEX sormas_lookup_person ON sormas_lookup (person_id);
