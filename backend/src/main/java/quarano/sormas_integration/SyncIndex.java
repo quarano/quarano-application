@@ -231,10 +231,8 @@ public class SyncIndex {
 
                     if(personRelatedToCase != null){
                         personFromQuarano = updatePerson(personFromQuarano, personRelatedToCase);
-                        if(checkPerson(personFromQuarano)) {
-                            trackedPersons.save(personFromQuarano);
-                            log.debug("Tracked person updated");
-                        }
+                        trackedPersons.save(personFromQuarano);
+                        log.debug("Tracked person updated");
 
                         log.debug("Retrieving person cases...");
                         Optional<TrackedCase> personCase = trackedCases.findByTrackedPerson(personFromQuarano.getId());
@@ -261,8 +259,8 @@ public class SyncIndex {
                             .filter(person ->
                                     casePerson.getUuid().equals(person.getUuid()) &&
                                             (
-                                                    (person.getEmailAddress() != null && !person.getEmailAddress().equals(""))
-                                                            || (person.getPhone() != null && !person.getPhone().equals(""))
+                                                    StringUtils.isNotEmpty(person.getEmailAddress()) ||
+                                                            StringUtils.isNotEmpty(person.getPhone())
                                             )
                             )
                             .findFirst()//.findAny()
@@ -274,25 +272,23 @@ public class SyncIndex {
                         TrackedPersonDto personDto = mapper.map(SormasPersonMapper.INSTANCE.map(personRelatedToCase), TrackedPersonDto.class);
                         TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
 
-                        if(checkPerson(trackedPerson)){
-                            if(sormasCase.getDistrict() != null){
-                                // Multi tenant approach will not be considered because is not used in production
-                                // all cases will be created for the department that is configured inside environment variable
-                                // Department department = getDepartment(sormasCase.getDistrict().getCaption());
+                        if(sormasCase.getDistrict() != null){
+                            // Multi tenant approach will not be considered because is not used in production
+                            // all cases will be created for the department that is configured inside environment variable
+                            // Department department = getDepartment(sormasCase.getDistrict().getCaption());
 
-                                String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
+                            String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
 
-                                Optional<Department> department = departments.findByRkiCode(rkiCode);
+                            Optional<Department> department = departments.findByRkiCode(rkiCode);
 
-                                if(department.isPresent()){
-                                    SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
-                                    TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
-                                    trackedCases.save(trackedCase);
-                                    log.debug("Case saved");
-                                }
-                                else{
-                                    log.error("Department with RkiCode" + rkiCode + "was not found");
-                                }
+                            if(department.isPresent()){
+                                SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
+                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
+                                trackedCases.save(trackedCase);
+                                log.debug("Case saved");
+                            }
+                            else{
+                                log.error("Department with RkiCode" + rkiCode + "was not found");
                             }
                         }
                     }
@@ -311,10 +307,8 @@ public class SyncIndex {
 
                 if(personFromQuarano != null){
                     personFromQuarano = updatePerson(personFromQuarano, person);
-                    if(checkPerson(personFromQuarano)) {
-                        trackedPersons.save(personFromQuarano);
-                        log.debug("Tracked person updated");
-                    }
+                    trackedPersons.save(personFromQuarano);
+                    log.debug("Tracked person updated");
                 }
                 else{
                     /*** Check in Sormas if exists a Case ***/
@@ -339,25 +333,23 @@ public class SyncIndex {
                                     TrackedPersonDto personDto = mapper.map(SormasPersonMapper.INSTANCE.map(person), TrackedPersonDto.class);
                                     TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
 
-                                    if(checkPerson(trackedPerson)){
-                                        if(sormasCase.getDistrict() != null){
-                                            // Multi tenant approach will not be considered because is not used in production
-                                            // all cases will be created for the department that is configured inside environment variable
-                                            // Department department = getDepartment(sormasCase.getDistrict().getCaption());
+                                    if(sormasCase.getDistrict() != null){
+                                        // Multi tenant approach will not be considered because is not used in production
+                                        // all cases will be created for the department that is configured inside environment variable
+                                        // Department department = getDepartment(sormasCase.getDistrict().getCaption());
 
-                                            String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
+                                        String rkiCode = departmentProperties.getDefaultDepartment().getRkiCode();
 
-                                            Optional<Department> department = departments.findByRkiCode(rkiCode);
+                                        Optional<Department> department = departments.findByRkiCode(rkiCode);
 
-                                            if(department.isPresent()){
-                                                SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
-                                                TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
-                                                trackedCases.save(trackedCase);
-                                                log.debug("Case saved");
-                                            }
-                                            else{
-                                                log.error("Department with RkiCode" + rkiCode + "was not found");
-                                            }
+                                        if(department.isPresent()){
+                                            SormasCaseDto caseDto = mapper.map(SormasCaseMapper.INSTANCE.map(sormasCase), SormasCaseDto.class);
+                                            TrackedCase trackedCase = mapper.map(caseDto, new TrackedCase(trackedPerson, CaseType.INDEX, department.get()));
+                                            trackedCases.save(trackedCase);
+                                            log.debug("Case saved");
+                                        }
+                                        else{
+                                            log.error("Department with RkiCode" + rkiCode + "was not found");
                                         }
                                     }
                                 }
@@ -386,24 +378,6 @@ public class SyncIndex {
             updateReport(newReport, executionTimeSpan, IndexSyncReport.ReportStatus.FAILED);
             return ex;
         }).subscribe();
-    }
-
-    private Boolean checkPerson(TrackedPerson quaranoEntity){
-        if(quaranoEntity.getAddress() == null){
-            log.warn("Person with UUID " + quaranoEntity.getSormasUuid() + " does not have a valid address");
-        }
-        if(quaranoEntity.getMobilePhoneNumber() == null){
-            log.warn("Person with UUID " + quaranoEntity.getSormasUuid() + " does not have a valid phone");
-        }
-        if(quaranoEntity.getDateOfBirth() == null){
-            log.warn("Person with UUID " + quaranoEntity.getSormasUuid() + " does not have a valid birth date");
-        }
-        if(quaranoEntity.getEmailAddress() == null){
-            log.warn("Person with UUID " + quaranoEntity.getSormasUuid() + " does not have an email address");
-            return false;
-        }
-
-        return true;
     }
 
     private Department getDepartment(String name){
