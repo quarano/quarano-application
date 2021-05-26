@@ -249,7 +249,7 @@ applications:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
     routes:
-      - route: quarano.de/internal-dev
+      - route: dev.quarano.xyz/internal-dev
     env:
       ENVIRONMENT_NAME: "internal-dev"
 
@@ -268,7 +268,7 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_FEDERAL-STATE: Voreingestellte Bundesländer
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_DISTRICT: Voreingestellter Landkreis
       SERVER_SERVLET_CONTEXTPATH: "/internal-dev/api"
-      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-dev/api
+      QUARANO_JWT_ALLOWED_ORIGINS: https://dev.quarano.xyz/internal-dev/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: staging
@@ -292,11 +292,14 @@ applications:
     memory: 1G
     disk_quota: 600M
     routes:
-      - route: quarano.de/internal-dev/api
+      - route: dev.quarano.xyz/internal-dev/api
     services:
       - quarano-internal-dev-db
     stack: cflinuxfs3
     path: ./backend/target/quarano-backend.jar
+    buildpacks:
+      - profiled_buildpack
+      - java_buildpack
   ###############   Internal PENTEST system #########################
   - name: internal-pentest-frontend
     memory: 128M

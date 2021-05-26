@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   api: {
-    baseUrl: 'https://quarano.de/internal-dev/api',
+    baseUrl: 'https://dev.quarano.xyz/internal-dev/api',
   },
 };
