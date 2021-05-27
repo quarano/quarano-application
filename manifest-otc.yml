@@ -256,7 +256,7 @@ applications:
   - name: internal-dev-backend
     env:
       JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
-      QUARANO_APP_HOST: quarano.de/internal-dev
+      QUARANO_APP_HOST: dev.quarano.xyz/internal-dev
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: gesundheitsamt@landkreis-cuxhaven.de
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 04721-66 2006
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT

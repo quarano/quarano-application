@@ -133,7 +133,6 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 			return new TrackedPerson(source.getFirstName(), source.getLastName());
 
 		}).addMappings(it -> {
-
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getMobilePhone, TrackedPerson::setMobilePhoneNumber);
 			it.using(STRING_TO_PHONE_NUMBER).map(TrackedPersonDto::getPhone, TrackedPerson::setPhoneNumber);
 			it.using(STRING_TO_EMAIL_ADDRESS).map(TrackedPersonDto::getEmail, TrackedPerson::setEmailAddress);
