@@ -42,9 +42,9 @@ jobs:
         if: success()
         uses: citizen-of-planet-earth/cf-cli-action@master
         with:
-          cf_api: ${{ secrets.CF_OTC_API }}
+          cf_api: ${{ secrets.CF_OTC_KCF_API }}
           cf_org: ${{ secrets.CF_OTC_ORG }}
           cf_space: ${{ secrets.CF_OTC_SPACE_INTERNAL }}
           cf_username: ${{ secrets.CF_OTC_BUILD_USERNAME }}
-          cf_password: ${{ secrets.CF_OTC_BUILD_PASSWORD }}
+          cf_password: ${{ secrets.CF_OTC_KCF_BUILD_PASSWORD }}
           command: push internal-dev-frontend -f ./manifest-otc.yml
