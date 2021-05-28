@@ -142,6 +142,10 @@ public class TrackingMappingConfiguration implements MappingCustomizer {
 			it.<String> map(TrackedPersonDto::getStreet, (target, v) -> target.getAddress().setStreet(v));
 			it.<String> map(TrackedPersonDto::getCity, (target, v) -> target.getAddress().setCity(v));
 			it.<ZipCode> map(TrackedPersonDto::getZipCode, (target, v) -> target.getAddress().setZipCode(v));
+
+			//it.<String> map(TrackedPersonDto::getSormasUuid, (target, v) -> target.setSormasUuid(target.getSormasUuid()));
+
+			it.skip(TrackedPerson::setSormasUuid);
 		});
 	}
 }

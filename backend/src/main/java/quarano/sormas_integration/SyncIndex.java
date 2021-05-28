@@ -272,6 +272,8 @@ public class SyncIndex {
                         TrackedPersonDto personDto = mapper.map(SormasPersonMapper.INSTANCE.map(personRelatedToCase), TrackedPersonDto.class);
                         TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
 
+                        trackedPerson.setSormasUuid(personRelatedToCase.getUuid());
+
                         if(sormasCase.getDistrict() != null){
                             // Multi tenant approach will not be considered because is not used in production
                             // all cases will be created for the department that is configured inside environment variable
@@ -332,6 +334,8 @@ public class SyncIndex {
                                     log.debug("Case person is new on Quarano");
                                     TrackedPersonDto personDto = mapper.map(SormasPersonMapper.INSTANCE.map(person), TrackedPersonDto.class);
                                     TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
+
+                                    trackedPerson.setSormasUuid(person.getUuid());
 
                                     if(sormasCase.getDistrict() != null){
                                         // Multi tenant approach will not be considered because is not used in production
