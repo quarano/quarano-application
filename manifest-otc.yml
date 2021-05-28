@@ -356,14 +356,14 @@ applications:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
     routes:
-      - route: quarano.de/internal-test
+      - route: test.quarano.xyz/
     env:
       ENVIRONMENT_NAME: "internal-test"
 
   - name: internal-test-backend
     env:
       JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
-      QUARANO_APP_HOST: quarano.de/internal-test
+      QUARANO_APP_HOST: test.quarano.xyz
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: 58corona2@mannheim.de
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 0621 293 2212
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
@@ -374,8 +374,8 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.08.2.22.
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_FEDERAL-STATE: Voreingestellte Bundesländer
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_DISTRICT: Voreingestellter Landkreis
-      SERVER_SERVLET_CONTEXTPATH: "/internal-test/api"
-      QUARANO_JWT_ALLOWED_ORIGINS: https://quarano.de/internal-test/api
+      SERVER_SERVLET_CONTEXTPATH: "/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://test.quarano.de/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       TZ: Europe/Berlin
@@ -389,8 +389,11 @@ applications:
     memory: 1G
     disk_quota: 600M
     routes:
-      - route: quarano.de/internal-test/api
+      - route: test.quarano.xyz/api
     services:
       - quarano-internal-test-db
     stack: cflinuxfs3
     path: ./backend/target/quarano-backend.jar
+    buildpacks:
+      - profiled_buildpack
+      - java_buildpack

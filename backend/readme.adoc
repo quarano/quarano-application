@@ -65,7 +65,7 @@ The application is based on the following open source projects:
 == Available Spring / Maven profiles
 
 The existing Spring profiles are documented under:
-https://quarano.de/internal-test/api/docs/index.html#_spring_profiles
+https://test.quarano.xyz/api/docs/index.html#_spring_profiles
 
 For convenience we expose the following Maven profiles:
 
