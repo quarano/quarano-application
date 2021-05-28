@@ -73,7 +73,6 @@ public class SormasIntegrationMappingUnitTests {
         TrackedPersonDto personDto = mapper.map(personMapper.map(sormasPerson), TrackedPersonDto.class);
         TrackedPerson trackedPerson = mapper.map(personDto, TrackedPerson.class);
 
-        assertThat(trackedPerson.getSormasUuid()).isEqualTo(sormasPerson.getUuid());
         assertThat(trackedPerson.getFirstName()).isEqualTo(sormasPerson.getFirstName());
         assertThat(trackedPerson.getLastName()).isEqualTo(sormasPerson.getLastName());
         assertThat(trackedPerson.getEmailAddress().toString()).isEqualTo(sormasPerson.getEmailAddress());
