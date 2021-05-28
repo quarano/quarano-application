@@ -41,7 +41,7 @@ HTTP/1.1 200
 
 Documentation is part of the actual application build and runtime.
 Once you've build the app, the root document can be found at `target/generated-docs/index.html`.
-It's also available from the running application at https://dev.quarano.xyz/internal-dev/api/docs/index.html[`…/api/docs/index.html`].
+It's also available from the running application at https://dev.quarano.xyz/api/docs/index.html[`…/api/docs/index.html`].
 
 == Developing Quarano Backend
 
@@ -74,7 +74,7 @@ For convenience we expose the following Maven profiles:
 
 == Demo deployments
 
-There's a demo deployment available at https://dev.quarano.xyz/internal-dev/api including some demo data.
+There's a demo deployment available at https://dev.quarano.xyz/api including some demo data.
 No guarantees about the availability and state of data.
 
-If you prefer to use a UI (what? 😳🤔😭) you can use https://dev.quarano.xyz/internal-dev.
+If you prefer to use a UI (what? 😳🤔😭) you can use https://dev.quarano.xyz.

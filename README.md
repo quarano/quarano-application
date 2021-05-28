@@ -4,7 +4,7 @@ Epidemic management for health authorities by digitizing self-reports of confirm
 
 For further information please visit <https://www.quarano.de> (in German)
 
-Hosted at <https://quarano.de/internal-test> (test) and <https://dev.quarano.xyz/internal-dev> (dev)
+Hosted at <https://quarano.de/internal-test> (test) and <https://dev.quarano.xyz> (dev)
 
 [![YouTube video](https://img.youtube.com/vi/3xkOvTBZ4ps/0.jpg)](https://www.youtube.com/watch?v=3xkOvTBZ4ps)
 

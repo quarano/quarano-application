@@ -249,14 +249,14 @@ applications:
       - https://github.com/cloudfoundry/nginx-buildpack.git
     path: ./frontend/dist/apps/quarano-frontend
     routes:
-      - route: dev.quarano.xyz/internal-dev
+      - route: dev.quarano.xyz
     env:
       ENVIRONMENT_NAME: "internal-dev"
 
   - name: internal-dev-backend
     env:
       JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 11.+ } }"
-      QUARANO_APP_HOST: dev.quarano.xyz/internal-dev
+      QUARANO_APP_HOST: dev.quarano.xyz
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_EMAIL-ADDRESS: gesundheitsamt@landkreis-cuxhaven.de
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_PHONE-NUMBER: 04721-66 2006
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_CONTACTS[0]_TYPE: CONTACT
@@ -267,8 +267,8 @@ applications:
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_RKI-CODE: 1.03.3.52.
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_FEDERAL-STATE: Voreingestellte Bundesländer
       QUARANO_DEPARTMENT_DEFAULT-DEPARTMENT_DISTRICT: Voreingestellter Landkreis
-      SERVER_SERVLET_CONTEXTPATH: "/internal-dev/api"
-      QUARANO_JWT_ALLOWED_ORIGINS: https://dev.quarano.xyz/internal-dev/api
+      SERVER_SERVLET_CONTEXTPATH: "/api"
+      QUARANO_JWT_ALLOWED_ORIGINS: https://dev.quarano.xyz/api
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_BASELINE_VERSION: "0"
       SPRING_PROFILES_ACTIVE: staging
@@ -292,7 +292,7 @@ applications:
     memory: 1G
     disk_quota: 600M
     routes:
-      - route: dev.quarano.xyz/internal-dev/api
+      - route: dev.quarano.xyz/api
     services:
       - quarano-internal-dev-db
     stack: cflinuxfs3

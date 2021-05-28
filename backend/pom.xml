@@ -92,7 +92,7 @@
 						to allow third party software to use the demo certificate
 						to authenticate requests.
 
-						See https://dev.quarano.xyz/internal-dev/api/docs/index.html#third-party.authentication
+						See https://dev.quarano.xyz/api/docs/index.html#third-party.authentication
 					-->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
