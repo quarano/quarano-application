@@ -201,7 +201,7 @@ describe('S1 - Externe PLZ führt zu Status externe PLZ', { defaultCommandTimeou
     cy.get('[data-cy="confirm-button"]').should('exist').click();
 
     // 35 - Telefonnummer (mobil) -> "01758631534"
-    cy.get('[data-cy="input-mobilePhone"]').should('exist').click().type('01758631534');
+    cy.get('[data-cy="contact-person-form-mobile-phone"]').should('exist').click().type('01758631534');
 
     // 36 - Klick auf "speichern"
     cy.get('[data-cy="submit-button"]').should('exist').click();
