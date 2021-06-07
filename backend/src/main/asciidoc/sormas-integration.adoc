@@ -1,0 +1,58 @@
+[[sormas-integration]]
+= Sormas Integration
+
+This section contains the documentation for the Quarano Sormas Integration Module.
+
+[[fundamentals]]
+== Fundamentals
+
+Sormas Integration module provides communication between Quarano and Sormas datasource.
+The system provides for a synchronization in two directions, it is possible to synchronize the index cases and contact cases from Quarano to Sormas and vice versa.
+
+All entities that contain at least one of the data required for tracking are synchronized (email or phone number).
+
+
+[[configuration]]
+== Configuration
+
+Sormas integration needs to be carefully configured according to the type of activity you want it to perform.
+
+[[general-configuration]]
+=== General Configuration
+
+Configuration section related to Sormas connection parameters.
+
+[source]
+----
+quarano.sormas-synch.sormasurl=https://sormasurl
+quarano.sormas-synch.sormasuser=username
+quarano.sormas-synch.sormaspass=password
+----
+
+[[department-configuration]]
+=== Department Configuration
+
+Configuration section related to department and user parameters;
+Reporting user need to have REST API permissions enabled in Sormas.
+
+[source]
+----
+quarano.sormas-synch.reporting-user=QRTYMS-IGTUAL-7EAA65-DNLJ2FGE
+quarano.sormas-synch.district=XIIQMM-GGZIQJ-J4BVXT-ZT5OCIWQ
+quarano.sormas-synch.region=X5MF5A-7IJ2YK-75NRZO-4NMMSKZY
+quarano.sormas-synch.health-facility=SORMAS-CONSTID-OTHERS-FACILITY
+----
+
+[[workflow-configuration]]
+=== Direction Workflow Configuration
+
+With following section it's possible to enable synchronization, set workflow direction and polling timespan.
+To disable synchronization for a specific workflow (index and contacts), the configuration parameter relating to the cron expression must be omitted.
+
+[source]
+----
+quarano.sormas-synch.interval.indexcases=0 * * * * *
+quarano.sormas-synch.interval.contacts=0 * * * * *
+quarano.sormas-synch.master.indexcases=sormas
+quarano.sormas-synch.master.contacts=quarano
+----
