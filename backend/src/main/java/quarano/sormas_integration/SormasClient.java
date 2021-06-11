@@ -79,36 +79,42 @@ public class SormasClient {
     public Flux<SormasCase> getCases(LocalDateTime since){
         log.debug("Getting cases since " + since);
         return GetRequest("/cases/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                .bodyToFlux(SormasCase.class);
+                .bodyToFlux(SormasCase.class)
+                .defaultIfEmpty(new SormasCase());
     }
 
     public Flux<SormasCase> getCasesById(List<String> uuids){
         log.debug("Getting cases by Id...");
         return PostRequest("/cases/query", uuids)
-                .bodyToFlux(SormasCase.class);
+                .bodyToFlux(SormasCase.class)
+                .defaultIfEmpty(new SormasCase());
     }
 
     public Flux<SormasPerson> getPersons(LocalDateTime since) {
         log.debug("Getting persons since " + since);
         return GetRequest("/persons/all/" + since.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                .bodyToFlux(SormasPerson.class);
+                .bodyToFlux(SormasPerson.class)
+                .defaultIfEmpty(new SormasPerson());
     }
 
     public Mono<String[]> postPersons(List<SormasPerson> persons){
         log.debug("Starting person insert on SORMAS...");
         return PostRequest("/persons/push", persons)
-                .bodyToMono(String[].class);
+                .bodyToMono(String[].class)
+                .defaultIfEmpty(new String[] {});
     }
 
     public Mono<String[]> postContacts(List<SormasContact> contacts){
         log.debug("Starting contact insert on SORMAS...");
         return PostRequest("/contacts/push", contacts)
-                .bodyToMono(String[].class);
+                .bodyToMono(String[].class)
+                .defaultIfEmpty(new String[] {});
     }
 
     public Mono<String[]> postCases(List<SormasCase> cases){
         log.debug("Starting case insert on SORMAS...");
         return PostRequest("/cases/push", cases)
-                .bodyToMono(String[].class);
+                .bodyToMono(String[].class)
+                .defaultIfEmpty(new String[] {});
     }
 }
