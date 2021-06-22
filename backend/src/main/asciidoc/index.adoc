@@ -10,3 +10,5 @@ include::runtime.adoc[]
 include::deployment.adoc[]
 
 include::developer.adoc[]
+
+include::sormas-integration.adoc[]

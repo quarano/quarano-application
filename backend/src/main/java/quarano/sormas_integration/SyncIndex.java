@@ -461,7 +461,7 @@ public class SyncIndex {
         try{
             trackedPerson.setAddress(new Address(
                     StringUtils.isNoneBlank(sormasPerson.getAddress().getStreet()) ? sormasPerson.getAddress().getStreet() : null,
-                    Address.HouseNumber.NONE,
+                    StringUtils.isNoneBlank(sormasPerson.getAddress().getHouseNumber()) ? Address.HouseNumber.of(sormasPerson.getAddress().getHouseNumber()) : Address.HouseNumber.NONE,
                     StringUtils.isNoneBlank(sormasPerson.getAddress().getCity()) ? sormasPerson.getAddress().getCity() : null,
                     StringUtils.isNoneBlank(sormasPerson.getAddress().getPostalCode()) ? ZipCode.of(sormasPerson.getAddress().getPostalCode()) : null
             ));
